@@ -10,7 +10,7 @@ function ReservationManagement(opts, approval) {
         resourceId: $("#resourceId"),
         statusId: $('#statusId'),
         referenceNumber: $("#referenceNumber"),
-        elements.reservationTable: $("#elements.reservationTable"),
+        reservationTable: $("#reservationTable"),
         updateScope: $('#hdnSeriesUpdateScope'),
         resourceStatusIdFilter: $('#resourceStatusIdFilter'),
         resourceReasonIdFilter: $('#resourceReasonIdFilter'),
