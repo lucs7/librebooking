@@ -68,7 +68,7 @@ function ReservationManagement(opts, approval) {
     ReservationManagement.prototype.init = function () {
 
 
-        elements.elements.reservationTable.on('click', '.update', function (e) {
+        elements.reservationTable.on('click', '.update', function (e) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -140,7 +140,7 @@ function ReservationManagement(opts, approval) {
             viewReservation($(this).closest('tr').attr('data-refnum'));
         });
 
-        elements.elements.reservationTable.find('tr.editable').each(function () {
+        elements.reservationTable.find('tr.editable').each(function () {
             var seriesId = $(this).attr('data-seriesId');
             var refNum = $(this).attr('data-refnum');
             $(this).attachReservationPopup(refNum, options.popupUrl);
@@ -191,7 +191,7 @@ function ReservationManagement(opts, approval) {
 
         elements.deleteMultiplePrompt.click(function (e) {
             e.preventDefault();
-            var checked = elements.elements.reservationTable.find('.delete-multiple:checked');
+            var checked = elements.reservationTable.find('.delete-multiple:checked');
             elements.deleteMultipleCount.text(checked.length);
             elements.deleteMultiplePlaceHolder.empty();
             elements.deleteMultiplePlaceHolder.append(checked.clone());
@@ -207,8 +207,8 @@ function ReservationManagement(opts, approval) {
 
         elements.deleteMultipleCheckboxes.click(function (e) {
             e.stopPropagation();
-            var numberChecked = elements.elements.reservationTable.find('.delete-multiple:checked').length;
-            var allSelected = numberChecked == elements.elements.reservationTable.find('.delete-multiple').length;
+            var numberChecked = elements.reservationTable.find('.delete-multiple:checked').length;
+            var allSelected = numberChecked == elements.reservationTable.find('.delete-multiple').length;
             elements.deleteMultipleSelectAll.prop('checked', allSelected);
             elements.deleteMultiplePrompt.toggleClass('d-none', numberChecked == 0);
         });
