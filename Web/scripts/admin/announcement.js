@@ -67,13 +67,13 @@ function AnnouncementManagement(opts) {
 
 		ConfigureAsyncForm(elements.addForm, getSubmitCallback(options.actions.add));
 		ConfigureAsyncForm(elements.deleteForm, getSubmitCallback(options.actions.deleteAnnouncement));
-		ConfigureAsyncForm(elements.form, function () {
-			// Sanitize the content of the Trumbowyg before sending it
-			const rawContent = $('#editText').trumbowyg('html');
-			const sanitizedHtml = DOMPurify.sanitize(rawContent);
+                ConfigureAsyncForm(elements.form, function () {
+                        // Sanitize the content of TinyMCE before sending it
+                        const rawContent = tinymce.get('editText').getContent();
+                        const sanitizedHtml = DOMPurify.sanitize(rawContent);
 
-			// Update the textarea with clean content before submitting
-			$('#editText').val(sanitizedHtml);
+                        // Update the editor with clean content before submitting
+                        tinymce.get('editText').setContent(sanitizedHtml);
 
 			return options.submitUrl + "?aid=" + getActiveId() + "&action=" + options.actions.edit;
 		});
