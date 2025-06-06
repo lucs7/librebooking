@@ -599,15 +599,9 @@ input.mid-number {
     display: none !important;
 }
 
-.trumbowyg-editor p,
 .notesValue p,
 .descriptionValue p {
     margin: 0;
-}
-
-.trumbowyg-modal-submit {
-    background-color: var(--primary) !important;
-    color: var(--text-color-btn) !important;
 }
 
 .descriptionValue a,
@@ -616,8 +610,7 @@ input.mid-number {
 .noteContent a,
 .announcement a,
 .announcementText a,
-.announcementContent a,
-.trumbowyg-editor a {
+.announcementContent a {
     color: var(--primary);
 }
 
