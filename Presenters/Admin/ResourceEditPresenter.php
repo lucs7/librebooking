@@ -5,7 +5,7 @@ require_once(ROOT_DIR . 'Domain/Access/ResourceRepository.php');
 require_once(ROOT_DIR . 'Domain/Access/ScheduleRepository.php');
 require_once(ROOT_DIR . 'Domain/Access/PageableDataStore.php');
 
-class EditResourcePresenter extends ManageResourcesPresenter
+class ResourceEditPresenter extends ManageResourcesPresenter
 {
     public function PageLoad()
     {

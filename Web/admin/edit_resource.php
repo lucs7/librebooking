@@ -2,7 +2,7 @@
 
 define('ROOT_DIR', '../../');
 
-require_once(ROOT_DIR . 'Pages/Admin/EditResourcePage.php');
+require_once(ROOT_DIR . 'Pages/Admin/ResourceEditPage.php');
 
-$page = new AdminPageDecorator(new EditResourcePage());
+$page = new AdminPageDecorator(new ResourceEditPage());
 $page->PageLoad();
