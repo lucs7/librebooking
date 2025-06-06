@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' InlineEdit=true DataTable=true Trumbowyg=true}
+{include file='globalheader.tpl' InlineEdit=true DataTable=true TinyMCE=true}
 
 <div id="page-manage-resources" class="admin-page">
 	<div class="clearfix border-bottom mb-3">
@@ -419,7 +419,7 @@
 																	{assign var=description value=''}
 																{/if}
 																{strip}
-																	<div class="descriptionValue" data-type="trumbowyg"
+                                                                              <div class="descriptionValue" data-type="tinymce"
 																		data-pk="{$id}" data-value="{$description}"
 																		data-name="{FormKeys::RESOURCE_DESCRIPTION}">
 																		{if $resource->HasDescription()}
@@ -445,7 +445,7 @@
 																	{assign var=notes value=''}
 																{/if}
 																{strip}
-																	<div class="notesValue" data-type="trumbowyg"
+                                                                              <div class="notesValue" data-type="tinymce"
 																		data-pk="{$id}" data-value="{$notes}"
 																		data-name="{FormKeys::RESOURCE_NOTES}">
 																		{if $resource->HasNotes()}
@@ -2057,7 +2057,7 @@
 
 {csrf_token}
 
-{include file="javascript-includes.tpl" InlineEdit=true Clear=true DataTable=true Trumbowyg=true }
+{include file="javascript-includes.tpl" InlineEdit=true Clear=true DataTable=true TinyMCE=true }
 {datatable tableId=$tableId}
 {jsfile src="ajax-helpers.js"}
 {jsfile src="autocomplete.js"}
@@ -2067,60 +2067,77 @@
 {jsfile src="search-clear.js"}
 
 <script type="text/javascript">
-	function addTrumbowygType() {
-		var Trumbowyg = function(options) {
-			this.init('trumbowyg', options, Trumbowyg.defaults);
-		};
-		$.fn.editableutils.inherit(Trumbowyg, $.fn.editabletypes.abstractinput);
-		$.extend(Trumbowyg.prototype, {
-			render: function() {
-				// Set any provided classes or attributes
-				this.setClass();
-				this.setAttr('placeholder');
+        function addTinyMceType() {
+                var TinyMce = function(options) {
+                        this.init('tinymce', options, TinyMce.defaults);
+                };
+                $.fn.editableutils.inherit(TinyMce, $.fn.editabletypes.abstractinput);
+                $.extend(TinyMce.prototype, {
+                        render: function() {
+                                this.setClass();
+                                this.setAttr('placeholder');
 
-				this.$input.trumbowyg({
-					tagsToRemove: ['script', 'link'],
-					removeformatPasted: true,
-					urlProtocol: true,
-					btns: [
-						['bold', 'italic', 'underline'],
-						['link'],
-						['unorderedList', 'orderedList']
-					]
-				});
-			},
+                                const id = 'tinymce_' + (new Date()).getTime();
+                                this.$input.attr('id', id);
 
-			value2html: function(value, element) {
-				const sanitizedHtml = DOMPurify.sanitize(value || '');
-				$(element).html(sanitizedHtml);
-			},
+                                tinymce.init({
+                                        target: this.$input[0],
+                                        menubar: false,
+                                        plugins: 'link lists',
+                                        toolbar: 'bold italic underline | bullist numlist | link',
+                                        setup: function(editor) {
+                                                editor.on('blur', function() {
+                                                        editor.save();
+                                                });
+                                        }
+                                });
+                        },
 
-			html2value: function(html) {
-				return html || '';
-			},
+                        value2html: function(value, element) {
+                                const sanitizedHtml = DOMPurify.sanitize(value || '');
+                                $(element).html(sanitizedHtml);
+                        },
 
-			activate: function() {
-				if (this.$input.data('trumbowyg')) {
-					this.$input.trumbowyg('open');
-				}
-			},
-			value2input: function(value) {
-				this.$input.trumbowyg('html', value);
-			},
-			input2value: function() {
-				const sanitizedHtml = DOMPurify.sanitize(this.$input.trumbowyg('html'));
-				return sanitizedHtml;
-			}
-		});
+                        html2value: function(html) {
+                                return html || '';
+                        },
 
-		Trumbowyg.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
-			tpl: '<textarea></textarea>',
-			inputclass: 'input-large',
-			placeholder: null,
-			rows: 7
-		});
-		$.fn.editabletypes.trumbowyg = Trumbowyg;
-	}
+                        activate: function() {
+                                const editor = tinymce.get(this.$input.attr('id'));
+                                if (editor) {
+                                        editor.focus();
+                                }
+                        },
+                        value2input: function(value) {
+                                const editor = tinymce.get(this.$input.attr('id'));
+                                if (editor) {
+                                        editor.setContent(value || '');
+                                }
+                        },
+                        input2value: function() {
+                                const editor = tinymce.get(this.$input.attr('id'));
+                                if (editor) {
+                                        return DOMPurify.sanitize(editor.getContent());
+                                }
+                                return this.$input.val();
+                        },
+
+                        destroy: function() {
+                                const editor = tinymce.get(this.$input.attr('id'));
+                                if (editor) {
+                                        editor.remove();
+                                }
+                        }
+                });
+
+                TinyMce.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
+                        tpl: '<textarea></textarea>',
+                        inputclass: 'input-large',
+                        placeholder: null,
+                        rows: 7
+                });
+                $.fn.editabletypes.tinymce = TinyMce;
+        }
 
 	function setUpPopovers() {
 		$('[rel="popover"]').popover({
@@ -2254,7 +2271,7 @@
 	}
 
 	$(document).ready(function() {
-		addTrumbowygType();
+                addTinyMceType();
 		setUpPopovers();
 		setUpEditables();
 		setupCustomAttributesIcon();

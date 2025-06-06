@@ -1,4 +1,4 @@
-{include file='globalheader.tpl' Select2=true DataTable=true Trumbowyg=true}
+{include file='globalheader.tpl' Select2=true DataTable=true TinyMCE=true}
 
 <div id="page-manage-announcements" class="admin-page">
 	<h1 class="border-bottom mb-3">{translate key=ManageAnnouncements}</h1>
@@ -262,7 +262,7 @@
 		</div>
 	</div>
 
-	{include file="javascript-includes.tpl" Select2=true DataTable=true Trumbowyg=true Resizimg=true}
+        {include file="javascript-includes.tpl" Select2=true DataTable=true TinyMCE=true Resizimg=true}
 	{datatable tableId={$tableId}}
 	{control type="DatePickerSetupControl" ControlId="BeginDate" AltId="formattedBeginDate"}
 	{control type="DatePickerSetupControl" ControlId="EndDate" AltId="formattedEndDate"}
@@ -277,39 +277,31 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-			const defaultTrumbowygOptions = {
-				btns: [
-					['viewHTML'],
-					['undo', 'redo'],
-					['formatting'],
-					['strong', 'em', 'del'],
-					['link'],
-					['insertImage'],
-					['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-					['unorderedList', 'orderedList']
-				],
-				tagsToRemove: ['script', 'link'],
-				removeformatPasted: true,
-				urlProtocol: true
-			};
+                        const defaultTinyMceOptions = {
+                                menubar: false,
+                                plugins: 'link lists',
+                                toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link'
+                        };
 
-			$('#addAnnouncement').trumbowyg(defaultTrumbowygOptions);
+                        {literal}tinymce.init(Object.assign({}, defaultTinyMceOptions, {selector: '#addAnnouncement'}));{/literal}
 
-			$(document).on('shown.bs.modal', '#editDialog', function() {
-				// Obtaining and sanitizing content
-				const rawContent = $('#editText').val();
-				const sanitizedHtml = DOMPurify.sanitize(rawContent);
+                        $(document).on('shown.bs.modal', '#editDialog', function() {
+                                const rawContent = $('#editText').val();
+                                const sanitizedHtml = DOMPurify.sanitize(rawContent);
 
-				// Initialize editor
-				$('#editText').trumbowyg(defaultTrumbowygOptions)
-					.trumbowyg('html', sanitizedHtml);
-			});
+                                const existing = tinymce.get('editText');
+                                if (existing) {
+                                        existing.setContent(sanitizedHtml);
+                                } else {
+                                        {literal}tinymce.init(Object.assign({}, defaultTinyMceOptions, {selector: '#editText'})).then(function(editors) { editors[0].setContent(sanitizedHtml); });{/literal}
+                                }
+                        });
 
-			$(document).on('hidden.bs.modal', '#editDialog', function() {
-				if ($('#editText').data('trumbowyg')) {
-					$('#editText').trumbowyg('destroy');
-				}
-			});
+                        $(document).on('hidden.bs.modal', '#editDialog', function() {
+                                if (tinymce.get('editText')) {
+                                        tinymce.get('editText').remove();
+                                }
+                        });
 
 			var actions = {
 				add: '{ManageAnnouncementsActions::Add}',
