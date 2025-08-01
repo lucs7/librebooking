@@ -12,6 +12,7 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - develop
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -41,7 +42,7 @@ jobs:
       - name: markdownlint-cli2-action
         uses: DavidAnson/markdownlint-cli2-action@v20
         with:
-          config: 'docs/.markdownlint.yml'
+          config: "docs/.markdownlint.yml"
           globs: |
             *.md
 
@@ -153,14 +154,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-version }}
-#          extensions: mbstring, iconv, mysqli, zip, gd, bz2
+      #          extensions: mbstring, iconv, mysqli, zip, gd, bz2
 
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
 
       - name: Analyse files with PHPStan
         run: composer phpstan -- --memory-limit 2G
-
 #      - name: Analyse files with Psalm
 #        # Allow the previous check to fail but not abort
 #        if: always()
