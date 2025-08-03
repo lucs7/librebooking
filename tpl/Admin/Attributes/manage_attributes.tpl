@@ -97,6 +97,8 @@
 										{formname key=ATTRIBUTE_IS_ADMIN_ONLY} id="ATTRIBUTE_IS_ADMIN_ONLY" />
 									<label class="form-check-label"
 										for="ATTRIBUTE_IS_ADMIN_ONLY">{translate key=AdminOnly}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=AdminOnlyHelp}"></i>
 								</div>
 							</div>
 
@@ -107,6 +109,8 @@
 										id='attributePrivate' />
 									<label class="form-check-label"
 										for="attributePrivate">{translate key=Private}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=PrivateHelp}"></i>
 								</div>
 							</div>
 
@@ -117,6 +121,8 @@
 										{formname key=ATTRIBUTE_LIMIT_SCOPE} id="attributeLimitScope" />
 									<label class="form-check-label"
 										for="attributeLimitScope">{translate key=LimitAttributeScope}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=LimitAttributeScopeHelp}"></i>
 								</div>
 							</div>
 
@@ -228,6 +234,8 @@
 										{formname key=ATTRIBUTE_IS_ADMIN_ONLY} id="editAttributeAdminOnly" />
 									<label class="form-check-label"
 										for="editAttributeAdminOnly">{translate key=AdminOnly}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=AdminOnlyHelp}"></i>
 								</div>
 							</div>
 
@@ -238,6 +246,8 @@
 										id='editAttributePrivate' />
 									<label class="form-check-label"
 										for="editAttributePrivate">{translate key=Private}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=PrivateHelp}"></i>
 								</div>
 							</div>
 
@@ -248,6 +258,8 @@
 										{formname key=ATTRIBUTE_LIMIT_SCOPE} id="editAttributeLimitScope" />
 									<label class="form-check-label"
 										for="editAttributeLimitScope">{translate key=LimitAttributeScope}</label>
+									<i class="bi bi-question-circle-fill link-primary" data-bs-toggle="tooltip"
+										title="{translate key=LimitAttributeScopeHelp}"></i>
 								</div>
 							</div>
 
