@@ -503,7 +503,7 @@ class CustomAttribute
      */
     public function WithSecondaryEntities($category, $entityIds, $entityDescriptions = null)
     {
-        if ($this->category != CustomAttributeCategory::RESERVATION) {
+        if ($this->category != CustomAttributeCategory::RESERVATION && $this->category != CustomAttributeCategory::RESOURCE) {
             return;
         }
 
