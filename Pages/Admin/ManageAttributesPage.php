@@ -73,7 +73,7 @@ interface IManageAttributesPage extends IActionPage
     public function GetAttributeId();
 
     /**
-     * @return int|null
+     * @return int[]
      */
     public function GetSecondaryEntityIds();
 
@@ -91,6 +91,11 @@ interface IManageAttributesPage extends IActionPage
      * @return bool
      */
     public function GetIsPrivate();
+
+    /**
+     * Set template variables for category-based field visibility
+     */
+    public function SetCategoryVisibilityRules();
 }
 
 class ManageAttributesPage extends ActionPage implements IManageAttributesPage
@@ -238,6 +243,39 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     {
         $isPrivate = $this->GetForm(FormKeys::ATTRIBUTE_IS_PRIVATE);
         return !empty($isPrivate);
+    }
+
+    public function SetCategoryVisibilityRules()
+    {
+        // Define which fields are visible for which categories
+        // This moves the visibility logic from JavaScript to PHP/Smarty
+        $this->Set('ShowAppliesToFor', [
+            CustomAttributeCategory::USER => true,
+            CustomAttributeCategory::RESOURCE_TYPE => true,
+            CustomAttributeCategory::RESERVATION => false,
+            CustomAttributeCategory::RESOURCE => false,
+        ]);
+
+        $this->Set('ShowAdminOnlyFor', [
+            CustomAttributeCategory::RESERVATION => true,
+            CustomAttributeCategory::RESOURCE => true,
+            CustomAttributeCategory::USER => true,
+            CustomAttributeCategory::RESOURCE_TYPE => true,
+        ]);
+
+        $this->Set('ShowPrivateFor', [
+            CustomAttributeCategory::RESERVATION => true,
+            CustomAttributeCategory::RESOURCE => false,
+            CustomAttributeCategory::USER => false,
+            CustomAttributeCategory::RESOURCE_TYPE => false,
+        ]);
+
+        $this->Set('ShowSecondaryEntitiesFor', [
+            CustomAttributeCategory::RESERVATION => true,
+            CustomAttributeCategory::RESOURCE => true,
+            CustomAttributeCategory::USER => false,
+            CustomAttributeCategory::RESOURCE_TYPE => false,
+        ]);
     }
 
     public function ProcessDataRequest($dataRequest)
