@@ -214,6 +214,7 @@ class ColumnNames
     public const ATTRIBUTE_SECONDARY_ENTITY_IDS = 'secondary_entity_ids';
     public const ATTRIBUTE_SECONDARY_ENTITY_DESCRIPTIONS = 'secondary_entity_descriptions';
     public const ATTRIBUTE_IS_PRIVATE = 'is_private';
+    public const ATTRIBUTE_DESCRIPTION = 'description';
 
     // RESERVATION FILES //
     public const FILE_ID = 'file_id';

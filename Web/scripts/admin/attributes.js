@@ -410,6 +410,7 @@ function AttributeManagement(opts) {
         $('#editAttributePossibleValues').val(selectedAttribute.possibleValues);
         $('#editAttributeSortOrder').val(selectedAttribute.sortOrder);
         $('#editAttributeEntityId').val(selectedAttribute.entityId);
+        $('#editAttributeDescription').val(selectedAttribute.description || '');
 
         selectedEntityChoices.empty();
         if (selectedAttribute.entityDescriptions.length == 0) {

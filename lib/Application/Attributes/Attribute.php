@@ -113,4 +113,12 @@ class LBAttribute
     {
         return $this->attributeDefinition->SecondaryEntityIds();
     }
+
+    /**
+     * @return string|null
+     */
+    public function Description()
+    {
+        return $this->attributeDefinition->Description();
+    }
 }

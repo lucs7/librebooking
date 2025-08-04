@@ -93,6 +93,11 @@ interface IManageAttributesPage extends IActionPage
     public function GetIsPrivate();
 
     /**
+     * @return string|null
+     */
+    public function GetDescription();
+
+    /**
      * Set template variables for category-based field visibility
      */
     public function SetCategoryVisibilityRules();
@@ -243,6 +248,11 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     {
         $isPrivate = $this->GetForm(FormKeys::ATTRIBUTE_IS_PRIVATE);
         return !empty($isPrivate);
+    }
+
+    public function GetDescription()
+    {
+        return $this->GetForm(FormKeys::ATTRIBUTE_DESCRIPTION);
     }
 
     public function SetCategoryVisibilityRules()

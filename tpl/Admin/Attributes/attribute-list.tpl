@@ -92,6 +92,7 @@
 		possibleValues: "{$attribute->PossibleValues()|escape:'javascript'}",
 		type: "{$attribute->Type()}",
 		sortOrder: "{$attribute->SortOrder()}",
+		description: "{$attribute->Description()|escape:'javascript'}",
 		{if $attribute->EntityIds()|count > 0}
 			entityIds: ["{$attribute->EntityIds()|join:'","'}"],
 		{else}

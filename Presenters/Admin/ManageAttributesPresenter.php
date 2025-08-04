@@ -51,10 +51,11 @@ class ManageAttributesPresenter extends ActionPresenter
         $sortOrder = $this->page->GetSortOrder();
         $entityIds = $this->page->GetEntityIds();
         $adminOnly = $this->page->GetIsAdminOnly();
+        $attributeDescription = $this->page->GetDescription();
 
         Log::Debug('Adding new attribute named: %s', $attributeName);
 
-        $attribute = CustomAttribute::Create($attributeName, $type, $scope, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly);
+        $attribute = CustomAttribute::Create($attributeName, $type, $scope, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly, $attributeDescription);
         $this->AddSecondaryEntities($attribute);
         $attribute->WithIsPrivate($this->page->GetIsPrivate());
 
@@ -78,11 +79,12 @@ class ManageAttributesPresenter extends ActionPresenter
         $sortOrder = $this->page->GetSortOrder();
         $entityIds = $this->page->GetEntityIds();
         $adminOnly = $this->page->GetIsAdminOnly();
+        $attributeDescription = $this->page->GetDescription();
 
         Log::Debug('Updating attribute with id: %s', $attributeId);
 
         $attribute = $this->attributeRepository->LoadById($attributeId);
-        $attribute->Update($attributeName, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly);
+        $attribute->Update($attributeName, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly, $attributeDescription);
         $this->AddSecondaryEntities($attribute);
         $attribute->WithIsPrivate($this->page->GetIsPrivate());
 

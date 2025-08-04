@@ -73,7 +73,8 @@ class AttributeRepository implements IAttributeRepository
                 $attribute->AdminOnly(),
                 $attribute->SecondaryCategory(),
                 $attribute->SecondaryEntityIds(),
-                $attribute->IsPrivate()
+                $attribute->IsPrivate(),
+                $attribute->Description()
             )
         );
 
@@ -140,7 +141,8 @@ class AttributeRepository implements IAttributeRepository
             $attribute->AdminOnly(),
             $attribute->SecondaryCategory(),
             $attribute->SecondaryEntityIds(),
-            $attribute->IsPrivate()
+            $attribute->IsPrivate(),
+            $attribute->Description()
         ));
 
         foreach ($attribute->RemovedEntityIds() as $entityId) {

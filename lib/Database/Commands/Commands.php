@@ -82,7 +82,8 @@ class AddAttributeCommand extends SqlCommand
         $adminOnly,
         $secondaryCategory,
         $secondaryEntityIds,
-        $isPrivate
+        $isPrivate,
+        $description = null
     ) {
         parent::__construct(Queries::ADD_ATTRIBUTE);
         $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_LABEL, $label));
@@ -96,6 +97,7 @@ class AddAttributeCommand extends SqlCommand
         $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_SECONDARY_CATEGORY, $secondaryCategory));
         $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_SECONDARY_ENTITY_IDS, implode(',', $secondaryEntityIds)));
         $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_IS_PRIVATE, (int)$isPrivate));
+        $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_DESCRIPTION, $description));
     }
 }
 
@@ -2616,7 +2618,8 @@ class UpdateAttributeCommand extends SqlCommand
         $adminOnly,
         $secondaryCategory,
         $secondaryEntityIds,
-        $isPrivate
+        $isPrivate,
+        $description = null
     ) {
         parent::__construct(Queries::UPDATE_ATTRIBUTE);
         $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_ID, $attributeId));
@@ -2631,6 +2634,7 @@ class UpdateAttributeCommand extends SqlCommand
         $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_SECONDARY_CATEGORY, $secondaryCategory));
         $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_SECONDARY_ENTITY_IDS, implode(',', $secondaryEntityIds)));
         $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_IS_PRIVATE, (int)$isPrivate));
+        $this->AddParameter(new Parameter(ParameterNames::ATTRIBUTE_DESCRIPTION, $description));
     }
 }
 

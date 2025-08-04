@@ -106,6 +106,11 @@ class CustomAttribute
     protected $isPrivate = false;
 
     /**
+     * @var string|null
+     */
+    protected $description;
+
+    /**
      * @return int
      */
     public function Id()
@@ -266,6 +271,14 @@ class CustomAttribute
     }
 
     /**
+     * @return string|null
+     */
+    public function Description()
+    {
+        return $this->description;
+    }
+
+    /**
      * @param $entityId
      * @return bool
      */
@@ -338,9 +351,10 @@ class CustomAttribute
         $possibleValues,
         $sortOrder,
         $entityIds = [],
-        $adminOnly = false
+        $adminOnly = false,
+        $attributeDescription = null
     ) {
-        return new CustomAttribute(
+        $attribute = new CustomAttribute(
             null,
             $label,
             $type,
@@ -352,6 +366,8 @@ class CustomAttribute
             $entityIds,
             $adminOnly
         );
+        $attribute->WithAttributeDescription($attributeDescription);
+        return $attribute;
     }
 
     /**
@@ -396,6 +412,10 @@ class CustomAttribute
 
         if (isset($row[ColumnNames::ATTRIBUTE_IS_PRIVATE])) {
             $attribute->WithIsPrivate($row[ColumnNames::ATTRIBUTE_IS_PRIVATE]);
+        }
+
+        if (isset($row[ColumnNames::ATTRIBUTE_DESCRIPTION])) {
+            $attribute->WithAttributeDescription($row[ColumnNames::ATTRIBUTE_DESCRIPTION]);
         }
 
         return $attribute;
@@ -445,8 +465,9 @@ class CustomAttribute
      * @param int $sortOrder
      * @param int[] $entityIds
      * @param bool $adminOnly
+     * @param string|null $attributeDescription
      */
-    public function Update($label, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly)
+    public function Update($label, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly, $attributeDescription = null)
     {
         $this->label = $label;
         $this->SetRegex($regex);
@@ -468,6 +489,7 @@ class CustomAttribute
         $this->adminOnly = $adminOnly;
         $this->SetPossibleValues($possibleValues);
         $this->SetSortOrder($sortOrder);
+        $this->WithAttributeDescription($attributeDescription);
     }
 
     /**
@@ -534,6 +556,14 @@ class CustomAttribute
     public function WithIsPrivate($isPrivate)
     {
         $this->isPrivate = BooleanConverter::ConvertValue($isPrivate);
+    }
+
+    /**
+     * @param string|null $attributeDescription
+     */
+    public function WithAttributeDescription($attributeDescription)
+    {
+        $this->description = $attributeDescription;
     }
 
     /**

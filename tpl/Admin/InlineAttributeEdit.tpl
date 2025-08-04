@@ -12,9 +12,14 @@
 			{assign var=datatype value='combodate'}
 			{assign var=value value={formatdate date=$value key=fullcalendar}}
 		{/if}
-		<label class="inline fw-bold">{$attribute->Label()}</label>
-		<a class="update changeAttribute link-primary" title="{translate key='Edit'}" href="#"><span class="bi bi-pencil-square"></span>
-			<span class="visually-hidden">{translate key=Edit}</span></a>
+		<div class="d-flex align-items-center">
+			<label class="inline fw-bold me-2">{$attribute->Label()}{if $attribute->Description()}
+				<i class="bi bi-question-circle-fill link-primary ms-1" data-bs-toggle="tooltip"
+					data-bs-title="{$attribute->Description()|escape:'html'}"></i>
+			{/if}</label>
+			<a class="update changeAttribute link-primary" title="{translate key='Edit'}" href="#"><span class="bi bi-pencil-square"></span>
+				<span class="visually-hidden">{translate key=Edit}</span></a>
+		</div>
 		<span class="inlineAttribute" id="inline{$attributeId}" data-type="{$datatype}" data-pk="{$id}" data-value="{$value}" data-name="{FormKeys::ATTRIBUTE_PREFIX}{$attribute->Id()}" {if $attribute->Type() == CustomAttributeTypes::SELECT_LIST} data-source='[{if !$attribute->Required()}{ldelim}value:"",text:""{rdelim},{/if}
 				  {foreach from=$attribute->PossibleValueList() item=v name=vals}
 						{ldelim}value:"{$v}",text:"{$v}"{rdelim}{if not $smarty.foreach.vals.last},{/if}

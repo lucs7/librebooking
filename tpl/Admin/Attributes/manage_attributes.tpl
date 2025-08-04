@@ -54,6 +54,12 @@
 								{textbox name=ATTRIBUTE_LABEL class="required has-feedback"}
 							</div>
 
+							<div class="attributeDescription form-group mb-2">
+								<label class="fw-bold" for="ATTRIBUTE_DESCRIPTION">{translate key=Description}</label>
+								<textarea class="form-control" {formname key=ATTRIBUTE_DESCRIPTION} id="ATTRIBUTE_DESCRIPTION"
+									rows="3"></textarea>
+							</div>
+
 							<div class="attributeValidationExpression form-group mb-2">
 								<label class="fw-bold"
 									for="ATTRIBUTE_VALIDATION_EXPRESSION">{translate key=ValidationExpression}</label>
@@ -188,6 +194,13 @@
 										class="bi bi-asterisk text-danger align-top form-control-feedback"
 										style="font-size: 0.5rem;"></i></label>
 								{textbox name=ATTRIBUTE_LABEL class="required has-feedback" id='editAttributeLabel'}
+							</div>
+
+                            							{* Attribute Description field *}
+							<div class="attributeDescription form-group mb-2">
+								<label class="fw-bold" for="editAttributeDescription">{translate key=Description}</label>
+								<textarea class="form-control" {formname key=ATTRIBUTE_DESCRIPTION} id="editAttributeDescription"
+									rows="3"></textarea>
 							</div>
 
 							<div class="form-group attributeValidationExpression">

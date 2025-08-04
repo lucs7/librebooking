@@ -42,6 +42,7 @@ class ParameterNames
     public const ATTRIBUTE_SECONDARY_CATEGORY = '@secondary_category';
     public const ATTRIBUTE_SECONDARY_ENTITY_IDS = '@secondary_entity_ids';
     public const ATTRIBUTE_IS_PRIVATE = '@is_private';
+    public const ATTRIBUTE_DESCRIPTION = '@description';
     public const AUTO_RELEASE_MINUTES = '@auto_release_minutes';
     public const ADDITIONAL_PROPERTIES = '@additional_properties';
 

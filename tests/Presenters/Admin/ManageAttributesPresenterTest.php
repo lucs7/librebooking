@@ -339,11 +339,17 @@ class FakeAttributePage extends FakeActionPageBase implements IManageAttributesP
     public $_secondaryCategory;
     public $_secondaryEntityIds;
     public $_isPrivate;
+    public $_description;
 
 
     public function GetLabel()
     {
         return $this->_label;
+    }
+
+    public function GetDescription()
+    {
+        return $this->_description;
     }
 
     public function GetType()
