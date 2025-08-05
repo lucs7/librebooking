@@ -1,14 +1,32 @@
 {
     "name": "librebooking/librebooking",
-    "description": "LibreBooking",
+    "description": "LibreBooking - Open Source Reservation System",
+    "version": "3.0.3",
+    "keywords": [
+        "booking",
+        "reservation",
+        "scheduling"
+    ],
+    "homepage": "https://librebooking.org",
     "license": "GPL-3.0-only",
+    "authors": [
+        {
+            "name": "LibreBooking Contributors",
+            "homepage": "https://github.com/librebooking/librebooking"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/librebooking/librebooking/issues",
+        "source": "https://github.com/librebooking/librebooking"
+    },
     "autoload": {},
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7.1",
         "phpcompatibility/php-compatibility": "^9.3.5",
         "kint-php/kint": "^4.2.3",
         "phpunit/phpunit": "^11.3",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "friendsofphp/php-cs-fixer": "^3.85"
     },
     "require": {
         "php": ">=8.2",
@@ -32,16 +50,29 @@
     "scripts": {
         "install-tools": "phive install --trust-gpg-keys",
         "build": "./tools/phing",
-        "fix": "./tools/php-cs-fixer fix -v",
-        "lint": "./tools/php-cs-fixer fix -vv --dry-run",
+        "fix": "./vendor/bin/php-cs-fixer fix -v",
+        "lint": "./vendor/bin/php-cs-fixer fix -vv --dry-run",
         "phpunit": "./vendor/bin/phpunit",
-        "phpstan": "./vendor/bin/phpstan analyse",
-        "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline",
-        "test": [
-            "@phpunit",
-            "@lint"
+        "stan": "./vendor/bin/phpstan --memory-limit=2G analyse",
+        "stan:baseline": "./vendor/bin/phpstan analyze --generate-baseline",
+        "cs": "./vendor/bin/phpcs -p --standard=PSR12 --ignore=vendor/*,tools/*,.git/*,tpl_c/*,build/*,.phpdoc/*,var/*,Web/scripts/*,Web/css/* .",
+        "cs:fix": "./vendor/bin/phpcbf -p --standard=PSR12 --ignore=vendor/*,tools/*,.git/*,tpl_c/*,build/*,.phpdoc/*,var/*,Web/scripts/*,Web/css/* .",
+        "security": "composer audit",
+        "compat": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.2",
+        "check": [
+            "@lint",
+            "@cs",
+            "@stan"
         ],
-        "sniffer:php8": "phpcs -p ./ --standard=vendor/phpcompatibility/php-compatibility/PHPCompatibility --report-full=./php8-report.log --ignore=./vendor/*,./tools/*,./.git/*,./tpl_c/*,./build/*,./.phpdoc/*,./var/*,./Web/scripts/*,./Web/css/* --runtime-set testVersion 8.0"
+        "test": [
+            "@check",
+            "@phpunit"
+        ],
+        "test:all": [
+            "@security",
+            "@compat",
+            "@test"
+        ]
     },
     "config": {
         "allow-plugins": {

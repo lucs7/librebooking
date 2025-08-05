@@ -1,0 +1,109 @@
+name: Auto-fix PHP Code Style
+
+on:
+  workflow_dispatch:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-fix-php:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/fix-style'))
+    steps:
+      - name: Get PR details
+        if: github.event_name == 'issue_comment'
+        id: pr
+        run: |
+          PR_NUMBER=${{ github.event.issue.number }}
+          PR_DATA=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER")
+          echo "head_ref=$(echo "$PR_DATA" | jq -r .head.ref)" >> $GITHUB_OUTPUT
+          echo "head_sha=$(echo "$PR_DATA" | jq -r .head.sha)" >> $GITHUB_OUTPUT
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event_name == 'issue_comment' && steps.pr.outputs.head_ref || github.head_ref }}
+          fetch-depth: 0
+
+      - name: Get changed PHP files
+        id: changed-php-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            **/*.php
+
+      - name: Set up PHP
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+
+      - name: Install Composer dependencies
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        uses: ramsey/composer-install@v2
+
+      - name: Cache Composer dependencies
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-php-8.4-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-8.4-composer-
+
+      - name: Apply PHP-CS-Fixer fixes
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        run: composer fix -- ${{ steps.changed-php-files.outputs.all_changed_files }}
+
+      - name: Apply PHP_CodeSniffer fixes
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        run: composer cs:fix -- ${{ steps.changed-php-files.outputs.all_changed_files }}
+
+      - name: Commit and push changes
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          if [[ -n $(git status --porcelain) ]]; then
+            git add .
+            git commit -m "style: auto-fix PHP code style
+
+            Applied PHP-CS-Fixer and PHP_CodeSniffer fixes to:
+            ${{ steps.changed-php-files.outputs.all_changed_files }}
+
+            Triggered by: ${{ github.actor }}"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+
+      - name: Comment on PR
+        if: github.event_name == 'issue_comment' && steps.changed-php-files.outputs.any_changed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ PHP code style has been automatically fixed and committed to this PR.'
+            })
+
+      - name: Comment if no changes
+        if: github.event_name == 'issue_comment' && steps.changed-php-files.outputs.any_changed != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'ℹ️ No PHP files found that need style fixing.'
+            })

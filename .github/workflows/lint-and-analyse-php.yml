@@ -1,4 +1,4 @@
-name: Linters
+name: Linters and Code Analysis
 
 # If a pull-request is pushed then cancel all previously running jobs related
 # to that pull-request
@@ -18,7 +18,7 @@ permissions:
   contents: read
 
 jobs:
-  lint:
+  lint-commit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
@@ -32,8 +32,14 @@ jobs:
         run: tox -e cz
       - name: Run config-check
         run: tox -e config-check
+      - name: Check LF line endings
+        run: |
+          if git grep -I -l $'\r' -- . ':!vendor' ':!node_modules'; then
+            echo "❌ CRLF line endings detected!"
+            exit 1
+          fi
 
-  markdownlint:
+  lint-markdown:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -46,9 +52,176 @@ jobs:
           globs: |
             *.md
 
+# for later release
+  # lint-js:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+
+  #     - name: Get changed JS files
+  #       id: changed-js-files
+  #       uses: tj-actions/changed-files@v44
+  #       with:
+  #         files: |
+  #           **/*.js
+  #           **/*.mjs
+  #           **/*.cjs
+
+  #     - name: Set up Node.js
+  #       if: steps.changed-js-files.outputs.any_changed == 'true'
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: 'npm'
+  #         cache-dependency-path: '**/package-lock.json'
+
+  #     - name: Install dependencies
+  #       if: steps.changed-js-files.outputs.any_changed == 'true'
+  #       run: |
+  #         if [ -f "package-lock.json" ]; then
+  #           npm ci
+  #         elif [ -f "package.json" ]; then
+  #           npm install
+  #         fi
+
+  #     - name: Lint JS with ESLint
+  #       if: steps.changed-js-files.outputs.any_changed == 'true'
+  #       run: npm run lint -- ${{ steps.changed-js-files.outputs.all_changed_files }}
+
+  lint-php-files:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ["8.2", "8.3", "8.4"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed PHP files
+        id: changed-php-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            **/*.php
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - name: Install Composer dependencies
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        uses: ramsey/composer-install@v2
+        with:
+          # Ignore zip for php-webdriver/webdriver
+          composer-options: "--ignore-platform-reqs"
+
+      - name: Update the composer.lock file
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        run: composer update
+
+      - name: Validate composer.json and composer.lock
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        run: composer validate --strict
+
+      # TODO: Enable this after resolving issues
+      # - name: Cache coding-standard
+      #   # Allow the previous check to fail but not abort
+      #   if: always()
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: .phpcs-cache
+      #     key: phpcs-cache
+
+      - name: Lint PHP syntax
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        run: |
+          echo "Checking PHP syntax for changed files..."
+          for file in ${{ steps.changed-php-files.outputs.all_changed_files }}; do
+            php -l "$file"
+          done
+
+      - name: PHP-CS-Fixer (dry-run for CI)
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        run: composer lint -- ${{ steps.changed-php-files.outputs.all_changed_files }}
+
+      - name: PHP_CodeSniffer (phpcs)
+        if: steps.changed-php-files.outputs.any_changed == 'true'
+        run: composer cs -- ${{ steps.changed-php-files.outputs.all_changed_files }}
+
+      # TODO: Enable this after resolving issues
+      # - name: Check coding-standard
+      #   # Allow the previous check to fail but not abort
+      #   if: always()
+      #   run: composer phpcs
+
+  analyse-php:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ["8.4"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed PHP files
+        id: changed-php-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            **/*.php
+
+      - name: Get changed config files
+        id: changed-config-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            phpstan.neon
+            phpstan.neon.dist
+            composer.json
+            composer.lock
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        if: steps.changed-php-files.outputs.any_changed == 'true' || steps.changed-config-files.outputs.any_changed == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+      #          extensions: mbstring, iconv, mysqli, zip, gd, bz2
+
+      - name: Install Composer dependencies
+        if: steps.changed-php-files.outputs.any_changed == 'true' || steps.changed-config-files.outputs.any_changed == 'true'
+        uses: ramsey/composer-install@v2
+
+      - name: Cache Composer dependencies
+        if: steps.changed-php-files.outputs.any_changed == 'true' || steps.changed-config-files.outputs.any_changed == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-${{ matrix.php-version }}-composer-
+
+      - name: Analyse changed files with PHPStan
+        if: steps.changed-php-files.outputs.any_changed == 'true' && steps.changed-config-files.outputs.any_changed != 'true'
+        run: composer stan -- ${{ steps.changed-php-files.outputs.all_changed_files }}
+
+      - name: Analyse all files with PHPStan (config changed)
+        if: steps.changed-config-files.outputs.any_changed == 'true'
+        run: composer stan
+
   phpunit:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         php-version: ["8.2", "8.3", "8.4"]
     steps:
@@ -89,79 +262,6 @@ jobs:
             fi
           done
 
-      - name: Unit Tests
-        run: |
-          composer phpunit | tee phpunit.log
-           if ! grep -qE "Tests:|OK \(" phpunit.log; then
-            echo "❌ PHPUnit exited early (no summary line found)"
-            exit 1
-          fi
-
-  lint-php-files:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ["8.2", "8.3", "8.4"]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up PHP ${{ matrix.php-version }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-
-      - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
-        with:
-          # Ignore zip for php-webdriver/webdriver
-          composer-options: "--ignore-platform-reqs"
-
-      - name: Update the composer.lock file
-        run: composer update
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-
-      # TODO: Enable this after resolving issues
-      # - name: Cache coding-standard
-      #   # Allow the previous check to fail but not abort
-      #   if: always()
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: .phpcs-cache
-      #     key: phpcs-cache
-
-      - name: Lint PHP files
-        run: ./ci/ci-phplint
-
-      # TODO: Enable this after resolving issues
-      # - name: Check coding-standard
-      #   # Allow the previous check to fail but not abort
-      #   if: always()
-      #   run: composer phpcs
-
-  analyse-php:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ["8.4"]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up PHP ${{ matrix.php-version }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-      #          extensions: mbstring, iconv, mysqli, zip, gd, bz2
-
-      - name: Install Composer dependencies
-        uses: ramsey/composer-install@v2
-
-      - name: Analyse files with PHPStan
-        run: composer phpstan -- --memory-limit 2G
-#      - name: Analyse files with Psalm
-#        # Allow the previous check to fail but not abort
-#        if: always()
-#        run: composer psalm -- --shepherd
+      - name: Run PHPUnit tests
+        if: steps.changed-php-files.outputs.any_changed == 'true' || steps.changed-config-files.outputs.any_changed == 'true'
+        run: composer phpunit
