@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class Apache extends Authentication implements IAuthentication
 {
@@ -9,7 +9,7 @@ class Apache extends Authentication implements IAuthentication
 
     private function GetRegistration()
     {
-        if ($this->_registration == null) {
+        if (null == $this->_registration) {
             $this->_registration = new Registration();
         }
 
@@ -23,17 +23,19 @@ class Apache extends Authentication implements IAuthentication
 
     public function Validate($username, $password)
     {
-        ## Get username for apache configuration and if Kerberus is used, the REALM is removed
+        // # Get username for apache configuration and if Kerberus is used, the REALM is removed
         $ru = explode('@', $_SERVER['REMOTE_USER']);
         $user = $ru[0];
+
         return true;
     }
 
     public function Login($username, $loginContext)
     {
-        ## Get username for apache configuration and if Kerberus is used, the REALM is removed
+        // # Get username for apache configuration and if Kerberus is used, the REALM is removed
         $ru = explode('@', $_SERVER['REMOTE_USER']);
         $username = $ru[0];
+
         return $this->authToDecorate->Login($username, $loginContext);
     }
 
@@ -44,7 +46,7 @@ class Apache extends Authentication implements IAuthentication
 
     public function AreCredentialsKnown()
     {
-        return (bool)$_SERVER['REMOTE_USER'];
+        return (bool) $_SERVER['REMOTE_USER'];
     }
 
     public function ShowUsernamePrompt()

@@ -35,8 +35,8 @@ class ResourceImportCsvRow
     private $indexes = [];
 
     /**
-     * @param $values array
-     * @param $indexes array
+     * @param $values     array
+     * @param $indexes    array
      * @param $attributes CustomAttribute[]
      */
     public function __construct($values, $indexes, $attributes)
@@ -55,7 +55,7 @@ class ResourceImportCsvRow
         $this->notes = $this->valueOrDefault('notes');
         $this->resourceAdministrator = strtolower($this->valueOrDefault('resourceAdministrator'));
         $this->color = $this->valueOrDefault('color');
-        $this->resourceGroups = (!array_key_exists('resourceGroups', $this->indexes) || $indexes['resourceGroups'] === false) ? []
+        $this->resourceGroups = (!array_key_exists('resourceGroups', $this->indexes) || false === $indexes['resourceGroups']) ? []
                 : array_map('trim', explode(',', htmlspecialchars($values[$indexes['resourceGroups']])));
         $this->autoAssign = strtolower($this->valueOrDefault('autoAssign'));
         $this->approvalRequired = strtolower($this->valueOrDefault('approvalRequired'));
@@ -84,12 +84,14 @@ class ResourceImportCsvRow
         if (!$isValid) {
             Log::Debug('Resource import row is not valid. Missing name');
         }
+
         return $isValid;
     }
 
     /**
-     * @param string[] $values
+     * @param string[]          $values
      * @param CustomAttribute[] $attributes
+     *
      * @return bool|string[]
      */
     public static function GetHeaders($values, $attributes)
@@ -139,7 +141,7 @@ class ResourceImportCsvRow
     {
         $values = array_map('strtolower', $values);
         $index = array_search($columnName, $values);
-        if ($index === false) {
+        if (false === $index) {
             return false;
         }
 
@@ -148,12 +150,13 @@ class ResourceImportCsvRow
 
     /**
      * @param $column string
+     *
      * @return string
      */
     private function valueOrDefault($column)
     {
-        return ($this->indexes[$column] === false ||
-                !array_key_exists($this->indexes[$column], $this->values)) ? ''
+        return (false === $this->indexes[$column]
+                || !array_key_exists($this->indexes[$column], $this->values)) ? ''
                 : htmlspecialchars(trim($this->values[$this->indexes[$column]]));
     }
 }
@@ -176,7 +179,6 @@ class ResourceImportCsv
     private $attributes;
 
     /**
-     * @param UploadedFile $file
      * @param CustomAttribute[] $attributes
      */
     public function __construct(UploadedFile $file, $attributes)
@@ -197,8 +199,9 @@ class ResourceImportCsv
         $contents = $this->RemoveUTF8BOM($contents);
         $csvRows = preg_split('/\n|\r\n?/', $contents);
 
-        if (count($csvRows) == 0) {
+        if (0 == count($csvRows)) {
             Log::Debug('No rows in resource import file');
+
             return $rows;
         }
 
@@ -211,10 +214,11 @@ class ResourceImportCsv
             if (count($csvRows) > 0) {
                 Log::Debug('Header row: %s', var_export(str_getcsv($csvRows[0]), true));
             }
+
             return $rows;
         }
 
-        for ($i = 1; $i < count($csvRows); $i++) {
+        for ($i = 1; $i < count($csvRows); ++$i) {
             $values = str_getcsv($csvRows[$i]);
 
             $row = new ResourceImportCsvRow($values, $headers, $this->attributes);

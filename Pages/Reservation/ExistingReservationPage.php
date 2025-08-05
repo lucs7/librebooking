@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Reservation/ReservationPage.php');
+require_once ROOT_DIR.'Pages/Reservation/ReservationPage.php';
 
 interface IExistingReservationPage extends IReservationPage
 {
@@ -73,19 +73,15 @@ interface IExistingReservationPage extends IReservationPage
 
     /**
      * @abstract
+     *
      * @param $canBeApproved bool
+     *
      * @return void
      */
     public function SetIsApprovable($canBeApproved);
 
-    /**
-     * @param $amIParticipating
-     */
     public function SetCurrentUserParticipating($amIParticipating);
 
-    /**
-     * @param $amIInvited
-     */
     public function SetCurrentUserInvited($amIInvited);
 
     /**
@@ -123,11 +119,7 @@ interface IExistingReservationPage extends IReservationPage
      */
     public function SetRequiresApproval($requiresApproval);
 
-    /**
-     * @param $viewableResourceReservations
-     */
     public function BindViewableResourceReservations($resourceIds);
-
 }
 
 class ExistingReservationPage extends ReservationPage implements IExistingReservationPage
@@ -161,7 +153,7 @@ class ExistingReservationPage extends ReservationPage implements IExistingReserv
 
     protected function GetTemplateName()
     {
-        $readOnly = $this->GetQuerystring(QueryStringKeys::READ_ONLY) == 1;
+        $readOnly = 1 == $this->GetQuerystring(QueryStringKeys::READ_ONLY);
 
         if (!$readOnly && $this->IsApprovable && !$this->UpdatingBeforeApproving()) {
             return 'Reservation/approve.tpl';
@@ -169,6 +161,7 @@ class ExistingReservationPage extends ReservationPage implements IExistingReserv
         if (!$readOnly && $this->IsEditable) {
             return 'Reservation/edit.tpl';
         }
+
         return 'Reservation/view.tpl';
     }
 
@@ -176,7 +169,7 @@ class ExistingReservationPage extends ReservationPage implements IExistingReserv
     {
         $forceUpdate = $this->GetQuerystring('update');
 
-        return $forceUpdate == '1' && $this->IsApprovable;
+        return '1' == $forceUpdate && $this->IsApprovable;
     }
 
     protected function GetReturnUrl()
@@ -184,6 +177,7 @@ class ExistingReservationPage extends ReservationPage implements IExistingReserv
         if ($this->UpdatingBeforeApproving()) {
             return str_replace('&update=1', '', ServiceLocator::GetServer()->GetUrl());
         }
+
         return parent::GetReturnUrl();
     }
 
@@ -319,7 +313,7 @@ class ExistingReservationPage extends ReservationPage implements IExistingReserv
 
     public function BindViewableResourceReservations($resourceIds)
     {
-        $this->Set('CanViewResourceReservations',$resourceIds);
+        $this->Set('CanViewResourceReservations', $resourceIds);
     }
 }
 

@@ -30,10 +30,10 @@ class ReservationReminderView
     public function __construct($minutes)
     {
         $this->minutes = $minutes;
-        if ($minutes % 1440 == 0) {
+        if (0 == $minutes % 1440) {
             $this->value = $minutes / 1440;
             $this->interval = ReservationReminderInterval::Days;
-        } elseif ($minutes % 60 == 0) {
+        } elseif (0 == $minutes % 60) {
             $this->value = $minutes / 60;
             $this->interval = ReservationReminderInterval::Hours;
         } else {

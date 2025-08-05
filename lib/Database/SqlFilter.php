@@ -14,7 +14,6 @@ interface ISqlFilter
 interface ISqlFilterColumn
 {
     /**
-     * @param mixed $columnValue
      * @return Criteria
      */
     public function GetCriteria($columnValue);
@@ -26,7 +25,7 @@ class SqlFilterColumn implements ISqlFilterColumn
 
     public function __construct($tableName, $columnName)
     {
-        $this->fullName = '`' . $tableName . '`.`' . $columnName . '`';
+        $this->fullName = '`'.$tableName.'`.`'.$columnName.'`';
     }
 
     public function __toString()
@@ -47,7 +46,7 @@ class SqlRepeatingFilterColumn implements ISqlFilterColumn
 
     public function __construct($tableName, $columnName, $index)
     {
-        $this->fullName = empty($tableName) ? '`'. $columnName . '`' : '`' .$tableName . '`.`' . $columnName . '`';
+        $this->fullName = empty($tableName) ? '`'.$columnName.'`' : '`'.$tableName.'`.`'.$columnName.'`';
         $this->index = $index;
     }
 
@@ -65,7 +64,7 @@ abstract class BaseSqlFilter implements ISqlFilter
 
     /**
      * @param string|ISqlFilterColumn $columnName
-     * @param string $columnValue
+     * @param string                  $columnValue
      */
     public function __construct($columnName, $columnValue)
     {
@@ -79,6 +78,7 @@ abstract class BaseSqlFilter implements ISqlFilter
     /**
      * @param string $columnName
      * @param string $columnValue
+     *
      * @return Criteria
      */
     protected function GetCriteria($columnName, $columnValue)
@@ -114,12 +114,14 @@ abstract class BaseSqlFilter implements ISqlFilter
     public function _And(ISqlFilter $filter)
     {
         $this->_and[] = $filter;
+
         return $this;
     }
 
     public function _Or(ISqlFilter $filter)
     {
         $this->_or[] = $filter;
+
         return $this;
     }
 
@@ -153,10 +155,10 @@ class Criteria
     {
         $this->Name = $columnName;
         if (!BookedStringHelper::StartsWith($this->Name, '`')) {
-            $this->Name = '`' . $this->Name;
+            $this->Name = '`'.$this->Name;
         }
         if (!BookedStringHelper::EndsWith($this->Name, '`')) {
-            $this->Name = $this->Name . '`';
+            $this->Name = $this->Name.'`';
         }
         $this->Value = $columnValue;
         $this->Variable = empty($variableName) ? "@$columnName" : "@$variableName";
@@ -167,7 +169,7 @@ class SqlFilterEquals extends BaseSqlFilter
 {
     /**
      * @param string|SqlFilterColumn $columnName
-     * @param string $columnValue
+     * @param string                 $columnValue
      */
     public function __construct($columnName, $columnValue)
     {
@@ -176,9 +178,10 @@ class SqlFilterEquals extends BaseSqlFilter
 
     protected function GetSql()
     {
-        if ($this->criteria->Value == null) {
+        if (null == $this->criteria->Value) {
             return "{$this->criteria->Name} IS NULL";
         }
+
         return "{$this->criteria->Name} = {$this->criteria->Variable}";
     }
 }
@@ -187,7 +190,7 @@ class SqlFilterNotEquals extends BaseSqlFilter
 {
     /**
      * @param string|SqlFilterColumn $columnName
-     * @param string $columnValue
+     * @param string                 $columnValue
      */
     public function __construct($columnName, $columnValue)
     {
@@ -239,12 +242,12 @@ class SqlFilterLike extends BaseSqlFilter
 {
     /**
      * @param string|ISqlFilterColumn $columnName
-     * @param string $columnValue
+     * @param string                  $columnValue
      */
     public function __construct($columnName, $columnValue)
     {
         if (!BookedStringHelper::Contains($columnValue, '%')) {
-            $columnValue = '%' . $columnValue . '%';
+            $columnValue = '%'.$columnValue.'%';
         }
         parent::__construct($columnName, $columnValue);
     }
@@ -269,8 +272,8 @@ class SqlFilterGreaterThan extends BaseSqlFilter
 
     /**
      * @param string|ISqlFilterColumn $columnName
-     * @param string $columnValue
-     * @param bool $inclusive false by default
+     * @param string                  $columnValue
+     * @param bool                    $inclusive   false by default
      */
     public function __construct($columnName, $columnValue, $inclusive = false)
     {
@@ -281,6 +284,7 @@ class SqlFilterGreaterThan extends BaseSqlFilter
     protected function GetSql()
     {
         $sign = $this->inclusive ? '>=' : '>';
+
         return "{$this->criteria->Name} $sign {$this->criteria->Variable}";
     }
 }
@@ -294,8 +298,8 @@ class SqlFilterLessThan extends BaseSqlFilter
 
     /**
      * @param string|ISqlFilterColumn $columnName
-     * @param string $columnValue
-     * @param bool $inclusive false by default
+     * @param string                  $columnValue
+     * @param bool                    $inclusive   false by default
      */
     public function __construct($columnName, $columnValue, $inclusive = false)
     {
@@ -306,6 +310,7 @@ class SqlFilterLessThan extends BaseSqlFilter
     protected function GetSql()
     {
         $sign = $this->inclusive ? '<=' : '<';
+
         return "{$this->criteria->Name} $sign {$this->criteria->Variable}";
     }
 }
@@ -325,7 +330,7 @@ class SqlFilterGreaterThanColumn extends BaseSqlFilter
     /**
      * @param string|ISqlFilterColumn $columnName
      * @param string|ISqlFilterColumn $columnNameCompare
-     * @param bool $inclusive false by default
+     * @param bool                    $inclusive         false by default
      */
     public function __construct($columnName, $columnNameCompare, $inclusive = false)
     {
@@ -338,6 +343,7 @@ class SqlFilterGreaterThanColumn extends BaseSqlFilter
     protected function GetSql()
     {
         $sign = $this->inclusive ? '>=' : '>';
+
         return "{$this->columnName} $sign {$this->columnNameCompare}";
     }
 }
@@ -357,7 +363,7 @@ class SqlFilterLessThanColumn extends BaseSqlFilter
     /**
      * @param string|ISqlFilterColumn $columnName
      * @param string|ISqlFilterColumn $columnNameCompare
-     * @param bool $inclusive false by default
+     * @param bool                    $inclusive         false by default
      */
     public function __construct($columnName, $columnNameCompare, $inclusive = false)
     {
@@ -370,6 +376,7 @@ class SqlFilterLessThanColumn extends BaseSqlFilter
     protected function GetSql()
     {
         $sign = $this->inclusive ? '<=' : '<';
+
         return "{$this->columnName} $sign {$this->columnNameCompare}";
     }
 }
@@ -383,12 +390,12 @@ class SqlFilterIn extends BaseSqlFilter
 
     /**
      * @param string|ISqlFilterColumn $columnName
-     * @param array $possibleValues
+     * @param array                   $possibleValues
      */
     public function __construct($columnName, $possibleValues)
     {
         $this->possibleValues = $possibleValues;
-        parent::__construct($columnName, $columnName . 'In');
+        parent::__construct($columnName, $columnName.'In');
     }
 
     protected function GetSql()
@@ -399,6 +406,7 @@ class SqlFilterIn extends BaseSqlFilter
         }
         $values = implode("','", $escapedValues);
         $inClause = "'$values'";
+
         return "{$this->criteria->Name} IN ($inClause)";
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/GroupsWebService.php');
+require_once ROOT_DIR.'WebServices/GroupsWebService.php';
 
 class GroupsWebServiceTest extends TestBase
 {

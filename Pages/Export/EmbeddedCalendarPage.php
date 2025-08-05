@@ -1,15 +1,13 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Presenters/EmbeddedCalendarPresenter.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'Presenters/EmbeddedCalendarPresenter.php';
 
 interface IEmbeddedCalendarPage
 {
     /**
      * @param ReservationListing $reservations
-     * @param string $timezone
-     * @param Date $startDate
-     * @param Date $endDate
+     * @param string             $timezone
      */
     public function BindReservations($reservations, $timezone, Date $startDate, Date $endDate);
 
@@ -46,9 +44,6 @@ interface IEmbeddedCalendarPage
      */
     public function GetTitleFormat();
 
-    /**
-     * @param EmbeddedCalendarTitleFormatter $formatter
-     */
     public function BindTitleFormatter(EmbeddedCalendarTitleFormatter $formatter);
 }
 
@@ -64,8 +59,8 @@ class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
 
     public function PageLoad()
     {
-        $this->Set('ReservationUrl', Configuration::Instance()->GetScriptUrl() . '/' . Pages::RESERVATION . '?' . QueryStringKeys::REFERENCE_NUMBER . '=');
-        $this->Set('ScheduleUrl', Configuration::Instance()->GetScriptUrl() . '/' . Pages::SCHEDULE . '?' . QueryStringKeys::START_DATE . '=');
+        $this->Set('ReservationUrl', Configuration::Instance()->GetScriptUrl().'/'.Pages::RESERVATION.'?'.QueryStringKeys::REFERENCE_NUMBER.'=');
+        $this->Set('ScheduleUrl', Configuration::Instance()->GetScriptUrl().'/'.Pages::SCHEDULE.'?'.QueryStringKeys::START_DATE.'=');
         $this->presenter->PageLoad();
     }
 
@@ -75,7 +70,7 @@ class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
         $this->Set('Reservations', $reservations);
         $this->Set('Timezone', $timezone);
         $this->Set('Range', $Range);
-        $this->Set('Width', (1/7)*100 . '%');
+        $this->Set('Width', (1 / 7) * 100 .'%');
     }
 
     public function DisplayAgenda()

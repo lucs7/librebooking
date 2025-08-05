@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Reports/IDisplayableReportPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Presenters/Reports/GenerateReportPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Reports/ReportCsvColumnView.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Pages/Reports/IDisplayableReportPage.php';
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Presenters/Reports/GenerateReportPresenter.php';
+require_once ROOT_DIR.'Presenters/Reports/ReportCsvColumnView.php';
 
 interface IGenerateReportPage extends IDisplayableReportPage, IActionPage
 {
@@ -218,6 +218,7 @@ class GenerateReportPage extends ActionPage implements IGenerateReportPage
         if (!is_array($id) && !empty($id)) {
             return [$id];
         }
+
         return $id;
     }
 
@@ -299,6 +300,7 @@ class GenerateReportPage extends ActionPage implements IGenerateReportPage
     public function GetIncludeDeleted()
     {
         $include = $this->GetValue(FormKeys::INCLUDE_DELETED);
+
         return isset($include);
     }
 

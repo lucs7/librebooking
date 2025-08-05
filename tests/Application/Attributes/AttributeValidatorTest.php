@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 class AttributeValidatorTest extends TestBase
 {

@@ -38,6 +38,7 @@ class ResourceType
     /**
      * @param string $name
      * @param string $description
+     *
      * @return ResourceType
      */
     public static function CreateNew($name, $description)
@@ -159,10 +160,6 @@ class ResourceType
         return $this->removedAttributeValues;
     }
 
-    /**
-     * @param $customAttributeId
-     * @return mixed
-     */
     public function GetAttributeValue($customAttributeId)
     {
         if (array_key_exists($customAttributeId, $this->attributeValues)) {

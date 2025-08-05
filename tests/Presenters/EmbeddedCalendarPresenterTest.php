@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/EmbeddedCalendarPresenter.php');
+require_once ROOT_DIR.'Presenters/EmbeddedCalendarPresenter.php';
 
 class EmbeddedCalendarPresenterTest extends TestBase
 {
@@ -190,7 +190,6 @@ class FakeEmbeddedCalendarPage extends FakePageBase implements IEmbeddedCalendar
         return $this->_DisplayType;
     }
 
-
     /**
      * @return string
      */
@@ -200,9 +199,6 @@ class FakeEmbeddedCalendarPage extends FakePageBase implements IEmbeddedCalendar
         return null;
     }
 
-    /**
-     * @param EmbeddedCalendarTitleFormatter $formatter
-     */
     public function BindTitleFormatter(EmbeddedCalendarTitleFormatter $formatter)
     {
         // TODO: Implement BindTitleFormatter() method.

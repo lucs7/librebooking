@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'Domain/Events/ReservationEvents.php');
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'Domain/Events/ReservationEvents.php';
 
 class ExistingReservationSeries extends ReservationSeries
 {
@@ -106,6 +106,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @var IRepeatOptions
+     *
      * @internal
      */
     private $_originalRepeatOptions;
@@ -145,6 +146,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param $statusId int|ReservationStatus
+     *
      * @return void
      */
     public function WithStatus($statusId)
@@ -153,7 +155,6 @@ class ExistingReservationSeries extends ReservationSeries
     }
 
     /**
-     * @param ReservationAccessory $accessory
      * @return void
      */
     public function WithAccessory(ReservationAccessory $accessory)
@@ -161,16 +162,13 @@ class ExistingReservationSeries extends ReservationSeries
         $this->_accessories[] = $accessory;
     }
 
-    /**
-     * @param AttributeValue $attributeValue
-     */
     public function WithAttribute(AttributeValue $attributeValue)
     {
         $this->AddAttributeValue($attributeValue);
     }
 
     /**
-     * @param $fileId int
+     * @param $fileId    int
      * @param $extension string
      */
     public function WithAttachment($fileId, $extension)
@@ -184,8 +182,8 @@ class ExistingReservationSeries extends ReservationSeries
         $toRemove = $reservation;
 
         foreach ($this->_Instances() as $instance) {
-            if ($instance->ReferenceNumber() == $reservation->ReferenceNumber() ||
-                    ($instance->StartDate()->Equals($reservation->StartDate()) && $instance->EndDate()->Equals($reservation->EndDate()))) {
+            if ($instance->ReferenceNumber() == $reservation->ReferenceNumber()
+                    || ($instance->StartDate()->Equals($reservation->StartDate()) && $instance->EndDate()->Equals($reservation->EndDate()))) {
                 $toRemove = $instance;
                 break;
             }
@@ -196,7 +194,8 @@ class ExistingReservationSeries extends ReservationSeries
         $this->AddEvent(new InstanceRemovedEvent($toRemove, $this));
         $this->_deleteRequestIds[] = $toRemove->ReservationId();
         $this->RemoveEvent(new InstanceAddedEvent($toRemove, $this));
-//        }
+
+        //        }
         return true;
     }
 
@@ -214,11 +213,9 @@ class ExistingReservationSeries extends ReservationSeries
     }
 
     /**
-     * @param int $userId
-     * @param BookableResource $resource
+     * @param int    $userId
      * @param string $title
      * @param string $description
-     * @param UserSession $updatedBy
      */
     public function Update($userId, BookableResource $resource, $title, $description, UserSession $updatedBy)
     {
@@ -244,9 +241,6 @@ class ExistingReservationSeries extends ReservationSeries
         $this->_description = $description;
     }
 
-    /**
-     * @param DateRange $reservationDate
-     */
     public function UpdateDuration(DateRange $reservationDate)
     {
         $currentDuration = $this->CurrentInstance()->Duration();
@@ -279,9 +273,6 @@ class ExistingReservationSeries extends ReservationSeries
         $this->seriesUpdateStrategy = SeriesUpdateScope::CreateStrategy($seriesUpdateScope);
     }
 
-    /**
-     * @param IRepeatOptions $repeatOptions
-     */
     public function Repeats(IRepeatOptions $repeatOptions)
     {
         if ($this->seriesUpdateStrategy->CanChangeRepeatTo($this, $repeatOptions)) {
@@ -303,6 +294,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param $resources array|BookableResource([]
+     *
      * @return void
      */
     public function ChangeResources($resources)
@@ -326,8 +318,8 @@ class ExistingReservationSeries extends ReservationSeries
     }
 
     /**
-     * @param UserSession $deletedBy
      * @param string $reason
+     *
      * @return void
      */
     public function Delete(UserSession $deletedBy, $reason = null)
@@ -344,7 +336,7 @@ class ExistingReservationSeries extends ReservationSeries
                 $this->unusedCreditBalance += $instance->GetCreditsConsumed();
             }
         } else {
-            Log::Debug("Removing series %s", $this->SeriesId());
+            Log::Debug('Removing series %s', $this->SeriesId());
 
             $this->_seriesBeingDeleted = true;
             $this->AddEvent(new SeriesDeletedEvent($this));
@@ -355,7 +347,6 @@ class ExistingReservationSeries extends ReservationSeries
     }
 
     /**
-     * @param UserSession $approvedBy
      * @return void
      */
     public function Approve(UserSession $approvedBy)
@@ -364,7 +355,7 @@ class ExistingReservationSeries extends ReservationSeries
 
         $this->statusId = ReservationStatus::Created;
 
-        Log::Debug("Approving series %s", $this->SeriesId());
+        Log::Debug('Approving series %s', $this->SeriesId());
 
         $this->AddEvent(new SeriesApprovedEvent($this));
     }
@@ -396,15 +387,17 @@ class ExistingReservationSeries extends ReservationSeries
         $this->AddEvent(new InstanceUpdatedEvent($this->CurrentInstance(), $this));
     }
 
-    protected function AddNewInstance(DateRange $reservationDate): Reservation|null
+    protected function AddNewInstance(DateRange $reservationDate): ?Reservation
     {
         if (!$this->InstanceStartsOnDate($reservationDate)) {
             Log::Debug('Adding instance for series %s on %s', $this->SeriesId(), $reservationDate);
 
             $newInstance = parent::AddNewInstance($reservationDate);
             $this->AddEvent(new InstanceAddedEvent($newInstance, $this));
+
             return $newInstance;
         }
+
         return null;
     }
 
@@ -487,6 +480,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param int[] $participantIds
+     *
      * @return void
      */
     public function ChangeParticipants($participantIds)
@@ -494,7 +488,7 @@ class ExistingReservationSeries extends ReservationSeries
         /** @var Reservation $instance */
         foreach ($this->Instances() as $instance) {
             $numberChanged = $instance->ChangeParticipants($participantIds);
-            if ($numberChanged != 0) {
+            if (0 != $numberChanged) {
                 $this->RaiseInstanceUpdatedEvent($instance);
             }
         }
@@ -502,6 +496,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param int[] $inviteeIds
+     *
      * @return void
      */
     public function ChangeInvitees($inviteeIds)
@@ -509,7 +504,7 @@ class ExistingReservationSeries extends ReservationSeries
         /** @var Reservation $instance */
         foreach ($this->Instances() as $instance) {
             $numberChanged = $instance->ChangeInvitees($inviteeIds);
-            if ($numberChanged != 0) {
+            if (0 != $numberChanged) {
                 $this->RaiseInstanceUpdatedEvent($instance);
             }
         }
@@ -518,6 +513,7 @@ class ExistingReservationSeries extends ReservationSeries
     /**
      * @param string[] $invitedGuests
      * @param string[] $participatingGuests
+     *
      * @return void
      */
     public function ChangeGuests($invitedGuests, $participatingGuests)
@@ -527,7 +523,7 @@ class ExistingReservationSeries extends ReservationSeries
             $invitedChanged = $instance->ChangeInvitedGuests($invitedGuests);
             $participatingChanged = $instance->ChangeParticipatingGuests($participatingGuests);
 
-            if ($invitedChanged + $participatingChanged != 0) {
+            if (0 != $invitedChanged + $participatingChanged) {
                 $this->RaiseInstanceUpdatedEvent($instance);
             }
         }
@@ -535,6 +531,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param int $inviteeId
+     *
      * @return void
      */
     public function AcceptInvitation($inviteeId)
@@ -550,6 +547,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param int $inviteeId
+     *
      * @return void
      */
     public function DeclineInvitation($inviteeId)
@@ -579,7 +577,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param string $email
-     * @param User $user
+     * @param User   $user
      */
     public function AcceptGuestAsUserInvitation($email, $user)
     {
@@ -610,6 +608,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param int $participantId
+     *
      * @return void
      */
     public function CancelAllParticipation($participantId)
@@ -625,6 +624,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param int $participantId
+     *
      * @return void
      */
     public function CancelInstanceParticipation($participantId)
@@ -669,6 +669,7 @@ class ExistingReservationSeries extends ReservationSeries
 
     /**
      * @param array|ReservationAccessory[] $accessories
+     *
      * @return void
      */
     public function ChangeAccessories($accessories)

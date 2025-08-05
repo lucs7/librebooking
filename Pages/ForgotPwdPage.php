@@ -1,20 +1,22 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 interface IForgotPwdPage extends IPage
 {
     public function ResetClicked();
+
     public function ShowResetEmailSent($showResetEmailSent);
 
     public function GetEmailAddress();
+
     public function SetEnabled($enabled);
 }
 
 class ForgotPwdPage extends Page implements IForgotPwdPage
 {
-    private $_presenter = null;
+    private $_presenter;
 
     public function __construct()
     {
@@ -34,6 +36,7 @@ class ForgotPwdPage extends Page implements IForgotPwdPage
     public function ResetClicked()
     {
         $reset = $this->GetForm(Actions::RESET);
+
         return !empty($reset);
     }
 

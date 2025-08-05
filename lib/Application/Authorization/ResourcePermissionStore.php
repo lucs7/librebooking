@@ -1,23 +1,26 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 interface IResourcePermissionStore
 {
     /**
      * @param $userId int
+     *
      * @return int[]
      */
     public function GetAllResources($userId);
 
     /**
      * @param $userId int
+     *
      * @return int[]
      */
     public function GetBookableResources($userId);
 
     /**
      * @param $userId int
+     *
      * @return int[]
      */
     public function GetViewOnlyResources($userId);
@@ -30,9 +33,6 @@ class ResourcePermissionStore implements IResourcePermissionStore
      */
     private $_scheduleUserRepository;
 
-    /**
-     * @param IScheduleUserRepository $scheduleUserRepository
-     */
     public function __construct(IScheduleUserRepository $scheduleUserRepository)
     {
         $this->_scheduleUserRepository = $scheduleUserRepository;

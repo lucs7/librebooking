@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/ReservationEvents.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/ReservationEvents.php';
 
 class Registration implements IRegistration
 {
@@ -36,7 +36,7 @@ class Registration implements IRegistration
         $userRepository = null,
         $notificationStrategy = null,
         $permissionAssignmentStrategy = null,
-        $groupRepository = null
+        $groupRepository = null,
     ) {
         $this->passwordEncryption = $passwordEncryption;
         $this->userRepository = $userRepository;
@@ -44,23 +44,23 @@ class Registration implements IRegistration
         $this->permissionAssignmentStrategy = $permissionAssignmentStrategy;
         $this->groupRepository = $groupRepository;
 
-        if ($passwordEncryption == null) {
+        if (null == $passwordEncryption) {
             $this->passwordEncryption = new PasswordEncryption();
         }
 
-        if ($userRepository == null) {
+        if (null == $userRepository) {
             $this->userRepository = new UserRepository();
         }
 
-        if ($notificationStrategy == null) {
+        if (null == $notificationStrategy) {
             $this->notificationStrategy = new RegistrationNotificationStrategy();
         }
 
-        if ($permissionAssignmentStrategy == null) {
+        if (null == $permissionAssignmentStrategy) {
             $this->permissionAssignmentStrategy = new RegistrationPermissionStrategy();
         }
 
-        if ($groupRepository == null) {
+        if (null == $groupRepository) {
             $this->groupRepository = new GroupRepository();
         }
     }
@@ -77,7 +77,7 @@ class Registration implements IRegistration
         $additionalFields = [],
         $attributeValues = [],
         $groups = null,
-        $acceptTerms = false
+        $acceptTerms = false,
     ) {
         $homepageId = empty($homepageId) ? Pages::DEFAULT_HOMEPAGE_ID : $homepageId;
         $encryptedPassword = $this->passwordEncryption->EncryptPassword($password);
@@ -95,7 +95,7 @@ class Registration implements IRegistration
         $user->ChangeCustomAttributes($attributeValues);
         $user->AcceptTerms($acceptTerms);
 
-        if ($groups != null) {
+        if (null != $groups) {
             $user->WithGroups($groups);
         }
 
@@ -149,7 +149,7 @@ class Registration implements IRegistration
             $command = new UpdateUserFromLdapCommand($user->UserName(), $user->Email(), $user->FirstName(), $user->LastName(), $password, $salt, $user->Phone(), $user->Organization(), $user->Title());
             ServiceLocator::GetDatabase()->Execute($command);
 
-            if ($this->GetUserGroups($user) != null) {
+            if (null != $this->GetUserGroups($user)) {
                 $updatedUser = $this->userRepository->LoadByUsername($user->Username());
                 $updatedUser->ChangeGroups($this->GetUserGroups($user));
                 $this->userRepository->Update($updatedUser);
@@ -174,8 +174,7 @@ class Registration implements IRegistration
     }
 
     /**
-     * @param AuthenticatedUser $user
-     * @return null|UserGroup[]
+     * @return UserGroup[]|null
      */
     private function GetUserGroups(AuthenticatedUser $user)
     {
@@ -186,10 +185,10 @@ class Registration implements IRegistration
         }
 
         $groupsToSync = [];
-        if ($userGroups != null) {
+        if (null != $userGroups) {
             $lowercaseGroups = array_map('strtolower', $userGroups);
             $altGroups = $userGroups;
-            $altGroups= array_map(function($dn) {return sscanf(explode(",", $dn)[0], "cn=%s,")[0];}, $altGroups);
+            $altGroups = array_map(function ($dn) {return sscanf(explode(',', $dn)[0], 'cn=%s,')[0]; }, $altGroups);
 
             $groupsToSync = [];
             $groups = $this->groupRepository->GetList()->Results();
@@ -200,10 +199,10 @@ class Registration implements IRegistration
                     $groupsToSync[] = new UserGroup($group->Id(), $group->Name());
                 } else {
                     if (in_array(strtolower($group->Name()), $altGroups)) {
-                      Log::Debug('Syncing group %s for user %s', $group->Name(), $user->Username());
-                      $groupsToSync[] = new UserGroup($group->Id(), $group->Name());
+                        Log::Debug('Syncing group %s for user %s', $group->Name(), $user->Username());
+                        $groupsToSync[] = new UserGroup($group->Id(), $group->Name());
                     } else {
-                      Log::Debug('User %s is not part of group %s, sync skipped', $user->Username(), $group->Name());
+                        Log::Debug('User %s is not part of group %s, sync skipped', $user->Username(), $group->Name());
                     }
                 }
             }

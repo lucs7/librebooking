@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenterFactory.php');
-require_once(ROOT_DIR . 'Pages/Ajax/IReservationSaveResultsView.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationPresenterFactory.php';
+require_once ROOT_DIR.'Pages/Ajax/IReservationSaveResultsView.php';
 
 interface IReservationWaitlistPage extends IReservationSaveResultsView
 {
@@ -46,7 +46,6 @@ interface IReservationWaitlistPage extends IReservationSaveResultsView
      */
     public function GetResourceId();
 }
-
 
 class ReservationWaitlistPage extends SecurePage implements IReservationWaitlistPage
 {

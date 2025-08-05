@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SchedulePage.php');
-require_once(ROOT_DIR . 'Presenters/Schedule/SchedulePresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/GuestPermissionServiceFactory.php');
+require_once ROOT_DIR.'Pages/SchedulePage.php';
+require_once ROOT_DIR.'Presenters/Schedule/SchedulePresenter.php';
+require_once ROOT_DIR.'lib/Application/Authorization/GuestPermissionServiceFactory.php';
 
 class ViewSchedulePage extends SchedulePage
 {
@@ -41,7 +41,6 @@ class ViewSchedulePage extends SchedulePage
 
     public function ProcessPageLoad()
     {
-
         // URIScriptValidator::validateOrRedirect($_SERVER['REQUEST_URI'], '/view-schedule.php');
         // ParamsValidator::validateOrRedirect(RouteParamsKeys::VIEW_SCHEDULE, $_SERVER['REQUEST_URI'], '/view-schedule.php', true);
 
@@ -60,7 +59,7 @@ class ViewSchedulePage extends SchedulePage
         $this->Set('ShowSubscription', true);
 
         if ($this->IsMobile && !$this->IsTablet) {
-            if ($this->ScheduleStyle == ScheduleStyle::Tall) {
+            if (ScheduleStyle::Tall == $this->ScheduleStyle) {
                 $this->Display('Schedule/schedule-flipped.tpl');
             } else {
                 $this->Display('Schedule/schedule-mobile.tpl');
@@ -87,6 +86,7 @@ class ViewSchedulePage extends SchedulePage
     public function GetDisplayTimezone(UserSession $user, Schedule $schedule)
     {
         $user->Timezone = $schedule->GetTimezone();
+
         return $schedule->GetTimezone();
     }
 }

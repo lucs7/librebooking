@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class ca extends en_gb
 {
@@ -359,7 +359,6 @@ class ca extends en_gb
         $strings['ForgotPassword'] = 'Contrasenya Oblidada';
         $strings['NotificationPreferences'] = 'Preferencies de Notificaci&oacute;';
         $strings['ManageAnnouncements'] = 'Anuncis';
-        //
 
         // Day representations
         $strings['DaySundaySingle'] = 'G';
@@ -388,10 +387,10 @@ class ca extends en_gb
         $strings['InviteeAddedSubject'] = 'Invitaci&oacute; a Reserva';
         $strings['ResetPassword'] = 'Petici&oacute; de Reinici de Contrasenya';
         $strings['ForgotPasswordEmailSent'] = 'S\'ha enviat un email a la direcci&oacute; proporcionada amb instruccions per reiniciar la teva contrasenya';
-        //End Email Subjects
+        // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'No tens cap reserva anterior';
         $strings['PastReservations'] = 'Reserves anteriors';
         $strings['AllNoPastReservations'] = 'No hi ha cap reserva anterior en els darrers %s dies';
@@ -399,38 +398,37 @@ class ca extends en_gb
         $strings['Yesterday'] = 'Ahir';
         $strings['EarlierThisWeek'] = 'Més aviat aquesta setmana';
         $strings['PreviousWeek'] = 'Setmana anterior';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'El vostre grup no té cap reserva futura';
         $strings['GroupUpcomingReservations'] = 'Properes reserves del meu(s) grup(s)';
-        //End Group Upcoming Reservations
-        
-        //Facebook Login SDK Error
-        $strings['FacebookLoginErrorMessage'] = 'S\'ha produït un error en iniciar la sessió amb Facebook. Torneu-ho a provar.';
-        //End Facebook Login SDK Error
+        // End Group Upcoming Reservations
 
-        //Pending Approval Reservations in Dashboard
+        // Facebook Login SDK Error
+        $strings['FacebookLoginErrorMessage'] = 'S\'ha produït un error en iniciar la sessió amb Facebook. Torneu-ho a provar.';
+        // End Facebook Login SDK Error
+
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'No teniu cap reserva a l\'espera d\'aprovació';
         $strings['PendingApprovalReservations'] = 'Reserves pendents d\'aprovació';
         $strings['LaterThisMonth'] = 'Més endavant aquest mes';
         $strings['LaterThisYear'] = 'Més endavant aquest any';
         $strings['Remaining'] = 'Restant';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'No hi ha cap reserva de sortida que falti';
-        $strings['MissingCheckOutReservations'] = 'Reserves de sortida que falten';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Reserves de sortida que falten';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'No es poden veure els detalls de la reserva perquè no teniu permisos per a cap dels recursos d\'aquesta reserva';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
+
         return $this->Strings;
     }
 
@@ -453,6 +451,7 @@ class ca extends en_gb
         $days['letter'] = ['G', 'L', 'T', 'C', 'J', 'V', 'S'];
 
         $this->Days = $days;
+
         return $this->Days;
     }
 
@@ -471,12 +470,14 @@ class ca extends en_gb
         $months['abbr'] = ['Gen', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Agt', 'Set', 'Oct', 'Nov', 'Des'];
 
         $this->Months = $months;
+
         return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', '&Ntilde;', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         return $this->Letters;
     }
 

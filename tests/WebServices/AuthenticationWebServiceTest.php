@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/AuthenticationWebService.php');
+require_once ROOT_DIR.'WebServices/AuthenticationWebService.php';
 
 class AuthenticationWebServiceTest extends TestBase
 {

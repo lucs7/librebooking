@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Requests/Account/AccountRequestBase.php');
-require_once(ROOT_DIR . 'WebServices/Requests/CustomAttributes/AttributeValueRequest.php');
+require_once ROOT_DIR.'WebServices/Requests/Account/AccountRequestBase.php';
+require_once ROOT_DIR.'WebServices/Requests/CustomAttributes/AttributeValueRequest.php';
 
 class CreateAccountRequest extends AccountRequestBase
 {

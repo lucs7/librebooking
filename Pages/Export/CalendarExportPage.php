@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
-require_once(ROOT_DIR . 'Presenters/CalendarExportPresenter.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Pages/Export/CalendarExportDisplay.php';
+require_once ROOT_DIR.'Presenters/CalendarExportPresenter.php';
 
 interface ICalendarExportPage
 {
@@ -35,7 +35,7 @@ interface ICalendarExportPage
 class CalendarExportPage extends Page implements ICalendarExportPage
 {
     /**
-     * @var \CalendarExportPresenter
+     * @var CalendarExportPresenter
      */
     private $presenter;
 
@@ -60,8 +60,8 @@ class CalendarExportPage extends Page implements ICalendarExportPage
     {
         $this->presenter->PageLoad(ServiceLocator::GetServer()->GetUserSession());
 
-        header("Content-Type: text/Calendar");
-        header("Content-Disposition: inline; filename=calendar.ics");
+        header('Content-Type: text/Calendar');
+        header('Content-Disposition: inline; filename=calendar.ics');
 
         $display = new CalendarExportDisplay();
         echo $display->Render($this->reservations);

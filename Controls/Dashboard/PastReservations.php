@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Controls/Dashboard/DashboardItem.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/PastReservationsPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/MissingCheckInOutReservationsPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/ReservationViewRepository.php');
+require_once ROOT_DIR.'Controls/Dashboard/DashboardItem.php';
+require_once ROOT_DIR.'Presenters/Dashboard/PastReservationsPresenter.php';
+require_once ROOT_DIR.'Presenters/Dashboard/MissingCheckInOutReservationsPresenter.php';
+require_once ROOT_DIR.'Domain/Access/ReservationViewRepository.php';
 
 class PastReservations extends DashboardItem implements IPastReservationsControl
 {
@@ -56,7 +56,7 @@ class PastReservations extends DashboardItem implements IPastReservationsControl
         $this->Set('ThisWeeksReservations', $reservations);
     }
 
-    public function BindPreviousWeek($reservations)                 
+    public function BindPreviousWeek($reservations)
     {
         $this->Set('PreviousWeekReservations', $reservations);
     }
@@ -75,15 +75,21 @@ class PastReservations extends DashboardItem implements IPastReservationsControl
 interface IPastReservationsControl
 {
     public function SetTimezone($timezone);
+
     public function SetTotal($total);
+
     public function SetUserId($userId);
 
     public function SetAllowCheckin($allowCheckin);
+
     public function SetAllowCheckout($allowCheckout);
 
-    public function BindToday($reservations);       
+    public function BindToday($reservations);
+
     public function BindYesterday($reservations);
+
     public function BindThisWeek($reservations);
+
     public function BindPreviousWeek($reservations);
 }
 
@@ -105,7 +111,7 @@ class AllPastReservations extends PastReservations
 
 class MissingCheckInOutReservations extends PastReservations implements IRemainingPastReservationsControl
 {
-/**
+    /**
      * @var MissingCheckInOutReservationsPresenter
      */
     protected $presenter;
@@ -124,7 +130,7 @@ class MissingCheckInOutReservations extends PastReservations implements IRemaini
         $this->Display('missing_check_in_out_reservations.tpl');
     }
 
-    public function BindRemaining($reservations)                 
+    public function BindRemaining($reservations)
     {
         $this->Set('RemainingReservations', $reservations);
     }

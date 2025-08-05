@@ -25,16 +25,16 @@ class ReservationDateBinder implements IReservationComponentBinder
         $requestedStartDate = $initializer->GetStartDate();
         $requestedScheduleId = $initializer->GetScheduleId();
 
-        $requestedDate = ($reservationDate == null) ? Date::Now()->ToTimezone($timezone) : $reservationDate->ToTimezone($timezone);
+        $requestedDate = (null == $reservationDate) ? Date::Now()->ToTimezone($timezone) : $reservationDate->ToTimezone($timezone);
 
-        $startDate = ($requestedStartDate == null) ? $requestedDate : $requestedStartDate->ToTimezone($timezone);
-        $endDate = ($requestedEndDate == null) ? $requestedDate : $requestedEndDate->ToTimezone($timezone);
+        $startDate = (null == $requestedStartDate) ? $requestedDate : $requestedStartDate->ToTimezone($timezone);
+        $endDate = (null == $requestedEndDate) ? $requestedDate : $requestedEndDate->ToTimezone($timezone);
 
         if ($initializer->IsNew()) {
             $resource = $initializer->PrimaryResource();
 
-            if ($resource->GetMinimumLength() != null && !$resource->GetMinimumLength()->Interval()->IsNull() &&
-                !DateDiff::BetweenDates($startDate, $endDate)->GreaterThan($resource->GetMinimumLength()->Interval())) {
+            if (null != $resource->GetMinimumLength() && !$resource->GetMinimumLength()->Interval()->IsNull()
+                && !DateDiff::BetweenDates($startDate, $endDate)->GreaterThan($resource->GetMinimumLength()->Interval())) {
                 $endDate = $startDate->ApplyDifference($resource->GetMinimumLength()->Interval());
             }
         }
@@ -47,8 +47,8 @@ class ReservationDateBinder implements IReservationComponentBinder
 
         $initializer->SetDates($startDate, $endDate, $startPeriods, $endPeriods, $schedule->GetWeekdayStart(), $layout->UsesCustomLayout());
 
-        $hideRecurrence = (!$initializer->CurrentUser()->IsAdmin &&
-            Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_PREVENT_RECURRENCE, new BooleanConverter())
+        $hideRecurrence = (!$initializer->CurrentUser()->IsAdmin
+            && Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_PREVENT_RECURRENCE, new BooleanConverter())
             || $layout->UsesCustomLayout());
 
         $initializer->HideRecurrence($hideRecurrence);
@@ -60,7 +60,8 @@ class ReservationDateBinder implements IReservationComponentBinder
 
     /**
      * @param IScheduleLayout $layout
-     * @param Date $startDate
+     * @param Date            $startDate
+     *
      * @return SchedulePeriod[]
      */
     protected function GetStartPeriods($layout, &$startDate)
@@ -72,25 +73,28 @@ class ReservationDateBinder implements IReservationComponentBinder
 
     /**
      * @param IScheduleLayout $layout
-     * @param Date $startDate
-     * @param Date $endDate
+     * @param Date            $startDate
+     * @param Date            $endDate
+     *
      * @return SchedulePeriod[]
      */
     protected function GetEndPeriods($layout, $startDate, &$endDate)
     {
         $endPeriods = $layout->GetLayout($endDate, true);
-        if (count($endPeriods) == 0 && $startDate->AddDays(1)->Equals($endDate)) {
+        if (0 == count($endPeriods) && $startDate->AddDays(1)->Equals($endDate)) {
             // no periods on the next day, return midnight to let the reservation end at the top of the hour
             return [new SchedulePeriod($endDate->SetTimeString('00:00'), $endDate->SetTimeString('00:00', true))];
         }
+
         return $this->GetPeriods($endPeriods, $layout, $endDate);
     }
 
     /**
      * @param SchedulePeriod[] $startPeriods
-     * @param IScheduleLayout $layout
-     * @param Date $startDate
-     * @param int $iteration
+     * @param IScheduleLayout  $layout
+     * @param Date             $startDate
+     * @param int              $iteration
+     *
      * @return array|SchedulePeriod[]
      */
     private function GetPeriods($startPeriods, $layout, &$startDate, $iteration = 0)
@@ -100,10 +104,12 @@ class ReservationDateBinder implements IReservationComponentBinder
             $startPeriods[] = $period;
         }
 
-        if (count($startPeriods) == 0 && $iteration < 7) {
+        if (0 == count($startPeriods) && $iteration < 7) {
             $startDate = $startDate->AddDays(1);
+
             return $this->GetPeriods($layout->GetLayout($startDate, true), $layout, $startDate, ++$iteration);
         }
+
         return $startPeriods;
     }
 }
@@ -121,7 +127,7 @@ class ReservationUserBinder implements IReservationComponentBinder
     private $reservationAuthorization;
 
     /**
-     * @param IUserRepository $userRepository
+     * @param IUserRepository           $userRepository
      * @param IReservationAuthorization $reservationAuthorization
      */
     public function __construct($userRepository, $reservationAuthorization)
@@ -186,6 +192,7 @@ class ReservationResourceBinder implements IReservationComponentBinder
 
         if ($bindableResourceData->NumberAccessible <= 0) {
             $initializer->RedirectToError(ErrorMessages::INSUFFICIENT_PERMISSIONS);
+
             return;
         }
 
@@ -200,8 +207,9 @@ class ReservationResourceBinder implements IReservationComponentBinder
     }
 
     /**
-     * @param $resources array|ResourceDto[]
+     * @param $resources           array|ResourceDto[]
      * @param $requestedResourceId int
+     *
      * @return BindableResourceData
      */
     private function GetBindableResourceData($resources, $requestedResourceId)
@@ -250,7 +258,7 @@ class ReservationDetailsBinder implements IReservationComponentBinder
         IReservationAuthorization $reservationAuthorization,
         IExistingReservationPage $page,
         ReservationView $reservationView,
-        IPrivacyFilter $privacyFilter
+        IPrivacyFilter $privacyFilter,
     ) {
         $this->reservationAuthorization = $reservationAuthorization;
         $this->page = $page;
@@ -273,7 +281,7 @@ class ReservationDetailsBinder implements IReservationComponentBinder
         $this->page->SetRepeatMonthlyType($this->reservationView->RepeatMonthlyType);
         $this->page->SetCustomRepeatDates($this->reservationView->CustomRepeatDates);
 
-        if ($this->reservationView->RepeatTerminationDate != null && $this->reservationView->RepeatTerminationDate->Timestamp() != 0) {
+        if (null != $this->reservationView->RepeatTerminationDate && 0 != $this->reservationView->RepeatTerminationDate->Timestamp()) {
             $this->page->SetRepeatTerminationDate($this->reservationView->RepeatTerminationDate->ToTimezone($initializer->GetTimezone()));
         } else {
             $this->page->SetRepeatTerminationDate($this->reservationView->EndDate);
@@ -347,6 +355,7 @@ class ReservationDetailsBinder implements IReservationComponentBinder
                 return true;
             }
         }
+
         return false;
     }
 
@@ -358,6 +367,7 @@ class ReservationDetailsBinder implements IReservationComponentBinder
                 return true;
             }
         }
+
         return false;
     }
 
@@ -374,7 +384,7 @@ class ReservationDetailsBinder implements IReservationComponentBinder
     private function SetAutoReleaseMinutes()
     {
         $minAutoReleaseMinutes = null;
-        if ($this->reservationView->CheckinDate->ToString() == '') {
+        if ('' == $this->reservationView->CheckinDate->ToString()) {
             $minAutoReleaseMinutes = $this->reservationView->AutoReleaseMinutes();
         }
         $this->page->SetAutoReleaseMinutes($minAutoReleaseMinutes);
@@ -382,7 +392,7 @@ class ReservationDetailsBinder implements IReservationComponentBinder
 
     /**
      * Gets the resources the user has permissions (full access and view only permissions)
-     * This is used to block a user from seeing reservation details if he has no permissions to it's resources
+     * This is used to block a user from seeing reservation details if he has no permissions to it's resources.
      */
     private function UserResourcePermissions($userId)
     {
@@ -391,13 +401,13 @@ class ReservationDetailsBinder implements IReservationComponentBinder
 
         $resourceIds = $resourceRepo->GetUserResourcePermissions($userId);
 
-        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId,$resourceIds);
+        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId, $resourceIds);
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){    
+        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId, $resourceIds);
         }
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 

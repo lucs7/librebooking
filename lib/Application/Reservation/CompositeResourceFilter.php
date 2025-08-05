@@ -14,6 +14,7 @@ class CompositeResourceFilter implements IResourceFilter
 
     /**
      * @param IResource $resource
+     *
      * @return bool
      */
     public function ShouldInclude($resource)

@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationAttributesPrintPage.php');
+require_once ROOT_DIR.'Pages/Ajax/ReservationAttributesPrintPage.php';
 
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ReservationAttributesPrintPresenter
 {
@@ -38,7 +38,7 @@ class ReservationAttributesPrintPresenter
         IAttributeService $attributeService,
         IAuthorizationService $authorizationService,
         IPrivacyFilter $privacyFilter,
-        IReservationViewRepository $reservationViewRepository
+        IReservationViewRepository $reservationViewRepository,
     ) {
         $this->page = $page;
         $this->attributeService = $attributeService;
@@ -76,8 +76,6 @@ class ReservationAttributesPrintPresenter
     }
 
     /**
-     * @param UserSession $userSession
-     * @param $requestedUserId
      * @return bool
      */
     private function CanReserveFor(UserSession $userSession, $requestedUserId)

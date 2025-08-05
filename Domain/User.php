@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/RoleLevel.php');
-require_once(ROOT_DIR . 'Domain/Values/EmailPreferences.php');
+require_once ROOT_DIR.'Domain/Values/RoleLevel.php';
+require_once ROOT_DIR.'Domain/Values/EmailPreferences.php';
 
 class User
 {
@@ -39,7 +39,7 @@ class User
 
     public function FullName()
     {
-        return $this->FirstName() . ' ' . $this->LastName();
+        return $this->FirstName().' '.$this->LastName();
     }
 
     protected $emailAddress;
@@ -80,7 +80,7 @@ class User
     protected $statusId;
 
     /**
-     * @return int|null|AccountStatus
+     * @return int|AccountStatus|null
      */
     public function StatusId()
     {
@@ -146,6 +146,7 @@ class User
 
     /**
      * @param int $groupId
+     *
      * @return bool
      */
     public function IsInGroup($groupId)
@@ -287,12 +288,14 @@ class User
 
     /**
      * @var string
+     *
      * @internal
      */
     public $encryptedPassword;
 
     /**
      * @var string
+     *
      * @internal
      */
     public $passwordSalt;
@@ -404,6 +407,7 @@ class User
 
     /**
      * @internal
+     *
      * @return int[]
      */
     public function GetAddedPermissions()
@@ -413,6 +417,7 @@ class User
 
     /**
      * @internal
+     *
      * @return int[]
      */
     public function GetAddedViewPermissions()
@@ -422,6 +427,7 @@ class User
 
     /**
      * @internal
+     *
      * @return int[]
      */
     public function GetRemovedPermissions()
@@ -439,7 +445,6 @@ class User
 
     /**
      * @internal
-     * @param IEmailPreferences $emailPreferences
      */
     public function WithEmailPreferences(IEmailPreferences $emailPreferences)
     {
@@ -447,7 +452,6 @@ class User
     }
 
     /**
-     * @param IDomainEvent $event
      * @return bool
      */
     public function WantsEventEmail(IDomainEvent $event)
@@ -456,7 +460,6 @@ class User
     }
 
     /**
-     * @param IDomainEvent $event
      * @param bool $turnedOn
      */
     public function ChangeEmailPreference(IDomainEvent $event, $turnedOn)
@@ -525,6 +528,7 @@ class User
 
     /**
      * @static
+     *
      * @return User
      */
     public static function Create(
@@ -536,7 +540,7 @@ class User
         $timezone,
         $password,
         $passwordSalt,
-        $homepageId = Pages::DEFAULT_HOMEPAGE_ID
+        $homepageId = Pages::DEFAULT_HOMEPAGE_ID,
     ) {
         $user = new User();
         $user->firstName = $firstName;
@@ -549,11 +553,13 @@ class User
         $user->passwordSalt = $passwordSalt;
         $user->homepageId = $homepageId;
         $user->statusId = AccountStatus::ACTIVE;
+
         return $user;
     }
 
     /**
      * @static
+     *
      * @return User
      */
     public static function CreatePending(
@@ -565,7 +571,7 @@ class User
         $timezone,
         $password,
         $passwordSalt,
-        $homepageId = Pages::DEFAULT_HOMEPAGE_ID
+        $homepageId = Pages::DEFAULT_HOMEPAGE_ID,
     ) {
         $user = self::Create(
             $firstName,
@@ -579,6 +585,7 @@ class User
             $homepageId
         );
         $user->statusId = AccountStatus::AWAITING_ACTIVATION;
+
         return $user;
     }
 
@@ -655,6 +662,7 @@ class User
 
     /**
      * @param UserAttribute|string $attributeName
+     *
      * @return string
      */
     public function GetAttribute($attributeName)
@@ -662,6 +670,7 @@ class User
         if (array_key_exists($attributeName, $this->attributes)) {
             return $this->attributes[$attributeName];
         }
+
         return null;
     }
 
@@ -674,7 +683,6 @@ class User
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function IsAdminFor(User $user)
@@ -706,7 +714,6 @@ class User
     }
 
     /**
-     * @param IResource $resource
      * @return bool
      */
     public function IsResourceAdminFor(IResource $resource)
@@ -718,8 +725,8 @@ class User
         if ($this->isResourceAdmin || $this->isScheduleAdmin) {
             foreach ($this->groups as $group) {
                 if (
-                    ($group->GroupId == $resource->GetAdminGroupId()) ||
-                    ($group->GroupId == $resource->GetScheduleAdminGroupId())
+                    ($group->GroupId == $resource->GetAdminGroupId())
+                    || ($group->GroupId == $resource->GetScheduleAdminGroupId())
                 ) {
                     return true;
                 }
@@ -731,6 +738,7 @@ class User
 
     /**
      * @param IResource[] $resources
+     *
      * @return bool
      */
     public function IsResourceAdminForOneOf($resources)
@@ -745,7 +753,6 @@ class User
     }
 
     /**
-     * @param ISchedule $schedule
      * @return bool
      */
     public function IsScheduleAdminFor(ISchedule $schedule)
@@ -769,20 +776,21 @@ class User
 
     /**
      * @param int|RoleLevel $roleLevel
+     *
      * @return bool
      */
     public function IsInRole($roleLevel)
     {
-        if ($roleLevel == RoleLevel::GROUP_ADMIN) {
+        if (RoleLevel::GROUP_ADMIN == $roleLevel) {
             return $this->isGroupAdmin;
         }
-        if ($roleLevel == RoleLevel::APPLICATION_ADMIN) {
+        if (RoleLevel::APPLICATION_ADMIN == $roleLevel) {
             return $this->isApplicationAdmin;
         }
-        if ($roleLevel == RoleLevel::RESOURCE_ADMIN) {
+        if (RoleLevel::RESOURCE_ADMIN == $roleLevel) {
             return $this->isResourceAdmin;
         }
-        if ($roleLevel == RoleLevel::SCHEDULE_ADMIN) {
+        if (RoleLevel::SCHEDULE_ADMIN == $roleLevel) {
             return $this->isScheduleAdmin;
         }
 
@@ -791,6 +799,7 @@ class User
 
     /**
      * @static
+     *
      * @return User
      */
     public static function null()
@@ -896,10 +905,6 @@ class User
         return $this->_removedAttributeValues;
     }
 
-    /**
-     * @param $customAttributeId
-     * @return mixed
-     */
     public function GetAttributeValue($customAttributeId)
     {
         if (array_key_exists($customAttributeId, $this->attributeValues)) {
@@ -940,6 +945,7 @@ class User
 
     /**
      * @param $groupId int|int[]
+     *
      * @return bool
      */
     public function IsGroupAdminFor($groupId)
@@ -959,7 +965,8 @@ class User
 
     /**
      * @param $preferenceName string
-     * @return null|string
+     *
+     * @return string|null
      */
     public function GetPreference($preferenceName)
     {
@@ -1085,7 +1092,8 @@ class UserAttribute
 
     /**
      * @param string|UserAttribute $attributeName
-     * @return null|string
+     *
+     * @return string|null
      */
     public function Get($attributeName)
     {
@@ -1135,10 +1143,10 @@ class UserGroup
     public $IsScheduleAdmin = false;
 
     /**
-     * @param int $groupId
-     * @param string $groupName
-     * @param int|null $adminGroupId
-     * @param int|RoleLevel $roleLevel defaults to none
+     * @param int           $groupId
+     * @param string        $groupName
+     * @param int|null      $adminGroupId
+     * @param int|RoleLevel $roleLevel    defaults to none
      */
     public function __construct($groupId, $groupName, $adminGroupId = null, $roleLevel = RoleLevel::NONE)
     {
@@ -1149,26 +1157,26 @@ class UserGroup
     }
 
     /**
-     * @param int|null|RoleLevel $roleLevel
+     * @param int|RoleLevel|null $roleLevel
      */
     public function AddRole($roleLevel = null)
     {
-        if ($roleLevel == RoleLevel::GROUP_ADMIN) {
+        if (RoleLevel::GROUP_ADMIN == $roleLevel) {
             $this->IsGroupAdmin = true;
         }
-        if ($roleLevel == RoleLevel::APPLICATION_ADMIN) {
+        if (RoleLevel::APPLICATION_ADMIN == $roleLevel) {
             $this->IsApplicationAdmin = true;
         }
-        if ($roleLevel == RoleLevel::RESOURCE_ADMIN) {
+        if (RoleLevel::RESOURCE_ADMIN == $roleLevel) {
             $this->IsResourceAdmin = true;
         }
-        if ($roleLevel == RoleLevel::SCHEDULE_ADMIN) {
+        if (RoleLevel::SCHEDULE_ADMIN == $roleLevel) {
             $this->IsScheduleAdmin = true;
         }
     }
 
     public function __toString()
     {
-        return $this->GroupId . '';
+        return $this->GroupId.'';
     }
 }

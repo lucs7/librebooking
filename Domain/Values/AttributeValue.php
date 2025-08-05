@@ -7,9 +7,6 @@ class AttributeValue
      */
     public $AttributeId;
 
-    /**
-     * @var mixed
-     */
     public $Value;
 
     /**
@@ -18,8 +15,8 @@ class AttributeValue
     public $AttributeLabel;
 
     /**
-     * @param $attributeId int
-     * @param $value mixed
+     * @param $attributeId    int
+     * @param $value          mixed
      * @param $attributeLabel string|null
      */
     public function __construct($attributeId, $value, $attributeLabel = null)
@@ -31,7 +28,7 @@ class AttributeValue
 
     public function __toString()
     {
-        return sprintf("AttributeValue id:%s value:%s", $this->AttributeId, $this->Value);
+        return sprintf('AttributeValue id:%s value:%s', $this->AttributeId, $this->Value);
     }
 }
 

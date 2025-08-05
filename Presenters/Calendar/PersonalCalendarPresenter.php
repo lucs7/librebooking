@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Calendar/CalendarFilters.php');
-require_once(ROOT_DIR . 'Presenters/Calendar/CalendarCommon.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Presenters/Calendar/CalendarFilters.php';
+require_once ROOT_DIR.'Presenters/Calendar/CalendarCommon.php';
 
 class PersonalCalendarPresenter extends CommonCalendarPresenter
 {
@@ -14,7 +14,7 @@ class PersonalCalendarPresenter extends CommonCalendarPresenter
         ICalendarSubscriptionService $subscriptionService,
         IUserRepository $userRepository,
         IResourceService $resourceService,
-        IScheduleRepository $scheduleRepository
+        IScheduleRepository $scheduleRepository,
     ) {
         parent::__construct(
             $page,

@@ -1,51 +1,39 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationSavePresenter.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationUpdatePresenter.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationDeletePresenter.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationCheckinPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationWaitlistPresenter.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationSavePresenter.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationUpdatePresenter.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationDeletePresenter.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationCheckinPresenter.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationWaitlistPresenter.php';
 
 interface IReservationPresenterFactory
 {
     /**
-     * @param IReservationSavePage $savePage
-     * @param UserSession $userSession
      * @return ReservationSavePresenter
      */
     public function Create(IReservationSavePage $savePage, UserSession $userSession);
 
     /**
-     * @param IReservationUpdatePage $updatePage
-     * @param UserSession $userSession
      * @return ReservationUpdatePresenter
      */
     public function Update(IReservationUpdatePage $updatePage, UserSession $userSession);
 
     /**
-     * @param IReservationDeletePage $deletePage
-     * @param UserSession $userSession
      * @return ReservationDeletePresenter
      */
     public function Delete(IReservationDeletePage $deletePage, UserSession $userSession);
 
     /**
-     * @param IReservationApprovalPage $approvePage
-     * @param UserSession $userSession
      * @return ReservationApprovalPresenter
      */
     public function Approve(IReservationApprovalPage $approvePage, UserSession $userSession);
 
     /**
-     * @param IReservationWaitlistPage $page
-     * @param UserSession $userSession
      * @return ReservationWaitlistPresenter
      */
     public function JoinWaitlist(IReservationWaitlistPage $page, UserSession $userSession);
 
     /**
-     * @param IReservationCheckinPage $page
-     * @param UserSession $userSession
      * @return ReservationCheckinPresenter
      */
     public function Checkin(IReservationCheckinPage $page, UserSession $userSession);
@@ -93,6 +81,7 @@ class ReservationPresenterFactory implements IReservationPresenterFactory
 
         $persistenceService = $persistenceFactory->Create($deleteAction);
         $handler = ReservationHandler::Create($deleteAction, $persistenceService, $userSession);
+
         return new ReservationDeletePresenter(
             $deletePage,
             $persistenceService,
@@ -130,7 +119,7 @@ class ReservationPresenterFactory implements IReservationPresenterFactory
         $persistenceFactory = new ReservationPersistenceFactory();
 
         $action = ReservationAction::Checkout;
-        if ($page->GetAction() == ReservationAction::Checkin) {
+        if (ReservationAction::Checkin == $page->GetAction()) {
             $action = ReservationAction::Checkin;
         }
 

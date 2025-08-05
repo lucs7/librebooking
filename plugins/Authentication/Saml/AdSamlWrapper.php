@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File in Authentication plugin package for ver 2.1.4 LibreBooking
  * to implement Single Sign On Capability.  Based on code from the
@@ -6,11 +7,11 @@
  * Authentication plugin for Moodle 1.9+.
  * See http://moodle.org/mod/data/view.php?d=13&rid=2574
  * This plugin uses the SimpleSAMLPHP version 1.8.2 libraries.
- * http://simplesamlphp.org/
+ * http://simplesamlphp.org/.
  */
 
-require_once(ROOT_DIR . 'plugins/Authentication/Saml/adSAML.php');
-require_once(ROOT_DIR . 'plugins/Authentication/Saml/SamlUser.php');
+require_once ROOT_DIR.'plugins/Authentication/Saml/adSAML.php';
+require_once ROOT_DIR.'plugins/Authentication/Saml/SamlUser.php';
 
 class AdSamlWrapper implements ISaml
 {

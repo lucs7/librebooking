@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Controllers/ResourceSaveController.php');
+require_once ROOT_DIR.'WebServices/Controllers/ResourceSaveController.php';
 
 class ResourceSaveControllerTest extends TestBase
 {
@@ -163,9 +163,9 @@ class ResourceSaveControllerTest extends TestBase
         $this->repository->expects($this->once())
                 ->method('LoadById')
                 ->willReturnMap(
-                [
-                    [$resourceId, $expectedUpdateResource]
-                ]);
+                    [
+                        [$resourceId, $expectedUpdateResource],
+                    ]);
 
         $response = $this->controller->Update($resourceId, $request, $this->session);
 

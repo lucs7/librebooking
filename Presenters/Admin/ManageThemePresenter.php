@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
 
 class ManageThemePresenter extends ActionPresenter
 {
@@ -25,12 +25,12 @@ class ManageThemePresenter extends ActionPresenter
         $cssFile = $this->page->GetCssFile();
         $favicon = $this->page->GetFaviconFile();
 
-        if ($logoFile != null) {
-            Log::Debug('Replacing logo with ' . $logoFile->OriginalName());
+        if (null != $logoFile) {
+            Log::Debug('Replacing logo with '.$logoFile->OriginalName());
 
             $this->RemoveLogo();
 
-            $target = ROOT_DIR . 'Web/img/custom-logo.' . $logoFile->Extension();
+            $target = ROOT_DIR.'Web/img/custom-logo.'.$logoFile->Extension();
             $copied = copy($logoFile->TemporaryName(), $target);
             if (!$copied) {
                 Log::Error(
@@ -40,9 +40,9 @@ class ManageThemePresenter extends ActionPresenter
                 );
             }
         }
-        if ($cssFile != null) {
-            Log::Debug('Replacing css file with ' . $cssFile->OriginalName());
-            $target = ROOT_DIR . 'Web/css/custom-style.css';
+        if (null != $cssFile) {
+            Log::Debug('Replacing css file with '.$cssFile->OriginalName());
+            $target = ROOT_DIR.'Web/css/custom-style.css';
             $copied = copy($cssFile->TemporaryName(), $target);
             if (!$copied) {
                 Log::Error(
@@ -52,12 +52,12 @@ class ManageThemePresenter extends ActionPresenter
                 );
             }
         }
-        if ($favicon != null) {
-            Log::Debug('Replacing favicon with ' . $favicon->OriginalName());
+        if (null != $favicon) {
+            Log::Debug('Replacing favicon with '.$favicon->OriginalName());
 
             $this->RemoveFavicon();
 
-            $target = ROOT_DIR . 'Web/custom-favicon.' . $favicon->Extension();
+            $target = ROOT_DIR.'Web/custom-favicon.'.$favicon->Extension();
             $copied = copy($favicon->TemporaryName(), $target);
             if (!$copied) {
                 Log::Error(
@@ -72,7 +72,7 @@ class ManageThemePresenter extends ActionPresenter
     public function RemoveLogo()
     {
         try {
-            $targets = glob(ROOT_DIR . 'Web/img/custom-logo.*');
+            $targets = glob(ROOT_DIR.'Web/img/custom-logo.*');
             foreach ($targets as $target) {
                 $removed = unlink($target);
                 if (!$removed) {
@@ -87,7 +87,7 @@ class ManageThemePresenter extends ActionPresenter
     public function RemoveFavicon()
     {
         try {
-            $targets = glob(ROOT_DIR . 'Web/custom-favicon.*');
+            $targets = glob(ROOT_DIR.'Web/custom-favicon.*');
             foreach ($targets as $target) {
                 $removed = unlink($target);
                 if (!$removed) {
@@ -102,7 +102,7 @@ class ManageThemePresenter extends ActionPresenter
     public function RemoveCss()
     {
         try {
-            $targets = glob(ROOT_DIR . 'Web/css/custom-style.css');
+            $targets = glob(ROOT_DIR.'Web/css/custom-style.css');
             foreach ($targets as $target) {
                 $removed = unlink($target);
                 if (!$removed) {
@@ -113,6 +113,7 @@ class ManageThemePresenter extends ActionPresenter
             Log::Error('Could not remove css file. %s', $ex);
         }
     }
+
     protected function LoadValidators($action)
     {
         $this->page->RegisterValidator('logoFile', new FileUploadValidator($this->page->GetLogoFile()));

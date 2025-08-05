@@ -48,18 +48,14 @@ class BufferSlot implements IReservationSlot
     protected $_endPeriod;
 
     /**
-     * @param SchedulePeriod $begin
-     * @param SchedulePeriod $end
-     * @param Date $displayDate
      * @param int $periodSpan
-     * @param ReservationItemView $reservation
      */
     public function __construct(
         SchedulePeriod $begin,
         SchedulePeriod $end,
         Date $displayDate,
         $periodSpan,
-        ReservationItemView $reservation
+        ReservationItemView $reservation,
     ) {
         $this->_reservation = $reservation;
         $this->_begin = $begin->BeginDate();
@@ -158,7 +154,7 @@ class BufferSlot implements IReservationSlot
 
     public function __toString()
     {
-        return sprintf("Buffer Start: %s, End: %s, Span: %s", $this->Begin(), $this->End(), $this->PeriodSpan());
+        return sprintf('Buffer Start: %s, End: %s, Span: %s', $this->Begin(), $this->End(), $this->PeriodSpan());
     }
 
     public function BeginSlotId()
@@ -189,6 +185,7 @@ class BufferSlot implements IReservationSlot
     public function CollidesWith(Date $date)
     {
         $range = new DateRange($this->_begin, $this->_end);
+
         return $range->Contains($date, false);
     }
 

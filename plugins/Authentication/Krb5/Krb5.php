@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class Krb5 extends Authentication implements IAuthentication
 {
@@ -9,7 +9,7 @@ class Krb5 extends Authentication implements IAuthentication
 
     private function GetRegistration()
     {
-        if ($this->_registration == null) {
+        if (null == $this->_registration) {
             $this->_registration = new Registration();
         }
 
@@ -26,14 +26,16 @@ class Krb5 extends Authentication implements IAuthentication
         $ru = explode('@', $_SERVER['REMOTE_USER']);
         $user = $ru[0];
         $realm = $ru[1];
-        ## TODO: supported REALM should be obtained from configuration file
-        return ($realm == 'IST.LOCAL' || $realm == 'ISTA.LOCAL');
+
+        // # TODO: supported REALM should be obtained from configuration file
+        return 'IST.LOCAL' == $realm || 'ISTA.LOCAL' == $realm;
     }
 
     public function Login($username, $loginContext)
     {
         $ru = explode('@', $_SERVER['REMOTE_USER']);
         $username = $ru[0];
+
         return $this->authToDecorate->Login($username, $loginContext);
     }
 
@@ -44,7 +46,7 @@ class Krb5 extends Authentication implements IAuthentication
 
     public function AreCredentialsKnown()
     {
-        return (bool)$_SERVER['REMOTE_USER'];
+        return (bool) $_SERVER['REMOTE_USER'];
     }
 
     public function ShowUsernamePrompt()

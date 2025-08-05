@@ -18,8 +18,9 @@ class FakeAttributeService implements IAttributeService
     public $_EntityAttributeList;
 
     /**
-     * @param $category CustomAttributeCategory|int
+     * @param $category  CustomAttributeCategory|int
      * @param $entityIds array|int[]|int
+     *
      * @return IEntityAttributeList
      */
     public function GetAttributes($category, $entityIds = [])
@@ -28,11 +29,12 @@ class FakeAttributeService implements IAttributeService
     }
 
     /**
-     * @param $category int|CustomAttributeCategory
-     * @param $attributeValues AttributeValue[]|array
-     * @param $entityIds int[]
+     * @param      $category        int|CustomAttributeCategory
+     * @param      $attributeValues AttributeValue[]|array
+     * @param      $entityIds       int[]
      * @param bool $ignoreEmpty
      * @param bool $isAdmin
+     *
      * @return AttributeServiceValidationResult
      */
     public function Validate($category, $attributeValues, $entityIds = [], $ignoreEmpty = false, $isAdmin = false)
@@ -42,6 +44,7 @@ class FakeAttributeService implements IAttributeService
 
     /**
      * @param $category int|CustomAttributeCategory
+     *
      * @return array|CustomAttribute[]
      */
     public function GetByCategory($category)
@@ -51,6 +54,7 @@ class FakeAttributeService implements IAttributeService
 
     /**
      * @param $attributeId int
+     *
      * @return CustomAttribute
      */
     public function GetById($attributeId)
@@ -60,9 +64,8 @@ class FakeAttributeService implements IAttributeService
     }
 
     /**
-     * @param UserSession $userSession
-     * @param ReservationView $reservationView
      * @param int $requestedUserId
+     *
      * @return Attribute[]
      */
     public function GetReservationAttributes(UserSession $userSession, ReservationView $reservationView, $requestedUserId = 0, $requestedResourceIds = [])

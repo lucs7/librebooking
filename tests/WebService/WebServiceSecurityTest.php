@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class WebServiceSecurityTest extends TestBase
 {
@@ -44,10 +44,10 @@ class WebServiceSecurityTest extends TestBase
         $this->server->expects($this->exactly(2))
                 ->method('GetHeader')
                 ->willReturnMap(
-                [
-                    [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
-                    [WebServiceHeaders::USER_ID, $this->userId]
-                ]);
+                    [
+                        [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
+                        [WebServiceHeaders::USER_ID, $this->userId],
+                    ]);
 
         $this->userSessionRepository->expects($this->once())
                 ->method('LoadBySessionToken')
@@ -75,10 +75,10 @@ class WebServiceSecurityTest extends TestBase
         $this->server->expects($this->exactly(2))
                 ->method('GetHeader')
                 ->willReturnMap(
-                [
-                    [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
-                    [WebServiceHeaders::USER_ID, $this->userId]
-                ]);
+                    [
+                        [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
+                        [WebServiceHeaders::USER_ID, $this->userId],
+                    ]);
 
         $this->userSessionRepository->expects($this->once())
                 ->method('LoadBySessionToken')
@@ -100,10 +100,10 @@ class WebServiceSecurityTest extends TestBase
         $this->server->expects($this->exactly(2))
                 ->method('GetHeader')
                 ->willReturnMap(
-                [
-                    [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
-                    [WebServiceHeaders::USER_ID, $this->userId]
-                ]);
+                    [
+                        [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
+                        [WebServiceHeaders::USER_ID, $this->userId],
+                    ]);
 
         $this->userSessionRepository->expects($this->once())
                 ->method('LoadBySessionToken')
@@ -120,10 +120,10 @@ class WebServiceSecurityTest extends TestBase
         $this->server->expects($this->exactly(2))
                 ->method('GetHeader')
                 ->willReturnMap(
-                [
-                    [WebServiceHeaders::SESSION_TOKEN, 'not the right token'],
-                    [WebServiceHeaders::USER_ID, 'not the right id']
-                ]);
+                    [
+                        [WebServiceHeaders::SESSION_TOKEN, 'not the right token'],
+                        [WebServiceHeaders::USER_ID, 'not the right id'],
+                    ]);
 
         $this->userSessionRepository->expects($this->once())
                 ->method('LoadBySessionToken')
@@ -141,10 +141,10 @@ class WebServiceSecurityTest extends TestBase
         $this->server->expects($this->exactly(2))
                 ->method('GetHeader')
                 ->willReturnMap(
-                [
-                    [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
-                    [WebServiceHeaders::USER_ID, $this->userId]
-                ]);
+                    [
+                        [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
+                        [WebServiceHeaders::USER_ID, $this->userId],
+                    ]);
 
         $this->userSessionRepository->expects($this->once())
                 ->method('LoadBySessionToken')
@@ -171,10 +171,10 @@ class WebServiceSecurityTest extends TestBase
         $this->server->expects($this->exactly(2))
                 ->method('GetHeader')
                 ->willReturnMap(
-                [
-                    [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
-                    [WebServiceHeaders::USER_ID, $this->userId]
-                ]);
+                    [
+                        [WebServiceHeaders::SESSION_TOKEN, $this->sessionToken],
+                        [WebServiceHeaders::USER_ID, $this->userId],
+                    ]);
 
         $this->userSessionRepository->expects($this->once())
                 ->method('LoadBySessionToken')

@@ -1,12 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Controllers/UserSaveController.php');
-require_once(ROOT_DIR . 'WebServices/Requests/User/CreateUserRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/User/UpdateUserRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/User/UpdateUserPasswordRequest.php');
-require_once(ROOT_DIR . 'WebServices/Responses/UserCreatedResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/UserUpdatedResponse.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'WebServices/Controllers/UserSaveController.php';
+require_once ROOT_DIR.'WebServices/Requests/User/CreateUserRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/User/UpdateUserRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/User/UpdateUserPasswordRequest.php';
+require_once ROOT_DIR.'WebServices/Responses/UserCreatedResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/UserUpdatedResponse.php';
 
 class UsersWriteWebService
 {
@@ -22,9 +22,13 @@ class UsersWriteWebService
 
     /**
      * @name CreateUser
+     *
      * @description Creates a new user
+     *
      * @request CreateUserRequest
+     *
      * @response UserCreatedResponse
+     *
      * @return void
      */
     public function Create()
@@ -58,10 +62,13 @@ class UsersWriteWebService
 
     /**
      * @name UpdateUser
+     *
      * @description Updates an existing user
+     *
      * @request UpdateUserRequest
+     *
      * @response UserUpdatedResponse
-     * @param $userId
+     *
      * @return void
      */
     public function Update($userId)
@@ -95,9 +102,13 @@ class UsersWriteWebService
 
     /**
      * @name DeleteUser
+     *
      * @description Deletes an existing user
+     *
      * @response DeletedResponse
+     *
      * @param int $userId
+     *
      * @return void
      */
     public function Delete($userId)
@@ -125,10 +136,15 @@ class UsersWriteWebService
 
     /**
      * @name UpdatePassword
+     *
      * @description Updates the password for an existing user
+     *
      * @request UpdateUserPasswordRequest
+     *
      * @response UserUpdatedResponse
+     *
      * @param int $userId
+     *
      * @return void
      */
     public function UpdatePassword($userId)

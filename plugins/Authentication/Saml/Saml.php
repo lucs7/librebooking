@@ -1,20 +1,21 @@
 <?php
 
 /**
-File in Authentication plugin package for ver 2.1.4 LibreBooking
-to implement Single Sign On Capability.  Based on code from the
-LibreBooking Authentication Ldap plugin as well as a SAML
-Authentication plugin for Moodle 1.9+.
-See http://moodle.org/mod/data/view.php?d=13&rid=2574
-This plugin uses the SimpleSAMLPHP version 1.8.2 libraries.
-http://simplesamlphp.org/
+ * File in Authentication plugin package for ver 2.1.4 LibreBooking
+ * to implement Single Sign On Capability.  Based on code from the
+ * LibreBooking Authentication Ldap plugin as well as a SAML
+ * Authentication plugin for Moodle 1.9+.
+ * See http://moodle.org/mod/data/view.php?d=13&rid=2574
+ * This plugin uses the SimpleSAMLPHP version 1.8.2 libraries.
+ * http://simplesamlphp.org/.
  */
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'plugins/Authentication/Saml/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'plugins/Authentication/Saml/namespace.php';
 
 /**
- * Provides simpleSAMLphp authentication/synchronization for LibreBooking
+ * Provides simpleSAMLphp authentication/synchronization for LibreBooking.
+ *
  * @see IAuthorization
  */
 class Saml extends Authentication implements IAuthentication
@@ -51,7 +52,6 @@ class Saml extends Authentication implements IAuthentication
 
     /**
      * @var string
-     *
      */
     private $username;
 
@@ -67,7 +67,7 @@ class Saml extends Authentication implements IAuthentication
 
     private function GetRegistration()
     {
-        if ($this->_registration == null) {
+        if (null == $this->_registration) {
             $this->_registration = new Registration();
         }
 
@@ -81,30 +81,29 @@ class Saml extends Authentication implements IAuthentication
 
     private function GetEncryption()
     {
-        if ($this->_encryption == null) {
+        if (null == $this->_encryption) {
             $this->_encryption = new PasswordEncryption();
         }
 
         return $this->_encryption;
     }
 
-
     /**
-     * @param IAuthentication $authentication Authentication class to decorate
-     * @param ISaml $samlImplementation The actual SAML implementation to work against
-     * @param SamlOptions $samlOptions Options to use for SAML configuration
+     * @param IAuthentication $authentication     Authentication class to decorate
+     * @param ISaml           $samlImplementation The actual SAML implementation to work against
+     * @param SamlOptions     $samlOptions        Options to use for SAML configuration
      */
     public function __construct(IAuthentication $authentication, $samlImplementation = null, $samlOptions = null)
     {
         $this->authToDecorate = $authentication;
 
         $this->options = $samlOptions;
-        if ($samlOptions == null) {
+        if (null == $samlOptions) {
             $this->options = new SamlOptions();
         }
 
         $this->saml = $samlImplementation;
-        if ($samlImplementation == null) {
+        if (null == $samlImplementation) {
             $this->saml = new AdSamlWrapper($this->options);
         }
     }
@@ -124,6 +123,7 @@ class Saml extends Authentication implements IAuthentication
                     $username
                 );
             }
+
             return $userLoaded;
         }
 
@@ -162,7 +162,7 @@ class Saml extends Authentication implements IAuthentication
 
     private function SamlUserExists()
     {
-        return $this->user != null;
+        return null != $this->user;
     }
 
     private function Synchronize($username)
@@ -205,7 +205,6 @@ class Saml extends Authentication implements IAuthentication
     {
         return true;
     }
-
 
     public function AllowUsernameChange()
     {

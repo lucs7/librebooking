@@ -1,13 +1,13 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 class ResourceDetailsPage extends Page implements IResourceDetailsPage
 {
     /**
-     * @var \ResourceDetailsPresenter
+     * @var ResourceDetailsPresenter
      */
     private $presenter;
 
@@ -65,7 +65,6 @@ class ResourceDetailsPage extends Page implements IResourceDetailsPage
     }
 
     /**
-     * @param ResourceType $resourceType
      * @param Attribute[] $attributes
      */
     public function BindResourceType(ResourceType $resourceType, $attributes)
@@ -77,9 +76,6 @@ class ResourceDetailsPage extends Page implements IResourceDetailsPage
 
 interface IResourceDetailsPage
 {
-    /**
-     * @param BookableResource $resource
-     */
     public function BindResource(BookableResource $resource);
 
     /**
@@ -88,7 +84,6 @@ interface IResourceDetailsPage
     public function BindAttributes($attributes);
 
     /**
-     * @param ResourceType $resourceType
      * @param Attribute[] $attributes
      */
     public function BindResourceType(ResourceType $resourceType, $attributes);
@@ -116,11 +111,6 @@ class ResourceDetailsPresenter
      */
     private $attributeService;
 
-    /**
-     * @param IResourceDetailsPage $page
-     * @param IResourceRepository $resourceRepository
-     * @param IAttributeService $attributeService
-     */
     public function __construct(IResourceDetailsPage $page, IResourceRepository $resourceRepository, IAttributeService $attributeService)
     {
         $this->page = $page;

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reports/ReportCsvColumnView.php');
+require_once ROOT_DIR.'Presenters/Reports/ReportCsvColumnView.php';
 
 class ReportEmailMessage extends EmailMessage
 {
@@ -17,10 +17,10 @@ class ReportEmailMessage extends EmailMessage
 
     /**
      * @param IGeneratedSavedReport $report
-     * @param IReportDefinition $definition
-     * @param string $toAddress
-     * @param UserSession $reportUser
-     * @param string $selectedColumns
+     * @param IReportDefinition     $definition
+     * @param string                $toAddress
+     * @param UserSession           $reportUser
+     * @param string                $selectedColumns
      */
     public function __construct($report, $definition, $toAddress, $reportUser, $selectedColumns)
     {

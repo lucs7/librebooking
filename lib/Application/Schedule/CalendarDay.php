@@ -3,19 +3,24 @@
 interface ICalendarDay
 {
     public function Date();
+
     public function DayOfMonth();
+
     public function Weekday();
+
     public function IsHighlighted();
+
     public function IsUnimportant();
 
     public function AddReservation($reservation);
+
     public function GetAdjustedStartDate($reservation);
 }
 
 class CalendarDay implements ICalendarDay, ICalendarSegment
 {
     /**
-     * @var \Date
+     * @var Date
      */
     private $date;
 
@@ -67,17 +72,19 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
         $this->isHighlighted = true;
     }
 
-    private static $nullInstance = null;
+    private static $nullInstance;
 
     /**
      * @static
+     *
      * @return CalendarDay
      */
     public static function null()
     {
-        if (self::$nullInstance == null) {
+        if (null == self::$nullInstance) {
             self::$nullInstance = new NullCalendarDay();
         }
+
         return self::$nullInstance;
     }
 
@@ -91,6 +98,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
 
     /**
      * @param CalendarReservation $reservation
+     *
      * @return void
      */
     public function AddReservation($reservation)
@@ -102,6 +110,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
 
     /**
      * @param $reservation CalendarReservation
+     *
      * @return bool
      */
     private function StartsBefore($reservation)
@@ -111,6 +120,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
 
     /**
      * @param $reservation CalendarReservation
+     *
      * @return bool
      */
     private function StartsOn($reservation)
@@ -120,6 +130,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
 
     /**
      * @param $reservation CalendarReservation
+     *
      * @return bool
      */
     private function EndsAfter($reservation)
@@ -129,6 +140,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
 
     /**
      * @param $reservation CalendarReservation
+     *
      * @return bool
      */
     private function EndsOn($reservation)
@@ -138,6 +150,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
 
     /**
      * @param $reservation CalendarReservation
+     *
      * @return Date
      */
     public function GetAdjustedStartDate($reservation)
@@ -180,6 +193,7 @@ class CalendarDay implements ICalendarDay, ICalendarSegment
 
     /**
      * @param $reservations array|CalendarReservation[]
+     *
      * @return void
      */
     public function AddReservations($reservations)

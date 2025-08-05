@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationSavePresenter.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationSavePage.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationSavePresenter.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationSavePage.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ReservationSavePresenterTest extends TestBase
 {
@@ -127,18 +127,18 @@ class ReservationSavePresenterTest extends TestBase
         $this->resourceRepository->expects($this->exactly(3))
                                  ->method('LoadById')
                                  ->willReturnMap(
-                                 [
-                                     [$resourceId, $resource],
-                                     [$additionalResources[0], $additionalResource1],
-                                     [$additionalResources[1], $additionalResource2]
-                                 ]);
+                                     [
+                                         [$resourceId, $resource],
+                                         [$additionalResources[0], $additionalResource1],
+                                         [$additionalResources[1], $additionalResource2],
+                                     ]);
 
         $fakeScheduleLayout = new FakeScheduleLayout();
         $fakeScheduleLayout->_SlotCount = new SlotCount(1, 2);
         $this->scheduleRepository->_Layout = $fakeScheduleLayout;
         $expectedCredits = 168;
 
-        $duration = DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $timezone);
+        $duration = DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $timezone);
 
         $actualReservation = $this->presenter->BuildReservation();
 

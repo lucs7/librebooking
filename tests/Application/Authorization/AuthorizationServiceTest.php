@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
 
 class AuthorizationServiceTest extends TestBase
 {
@@ -143,7 +143,6 @@ class AuthorizationServiceTest extends TestBase
         $user = new User();
         $user->WithGroups($groups);
 
-
         $actualIsAdmin = $this->authorizationService->IsApplicationAdministrator($user);
 
         $this->assertEquals($expectedIsAdmin, $actualIsAdmin);
@@ -218,7 +217,7 @@ class AuthorizationServiceTest extends TestBase
 
         $canEdit = $this->authorizationService->CanEditForResource($userSession, $resource);
 
-        $this->assertTrue($canEdit, "should be able to edit because user is in admin group");
+        $this->assertTrue($canEdit, 'should be able to edit because user is in admin group');
     }
 
     public function testCanApproveReservationOnResourceIfUserIsAdminOfThatResource()
@@ -242,6 +241,6 @@ class AuthorizationServiceTest extends TestBase
 
         $canApprove = $this->authorizationService->CanApproveForResource($userSession, $resource);
 
-        $this->assertTrue($canApprove, "should be able to approve because user is in admin group");
+        $this->assertTrue($canApprove, 'should be able to approve because user is in admin group');
     }
 }

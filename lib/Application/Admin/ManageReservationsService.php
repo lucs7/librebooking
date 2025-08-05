@@ -1,46 +1,49 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/IReservationSaveResultsView.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Persistence/namespace.php');
+require_once ROOT_DIR.'Pages/Ajax/IReservationSaveResultsView.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Persistence/namespace.php';
 
 interface IManageReservationsService
 {
     /**
-     * @param $pageNumber int
-     * @param $pageSize int
-     * @param $sortField string|null
+     * @param $pageNumber    int
+     * @param $pageSize      int
+     * @param $sortField     string|null
      * @param $sortDirection string|null
-     * @param $filter ReservationFilter
-     * @param $user UserSession
+     * @param $filter        ReservationFilter
+     * @param $user          UserSession
+     *
      * @return PageableData|ReservationItemView[]
      */
     public function LoadFiltered($pageNumber, $pageSize, $sortField, $sortDirection, $filter, $user);
 
     /**
-     * @param  $referenceNumber string
-     * @param $user UserSession
+     * @param $referenceNumber string
+     * @param $user            UserSession
+     *
      * @return ReservationView|null
      */
     public function LoadByReferenceNumber($referenceNumber, $user);
 
     /**
-     * @param string $referenceNumber
-     * @param int $attributeId
-     * @param string $attributeValue
+     * @param string      $referenceNumber
+     * @param int         $attributeId
+     * @param string      $attributeValue
      * @param UserSession $userSession
+     *
      * @return string[] Any errors that were returned during reservation update
      */
     public function UpdateAttribute($referenceNumber, $attributeId, $attributeValue, $userSession);
 
     /**
-     * Adds a reservation without any validation or notification
-     * @param ReservationSeries $series
+     * Adds a reservation without any validation or notification.
      */
     public function UnsafeAdd(ReservationSeries $series);
 
     /**
-     * Deletes a reservation instance without any validation or notification
-     * @param int $reservationId
+     * Deletes a reservation instance without any validation or notification.
+     *
+     * @param int         $reservationId
      * @param UserSession $userSession
      */
     public function UnsafeDelete($reservationId, $userSession);
@@ -74,24 +77,23 @@ class ManageReservationsService implements IManageReservationsService
     private $reservationRepository;
 
     /**
-     * @param IReservationViewRepository $reservationViewRepository
-     * @param IReservationAuthorization|null $authorization
-     * @param IReservationHandler|null $reservationHandler
+     * @param IReservationAuthorization|null            $authorization
+     * @param IReservationHandler|null                  $reservationHandler
      * @param IUpdateReservationPersistenceService|null $persistenceService
-     * @param IReservationRepository|null $reservationRepository
+     * @param IReservationRepository|null               $reservationRepository
      */
     public function __construct(
         IReservationViewRepository $reservationViewRepository,
         $authorization = null,
         $reservationHandler = null,
         $persistenceService = null,
-        $reservationRepository = null
+        $reservationRepository = null,
     ) {
         $this->reservationViewRepository = $reservationViewRepository;
-        $this->reservationAuthorization = $authorization == null ? new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization()) : $authorization;
-        $this->persistenceService = $persistenceService == null ? new UpdateReservationPersistenceService(new ReservationRepository()) : $persistenceService;
-        $this->reservationHandler = $reservationHandler == null ? ReservationHandler::Create(ReservationAction::Update, $this->persistenceService, ServiceLocator::GetServer()->GetUserSession()) : $reservationHandler;
-        $this->reservationRepository = $reservationRepository == null ? new ReservationRepository() : $reservationRepository;
+        $this->reservationAuthorization = null == $authorization ? new ReservationAuthorization(PluginManager::Instance()->LoadAuthorization()) : $authorization;
+        $this->persistenceService = null == $persistenceService ? new UpdateReservationPersistenceService(new ReservationRepository()) : $persistenceService;
+        $this->reservationHandler = null == $reservationHandler ? ReservationHandler::Create(ReservationAction::Update, $this->persistenceService, ServiceLocator::GetServer()->GetUserSession()) : $reservationHandler;
+        $this->reservationRepository = null == $reservationRepository ? new ReservationRepository() : $reservationRepository;
     }
 
     public function LoadFiltered($pageNumber, $pageSize, $sortField, $sortDirection, $filter, $user)

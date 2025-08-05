@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Requests/CustomAttributes/CustomAttributeRequest.php');
-require_once(ROOT_DIR . 'WebServices/Controllers/AttributeSaveController.php');
+require_once ROOT_DIR.'WebServices/Requests/CustomAttributes/CustomAttributeRequest.php';
+require_once ROOT_DIR.'WebServices/Controllers/AttributeSaveController.php';
 
 class AttributeSaveControllerTest extends TestBase
 {
@@ -31,7 +31,7 @@ class AttributeSaveControllerTest extends TestBase
         $request->label = 'attributename';
         $request->type = CustomAttributeTypes::SELECT_LIST;
         $request->categoryId = CustomAttributeCategory::USER;
-        $request->regex= 'regex';
+        $request->regex = 'regex';
         $request->required = true;
         $request->possibleValues = '1,2,3';
         $request->sortOrder = 9;
@@ -73,7 +73,7 @@ class AttributeSaveControllerTest extends TestBase
         $request->label = 'attributename';
         $request->type = CustomAttributeTypes::SELECT_LIST;
         $request->categoryId = CustomAttributeCategory::USER;
-        $request->regex= 'regex';
+        $request->regex = 'regex';
         $request->required = true;
         $request->possibleValues = '1,2,3';
         $request->sortOrder = 9;

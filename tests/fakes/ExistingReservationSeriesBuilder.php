@@ -57,6 +57,7 @@ class ExistingReservationSeriesBuilder
 
     /**
      * @param int $id
+     *
      * @return ExistingReservationSeriesBuilder
      */
     public function WithId($id)
@@ -68,6 +69,7 @@ class ExistingReservationSeriesBuilder
 
     /**
      * @param Reservation $reservation
+     *
      * @return ExistingReservationSeriesBuilder
      */
     public function WithCurrentInstance($reservation)
@@ -96,6 +98,7 @@ class ExistingReservationSeriesBuilder
 
     /**
      * @param Reservation $reservation
+     *
      * @return ExistingReservationSeriesBuilder
      */
     public function WithInstance($reservation)
@@ -126,7 +129,6 @@ class ExistingReservationSeriesBuilder
     }
 
     /**
-     * @param BookableResource $resource
      * @return ExistingReservationSeriesBuilder
      */
     public function WithPrimaryResource(BookableResource $resource)
@@ -138,6 +140,7 @@ class ExistingReservationSeriesBuilder
 
     /**
      * @param BookableResource[] $resources
+     *
      * @return ExistingReservationSeriesBuilder
      */
     public function WithResources($resources)
@@ -146,6 +149,7 @@ class ExistingReservationSeriesBuilder
 
         return $this;
     }
+
     /**
      * @return ExistingReservationSeries
      */

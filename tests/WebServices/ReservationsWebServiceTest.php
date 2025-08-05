@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/ReservationsWebService.php');
+require_once ROOT_DIR.'WebServices/ReservationsWebService.php';
 
 class ReservationsWebServiceTest extends TestBase
 {

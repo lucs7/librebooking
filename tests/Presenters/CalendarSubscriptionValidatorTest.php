@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Export/CalendarSubscriptionPage.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'Pages/Export/CalendarSubscriptionPage.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class CalendarSubscriptionValidatorTest extends TestBase
 {

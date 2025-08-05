@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
 
 class AccountActivationEmail extends EmailMessage
 {
@@ -50,6 +50,7 @@ class AccountActivationEmail extends EmailMessage
         $this->Set('FirstName', $this->user->FirstName());
         $this->Set('EmailAddress', $this->user->EmailAddress());
         $this->Set('ActivationUrl', $activationUrl);
+
         return $this->FetchTemplate('AccountActivation.tpl');
     }
 }

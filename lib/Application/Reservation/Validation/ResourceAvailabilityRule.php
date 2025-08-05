@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/ResourceAvailability.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/ReservationConflictIdentifier.php');
+require_once ROOT_DIR.'lib/Application/Reservation/ResourceAvailability.php';
+require_once ROOT_DIR.'lib/Application/Reservation/ReservationConflictIdentifier.php';
 
 class ResourceAvailabilityRule implements IReservationValidationRule
 {
@@ -24,17 +24,17 @@ class ResourceAvailabilityRule implements IReservationValidationRule
     public function Validate($reservationSeries, $retryParameters = null)
     {
         $conflicts = $this->conflictIdentifier->GetConflicts($reservationSeries);
-        $shouldSkipConflicts = ReservationRetryParameter::GetValue(
+        $shouldSkipConflicts = true == ReservationRetryParameter::GetValue(
             ReservationRetryParameter::$SKIP_CONFLICTS,
             $retryParameters,
             new BooleanConverter()
-        ) == true;
+        );
 
         $skippedConflicts = 0;
         if ($shouldSkipConflicts) {
             foreach ($conflicts->Conflicts() as $conflict) {
                 Log::Debug(
-                    "Skipping conflicting reservation. Reference number %s conflicts with existing %s with id %s on %s",
+                    'Skipping conflicting reservation. Reference number %s conflicts with existing %s with id %s on %s',
                     $conflict->Reservation->ReferenceNumber(),
                     get_class($conflict->Conflict),
                     $conflict->Conflict->GetId(),
@@ -44,17 +44,18 @@ class ResourceAvailabilityRule implements IReservationValidationRule
                 $skipped = $reservationSeries->RemoveInstance($conflict->Reservation);
 
                 if ($skipped) {
-                    $skippedConflicts++;
+                    ++$skippedConflicts;
                 }
             }
         }
 
-        $allowReservation = $conflicts->AllowReservation($skippedConflicts);//$numberOfConflicts > 0 || $anyConflictsAreBlackouts;
+        $allowReservation = $conflicts->AllowReservation($skippedConflicts); // $numberOfConflicts > 0 || $anyConflictsAreBlackouts;
 
         if (!$allowReservation) {
             $numberOfReservationDates = count($reservationSeries->Instances());
             $shouldRetry = count($conflicts->Conflicts()) < $numberOfReservationDates;
-            $canJoinWaitlist = $numberOfReservationDates == 1;
+            $canJoinWaitlist = 1 == $numberOfReservationDates;
+
             return new ReservationRuleResult(
                 false,
                 $this->GetErrorString($conflicts->Conflicts()),
@@ -69,10 +70,8 @@ class ResourceAvailabilityRule implements IReservationValidationRule
     }
 
     /**
-     * @param Reservation $instance
-     * @param ReservationSeries $series
-     * @param IReservedItemView $existingItem
      * @param BookableResource[] $keyedResources
+     *
      * @return bool
      */
     protected function IsInConflict(Reservation $instance, ReservationSeries $series, IReservedItemView $existingItem, $keyedResources)
@@ -86,6 +85,7 @@ class ResourceAvailabilityRule implements IReservationValidationRule
 
     /**
      * @param IdentifiedConflict[] $conflicts
+     *
      * @return string
      */
     protected function GetErrorString($conflicts)

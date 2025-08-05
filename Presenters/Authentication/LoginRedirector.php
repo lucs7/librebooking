@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Authentication/ILoginBasePage.php');
+require_once ROOT_DIR.'Pages/Authentication/ILoginBasePage.php';
 
 class LoginRedirector
 {

@@ -1,38 +1,42 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Requests/User/CreateUserRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/User/UpdateUserRequest.php');
-require_once(ROOT_DIR . 'WebServices/Validators/UserRequestValidator.php');
-require_once(ROOT_DIR . 'lib/Application/User/namespace.php');
+require_once ROOT_DIR.'WebServices/Requests/User/CreateUserRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/User/UpdateUserRequest.php';
+require_once ROOT_DIR.'WebServices/Validators/UserRequestValidator.php';
+require_once ROOT_DIR.'lib/Application/User/namespace.php';
 
 interface IUserSaveController
 {
     /**
-     * @param CreateUserRequest $request
+     * @param CreateUserRequest     $request
      * @param WebServiceUserSession $session
+     *
      * @return UserControllerResult
      */
     public function Create($request, $session);
 
     /**
-     * @param int $userId
-     * @param UpdateUserRequest $request
+     * @param int                   $userId
+     * @param UpdateUserRequest     $request
      * @param WebServiceUserSession $session
+     *
      * @return UserControllerResult
      */
     public function Update($userId, $request, $session);
 
     /**
-     * @param int $userId
+     * @param int                   $userId
      * @param WebServiceUserSession $session
+     *
      * @return UserControllerResult
      */
     public function Delete($userId, $session);
 
     /**
-     * @param int $userId
-     * @param string $password
+     * @param int                   $userId
+     * @param string                $password
      * @param WebServiceUserSession $session
+     *
      * @return UserControllerResult
      */
     public function UpdatePassword($userId, $password, $session);
@@ -144,7 +148,7 @@ class UserSaveController implements IUserSaveController
 class UserControllerResult
 {
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $errors
      */
     public function __construct(private $userId, private $errors = [])

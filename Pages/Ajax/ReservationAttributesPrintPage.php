@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationAttributesPrintPresenter.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationAttributesPrintPresenter.php';
 
 interface IReservationAttributesPrintPage
 {

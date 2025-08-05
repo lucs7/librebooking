@@ -11,6 +11,7 @@ class WebServiceExpiration
 
     /**
      * @param string $expirationTime
+     *
      * @return bool
      */
     public static function IsExpired($expirationTime)

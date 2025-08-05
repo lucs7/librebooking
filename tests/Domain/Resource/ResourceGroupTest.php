@@ -95,9 +95,9 @@ class ResourceGroupTest extends TestBase
         $this->assertEquals(3, count($group1aResourceIds));
         $this->assertEquals(4, count($group1ResourceIds));
 
-        $this->assertEquals([1,2], $group1a1ResourceIds);
-        $this->assertEquals([1,2,3], $group1aResourceIds);
-        $this->assertEquals([1,2,3,4], $group1ResourceIds);
+        $this->assertEquals([1, 2], $group1a1ResourceIds);
+        $this->assertEquals([1, 2, 3], $group1aResourceIds);
+        $this->assertEquals([1, 2, 3, 4], $group1ResourceIds);
     }
 
     public function testGetsGroupById()

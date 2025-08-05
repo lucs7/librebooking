@@ -17,7 +17,7 @@ class ReservationValidationRuleProcessor implements IReservationValidationServic
         /** @var IReservationValidationRule $rule */
         foreach ($this->_validationRules as $rule) {
             $result = $rule->Validate($reservationSeries, $retryParameters);
-            Log::Debug('Validating rule %s. Passed?: %s', get_class($rule), $result->IsValid() . '');
+            Log::Debug('Validating rule %s. Passed?: %s', get_class($rule), $result->IsValid().'');
 
             if (!$result->IsValid()) {
                 return new ReservationValidationResult(false, [$result->ErrorMessage()], [], $result->CanBeRetried(), $result->RetryParameters(), [$result->RetryMessage()], $result->CanJoinWaitlist());

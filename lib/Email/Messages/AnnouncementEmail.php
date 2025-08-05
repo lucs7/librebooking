@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
+require_once ROOT_DIR.'Domain/namespace.php';
 
 class AnnouncementEmail extends EmailMessage
 {
@@ -21,8 +21,8 @@ class AnnouncementEmail extends EmailMessage
     private $to;
 
     /**
-     * @param string $announcement
-     * @param UserSession $sentBy
+     * @param string       $announcement
+     * @param UserSession  $sentBy
      * @param UserItemView $to
      */
     public function __construct($announcement, $sentBy, $to)
@@ -55,6 +55,7 @@ class AnnouncementEmail extends EmailMessage
     public function Body()
     {
         $this->Set('AnnouncementText', $this->announcement);
+
         return $this->FetchTemplate('AnnouncementEmail.tpl');
     }
 

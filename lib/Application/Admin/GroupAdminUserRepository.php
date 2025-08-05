@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class GroupAdminUserRepository extends UserRepository
 {
@@ -40,6 +40,7 @@ class GroupAdminUserRepository extends UserRepository
 
     /**
      * @param int $userId
+     *
      * @return User|void
      */
     public function LoadById($userId)

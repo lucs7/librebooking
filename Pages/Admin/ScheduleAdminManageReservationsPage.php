@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageReservationsPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageReservationsPresenter.php');
+require_once ROOT_DIR.'Pages/Admin/ManageReservationsPage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageReservationsPresenter.php';
 
 class ScheduleAdminManageReservationsPage extends ManageReservationsPage
 {

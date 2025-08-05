@@ -21,7 +21,7 @@ class RoleLevel
             RoleLevel::GROUP_ADMIN,
             RoleLevel::APPLICATION_ADMIN,
             RoleLevel::RESOURCE_ADMIN,
-            RoleLevel::SCHEDULE_ADMIN
+            RoleLevel::SCHEDULE_ADMIN,
         ];
     }
 }

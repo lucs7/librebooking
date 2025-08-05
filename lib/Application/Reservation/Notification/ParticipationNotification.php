@@ -1,19 +1,17 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationParticipationActivityEmail.php');
+require_once ROOT_DIR.'lib/Email/Messages/ReservationParticipationActivityEmail.php';
 
 interface IParticipationNotification
 {
     /**
-     * @param ExistingReservationSeries $series
-     * @param int $participantId
+     * @param int                     $participantId
      * @param InvitationAction|string $invitationAction
      */
     public function Notify(ExistingReservationSeries $series, $participantId, $invitationAction);
 
     /**
-     * @param ExistingReservationSeries $series
-     * @param string $guestEmail
+     * @param string                  $guestEmail
      * @param InvitationAction|string $invitationAction
      */
     public function NotifyGuest(ExistingReservationSeries $series, $guestEmail, $invitationAction);

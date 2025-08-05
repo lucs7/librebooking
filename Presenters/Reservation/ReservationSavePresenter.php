@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 interface IReservationSavePresenter
 {
@@ -52,7 +52,7 @@ class ReservationSavePresenter implements IReservationSavePresenter
         IReservationHandler $handler,
         IResourceRepository $resourceRepository,
         IScheduleRepository $scheduleRepository,
-        UserSession $userSession
+        UserSession $userSession,
     ) {
         $this->page = $page;
         $this->persistenceService = $persistenceService;
@@ -107,7 +107,7 @@ class ReservationSavePresenter implements IReservationSavePresenter
         $attachments = $this->page->GetAttachments();
 
         foreach ($attachments as $attachment) {
-            if ($attachment != null) {
+            if (null != $attachment) {
                 if ($attachment->IsError()) {
                     Log::Error('Error attaching file %s. %s', $attachment->OriginalName(), $attachment->Error());
                 } else {
@@ -137,6 +137,7 @@ class ReservationSavePresenter implements IReservationSavePresenter
 
     /**
      * @param ReservationSeries $reservationSeries
+     *
      * @throws Exception
      */
     public function HandleReservation($reservationSeries)
@@ -145,7 +146,6 @@ class ReservationSavePresenter implements IReservationSavePresenter
             $reservationSeries,
             $this->page
         );
-
 
         if ($successfullySaved) {
             $this->page->SetRequiresApproval($reservationSeries->RequiresApproval());
@@ -164,6 +164,7 @@ class ReservationSavePresenter implements IReservationSavePresenter
         $endTime = $this->page->GetEndTime();
 
         $timezone = $this->userSession->Timezone;
-        return DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $timezone);
+
+        return DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $timezone);
     }
 }

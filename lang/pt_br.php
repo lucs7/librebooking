@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class pt_br extends en_gb
 {
@@ -484,10 +484,10 @@ class pt_br extends en_gb
         $strings['Import'] = 'Importar';
         $strings['GetTemplate'] = 'Obter modelo';
         $strings['UserImportInstructions'] = '<ul><li>O arquivo deve estar no formato CSV.</li>'
-            . '<li>Nome de usuário e e-mail são campos obrigatórios.</li>'
-            . '<li>A validade do atributo não será imposta.</li>'
-            . '<li>Deixar outros campos em branco irá definir valores padrão e \'password\' como a senha do usuário.</li>'
-            . '<li>Use o modelo fornecido como um exemplo.</li></ul>';
+            .'<li>Nome de usuário e e-mail são campos obrigatórios.</li>'
+            .'<li>A validade do atributo não será imposta.</li>'
+            .'<li>Deixar outros campos em branco irá definir valores padrão e \'password\' como a senha do usuário.</li>'
+            .'<li>Use o modelo fornecido como um exemplo.</li></ul>';
         $strings['RowsImported'] = 'Linhas importadas';
         $strings['RowsSkipped'] = 'Linhas ignoradas';
         $strings['Columns'] = 'Colunas';
@@ -568,22 +568,22 @@ class pt_br extends en_gb
         $strings['ImportResources'] = 'Importar recursos';
         $strings['ExportResources'] = 'Exportar recursos';
         $strings['ResourceImportInstructions'] = '<ul><li>O arquivo deve estar no formato CSV com codificação UTF-8.</li>'
-            . '<li>O nome é um campo obrigatório. Deixar outros campos em branco definirá os valores padrão.</li>'
-            . '<li>As opções de status são \'Disponível\', \'Indisponível\' e \'Oculto\'..</li>'
-            . '<li>A cor deve ser o valor hexadecimal, por exemplo, #ffffff.</li>'
-            . '<li>As colunas Atribuição automática e Aprovação podem ser verdadeiras ou falsas.</li>'
-            . '<li>A validade dos atributos não será imposta.</li>'
-            . '<li>Separe vários grupos de recursos por vírgula.</li>'
-            . '<li>As durações podem ser especificadas no formato #d#h#m ou HH:mm (1d3h30m ou 27:30 para 1 dia, 3 horas, 30 minutos)</li>'
-            . '<li>Use o modelo fornecido como exemplo.</li></ul>';
+            .'<li>O nome é um campo obrigatório. Deixar outros campos em branco definirá os valores padrão.</li>'
+            .'<li>As opções de status são \'Disponível\', \'Indisponível\' e \'Oculto\'..</li>'
+            .'<li>A cor deve ser o valor hexadecimal, por exemplo, #ffffff.</li>'
+            .'<li>As colunas Atribuição automática e Aprovação podem ser verdadeiras ou falsas.</li>'
+            .'<li>A validade dos atributos não será imposta.</li>'
+            .'<li>Separe vários grupos de recursos por vírgula.</li>'
+            .'<li>As durações podem ser especificadas no formato #d#h#m ou HH:mm (1d3h30m ou 27:30 para 1 dia, 3 horas, 30 minutos)</li>'
+            .'<li>Use o modelo fornecido como exemplo.</li></ul>';
         $strings['ReservationImportInstructions'] = '<ul><li>O arquivo deve estar no formato CSV com codificação UTF-8.</li>'
-            . '<li>E-mail, nomes de recursos, início e fim são campos obrigatórios.</li>'
-            . '<li>Início e fim exigem data e hora completas. O formato recomendado é AAAA-mm-dd HH:mm (2017-12-31 20:30).</li>'
-            . '<li>Regras, conflitos e intervalos de tempo válidos não serão verificados.</li>'
-            . '<li>As notificações não serão enviadas.</li>'
-            . '<li>A validade dos atributos não será imposta.</li>'
-            . '<li>Separe vários nomes de recursos por vírgula.</li>'
-            . '<li>Use o modelo fornecido como exemplo.</li></ul>';
+            .'<li>E-mail, nomes de recursos, início e fim são campos obrigatórios.</li>'
+            .'<li>Início e fim exigem data e hora completas. O formato recomendado é AAAA-mm-dd HH:mm (2017-12-31 20:30).</li>'
+            .'<li>Regras, conflitos e intervalos de tempo válidos não serão verificados.</li>'
+            .'<li>As notificações não serão enviadas.</li>'
+            .'<li>A validade dos atributos não será imposta.</li>'
+            .'<li>Separe vários nomes de recursos por vírgula.</li>'
+            .'<li>Use o modelo fornecido como exemplo.</li></ul>';
         $strings['AutoReleaseMinutes'] = 'Minutos de liberação automática';
         $strings['CreditsPeak'] = 'Créditos (horário de pico)';
         $strings['CreditsOffPeak'] = 'Créditos (fora do horário de pico)';
@@ -768,12 +768,12 @@ class pt_br extends en_gb
         $strings['ChangeResourceStatus'] = 'Alterar o status do recurso';
         $strings['UpdateGroupsOnImport'] = 'Atualizar o grupo existente se o nome corresponder';
         $strings['GroupsImportInstructions'] = '<ul><li>O ficheiro deverá estar em formato CSV.</li>'
-            . '<li>O nome é obrigatório.</li>'
-            . '<li>As listas de membros deverão ser listas de emails separados por vírgulas.</li>'
-            . '<li>Listas de membros vazias durante a atualização deixarão os membros inalterados.</li>'
-            . '<li>As listas de permissões deverão ser listas de nomes de recursos separados por vírgulas.</li>'
-            . '<li>Listas de permissões vazias durante a atualização de grupos deixarão as permissões inalteradas.</li>'
-            . '<li>Utilize o modelo fornecido como exemplo.</li></ul>';
+            .'<li>O nome é obrigatório.</li>'
+            .'<li>As listas de membros deverão ser listas de emails separados por vírgulas.</li>'
+            .'<li>Listas de membros vazias durante a atualização deixarão os membros inalterados.</li>'
+            .'<li>As listas de permissões deverão ser listas de nomes de recursos separados por vírgulas.</li>'
+            .'<li>Listas de permissões vazias durante a atualização de grupos deixarão as permissões inalteradas.</li>'
+            .'<li>Utilize o modelo fornecido como exemplo.</li></ul>';
         $strings['PhoneRequired'] = 'O telefone é obrigatório';
         $strings['OrganizationRequired'] = 'A organização é obrigatória';
         $strings['PositionRequired'] = 'A posição é obrigatória';
@@ -1003,8 +1003,8 @@ class pt_br extends en_gb
         $strings['ResourceStatusChangedSubject'] = 'A disponibilidade de %s foi alterada';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Você não possui reservas anteriores';
         $strings['PastReservations'] = 'Reservas Anteriores';
         $strings['AllNoPastReservations'] = 'Não há reservas anteriores nos últimos %s dias';
@@ -1012,34 +1012,34 @@ class pt_br extends en_gb
         $strings['Yesterday'] = 'Ontem';
         $strings['EarlierThisWeek'] = 'Antes desta semana';
         $strings['PreviousWeek'] = 'Semana anterior';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Seu grupo não tem reservas futuras';
         $strings['GroupUpcomingReservations'] = 'Reservas Futuras do(s) meu(s) Grupo(s)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Ocorreu um erro ao fazer login com o Facebook. Por favor, tente novamente.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Você não tem reservas aguardando aprovação';
         $strings['PendingApprovalReservations'] = 'Reservas aguardando aprovação';
         $strings['LaterThisMonth'] = 'Mais tarde neste mês';
         $strings['LaterThisYear'] = 'Mais tarde neste ano';
-        $strings['Remaining'] = 'Restante';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Restante';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Não há reservas de check-out em falta';
-        $strings['MissingCheckOutReservations'] = 'Reservas de Check Out em Falta';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Reservas de Check Out em Falta';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Não é possível ver os detalhes da reserva porque você não tem permissões para nenhum dos recursos nesta reserva';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         // Currently unused strings
         $strings['of'] = 'de';
@@ -1050,7 +1050,6 @@ class pt_br extends en_gb
         $strings['ChangePermissions'] = 'Tente aplicar as permissões corretas';
         $strings['PwComplexity'] = 'A senha deve ter pelo menos 6 caracteres com uma combinação de letras, números e símbolos.';
         // End of Currently unused strings
-
 
         $this->Strings = $strings;
 

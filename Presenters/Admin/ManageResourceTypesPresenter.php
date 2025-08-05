@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Pages/Admin/ManageResourceTypesPage.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Pages/Admin/ManageResourceTypesPage.php';
 
 class ManageResourceTypesActions
 {
@@ -33,7 +33,7 @@ class ManageResourceTypesPresenter extends ActionPresenter
     public function __construct(
         IManageResourceTypesPage $page,
         IResourceRepository $resourceRepository,
-        IAttributeService $attributeService
+        IAttributeService $attributeService,
     ) {
         parent::__construct($page);
 
@@ -50,7 +50,7 @@ class ManageResourceTypesPresenter extends ActionPresenter
     public function PageLoad()
     {
         $types = $this->resourceRepository->GetResourceTypes();
-//
+        //
         //		$ids = array();
         //		foreach ($types as $type)
         //		{
@@ -123,7 +123,7 @@ class ManageResourceTypesPresenter extends ActionPresenter
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest == 'all') {
+        if ('all' == $dataRequest) {
             $this->page->SetResourceTypesJson(array_map(
                 ['ResourceTypeJson', 'FromResourceType'],
                 $this->resourceRepository->GetResourceTypes()
@@ -133,7 +133,7 @@ class ManageResourceTypesPresenter extends ActionPresenter
 
     protected function LoadValidators($action)
     {
-        if ($action == ManageResourceTypesActions::ChangeAttribute) {
+        if (ManageResourceTypesActions::ChangeAttribute == $action) {
             $attributes = $this->GetInlineAttributeValue();
             $this->page->RegisterValidator(
                 'attributeValidator',
@@ -163,6 +163,7 @@ class ResourceTypeJson
 
     /**
      * @param ResourceType $resourceType
+     *
      * @return ResourceTypeJson
      */
     public static function FromResourceType($resourceType)

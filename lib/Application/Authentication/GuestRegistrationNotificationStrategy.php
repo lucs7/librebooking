@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/GuestAccountCreationEmail.php');
+require_once ROOT_DIR.'lib/Email/Messages/GuestAccountCreationEmail.php';
 
 class GuestRegistrationNotificationStrategy implements IRegistrationNotificationStrategy
 {

@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class CalendarExportPresenter
 {
@@ -30,7 +30,7 @@ class CalendarExportPresenter
         ICalendarExportPage $page,
         IReservationViewRepository $reservationViewRepository,
         ICalendarExportValidator $validator,
-        IPrivacyFilter $privacyFilter
+        IPrivacyFilter $privacyFilter,
     ) {
         $this->page = $page;
         $this->reservationViewRepository = $reservationViewRepository;

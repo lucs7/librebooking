@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
 
 class FakeEmailService implements IEmailService
 {
@@ -12,10 +12,9 @@ class FakeEmailService implements IEmailService
     /**
      * @var IEmailMessage
      */
-    public $_LastMessage = null;
+    public $_LastMessage;
 
     /**
-     * @param IEmailMessage $emailMessage
      * @see IEmailService::Send()
      */
     public function Send(IEmailMessage $emailMessage)

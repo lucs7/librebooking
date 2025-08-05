@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+require_once ROOT_DIR.'Pages/ActionPage.php';
+require_once ROOT_DIR.'Pages/SecurePage.php';
 
 class AdminPageDecorator extends ActionPage implements IActionPage
 {
@@ -20,8 +20,8 @@ class AdminPageDecorator extends ActionPage implements IActionPage
         $user = ServiceLocator::GetServer()->GetUserSession();
 
         if (!$this->page->IsAuthenticated() || !$user->IsAdmin) {
-            $this->RedirectResume(sprintf("%s%s?%s=%s", $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl())));
-            die();
+            $this->RedirectResume(sprintf('%s%s?%s=%s', $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl())));
+            exit;
         }
 
         $this->page->PageLoad();
@@ -57,25 +57,27 @@ abstract class AdminPage extends SecurePage implements IActionPage
         $user = ServiceLocator::GetServer()->GetUserSession();
 
         if (!$user->IsAdmin) {
-            $this->RedirectResume(sprintf("%s%s?%s=%s", $this->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->server->GetUrl())));
-            die();
+            $this->RedirectResume(sprintf('%s%s?%s=%s', $this->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->server->GetUrl())));
+            exit;
         }
     }
 
     public function Display($adminTemplateName)
     {
-        parent::Display('Admin/' . $adminTemplateName);
+        parent::Display('Admin/'.$adminTemplateName);
     }
 
     public function TakingAction()
     {
         $action = $this->GetAction();
+
         return !empty($action);
     }
 
     public function RequestingData()
     {
         $dataRequest = $this->GetDataRequest();
+
         return !empty($dataRequest);
     }
 
@@ -93,6 +95,7 @@ abstract class AdminPage extends SecurePage implements IActionPage
     {
         if (parent::IsValid()) {
             Log::Debug('Action passed all validations');
+
             return true;
         }
 
@@ -114,6 +117,7 @@ abstract class AdminPage extends SecurePage implements IActionPage
         } else {
             $this->SetJson($errors);
         }
+
         return false;
     }
 }

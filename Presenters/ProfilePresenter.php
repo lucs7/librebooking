@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'config/timezones.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
+require_once ROOT_DIR.'config/timezones.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
 
 class ProfileActions
 {
@@ -33,7 +33,7 @@ class ProfilePresenter extends ActionPresenter
     public function __construct(
         IProfilePage $page,
         IUserRepository $userRepository,
-        IAttributeService $attributeService
+        IAttributeService $attributeService,
     ) {
         parent::__construct($page);
 
@@ -116,7 +116,7 @@ class ProfilePresenter extends ActionPresenter
 
     protected function LoadValidators($action)
     {
-        if ($action != ProfileActions::Update) {
+        if (ProfileActions::Update != $action) {
             return;
         }
         $userId = ServiceLocator::GetServer()->GetUserSession()->UserId;
@@ -156,6 +156,7 @@ class ProfilePresenter extends ActionPresenter
         foreach ($this->page->GetAttributes() as $attribute) {
             $attributes[] = new AttributeValue($attribute->Id, $attribute->Value);
         }
+
         return $attributes;
     }
 

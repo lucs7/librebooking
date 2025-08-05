@@ -4,14 +4,18 @@ interface IPassword
 {
     /**
      * @abstract
+     *
      * @param $salt string
+     *
      * @return bool
      */
     public function Validate($salt);
 
     /**
      * @abstract
+     *
      * @param $userid int
+     *
      * @return void
      */
     public function Migrate($userid);
@@ -20,9 +24,6 @@ interface IPassword
 class PasswordMigration
 {
     /**
-     * @param $plaintext
-     * @param $oldpassword
-     * @param $newpassword
      * @return IPassword
      */
     public function Create($plaintext, $oldpassword, $newpassword)
@@ -30,6 +31,7 @@ class PasswordMigration
         if (!empty($newpassword)) {
             return new Password($plaintext, $newpassword);
         }
+
         return new OldPassword($plaintext, $oldpassword);
     }
 }
@@ -38,12 +40,13 @@ class Password implements IPassword
 {
     /**
      * @internal
-     * @var null|string
+     *
+     * @var string|null
      */
-    public static $_Random = null;
+    public static $_Random;
 
     /**
-     * @var \PasswordEncryption
+     * @var PasswordEncryption
      */
     public $Encryption;
 
@@ -99,20 +102,21 @@ class Password implements IPassword
 
     /**
      * @static
+     *
      * @return string
      */
     public static function GenerateRandom()
     {
-        if (self::$_Random != null) {
+        if (null != self::$_Random) {
             return self::$_Random;
         }
 
         $length = 10;
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%';
-        $password ='';
+        $password = '';
         $max = strlen($characters) - 1;
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $password .= $characters[mt_rand(0, $max)];
         }
 

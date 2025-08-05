@@ -11,7 +11,7 @@ class RouteParamsKeys
         QueryStringKeys::SCHEDULE_ID => ParamsValidatorKeys::NUMERICAL,
         QueryStringKeys::RESERVATION_DATE => ParamsValidatorKeys::DATE,
         QueryStringKeys::START_DATE => ParamsValidatorKeys::COMPLEX_DATETIME,
-        QueryStringKeys::END_DATE => ParamsValidatorKeys::COMPLEX_DATETIME
+        QueryStringKeys::END_DATE => ParamsValidatorKeys::COMPLEX_DATETIME,
     ];
 
     public const GUEST_RESERVATION_FROM_CALENDAR = [
@@ -19,7 +19,7 @@ class RouteParamsKeys
         QueryStringKeys::REPORT_ID => ParamsValidatorKeys::EXISTS,
         QueryStringKeys::START_DATE => ParamsValidatorKeys::SIMPLE_DATETIME,
         QueryStringKeys::END_DATE => ParamsValidatorKeys::SIMPLE_DATETIME,
-        QueryStringKeys::REDIRECT => ParamsValidatorKeys::REDIRECT_GUEST_RESERVATION
+        QueryStringKeys::REDIRECT => ParamsValidatorKeys::REDIRECT_GUEST_RESERVATION,
     ];
 
     public const VIEW_SCHEDULE = [
@@ -27,19 +27,19 @@ class RouteParamsKeys
         FormKeys::USER_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
         QueryStringKeys::SCHEDULE_ID => ParamsValidatorKeys::NUMERICAL,
         QueryStringKeys::START_DATE => ParamsValidatorKeys::DATE,
-        "clearFilter" => ParamsValidatorKeys::NUMERICAL,
+        'clearFilter' => ParamsValidatorKeys::NUMERICAL,
         QueryStringKeys::START_DATES => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::SIMPLE_DATE],
         FormKeys::RESOURCE_TYPE_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
         FormKeys::MAX_PARTICIPANTS => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
         FormKeys::SUBMIT => ParamsValidatorKeys::BOOLEAN,
-        QueryStringKeys::DATA_REQUEST => [ParamsValidatorKeys::MATCH => ['reservations']]
+        QueryStringKeys::DATA_REQUEST => [ParamsValidatorKeys::MATCH => ['reservations']],
     ];
 
     public const VIEW_CALENDAR = [
         QueryStringKeys::REPORT_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
         QueryStringKeys::SCHEDULE_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
         QueryStringKeys::START => ParamsValidatorKeys::SIMPLE_DATE,
-        //QueryStringKeys::END => ParamsValidatorKeys::SIMPLE_DATE,
-        QueryStringKeys::GROUP_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL]
+        // QueryStringKeys::END => ParamsValidatorKeys::SIMPLE_DATE,
+        QueryStringKeys::GROUP_ID => [ParamsValidatorKeys::EXISTS, ParamsValidatorKeys::NUMERICAL],
     ];
 }

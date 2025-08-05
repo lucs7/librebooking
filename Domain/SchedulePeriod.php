@@ -63,6 +63,7 @@ class SchedulePeriod
 
     /**
      * @param Date $dateOverride
+     *
      * @return string
      */
     public function Label($dateOverride = null)
@@ -73,8 +74,10 @@ class SchedulePeriod
             if (isset($dateOverride) && !$this->_begin->DateEquals($dateOverride)) {
                 return $dateOverride->Format($format);
             }
+
             return $this->_begin->Format($format);
         }
+
         return $this->_label;
     }
 
@@ -88,7 +91,8 @@ class SchedulePeriod
 
             return $this->_end->Format($format);
         }
-        return '(' . $this->_label . ')';
+
+        return '('.$this->_label.')';
     }
 
     /**
@@ -116,11 +120,11 @@ class SchedulePeriod
 
     public function __toString()
     {
-        return sprintf("Begin: %s End: %s Label: %s", $this->_begin, $this->_end, $this->Label());
+        return sprintf('Begin: %s End: %s Label: %s', $this->_begin, $this->_end, $this->Label());
     }
 
     /**
-     * Compares the starting datetimes
+     * Compares the starting datetimes.
      */
     public function Compare(SchedulePeriod $other)
     {
@@ -145,6 +149,7 @@ class SchedulePeriod
         if (empty($this->_id)) {
             $this->_id = uniqid($this->_begin->Timestamp());
         }
+
         return $this->_id;
     }
 

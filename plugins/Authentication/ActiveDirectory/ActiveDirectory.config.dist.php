@@ -4,7 +4,7 @@ $conf['settings']['domain.controllers'] = 'mydomain,local'; // comma separated l
 $conf['settings']['port'] = '389';      // default ldap port 389 or 636 for ssl.
 $conf['settings']['username'] = '';     // admin user - bind to ldap service with an authorized account user/password
 $conf['settings']['password'] = '';     // admin password - corresponding password
-$conf['settings']['basedn'] =  'ou=uidauthent,o=domain.com';   // The base dn for your domain. This is generally the same as your account suffix, but broken up and prefixed with DC=. Your base dn can be located in the extended attributes in Active Directory Users and Computers MMC.
+$conf['settings']['basedn'] = 'ou=uidauthent,o=domain.com';   // The base dn for your domain. This is generally the same as your account suffix, but broken up and prefixed with DC=. Your base dn can be located in the extended attributes in Active Directory Users and Computers MMC.
 $conf['settings']['version'] = '3';		// LDAP protocol version
 $conf['settings']['use.ssl'] = 'false'; // 'true' if 636 was used.
 $conf['settings']['account.suffix'] = '';	// The full account suffix for your domain. Example: @uidauthent.domain.com.

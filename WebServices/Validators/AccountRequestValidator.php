@@ -1,30 +1,31 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Validators/RequestRequiredValueValidator.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Account/CreateAccountRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Account/UpdateAccountRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Account/UpdateAccountPasswordRequest.php');
+require_once ROOT_DIR.'lib/Common/Validators/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'WebServices/Validators/RequestRequiredValueValidator.php';
+require_once ROOT_DIR.'WebServices/Requests/Account/CreateAccountRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/Account/UpdateAccountRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/Account/UpdateAccountPasswordRequest.php';
 
 interface IAccountRequestValidator
 {
     /**
      * @param CreateAccountRequest $request
+     *
      * @return string[]
      */
     public function ValidateCreate($request);
 
     /**
      * @param UpdateAccountRequest $request
-     * @param WebServiceUserSession $session
+     *
      * @return string[]
      */
     public function ValidateUpdate($request, WebServiceUserSession $session);
 
     /**
      * @param UpdateAccountPasswordRequest $request
-     * @param WebServiceUserSession $session
+     *
      * @return string[]
      */
     public function ValidatePasswordUpdate($request, WebServiceUserSession $session);
@@ -73,7 +74,6 @@ class AccountRequestValidator implements IAccountRequestValidator
         return $this->Validate($request, $validators);
     }
 
-
     public function ValidatePasswordUpdate($request, WebServiceUserSession $session)
     {
         $validators[] = new PasswordComplexityValidator($request->newPassword);
@@ -89,12 +89,14 @@ class AccountRequestValidator implements IAccountRequestValidator
                 }
             }
         }
+
         return $errors;
     }
 
     /**
      * @param AccountRequestBase $request
-     * @param IValidator[] $additionalValidators
+     * @param IValidator[]       $additionalValidators
+     *
      * @return array|string[]
      */
     private function Validate($request, $additionalValidators = [])
@@ -122,6 +124,7 @@ class AccountRequestValidator implements IAccountRequestValidator
                 }
             }
         }
+
         return $errors;
     }
 }

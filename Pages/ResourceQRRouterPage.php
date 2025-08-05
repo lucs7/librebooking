@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class ResourceQRRouterPage extends Page
 {

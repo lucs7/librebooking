@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Pages/SecurePage.php';
 
 class AutoCompletePage extends Page
 {
@@ -31,6 +31,7 @@ class AutoCompletePage extends Page
     {
         if (array_key_exists($type, $this->listMethods)) {
             $method = $this->listMethods[$type];
+
             return $this->$method($term);
         }
 
@@ -51,21 +52,21 @@ class AutoCompletePage extends Page
 
     /**
      * @param $term string
+     *
      * @return array|AutocompleteUser[]
      */
     private function GetUsers($term)
     {
-        if ($term == 'group') {
+        if ('group' == $term) {
             return $this->GetGroupUsers($this->GetQuerystring(QueryStringKeys::GROUP_ID));
         }
         if (empty($term)) {
             $term = '';
         }
 
-
         $onlyActive = false;
         $activeQS = $this->GetQuerystring(QueryStringKeys::ACCOUNT_STATUS);
-        if ($activeQS == AccountStatus::ACTIVE) {
+        if (AccountStatus::ACTIVE == $activeQS) {
             $onlyActive = true;
         }
         $filter = new SqlFilterLike(ColumnNames::FIRST_NAME, $term);
@@ -97,17 +98,19 @@ class AutoCompletePage extends Page
 
     /**
      * @param $term string
+     *
      * @return array|XAutocompleteUser[]
      */
     private function XGetUsers($term)
     {
         $users = $this->GetUsers($term);
 
-        $outUsers = [new XAutocompleteUser("", "")];
+        $outUsers = [new XAutocompleteUser('', '')];
         foreach ($users as $user) {
-            $value = $user->Name . " <" . $user->Email . ">";
+            $value = $user->Name.' <'.$user->Email.'>';
             $outUsers[] = new XAutocompleteUser($value, $value);
         }
+
         return $outUsers;
     }
 
@@ -115,11 +118,13 @@ class AutoCompletePage extends Page
     {
         $filter = new SqlFilterLike(new SqlFilterColumn(TableNames::GROUPS_ALIAS, ColumnNames::GROUP_NAME), $term);
         $r = new GroupRepository();
+
         return $r->GetList(1, PageInfo::All, null, null, $filter)->Results();
     }
 
     /**
      * @param $term string
+     *
      * @return array|AutocompleteUser[]
      */
     private function GetMyUsers($term)
@@ -192,6 +197,7 @@ class XAutocompleteUser
 {
     public $value;
     public $text;
+
     public function __construct($value, $text)
     {
         $this->value = $value;

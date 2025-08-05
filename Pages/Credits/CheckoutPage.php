@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Credits/CheckoutPresenter.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+require_once ROOT_DIR.'Presenters/Credits/CheckoutPresenter.php';
+require_once ROOT_DIR.'Pages/SecurePage.php';
 
 interface ICheckoutPage extends IActionPage
 {
@@ -10,14 +10,14 @@ interface ICheckoutPage extends IActionPage
     public function GetCreditQuantity();
 
     /**
-     * @param float $total
+     * @param float      $total
      * @param CreditCost $cost
-     * @param float $creditQuantity
+     * @param float      $creditQuantity
      */
     public function SetTotals($total, $cost, $creditQuantity);
 
     /**
-     * @param bool $enabled
+     * @param bool   $enabled
      * @param string $clientId
      * @param string $environment
      */
@@ -154,6 +154,6 @@ class CheckoutPage extends ActionPage implements ICheckoutPage
 
     public function SetStripeResult($result)
     {
-        $this->SetJson(['result'=>$result]);
+        $this->SetJson(['result' => $result]);
     }
 }

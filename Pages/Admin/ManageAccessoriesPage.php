@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageAccessoriesPresenter.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageAccessoriesPresenter.php';
 
 interface IManageAccessoriesPage extends IActionPage
 {

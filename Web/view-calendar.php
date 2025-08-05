@@ -1,7 +1,7 @@
 <?php
 
 define('ROOT_DIR', '../');
-require_once(ROOT_DIR . 'Pages/ViewCalendarPage.php');
+require_once ROOT_DIR.'Pages/ViewCalendarPage.php';
 $allowAnonymousSchedule = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_VIEW_SCHEDULES, new BooleanConverter());
 
 $page = new ViewCalendarPage();

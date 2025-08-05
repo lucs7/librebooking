@@ -1,10 +1,11 @@
 <?php
+
 /**
-Translation: 2016 Neklyudov Dmitriy <neodim5@mail.ru>
+ * Translation: 2016 Neklyudov Dmitriy <neodim5@mail.ru>.
  */
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class ru_ru extends en_gb
 {
@@ -803,8 +804,8 @@ class ru_ru extends en_gb
         $strings['AnnouncementSubject'] = 'Новое объявление было опубликовано %s';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'У вас нет предыдущих бронирований';
         $strings['PastReservations'] = 'Предыдущие бронирования';
         $strings['AllNoPastReservations'] = 'За последние %s дней нет предыдущих бронирований';
@@ -812,35 +813,34 @@ class ru_ru extends en_gb
         $strings['Yesterday'] = 'Вчера';
         $strings['EarlierThisWeek'] = 'Ранее на этой неделе';
         $strings['PreviousWeek'] = 'Прошлая неделя';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Ваша группа не имеет предстоящих бронирований';
         $strings['GroupUpcomingReservations'] = 'Предстоящие бронирования моей группы(ов)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Произошла ошибка при входе через Facebook. Пожалуйста, попробуйте еще раз.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'У вас нет резерваций, ожидающих утверждения';
         $strings['PendingApprovalReservations'] = 'Резервации ожидают утверждения';
         $strings['LaterThisMonth'] = 'Позже в этом месяце';
         $strings['LaterThisYear'] = 'Позже в этом году';
-        $strings['Remaining'] = 'Осталось';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Осталось';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Отсутствуют пропущенные резервации на выезд';
-        $strings['MissingCheckOutReservations'] = 'Пропущенные резервации на выезд';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Пропущенные резервации на выезд';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Невозможно просмотреть детали бронирования, потому что у вас нет разрешений на ни один из ресурсов в этом бронировании';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

@@ -15,8 +15,8 @@ class ReportColumns implements IReportColumns
 
     /**
      * @param $attributeTypeId int|CustomAttributeCategory
-     * @param $attributeId int
-     * @param $label string
+     * @param $attributeId     int
+     * @param $label           string
      */
     public function AddAttribute($attributeTypeId, $attributeId, $label)
     {

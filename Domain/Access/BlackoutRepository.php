@@ -1,18 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Blackout.php');
+require_once ROOT_DIR.'Domain/Blackout.php';
 
 interface IBlackoutRepository
 {
     /**
-     * @param BlackoutSeries $blackoutSeries
      * @return int
      */
     public function Add(BlackoutSeries $blackoutSeries);
 
-    /**
-     * @param BlackoutSeries $blackoutSeries
-     */
     public function Update(BlackoutSeries $blackoutSeries);
 
     /**
@@ -27,6 +23,7 @@ interface IBlackoutRepository
 
     /**
      * @param int $blackoutId
+     *
      * @return BlackoutSeries
      */
     public function LoadByBlackoutId($blackoutId);
@@ -35,7 +32,6 @@ interface IBlackoutRepository
 class BlackoutRepository implements IBlackoutRepository
 {
     /**
-     * @param BlackoutSeries $blackoutSeries
      * @return int
      */
     public function Add(BlackoutSeries $blackoutSeries)
@@ -83,6 +79,7 @@ class BlackoutRepository implements IBlackoutRepository
 
     /**
      * @param int $blackoutId
+     *
      * @return BlackoutSeries
      */
     public function LoadByBlackoutId($blackoutId)
@@ -120,16 +117,15 @@ class BlackoutRepository implements IBlackoutRepository
 
             $result->Free();
             $reader->Free();
+
             return $series;
         }
 
         $reader->Free();
+
         return null;
     }
 
-    /**
-     * @param BlackoutSeries $blackoutSeries
-     */
     public function Update(BlackoutSeries $blackoutSeries)
     {
         if ($blackoutSeries->IsNew()) {

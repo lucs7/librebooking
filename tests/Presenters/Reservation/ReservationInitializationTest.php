@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'Pages/Reservation/ReservationPage.php');
-require_once(ROOT_DIR . 'Pages/Reservation/NewReservationPage.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/NewReservationInitializer.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'Pages/Reservation/ReservationPage.php';
+require_once ROOT_DIR.'Pages/Reservation/NewReservationPage.php';
+require_once ROOT_DIR.'lib/Application/Reservation/NewReservationInitializer.php';
 
 class ReservationInitializationTest extends TestBase
 {
@@ -159,7 +159,7 @@ class ReservationInitializationTest extends TestBase
         $initializer->SetDates($startDate, $endDate, $periods, $periods, 0);
     }
 
-    public function testWhenNoScheduleIsPassed_UseDefaultScheduleId()
+    public function testWhenNoScheduleIsPassedUseDefaultScheduleId()
     {
         $id = $this->scheduleRepository->_DefaultScheduleId;
 

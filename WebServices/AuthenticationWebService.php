@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Responses/AuthenticationResponse.php');
-require_once(ROOT_DIR . 'WebServices/Requests/AuthenticationRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/SignOutRequest.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'WebServices/Responses/AuthenticationResponse.php';
+require_once ROOT_DIR.'WebServices/Requests/AuthenticationRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/SignOutRequest.php';
 
 class SignedOutResponse extends RestResponse
 {
@@ -13,7 +13,6 @@ class SignedOutResponse extends RestResponse
      */
     public $signedOut;
 }
-
 
 class AuthenticationWebService
 {
@@ -36,9 +35,13 @@ class AuthenticationWebService
 
     /**
      * @name Authenticate
+     *
      * @description Authenticates an existing LibreBooking user
+     *
      * @request AuthenticationRequest
+     *
      * @response AuthenticationResponse
+     *
      * @return void
      */
     public function Authenticate()
@@ -59,6 +62,7 @@ class AuthenticationWebService
                 if (!UserGroupHelper::isUserInGroup(groupId: $this->api_access_group_id, userId: $session->UserId)) {
                     Log::Debug('WebService Authenticate, user %s was denied API access', $username);
                     $this->server->WriteResponse(AuthenticationResponse::NotAuthorized(), statusCode: RestResponse::FORBIDDEN);
+
                     return;
                 }
             }
@@ -81,7 +85,9 @@ class AuthenticationWebService
 
     /**
      * @name SignOut
+     *
      * @request SignOutRequest
+     *
      * @return void
      */
     public function SignOut()

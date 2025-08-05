@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class PrivacyFilterTest extends TestBase
 {

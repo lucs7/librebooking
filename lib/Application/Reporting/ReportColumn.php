@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reporting/ChartColumnDefinition.php');
+require_once ROOT_DIR.'lib/Application/Reporting/ChartColumnDefinition.php';
 
 class ReportCell
 {
@@ -10,7 +10,7 @@ class ReportCell
     private $value;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $chartValue;
 
@@ -21,10 +21,10 @@ class ReportCell
     private $chartGroup;
 
     /**
-     * @param string $value
-     * @param string|null $chartValue
+     * @param string                      $value
+     * @param string|null                 $chartValue
      * @param ChartColumnType|string|null $chartColumnType
-     * @param ChartGroup $chartGroup
+     * @param ChartGroup                  $chartGroup
      */
     public function __construct($value, $chartValue = null, $chartColumnType = null, $chartGroup = null)
     {
@@ -93,7 +93,7 @@ abstract class ReportColumn
     protected $title;
 
     /**
-     * @param $titleKey string
+     * @param $titleKey              string
      * @param $chartColumnDefinition ChartColumnDefinition|null
      */
     public function __construct($titleKey, ?ChartColumnDefinition $chartColumnDefinition = null)
@@ -123,11 +123,12 @@ abstract class ReportColumn
      */
     public function HasTitle()
     {
-        return $this->title != null;
+        return null != $this->title;
     }
 
     /**
      * @param $data mixed
+     *
      * @return string
      */
     public function GetData($data)
@@ -144,8 +145,9 @@ abstract class ReportColumn
     }
 
     /**
-     * @param $row array
+     * @param $row       array
      * @param $columnKey string
+     *
      * @return string
      */
     public function GetChartData($row, $columnKey)
@@ -154,7 +156,7 @@ abstract class ReportColumn
     }
 
     /**
-     * @return ChartGroup|null|string
+     * @return ChartGroup|string|null
      */
     public function GetChartGroup()
     {
@@ -186,11 +188,11 @@ class ReportStatusColumn extends ReportStringColumn
     {
         $r = Resources::GetInstance();
 
-        if ($data == ReservationStatus::Created) {
+        if (ReservationStatus::Created == $data) {
             return $r->GetString('Created');
         }
 
-        if ($data == ReservationStatus::Pending) {
+        if (ReservationStatus::Pending == $data) {
             return $r->GetString('Pending');
         }
 
@@ -217,6 +219,7 @@ class ReportDateColumn extends ReportColumn
         } else {
             $date = Date::FromDatabase($data);
         }
+
         return $date->ToTimezone($this->timezone)->Format($this->format);
     }
 
@@ -227,6 +230,7 @@ class ReportDateColumn extends ReportColumn
         } else {
             $date = Date::FromDatabase($row[$key]);
         }
+
         //		$format = Resources::GetInstance()->GetDateFormat(ResourceKeys::DATE_GENERAL);
         return $date->ToTimezone($this->timezone)->GetDate()->ToIso();
     }
@@ -245,6 +249,7 @@ class ReportTimeColumn extends ReportColumn
     public function GetData($data)
     {
         $interval = new TimeInterval($data);
+
         return $interval->ToString($this->includeTotalHours);
     }
 }

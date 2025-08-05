@@ -20,30 +20,35 @@
  * PHP Version 5
  *
  * @file     CAS/Language/ChineseSimplified.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Pascal Aubry <pascal.aubry@univ-rennes1.fr>, Phy25 <caslang@phy25.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
- * Chinese Simplified language class
+ * Chinese Simplified language class.
  *
  * @class    CAS_Languages_ChineseSimplified
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Pascal Aubry <pascal.aubry@univ-rennes1.fr>, Phy25 <caslang@phy25.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
  *
- * @sa @link internalLang Internationalization @endlink
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @sa @see internalLang Internationalization @endlink
+ *
  * @ingroup internalLang
  */
 class CAS_Languages_ChineseSimplified implements CAS_Languages_LanguageInterface
 {
     /**
-     * Get the using server string
+     * Get the using server string.
      *
      * @return string using server
      */
@@ -53,7 +58,7 @@ class CAS_Languages_ChineseSimplified implements CAS_Languages_LanguageInterface
     }
 
     /**
-     * Get authentication wanted string
+     * Get authentication wanted string.
      *
      * @return string authentication wanted
      */
@@ -63,7 +68,7 @@ class CAS_Languages_ChineseSimplified implements CAS_Languages_LanguageInterface
     }
 
     /**
-     * Get logout string
+     * Get logout string.
      *
      * @return string logout
      */
@@ -73,7 +78,7 @@ class CAS_Languages_ChineseSimplified implements CAS_Languages_LanguageInterface
     }
 
     /**
-     * Get the should have been redirected string
+     * Get the should have been redirected string.
      *
      * @return string should habe been redirected
      */
@@ -83,30 +88,30 @@ class CAS_Languages_ChineseSimplified implements CAS_Languages_LanguageInterface
     }
 
     /**
-    * Get authentication failed string
-    *
-    * @return string authentication failed
-    */
+     * Get authentication failed string.
+     *
+     * @return string authentication failed
+     */
     public function getAuthenticationFailed()
     {
         return 'CAS ???????????????';
     }
 
     /**
-    * Get the your were not authenticated string
-    *
-    * @return string not authenticated
-    */
+     * Get the your were not authenticated string.
+     *
+     * @return string not authenticated
+     */
     public function getYouWereNotAuthenticated()
     {
         return '<p>????????????????????????</p><p>?????????<a href="%s">????????????????????????</a>???</p><p>??????????????????????????????<a href="mailto:%s">?????????????????????</a>???</p>';
     }
 
     /**
-    * Get the service unavailable string
-    *
-    * @return string service unavailable
-    */
+     * Get the service unavailable string.
+     *
+     * @return string service unavailable
+     */
     public function getServiceUnavailable()
     {
         return '????????? <b>%s</b> ????????????<b>%s</b>??????';

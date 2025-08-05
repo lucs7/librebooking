@@ -2,9 +2,6 @@
 
 class EmailLogger implements IEmailService
 {
-    /**
-     * @param IEmailMessage $emailMessage
-     */
     public function Send(IEmailMessage $emailMessage)
     {
         if (is_array($emailMessage->To())) {

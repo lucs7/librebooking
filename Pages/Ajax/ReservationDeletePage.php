@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/IReservationSaveResultsView.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenterFactory.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Pages/Ajax/IReservationSaveResultsView.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationPresenterFactory.php';
 
 interface IReservationDeletePage extends IReservationSaveResultsView
 {
@@ -136,14 +136,14 @@ class ReservationDeleteJsonPage extends ReservationDeletePage implements IReserv
     public function SetSaveSuccessfulMessage($succeeded)
     {
         if ($succeeded) {
-            $this->SetJson(['deleted' => (string)$succeeded]);
+            $this->SetJson(['deleted' => (string) $succeeded]);
         }
     }
 
     public function SetErrors($errors)
     {
         if (!empty($errors)) {
-            $this->SetJson(['deleted' => (string)false], $errors);
+            $this->SetJson(['deleted' => (string) false], $errors);
         }
     }
 

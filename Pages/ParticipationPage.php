@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/ParticipationPresenter.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/ParticipationPresenter.php';
 
 interface IParticipationPage
 {
@@ -22,6 +22,7 @@ interface IParticipationPage
 
     /**
      * @param $results serializable json
+     *
      * @return void
      */
     public function DisplayResult($results);
@@ -38,12 +39,12 @@ interface IParticipationPage
 
     /**
      * @param array|ReservationItemView[] $reservations
+     *
      * @return void
      */
     public function BindReservations($reservations);
 
     /**
-     * @param $timezone
      * @return void
      */
     public function SetTimezone($timezone);
@@ -57,7 +58,7 @@ interface IParticipationPage
 class ParticipationPage extends SecurePage implements IParticipationPage
 {
     /**
-     * @var \ParticipationPresenter
+     * @var ParticipationPresenter
      */
     private $presenter;
 

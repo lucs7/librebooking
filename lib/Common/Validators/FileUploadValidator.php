@@ -3,7 +3,7 @@
 class FileUploadValidator extends ValidatorBase implements IValidator
 {
     /**
-     * @var null|UploadedFile
+     * @var UploadedFile|null
      */
     private $file;
 
@@ -17,7 +17,7 @@ class FileUploadValidator extends ValidatorBase implements IValidator
 
     public function Validate()
     {
-        if ($this->file == null) {
+        if (null == $this->file) {
             return;
         }
         $this->isValid = !$this->file->IsError();

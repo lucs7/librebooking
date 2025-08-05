@@ -1,10 +1,10 @@
 <?php
 
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-    require_once ROOT_DIR . 'vendor/autoload.php';
+if (file_exists(ROOT_DIR.'vendor/autoload.php')) {
+    require_once ROOT_DIR.'vendor/autoload.php';
 }
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'lib/Server/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 use Smarty\Smarty;
 
@@ -13,7 +13,7 @@ class SmartyEmail extends Smarty
     /**
      * @var Resources
      */
-    protected $Resources = null;
+    protected $Resources;
 
     public function __construct($languageCode = null)
     {
@@ -25,10 +25,10 @@ class SmartyEmail extends Smarty
         $this->assign('Charset', $this->Resources->Charset);
         $this->assign('ScriptUrl', Configuration::Instance()->GetScriptUrl());
 
-        $this->template_dir = ROOT_DIR . 'lang';
-        $this->compile_dir = ROOT_DIR . 'tpl_c';
-        $this->config_dir = ROOT_DIR . 'configs';
-        $this->cache_dir = ROOT_DIR . 'cache';
+        $this->template_dir = ROOT_DIR.'lang';
+        $this->compile_dir = ROOT_DIR.'tpl_c';
+        $this->config_dir = ROOT_DIR.'configs';
+        $this->cache_dir = ROOT_DIR.'cache';
 
         $cacheTemplates = Configuration::Instance()->GetKey(ConfigKeys::CACHE_TEMPLATES, new BooleanConverter());
         $this->compile_check = !$cacheTemplates;    // should be set to false in production
@@ -47,7 +47,7 @@ class SmartyEmail extends Smarty
 
     public function FetchTemplate($templateName)
     {
-        $localizedTemplate = $this->Resources->CurrentLanguage . '/' . $templateName;
+        $localizedTemplate = $this->Resources->CurrentLanguage.'/'.$templateName;
         if (file_exists($localizedTemplate)) {
             return $this->fetch($localizedTemplate);
         }
@@ -57,10 +57,11 @@ class SmartyEmail extends Smarty
 
     public function SmartyTranslate($params, &$smarty)
     {
-        //TODO: make these more pluggable so theyre not copied
+        // TODO: make these more pluggable so theyre not copied
         if (!isset($params['args'])) {
             return $this->Resources->GetString($params['key'], '');
         }
+
         return $this->Resources->GetString($params['key'], explode(',', $params['args']));
     }
 
@@ -74,6 +75,7 @@ class SmartyEmail extends Smarty
         if (isset($params['key'])) {
             $key = $params['key'];
         }
+
         return $params['date']->Format($this->Resources->GetDateFormat($key));
     }
 }

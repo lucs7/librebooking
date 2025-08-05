@@ -1,9 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageSchedulesPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageSchedulesPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
-
+require_once ROOT_DIR.'Pages/Admin/ManageSchedulesPage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageSchedulesPresenter.php';
+require_once ROOT_DIR.'lib/Application/Admin/namespace.php';
 
 class ScheduleAdminManageSchedulesPage extends ManageSchedulesPage
 {

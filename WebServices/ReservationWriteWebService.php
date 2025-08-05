@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Controllers/ReservationSaveController.php');
-require_once(ROOT_DIR . 'WebServices/Responses/ReservationCreatedResponse.php');
-require_once(ROOT_DIR . 'WebServices/Requests/ReservationRequest.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationSavePresenter.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationSavePage.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'WebServices/Controllers/ReservationSaveController.php';
+require_once ROOT_DIR.'WebServices/Responses/ReservationCreatedResponse.php';
+require_once ROOT_DIR.'WebServices/Requests/ReservationRequest.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationSavePresenter.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationSavePage.php';
 
 class ReservationWriteWebService
 {
@@ -21,9 +21,13 @@ class ReservationWriteWebService
 
     /**
      * @name CreateReservation
+     *
      * @description Creates a new reservation
+     *
      * @request ReservationRequest
+     *
      * @response ReservationCreatedResponse
+     *
      * @return void
      */
     public function Create()
@@ -61,11 +65,16 @@ class ReservationWriteWebService
 
     /**
      * @name UpdateReservation
+     *
      * @description Updates an existing reservation.
      * Pass an optional updateScope query string parameter to restrict changes. Possible values for updateScope are this|full|future
+     *
      * @request ReservationRequest
+     *
      * @response ReservationUpdatedResponse
+     *
      * @param string $referenceNumber
+     *
      * @return void
      */
     public function Update($referenceNumber)
@@ -105,9 +114,13 @@ class ReservationWriteWebService
 
     /**
      * @name ApproveReservation
+     *
      * @description Approves a pending reservation.
+     *
      * @response ReservationApprovedResponse
+     *
      * @param string $referenceNumber
+     *
      * @return void
      */
     public function Approve($referenceNumber)
@@ -129,9 +142,13 @@ class ReservationWriteWebService
 
     /**
      * @name CheckinReservation
+     *
      * @description Checks in to a reservation.
+     *
      * @response ReservationCheckedInResponse
+     *
      * @param string $referenceNumber
+     *
      * @return void
      */
     public function Checkin($referenceNumber)
@@ -153,9 +170,13 @@ class ReservationWriteWebService
 
     /**
      * @name CheckoutReservation
+     *
      * @description Checks out of a reservation.
+     *
      * @response ReservationCheckedOutResponse
+     *
      * @param string $referenceNumber
+     *
      * @return void
      */
     public function Checkout($referenceNumber)
@@ -177,10 +198,14 @@ class ReservationWriteWebService
 
     /**
      * @name DeleteReservation
+     *
      * @description Deletes an existing reservation.
      * Pass an optional updateScope query string parameter to restrict changes. Possible values for updateScope are this|full|future
+     *
      * @response DeletedResponse
+     *
      * @param string $referenceNumber
+     *
      * @return void
      */
     public function Delete($referenceNumber)

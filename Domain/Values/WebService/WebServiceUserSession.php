@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Server/UserSession.php');
-require_once(ROOT_DIR . 'Domain/Values/WebService/WebServiceExpiration.php');
-require_once(ROOT_DIR . 'Domain/Values/WebService/WebServiceSessionToken.php');
+require_once ROOT_DIR.'lib/Server/UserSession.php';
+require_once ROOT_DIR.'Domain/Values/WebService/WebServiceExpiration.php';
+require_once ROOT_DIR.'Domain/Values/WebService/WebServiceSessionToken.php';
 
 class WebServiceUserSession extends UserSession
 {
@@ -17,7 +17,6 @@ class WebServiceUserSession extends UserSession
     }
 
     /**
-     * @param UserSession $session
      * @return WebServiceUserSession
      */
     public static function FromSession(UserSession $session)

@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Database/namespace.php');
-//require_once(ROOT_DIR . 'lib/pear/MDB2.php');
+require_once ROOT_DIR.'lib/Database/namespace.php';
+// require_once(ROOT_DIR . 'lib/pear/MDB2.php');
 
 class FakeDatabase extends Database
 {
@@ -39,7 +39,8 @@ class FakeDatabase extends Database
             $reader = $this->reader[$this->readcount];
         }
 
-        $this->readcount++;
+        ++$this->readcount;
+
         return $reader;
     }
 
@@ -62,12 +63,13 @@ class FakeDatabase extends Database
         $this->_LastCommand = $command;
         $this->_AddCommand($command);
 
-        $expectedId =  $this->_ExpectedInsertId;
+        $expectedId = $this->_ExpectedInsertId;
         if (isset($this->_ExpectedInsertIds[$this->executeInsertCount])) {
             $expectedId = $this->_ExpectedInsertIds[$this->executeInsertCount];
         }
 
-        $this->executeInsertCount++;
+        ++$this->executeInsertCount;
+
         return $expectedId;
     }
 
@@ -77,8 +79,7 @@ class FakeDatabase extends Database
     }
 
     /**
-     * Set this to array(array())
-     * @param $rows
+     * Set this to array(array()).
      */
     public function SetRows($rows)
     {
@@ -111,6 +112,7 @@ class FakeDatabase extends Database
 
     /**
      * @param ISqlCommand $command
+     *
      * @return bool
      */
     public function ContainsCommand($command)
@@ -135,6 +137,7 @@ class FakeReader implements IReader
         if (sizeof($this->rows) > $this->idx) {
             return $this->rows[$this->idx++];
         }
+
         return false;
     }
 
@@ -151,9 +154,9 @@ class FakeReader implements IReader
 
 class FakeDBConnection implements IDbConnection
 {
-    public $_LastQueryCommand = null;
-    public $_LastExecuteCommand = null;
-    public $_LastSqlCommand = null;
+    public $_LastQueryCommand;
+    public $_LastExecuteCommand;
+    public $_LastSqlCommand;
     public $_ConnectWasCalled = false;
     public $_DisconnectWasCalled = false;
     public $_GetLastInsertIdCalled = false;
@@ -177,6 +180,7 @@ class FakeDBConnection implements IDbConnection
     public function Query(ISqlCommand $command)
     {
         $this->_LastSqlCommand = $command;
+
         return null;
     }
 
@@ -188,18 +192,20 @@ class FakeDBConnection implements IDbConnection
     public function GetLastInsertId()
     {
         $this->_GetLastInsertIdCalled = true;
+
         return $this->_ExpectedInsertId;
     }
 
     /**
-     * @param ISqlCommand $command
      * @param int $limit
      * @param int $offset
+     *
      * @return IReader to iterate over
      */
     public function LimitQuery(ISqlCommand $command, $limit, $offset = null)
     {
         $this->_LimitQueryCalled = true;
+
         return null;
     }
 }

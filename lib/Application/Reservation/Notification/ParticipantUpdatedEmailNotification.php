@@ -1,12 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/ParticipantAddedEmailNotification.php');
+require_once ROOT_DIR.'lib/Application/Reservation/Notification/ParticipantAddedEmailNotification.php';
 
 class ParticipantUpdatedEmailNotification extends ParticipantAddedEmailNotification
 {
     /**
-         * @var IUserRepository
-         */
+     * @var IUserRepository
+     */
     private $userRepository;
 
     /**

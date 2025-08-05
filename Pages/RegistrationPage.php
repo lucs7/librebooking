@@ -1,41 +1,65 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Presenters/RegistrationPresenter.php');
-require_once(ROOT_DIR . 'config/timezones.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'Pages/ActionPage.php';
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Presenters/RegistrationPresenter.php';
+require_once ROOT_DIR.'config/timezones.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 interface IRegistrationPage extends IPage, IActionPage
 {
     public function RegisterClicked();
 
     public function SetTimezones($timezoneValues, $timezoneOutput);
+
     public function SetTimezone($timezone);
+
     public function SetHomepages($homepageValues, $homepageOutput);
+
     public function SetHomepage($homepage);
+
     public function SetLoginName($loginName);
+
     public function SetEmail($email);
+
     public function SetFirstName($firstName);
+
     public function SetLastName($lastName);
+
     public function SetPhone($phoneNumber);
+
     public function SetOrganization($organization);
+
     public function SetPosition($position);
+
     public function SetPassword($password);
+
     public function SetPasswordConfirm($passwordConfirm);
+
     public function SetCaptchaImageUrl($captchaUrl);
 
     public function GetTimezone();
+
     public function GetHomepage();
+
     public function GetLoginName();
+
     public function GetEmail();
+
     public function GetFirstName();
+
     public function GetLastName();
+
     public function GetPhone();
+
     public function GetOrganization();
+
     public function GetPosition();
+
     public function GetPassword();
+
     public function GetPasswordConfirm();
+
     public function GetCaptcha();
 
     /**

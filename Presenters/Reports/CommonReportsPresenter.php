@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reports/ReportActions.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Pages/Reports/CommonReportsPage.php');
-require_once(ROOT_DIR . 'lib/Application/Reporting/namespace.php');
+require_once ROOT_DIR.'Presenters/Reports/ReportActions.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Pages/Reports/CommonReportsPage.php';
+require_once ROOT_DIR.'lib/Application/Reporting/namespace.php';
 
 class CommonReportsPresenter extends ActionPresenter
 {
@@ -43,7 +43,7 @@ class CommonReportsPresenter extends ActionPresenter
 
     public function PageLoad()
     {
-        //$this->page->BindReport($report, new ReportDefinition($report, $this->user->Timezone));
+        // $this->page->BindReport($report, new ReportDefinition($report, $this->user->Timezone));
     }
 
     public function ProcessAction()
@@ -62,7 +62,7 @@ class CommonReportsPresenter extends ActionPresenter
         $userId = $this->user->UserId;
         $report = $this->service->GenerateCommonReport(new CannedReport($reportId, $this->user));
 
-        if ($report != null) {
+        if (null != $report) {
             Log::Debug('Loading saved report for userId: %s, reportId %s', $userId, $reportId);
             $user = $this->userRepository->LoadById($userId);
             $this->page->BindReport($report, new ReportDefinition($report, $this->user->Timezone), $user->GetPreference(UserPreferences::REPORT_COLUMNS));
@@ -94,7 +94,7 @@ class CommonReportsPresenter extends ActionPresenter
         $userId = $this->user->UserId;
         $report = $this->service->GenerateSavedReport($reportId, $userId, $this->user->Timezone);
 
-        if ($report != null) {
+        if (null != $report) {
             Log::Debug('Loading saved report for userId: %s, reportId %s', $userId, $reportId);
 
             $user = $this->userRepository->LoadById($userId);

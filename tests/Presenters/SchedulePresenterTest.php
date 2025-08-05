@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Schedule/SchedulePresenter.php');
-require_once(ROOT_DIR . 'Pages/SchedulePage.php');
+require_once ROOT_DIR.'Presenters/Schedule/SchedulePresenter.php';
+require_once ROOT_DIR.'Pages/SchedulePage.php';
 
 class SchedulePresenterTest extends TestBase
 {
@@ -441,8 +441,8 @@ class SchedulePresenterTest extends TestBase
         $pageBuilder = new SchedulePageBuilder();
         $dates = $pageBuilder->GetScheduleDates($user, $schedule, $schedulePage);
 
-        //echo $expectedScheduleDates->ToString();
-        //echo $utcDates->ToString();
+        // echo $expectedScheduleDates->ToString();
+        // echo $utcDates->ToString();
 
         $this->assertEquals($expectedScheduleDates, $dates);
     }
@@ -487,8 +487,8 @@ class SchedulePresenterTest extends TestBase
         $pageBuilder = new SchedulePageBuilder();
         $dates = $pageBuilder->GetScheduleDates($user, $schedule, $schedulePage);
 
-        //echo $expectedScheduleDates->ToString();
-        //echo $utcDates->ToString();
+        // echo $expectedScheduleDates->ToString();
+        // echo $utcDates->ToString();
 
         $this->assertEquals($expectedScheduleDates, $dates);
     }
@@ -560,7 +560,7 @@ class SchedulePresenterTest extends TestBase
         $schedulePage
                 ->expects($this->once())
                 ->method('GetSelectedDate')
-                ->willReturn($selectedDate->Format("Y-m-d"));
+                ->willReturn($selectedDate->Format('Y-m-d'));
 
         $schedule
                 ->expects($this->once())
@@ -575,8 +575,8 @@ class SchedulePresenterTest extends TestBase
         $pageBuilder = new SchedulePageBuilder();
         $dates = $pageBuilder->GetScheduleDates($user, $schedule, $schedulePage);
 
-        //echo $expectedScheduleDates->ToString();
-        //echo $utcDates->ToString();
+        // echo $expectedScheduleDates->ToString();
+        // echo $utcDates->ToString();
 
         $this->assertEquals($expectedScheduleDates, $dates);
     }
@@ -687,7 +687,7 @@ class SchedulePresenterTest extends TestBase
         $builder->BindDisplayDates($page, new DateRange($start, $end), $schedule);
     }
 
-    public function testIfCurrentDateIsBeforeAvailability_ShowFirstAvailableMessage()
+    public function testIfCurrentDateIsBeforeAvailabilityShowFirstAvailableMessage()
     {
         $tz = 'America/Chicago';
         $start = Date::Parse('2011-04-04', $tz);
@@ -708,7 +708,7 @@ class SchedulePresenterTest extends TestBase
         $this->assertTrue($page->_ScheduleTooEarly);
     }
 
-    public function testIfCurrentDateIsAfterAvailability_ShowNoLongerAvailableMessage()
+    public function testIfCurrentDateIsAfterAvailabilityShowNoLongerAvailableMessage()
     {
         $tz = 'America/Chicago';
         $start = Date::Parse('2011-04-04', $tz);
@@ -753,7 +753,7 @@ class SchedulePresenterTest extends TestBase
         $schedulePage
                 ->expects($this->once())
                 ->method('GetSelectedDate')
-                ->willReturn($selectedDate->Format("Y-m-d"));
+                ->willReturn($selectedDate->Format('Y-m-d'));
 
         $schedulePage
                 ->expects($this->once())
@@ -852,7 +852,7 @@ class SchedulePresenterTest extends TestBase
         $page = new FakeSchedulePage();
 
         $filter = new ScheduleResourceFilter(1, 2, 3, [new AttributeValue(1, 1)], [new AttributeValue(2, 2)], [1, 2, 3]);
-        $this->fakeServer->SetCookie(new Cookie('resource_filter' . $scheduleId, json_encode($filter)));
+        $this->fakeServer->SetCookie(new Cookie('resource_filter'.$scheduleId, json_encode($filter)));
         $page->_FilterSubmitted = false;
         $builder = new SchedulePageBuilder();
 
@@ -877,7 +877,6 @@ class SchedulePresenterTest extends TestBase
         $this->assertEquals(new DateRange($d1, $d2->AddDays(1)), $dates);
     }
 }
-
 
 class FakeSchedulePage implements ISchedulePage
 {
@@ -909,7 +908,9 @@ class FakeSchedulePage implements ISchedulePage
      */
     public $_ParticipantId;
 
-    public function BindViewableResourceReservations($resourceIds) { }
+    public function BindViewableResourceReservations($resourceIds)
+    {
+    }
 
     public function TakingAction()
     {
@@ -998,7 +999,7 @@ class FakeSchedulePage implements ISchedulePage
     }
 
     /**
-     * Sets the dates to be displayed for the schedule, adjusted for timezone if necessary
+     * Sets the dates to be displayed for the schedule, adjusted for timezone if necessary.
      *
      * @param DateRange $dates
      */
@@ -1022,8 +1023,6 @@ class FakeSchedulePage implements ISchedulePage
         return null;
     }
 
-    /**
-     */
     public function ShowInaccessibleResources()
     {
     }
@@ -1060,6 +1059,7 @@ class FakeSchedulePage implements ISchedulePage
 
     /**
      * @param int $scheduleId
+     *
      * @return string|ScheduleStyle
      */
     public function GetScheduleStyle($scheduleId)
@@ -1090,9 +1090,6 @@ class FakeSchedulePage implements ISchedulePage
         return $this->_ResourceIds;
     }
 
-    /**
-     * @param ResourceGroupTree $resourceGroupTree
-     */
     public function SetResourceGroupTree(ResourceGroupTree $resourceGroupTree)
     {
     }
@@ -1212,7 +1209,6 @@ class FakeSchedulePage implements ISchedulePage
     public function SetAllowConcurrent($allowConcurrentReservations)
     {
     }
-
 
     public function GetReservationRequest()
     {

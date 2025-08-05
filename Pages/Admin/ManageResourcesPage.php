@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageSchedulesPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/ScheduleRepository.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageSchedulesPresenter.php';
+require_once ROOT_DIR.'Domain/Access/ScheduleRepository.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 interface IUpdateResourcePage
 {
@@ -174,6 +174,7 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
 
     /**
      * @param $adminGroups GroupItemView[]|array
+     *
      * @return void
      */
     public function BindAdminGroups($adminGroups);
@@ -330,15 +331,12 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
 
     /**
      * @param BookableResource $resource
-     * @param ResourceGroup[] $groupList
+     * @param ResourceGroup[]  $groupList
      */
     public function BindUpdatedResourceGroups($resource, $groupList);
 
     public function SetAttributeValueAsJson($attributeValue);
 
-    /**
-     * @param ResourceGroupTree $resourceGroups
-     */
     public function BindResourceGroups(ResourceGroupTree $resourceGroups);
 
     /**
@@ -407,9 +405,6 @@ interface IManageResourcesPage extends IUpdateResourcePage, IActionPage, IPageab
      */
     public function GetUpdateOnImport();
 
-    /**
-     * @param BookableResource $resource
-     */
     public function BindResourceImages(BookableResource $resource);
 
     /**
@@ -485,7 +480,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
             new ReservationViewRepository()
         );
 
-        /**
+        /*
          * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
          */
         $this->pageablePage = new PageablePage($this);
@@ -493,7 +488,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
             'YesNoOptions',
             [
                 '1' => Resources::GetInstance()->GetString('Yes'),
-                '0' => Resources::GetInstance()->GetString('No')
+                '0' => Resources::GetInstance()->GetString('No'),
             ]
         );
         $this->Set(
@@ -501,14 +496,14 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
             [
                 '-1' => Resources::GetInstance()->GetString('Unchanged'),
                 '1' => Resources::GetInstance()->GetString('Yes'),
-                '0' => Resources::GetInstance()->GetString('No')
+                '0' => Resources::GetInstance()->GetString('No'),
             ]
         );
 
         $this->Set('CreditsEnabled', Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
 
         $url = $this->server->GetUrl();
-        $exportUrl = BookedStringHelper::Contains($url, '?') ? $url . '&dr=export' : $this->server->GetRequestUri() . '?dr=export';
+        $exportUrl = BookedStringHelper::Contains($url, '?') ? $url.'&dr=export' : $this->server->GetRequestUri().'?dr=export';
         $this->Set('ExportUrl', $exportUrl);
 
         // If the contact for a resource must be chosen from a list of registered users.
@@ -532,6 +527,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
 
     /**
      * @return int
+     *
      * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
      */
     public function GetPageSize()
@@ -543,11 +539,10 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
             return 10;
         }
         return $pageSize;*/
-        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
+        throw new LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     /**
-     * @param PageInfo $pageInfo
      * @return void
      */
     public function BindPageInfo(PageInfo $pageInfo)
@@ -736,6 +731,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
 
     /**
      * @param $adminGroups GroupItemView[]|array
+     *
      * @return void
      */
     public function BindAdminGroups($adminGroups)
@@ -842,8 +838,8 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->Set('ResourceNameFilter', $values->ResourceNameFilter);
         $this->Set('ScheduleIdFilter', $values->ScheduleIdFilter);
         $this->Set('ResourceTypeFilter', $values->ResourceTypeFilter);
-        $this->Set('ResourceStatusFilterId', $values->ResourceStatusFilterId == '' ? '' : intval($values->ResourceStatusFilterId));
-        $this->Set('ResourceStatusReasonFilterId', $values->ResourceStatusReasonFilterId == '' ? '' : intval($values->ResourceStatusReasonFilterId));
+        $this->Set('ResourceStatusFilterId', '' == $values->ResourceStatusFilterId ? '' : intval($values->ResourceStatusFilterId));
+        $this->Set('ResourceStatusReasonFilterId', '' == $values->ResourceStatusReasonFilterId ? '' : intval($values->ResourceStatusReasonFilterId));
         $this->Set('CapacityFilter', $values->CapacityFilter);
         $this->Set('RequiresApprovalFilter', $values->RequiresApprovalFilter);
         $this->Set('AutoPermissionFilter', $values->AutoPermissionFilter);
@@ -952,7 +948,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
 
     /**
      * @param BookableResource $resource
-     * @param ResourceGroup[] $groupList
+     * @param ResourceGroup[]  $groupList
      */
     public function BindUpdatedResourceGroups($resource, $groupList)
     {
@@ -989,9 +985,6 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         return $this->GetForm(FormKeys::PERMISSION_TYPE);
     }
 
-    /**
-     * @param ResourceGroupTree $resourceGroups
-     */
     public function BindResourceGroups(ResourceGroupTree $resourceGroups)
     {
         $this->Set('ResourceGroups', json_encode($resourceGroups->GetGroups(false)));
@@ -1152,6 +1145,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     public function GetMaxConcurrentReservations()
     {
         $val = $this->GetForm(FormKeys::MAX_CONCURRENT_RESERVATIONS);
+
         return intval($val);
     }
 
@@ -1215,6 +1209,7 @@ class ResourceFilterValues
 
     /**
      * @param CustomAttribute[] $customAttributes
+     *
      * @return ISqlFilter
      */
     public function AsFilter($customAttributes)
@@ -1244,7 +1239,7 @@ class ResourceFilterValues
                 $this->ResourceTypeFilter
             ));
         }
-        if ($this->ResourceStatusFilterId != '') {
+        if ('' != $this->ResourceStatusFilterId) {
             $filter->_And(new SqlFilterEquals(
                 new SqlFilterColumn(
                     TableNames::RESOURCES_ALIAS,
@@ -1253,7 +1248,7 @@ class ResourceFilterValues
                 $this->ResourceStatusFilterId
             ));
         }
-        if ($this->ResourceStatusReasonFilterId != '') {
+        if ('' != $this->ResourceStatusReasonFilterId) {
             $filter->_And(new SqlFilterEquals(
                 new SqlFilterColumn(
                     TableNames::RESOURCES_ALIAS,
@@ -1272,7 +1267,7 @@ class ResourceFilterValues
                 true
             ));
         }
-        if ($this->RequiresApprovalFilter != '') {
+        if ('' != $this->RequiresApprovalFilter) {
             $filter->_And(new SqlFilterEquals(
                 new SqlFilterColumn(
                     TableNames::RESOURCES_ALIAS,
@@ -1281,7 +1276,7 @@ class ResourceFilterValues
                 $this->RequiresApprovalFilter
             ));
         }
-        if ($this->AutoPermissionFilter != '') {
+        if ('' != $this->AutoPermissionFilter) {
             $filter->_And(new SqlFilterEquals(
                 new SqlFilterColumn(
                     TableNames::RESOURCES_ALIAS,
@@ -1290,7 +1285,7 @@ class ResourceFilterValues
                 $this->AutoPermissionFilter
             ));
         }
-        if ($this->AllowMultiDayFilter != '') {
+        if ('' != $this->AllowMultiDayFilter) {
             $filter->_And(new SqlFilterEquals(
                 new SqlFilterColumn(
                     TableNames::RESOURCES_ALIAS,
@@ -1307,13 +1302,13 @@ class ResourceFilterValues
                 $attributeDefinitions[$a->Id()] = $a;
             }
 
-            $f = new SqlFilterFreeForm('`' . ColumnNames::RESOURCE_ID . '` IN (SELECT `a0`.`' . ColumnNames::ATTRIBUTE_ENTITY_ID . '` FROM `' . TableNames::CUSTOM_ATTRIBUTE_VALUES . '` `a0` ');
+            $f = new SqlFilterFreeForm('`'.ColumnNames::RESOURCE_ID.'` IN (SELECT `a0`.`'.ColumnNames::ATTRIBUTE_ENTITY_ID.'` FROM `'.TableNames::CUSTOM_ATTRIBUTE_VALUES.'` `a0` ');
 
             $attributeFragment = new SqlFilterNull();
 
             /** @var mixed $value */
             foreach ($this->Attributes as $id => $value) {
-                if ($value == null || $value == '' || !array_key_exists($id, $attributeDefinitions)) {
+                if (null == $value || '' == $value || !array_key_exists($id, $attributeDefinitions)) {
                     continue;
                 }
                 $filteringAttributes = true;
@@ -1322,15 +1317,15 @@ class ResourceFilterValues
                 $attributeValue = new SqlRepeatingFilterColumn("a$id", ColumnNames::CUSTOM_ATTRIBUTE_VALUE, $id);
 
                 $idEquals = new SqlFilterEquals($attributeId, $id);
-                $f->AppendSql('LEFT JOIN `' . TableNames::CUSTOM_ATTRIBUTE_VALUES . '` `a' . $id . '` ON `a0`.`entity_id` = `a' . $id . '`.`entity_id` ');
-                if ($attribute->Type() == CustomAttributeTypes::MULTI_LINE_TEXTBOX || $attribute->Type() == CustomAttributeTypes::SINGLE_LINE_TEXTBOX) {
+                $f->AppendSql('LEFT JOIN `'.TableNames::CUSTOM_ATTRIBUTE_VALUES.'` `a'.$id.'` ON `a0`.`entity_id` = `a'.$id.'`.`entity_id` ');
+                if (CustomAttributeTypes::MULTI_LINE_TEXTBOX == $attribute->Type() || CustomAttributeTypes::SINGLE_LINE_TEXTBOX == $attribute->Type()) {
                     $attributeFragment->_And($idEquals->_And(new SqlFilterLike($attributeValue, $value)));
                 } else {
                     $attributeFragment->_And($idEquals->_And(new SqlFilterEquals($attributeValue, $value)));
                 }
             }
 
-            $f->AppendSql("WHERE [attribute_list_token] )");
+            $f->AppendSql('WHERE [attribute_list_token] )');
             $f->Substitute('attribute_list_token', $attributeFragment);
 
             if ($filteringAttributes) {

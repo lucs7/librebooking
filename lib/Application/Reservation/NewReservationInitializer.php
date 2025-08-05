@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Reservation/NewReservationPage.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/ReservationInitializerBase.php');
+require_once ROOT_DIR.'Pages/Reservation/NewReservationPage.php';
+require_once ROOT_DIR.'lib/Application/Reservation/ReservationInitializerBase.php';
 
 class NewReservationInitializer extends ReservationInitializerBase
 {
@@ -33,7 +33,7 @@ class NewReservationInitializer extends ReservationInitializerBase
         UserSession $userSession,
         IScheduleRepository $scheduleRepository,
         IResourceRepository $resourceRepository,
-        ITermsOfServiceRepository $termsOfServiceRepository
+        ITermsOfServiceRepository $termsOfServiceRepository,
     ) {
         $this->page = $page;
         $this->scheduleRepository = $scheduleRepository;
@@ -130,11 +130,11 @@ class NewReservationInitializer extends ReservationInitializerBase
         $start = $this->GetReminderPieces(Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_START_REMINDER));
         $end = $this->GetReminderPieces(Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_END_REMINDER));
 
-        if ($start != null) {
+        if (null != $start) {
             $this->page->SetStartReminder($start['value'], $start['interval']);
         }
 
-        if ($end != null) {
+        if (null != $end) {
             $this->page->SetEndReminder($end['value'], $end['interval']);
         }
     }
@@ -144,10 +144,11 @@ class NewReservationInitializer extends ReservationInitializerBase
         if (!empty($reminder)) {
             $parts = explode(' ', strtolower($reminder));
 
-            if (count($parts) == 2) {
+            if (2 == count($parts)) {
                 $interval = trim($parts[1]);
                 $pieces['value'] = intval($parts[0]);
-                $pieces['interval'] = ($interval == 'minutes' || $interval == 'hours' || $interval == 'days') ? $interval : 'minutes';
+                $pieces['interval'] = ('minutes' == $interval || 'hours' == $interval || 'days' == $interval) ? $interval : 'minutes';
+
                 return $pieces;
             }
         }
@@ -181,6 +182,7 @@ class BindableResourceData
 
     /**
      * @param $resource ResourceDto
+     *
      * @return void
      */
     public function SetReservationResource($resource)
@@ -190,11 +192,12 @@ class BindableResourceData
 
     /**
      * @param $resource ResourceDto
+     *
      * @return void
      */
     public function AddAvailableResource($resource)
     {
-        $this->NumberAccessible++;
+        ++$this->NumberAccessible;
         $this->AvailableResources[] = $resource;
     }
 }

@@ -88,11 +88,9 @@ class ReminderNotice
     }
 
     /**
-     * @param int $seriesId
-     * @param int $reservationId
+     * @param int    $seriesId
+     * @param int    $reservationId
      * @param string $referenceNumber
-     * @param Date $startDate
-     * @param Date $endDate
      * @param string $title
      * @param string $description
      * @param string $resourceNames
@@ -100,7 +98,7 @@ class ReminderNotice
      * @param string $firstName
      * @param string $lastName
      * @param string $timezone
-     * @param int $reminder_minutes
+     * @param int    $reminder_minutes
      * @param string $language
      */
     public function __construct(
@@ -117,7 +115,7 @@ class ReminderNotice
         $lastName,
         $timezone,
         $reminder_minutes,
-        $language
+        $language,
     ) {
         $this->seriesId = $seriesId;
         $this->reservationId = $reservationId;
@@ -137,6 +135,7 @@ class ReminderNotice
 
     /**
      * @param array $row
+     *
      * @return ReminderNotice
      */
     public static function FromRow($row)

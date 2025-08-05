@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationUserAvailabilityPresenter.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationUserAvailabilityPresenter.php';
 
 class ReservationUserAvailabilityPresenterTest extends TestBase
 {
@@ -77,7 +77,6 @@ class ReservationUserAvailabilityPresenterTest extends TestBase
         $this->page->_EndTime = '14:15';
         $this->fakeUser->UserId = 3;
 
-
         $this->resourceRepository->_Resource = $expectedResources[0];
         $this->userRepository->_UserDtos[3] = $expectedUser;
         $this->userRepository->_UserDtos[2] = $expectedParticipants[0];
@@ -137,8 +136,8 @@ class ReservationUserAvailabilityPresenterTest extends TestBase
 
         $this->presenter->PageLoad($this->fakeUser);
 
-        $start = Date::Parse($this->page->_StartDate . ' ' . $this->page->_StartTime, $this->fakeUser->Timezone);
-        $end = Date::Parse($this->page->_EndDate . ' ' . $this->page->_EndTime, $this->fakeUser->Timezone);
+        $start = Date::Parse($this->page->_StartDate.' '.$this->page->_StartTime, $this->fakeUser->Timezone);
+        $end = Date::Parse($this->page->_EndDate.' '.$this->page->_EndTime, $this->fakeUser->Timezone);
         $this->assertEquals(new DateRange($start->GetDate(), $end->GetDate()->AddDays(1)), $this->reservationRepository->_LastRange);
         $this->assertEquals($expectedInvitees, $this->page->_Invitees);
         $this->assertEquals($expectedParticipants, $this->page->_Participants);

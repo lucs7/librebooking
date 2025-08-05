@@ -1,13 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/UserRepository.php');
-require_once(ROOT_DIR . 'Domain/Access/GroupRepository.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/GroupAdminUserRepository.php');
+require_once ROOT_DIR.'Domain/Access/UserRepository.php';
+require_once ROOT_DIR.'Domain/Access/GroupRepository.php';
+require_once ROOT_DIR.'lib/Application/Admin/GroupAdminUserRepository.php';
 
 interface IUserRepositoryFactory
 {
     /**
-     * @param UserSession $session
      * @return IUserRepository
      */
     public function Create(UserSession $session);

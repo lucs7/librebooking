@@ -1,15 +1,15 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Database/ISqlCommand.php');
-require_once(ROOT_DIR . 'lib/Database/SqlFilter.php');
+require_once ROOT_DIR.'lib/Database/ISqlCommand.php';
+require_once ROOT_DIR.'lib/Database/SqlFilter.php';
 
 class SqlCommand implements ISqlCommand
 {
-    public $Parameters = null;
+    public $Parameters;
 
     private $_paramNames = [];
     private $_values = [];
-    private $_query = null;
+    private $_query;
 
     public function __construct($query = null)
     {
@@ -22,9 +22,9 @@ class SqlCommand implements ISqlCommand
         $this->_paramNames = []; // Clean out contents
         $this->_values = [];
 
-        $this->Parameters = & $parameters;
+        $this->Parameters = &$parameters;
 
-        for ($i = 0; $i < $this->Parameters->Count(); $i++) {
+        for ($i = 0; $i < $this->Parameters->Count(); ++$i) {
             $p = $this->Parameters->Items($i);
             $this->_paramNames[] = $p->Name;
             $this->_values[] = $p->Value;
@@ -47,7 +47,7 @@ class SqlCommand implements ISqlCommand
         $builder->append("Command: {$this->_query}\n");
         $builder->append("Parameters ({$this->Parameters->Count()}): \n");
 
-        for ($i = 0; $i < $this->Parameters->Count(); $i++) {
+        for ($i = 0; $i < $this->Parameters->Count(); ++$i) {
             $parameter = $this->Parameters->Items($i);
             $builder->append("{$parameter->Name} = {$parameter->Value}");
         }
@@ -104,7 +104,7 @@ class CountCommand extends SqlCommand
 
     public function GetQuery()
     {
-        return 'SELECT COUNT(*) as `total` FROM (' . $this->baseCommand->GetQuery() . ') `results`';
+        return 'SELECT COUNT(*) as `total` FROM ('.$this->baseCommand->GetQuery().') `results`';
     }
 }
 
@@ -116,14 +116,14 @@ class SortCommand extends SqlCommand
     {
         parent::__construct();
 
-        if ($sortDirection != 'desc') {
+        if ('desc' != $sortDirection) {
             $sortDirection = 'asc';
         } else {
             $sortDirection = 'desc';
         }
 
         $this->Parameters = $baseCommand->Parameters;
-        $sortField = preg_replace("/[^a-zA-Z0-9_]+/", "", $sortField);
+        $sortField = preg_replace('/[^a-zA-Z0-9_]+/', '', $sortField);
         $this->AddParameter(new ParameterRaw('@sort_params', $sortField));
 
         $query = $baseCommand->GetQuery();
@@ -167,10 +167,10 @@ class FilterCommand extends SqlCommand
         $baseQueryUpper = strtoupper($baseQuery);
         $numberOfWheres = substr_count($baseQueryUpper, 'WHERE');
         $numberOfSelects = substr_count($baseQueryUpper, 'SELECT');
-        $hasWhere = $numberOfWheres !== false && $numberOfWheres > 0 && $numberOfWheres == $numberOfSelects;
+        $hasWhere = false !== $numberOfWheres && $numberOfWheres > 0 && $numberOfWheres == $numberOfSelects;
 
-        $hasOrderBy = (stripos($baseQuery, 'ORDER BY') !== false);
-        $hasGroupBy = (stripos($baseQuery, 'GROUP BY') !== false);
+        $hasOrderBy = (false !== stripos($baseQuery, 'ORDER BY'));
+        $hasGroupBy = (false !== stripos($baseQuery, 'GROUP BY'));
 
         $newWhere = $this->filter->Where();
 
@@ -179,8 +179,8 @@ class FilterCommand extends SqlCommand
             $pos = strripos($baseQuery, 'WHERE');
             $baseQuery = substr_replace($baseQuery, 'WHERE (', $pos, strlen('WHERE'));
 
-            $groupBySplit = preg_split("/GROUP BY/ims", $baseQuery);
-            $orderBySplit = preg_split("/ORDER BY/ims", $baseQuery);
+            $groupBySplit = preg_split('/GROUP BY/ims', $baseQuery);
+            $orderBySplit = preg_split('/ORDER BY/ims', $baseQuery);
 
             if (count($groupBySplit) > 1) {
                 $queryFragment = trim($groupBySplit[0]);

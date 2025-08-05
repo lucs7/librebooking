@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lang/AvailableLanguage.php');
+require_once ROOT_DIR.'lang/AvailableLanguage.php';
 
 class AvailableLanguages
 {

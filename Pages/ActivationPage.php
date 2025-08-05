@@ -1,16 +1,18 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'Presenters/ActivationPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'Pages/ActionPage.php';
+require_once ROOT_DIR.'Presenters/ActivationPresenter.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 interface IActivationPage extends IPage
 {
     public function ShowSent();
+
     public function ShowError();
 
     /**
      * @abstract
+     *
      * @return string
      */
     public function GetActivationCode();
@@ -38,7 +40,7 @@ class ActivationPage extends ActionPage implements IActivationPage
 
     public function ProcessAction()
     {
-        //$this->_presenter->Resend();
+        // $this->_presenter->Resend();
     }
 
     public function ProcessDataRequest($dataRequest)
@@ -55,7 +57,6 @@ class ActivationPage extends ActionPage implements IActivationPage
     {
         $this->Display('Activation/activation-error.tpl');
     }
-
 
     /**
      * @return string

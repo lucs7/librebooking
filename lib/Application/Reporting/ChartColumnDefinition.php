@@ -28,18 +28,18 @@ class ChartColumnDefinition
      */
     private $chartColumnType;
     /**
-     * @var null|string
+     * @var string|null
      */
     private $dataColumnName;
     /**
-     * @var ChartGroup|null|string
+     * @var ChartGroup|string|null
      */
     private $chartGroup;
 
     /**
      * @param string|ChartColumnType $chartColumnType
-     * @param string|null $dataColumnName
-     * @param string|null|ChartGroup $chartGroup
+     * @param string|null            $dataColumnName
+     * @param string|ChartGroup|null $chartGroup
      */
     private function __construct($chartColumnType, $dataColumnName = null, $chartGroup = null)
     {
@@ -50,8 +50,10 @@ class ChartColumnDefinition
 
     /**
      * @static
-     * @param string $dataColumnName
+     *
+     * @param string            $dataColumnName
      * @param string|ChartGroup $chartGroup
+     *
      * @return ChartColumnDefinition
      */
     public static function Label($dataColumnName, $chartGroup = null)
@@ -61,6 +63,7 @@ class ChartColumnDefinition
 
     /**
      * @static
+     *
      * @return ChartColumnDefinition
      */
     public static function null()
@@ -70,6 +73,7 @@ class ChartColumnDefinition
 
     /**
      * @static
+     *
      * @return ChartColumnDefinition
      */
     public static function Date()
@@ -79,6 +83,7 @@ class ChartColumnDefinition
 
     /**
      * @static
+     *
      * @return ChartColumnDefinition
      */
     public static function Total()
@@ -95,7 +100,7 @@ class ChartColumnDefinition
     }
 
     /**
-     * @param $row array
+     * @param $row       array
      * @param $columnKey string
      */
     public function GetChartData($row, $columnKey)
@@ -103,11 +108,12 @@ class ChartColumnDefinition
         if (empty($this->dataColumnName)) {
             return $row[$columnKey];
         }
+
         return $row[$this->dataColumnName];
     }
 
     /**
-     * @return ChartGroup|null|string
+     * @return ChartGroup|string|null
      */
     public function GetChartGroup()
     {

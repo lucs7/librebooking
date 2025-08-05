@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Reservation/NewReservationPage.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/GuestReservationPresenter.php');
+require_once ROOT_DIR.'Pages/Reservation/NewReservationPage.php';
+require_once ROOT_DIR.'Presenters/Reservation/GuestReservationPresenter.php';
 
 interface IGuestReservationPage extends INewReservationPage
 {

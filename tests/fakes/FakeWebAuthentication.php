@@ -8,6 +8,7 @@ class FakeAuthentication implements IAuthentication
     /**
      * @param string $username
      * @param string $password
+     *
      * @return bool If user is valid
      */
     public function Validate($username, $password)
@@ -16,8 +17,9 @@ class FakeAuthentication implements IAuthentication
     }
 
     /**
-     * @param string $username
+     * @param string        $username
      * @param ILoginContext $loginContext
+     *
      * @return UserSession
      */
     public function Login($username, $loginContext)
@@ -26,7 +28,6 @@ class FakeAuthentication implements IAuthentication
     }
 
     /**
-     * @param UserSession $user
      * @return void
      */
     public function Logout(UserSession $user)
@@ -44,7 +45,6 @@ class FakeAuthentication implements IAuthentication
     }
 
     /**
-     * @param IAuthenticationPage $loginPage
      * @return void
      */
     public function HandleLoginFailure(IAuthenticationPage $loginPage)
@@ -180,7 +180,9 @@ class FakeWebAuthentication implements IWebAuthentication
     public $_IsLoggedIn = false;
     public $_AreCredentialsKnown = false;
 
-    public function postLogout(UserSession $user) { }
+    public function postLogout(UserSession $user)
+    {
+    }
 
     public function Validate($username, $password)
     {
@@ -252,9 +254,6 @@ class FakeWebAuthentication implements IWebAuthentication
         return $this->_ShowForgotPasswordPrompt;
     }
 
-    /**
-     * @return mixed
-     */
     public function IsLoggedIn()
     {
         return $this->_IsLoggedIn;

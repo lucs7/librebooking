@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class lt extends en_gb
 {
@@ -978,10 +978,10 @@ class lt extends en_gb
         $strings['ReservationParticipantJoin'] = '%s has joined your reservation for %s on %s';
         $strings['ReservationAvailableSubject'] = '%s is available on %s';
         $strings['ResourceStatusChangedSubject'] = 'The availability of %s has changed';
-        //End Email Subjects
+        // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Neturite ankstesnių rezervacijų';
         $strings['PastReservations'] = 'Ankstesnės rezervacijos';
         $strings['AllNoPastReservations'] = 'Paskutiniuose %s dienos nėra ankstesnių rezervacijų';
@@ -989,35 +989,34 @@ class lt extends en_gb
         $strings['Yesterday'] = 'Vakar';
         $strings['EarlierThisWeek'] = 'Anksčiau šią savaitę';
         $strings['PreviousWeek'] = 'Ankstesnė savaitė';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Jūsų grupė neturi ateinančių rezervacijų';
         $strings['GroupUpcomingReservations'] = 'Mano grupės ateities rezervacijos';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Vartotojo prisijungimo metu su Facebook įvyko klaida. Bandykite dar kartą.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Jūs neturite laukiančių patvirtinimo rezervacijų';
         $strings['PendingApprovalReservations'] = 'Laukiančios patvirtinimo rezervacijos';
         $strings['LaterThisMonth'] = 'Vėliau šį mėnesį';
         $strings['LaterThisYear'] = 'Vėliau šiais metais';
-        $strings['Remaining'] = 'Liko';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Liko';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Trūksta išvykimo rezervacijų';
-        $strings['MissingCheckOutReservations'] = 'Trūksta išvykimo rezervacijų';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Trūksta išvykimo rezervacijų';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Dėl neturėtų teisių į šioje rezervacijoje esančius išteklius negalite matyti rezervacijos informacijos';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

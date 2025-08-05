@@ -3,37 +3,31 @@
 interface IPreReservationFactory
 {
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreAddService(UserSession $userSession);
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreUpdateService(UserSession $userSession);
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreDeleteService(UserSession $userSession);
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreApprovalService(UserSession $userSession);
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreCheckinService(UserSession $userSession);
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreCheckoutService(UserSession $userSession);
@@ -76,7 +70,6 @@ class PreReservationFactory implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreAddService(UserSession $userSession)
@@ -85,7 +78,6 @@ class PreReservationFactory implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreUpdateService(UserSession $userSession)
@@ -94,7 +86,6 @@ class PreReservationFactory implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreDeleteService(UserSession $userSession)
@@ -103,7 +94,6 @@ class PreReservationFactory implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreApprovalService(UserSession $userSession)
@@ -112,7 +102,6 @@ class PreReservationFactory implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreCheckinService(UserSession $userSession)
@@ -125,7 +114,6 @@ class PreReservationFactory implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreCheckoutService(UserSession $userSession)
@@ -143,6 +131,7 @@ class PreReservationFactory implements IPreReservationFactory
         $ruleProcessor->AddRule(new AdminExcludedRule(new ResourceMinimumNoticeRuleAdd($userSession), $userSession, $this->userRepository));
         $ruleProcessor->AddRule(new AdminExcludedRule(new RequiresApprovalRule(PluginManager::Instance()->LoadAuthorization()), $userSession, $this->userRepository));
         $ruleProcessor->AddRule(new ResourceAvailabilityRule(new ReservationConflictIdentifier(new ResourceAvailability($this->reservationRepository)), $userSession->Timezone));
+
         return new AddReservationValidationService($ruleProcessor);
     }
 
@@ -154,6 +143,7 @@ class PreReservationFactory implements IPreReservationFactory
         $ruleProcessor->AddRule(new AdminExcludedRule(new ResourceMinimumNoticeRuleUpdate($userSession), $userSession, $this->userRepository));
         $ruleProcessor->AddRule(new AdminExcludedRule(new CurrentUserIsReservationUserRule($userSession), $userSession, $this->userRepository));
         $ruleProcessor->AddRule(new ExistingResourceAvailabilityRule(new ReservationConflictIdentifier(new ResourceAvailability($this->reservationRepository)), $userSession->Timezone));
+
         return new UpdateReservationValidationService($ruleProcessor);
     }
 
@@ -161,6 +151,7 @@ class PreReservationFactory implements IPreReservationFactory
     {
         $ruleProcessor->AddRule(new AdminExcludedRule(new ResourceMinimumNoticeRuleDelete($userSession), $userSession, $this->userRepository));
         $ruleProcessor->AddRule(new AdminExcludedRule(new CurrentUserIsReservationUserRule($userSession), $userSession, $this->userRepository));
+
         return new DeleteReservationValidationService($ruleProcessor);
     }
 

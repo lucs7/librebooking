@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationCreatedEmail.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationUpdatedEmail.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationDeletedEmail.php');
+require_once ROOT_DIR.'lib/Email/Messages/ReservationCreatedEmail.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationUpdatedEmail.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationDeletedEmail.php';
 
 class OwnerEmailNotificationTest extends TestBase
 {

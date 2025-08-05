@@ -21,11 +21,13 @@
  * PHP Version 5
  *
  * @file     CAS/OutOfSequenceBeforeProxyException.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Joachim Fritschi <jfritschi@freenet.de>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -34,16 +36,18 @@
  * has not yet happened and no proxy object exists.
  *
  * @class    CAS_OutOfSequenceBeforeProxyException
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Joachim Fritschi <jfritschi@freenet.de>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 class CAS_OutOfSequenceBeforeProxyException extends CAS_OutOfSequenceException implements CAS_Exception
 {
     /**
-     * Return standard error message
+     * Return standard error message.
      *
      * @return void
      */

@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageResourcesPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageResourcesPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/ManageResourcesPage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageResourcesPresenter.php';
+require_once ROOT_DIR.'lib/Application/Admin/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 class ResourceAdminManageResourcesPage extends ManageResourcesPage
 {

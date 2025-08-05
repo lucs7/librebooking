@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationEmailPresenter.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationEmailPresenter.php';
 
 interface IReservationEmailPage
 {
@@ -21,7 +21,6 @@ class ReservationEmailPage extends Page implements IReservationEmailPage
      * @var ReservationEmailPresenter
      */
     private $presenter;
-
 
     public function __construct()
     {
@@ -52,7 +51,8 @@ class ReservationEmailPage extends Page implements IReservationEmailPage
 
     public function GetEmailAddresses()
     {
-        $email = implode(',',$this->GetForm('email')); 
+        $email = implode(',', $this->GetForm('email'));
+
         return preg_split('/, ?/', $email);
     }
 }

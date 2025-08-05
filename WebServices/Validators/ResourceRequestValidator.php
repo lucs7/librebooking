@@ -1,28 +1,31 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Validators/RequestRequiredValueValidator.php');
-require_once(ROOT_DIR . 'WebServices/Validators/TimeIntervalValidator.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Resource/ResourceRequest.php');
+require_once ROOT_DIR.'lib/Common/Validators/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'WebServices/Validators/RequestRequiredValueValidator.php';
+require_once ROOT_DIR.'WebServices/Validators/TimeIntervalValidator.php';
+require_once ROOT_DIR.'WebServices/Requests/Resource/ResourceRequest.php';
 
 interface IResourceRequestValidator
 {
     /**
      * @param ResourceRequest $createRequest
+     *
      * @return array|string[]
      */
     public function ValidateCreateRequest($createRequest);
 
     /**
-     * @param int $resourceId
+     * @param int             $resourceId
      * @param ResourceRequest $updateRequest
+     *
      * @return array|string[]
      */
     public function ValidateUpdateRequest($resourceId, $updateRequest);
 
     /**
      * @param int $resourceId
+     *
      * @return array|string[]
      */
     public function ValidateDeleteRequest($resourceId);
@@ -47,6 +50,7 @@ class ResourceRequestValidator implements IResourceRequestValidator
 
     /**
      * @param ResourceRequest $request
+     *
      * @return array
      */
     private function ValidateCommon($request)
@@ -68,7 +72,6 @@ class ResourceRequestValidator implements IResourceRequestValidator
             $attributes[] = new AttributeValue($attribute->attributeId, $attribute->attributeValue);
         }
         $validators[] = new AttributeValidator($this->attributeService, CustomAttributeCategory::RESOURCE, $attributes);
-
 
         /** @var IValidator $validator */
         foreach ($validators as $validator) {

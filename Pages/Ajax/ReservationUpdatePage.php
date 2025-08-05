@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationSavePage.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenterFactory.php');
+require_once ROOT_DIR.'Pages/Ajax/ReservationSavePage.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationPresenterFactory.php';
 
 interface IReservationUpdatePage extends IReservationSavePage
 {

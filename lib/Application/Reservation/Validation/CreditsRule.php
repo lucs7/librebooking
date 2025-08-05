@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/UserRepository.php');
+require_once ROOT_DIR.'Domain/Access/UserRepository.php';
 
 class CreditsRule implements IReservationValidationRule
 {

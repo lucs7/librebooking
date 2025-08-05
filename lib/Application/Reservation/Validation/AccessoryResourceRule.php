@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/AccessoryRepository.php');
+require_once ROOT_DIR.'Domain/Access/AccessoryRepository.php';
 
 class AccessoryResourceRule implements IReservationValidationRule
 {
@@ -15,9 +15,7 @@ class AccessoryResourceRule implements IReservationValidationRule
     private $strings;
 
     /**
-     * Constructor for initializing dependencies
-     *
-     * @param IAccessoryRepository $accessoryRepository
+     * Constructor for initializing dependencies.
      */
     public function __construct(IAccessoryRepository $accessoryRepository)
     {
@@ -26,10 +24,8 @@ class AccessoryResourceRule implements IReservationValidationRule
     }
 
     /**
-     * Validates reservations for accessory-resource rules
+     * Validates reservations for accessory-resource rules.
      *
-     * @param $reservationSeries
-     * @param $retryParameters
      * @return ReservationRuleResult
      */
     public function Validate($reservationSeries, $retryParameters)
@@ -69,7 +65,7 @@ class AccessoryResourceRule implements IReservationValidationRule
                 foreach ($resourceAccessories as $accessory) {
                     $accessoryId = $accessory->GetId();
 
-                    if (isset($bookedAccessories[$accessoryId]) && $bookedAccessories[$accessoryId] !== null) {
+                    if (isset($bookedAccessories[$accessoryId]) && null !== $bookedAccessories[$accessoryId]) {
                         $resource = $accessory->GetResource($resourceId);
 
                         // Validate minimum quantity
@@ -90,13 +86,14 @@ class AccessoryResourceRule implements IReservationValidationRule
         }
 
         // Return validation result
-        return new ReservationRuleResult(count($errors) == 0, implode("\n", $errors));
+        return new ReservationRuleResult(0 == count($errors), implode("\n", $errors));
     }
 
     /**
-     * Builds relationships between resources and accessories
+     * Builds relationships between resources and accessories.
      *
      * @param Accessory[] $accessories
+     *
      * @return ResourceAccessoryAssociation
      */
     private function GetResourcesAndRequiredAccessories($accessories)
@@ -108,6 +105,7 @@ class AccessoryResourceRule implements IReservationValidationRule
                 $association->AddRelationship($resource, $accessory);
             }
         }
+
         return $association;
     }
 }
@@ -120,10 +118,10 @@ class ResourceAccessoryAssociation
     private $accessories = [];
 
     /**
-     * Adds a relationship between a resource and an accessory
+     * Adds a relationship between a resource and an accessory.
      *
      * @param ResourceAccessory $resource
-     * @param Accessory $accessory
+     * @param Accessory         $accessory
      */
     public function AddRelationship($resource, $accessory)
     {
@@ -131,9 +129,10 @@ class ResourceAccessoryAssociation
     }
 
     /**
-     * Checks if a resource exists in the association
+     * Checks if a resource exists in the association.
      *
      * @param int $resourceId
+     *
      * @return bool
      */
     public function ContainsResource($resourceId)
@@ -142,9 +141,10 @@ class ResourceAccessoryAssociation
     }
 
     /**
-     * Gets accessories associated with a resource
+     * Gets accessories associated with a resource.
      *
      * @param int $resourceId
+     *
      * @return Accessory[]
      */
     public function GetResourceAccessories($resourceId)
@@ -153,9 +153,7 @@ class ResourceAccessoryAssociation
     }
 
     /**
-     * Adds an accessory to the association
-     *
-     * @param Accessory $accessory
+     * Adds an accessory to the association.
      */
     public function AddAccessory(Accessory $accessory)
     {
@@ -163,10 +161,11 @@ class ResourceAccessoryAssociation
     }
 
     /**
-     * Identifies accessories that cannot be booked with the given resources
+     * Identifies accessories that cannot be booked with the given resources.
      *
      * @param ReservationAccessory[] $bookedAccessories
-     * @param int[] $bookedResourceIds
+     * @param int[]                  $bookedResourceIds
+     *
      * @return string[]
      */
     public function GetAccessoriesThatCannotBeBookedWithGivenResources($bookedAccessories, $bookedResourceIds)
@@ -185,10 +184,11 @@ class ResourceAccessoryAssociation
     }
 
     /**
-     * Checks if an accessory requires a specific resource to be booked
+     * Checks if an accessory requires a specific resource to be booked.
      *
-     * @param int $accessoryId
+     * @param int   $accessoryId
      * @param int[] $bookedResourceIds
+     *
      * @return bool
      */
     private function AccessoryNeedsARequiredResourceToBeBooked($accessoryId, $bookedResourceIds)
@@ -197,8 +197,10 @@ class ResourceAccessoryAssociation
         if ($accessory->IsTiedToResource()) {
             Log::Debug('Checking required resources for accessory %s', $accessoryId);
             $overlap = array_intersect($accessory->ResourceIds(), $bookedResourceIds);
-            return count($overlap) == 0;
+
+            return 0 == count($overlap);
         }
+
         return false;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ResourceDisplayPresenter.php');
+require_once ROOT_DIR.'Presenters/ResourceDisplayPresenter.php';
 
 interface IResourceDisplayPage extends IPage, IActionPage
 {
@@ -33,22 +33,16 @@ interface IResourceDisplayPage extends IPage, IActionPage
      */
     public function BindResourceList($resourceList);
 
-    /**
-     * @param $publicId
-     */
     public function SetActivatedResourceId($publicId);
 
     public function BindResource(BookableResource $resource);
 
     /**
-     * @param IDailyLayout $dailyLayout
-     * @param Date $today
-     * @param Date $reservationDate
      * @param ReservationListItem|null $current
      * @param ReservationListItem|null $next
-     * @param ReservationListItem[] $upcoming
-     * @param bool $requiresCheckin
-     * @param string $checkinReferenceNumber
+     * @param ReservationListItem[]    $upcoming
+     * @param bool                     $requiresCheckin
+     * @param string                   $checkinReferenceNumber
      */
     public function DisplayAvailability(IDailyLayout $dailyLayout, Date $today, Date $reservationDate, $current, $next, $upcoming, $requiresCheckin, $checkinReferenceNumber);
 
@@ -72,7 +66,6 @@ interface IResourceDisplayPage extends IPage, IActionPage
     public function GetBeginTime();
 
     /**
-     *
      * @return string
      */
     public function GetBeginDate();
@@ -83,20 +76,17 @@ interface IResourceDisplayPage extends IPage, IActionPage
     public function GetEndTime();
 
     /**
-     * @param bool $success
+     * @param bool                       $success
      * @param ReservationResultCollector $resultCollector
      */
     public function SetReservationSaveResults($success, $resultCollector);
 
     /**
-     * @param bool $success
+     * @param bool                       $success
      * @param ReservationResultCollector $resultCollector
      */
     public function SetReservationCheckinResults($success, $resultCollector);
 
-    /**
-     * @param Schedule $schedule
-     */
     public function BindSchedule(Schedule $schedule);
 
     /**
@@ -228,7 +218,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
 
     public function SetActivatedResourceId($publicId)
     {
-        $resourceDisplayUrl = Configuration::Instance()->GetScriptUrl() . '/' . Pages::DISPLAY_RESOURCE . '?' . QueryStringKeys::RESOURCE_ID . '=' . $publicId;
+        $resourceDisplayUrl = Configuration::Instance()->GetScriptUrl().'/'.Pages::DISPLAY_RESOURCE.'?'.QueryStringKeys::RESOURCE_ID.'='.$publicId;
         $this->SetJson(['location' => $resourceDisplayUrl]);
     }
 
@@ -243,9 +233,10 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         $parsedDate = $this->GetQuerystring(QueryStringKeys::START_DATE);
         if (!empty($parsedDate)) {
             $startDate = Date::Parse($parsedDate, $userTimezone);
-        }else{
+        } else {
             $startDate = Date::Now()->ToTimezone($userTimezone);
         }
+
         return $startDate;
     }
 
@@ -287,10 +278,10 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         $this->Set('PublicResourceId', $this->GetPublicResourceId());
         $this->Set('InitialDate', $this->GetStartDate()->Format('Y-m-d H:i:s'));
         $futureDays = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_PUBLIC_FUTURE_DAYS, new IntConverter());
-        if ($futureDays == 0) {
+        if (0 == $futureDays) {
             $futureDays = 1;
         }
-        $this->Set('MaxFutureDate', Date::Now()->AddDays($futureDays-1));
+        $this->Set('MaxFutureDate', Date::Now()->AddDays($futureDays - 1));
         $this->Display('ResourceDisplay/resource-display-shell.tpl');
     }
 

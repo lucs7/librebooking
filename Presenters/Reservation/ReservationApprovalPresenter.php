@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 interface IReservationApprovalPresenter
 {
@@ -39,7 +39,7 @@ class ReservationApprovalPresenter implements IReservationApprovalPresenter
         IUpdateReservationPersistenceService $persistenceService,
         IReservationHandler $handler,
         IReservationAuthorization $authorizationService,
-        UserSession $userSession
+        UserSession $userSession,
     ) {
         $this->page = $page;
         $this->persistenceService = $persistenceService;

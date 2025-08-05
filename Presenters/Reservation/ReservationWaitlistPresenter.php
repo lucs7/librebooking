@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationWaitlistPage.php');
+require_once ROOT_DIR.'Pages/Ajax/ReservationWaitlistPage.php';
 
 class ReservationWaitlistPresenter
 {
@@ -44,6 +44,7 @@ class ReservationWaitlistPresenter
         $endTime = $this->page->GetEndTime();
 
         $timezone = $this->user->Timezone;
-        return DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $timezone);
+
+        return DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $timezone);
     }
 }

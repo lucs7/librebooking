@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Requests/User/UserRequestBase.php');
+require_once ROOT_DIR.'WebServices/Requests/User/UserRequestBase.php';
 
 class UpdateUserRequest extends UserRequestBase
 {
@@ -16,7 +16,8 @@ class UpdateUserRequest extends UserRequestBase
         $request->organization = 'organization';
         $request->position = 'position';
         $request->customAttributes = [new AttributeValueRequest(99, 'attribute value')];
-        $request->groups = [1,2,4];
+        $request->groups = [1, 2, 4];
+
         return $request;
     }
 }

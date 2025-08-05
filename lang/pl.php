@@ -1,11 +1,12 @@
 <?php
+
 /**
-Translated to Polish by Dariusz Kliszewski
-Corrected and expanded by MBK
+ * Translated to Polish by Dariusz Kliszewski
+ * Corrected and expanded by MBK.
  */
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class pl extends en_gb
 {
@@ -1021,8 +1022,8 @@ class pl extends en_gb
         $strings['ResourceStatusChangedSubject'] = 'Dostępność %s zmieniła się';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Nie masz żadnych wcześniejszych rezerwacji';
         $strings['PastReservations'] = 'Wcześniejsze rezerwacje';
         $strings['AllNoPastReservations'] = 'Nie ma wcześniejszych rezerwacji w ciągu ostatnich %s dni';
@@ -1030,35 +1031,34 @@ class pl extends en_gb
         $strings['Yesterday'] = 'Wczoraj';
         $strings['EarlierThisWeek'] = 'Wcześniej w tym tygodniu';
         $strings['PreviousWeek'] = 'Poprzedni tydzień';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Twoja grupa nie ma żadnych nadchodzących rezerwacji';
         $strings['GroupUpcomingReservations'] = 'Nadchodzące rezerwacje mojej grupy(y)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Wystąpił błąd podczas logowania przez Facebook. Spróbuj ponownie.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Nie masz żadnych rezerwacji oczekujących na zatwierdzenie';
         $strings['PendingApprovalReservations'] = 'Rezerwacje oczekujące na zatwierdzenie';
         $strings['LaterThisMonth'] = 'Później w tym miesiącu';
         $strings['LaterThisYear'] = 'Później w tym roku';
-        $strings['Remaining'] = 'Pozostałe';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Pozostałe';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Brak brakujących rezerwacji wymeldowania';
-        $strings['MissingCheckOutReservations'] = 'Brakujące rezerwacje wymeldowania';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Brakujące rezerwacje wymeldowania';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Nie można zobaczyć szczegółów rezerwacji, ponieważ nie masz uprawnień do żadnych zasobów w tej rezerwacji';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

@@ -2,7 +2,7 @@
 
 class MySqlReader implements IReader
 {
-    private $_result = null;
+    private $_result;
 
     public function __construct($result)
     {

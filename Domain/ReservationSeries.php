@@ -1,12 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'Domain/BookableResource.php');
-require_once(ROOT_DIR . 'Domain/Reservation.php');
-require_once(ROOT_DIR . 'Domain/Values/ReservationAccessory.php');
-require_once(ROOT_DIR . 'Domain/Values/ReservationReminder.php');
-require_once(ROOT_DIR . 'Domain/Values/ReservationPastTimeConstraint.php');
-require_once(ROOT_DIR . 'Domain/ReservationAttachment.php');
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'Domain/BookableResource.php';
+require_once ROOT_DIR.'Domain/Reservation.php';
+require_once ROOT_DIR.'Domain/Values/ReservationAccessory.php';
+require_once ROOT_DIR.'Domain/Values/ReservationReminder.php';
+require_once ROOT_DIR.'Domain/Values/ReservationPastTimeConstraint.php';
+require_once ROOT_DIR.'Domain/ReservationAttachment.php';
 
 class ReservationSeries
 {
@@ -152,6 +152,7 @@ class ReservationSeries
         foreach ($this->_additionalResources as $resource) {
             $ids[] = $resource->GetResourceId();
         }
+
         return $ids;
     }
 
@@ -189,8 +190,6 @@ class ReservationSeries
     }
 
     /**
-     * @param Reservation $r1
-     * @param Reservation $r2
      * @return int
      */
     protected function SortReservations(Reservation $r1, Reservation $r2)
@@ -262,13 +261,12 @@ class ReservationSeries
     }
 
     /**
-     * @param int $userId
-     * @param BookableResource $resource
-     * @param string $title
-     * @param string $description
-     * @param DateRange $reservationDate
+     * @param int            $userId
+     * @param string         $title
+     * @param string         $description
+     * @param DateRange      $reservationDate
      * @param IRepeatOptions $repeatOptions
-     * @param UserSession $bookedBy
+     *
      * @return ReservationSeries
      */
     public static function Create(
@@ -278,7 +276,7 @@ class ReservationSeries
         $description,
         $reservationDate,
         $repeatOptions,
-        UserSession $bookedBy
+        UserSession $bookedBy,
     ) {
         $series = new ReservationSeries();
         $series->_userId = $userId;
@@ -292,16 +290,12 @@ class ReservationSeries
         return $series;
     }
 
-    /**
-     * @param DateRange $reservationDate
-     */
     protected function UpdateDuration(DateRange $reservationDate)
     {
         $this->AddNewCurrentInstance($reservationDate);
     }
 
     /**
-     * @param IRepeatOptions $repeatOptions
      * @throws Exception
      */
     protected function Repeats(IRepeatOptions $repeatOptions)
@@ -339,8 +333,8 @@ class ReservationSeries
     }
 
     /**
-     * @param Reservation $reservation
      * @return bool
+     *
      * @throws Exception
      */
     public function RemoveInstance(Reservation $reservation)
@@ -360,7 +354,7 @@ class ReservationSeries
      */
     public function HasAcceptedTerms()
     {
-        return $this->termsAcceptanceDate != null;
+        return null != $this->termsAcceptanceDate;
     }
 
     /**
@@ -387,7 +381,6 @@ class ReservationSeries
     }
 
     /**
-     * @param DateRange $reservationDate
      * @return bool
      */
     protected function InstanceStartsOnDate(DateRange $reservationDate)
@@ -398,14 +391,14 @@ class ReservationSeries
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * @param DateRange $reservationDate
      * @return Reservation|null newly created instance
      */
-    protected function AddNewInstance(DateRange $reservationDate): Reservation|null
+    protected function AddNewInstance(DateRange $reservationDate): ?Reservation
     {
         $newInstance = new Reservation($this, $reservationDate);
         $this->AddInstance($newInstance);
@@ -436,9 +429,6 @@ class ReservationSeries
         return $reservation->ReferenceNumber();
     }
 
-    /**
-     * @param BookableResource $resource
-     */
     public function AddResource(BookableResource $resource)
     {
         $this->_additionalResources[] = $resource;
@@ -449,7 +439,7 @@ class ReservationSeries
      */
     public function IsRecurring()
     {
-        return $this->RepeatOptions()->RepeatType() != RepeatType::None;
+        return RepeatType::None != $this->RepeatOptions()->RepeatType();
     }
 
     /**
@@ -470,11 +460,12 @@ class ReservationSeries
 
     public function RequiresApproval()
     {
-        return $this->StatusId() == ReservationStatus::Pending;
+        return ReservationStatus::Pending == $this->StatusId();
     }
 
     /**
      * @param string $referenceNumber
+     *
      * @return Reservation
      */
     public function GetInstance($referenceNumber)
@@ -484,6 +475,7 @@ class ReservationSeries
 
     /**
      * @return Reservation
+     *
      * @throws Exception
      */
     public function CurrentInstance()
@@ -492,11 +484,13 @@ class ReservationSeries
         if (!isset($instance)) {
             throw new Exception("Current instance not found. Missing Reservation key {$this->GetCurrentKey()}");
         }
+
         return $instance;
     }
 
     /**
      * @param int[] $participantIds
+     *
      * @return void
      */
     public function ChangeParticipants($participantIds)
@@ -525,6 +519,7 @@ class ReservationSeries
 
     /**
      * @param int[] $inviteeIds
+     *
      * @return void
      */
     public function ChangeInvitees($inviteeIds)
@@ -538,6 +533,7 @@ class ReservationSeries
     /**
      * @param string[] $invitedGuests
      * @param string[] $participatingGuests
+     *
      * @return void
      */
     public function ChangeGuests($invitedGuests, $participatingGuests)
@@ -550,7 +546,6 @@ class ReservationSeries
     }
 
     /**
-     * @param Reservation $current
      * @return void
      */
     protected function SetCurrentInstance(Reservation $current)
@@ -567,8 +562,8 @@ class ReservationSeries
     }
 
     /**
-     * @param Reservation $instance
      * @return bool
+     *
      * @throws Exception
      */
     protected function IsCurrent(Reservation $instance)
@@ -578,6 +573,7 @@ class ReservationSeries
 
     /**
      * @param int $resourceId
+     *
      * @return bool
      */
     public function ContainsResource($resourceId)
@@ -586,7 +582,6 @@ class ReservationSeries
     }
 
     /**
-     * @param ReservationAccessory $accessory
      * @return void
      */
     public function AddAccessory(ReservationAccessory $accessory)
@@ -594,18 +589,11 @@ class ReservationSeries
         $this->_accessories[] = $accessory;
     }
 
-    /**
-     * @param AttributeValue $attributeValue
-     */
     public function AddAttributeValue(AttributeValue $attributeValue)
     {
         $this->_attributeValues[$attributeValue->AttributeId] = $attributeValue;
     }
 
-    /**
-     * @param $customAttributeId
-     * @return mixed
-     */
     public function GetAttributeValue($customAttributeId)
     {
         if (array_key_exists($customAttributeId, $this->_attributeValues)) {
@@ -633,9 +621,6 @@ class ReservationSeries
         return $this->addedAttachments;
     }
 
-    /**
-     * @param ReservationAttachment $attachment
-     */
     public function AddAttachment(ReservationAttachment $attachment)
     {
         $this->addedAttachments[] = $attachment;
@@ -645,7 +630,7 @@ class ReservationSeries
     {
         $this->seriesId = $seriesId;
         foreach ($this->addedAttachments as $addedAttachment) {
-            if ($addedAttachment != null) {
+            if (null != $addedAttachment) {
                 $addedAttachment->WithSeriesId($seriesId);
             }
         }
@@ -687,6 +672,7 @@ class ReservationSeries
         }
 
         $this->creditsRequired = $creditsRequired;
+
         return $this->creditsRequired;
     }
 
@@ -697,8 +683,9 @@ class ReservationSeries
             $credits += ($resource->GetCreditsPerSlot() + $resource->GetPeakCreditsPerSlot());
         }
 
-        if ($credits == 0) {
+        if (0 == $credits) {
             $this->creditsRequired = 0;
+
             return;
         }
 

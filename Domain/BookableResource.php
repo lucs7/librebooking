@@ -64,7 +64,7 @@ interface IBookableResource extends IResource
     public function IsAutoReleased();
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function GetAutoReleaseMinutes();
 
@@ -74,12 +74,12 @@ interface IBookableResource extends IResource
     public function GetResourceTypeId();
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetColor();
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetTextColor();
 }
@@ -179,103 +179,123 @@ class BookableResourceBuilder
 
     /**
      * @param int $id
+     *
      * @return BookableResourceBuilder
      */
     public function Id($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
     /**
      * @param string $name
+     *
      * @return BookableResourceBuilder
      */
     public function Name($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
     /**
      * @param string $location
+     *
      * @return BookableResourceBuilder
      */
     public function Location($location)
     {
         $this->location = $location;
+
         return $this;
     }
 
     /**
      * @param string $contact
+     *
      * @return BookableResourceBuilder
      */
     public function Contact($contact)
     {
         $this->contact = $contact;
+
         return $this;
     }
 
     /**
      * @param string $notes
+     *
      * @return BookableResourceBuilder
      */
     public function Notes($notes)
     {
         $this->notes = $notes;
+
         return $this;
     }
 
     /**
      * @param string|int|null $minLength
      * @param string|int|null $maxLength
+     *
      * @return BookableResourceBuilder
      */
     public function Length($minLength, $maxLength)
     {
         $this->minLength = $minLength;
         $this->maxLength = $maxLength;
+
         return $this;
     }
 
     /**
      * @param bool $autoAssign
+     *
      * @return BookableResourceBuilder
      */
     public function AutoAssign($autoAssign)
     {
         $this->autoAssign = $autoAssign;
+
         return $this;
     }
 
     /**
      * @param bool $requiresApproval
+     *
      * @return BookableResourceBuilder
      */
     public function RequiresApproval($requiresApproval)
     {
         $this->requiresApproval = $requiresApproval;
+
         return $this;
     }
 
     /**
      * @param bool $allowMultiday
+     *
      * @return BookableResourceBuilder
      */
     public function AllowMultiday($allowMultiday)
     {
         $this->allowMultiday = $allowMultiday;
+
         return $this;
     }
 
     /**
      * @param int|null $maxParticipants
+     *
      * @return BookableResourceBuilder
      */
     public function MaxParticipants($maxParticipants)
     {
         $this->maxParticipants = $maxParticipants;
+
         return $this;
     }
 
@@ -283,6 +303,7 @@ class BookableResourceBuilder
      * @param string|int|null $add
      * @param string|int|null $update
      * @param string|int|null $delete
+     *
      * @return BookableResourceBuilder
      */
     public function MinNotice($add, $update, $delete)
@@ -290,208 +311,249 @@ class BookableResourceBuilder
         $this->minNoticeAdd = $add;
         $this->minNoticeUpdate = $update;
         $this->minNoticeDelete = $delete;
+
         return $this;
     }
 
     /**
      * @param string|int|null $maxNotice
+     *
      * @return BookableResourceBuilder
      */
     public function MaxNotice($maxNotice)
     {
         $this->maxNotice = $maxNotice;
+
         return $this;
     }
 
     /**
      * @param string $description
+     *
      * @return BookableResourceBuilder
      */
     public function Description($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
     /**
      * @param int $scheduleId
+     *
      * @return BookableResourceBuilder
      */
     public function ScheduleId($scheduleId)
     {
         $this->scheduleId = $scheduleId;
+
         return $this;
     }
 
     /**
      * @param int $adminGroupId
+     *
      * @return BookableResourceBuilder
      */
     public function AdminGroupId($adminGroupId)
     {
         $this->adminGroupId = $adminGroupId;
+
         return $this;
     }
 
     /**
      * @param string $imageName
+     *
      * @return BookableResourceBuilder
      */
     public function ImageName($imageName)
     {
         $this->imageName = $imageName;
+
         return $this;
     }
 
     /**
      * @param int $sortOrder
+     *
      * @return BookableResourceBuilder
      */
     public function SortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
+
         return $this;
     }
 
     /**
      * @param int $status
+     *
      * @return BookableResourceBuilder
      */
     public function Status($status)
     {
         $this->status = $status;
+
         return $this;
     }
 
     /**
      * @param int $resourceTypeId
+     *
      * @return BookableResourceBuilder
      */
     public function ResourceType($resourceTypeId)
     {
         $this->resourceTypeId = $resourceTypeId;
+
         return $this;
     }
 
     /**
      * @param string $publicId
+     *
      * @return BookableResourceBuilder
      */
     public function PublicId($publicId)
     {
         $this->publicId = $publicId;
+
         return $this;
     }
 
     /**
      * @param bool $allowSubscription
+     *
      * @return BookableResourceBuilder
      */
     public function AllowSubscription($allowSubscription)
     {
         $this->allowSubscription = $allowSubscription;
+
         return $this;
     }
 
     /**
      * @param int|string|null $bufferTime
+     *
      * @return BookableResourceBuilder
      */
     public function BufferTime($bufferTime)
     {
         $this->bufferTime = $bufferTime;
+
         return $this;
     }
 
     /**
      * @param string $color
+     *
      * @return BookableResourceBuilder
      */
     public function Color($color)
     {
         $this->color = $color;
+
         return $this;
     }
 
     /**
      * @param AttributeValue $attributeValue
+     *
      * @return BookableResourceBuilder
      */
     public function Attribute($attributeValue)
     {
         $this->attributeValues[] = $attributeValue;
+
         return $this;
     }
 
     /**
      * @param AttributeValue[] $attributeValues
+     *
      * @return BookableResourceBuilder
      */
     public function Attributes($attributeValues)
     {
         $this->attributeValues = $attributeValues;
+
         return $this;
     }
 
     /**
      * @param int $groupId
+     *
      * @return BookableResourceBuilder
      */
     public function GroupId($groupId)
     {
         $this->groupIds[] = $groupId;
+
         return $this;
     }
 
     /**
      * @param int[] $groupIds
+     *
      * @return BookableResourceBuilder
      */
     public function GroupIds($groupIds)
     {
         $this->groupIds = $groupIds;
+
         return $this;
     }
 
     /**
      * @param bool $allowCheckin
+     *
      * @return BookableResourceBuilder
      */
     public function AllowCheckin($allowCheckin)
     {
         $this->allowCheckin = $allowCheckin;
+
         return $this;
     }
 
     /**
      * @param int $autoReleaseMinutes
+     *
      * @return BookableResourceBuilder
      */
     public function AutoReleaseMinutes($autoReleaseMinutes)
     {
         $this->autoReleaseMinutes = $autoReleaseMinutes;
+
         return $this;
     }
 
     /**
      * @param int $allowDisplay
+     *
      * @return BookableResourceBuilder
      */
     public function AllowDisplay($allowDisplay)
     {
         $this->allowDisplay = $allowDisplay;
+
         return $this;
     }
 
     /**
      * @param int $peak
      * @param int $offPeak
+     *
      * @return BookableResourceBuilder
      */
     public function Credits($peak, $offPeak)
     {
         $this->peakCredits = $peak;
         $this->offPeakCredits = $offPeak;
+
         return $this;
     }
 }
@@ -552,7 +614,7 @@ class BookableResource implements IBookableResource
     protected $_resourceTypeId;
     protected $_resourceGroupIds = [];
     protected $_enableCheckIn = false;
-    protected $_autoReleaseMinutes = null;
+    protected $_autoReleaseMinutes;
     protected $_color;
     protected $_textColor;
     protected $_creditsPerSlot;
@@ -612,9 +674,10 @@ class BookableResource implements IBookableResource
 
     /**
      * @param string $resourceName
-     * @param int $scheduleId
-     * @param bool $autoAssign
-     * @param int $order
+     * @param int    $scheduleId
+     * @param bool   $autoAssign
+     * @param int    $order
+     *
      * @return BookableResource
      */
     public static function CreateNew($resourceName, $scheduleId, $autoAssign = false, $order = 0)
@@ -640,6 +703,7 @@ class BookableResource implements IBookableResource
 
     /**
      * @param array $row
+     *
      * @return BookableResource
      */
     public static function Create($row)
@@ -682,7 +746,7 @@ class BookableResource implements IBookableResource
         }
         if (isset($row[ColumnNames::RESOURCE_GROUP_LIST])) {
             $groupIds = explode('!sep!', $row[ColumnNames::RESOURCE_GROUP_LIST]);
-            for ($i = 0; $i < count($groupIds); $i++) {
+            for ($i = 0; $i < count($groupIds); ++$i) {
                 $resource->WithResourceGroupId($groupIds[$i]);
             }
         }
@@ -851,7 +915,7 @@ class BookableResource implements IBookableResource
             }
         } else {
             $index = array_search($imageName, $this->_imageNames);
-            if ($index !== false) {
+            if (false !== $index) {
                 array_splice($this->_imageNames, $index, 1);
             }
         }
@@ -865,17 +929,18 @@ class BookableResource implements IBookableResource
         if ($this->_imageName != $imageName) {
             $index = array_search($imageName, $this->_imageNames);
 
-            if ($index !== false) {
+            if (false !== $index) {
                 array_splice($this->_imageNames, $index, 1);
             }
             $this->_imageNames[] = $this->_imageName;
 
-            $this->_imageName = '' . $imageName;
+            $this->_imageName = ''.$imageName;
         }
     }
 
     /**
      * @param TimeInterval|string|int $value
+     *
      * @return int
      */
     private function GetIntervalValue($value)
@@ -937,12 +1002,13 @@ class BookableResource implements IBookableResource
 
     /**
      * @param bool $value
+     *
      * @return void
      */
     public function SetAutoAssign($value)
     {
         $value = intval($value);
-        if ($this->_autoAssign == false && $value == true) {
+        if (false == $this->_autoAssign && true == $value) {
             $this->_autoAssignToggledOn = true;
         } else {
             $this->_autoAssignToggledOn = false;
@@ -966,6 +1032,7 @@ class BookableResource implements IBookableResource
 
     /**
      * @param bool $value
+     *
      * @return void
      */
     public function SetRequiresApproval($value)
@@ -987,6 +1054,7 @@ class BookableResource implements IBookableResource
 
     /**
      * @param bool $value
+     *
      * @return void
      */
     public function SetAllowMultiday($value)
@@ -1127,6 +1195,7 @@ class BookableResource implements IBookableResource
 
     /**
      * @param int $value
+     *
      * @return void
      */
     public function SetScheduleId($value)
@@ -1171,6 +1240,7 @@ class BookableResource implements IBookableResource
 
     /**
      * @param string $value
+     *
      * @return void
      */
     public function SetImage($value)
@@ -1196,6 +1266,7 @@ class BookableResource implements IBookableResource
 
     /**
      * @param $value string[]
+     *
      * @return void
      */
     public function SetImages($value)
@@ -1213,7 +1284,8 @@ class BookableResource implements IBookableResource
 
     /**
      * @param int|ResourceStatus $statusId
-     * @param int|null $statusReasonId
+     * @param int|null           $statusReasonId
+     *
      * @return void
      */
     public function ChangeStatus($statusId, $statusReasonId = null)
@@ -1230,7 +1302,7 @@ class BookableResource implements IBookableResource
      */
     public function IsAvailable()
     {
-        return $this->_statusId == ResourceStatus::AVAILABLE;
+        return ResourceStatus::AVAILABLE == $this->_statusId;
     }
 
     /**
@@ -1238,7 +1310,7 @@ class BookableResource implements IBookableResource
      */
     public function IsUnavailable()
     {
-        return $this->_statusId == ResourceStatus::UNAVAILABLE;
+        return ResourceStatus::UNAVAILABLE == $this->_statusId;
     }
 
     /**
@@ -1246,7 +1318,7 @@ class BookableResource implements IBookableResource
      */
     public function IsHidden()
     {
-        return $this->_statusId == ResourceStatus::HIDDEN;
+        return ResourceStatus::HIDDEN == $this->_statusId;
     }
 
     /**
@@ -1369,7 +1441,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @param bool $enabled
+     * @param bool     $enabled
      * @param int|null $autoReleaseMinutes
      */
     public function SetCheckin($enabled, $autoReleaseMinutes = null)
@@ -1436,10 +1508,6 @@ class BookableResource implements IBookableResource
         return $this->_removedAttributeValues;
     }
 
-    /**
-     * @param $customAttributeId
-     * @return mixed
-     */
     public function GetAttributeValue($customAttributeId)
     {
         if (array_key_exists($customAttributeId, $this->_attributeValues)) {
@@ -1454,11 +1522,12 @@ class BookableResource implements IBookableResource
      */
     public function __toString()
     {
-        return 'BookableResource' . $this->_resourceId;
+        return 'BookableResource'.$this->_resourceId;
     }
 
     /**
      * @static
+     *
      * @return BookableResource
      */
     public static function null()
@@ -1588,10 +1657,11 @@ class BookableResource implements IBookableResource
         if (empty($color)) {
             $this->_color = '';
             $this->_textColor = '';
+
             return;
         }
         if (!BookedStringHelper::StartsWith($color, '#')) {
-            $color = '#' . $color;
+            $color = '#'.$color;
         }
 
         $this->_color = $color;
@@ -1600,7 +1670,7 @@ class BookableResource implements IBookableResource
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetTextColor()
     {
@@ -1683,6 +1753,7 @@ class BookableResource implements IBookableResource
     public function GetSerializedProperties()
     {
         $properties = ResourceProperties::FromResource($this);
+
         return $properties->Serialize();
     }
 

@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Presenters/ProfilePresenter.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Presenters/ProfilePresenter.php';
 
 interface IProfilePage extends IPage, IActionPage
 {
@@ -52,6 +52,7 @@ interface IProfilePage extends IPage, IActionPage
 
     /**
      * @abstract
+     *
      * @return AttributeFormElement[]
      */
     public function GetAttributes();
@@ -65,7 +66,7 @@ interface IProfilePage extends IPage, IActionPage
 class ProfilePage extends ActionPage implements IProfilePage
 {
     /**
-     * @var \ProfilePresenter
+     * @var ProfilePresenter
      */
     private $presenter;
 

@@ -3,7 +3,8 @@
 interface IReader
 {
     /**
-     * Returns the next row in the reader
+     * Returns the next row in the reader.
+     *
      * @return array list of key-value pairs
      */
     public function GetRow();
@@ -14,7 +15,8 @@ interface IReader
     public function NumRows();
 
     /**
-     * Releases all rows held by the reader
+     * Releases all rows held by the reader.
+     *
      * @return void
      */
     public function Free();

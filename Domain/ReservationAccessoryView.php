@@ -18,15 +18,15 @@ class ReservationAccessoryView
     public $QuantityAvailable;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $Name;
 
     /**
-     * @param int $accessoryId
-     * @param int $quantityReserved
+     * @param int    $accessoryId
+     * @param int    $quantityReserved
      * @param string $accessoryName
-     * @param int $quantityAvailable
+     * @param int    $quantityAvailable
      */
     public function __construct($accessoryId, $quantityReserved, $accessoryName, $quantityAvailable)
     {

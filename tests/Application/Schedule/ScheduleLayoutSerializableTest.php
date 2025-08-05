@@ -27,7 +27,7 @@ class ScheduleLayoutSerializableTest extends TestBase
         $p2 = new NonSchedulePeriod($b2, $e2);
         $p3 = new SchedulePeriod($b3, $e3, $l1);
         $p4 = new NonSchedulePeriod($b4, $e4, $l2);
-        $periods = [$p1, $p2, $p3, $p4,];
+        $periods = [$p1, $p2, $p3, $p4];
 
         $actual = new ScheduleLayoutSerializable($periods);
 

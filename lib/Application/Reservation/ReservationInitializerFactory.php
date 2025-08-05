@@ -31,7 +31,7 @@ class ReservationInitializerFactory implements IReservationInitializerFactory
         IScheduleRepository $scheduleRepository,
         IUserRepository $userRepository,
         IResourceService $resourceService,
-        IReservationAuthorization $reservationAuthorization
+        IReservationAuthorization $reservationAuthorization,
     ) {
         $this->reservationAuthorization = $reservationAuthorization;
         $this->userRepository = $userRepository;

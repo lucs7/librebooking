@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Validation/namespace.php';
 
 class AccessoryAvailabilityRuleTest extends TestBase
 {
@@ -64,14 +64,14 @@ class AccessoryAvailabilityRuleTest extends TestBase
             ->method('LoadById')
             ->willReturnMap([
                 [$accessory1->AccessoryId, new Accessory($accessory1->AccessoryId, 'name1', $quantityAvailable)],
-                [$accessory2->AccessoryId, new Accessory($accessory2->AccessoryId, 'name2', $quantityAvailable)]
+                [$accessory2->AccessoryId, new Accessory($accessory2->AccessoryId, 'name2', $quantityAvailable)],
             ]);
 
         $this->reservationRepository->expects($this->exactly(2))
             ->method('GetAccessoriesWithin')
             ->willReturnMap([
                 [$dr1, [$accessoryReservation, $accessoryReservationForOtherResource]],
-                [$dr2, []]
+                [$dr2, []],
             ]);
 
         $result = $this->rule->Validate($reservation, null);

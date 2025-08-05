@@ -5,7 +5,7 @@ class TimeInterval
     /**
      * @var DateDiff
      */
-    private $interval = null;
+    private $interval;
 
     /**
      * @param int $seconds
@@ -21,7 +21,9 @@ class TimeInterval
 
     /**
      * @static
+     *
      * @param string|int $interval string interval in format: #d#h#m ie: 22d4h12m or total seconds
+     *
      * @return TimeInterval
      */
     public static function Parse($interval)
@@ -44,7 +46,6 @@ class TimeInterval
     }
 
     /**
-     * @param $minutes
      * @return TimeInterval
      */
     public static function FromMinutes($minutes)
@@ -53,7 +54,6 @@ class TimeInterval
     }
 
     /**
-     * @param $hours
      * @return TimeInterval
      */
     public static function FromHours($hours)
@@ -62,7 +62,6 @@ class TimeInterval
     }
 
     /**
-     * @param $days
      * @return TimeInterval
      */
     public static function FromDays($days)
@@ -115,7 +114,7 @@ class TimeInterval
      */
     public function Diff()
     {
-        if ($this->interval != null) {
+        if (null != $this->interval) {
             return $this->interval;
         }
 
@@ -123,11 +122,11 @@ class TimeInterval
     }
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function ToDatabase()
     {
-        if ($this->interval != null && !$this->interval->IsNull()) {
+        if (null != $this->interval && !$this->interval->IsNull()) {
             return $this->interval->TotalSeconds();
         }
 
@@ -139,9 +138,10 @@ class TimeInterval
      */
     public function TotalSeconds()
     {
-        if ($this->interval != null) {
+        if (null != $this->interval) {
             return $this->interval->TotalSeconds();
         }
+
         return 0;
     }
 
@@ -150,7 +150,7 @@ class TimeInterval
      */
     public function __toString()
     {
-        if ($this->interval != null) {
+        if (null != $this->interval) {
             return $this->interval->__toString();
         }
 
@@ -162,7 +162,7 @@ class TimeInterval
      */
     public function ToShortString()
     {
-        if ($this->interval != null) {
+        if (null != $this->interval) {
             return $this->interval->ToString(true);
         }
 
@@ -171,12 +171,13 @@ class TimeInterval
 
     /**
      * @param bool $includeTotalHours
+     *
      * @return string
      */
     public function ToString($includeTotalHours)
     {
         if ($includeTotalHours) {
-            return $this->__toString() . ' (' . $this->TotalSeconds() / 3600 . 'h)';
+            return $this->__toString().' ('.$this->TotalSeconds() / 3600 .'h)';
         }
 
         return $this->__toString();

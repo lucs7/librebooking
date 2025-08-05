@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/AnnouncementRepository.php');
+require_once ROOT_DIR.'Domain/Access/AnnouncementRepository.php';
 
 class FakeAnnouncementRepository implements IAnnouncementRepository
 {
@@ -51,6 +51,7 @@ class FakeAnnouncementRepository implements IAnnouncementRepository
     public function GetFuture($displayPage = -1)
     {
         $this->_GetFutureCalled = true;
+
         return $this->_ExpectedAnnouncements;
     }
 
@@ -70,9 +71,6 @@ class FakeAnnouncementRepository implements IAnnouncementRepository
         return null;
     }
 
-    /**
-     * @param Announcement $announcement
-     */
     public function Add(Announcement $announcement)
     {
     }
@@ -84,15 +82,13 @@ class FakeAnnouncementRepository implements IAnnouncementRepository
     {
     }
 
-    /**
-     * @param Announcement $announcement
-     */
     public function Update(Announcement $announcement)
     {
     }
 
     /**
      * @param int $announcementId
+     *
      * @return Announcement
      */
     public function LoadById($announcementId)

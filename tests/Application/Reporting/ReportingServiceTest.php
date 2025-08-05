@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reporting/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reporting/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class ReportingServiceTest extends TestBase
 {
@@ -155,7 +155,7 @@ class ReportingServiceTest extends TestBase
         $this->assertEquals($reportId, $this->reportingRepository->_DeletedReport);
     }
 
-    public function testGetsUtilizationReport_DifferentLayoutPerDay()
+    public function testGetsUtilizationReportDifferentLayoutPerDay()
     {
         $r1 = 1;
         $s1 = 100;
@@ -206,7 +206,7 @@ class ReportingServiceTest extends TestBase
 
         $format = Resources::GetInstance()->GetDateFormat('general_date');
 
-        /**
+        /*
          * $availableHoursThursday = 12;
          * $blackoutHoursThursday = 2;
          * $reservedHoursThursday = 6;
@@ -221,22 +221,22 @@ class ReportingServiceTest extends TestBase
          **/
 
         $this->assertEquals($thursday, $data[0][ColumnNames::DATE]);
-        $this->assertEquals(60, $data[0][ColumnNames::UTILIZATION], "6/10");
+        $this->assertEquals(60, $data[0][ColumnNames::UTILIZATION], '6/10');
         $this->assertEquals('r1', $data[0][ColumnNames::RESOURCE_NAME_ALIAS]);
         $this->assertEquals($s1, $data[0][ColumnNames::SCHEDULE_ID]);
         $this->assertEquals($r1, $data[0][ColumnNames::RESOURCE_ID]);
 
         $this->assertEquals($friday, $data[1][ColumnNames::DATE]);
-        $this->assertEquals(100, $data[1][ColumnNames::UTILIZATION], "19/19");
+        $this->assertEquals(100, $data[1][ColumnNames::UTILIZATION], '19/19');
 
         $this->assertEquals($saturday, $data[2][ColumnNames::DATE]);
-        $this->assertEquals(43, $data[2][ColumnNames::UTILIZATION], "6/14");
+        $this->assertEquals(43, $data[2][ColumnNames::UTILIZATION], '6/14');
 
         $this->assertEquals($sunday, $data[3][ColumnNames::DATE]);
         $this->assertEquals(0, $data[3][ColumnNames::UTILIZATION]);
     }
 
-    public function testGetsUtilizationReport_SameLayoutPerDay()
+    public function testGetsUtilizationReportSameLayoutPerDay()
     {
         $r1 = 1;
         $s1 = 100;
@@ -272,7 +272,7 @@ class ReportingServiceTest extends TestBase
 
         $format = Resources::GetInstance()->GetDateFormat('general_date');
 
-        /**
+        /*
          * availableHours = 12;
          * $blackoutHoursThursday = 2;
          * $reservedHoursThursday = 6;
@@ -295,7 +295,7 @@ class ReportingServiceTest extends TestBase
         $this->assertEquals(0, $data[3][ColumnNames::UTILIZATION]);
     }
 
-    public function testGetsUtilizationReport_CustomLayout()
+    public function testGetsUtilizationReportCustomLayout()
     {
         $r1 = 1;
         $s1 = 100;
@@ -327,7 +327,6 @@ class ReportingServiceTest extends TestBase
             ]
         );
 
-
         $data = [
             $this->GetUtilizationRow($r1, $s1, $thursday->SetTimeString('12:00'), $thursday->SetTimeString('14:00'), 1, 'r1'),
             $this->GetUtilizationRow($r1, $s1, $saturday->SetTimeString('12:00'), $saturday->SetTimeString('14:00'), 1, 'r1'),
@@ -343,7 +342,7 @@ class ReportingServiceTest extends TestBase
         $format = Resources::GetInstance()->GetDateFormat('general_date');
 
         $this->assertEquals($thursday, $data[0][ColumnNames::DATE]);
-        $this->assertEquals(50, $data[0][ColumnNames::UTILIZATION], "2/4");
+        $this->assertEquals(50, $data[0][ColumnNames::UTILIZATION], '2/4');
         $this->assertEquals('r1', $data[0][ColumnNames::RESOURCE_NAME_ALIAS]);
         $this->assertEquals($s1, $data[0][ColumnNames::SCHEDULE_ID]);
         $this->assertEquals($r1, $data[0][ColumnNames::RESOURCE_ID]);
@@ -352,16 +351,19 @@ class ReportingServiceTest extends TestBase
         $this->assertEquals(0, $data[1][ColumnNames::UTILIZATION]);
 
         $this->assertEquals($saturday, $data[2][ColumnNames::DATE]);
-        $this->assertEquals(100, $data[2][ColumnNames::UTILIZATION], "4/4");
+        $this->assertEquals(100, $data[2][ColumnNames::UTILIZATION], '4/4');
     }
 
     /**
-     * @param int $resourceId
-     * @param int $scheduleId
+     * @param int  $resourceId
+     * @param int  $scheduleId
      * @param Date $start
      * @param Date $end
+     *
      * @parma int $type
+     *
      * @param string $resourceName
+     *
      * @return array
      */
     private function GetUtilizationRow($resourceId, $scheduleId, $start, $end, $type = 1, $resourceName = 'name')
@@ -377,24 +379,25 @@ class ReportingServiceTest extends TestBase
     }
 
     /**
-     * @param int $firstHour
-     * @param int $lastHour
+     * @param int  $firstHour
+     * @param int  $lastHour
      * @param Date $date
+     *
      * @return SchedulePeriod[]
      */
     private function HourlyBetween($firstHour, $lastHour, $date)
     {
         $slots = [];
-        if ($firstHour != 0) {
-            $slots = [new NonSchedulePeriod($date->SetTimeString("00:00"), $date->SetTimeString("$firstHour:00", true))];
+        if (0 != $firstHour) {
+            $slots = [new NonSchedulePeriod($date->SetTimeString('00:00'), $date->SetTimeString("$firstHour:00", true))];
         }
 
-        for ($i = $firstHour; $i < $lastHour; $i++) {
+        for ($i = $firstHour; $i < $lastHour; ++$i) {
             $e = $i + 1;
             $slots[] = new SchedulePeriod($date->SetTimeString("$i:00"), $date->SetTimeString("$e:00", true));
         }
 
-        if ($lastHour != 0) {
+        if (0 != $lastHour) {
             $slots[] = new NonSchedulePeriod($date->SetTimeString("$lastHour:00"), $date->SetTimeString('24:00', true));
         }
 
@@ -412,7 +415,6 @@ class FakeReportingRepository implements IReportingRepository
     public $_DeletedReport;
 
     /**
-     * @param ReportCommandBuilder $commandBuilder
      * @return array
      */
     public function GetCustomReport(ReportCommandBuilder $commandBuilder)
@@ -420,9 +422,6 @@ class FakeReportingRepository implements IReportingRepository
         return $this->_CustomReportData;
     }
 
-    /**
-     * @param SavedReport $savedReport
-     */
     public function SaveCustomReport(SavedReport $savedReport)
     {
         $this->_LastSavedReport = $savedReport;
@@ -430,6 +429,7 @@ class FakeReportingRepository implements IReportingRepository
 
     /**
      * @param int $userId
+     *
      * @return array|SavedReport[]
      */
     public function LoadSavedReportsForUser($userId)
@@ -440,6 +440,7 @@ class FakeReportingRepository implements IReportingRepository
     /**
      * @param int $reportId
      * @param int $userId
+     *
      * @return SavedReport
      */
     public function LoadSavedReportForUser($reportId, $userId)

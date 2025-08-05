@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class PasswordEncryptionTest extends TestBase
 {
@@ -12,8 +12,8 @@ class PasswordEncryptionTest extends TestBase
         $salt = $encryption->Salt();
         $actualEncryptedPassword = $encryption->Encrypt($password, $salt);
 
-        $expectedEncryptedPassword = sha1($password . $salt);
+        $expectedEncryptedPassword = sha1($password.$salt);
 
-        $this->assertEquals($expectedEncryptedPassword, $actualEncryptedPassword, "Password was not encrypted correctly");
+        $this->assertEquals($expectedEncryptedPassword, $actualEncryptedPassword, 'Password was not encrypted correctly');
     }
 }

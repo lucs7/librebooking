@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'plugins/Authentication/Ldap/namespace.php');
+require_once ROOT_DIR.'plugins/Authentication/Ldap/namespace.php';
 
 class LdapTest extends TestBase
 {
@@ -157,7 +157,6 @@ class LdapTest extends TestBase
             $this->ldapUser->GetTitle()
         );
 
-
         $auth = new Ldap($this->fakeAuth, $this->fakeLdap, $this->fakeLdapOptions);
         $auth->SetRegistration($this->fakeRegistration);
 
@@ -213,7 +212,7 @@ class LdapTest extends TestBase
         $this->assertEquals($password, $options['bindpw']);
         $this->assertEquals($base, $options['basedn']);
         $this->assertEquals(false, $options['starttls']);
-        $this->assertEquals(intval($version), $options['version'], "version should be int");
+        $this->assertEquals(intval($version), $options['version'], 'version should be int');
     }
 
     public function testGetAllHosts()
@@ -226,7 +225,7 @@ class LdapTest extends TestBase
 
         $options = new LdapOptions();
 
-        $this->assertEquals(['localhost', 'localhost.2'], $options->Controllers(), "comma separated values should become array");
+        $this->assertEquals(['localhost', 'localhost.2'], $options->Controllers(), 'comma separated values should become array');
     }
 
     public function testUserHandlesArraysAsAttribute()
@@ -262,7 +261,7 @@ class LdapTest extends TestBase
 
     public function testCanGetAttributeMapping()
     {
-        $attributeMapping = "sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename";
+        $attributeMapping = 'sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename';
 
         $configFile = new FakeConfigFile();
         $configFile->SetKey(LdapConfig::ATTRIBUTE_MAPPING, $attributeMapping);
@@ -270,7 +269,7 @@ class LdapTest extends TestBase
 
         $options = new LdapOptions();
 
-        $expectedAttributes = [ 'sn', 'givenname', 'email', 'phone', 'physicaldeliveryofficename', 'title'];
+        $expectedAttributes = ['sn', 'givenname', 'email', 'phone', 'physicaldeliveryofficename', 'title'];
         $this->assertEquals($expectedAttributes, $options->Attributes());
     }
 
@@ -282,7 +281,7 @@ class LdapTest extends TestBase
 
         $options = new LdapOptions();
 
-        $expectedAttributes = [ 'sn', 'givenname', 'mail', 'telephonenumber', 'physicaldeliveryofficename', 'title'];
+        $expectedAttributes = ['sn', 'givenname', 'mail', 'telephonenumber', 'physicaldeliveryofficename', 'title'];
         $this->assertEquals($expectedAttributes, $options->Attributes());
     }
 
@@ -311,8 +310,8 @@ class LdapTest extends TestBase
     public function testMapsUserAttributes()
     {
         $mapping = ['sn' => 'sn',
-                        'givenname' => 'givenname',
-                        'mail' => 'fooName',];
+            'givenname' => 'givenname',
+            'mail' => 'fooName', ];
 
         $entry = new TestLdapEntry();
         $entry->Set('sn', 'sn');
@@ -333,7 +332,7 @@ class LdapIntegrationTest extends TestBase
 {
     public function testAuthRealLdap()
     {
-        require_once(ROOT_DIR . 'plugins/Authentication/Ldap/namespace.php');
+        require_once ROOT_DIR.'plugins/Authentication/Ldap/namespace.php';
         $ldap = new Ldap(PluginManager::Instance()->LoadAuthentication());
         $ldap->Validate('riemann', 'password');
     }
@@ -390,6 +389,7 @@ class FakeLdapWrapper extends Ldap2Wrapper
     public function Connect()
     {
         $this->_ConnectCalled = true;
+
         return $this->_ExpectedConnect;
     }
 

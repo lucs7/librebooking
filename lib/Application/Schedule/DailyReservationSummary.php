@@ -5,7 +5,7 @@ class DailyReservationSummary
     /**
      * @var ReservationListItem
      */
-    private $_first = null;
+    private $_first;
 
     private $_reservationCount = 0;
 
@@ -45,12 +45,12 @@ class DailyReservationSummary
 
     public function AddReservation(ReservationListItem $item)
     {
-        if ($this->_first == null) {
+        if (null == $this->_first) {
             $this->_first = $item;
         }
 
         if ($item->IsReservation()) {
-            $this->_reservationCount++;
+            ++$this->_reservationCount;
         }
         $this->_reservations[] = $item;
     }

@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'lib/Application/Admin/namespace.php';
 
 class ServerSettingsPage extends AdminPage
 {
@@ -31,7 +31,7 @@ class ServerSettingsPage extends AdminPage
 
     public function ProcessAction()
     {
-        if ($this->GetAction() == 'changePermissions') {
+        if ('changePermissions' == $this->GetAction()) {
             $uploadDir = new ImageUploadDirectory();
             $uploadDir->MakeWriteable();
         } else {
@@ -43,15 +43,15 @@ class ServerSettingsPage extends AdminPage
     private function GetPlugins()
     {
         $plugins = [];
-        $dit = new RecursiveDirectoryIterator(ROOT_DIR . 'plugins');
+        $dit = new RecursiveDirectoryIterator(ROOT_DIR.'plugins');
 
-        /** @var SplFileInfo $path  */
+        /** @var SplFileInfo $path */
         foreach ($dit as $path) {
-            if ($path->isDir() && basename($path->getPathname()) != '.' && basename($path->getPathname()) != '..') {
+            if ($path->isDir() && '.' != basename($path->getPathname()) && '..' != basename($path->getPathname())) {
                 $plugins[basename($path->getPathname())] = [];
-                /** @var SplFileInfo $plugin  */
+                /** @var SplFileInfo $plugin */
                 foreach (new RecursiveDirectoryIterator($path) as $plugin) {
-                    if ($plugin->isDir() && basename($plugin->getPathname()) != '.' && basename($plugin->getPathname()) != '..') {
+                    if ($plugin->isDir() && '.' != basename($plugin->getPathname()) && '..' != basename($plugin->getPathname())) {
                         $plugins[basename($path->getPathname())][] = basename($plugin->getPathname());
                     }
                 }

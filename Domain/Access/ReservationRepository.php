@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
 
 class ReservationRepository implements IReservationRepository
 {
@@ -22,8 +22,9 @@ class ReservationRepository implements IReservationRepository
     {
         $reader = ServiceLocator::GetDatabase()->Query($loadSeriesCommand);
 
-        if ($reader->NumRows() != 1) {
+        if (1 != $reader->NumRows()) {
             Log::Debug('Reservation not found');
+
             return null;
         }
 
@@ -114,7 +115,7 @@ class ReservationRepository implements IReservationRepository
                 $reservationSeries->GetCreditsConsumed()
             );
 
-            if ($creditsToDeduct != 0) {
+            if (0 != $creditsToDeduct) {
                 try {
                     $adjustCreditsCommand = new AdjustUserCreditsCommand($reservationSeries->UserId(), $creditsToDeduct, Resources::GetInstance()->GetString('ReservationUpdatedLog', $reservationSeries->CurrentInstance()->ReferenceNumber()));
 
@@ -128,7 +129,6 @@ class ReservationRepository implements IReservationRepository
     }
 
     /**
-     * @param ReservationSeries $reservationSeries
      * @return int newly created series_id
      */
     private function InsertSeries(ReservationSeries $reservationSeries)
@@ -204,7 +204,7 @@ class ReservationRepository implements IReservationRepository
             $reservationSeries->GetCreditsConsumed()
         );
 
-        if ($creditsToDeduct != 0) {
+        if (0 != $creditsToDeduct) {
             try {
                 $adjustCreditsCommand = new AdjustUserCreditsCommand($reservationSeries->UserId(), $creditsToDeduct, Resources::GetInstance()->GetString('ReservationCreatedLog', $reservationSeries->CurrentInstance()->ReferenceNumber()));
                 $database->Execute($adjustCreditsCommand);
@@ -219,10 +219,10 @@ class ReservationRepository implements IReservationRepository
     {
         $database = ServiceLocator::GetDatabase();
 
-//        $creditAdjustment = 0 - $existingReservationSeries->GetCreditsConsumed();
+        //        $creditAdjustment = 0 - $existingReservationSeries->GetCreditsConsumed();
         //		$creditAdjustment = $existingReservationSeries->GetCreditsRequired() - $existingReservationSeries->GetOriginalCreditsConsumed();
         $creditAdjustment = 0 - $existingReservationSeries->GetUnusedCreditBalance();
-        if ($creditAdjustment != 0) {
+        if (0 != $creditAdjustment) {
             Log::Debug('CREDITS - Reservation delete adjusting credits for user %s by %s', $existingReservationSeries->UserId(), $creditAdjustment);
 
             try {
@@ -243,15 +243,16 @@ class ReservationRepository implements IReservationRepository
         foreach ($events as $event) {
             $command = $this->GetReservationCommand($event, $existingReservationSeries);
 
-            if ($command != null) {
+            if (null != $command) {
                 $command->Execute($database);
             }
         }
     }
 
     /**
-     * @param SeriesEvent $event
+     * @param SeriesEvent               $event
      * @param ExistingReservationSeries $series
+     *
      * @return EventCommand
      */
     private function GetReservationCommand($event, $series)
@@ -259,10 +260,11 @@ class ReservationRepository implements IReservationRepository
         return ReservationEventMapper::Instance()->Map($event, $series);
     }
 
-    /// LOAD BY ID HELPER FUNCTIONS
+    // / LOAD BY ID HELPER FUNCTIONS
 
     /**
      * @param IReader $reader
+     *
      * @return ExistingReservationSeries
      */
     private function BuildSeries($reader)
@@ -274,7 +276,7 @@ class ReservationRepository implements IReservationRepository
             $configurationString = $row[ColumnNames::REPEAT_OPTIONS];
 
             $repeatDates = [];
-            if ($repeatType == RepeatType::Custom) {
+            if (RepeatType::Custom == $repeatType) {
                 $getRepeatDates = new GetReservationRepeatDatesCommand($seriesId);
                 $repeatReader = ServiceLocator::GetDatabase()->Query($getRepeatDates);
                 while ($repeatRow = $repeatReader->GetRow()) {
@@ -342,7 +344,7 @@ class ReservationRepository implements IReservationRepository
         $reader = ServiceLocator::GetDatabase()->Query($getResourcesCommand);
         while ($row = $reader->GetRow()) {
             $resource = BookableResource::Create($row);
-            if ($row[ColumnNames::RESOURCE_LEVEL_ID] == ResourceLevel::Primary) {
+            if (ResourceLevel::Primary == $row[ColumnNames::RESOURCE_LEVEL_ID]) {
                 $series->WithPrimaryResource($resource);
             } else {
                 $series->WithResource($resource);
@@ -357,10 +359,10 @@ class ReservationRepository implements IReservationRepository
 
         $reader = ServiceLocator::GetDatabase()->Query($getSeriesParticipants);
         while ($row = $reader->GetRow()) {
-            if ($row[ColumnNames::RESERVATION_USER_LEVEL] == ReservationUserLevel::PARTICIPANT) {
+            if (ReservationUserLevel::PARTICIPANT == $row[ColumnNames::RESERVATION_USER_LEVEL]) {
                 $series->GetInstance($row[ColumnNames::REFERENCE_NUMBER])->WithParticipant($row[ColumnNames::USER_ID]);
             }
-            if ($row[ColumnNames::RESERVATION_USER_LEVEL] == ReservationUserLevel::INVITEE) {
+            if (ReservationUserLevel::INVITEE == $row[ColumnNames::RESERVATION_USER_LEVEL]) {
                 $series->GetInstance($row[ColumnNames::REFERENCE_NUMBER])->WithInvitee($row[ColumnNames::USER_ID]);
             }
         }
@@ -373,10 +375,10 @@ class ReservationRepository implements IReservationRepository
 
         $reader = ServiceLocator::GetDatabase()->Query($getSeriesGuests);
         while ($row = $reader->GetRow()) {
-            if ($row[ColumnNames::RESERVATION_USER_LEVEL] == ReservationUserLevel::PARTICIPANT) {
+            if (ReservationUserLevel::PARTICIPANT == $row[ColumnNames::RESERVATION_USER_LEVEL]) {
                 $series->GetInstance($row[ColumnNames::REFERENCE_NUMBER])->WithParticipatingGuest($row[ColumnNames::EMAIL]);
             }
-            if ($row[ColumnNames::RESERVATION_USER_LEVEL] == ReservationUserLevel::INVITEE) {
+            if (ReservationUserLevel::INVITEE == $row[ColumnNames::RESERVATION_USER_LEVEL]) {
                 $series->GetInstance($row[ColumnNames::REFERENCE_NUMBER])->WithInvitedGuest($row[ColumnNames::EMAIL]);
             }
         }
@@ -419,7 +421,7 @@ class ReservationRepository implements IReservationRepository
         $reader = ServiceLocator::GetDatabase()->Query($getReminders);
         while ($row = $reader->GetRow()) {
             $reminder = ReservationReminder::FromMinutes($row[ColumnNames::REMINDER_MINUTES_PRIOR]);
-            if ($row[ColumnNames::REMINDER_TYPE] == ReservationReminderType::Start) {
+            if (ReservationReminderType::Start == $row[ColumnNames::REMINDER_TYPE]) {
                 $series->WithStartReminder($reminder);
             } else {
                 $series->WithEndReminder($reminder);
@@ -432,6 +434,7 @@ class ReservationRepository implements IReservationRepository
     {
         $configuration = RepeatConfiguration::Create($repeatType, $configurationString);
         $factory = new RepeatOptionsFactory();
+
         return $factory->Create(
             $repeatType,
             $configuration->Interval,
@@ -446,6 +449,7 @@ class ReservationRepository implements IReservationRepository
 
     /**
      * @param $attachmentFileId int
+     *
      * @return ReservationAttachment
      */
     public function LoadReservationAttachment($attachmentFileId)
@@ -457,7 +461,7 @@ class ReservationRepository implements IReservationRepository
             $fileId = $row[ColumnNames::FILE_ID];
             $extension = $row[ColumnNames::FILE_EXTENSION];
             $fileSystem = ServiceLocator::GetFileSystem();
-            $contents = $fileSystem->GetFileContents($fileSystem->GetReservationAttachmentsPath() . "$fileId.$extension");
+            $contents = $fileSystem->GetFileContents($fileSystem->GetReservationAttachmentsPath()."$fileId.$extension");
             $attachment = ReservationAttachment::Create(
                 $row[ColumnNames::FILE_NAME],
                 $row[ColumnNames::FILE_TYPE],
@@ -476,6 +480,7 @@ class ReservationRepository implements IReservationRepository
 
     /**
      * @param $attachmentFile ReservationAttachment
+     *
      * @return int
      */
     public function AddReservationAttachment(ReservationAttachment $attachmentFile)
@@ -573,6 +578,7 @@ class ReservationEventMapper
 
     /**
      * @static
+     *
      * @return ReservationEventMapper
      */
     public static function Instance()
@@ -585,8 +591,9 @@ class ReservationEventMapper
     }
 
     /**
-     * @param $event mixed
+     * @param $event  mixed
      * @param $series ExistingReservationSeries
+     *
      * @return EventCommand
      */
     public function Map($event, ExistingReservationSeries $series)
@@ -594,10 +601,12 @@ class ReservationEventMapper
         $eventType = get_class($event);
         if (!isset($this->buildMethods[$eventType])) {
             Log::Debug("No command event mapper found for event $eventType");
+
             return null;
         }
 
         $method = $this->buildMethods[$eventType];
+
         return $this->$method($event, $series);
     }
 
@@ -758,13 +767,13 @@ class InstanceAddedEventCommand extends EventCommand
         );
 
         $reservationId = $database->ExecuteInsert($insertReservation);
-//
-//        if ($reservationId <= 0)
-//        {
-//            $database->Execute(new DeleteSeriesPermanantCommand($this->series->SeriesId()));
-//            Log::Error("Could not insert reservation because there were conflicts. Command: %s", $insertReservation);
-//            throw new Exception("Could not insert reservation - conflicting times");
-//        }
+        //
+        //        if ($reservationId <= 0)
+        //        {
+        //            $database->Execute(new DeleteSeriesPermanantCommand($this->series->SeriesId()));
+        //            Log::Error("Could not insert reservation because there were conflicts. Command: %s", $insertReservation);
+        //            throw new Exception("Could not insert reservation - conflicting times");
+        //        }
         $insertReservationUser = new AddReservationUserCommand($reservationId, $this->series->UserId(), ReservationUserLevel::OWNER);
 
         $database->Execute($insertReservationUser);
@@ -780,7 +789,6 @@ class InstanceAddedEventCommand extends EventCommand
 
             $database->Execute($insertReservationUser);
         }
-
 
         foreach ($this->instance->AddedInvitedGuests() as $guest) {
             $insertReservationGuest = new AddReservationGuestCommand($reservationId, $guest, ReservationUserLevel::INVITEE);
@@ -921,7 +929,7 @@ class AttachmentRemovedCommand extends EventCommand
     {
         $database->Execute(new RemoveReservationAttachmentCommand($this->event->FileId()));
         $fileSystem = ServiceLocator::GetFileSystem();
-        $fileSystem->RemoveFile($fileSystem->GetReservationAttachmentsPath() . $this->event->FileName());
+        $fileSystem->RemoveFile($fileSystem->GetReservationAttachmentsPath().$this->event->FileName());
     }
 }
 
@@ -947,54 +955,56 @@ class ReminderAddedCommand extends EventCommand
 interface IReservationRepository
 {
     /**
-     * Insert a new reservation
+     * Insert a new reservation.
      *
-     * @param ReservationSeries $reservation
      * @return void
      */
     public function Add(ReservationSeries $reservation);
 
     /**
-     * Return an existing reservation series
+     * Return an existing reservation series.
      *
      * @param int $reservationInstanceId
+     *
      * @return ExistingReservationSeries or null if no reservation found
      */
     public function LoadById($reservationInstanceId);
 
     /**
-     * Return an existing reservation series
+     * Return an existing reservation series.
      *
      * @param string $referenceNumber
+     *
      * @return ExistingReservationSeries or null if no reservation found
      */
     public function LoadByReferenceNumber($referenceNumber);
 
     /**
-     * Update an existing reservation
+     * Update an existing reservation.
      *
-     * @param ExistingReservationSeries $existingReservationSeries
      * @return void
      */
     public function Update(ExistingReservationSeries $existingReservationSeries);
 
     /**
-     * Delete all or part of an existing reservation
+     * Delete all or part of an existing reservation.
      *
-     * @param ExistingReservationSeries $existingReservationSeries
      * @return void
      */
     public function Delete(ExistingReservationSeries $existingReservationSeries);
 
     /**
      * @abstract
+     *
      * @param $attachmentFileId int
+     *
      * @return ReservationAttachment
      */
     public function LoadReservationAttachment($attachmentFileId);
 
     /**
      * @param $attachmentFile ReservationAttachment
+     *
      * @return int
      */
     public function AddReservationAttachment(ReservationAttachment $attachmentFile);
@@ -1006,18 +1016,15 @@ interface IReservationRepository
 
     /**
      * @param int $ruleId
+     *
      * @return ReservationColorRule
      */
     public function GetReservationColorRule($ruleId);
 
     /**
-     * @param ReservationColorRule $colorRule
      * @return int
      */
     public function AddReservationColorRule(ReservationColorRule $colorRule);
 
-    /**
-     * @param ReservationColorRule $colorRule
-     */
     public function DeleteReservationColorRule(ReservationColorRule $colorRule);
 }

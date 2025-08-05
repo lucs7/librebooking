@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
+require_once ROOT_DIR.'Domain/namespace.php';
 
 class AccountCreationEmail extends EmailMessage
 {
@@ -11,7 +11,7 @@ class AccountCreationEmail extends EmailMessage
     private $user;
 
     /**
-     * @var null|UserSession
+     * @var UserSession|null
      */
     private $userSession;
 
@@ -33,6 +33,7 @@ class AccountCreationEmail extends EmailMessage
         foreach ($admins as $admin) {
             $emails[] = new EmailAddress($admin->EmailAddress, $admin->FullName);
         }
+
         return $emails;
     }
 
@@ -58,7 +59,7 @@ class AccountCreationEmail extends EmailMessage
         $this->Set('Position', $this->user->GetAttribute(UserAttribute::Position));
 
         $this->Set('CreatedBy', '');
-        if ($this->userSession != null && $this->userSession->UserId != $this->user->Id()) {
+        if (null != $this->userSession && $this->userSession->UserId != $this->user->Id()) {
             $this->Set('CreatedBy', new FullName($this->userSession->FirstName, $this->userSession->LastName));
         }
 

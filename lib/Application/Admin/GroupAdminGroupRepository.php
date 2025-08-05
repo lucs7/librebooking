@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class GroupAdminGroupRepository extends GroupRepository
 {
@@ -31,11 +31,12 @@ class GroupAdminGroupRepository extends GroupRepository
             $groupIds[] = $group->GroupId;
         }
         $and = new SqlFilterIn(new SqlFilterColumn(TableNames::GROUPS_ALIAS, ColumnNames::GROUP_ID), $groupIds);
-        if ($filter == null) {
+        if (null == $filter) {
             $filter = $and;
         } else {
             $filter->_And($and);
         }
+
         return parent::GetList($pageNumber, $pageSize, $sortField, $sortDirection, $filter);
     }
 

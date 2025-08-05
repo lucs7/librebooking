@@ -10,12 +10,12 @@ class ReservationRuleResult
     private $_canJoinWaitlist;
 
     /**
-     * @param bool $isValid
-     * @param string $errorMessage
-     * @param bool $canBeRetried
-     * @param null $retryMessage
+     * @param bool                              $isValid
+     * @param string                            $errorMessage
+     * @param bool                              $canBeRetried
+     * @param null                              $retryMessage
      * @param array|ReservationRetryParameter[] $retryParams
-     * @param bool $canJoinWaitlist
+     * @param bool                              $canJoinWaitlist
      */
     public function __construct($isValid = true, $errorMessage = null, $canBeRetried = false, $retryMessage = null, $retryParams = [], $canJoinWaitlist = false)
     {

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/AccountActivationEmail.php');
+require_once ROOT_DIR.'lib/Email/Messages/AccountActivationEmail.php';
 
 class AccountActivation implements IAccountActivation
 {
@@ -34,10 +34,11 @@ class AccountActivation implements IAccountActivation
         $userId = $this->activationRepository->FindUserIdByCode($activationCode);
         $this->activationRepository->DeleteActivation($activationCode);
 
-        if ($userId != null) {
+        if (null != $userId) {
             $user = $this->userRepository->LoadById($userId);
             $user->Activate();
             $this->userRepository->Update($user);
+
             return new ActivationResult(true, $user);
         }
 
@@ -53,12 +54,12 @@ class ActivationResult
     private $activated;
 
     /**
-     * @var null|User
+     * @var User|null
      */
     private $user;
 
     /**
-     * @param bool $activated
+     * @param bool      $activated
      * @param User|null $user
      */
     public function __construct($activated, $user = null)
@@ -68,7 +69,7 @@ class ActivationResult
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function Activated()
     {
@@ -76,7 +77,7 @@ class ActivationResult
     }
 
     /**
-     * @return null|User
+     * @return User|null
      */
     public function User()
     {

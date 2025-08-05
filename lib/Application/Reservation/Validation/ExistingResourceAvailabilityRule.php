@@ -4,7 +4,8 @@ class ExistingResourceAvailabilityRule extends ResourceAvailabilityRule implemen
 {
     /**
      * @param ReservationSeries|ExistingReservationSeries $reservationSeries
-     * @param null|ReservationRetryParameter[] $retryParameters
+     * @param ReservationRetryParameter[]|null            $retryParameters
+     *
      * @return ReservationRuleResult
      */
     public function Validate($reservationSeries, $retryParameters = null)
@@ -13,10 +14,8 @@ class ExistingResourceAvailabilityRule extends ResourceAvailabilityRule implemen
     }
 
     /**
-     * @param Reservation $instance
-     * @param ReservationSeries $series
-     * @param IReservedItemView $existingItem
      * @param BookableResource[] $keyedResources
+     *
      * @return bool
      */
     protected function IsInConflict(Reservation $instance, ReservationSeries $series, IReservedItemView $existingItem, $keyedResources)

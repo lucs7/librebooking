@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Admin/Import/ICalImportPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Presenters/Admin/Import/ICalImportPresenter.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 interface IICalImportPage extends IActionPage
 {

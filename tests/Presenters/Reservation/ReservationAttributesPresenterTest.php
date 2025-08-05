@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationAttributesPresenter.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationAttributesPresenter.php';
 
 class ReservationAttributesPresenterTest extends TestBase
 {
@@ -64,7 +64,7 @@ class ReservationAttributesPresenterTest extends TestBase
         $this->privacyFilter->_CanViewDetails = true;
     }
 
-    public function testForSecondaryUserAttributes_ShowIfTheCurrentUserCanBookForRequestedUser()
+    public function testForSecondaryUserAttributesShowIfTheCurrentUserCanBookForRequestedUser()
     {
         $requestedUserId = 9292;
 
@@ -76,9 +76,9 @@ class ReservationAttributesPresenterTest extends TestBase
         $attributeWithSecondaryEntityOfAnotherUser->WithSecondaryEntities(CustomAttributeCategory::USER, 1212);
 
         $attributes = [
-                $attributeWithoutSecondaryEntity,
-                $attributeWithSecondaryEntityOfRequestedUser,
-                $attributeWithSecondaryEntityOfAnotherUser,
+            $attributeWithoutSecondaryEntity,
+            $attributeWithSecondaryEntityOfRequestedUser,
+            $attributeWithSecondaryEntityOfAnotherUser,
         ];
 
         $this->authorizationService->_CanReserveFor = true;
@@ -97,7 +97,7 @@ class ReservationAttributesPresenterTest extends TestBase
         $this->assertEquals($attributeWithSecondaryEntityOfRequestedUser->Id(), $this->page->_Attributes[1]->Id());
     }
 
-    public function testForSecondaryUserAttributes_DoNotShowIfTheCurrentUserCanBookForRequestedUser()
+    public function testForSecondaryUserAttributesDoNotShowIfTheCurrentUserCanBookForRequestedUser()
     {
         $requestedUserId = 9292;
 
@@ -106,8 +106,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $attributeWithSecondaryEntityOfRequestedUser->WithSecondaryEntities(CustomAttributeCategory::USER, $requestedUserId);
 
         $attributes = [
-                $attributeWithoutSecondaryEntity,
-                $attributeWithSecondaryEntityOfRequestedUser
+            $attributeWithoutSecondaryEntity,
+            $attributeWithSecondaryEntityOfRequestedUser,
         ];
 
         $this->authorizationService->_CanReserveFor = false;
@@ -125,13 +125,13 @@ class ReservationAttributesPresenterTest extends TestBase
         $this->assertEquals($attributeWithoutSecondaryEntity->Id(), $this->page->_Attributes[0]->Id());
     }
 
-    public function testWhenExistingReservationIsRequested_ThenLoadValuesForAttributes()
+    public function testWhenExistingReservationIsRequestedThenLoadValuesForAttributes()
     {
         $requestedRefNum = '8882';
 
         $attributes = [
-                new FakeCustomAttribute(1),
-                new FakeCustomAttribute(2),
+            new FakeCustomAttribute(1),
+            new FakeCustomAttribute(2),
         ];
 
         $this->attributeRepository->expects($this->once())
@@ -154,7 +154,7 @@ class ReservationAttributesPresenterTest extends TestBase
         $this->assertEquals('value2', $this->page->_Attributes[1]->Value());
     }
 
-    public function testIfCannotViewDetails_ThenDoNotAddAnyAttributes()
+    public function testIfCannotViewDetailsThenDoNotAddAnyAttributes()
     {
         $this->page->_RequestedReferenceNumber = 'something';
 
@@ -165,7 +165,7 @@ class ReservationAttributesPresenterTest extends TestBase
         $this->assertCount(0, $this->page->_Attributes);
     }
 
-    public function testIfTheAttributeIsPrivate_AndTheCurrentUserIsNotTheOwnerOrAdmin_ThenDoNotAddTheAttributes()
+    public function testIfTheAttributeIsPrivateAndTheCurrentUserIsNotTheOwnerOrAdminThenDoNotAddTheAttributes()
     {
         $this->page->_RequestedReferenceNumber = 'something';
 
@@ -173,8 +173,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $privateAttribute->WithIsPrivate(true);
 
         $attributes = [
-                $privateAttribute,
-                        new FakeCustomAttribute(2),
+            $privateAttribute,
+            new FakeCustomAttribute(2),
         ];
 
         $this->attributeRepository->expects($this->once())
@@ -187,7 +187,7 @@ class ReservationAttributesPresenterTest extends TestBase
         $this->assertCount(1, $this->page->_Attributes);
     }
 
-    public function testIfTheAttributeIsPrivate_AndTheCurrentUserCanReserveForRequestedUser_ThenAddTheAttributes()
+    public function testIfTheAttributeIsPrivateAndTheCurrentUserCanReserveForRequestedUserThenAddTheAttributes()
     {
         $this->page->_RequestedReferenceNumber = 'something';
 
@@ -197,8 +197,8 @@ class ReservationAttributesPresenterTest extends TestBase
         $privateAttribute->WithIsPrivate(true);
 
         $attributes = [
-                $privateAttribute,
-                        new FakeCustomAttribute(2),
+            $privateAttribute,
+            new FakeCustomAttribute(2),
         ];
 
         $this->attributeRepository->expects($this->once())

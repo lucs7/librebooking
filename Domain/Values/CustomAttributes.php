@@ -6,6 +6,7 @@ class CustomAttributes
 
     /**
      * @param string $attributes
+     *
      * @return CustomAttributes
      */
     public static function Parse($attributes)
@@ -20,7 +21,7 @@ class CustomAttributes
 
         foreach ($pairs as $pair) {
             $nv = explode('=', $pair, 2);
-            if (count($nv) !== 2) {
+            if (2 !== count($nv)) {
                 Log::Debug('nv not exploded to two values: %s', print_r($nv, true));
             } else {
                 $ca->Add($nv[0], $nv[1]);
@@ -31,7 +32,7 @@ class CustomAttributes
     }
 
     /**
-     * @param $id int
+     * @param $id    int
      * @param $value string
      */
     public function Add($id, $value)
@@ -41,7 +42,8 @@ class CustomAttributes
 
     /**
      * @param $id int
-     * @return null|string
+     *
+     * @return string|null
      */
     public function Get($id)
     {
@@ -62,6 +64,7 @@ class CustomAttributes
 
     /**
      * @param int $id
+     *
      * @return bool
      */
     public function Contains($id)

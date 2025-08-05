@@ -1,18 +1,18 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Responses/ResourceResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/ResourcesResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/CustomAttributes/CustomAttributeResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceStatusResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceStatusReasonsResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceAvailabilityResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceReference.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceTypesResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceGroupsResponse.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'WebServices/Responses/ResourceResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/ResourcesResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/CustomAttributes/CustomAttributeResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Resource/ResourceStatusResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Resource/ResourceStatusReasonsResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Resource/ResourceAvailabilityResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Resource/ResourceReference.php';
+require_once ROOT_DIR.'WebServices/Responses/Resource/ResourceTypesResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Resource/ResourceGroupsResponse.php';
 
 class ResourcesWebService
 {
@@ -40,7 +40,7 @@ class ResourcesWebService
         IRestServer $server,
         IResourceRepository $resourceRepository,
         IAttributeService $attributeService,
-        IReservationViewRepository $reservationRepository
+        IReservationViewRepository $reservationRepository,
     ) {
         $this->server = $server;
         $this->resourceRepository = $resourceRepository;
@@ -50,8 +50,11 @@ class ResourcesWebService
 
     /**
      * @name GetAllResources
+     *
      * @description Loads all resources
+     *
      * @response ResourcesResponse
+     *
      * @return void
      */
     public function GetAll()
@@ -67,9 +70,13 @@ class ResourcesWebService
 
     /**
      * @name GetResource
+     *
      * @description Loads a specific resource by id
+     *
      * @param int $resourceId
+     *
      * @response ResourceResponse
+     *
      * @return void
      */
     public function GetResource($resourceId)
@@ -92,8 +99,11 @@ class ResourcesWebService
 
     /**
      * @name GetStatuses
+     *
      * @description Returns all available resource statuses
+     *
      * @response ResourceStatusResponse
+     *
      * @return void
      */
     public function GetStatuses()
@@ -103,8 +113,11 @@ class ResourcesWebService
 
     /**
      * @name GetStatusReasons
+     *
      * @description Returns all available resource status reasons
+     *
      * @response ResourceStatusReasonsResponse
+     *
      * @return void
      */
     public function GetStatusReasons()
@@ -116,8 +129,11 @@ class ResourcesWebService
 
     /**
      * @name GetResourceTypes
+     *
      * @description Returns all available resource types
+     *
      * @response ResourceTypesResponse
+     *
      * @return void
      */
     public function GetTypes()
@@ -128,9 +144,12 @@ class ResourcesWebService
 
     /**
      * @name GetAvailability
+     *
      * @description Returns resource availability for the requested resource (optional). "availableAt" and "availableUntil" will include availability through the next 7 days
      * Optional query string parameter: dateTime. If no dateTime is requested the current datetime will be used.
+     *
      * @response ResourcesAvailabilityResponse
+     *
      * @return void
      */
     public function GetAvailability()
@@ -162,10 +181,10 @@ class ResourcesWebService
         foreach ($resources as $resource) {
             $reservation = $this->GetOngoingReservation($resource, $reservations);
 
-            if ($reservation != null) {
+            if (null != $reservation) {
                 $lastReservationBeforeOpening = $this->GetLastReservationBeforeAnOpening($resource, $reservations);
 
-                if ($lastReservationBeforeOpening == null) {
+                if (null == $lastReservationBeforeOpening) {
                     $lastReservationBeforeOpening = $reservation;
                 }
 
@@ -185,8 +204,11 @@ class ResourcesWebService
 
     /**
      * @name GetGroups
+     *
      * @description Returns the full resource group tree
+     *
      * @response ResourceGroupsResponse
+     *
      * @return void
      */
     public function GetGroups()
@@ -197,8 +219,9 @@ class ResourcesWebService
     }
 
     /**
-     * @param BookableResource $resource
+     * @param BookableResource        $resource
      * @param ReservationItemView[][] $reservations
+     *
      * @return ReservationItemView|null
      */
     private function GetOngoingReservation($resource, $reservations)
@@ -212,6 +235,7 @@ class ResourcesWebService
 
     /**
      * @param ReservationItemView[] $reservations
+     *
      * @return ReservationItemView[][]
      */
     private function GetReservations($reservations)
@@ -225,9 +249,10 @@ class ResourcesWebService
     }
 
     /**
-     * @param BookableResource $resource
+     * @param BookableResource        $resource
      * @param ReservationItemView[][] $reservations
-     * @return null|ReservationItemView
+     *
+     * @return ReservationItemView|null
      */
     private function GetLastReservationBeforeAnOpening($resource, $reservations)
     {
@@ -237,7 +262,7 @@ class ResourcesWebService
         }
 
         $resourceReservations = $reservations[$resourceId];
-        for ($i = 0; $i < count($resourceReservations) - 1; $i++) {
+        for ($i = 0; $i < count($resourceReservations) - 1; ++$i) {
             $current = $resourceReservations[$i];
             $next = $resourceReservations[$i + 1];
 

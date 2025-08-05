@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/EmailMessage.php');
+require_once ROOT_DIR.'lib/Email/EmailMessage.php';
 
 class ReservationParticipationActivityEmail extends EmailMessage
 {
@@ -27,9 +27,9 @@ class ReservationParticipationActivityEmail extends EmailMessage
 
     /**
      * @param ExistingReservationSeries $series
-     * @param string|InvitationAction $invitationAction
-     * @param User $owner
-     * @param string $participantDetails
+     * @param string|InvitationAction   $invitationAction
+     * @param User                      $owner
+     * @param string                    $participantDetails
      */
     public function __construct($series, $invitationAction, $owner, $participantDetails)
     {
@@ -49,11 +49,12 @@ class ReservationParticipationActivityEmail extends EmailMessage
     public function Subject()
     {
         $subject = 'ReservationParticipantAccept';
-        if ($this->invitationAction == InvitationAction::Decline || $this->invitationAction == InvitationAction::CancelAll || $this->invitationAction == InvitationAction::CancelInstance) {
+        if (InvitationAction::Decline == $this->invitationAction || InvitationAction::CancelAll == $this->invitationAction || InvitationAction::CancelInstance == $this->invitationAction) {
             $subject = 'ReservationParticipantDecline';
-        } elseif ($this->invitationAction == InvitationAction::Join || $this->invitationAction == InvitationAction::JoinAll) {
+        } elseif (InvitationAction::Join == $this->invitationAction || InvitationAction::JoinAll == $this->invitationAction) {
             $subject = 'ReservationParticipantJoin';
         }
+
         return $this->Translate($subject, [$this->participantDetails, $this->series->Resource()->GetName(), $this->series->CurrentInstance()->StartDate()->ToTimezone($this->timezone)->Format(Resources::GetInstance()->GeneralDateFormat())]);
     }
 
@@ -66,7 +67,7 @@ class ReservationParticipationActivityEmail extends EmailMessage
         $this->Set('ResourceName', $this->series->Resource()->GetName());
         $this->Set('Title', $this->series->Title());
         $this->Set('Description', $this->series->Description());
-        $this->Set('ReservationUrl', sprintf("%s?%s=%s", Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber()));
+        $this->Set('ReservationUrl', sprintf('%s?%s=%s', Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber()));
         $this->Set('ParticipantDetails', $this->participantDetails);
         $this->Set('InvitationAction', $this->invitationAction);
 

@@ -20,35 +20,39 @@
  * PHP Version 5
  *
  * @file     CAS/Request/AbstractRequest.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
- * Provides support for performing web-requests via curl
+ * Provides support for performing web-requests via curl.
  *
  * @class    CAS_Request_AbstractRequest
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterface
 {
-    protected $url = null;
+    protected $url;
     protected $cookies = [];
     protected $headers = [];
     protected $isPost = false;
-    protected $postBody = null;
-    protected $caCertPath = null;
+    protected $postBody;
+    protected $caCertPath;
     protected $validateCN = true;
     private $_sent = false;
     private $_responseHeaders = [];
-    private $_responseBody = null;
+    private $_responseBody;
     private $_errorMessage = '';
 
     /*********************************************************
@@ -56,19 +60,18 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
     *********************************************************/
 
     /**
-     * Set the URL of the Request
+     * Set the URL of the Request.
      *
      * @param string $url Url to set
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function setUrl($url)
     {
         if ($this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has already been sent cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has already been sent cannot '.__METHOD__);
         }
 
         $this->url = $url;
@@ -81,14 +84,13 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
      * @param string $value value of entry
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function addCookie($name, $value)
     {
         if ($this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has already been sent cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has already been sent cannot '.__METHOD__);
         }
 
         $this->cookies[$name] = $value;
@@ -97,19 +99,18 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
     /**
      * Add an array of cookies to the request.
      * The cookie array is of the form
-     *     array('cookie_name' => 'cookie_value', 'cookie_name2' => cookie_value2')
+     *     array('cookie_name' => 'cookie_value', 'cookie_name2' => cookie_value2').
      *
      * @param array $cookies cookies to add
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function addCookies(array $cookies)
     {
         if ($this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has already been sent cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has already been sent cannot '.__METHOD__);
         }
 
         $this->cookies = array_merge($this->cookies, $cookies);
@@ -121,14 +122,13 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
      * @param string $header Header to add
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function addHeader($header)
     {
         if ($this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has already been sent cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has already been sent cannot '.__METHOD__);
         }
 
         $this->headers[] = $header;
@@ -140,14 +140,13 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
      * @param array $headers headers to add
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function addHeaders(array $headers)
     {
         if ($this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has already been sent cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has already been sent cannot '.__METHOD__);
         }
 
         $this->headers = array_merge($this->headers, $headers);
@@ -157,38 +156,34 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
      * Make the request a POST request rather than the default GET request.
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function makePost()
     {
         if ($this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has already been sent cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has already been sent cannot '.__METHOD__);
         }
 
         $this->isPost = true;
     }
 
     /**
-     * Add a POST body to the request
+     * Add a POST body to the request.
      *
      * @param string $body body to add
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function setPostBody($body)
     {
         if ($this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has already been sent cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has already been sent cannot '.__METHOD__);
         }
         if (!$this->isPost) {
-            throw new CAS_OutOfSequenceException(
-                'Cannot add a POST body to a GET request, use makePost() first.'
-            );
+            throw new CAS_OutOfSequenceException('Cannot add a POST body to a GET request, use makePost() first.');
         }
 
         $this->postBody = $body;
@@ -201,14 +196,13 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
      * @param bool   $validate_cn valdiate CN of certificate
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
-    public function setSslCaCert($caCertPath, $validate_cn=true)
+    public function setSslCaCert($caCertPath, $validate_cn = true)
     {
         if ($this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has already been sent cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has already been sent cannot '.__METHOD__);
         }
         $this->caCertPath = $caCertPath;
         $this->validateCN = $validate_cn;
@@ -221,29 +215,27 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
     /**
      * Perform the request.
      *
-     * @return bool TRUE on success, FALSE on failure.
-     * @throws CAS_OutOfSequenceException If called multiple times.
+     * @return bool TRUE on success, FALSE on failure
+     *
+     * @throws CAS_OutOfSequenceException if called multiple times
      */
     public function send()
     {
         if ($this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has already been sent cannot send again.'
-            );
+            throw new CAS_OutOfSequenceException('Request has already been sent cannot send again.');
         }
         if (is_null($this->url) || !$this->url) {
-            throw new CAS_OutOfSequenceException(
-                'A url must be specified via setUrl() before the request can be sent.'
-            );
+            throw new CAS_OutOfSequenceException('A url must be specified via setUrl() before the request can be sent.');
         }
         $this->_sent = true;
+
         return $this->sendRequest();
     }
 
     /**
      * Send the request and store the results.
      *
-     * @return bool TRUE on success, FALSE on failure.
+     * @return bool TRUE on success, FALSE on failure
      */
     abstract protected function sendRequest();
 
@@ -302,32 +294,31 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
     /**
      * Answer the headers of the response.
      *
-     * @return array An array of header strings.
-     * @throws CAS_OutOfSequenceException If called before the Request has been sent.
+     * @return array an array of header strings
+     *
+     * @throws CAS_OutOfSequenceException if called before the Request has been sent
      */
     public function getResponseHeaders()
     {
         if (!$this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has not been sent yet. Cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has not been sent yet. Cannot '.__METHOD__);
         }
+
         return $this->_responseHeaders;
     }
 
     /**
-     * Answer HTTP status code of the response
+     * Answer HTTP status code of the response.
      *
      * @return int
-     * @throws CAS_OutOfSequenceException If called before the Request has been sent.
-     * @throws CAS_Request_Exception if the response did not contain a status code
+     *
+     * @throws CAS_OutOfSequenceException if called before the Request has been sent
+     * @throws CAS_Request_Exception      if the response did not contain a status code
      */
     public function getResponseStatusCode()
     {
         if (!$this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has not been sent yet. Cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has not been sent yet. Cannot '.__METHOD__);
         }
 
         if (!preg_match(
@@ -336,9 +327,7 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
             $matches
         )
         ) {
-            throw new CAS_Request_Exception(
-                'Bad response, no status code was found in the first line.'
-            );
+            throw new CAS_Request_Exception('Bad response, no status code was found in the first line.');
         }
 
         return intval($matches[1]);
@@ -348,14 +337,13 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
      * Answer the body of response.
      *
      * @return string
-     * @throws CAS_OutOfSequenceException If called before the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called before the Request has been sent
      */
     public function getResponseBody()
     {
         if (!$this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has not been sent yet. Cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has not been sent yet. Cannot '.__METHOD__);
         }
 
         return $this->_responseBody;
@@ -365,15 +353,15 @@ abstract class CAS_Request_AbstractRequest implements CAS_Request_RequestInterfa
      * Answer a message describing any errors if the request failed.
      *
      * @return string
-     * @throws CAS_OutOfSequenceException If called before the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called before the Request has been sent
      */
     public function getErrorMessage()
     {
         if (!$this->_sent) {
-            throw new CAS_OutOfSequenceException(
-                'Request has not been sent yet. Cannot '.__METHOD__
-            );
+            throw new CAS_OutOfSequenceException('Request has not been sent yet. Cannot '.__METHOD__);
         }
+
         return $this->_errorMessage;
     }
 }

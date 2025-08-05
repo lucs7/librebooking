@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Pages/Reservation/ReservationPage.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenter.php');
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Pages/Reservation/ReservationPage.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationPresenter.php';
 
 interface IRequestedResourcePage
 {
@@ -43,6 +43,7 @@ class NewReservationPage extends ReservationPage implements INewReservationPage
     protected function GetPresenter()
     {
         $this->LoadInitializerFactory();
+
         return new ReservationPresenter(
             $this,
             $this->LoadInitializerFactory(),
@@ -78,6 +79,7 @@ class NewReservationPage extends ReservationPage implements INewReservationPage
         if (empty($dateTimeString)) {
             return null;
         }
+
         return new Date($dateTimeString, $timezone);
     }
 
@@ -89,6 +91,7 @@ class NewReservationPage extends ReservationPage implements INewReservationPage
         if (empty($dateTimeString)) {
             return null;
         }
+
         return new Date($dateTimeString, $timezone);
     }
 
@@ -100,6 +103,7 @@ class NewReservationPage extends ReservationPage implements INewReservationPage
         if (empty($dateTimeString)) {
             return null;
         }
+
         return new Date($dateTimeString, $timezone);
     }
 

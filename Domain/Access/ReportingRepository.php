@@ -1,24 +1,21 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/ReportCommandBuilder.php');
-require_once(ROOT_DIR . 'Domain/SavedReport.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Domain/Access/ReportCommandBuilder.php';
+require_once ROOT_DIR.'Domain/SavedReport.php';
 
 interface IReportingRepository
 {
     /**
-     * @param ReportCommandBuilder $commandBuilder
      * @return array
      */
     public function GetCustomReport(ReportCommandBuilder $commandBuilder);
 
-    /**
-     * @param SavedReport $savedReport
-     */
     public function SaveCustomReport(SavedReport $savedReport);
 
     /**
      * @param int $userId
+     *
      * @return array|SavedReport[]
      */
     public function LoadSavedReportsForUser($userId);
@@ -26,6 +23,7 @@ interface IReportingRepository
     /**
      * @param int $reportId
      * @param int $userId
+     *
      * @return SavedReport
      */
     public function LoadSavedReportForUser($reportId, $userId);
@@ -40,7 +38,6 @@ interface IReportingRepository
 class ReportingRepository implements IReportingRepository
 {
     /**
-     * @param ReportCommandBuilder $commandBuilder
      * @return array
      */
     public function GetCustomReport(ReportCommandBuilder $commandBuilder)
@@ -64,7 +61,6 @@ class ReportingRepository implements IReportingRepository
     }
 
     /**
-     * @param $userId
      * @return array|SavedReport[]
      */
     public function LoadSavedReportsForUser($userId)
@@ -88,6 +84,7 @@ class ReportingRepository implements IReportingRepository
     /**
      * @param int $reportId
      * @param int $userId
+     *
      * @return SavedReport
      */
     public function LoadSavedReportForUser($reportId, $userId)
@@ -96,6 +93,7 @@ class ReportingRepository implements IReportingRepository
 
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return SavedReport::FromDatabase(
                 $row[ColumnNames::REPORT_NAME],
                 $row[ColumnNames::USER_ID],
@@ -105,6 +103,7 @@ class ReportingRepository implements IReportingRepository
             );
         }
         $reader->Free();
+
         return null;
     }
 

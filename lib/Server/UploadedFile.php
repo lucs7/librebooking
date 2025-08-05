@@ -47,6 +47,7 @@ class UploadedFile
     public function Extension()
     {
         $info = pathinfo($this->OriginalName());
+
         return $info['extension'];
     }
 
@@ -65,7 +66,7 @@ class UploadedFile
 
     public function IsError()
     {
-        return $this->file['error'] != UPLOAD_ERR_OK;
+        return UPLOAD_ERR_OK != $this->file['error'];
     }
 
     public function Error()
@@ -77,7 +78,7 @@ class UploadedFile
             UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded',
             UPLOAD_ERR_NO_FILE => 'No file was uploaded',
             UPLOAD_ERR_NO_TMP_DIR => 'Missing temporary storage folder',
-            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk, check folder permissions of configured upload directory'
+            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk, check folder permissions of configured upload directory',
         ];
 
         return $messages[$this->file['error']];
@@ -85,22 +86,25 @@ class UploadedFile
 
     /**
      * @static
+     *
      * @return int
      */
     public static function GetMaxSize()
     {
-        $max_upload = (int)(ini_get('upload_max_filesize'));
-        $max_post = (int)(ini_get('post_max_size'));
-        $memory_limit = (int)(ini_get('memory_limit'));
+        $max_upload = (int) ini_get('upload_max_filesize');
+        $max_post = (int) ini_get('post_max_size');
+        $memory_limit = (int) ini_get('memory_limit');
+
         return min($max_upload, $max_post, $memory_limit);
     }
 
     /**
      * @static
+     *
      * @return int
      */
     public static function GetMaxUploadCount()
     {
-        return (int)(ini_get('max_file_uploads'));
+        return (int) ini_get('max_file_uploads');
     }
 }

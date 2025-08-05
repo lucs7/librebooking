@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Validation/namespace.php';
 
 class AccessoryResourceRuleTest extends TestBase
 {
@@ -39,7 +39,7 @@ class AccessoryResourceRuleTest extends TestBase
         $this->assertTrue($result->IsValid());
     }
 
-    public function testRuleIsValidIfAccessoryIsTiedToResource_AndQuantityIsMet()
+    public function testRuleIsValidIfAccessoryIsTiedToResourceAndQuantityIsMet()
     {
         $resourceId = 1;
 
@@ -59,7 +59,7 @@ class AccessoryResourceRuleTest extends TestBase
         $this->assertTrue($result->IsValid());
     }
 
-    public function testRuleIsValidIfAccessoryTiedToMultipleResources_WithNoMinQuantity_AndAtLeastOneResourcePresent()
+    public function testRuleIsValidIfAccessoryTiedToMultipleResourcesWithNoMinQuantityAndAtLeastOneResourcePresent()
     {
         $resourceId = 1;
         $accessoryId = 1;
@@ -78,7 +78,7 @@ class AccessoryResourceRuleTest extends TestBase
         $this->assertTrue($result->IsValid(), $result->ErrorMessage());
     }
 
-    public function testRuleNotValidIfTiedToResource_AndAccessoryIsBeingReserved_AndResourceNotPresent()
+    public function testRuleNotValidIfTiedToResourceAndAccessoryIsBeingReservedAndResourceNotPresent()
     {
         $resourceId = 1;
         $accessoryId = 1;
@@ -96,7 +96,7 @@ class AccessoryResourceRuleTest extends TestBase
         $this->assertFalse($result->IsValid());
     }
 
-    public function testRuleIsNotValidIfTiedToResource_AndQuantityMinimumIsNotMet()
+    public function testRuleIsNotValidIfTiedToResourceAndQuantityMinimumIsNotMet()
     {
         $resourceId = 1;
         $accessoryId = 1;
@@ -114,7 +114,7 @@ class AccessoryResourceRuleTest extends TestBase
         $this->assertFalse($result->IsValid());
     }
 
-    public function testRuleIsNotValidIfTiedToResource_AndQuantityMaximumIsNotMet()
+    public function testRuleIsNotValidIfTiedToResourceAndQuantityMaximumIsNotMet()
     {
         $resourceId = 1;
         $accessoryId = 1;
@@ -132,7 +132,7 @@ class AccessoryResourceRuleTest extends TestBase
         $this->assertFalse($result->IsValid());
     }
 
-    public function testRuleIsValidWhenAccessoryNotOnReservation_AndTiedToResource()
+    public function testRuleIsValidWhenAccessoryNotOnReservationAndTiedToResource()
     {
         $resourceId = 1;
         $reservation = new TestReservationSeries();
@@ -153,7 +153,7 @@ class AccessoryResourceRuleTest extends TestBase
         $this->assertTrue($result->IsValid(), $result->ErrorMessage());
     }
 
-    public function testRuleIsNotValidIfAccessoryTiedToResources_ButNoneArePresent()
+    public function testRuleIsNotValidIfAccessoryTiedToResourcesButNoneArePresent()
     {
         $resourceId = 1;
         $accessoryId = 1;

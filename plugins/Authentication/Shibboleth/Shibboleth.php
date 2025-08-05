@@ -1,10 +1,11 @@
 <?php
+
 /**
  * @file Shibboleth.php
  */
 
-require_once ROOT_DIR . 'lib/Application/Authentication/namespace.php';
-require_once ROOT_DIR . 'plugins/Authentication/Shibboleth/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'plugins/Authentication/Shibboleth/namespace.php';
 
 /**
  * Shibboleth implementation of LibreBooking's authentication interface.
@@ -18,7 +19,6 @@ class Shibboleth extends Authentication
     /**
      * @var IAuthentication
      */
-
     protected $authToDecorate;
     /**
      * @var Registration
@@ -38,7 +38,7 @@ class Shibboleth extends Authentication
     /**
      * Constructor.
      *
-     * @param IAuthentication $authentication Authentication class to decorate.
+     * @param IAuthentication $authentication authentication class to decorate
      */
     public function __construct(IAuthentication $authentication)
     {
@@ -52,9 +52,10 @@ class Shibboleth extends Authentication
     {
         $user = $this->GetShibbolethUser();
         $uid = $user->GetUsername();
-        if (! empty($uid)) {
+        if (!empty($uid)) {
             return true;
         }
+
         return false;
     }
 
@@ -149,12 +150,12 @@ class Shibboleth extends Authentication
      */
     protected function GetRegistration()
     {
-        if (! isset($this->_registration)) {
+        if (!isset($this->_registration)) {
             $this->_registration = new Registration();
         }
+
         return $this->_registration;
     }
-
 
     /**
      * Retrieves the plugin runtime configuration.
@@ -163,9 +164,10 @@ class Shibboleth extends Authentication
      */
     protected function GetConfiguration()
     {
-        if (! isset($this->_config)) {
+        if (!isset($this->_config)) {
             $this->_config = new ShibbolethOptions();
         }
+
         return $this->_config;
     }
 
@@ -176,11 +178,12 @@ class Shibboleth extends Authentication
      */
     protected function GetShibbolethUser()
     {
-        if (! isset($this->_user)) {
+        if (!isset($this->_user)) {
             // user attributes are passed in the global $_SERVER array, get them from there.
-            $config =  $this->GetConfiguration();
+            $config = $this->GetConfiguration();
             $this->_user = new ShibbolethUser($_SERVER, $config);
         }
+
         return $this->_user;
     }
 }

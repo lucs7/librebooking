@@ -1,14 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageReservationsPage.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/ReservationImportCsv.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/CsvImportResult.php');
-require_once(ROOT_DIR . 'lib/FileSystem/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/ManageReservationsPage.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Admin/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'lib/Application/Admin/ReservationImportCsv.php';
+require_once ROOT_DIR.'lib/Application/Admin/CsvImportResult.php';
+require_once ROOT_DIR.'lib/FileSystem/namespace.php';
 
 class ManageReservationsActions
 {
@@ -64,7 +64,7 @@ class ManageReservationsPresenter extends ActionPresenter
         IResourceRepository $resourceRepository,
         IAttributeService $attributeService,
         IUserRepository $userRepository,
-        ITermsOfServiceRepository $termsOfServiceRepository
+        ITermsOfServiceRepository $termsOfServiceRepository,
     ) {
         parent::__construct($page);
 
@@ -144,8 +144,8 @@ class ManageReservationsPresenter extends ActionPresenter
                 $filters[$filter->Id] = $filter->Value;
             }
 
-            $filterPreferences->SetFilterStartDateDelta($startOffset == null ? -14 : $startOffset);
-            $filterPreferences->SetFilterEndDateDelta($endOffset == null ? 14 : $endOffset);
+            $filterPreferences->SetFilterStartDateDelta(null == $startOffset ? -14 : $startOffset);
+            $filterPreferences->SetFilterEndDateDelta(null == $endOffset ? 14 : $endOffset);
             $filterPreferences->SetFilterReferenceNumber($referenceNumber);
             $filterPreferences->SetFilterScheduleId($scheduleId);
             $filterPreferences->SetFilterResourceId($resourceId);
@@ -228,7 +228,7 @@ class ManageReservationsPresenter extends ActionPresenter
             $seriesIds[] = $reservationItemView->SeriesId;
         }
 
-        if ($this->page->GetFormat() == 'csv') {
+        if ('csv' == $this->page->GetFormat()) {
             $this->page->ShowCsv();
         } else {
             $this->page->ShowPage();
@@ -258,8 +258,9 @@ class ManageReservationsPresenter extends ActionPresenter
             return null;
         }
 
-        $today = Date::Create(Date('Y'), Date('m'), Date('d'), 0, 0, 0, $timezone);
+        $today = Date::Create(date('Y'), date('m'), date('d'), 0, 0, 0, $timezone);
         $diff = DateDiff::BetweenDates($today, $date);
+
         return $diff->Days();
     }
 
@@ -324,7 +325,7 @@ class ManageReservationsPresenter extends ActionPresenter
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest == 'load') {
+        if ('load' == $dataRequest) {
             $referenceNumber = $this->page->GetReferenceNumber();
 
             $rv = $this->manageReservationsService->LoadByReferenceNumber(
@@ -332,7 +333,7 @@ class ManageReservationsPresenter extends ActionPresenter
                 ServiceLocator::GetServer()->GetUserSession()
             );
             $this->page->SetReservationJson($rv);
-        } elseif ($dataRequest == 'template') {
+        } elseif ('template' == $dataRequest) {
             $attributes = $this->attributeService->GetByCategory(CustomAttributeCategory::RESERVATION);
             $importAttributes = [];
             foreach ($attributes as $attribute) {
@@ -341,10 +342,10 @@ class ManageReservationsPresenter extends ActionPresenter
                 }
             }
             $this->page->ShowTemplateCSV($importAttributes);
-        } elseif ($dataRequest == 'tos') {
+        } elseif ('tos' == $dataRequest) {
             $terms = $this->termsOfServiceRepository->Load();
 
-            if ($terms != null) {
+            if (null != $terms) {
                 $this->page->BindTerms(
                     [
                         'text' => $terms->Text(),
@@ -401,6 +402,7 @@ class ManageReservationsPresenter extends ActionPresenter
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             $this->page->SetImportResult(new CsvImportResult(0, [], 'User is not an admin'));
+
             return;
         }
 
@@ -438,12 +440,13 @@ class ManageReservationsPresenter extends ActionPresenter
 
         $rows = $csv->GetRows();
 
-        if (count($rows) == 0) {
+        if (0 == count($rows)) {
             $this->page->SetImportResult(new CsvImportResult(0, [], 'Empty file or missing header row'));
+
             return;
         }
 
-        for ($i = 0; $i < count($rows); $i++) {
+        for ($i = 0; $i < count($rows); ++$i) {
             $rowNum = $i + 1;
             $row = $rows[$i];
             try {
@@ -462,7 +465,7 @@ class ManageReservationsPresenter extends ActionPresenter
                 if (!empty($resources) && !empty($user)) {
                     $reservation = ReservationSeries::Create($user->Id(), $resources[0], $row->title, $row->description, $date, new RepeatNone(), $userSession);
 
-                    for ($r = 1; $r < count($resources); $r++) {
+                    for ($r = 1; $r < count($resources); ++$r) {
                         $reservation->AddResource($resources[$r]);
                     }
 
@@ -475,12 +478,12 @@ class ManageReservationsPresenter extends ActionPresenter
 
                     $this->manageReservationsService->UnsafeAdd($reservation);
 
-                    $importCount++;
+                    ++$importCount;
                 } else {
-                    $messages[] = 'Invalid data in row ' . $rowNum . '. Ensure the user and resource in this row exist.';
+                    $messages[] = 'Invalid data in row '.$rowNum.'. Ensure the user and resource in this row exist.';
                 }
             } catch (Exception $ex) {
-                $messages[] = 'Invalid data in row ' . $rowNum;
+                $messages[] = 'Invalid data in row '.$rowNum;
                 Log::Error('Error importing reservations. %s', $ex);
             }
         }
@@ -507,16 +510,16 @@ class ManageReservationsPresenter extends ActionPresenter
         $termsText = null;
         $termsUrl = null;
 
-        if ($source == 'manual') {
+        if ('manual' == $source) {
             $termsText = $this->page->GetTermsText();
-        } elseif ($source == 'url') {
+        } elseif ('url' == $source) {
             $termsUrl = $this->page->GetTermsUrl();
         } else {
             $file = $this->page->GetTermsUpload();
 
-            if ($file != null && $file->Extension() == 'pdf') {
+            if (null != $file && 'pdf' == $file->Extension()) {
                 $filename = 'tos.pdf';
-                $fileSystem = new \Booked\FileSystem();
+                $fileSystem = new Booked\FileSystem();
                 $fileSystem->Save(Paths::Terms(), $filename, $file->Contents());
             }
         }
@@ -535,7 +538,7 @@ class ManageReservationsPresenter extends ActionPresenter
     {
         Log::Debug('Loading validators for %s', $action);
 
-        if ($action == ManageReservationsActions::Import) {
+        if (ManageReservationsActions::Import == $action) {
             $this->page->RegisterValidator('fileExtensionValidator', new FileExtensionValidator('csv', $this->page->GetImportFile()));
         }
     }
@@ -762,7 +765,6 @@ class ReservationFilterPreferences
         'FilterMissedCheckin' => 0,
         'FilterMissedCheckout' => 0,
     ];
-
 
     public function Load()
     {

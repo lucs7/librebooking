@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
+require_once ROOT_DIR.'lib/Email/Messages/ReservationEmailMessage.php';
 
 class ReservationShareEmail extends ReservationEmailMessage
 {

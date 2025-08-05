@@ -48,7 +48,7 @@ class Announcement
      */
     public function Priority()
     {
-        return empty($this->Priority) ? null : (int)$this->Priority;
+        return empty($this->Priority) ? null : (int) $this->Priority;
     }
 
     /**
@@ -108,13 +108,13 @@ class Announcement
 
     /**
      * @static
+     *
      * @param string $text
-     * @param Date $start
-     * @param Date $end
-     * @param int $priority
-     * @param int[] $groupIds
-     * @param int[] $resourceIds
-     * @param int $displayPage
+     * @param int    $priority
+     * @param int[]  $groupIds
+     * @param int[]  $resourceIds
+     * @param int    $displayPage
+     *
      * @return Announcement
      */
     public static function Create($text, Date $start, Date $end, $priority, $groupIds, $resourceIds, $displayPage)
@@ -122,6 +122,7 @@ class Announcement
         if (empty($priority)) {
             $priority = null;
         }
+
         return new Announcement(null, $text, $start, $end, $priority, $groupIds, $resourceIds, $displayPage);
     }
 
@@ -133,10 +134,6 @@ class Announcement
         $this->Text = $text;
     }
 
-    /**
-     * @param Date $start
-     * @param Date $end
-     */
     public function SetDates(Date $start, Date $end)
     {
         $this->Start = $start;
@@ -168,8 +165,6 @@ class Announcement
     }
 
     /**
-     * @param UserSession $user
-     * @param IPermissionService $permissionService
      * @return bool
      */
     public function AppliesToUser(UserSession $user, IPermissionService $permissionService)
@@ -202,7 +197,7 @@ class Announcement
      */
     public function CanEmail()
     {
-        return $this->DisplayPage() == 1;
+        return 1 == $this->DisplayPage();
     }
 }
 

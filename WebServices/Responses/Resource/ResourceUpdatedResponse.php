@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class ResourceUpdatedResponse extends RestResponse
 {

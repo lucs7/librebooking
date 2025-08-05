@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/PaymentGateway.php');
+require_once ROOT_DIR.'Domain/PaymentGateway.php';
 
 class FakePaymentTransactionLogger implements IPaymentTransactionLogger
 {

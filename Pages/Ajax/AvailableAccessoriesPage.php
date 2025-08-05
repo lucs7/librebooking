@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/AvailableAccessoriesPresenter.php');
+require_once ROOT_DIR.'Presenters/AvailableAccessoriesPresenter.php';
 
 interface IAvailableAccessoriesPage
 {

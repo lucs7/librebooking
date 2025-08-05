@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'plugins/Authentication/ActiveDirectory/ActiveDirectoryOptions.php');
+require_once ROOT_DIR.'plugins/Authentication/ActiveDirectory/ActiveDirectoryOptions.php';
 
 class FakeActiveDirectoryOptions extends ActiveDirectoryOptions
 {

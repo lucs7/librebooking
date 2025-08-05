@@ -1,47 +1,54 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/CustomAttribute.php');
+require_once ROOT_DIR.'Domain/CustomAttribute.php';
 
 interface IAttributeRepository
 {
     /**
      * @abstract
-     * @param CustomAttribute $attribute
+     *
      * @return int
      */
     public function Add(CustomAttribute $attribute);
 
     /**
      * @abstract
+     *
      * @param $attributeId int
+     *
      * @return CustomAttribute
      */
     public function LoadById($attributeId);
 
     /**
      * @abstract
-     * @param CustomAttribute $attribute
      */
     public function Update(CustomAttribute $attribute);
 
     /**
      * @abstract
+     *
      * @param $attributeId int
+     *
      * @return void
      */
     public function DeleteById($attributeId);
 
     /**
      * @abstract
+     *
      * @param int|CustomAttributeCategory $category
+     *
      * @return array|CustomAttribute[]
      */
     public function GetByCategory($category);
 
     /**
      * @abstract
+     *
      * @param int|CustomAttributeCategory $category
-     * @param array|int[] $entityIds if null is passed, get all entity values
+     * @param array|int[]                 $entityIds if null is passed, get all entity values
+     *
      * @return array|AttributeEntityValue[]
      */
     public function GetEntityValues($category, $entityIds = null);
@@ -86,6 +93,7 @@ class AttributeRepository implements IAttributeRepository
 
     /**
      * @param int|CustomAttributeCategory $category
+     *
      * @return array|CustomAttribute[]
      */
     public function GetByCategory($category)
@@ -107,6 +115,7 @@ class AttributeRepository implements IAttributeRepository
 
     /**
      * @param $attributeId int
+     *
      * @return CustomAttribute
      */
     public function LoadById($attributeId)
@@ -119,12 +128,10 @@ class AttributeRepository implements IAttributeRepository
         }
 
         $reader->Free();
+
         return $attribute;
     }
 
-    /**
-     * @param CustomAttribute $attribute
-     */
     public function Update(CustomAttribute $attribute)
     {
         $db = ServiceLocator::GetDatabase();
@@ -154,7 +161,8 @@ class AttributeRepository implements IAttributeRepository
 
     /**
      * @param int|CustomAttributeCategory $category
-     * @param int[]|int $entityIds
+     * @param int[]|int                   $entityIds
+     *
      * @return array|AttributeEntityValue[]
      */
     public function GetEntityValues($category, $entityIds = null)
@@ -182,6 +190,7 @@ class AttributeRepository implements IAttributeRepository
         }
 
         $reader->Free();
+
         return $values;
     }
 

@@ -1,7 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/PaymentGateway.php');
-
+require_once ROOT_DIR.'Domain/PaymentGateway.php';
 
 class FakeStripeGateway extends StripeGateway
 {
@@ -28,6 +27,7 @@ class FakeStripeGateway extends StripeGateway
     {
         $this->_LastTransactionView = $log;
         $this->_LastRefundAmount = $amount;
+
         return $this->_Refunded;
     }
 }

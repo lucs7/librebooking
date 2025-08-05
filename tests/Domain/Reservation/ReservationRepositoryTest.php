@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class ReservationRepositoryTest extends TestBase
 {
@@ -537,8 +537,8 @@ class ReservationRepositoryTest extends TestBase
     public function testChangingOnlySharedInformationForFullSeriesJustUpdatesSeriesTable()
     {
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
         $allowParticipation = true;
 
         $builder = new ExistingReservationSeriesBuilder();
@@ -576,8 +576,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -596,7 +596,7 @@ class ReservationRepositoryTest extends TestBase
 
         $this->repository->Update($existingReservation);
 
-        $this->assertEquals(new AdjustUserCreditsCommand($userId, 2, 'ReservationUpdatedLog' . $existingReservation->CurrentInstance()->ReferenceNumber()), $this->db->_Commands[1], 'was taking 10, required 12');
+        $this->assertEquals(new AdjustUserCreditsCommand($userId, 2, 'ReservationUpdatedLog'.$existingReservation->CurrentInstance()->ReferenceNumber()), $this->db->_Commands[1], 'was taking 10, required 12');
     }
 
     public function testWhenCreditsConsumedDecreases()
@@ -605,8 +605,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -625,7 +625,7 @@ class ReservationRepositoryTest extends TestBase
 
         $this->repository->Update($existingReservation);
 
-        $this->assertEquals(new AdjustUserCreditsCommand($userId, -2, 'ReservationUpdatedLog' . $existingReservation->CurrentInstance()->ReferenceNumber()), $this->db->_Commands[1], 'was taking 10, required 12');
+        $this->assertEquals(new AdjustUserCreditsCommand($userId, -2, 'ReservationUpdatedLog'.$existingReservation->CurrentInstance()->ReferenceNumber()), $this->db->_Commands[1], 'was taking 10, required 12');
     }
 
     public function testDoesNotDeductCreditsForPastInstances()
@@ -633,8 +633,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -653,7 +653,7 @@ class ReservationRepositoryTest extends TestBase
 
         $this->repository->Update($existingReservation);
 
-        $this->assertTrue(count($this->db->GetCommandsOfType('AdjustUserCreditsCommand')) == 0);
+        $this->assertTrue(0 == count($this->db->GetCommandsOfType('AdjustUserCreditsCommand')));
     }
 
     public function testDoesNotDeductCreditsForWhenNoChangeInCredits()
@@ -661,8 +661,8 @@ class ReservationRepositoryTest extends TestBase
         $layout = new FakeScheduleLayout();
         $layout->_SlotCount = new SlotCount(2, 2);
         $userId = 10;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
 
         $resource = new FakeBookableResource(1);
         $resource->SetCreditsPerSlot(2);
@@ -681,7 +681,7 @@ class ReservationRepositoryTest extends TestBase
 
         $this->repository->Update($existingReservation);
 
-        $this->assertTrue(count($this->db->GetCommandsOfType('AdjustUserCreditsCommand')) == 0);
+        $this->assertTrue(0 == count($this->db->GetCommandsOfType('AdjustUserCreditsCommand')));
     }
 
     public function testBranchedSingleInstance()
@@ -689,8 +689,8 @@ class ReservationRepositoryTest extends TestBase
         $seriesId = 10909;
         $userId = 10;
         $resourceId = 11;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
         $expectedRepeat = new RepeatNone();
         $referenceNumber = 'ref number current';
         $allowParticipation = true;
@@ -738,8 +738,8 @@ class ReservationRepositoryTest extends TestBase
         $newInstanceId2 = 2828;
         $userId = 10;
         $resourceId = 11;
-        $title = "new title";
-        $description = "new description";
+        $title = 'new title';
+        $description = 'new description';
         $allowParticipation = true;
 
         $dateRange = DateRange::Create('2010-01-10 05:30:00', '2010-01-10 08:30:00', 'UTC');
@@ -867,7 +867,7 @@ class ReservationRepositoryTest extends TestBase
         $this->repository->Delete($series);
 
         $deleteSeriesCommand = new DeleteSeriesCommand($series->SeriesId(), Date::Now(), $deletedBy->UserId);
-        $adjustCreditsCommand = new AdjustUserCreditsCommand($series->UserId(), -10, 'ReservationDeletedLog' . $series->CurrentInstance()->ReferenceNumber());
+        $adjustCreditsCommand = new AdjustUserCreditsCommand($series->UserId(), -10, 'ReservationDeletedLog'.$series->CurrentInstance()->ReferenceNumber());
 
         $this->assertEquals(2, count($this->db->_Commands));
         $this->assertTrue(in_array($deleteSeriesCommand, $this->db->_Commands));
@@ -877,8 +877,8 @@ class ReservationRepositoryTest extends TestBase
     public function testDeleteInstances()
     {
         $seriesId = 981;
-        $instance1 = new TestReservation("ref1");
-        $instance2 = new TestReservation("ref2");
+        $instance1 = new TestReservation('ref1');
+        $instance2 = new TestReservation('ref2');
 
         $builder = new ExistingReservationSeriesBuilder();
         $builder->WithEvent(new InstanceRemovedEvent($instance1, $builder->series));
@@ -1084,7 +1084,7 @@ class ReservationRepositoryTest extends TestBase
         $deleteAccessories = $this->db->GetCommandsOfType('RemoveReservationAccessoryCommand');
 
         $this->assertTrue($this->db->ContainsCommand(new AddReservationUserCommand($instance->ReservationId(), $newUserId, ReservationUserLevel::OWNER)));
-        $this->assertEquals(count($series->AdditionalResources()), count($addResources), "dont want to double add");
+        $this->assertEquals(count($series->AdditionalResources()), count($addResources), 'dont want to double add');
         $this->assertEquals(count($series->Accessories()), count($addAccessories));
         $this->assertEquals(1, count($deleteResources));
         $this->assertEquals(0, count($deleteAccessories));
@@ -1179,7 +1179,7 @@ class ReservationRepositoryTest extends TestBase
             ColumnNames::FILE_NAME => $fileName,
             ColumnNames::FILE_SIZE => $fileSize,
             ColumnNames::FILE_TYPE => $fileType,
-            ColumnNames::SERIES_ID => $seriesId]
+            ColumnNames::SERIES_ID => $seriesId],
         ]);
 
         $command = new GetReservationAttachmentCommand($attachmentId);
@@ -1188,7 +1188,7 @@ class ReservationRepositoryTest extends TestBase
         $this->assertEquals($command, $this->db->_LastCommand);
         $this->assertEquals($expectedAttachment, $actualAttachment);
         $this->assertEquals(
-            $this->fileSystem->GetReservationAttachmentsPath() . "$attachmentId.$fileExtension",
+            $this->fileSystem->GetReservationAttachmentsPath()."$attachmentId.$fileExtension",
             $this->fileSystem->_ContentsPath
         );
     }
@@ -1251,7 +1251,7 @@ class ReservationRepositoryTest extends TestBase
         $this->assertTrue($this->db->ContainsCommand($command2));
         $this->assertEquals(2, count($this->fileSystem->_RemovedFiles));
         $this->assertTrue(in_array(
-            $this->fileSystem->GetReservationAttachmentsPath() . "$fileId2.$fileExt2",
+            $this->fileSystem->GetReservationAttachmentsPath()."$fileId2.$fileExt2",
             $this->fileSystem->_RemovedFiles
         ));
     }

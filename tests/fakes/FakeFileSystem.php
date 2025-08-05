@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/FileSystem/namespace.php');
+require_once ROOT_DIR.'lib/FileSystem/namespace.php';
 
-class FakeFileSystem implements \Booked\IFileSystem
+class FakeFileSystem implements Booked\IFileSystem
 {
     /**
      * @var string
@@ -52,18 +52,21 @@ class FakeFileSystem implements \Booked\IFileSystem
         $this->_AddedFilePath = $path;
         $this->_AddedFileName = $fileName;
         $this->_AddedFileContents = $fileContents;
+
         return $this->_Saved;
     }
 
     public function GetFileContents($fullPath)
     {
         $this->_ContentsPath = $fullPath;
+
         return is_array($this->_ExpectedContents) ? $this->_ExpectedContents[$fullPath] : $this->_ExpectedContents;
     }
 
     public function RemoveFile($fullPath)
     {
         $this->_RemovedFiles[] = $fullPath;
+
         return $this->_Removed;
     }
 

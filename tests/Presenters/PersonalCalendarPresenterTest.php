@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/PersonalCalendarPage.php');
-require_once(ROOT_DIR . 'Presenters/Calendar/PersonalCalendarPresenter.php');
+require_once ROOT_DIR.'Pages/PersonalCalendarPage.php';
+require_once ROOT_DIR.'Presenters/Calendar/PersonalCalendarPresenter.php';
 
 class PersonalCalendarPresenterTest extends TestBase
 {
@@ -71,7 +71,7 @@ class PersonalCalendarPresenterTest extends TestBase
     {
         $userId = 10;
         $this->fakeUser->UserId = $userId;
-        $userTimezone = "America/New_York";
+        $userTimezone = 'America/New_York';
 
         $calendarType = CalendarTypes::Month;
 
@@ -88,7 +88,7 @@ class PersonalCalendarPresenterTest extends TestBase
 
         $resourceGroupTree = new ResourceGroupTree();
 
-        $schedules = [new Schedule(1, null, false, 2, null), new Schedule($defaultScheduleId, null, true, 3, null),];
+        $schedules = [new Schedule(1, null, false, 2, null), new Schedule($defaultScheduleId, null, true, 3, null)];
 
         $this->page
                 ->expects($this->atLeastOnce())

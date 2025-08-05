@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManagePaymentsPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/PaymentRepository.php');
-require_once(ROOT_DIR . 'Domain/Values/Currency.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Presenters/Admin/ManagePaymentsPresenter.php';
+require_once ROOT_DIR.'Domain/Access/PaymentRepository.php';
+require_once ROOT_DIR.'Domain/Values/Currency.php';
 
 interface IManagePaymentsPage extends IActionPage
 {
@@ -12,6 +12,7 @@ interface IManagePaymentsPage extends IActionPage
      * @return string
      */
     public function GetCreditCount();
+
     /**
      * @return string
      */
@@ -63,7 +64,7 @@ interface IManagePaymentsPage extends IActionPage
     public function GetStripeSecretKey();
 
     /**
-     * @param bool $enabled
+     * @param bool   $enabled
      * @param string $clientId
      * @param string $secret
      * @param string $environment
@@ -107,9 +108,6 @@ interface IManagePaymentsPage extends IActionPage
      */
     public function GetRefundAmount();
 
-    /**
-     * @param TransactionLogView $transactionLogView
-     */
     public function BindTransactionLogView(TransactionLogView $transactionLogView);
 
     /**
@@ -151,7 +149,7 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
     {
         $paymentsEnabled = Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ALLOW_PURCHASE, new BooleanConverter());
 
-        $this->Set('Currencies', \Booked\Currency::Currencies());
+        $this->Set('Currencies', Booked\Currency::Currencies());
         $this->Set('PaymentsEnabled', $paymentsEnabled);
         $this->presenter->PageLoad();
         $this->Display('Admin/Payments/manage_payments.tpl');
@@ -214,7 +212,7 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
 
     public function SetPayPalSettings($enabled, $clientId, $secret, $environment)
     {
-        $this->Set('PayPalEnabled', (int)$enabled);
+        $this->Set('PayPalEnabled', (int) $enabled);
         $this->Set('PayPalClientId', $clientId);
         $this->Set('PayPalSecret', $secret);
         $this->Set('PayPalEnvironment', $environment);
@@ -222,7 +220,7 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
 
     public function SetStripeSettings($enabled, $publishableKey, $secretKey)
     {
-        $this->Set('StripeEnabled', (int)$enabled);
+        $this->Set('StripeEnabled', (int) $enabled);
         $this->Set('StripePublishableKey', $publishableKey);
         $this->Set('StripeSecretKey', $secretKey);
     }

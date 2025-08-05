@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationUpdatePresenter.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationUpdatePage.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationUpdatePresenter.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationUpdatePage.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ReservationUpdatePresenterTest extends TestBase
 {
@@ -111,19 +111,19 @@ class ReservationUpdatePresenterTest extends TestBase
         $this->resourceRepository->expects($this->exactly(3))
                                  ->method('LoadById')
                                  ->willReturnMap(
-                                 [
-                                     [$this->page->resourceId, $resource],
-                                     [$additionalId1, $additional1],
-                                     [$additionalId2, $additional2]
-                                 ]);
+                                     [
+                                         [$this->page->resourceId, $resource],
+                                         [$additionalId1, $additional1],
+                                         [$additionalId2, $additional2],
+                                     ]);
 
         $this->page->repeatType = RepeatType::Daily;
         $roFactory = new RepeatOptionsFactory();
         $repeatOptions = $roFactory->CreateFromComposite($this->page, $this->user->Timezone);
 
         $expectedDuration = DateRange::Create(
-            $this->page->GetStartDate() . " " . $this->page->GetStartTime(),
-            $this->page->GetEndDate() . " " . $this->page->GetEndTime(),
+            $this->page->GetStartDate().' '.$this->page->GetStartTime(),
+            $this->page->GetEndDate().' '.$this->page->GetEndTime(),
             $timezone
         );
 
@@ -145,7 +145,6 @@ class ReservationUpdatePresenterTest extends TestBase
 
         $expectedAccessories = [new ReservationAccessory(1, 2, 'accessoryname')];
         $expectedAttributes = [1 => new AttributeValue(1, 'something')];
-
 
         $this->assertEquals($seriesId, $existingSeries->SeriesId());
         $this->assertEquals($this->page->seriesUpdateScope, $existingSeries->SeriesUpdateScope());

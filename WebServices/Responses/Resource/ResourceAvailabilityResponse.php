@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class ResourcesAvailabilityResponse extends RestResponse
 {
@@ -54,22 +54,21 @@ class ResourceAvailabilityResponse extends RestResponse
     public $availableUntil;
 
     /**
-     * @param IRestServer $server
-     * @param BookableResource $resource
+     * @param BookableResource         $resource
      * @param ReservationItemView|null $conflictingReservation
      * @param ReservationItemView|null $nextReservation
-     * @param Date|null $nextAvailableTime
-     * @param Date $lastDateSearched
+     * @param Date|null                $nextAvailableTime
+     * @param Date                     $lastDateSearched
      */
     public function __construct(IRestServer $server, $resource, $conflictingReservation, $nextReservation, $nextAvailableTime, $lastDateSearched)
     {
         $this->resource = new ResourceReference($server, $resource);
-        $this->available = $conflictingReservation == null;
+        $this->available = null == $conflictingReservation;
 
         $this->AddService($server, WebServices::GetResource, [WebServiceParams::ResourceId => $resource->GetId()]);
 
         if (!$this->available) {
-            $this->availableAt = $nextAvailableTime != null ? $nextAvailableTime->ToTimezone($server->GetSession()->Timezone)->ToIso() : null;
+            $this->availableAt = null != $nextAvailableTime ? $nextAvailableTime->ToTimezone($server->GetSession()->Timezone)->ToIso() : null;
 
             $this->AddService(
                 $server,
@@ -83,7 +82,7 @@ class ResourceAvailabilityResponse extends RestResponse
             );
         }
 
-        if ($nextReservation != null) {
+        if (null != $nextReservation) {
             $this->availableUntil = $nextReservation->BufferedTimes()->GetBegin()->ToTimezone($server->GetSession()->Timezone)->ToIso();
         } else {
             $this->availableUntil = $lastDateSearched->ToTimezone($server->GetSession()->Timezone)->ToIso();

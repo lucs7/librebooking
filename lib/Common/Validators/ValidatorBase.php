@@ -21,7 +21,7 @@ abstract class ValidatorBase implements IValidator
     }
 
     /**
-     * @return array|null|string[]
+     * @return array|string[]|null
      */
     public function Messages()
     {
@@ -46,7 +46,7 @@ abstract class ValidatorBase implements IValidator
 
     /**
      * @param string $resourceKey
-     * @param array $params
+     * @param array  $params
      */
     protected function AddMessageKey($resourceKey, $params = [])
     {

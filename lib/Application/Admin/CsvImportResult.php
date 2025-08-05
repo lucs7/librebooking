@@ -7,9 +7,9 @@ class CsvImportResult
     public $messages = [];
 
     /**
-     * @param $imported int
+     * @param $imported    int
      * @param $skippedRows int[]
-     * @param $messages string|string[]
+     * @param $messages    string|string[]
      */
     public function __construct($imported, $skippedRows, $messages)
     {

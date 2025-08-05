@@ -48,18 +48,14 @@ class BlackoutSlot implements IReservationSlot
     protected $_endPeriod;
 
     /**
-     * @param SchedulePeriod $begin
-     * @param SchedulePeriod $end
-     * @param Date $displayDate
      * @param int $periodSpan
-     * @param BlackoutItemView $blackout
      */
     public function __construct(
         SchedulePeriod $begin,
         SchedulePeriod $end,
         Date $displayDate,
         $periodSpan,
-        BlackoutItemView $blackout
+        BlackoutItemView $blackout,
     ) {
         $this->blackout = $blackout;
         $this->begin = $begin->BeginDate();

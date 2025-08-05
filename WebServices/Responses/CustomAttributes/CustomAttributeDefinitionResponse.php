@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class CustomAttributeDefinitionResponse extends RestResponse
 {
@@ -122,6 +122,6 @@ class ExampleCustomAttributeDefinitionResponse extends CustomAttributeDefinition
         $this->adminOnly = true;
         $this->isPrivate = true;
         $this->secondaryCategoryId = 1;
-        $this->secondaryEntityIds = [1,2];
+        $this->secondaryEntityIds = [1, 2];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_us.php');
+require_once 'Language.php';
+require_once 'en_us.php';
 
 class it_it extends en_us
 {
@@ -13,7 +13,6 @@ class it_it extends en_us
     /**
      * @return array
      */
-
     protected function _LoadDates()
     {
         $dates = parent::_LoadDates();
@@ -27,9 +26,9 @@ class it_it extends en_us
         $dates['reservation_email'] = 'd/m/Y @ H:i (e)';
         $dates['res_popup'] = 'd/m/Y H:i';
         $dates['dashboard'] = 'l, d/m/Y H:i';
-        $dates['period_time'] = "H:i";
+        $dates['period_time'] = 'H:i';
         $dates['timepicker'] = 'H:i';
-        $dates['general_date_js'] = "dd/mm/yy";
+        $dates['general_date_js'] = 'dd/mm/yy';
         $dates['short_datetime'] = 'j/n/y H:i';
         $dates['schedule_daily'] = 'l, d/m/Y';
         $dates['res_popup_time'] = 'D, d/n H:i';
@@ -39,10 +38,11 @@ class it_it extends en_us
         $dates['timepicker_js'] = 'H:i';
         $dates['momentjs_datetime'] = 'D/M/YY H:mm';
         $dates['calendar_time'] = 'H:mm';
-        $dates['calendar_dates'] = 'd '.(preg_replace('/(.)(.)(.)/i', '\$1\$2\$3', date("M")));
+        $dates['calendar_dates'] = 'd '.preg_replace('/(.)(.)(.)/i', '\$1\$2\$3', date('M'));
         $dates['report_date'] = '%d/%m';
 
         $this->Dates = $dates;
+
         return $this->Dates;
     }
 
@@ -1016,8 +1016,8 @@ class it_it extends en_us
         $strings['ReservationParticipantJoin'] = '%s si è unito alla sua prenotazione per %s il %s';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Non hai prenotazioni passate';
         $strings['PastReservations'] = 'Prenotazioni passate';
         $strings['AllNoPastReservations'] = 'Non ci sono prenotazioni passate nei precedenti %s giorni';
@@ -1025,35 +1025,34 @@ class it_it extends en_us
         $strings['Yesterday'] = 'Ieri';
         $strings['EarlierThisWeek'] = 'All\'inizio di questa settimana';
         $strings['PreviousWeek'] = 'Settimana precedente';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Il tuo gruppo non ha prenotazioni future';
         $strings['GroupUpcomingReservations'] = 'Prossime prenotazioni del mio(i) gruppo(i)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Si è verificato un errore durante l\'accesso con Facebook. Riprova.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Non hai prenotazioni in attesa di approvazione';
         $strings['PendingApprovalReservations'] = 'Prenotazioni in attesa di approvazione';
         $strings['LaterThisMonth'] = 'Più tardi questo mese';
         $strings['LaterThisYear'] = 'Più tardi quest\'anno';
         $strings['Remaining'] = 'Rimanenti';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Non ci sono prenotazioni mancanti per il check out';
-        $strings['MissingCheckOutReservations'] = 'Prenotazioni mancanti per il check out';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Prenotazioni mancanti per il check out';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Impossibile visualizzare i dettagli della prenotazione perché non hai le autorizzazioni per nessuna delle risorse in questa prenotazione';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

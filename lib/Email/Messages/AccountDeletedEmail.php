@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
 
 class AccountDeletedEmail extends EmailMessage
 {
@@ -49,6 +49,7 @@ class AccountDeletedEmail extends EmailMessage
     {
         $this->Set('UserFullName', $this->deletedUser->FullName());
         $this->Set('AdminFullName', new FullName($this->userSession->FirstName, $this->userSession->LastName));
+
         return $this->FetchTemplate('AccountDeleted.tpl');
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/AnnouncementEmail.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
+require_once ROOT_DIR.'lib/Email/Messages/AnnouncementEmail.php';
 
 class ManageAnnouncementsActions
 {
@@ -40,21 +40,13 @@ class ManageAnnouncementsPresenter extends ActionPresenter
      */
     private $userViewRepository;
 
-    /**
-     * @param IManageAnnouncementsPage $page
-     * @param IAnnouncementRepository $announcementRepository
-     * @param IGroupViewRepository $groupViewRepository
-     * @param IResourceRepository $resourceRepository
-     * @param IPermissionService $permissionService
-     * @param IUserViewRepository $userViewRepository
-     */
     public function __construct(
         IManageAnnouncementsPage $page,
         IAnnouncementRepository $announcementRepository,
         IGroupViewRepository $groupViewRepository,
         IResourceRepository $resourceRepository,
         IPermissionService $permissionService,
-        IUserViewRepository $userViewRepository
+        IUserViewRepository $userViewRepository,
     ) {
         parent::__construct($page);
 
@@ -184,7 +176,7 @@ class ManageAnnouncementsPresenter extends ActionPresenter
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest == 'emailCount') {
+        if ('emailCount' == $dataRequest) {
             $announcementId = $this->page->GetAnnouncementId();
             $announcement = $this->announcementRepository->LoadById($announcementId);
             $user = ServiceLocator::GetServer()->GetUserSession();
@@ -193,8 +185,6 @@ class ManageAnnouncementsPresenter extends ActionPresenter
     }
 
     /**
-     * @param Announcement $announcement
-     * @param UserSession $user
      * @return UserItemView[]
      */
     private function GetUsersToSendTo(Announcement $announcement, UserSession $user)
@@ -211,6 +201,7 @@ class ManageAnnouncementsPresenter extends ActionPresenter
                 $allUsers[$user->Id] = $user;
                 $usersToSendTo[] = $user;
             }
+
             return $usersToSendTo;
         } else {
             $groupUserIds = [];

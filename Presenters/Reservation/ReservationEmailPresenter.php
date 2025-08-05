@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationEmailPage.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationShareEmail.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationEmailPage.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationShareEmail.php';
 
 class ReservationEmailPresenter
 {
@@ -38,7 +38,7 @@ class ReservationEmailPresenter
         IReservationRepository $reservationRepository,
         IUserRepository $userRepository,
         IAttributeRepository $attributeRepository,
-        IPermissionService $permissionService
+        IPermissionService $permissionService,
     ) {
         $this->page = $page;
         $this->userSession = $userSession;
@@ -57,6 +57,7 @@ class ReservationEmailPresenter
 
         if (!$this->HasPermissionToSend($existingSeries)) {
             Log::Debug('Attempting to email reservation but user does not have permission. Reference Number %s, UserId %s', $existingSeries->CurrentInstance()->ReferenceNumber(), $this->userSession->UserId);
+
             return;
         }
 

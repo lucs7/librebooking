@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Responses/UserItemResponse.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'WebServices/Responses/UserItemResponse.php';
 
 class UsersResponse extends RestResponse
 {
@@ -11,9 +11,8 @@ class UsersResponse extends RestResponse
     public $users = [];
 
     /**
-     * @param IRestServer $server
      * @param array|UserItemView[] $users
-     * @param array|string[] $attributeLabels
+     * @param array|string[]       $attributeLabels
      */
     public function __construct(IRestServer $server, $users, $attributeLabels)
     {

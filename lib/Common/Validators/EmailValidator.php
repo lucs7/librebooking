@@ -18,6 +18,7 @@ class EmailValidator extends ValidatorBase implements IValidator
         if (empty($this->email)) {
             $this->isValid = false;
             $this->AddMessageKey('ValidEmailRequired');
+
             return;
         }
 

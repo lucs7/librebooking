@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageBlackoutsPage.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/ManageBlackoutsPage.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ManageBlackoutsActions
 {
@@ -40,7 +40,7 @@ class ManageBlackoutsPresenter extends ActionPresenter
         IManageBlackoutsPage $page,
         IManageBlackoutsService $manageBlackoutsService,
         IScheduleRepository $scheduleRepository,
-        IResourceRepository $resourceRepository
+        IResourceRepository $resourceRepository,
     ) {
         parent::__construct($page);
 
@@ -125,7 +125,7 @@ class ManageBlackoutsPresenter extends ActionPresenter
         $endDate = $this->page->GetBlackoutEndDate();
         $endTime = $this->page->GetBlackoutEndTime();
 
-        $blackoutDate = DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $session->Timezone);
+        $blackoutDate = DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $session->Timezone);
 
         $title = $this->page->GetBlackoutTitle();
         $conflictAction = $this->page->GetBlackoutConflictAction();
@@ -168,18 +168,18 @@ class ManageBlackoutsPresenter extends ActionPresenter
         Log::Debug('Loading blackout for editing. Id=%s', $id);
         $series = $this->manageBlackoutsService->LoadBlackout($id, $session->UserId);
 
-        if ($series != null) {
+        if (null != $series) {
             $this->page->BindResources($this->resourceRepository->GetResourceList());
             $this->page->SetBlackoutResources($series->ResourceIds());
             $this->page->SetBlackoutId($id);
             $this->page->SetBlackoutStartDate($series->CurrentBlackout()->StartDate()->ToTimezone($session->Timezone));
             $this->page->SetBlackoutEndDate($series->CurrentBlackout()->EndDate()->ToTimezone($session->Timezone));
             $this->page->SetTitle($series->Title());
-            $this->page->SetIsRecurring($series->RepeatType() != RepeatType::None);
+            $this->page->SetIsRecurring(RepeatType::None != $series->RepeatType());
             $repeatConfiguration = $series->RepeatConfiguration();
             $this->page->SetRepeatInterval($repeatConfiguration->Interval);
             $this->page->SetRepeatMonthlyType($repeatConfiguration->MonthlyType);
-            if ($repeatConfiguration->TerminationDate != null) {
+            if (null != $repeatConfiguration->TerminationDate) {
                 $this->page->SetRepeatTerminationDate($repeatConfiguration->TerminationDate->ToTimezone($session->Timezone));
             }
             $this->page->SetRepeatType($repeatConfiguration->Type);
@@ -207,7 +207,7 @@ class ManageBlackoutsPresenter extends ActionPresenter
         $startTime = $this->page->GetBlackoutStartTime();
         $endDate = $this->page->GetBlackoutEndDate();
         $endTime = $this->page->GetBlackoutEndTime();
-        $blackoutDate = DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $session->Timezone);
+        $blackoutDate = DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $session->Timezone);
 
         $title = $this->page->GetBlackoutTitle();
         $conflictAction = $this->page->GetBlackoutConflictAction();

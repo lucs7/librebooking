@@ -1,13 +1,13 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
-require_once(ROOT_DIR . 'Pages/Reservation/ReservationPage.php');
-require_once(ROOT_DIR . 'Pages/Reservation/NewReservationPage.php');
-require_once(ROOT_DIR . 'Pages/Reservation/ExistingReservationPage.php');
+require_once ROOT_DIR.'Pages/Reservation/ReservationPage.php';
+require_once ROOT_DIR.'Pages/Reservation/NewReservationPage.php';
+require_once ROOT_DIR.'Pages/Reservation/ExistingReservationPage.php';
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/ExistingReservationInitializer.php');
+require_once ROOT_DIR.'lib/Application/Reservation/ExistingReservationInitializer.php';
 
 class ExistingReservationInitializerTest extends TestBase
 {
@@ -15,7 +15,6 @@ class ExistingReservationInitializerTest extends TestBase
      * @var int
      */
     private $userId;
-
 
     public function setUp(): void
     {

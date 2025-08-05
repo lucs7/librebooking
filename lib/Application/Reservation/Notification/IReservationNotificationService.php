@@ -4,6 +4,7 @@ interface IReservationNotificationService
 {
     /**
      * @param $reservationSeries ReservationSeries|ExistingReservationSeries
+     *
      * @return void
      */
     public function Notify($reservationSeries);
@@ -26,6 +27,7 @@ abstract class ReservationNotificationService implements IReservationNotificatio
 
     /**
      * @param $reservationSeries ReservationSeries|ExistingReservationSeries
+     *
      * @return void
      */
     public function Notify($reservationSeries)
@@ -34,11 +36,11 @@ abstract class ReservationNotificationService implements IReservationNotificatio
 
         foreach ($this->notifications as $notification) {
             try {
-                Log::Debug("Calling notify on %s for reservation %s", get_class($notification), $referenceNumber);
+                Log::Debug('Calling notify on %s for reservation %s', get_class($notification), $referenceNumber);
 
                 $notification->Notify($reservationSeries);
             } catch (Exception $ex) {
-                Log::Error("Error sending notification of type %s for reservation %s. Exception: %s", get_class($notification), $referenceNumber, $ex);
+                Log::Error('Error sending notification of type %s for reservation %s. Exception: %s', get_class($notification), $referenceNumber, $ex);
             }
         }
     }

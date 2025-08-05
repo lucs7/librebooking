@@ -1,12 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/CalendarSubscriptionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Pages/Export/CalendarSubscriptionPage.php');
+require_once ROOT_DIR.'Presenters/CalendarSubscriptionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Pages/Export/CalendarSubscriptionPage.php';
 
-use \FeedWriter\ATOM;
+use FeedWriter\ATOM;
 
 class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
 {
@@ -73,7 +73,7 @@ class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
             if ($reservation->DateCreated->GreaterThan($lastUpdated)) {
                 $lastUpdated = $reservation->DateCreated;
             }
-            if ($reservation->LastModified != null && $reservation->LastModified->GreaterThan($lastUpdated)) {
+            if (null != $reservation->LastModified && $reservation->LastModified->GreaterThan($lastUpdated)) {
                 $lastUpdated = $reservation->LastModified;
             }
         }
@@ -111,6 +111,7 @@ class AtomSubscriptionPage extends Page implements ICalendarSubscriptionPage
     public function FormatReservationDescription(iCalendarReservationView $reservation, UserSession $user)
     {
         $factory = new SlotLabelFactory($user);
+
         return $factory->Format($reservation->ReservationItemView, Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION_LABELS, ConfigKeys::RESERVATION_LABELS_RSS_DESCRIPTION));
     }
 

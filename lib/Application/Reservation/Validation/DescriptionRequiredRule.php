@@ -9,6 +9,7 @@ class DescriptionRequiredRule implements IReservationValidationRule
     public function Validate($reservationSeries, $retryParameters)
     {
         $description = $reservationSeries->Description();
+
         return new ReservationRuleResult(!empty($description), Resources::GetInstance()->GetString('DescriptionRequiredRule'));
     }
 }

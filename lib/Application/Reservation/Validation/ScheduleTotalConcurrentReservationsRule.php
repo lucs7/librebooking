@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/ScheduleRepository.php');
-require_once(ROOT_DIR . 'Domain/Access/ReservationViewRepository.php');
+require_once ROOT_DIR.'Domain/Access/ScheduleRepository.php';
+require_once ROOT_DIR.'Domain/Access/ReservationViewRepository.php';
 
 class ScheduleTotalConcurrentReservationsRule implements IReservationValidationRule
 {
@@ -54,10 +54,9 @@ class ScheduleTotalConcurrentReservationsRule implements IReservationValidationR
                 }
 
                 if ($existingItem->BufferedTimes()->Overlaps($instance->Duration())) {
-                    $concurrent++;
+                    ++$concurrent;
                 }
             }
-
 
             if ($concurrent + count($reservationSeries->AllResourceIds()) > $totalConcurrentReservations) {
                 $isValid = false;
@@ -69,8 +68,9 @@ class ScheduleTotalConcurrentReservationsRule implements IReservationValidationR
     }
 
     /**
-     * @param $invalidDates Date[]
+     * @param $invalidDates                    Date[]
      * @param $totalConcurrentReservationLimit int
+     *
      * @return string
      */
     private function GetErrorMessage($invalidDates, $totalConcurrentReservationLimit)
@@ -84,11 +84,12 @@ class ScheduleTotalConcurrentReservationsRule implements IReservationValidationR
             $formatted[] = $d->ToTimezone($this->timezone)->Format($format);
         }
 
-        $datesAsString = implode(",", $formatted);
+        $datesAsString = implode(',', $formatted);
 
         $errorString = new StringBuilder();
         $errorString->AppendLine(Resources::GetInstance()->GetString('ScheduleTotalReservationsError', [$totalConcurrentReservationLimit]));
         $errorString->Append($datesAsString);
+
         return $errorString->ToString();
     }
 }

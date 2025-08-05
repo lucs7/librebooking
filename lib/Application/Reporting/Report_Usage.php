@@ -20,7 +20,7 @@ class Report_Usage
 
     public function Add(ReportCommandBuilder $builder)
     {
-        if ($this->usage == self::ACCESSORIES) {
+        if (self::ACCESSORIES == $this->usage) {
             $builder->OfAccessories();
         } else {
             $builder->OfResources();

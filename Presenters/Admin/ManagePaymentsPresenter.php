@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Pages/Admin/ManagePaymentsPage.php');
-require_once(ROOT_DIR . 'Domain/Access/PaymentRepository.php');
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Pages/Admin/ManagePaymentsPage.php';
+require_once ROOT_DIR.'Domain/Access/PaymentRepository.php';
 
 class ManagePaymentsActions
 {
@@ -83,7 +83,7 @@ class ManagePaymentsPresenter extends ActionPresenter
 
     public function ProcessDataRequest($dataRequest, $userSession)
     {
-        if ($dataRequest == 'transactionLog') {
+        if ('transactionLog' == $dataRequest) {
             $this->GetTransactionLog();
         } else {
             $this->GetTransactionDetails();
@@ -103,7 +103,7 @@ class ManagePaymentsPresenter extends ActionPresenter
     {
         $id = $this->page->GetTransactionLogId();
         $transactionLogView = $this->paymentRepository->GetTransactionLogView($id);
-        if ($transactionLogView != null) {
+        if (null != $transactionLogView) {
             $this->page->BindTransactionLogView($transactionLogView);
         }
     }
@@ -114,11 +114,11 @@ class ManagePaymentsPresenter extends ActionPresenter
         $amount = $this->page->GetRefundAmount();
         $transactionLogView = $this->paymentRepository->GetTransactionLogView($id);
 
-        if ($transactionLogView->GatewayName == PaymentGateways::PAYPAL) {
+        if (PaymentGateways::PAYPAL == $transactionLogView->GatewayName) {
             $gateway = $this->paymentRepository->GetPayPalGateway();
             $refund = $gateway->Refund($transactionLogView, $amount, $this->paymentLogger);
 
-            $this->page->BindRefundIssued($refund->state == 'completed');
+            $this->page->BindRefundIssued('completed' == $refund->state);
         } else {
             $gateway = $this->paymentRepository->GetStripeGateway();
 

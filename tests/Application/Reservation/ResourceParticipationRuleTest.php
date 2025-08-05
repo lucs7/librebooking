@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/Validation/namespace.php';
 
 class ResourceParticipationRuleTest extends TestBase
 {

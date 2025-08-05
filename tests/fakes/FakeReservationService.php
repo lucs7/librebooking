@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class FakeReservationService implements IReservationService
 {
@@ -44,10 +44,11 @@ class FakeReservationService implements IReservationService
     }
 
     /**
-     * @param DateRange $dateRangeUtc range of dates to search against in UTC
-     * @param int $scheduleId
-     * @param string $targetTimezone timezone to convert the results to
-     * @param null|int $resourceIds
+     * @param DateRange $dateRangeUtc   range of dates to search against in UTC
+     * @param int       $scheduleId
+     * @param string    $targetTimezone timezone to convert the results to
+     * @param int|null  $resourceIds
+     *
      * @return IReservationListing
      */
     public function GetReservations(DateRange $dateRangeUtc, $scheduleId, $targetTimezone, $resourceIds = null)
@@ -63,6 +64,7 @@ class FakeReservationService implements IReservationService
     public function Search(DateRange $dateRange, $scheduleId, $resourceIds = null, $ownerId = null, $participantId = null)
     {
         $this->_LastDateRange = $dateRange;
+
         return $this->_ReservationsAndBlackouts;
     }
 }
@@ -71,7 +73,6 @@ class FakeReservationListing implements IReservationListing
 {
     /**
      * @var array|ReservationListItem[]
-
      */
     public $_Reservations = [];
 
@@ -93,6 +94,7 @@ class FakeReservationListing implements IReservationListing
 
     /**
      * @param Date $date
+     *
      * @return IReservationListing
      */
     public function OnDate($date)
@@ -102,6 +104,7 @@ class FakeReservationListing implements IReservationListing
 
     /**
      * @param int $resourceId
+     *
      * @return IReservationListing
      */
     public function ForResource($resourceId)
@@ -110,8 +113,8 @@ class FakeReservationListing implements IReservationListing
     }
 
     /**
-     * @param Date $date
      * @param int $resourceId
+     *
      * @return array|ReservationListItem[]
      */
     public function OnDateForResource(Date $date, $resourceId)

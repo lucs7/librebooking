@@ -1,51 +1,57 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManageGroupsPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/ManageGroupsPresenter.php';
 
 interface IGroupSaveController
 {
     /**
-     * @param GroupRequest $request
+     * @param GroupRequest          $request
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function Create($request, $session);
 
     /**
-     * @param int $groupId
-     * @param GroupRequest $request
+     * @param int                   $groupId
+     * @param GroupRequest          $request
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function Update($groupId, $request, $session);
 
     /**
-     * @param int $groupId
+     * @param int                   $groupId
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function Delete($groupId, $session);
 
     /**
-     * @param int $groupId
-     * @param GroupRolesRequest $request
+     * @param int                   $groupId
+     * @param GroupRolesRequest     $request
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function ChangeRoles($groupId, $request, $session);
 
     /**
-     * @param int $groupId
+     * @param int                     $groupId
      * @param GroupPermissionsRequest $request
-     * @param WebServiceUserSession $session
+     * @param WebServiceUserSession   $session
+     *
      * @return GroupControllerResult
      */
     public function ChangePermissions($groupId, $request, $session);
 
     /**
-     * @param int $groupId
-     * @param GroupUsersRequest $request
+     * @param int                   $groupId
+     * @param GroupUsersRequest     $request
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function ChangeUsers($groupId, $request, $session);
@@ -106,8 +112,9 @@ class GroupSaveController implements IGroupSaveController
     }
 
     /**
-     * @param GroupRequest $request
+     * @param GroupRequest          $request
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function Create($request, $session)
@@ -126,9 +133,10 @@ class GroupSaveController implements IGroupSaveController
     }
 
     /**
-     * @param int $groupId
-     * @param GroupRequest $request
+     * @param int                   $groupId
+     * @param GroupRequest          $request
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function Update($groupId, $request, $session)
@@ -147,8 +155,9 @@ class GroupSaveController implements IGroupSaveController
     }
 
     /**
-     * @param int $groupId
+     * @param int                   $groupId
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function Delete($groupId, $session)
@@ -166,6 +175,7 @@ class GroupSaveController implements IGroupSaveController
 
     /**
      * @param GroupRequest $request
+     *
      * @return array|string[]
      */
     private function ValidateRequest($request)
@@ -191,9 +201,10 @@ class GroupSaveController implements IGroupSaveController
     }
 
     /**
-     * @param int $groupId
-     * @param GroupRolesRequest $request
+     * @param int                   $groupId
+     * @param GroupRolesRequest     $request
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function ChangeRoles($groupId, $request, $session)
@@ -206,9 +217,10 @@ class GroupSaveController implements IGroupSaveController
     }
 
     /**
-     * @param int $groupId
+     * @param int                     $groupId
      * @param GroupPermissionsRequest $request
-     * @param WebServiceUserSession $session
+     * @param WebServiceUserSession   $session
+     *
      * @return GroupControllerResult
      */
     public function ChangePermissions($groupId, $request, $session)
@@ -221,9 +233,10 @@ class GroupSaveController implements IGroupSaveController
     }
 
     /**
-     * @param int $groupId
-     * @param GroupUsersRequest $request
+     * @param int                   $groupId
+     * @param GroupUsersRequest     $request
      * @param WebServiceUserSession $session
+     *
      * @return GroupControllerResult
      */
     public function ChangeUsers($groupId, $request, $session)
@@ -394,7 +407,7 @@ class CreateGroupFacade extends GroupControllerPageFacade
 {
     /**
      * @param GroupRequest $request
-     * @param int|null $id
+     * @param int|null     $id
      */
     public function __construct(private $request, private $id = null)
     {
@@ -455,7 +468,7 @@ class UpdateGroupRolesFacade extends GroupControllerPageFacade
 {
     /**
      * @param GroupRolesRequest $request
-     * @param int|null $id
+     * @param int|null          $id
      */
     public function __construct(private $request, private $id = null)
     {
@@ -513,7 +526,7 @@ class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
 {
     /**
      * @param GroupPermissionsRequest $request
-     * @param int|null $id
+     * @param int|null                $id
      */
     public function __construct(private $request, private $id = null)
     {
@@ -532,13 +545,13 @@ class UpdateGroupPermissionsFacade extends GroupControllerPageFacade
 
         if (!empty($full)) {
             foreach ($full as $id) {
-                $ids[] = $id . '_' . ResourcePermissionType::Full;
+                $ids[] = $id.'_'.ResourcePermissionType::Full;
             }
         }
 
         if (!empty($view)) {
             foreach ($view as $id) {
-                $ids[] = $id . '_' . ResourcePermissionType::View;
+                $ids[] = $id.'_'.ResourcePermissionType::View;
             }
         }
 
@@ -585,7 +598,7 @@ class UpdateGroupUsersFacade extends GroupControllerPageFacade
 {
     /**
      * @param GroupUsersRequest $request
-     * @param int|null $id
+     * @param int|null          $id
      */
     public function __construct(private $request, private $id = null)
     {

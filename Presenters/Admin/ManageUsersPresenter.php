@@ -1,13 +1,13 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/User/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/UserImportCsv.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/CsvImportResult.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/InviteUserEmail.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/AccountCreationForUserEmail.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'lib/Application/User/namespace.php';
+require_once ROOT_DIR.'lib/Application/Admin/UserImportCsv.php';
+require_once ROOT_DIR.'lib/Application/Admin/CsvImportResult.php';
+require_once ROOT_DIR.'lib/Email/Messages/InviteUserEmail.php';
+require_once ROOT_DIR.'lib/Email/Messages/AccountCreationForUserEmail.php';
 
 class ManageUsersActions
 {
@@ -124,14 +124,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     }
 
     /**
-     * @param IManageUsersPage $page
      * @param UserRepository $userRepository
-     * @param IResourceRepository $resourceRepository
-     * @param PasswordEncryption $passwordEncryption
-     * @param IManageUsersService $manageUsersService
-     * @param IAttributeService $attributeService
-     * @param IGroupRepository $groupRepository
-     * @param IGroupViewRepository $groupViewRepository
      */
     public function __construct(
         IManageUsersPage $page,
@@ -141,7 +134,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         IManageUsersService $manageUsersService,
         IAttributeService $attributeService,
         IGroupRepository $groupRepository,
-        IGroupViewRepository $groupViewRepository
+        IGroupViewRepository $groupViewRepository,
     ) {
         parent::__construct($page);
 
@@ -171,7 +164,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function PageLoad()
     {
-        if ($this->page->GetUserId() != null) {
+        if (null != $this->page->GetUserId()) {
             $userList = $this->userRepository->GetList(
                 1,
                 1,
@@ -231,9 +224,9 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     {
         $defaultHomePageId = Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_HOMEPAGE, new IntConverter());
         $extraAttributes = [
-                UserAttribute::Organization => $this->page->GetOrganization(),
-                UserAttribute::Phone => $this->page->GetPhone(),
-                UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Organization => $this->page->GetOrganization(),
+            UserAttribute::Phone => $this->page->GetPhone(),
+            UserAttribute::Position => $this->page->GetPosition()];
 
         $user = $this->manageUsersService->AddUser(
             $this->page->GetUserName(),
@@ -271,9 +264,9 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         Log::Debug('Updating user %s', $this->page->GetUserId());
 
         $extraAttributes = [
-                UserAttribute::Organization => $this->page->GetOrganization(),
-                UserAttribute::Phone => $this->page->GetPhone(),
-                UserAttribute::Position => $this->page->GetPosition()];
+            UserAttribute::Organization => $this->page->GetOrganization(),
+            UserAttribute::Phone => $this->page->GetPhone(),
+            UserAttribute::Position => $this->page->GetPosition()];
 
         $this->manageUsersService->UpdateUser(
             $this->page->GetUserId(),
@@ -320,10 +313,10 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
             $resourceId = $split[0];
             $permissionType = $split[1];
 
-            if ($permissionType === ResourcePermissionType::Full . '') {
+            if ($permissionType === ResourcePermissionType::Full.'') {
                 $allowed[] = $resourceId;
             } else {
-                if ($permissionType === ResourcePermissionType::View . '') {
+                if ($permissionType === ResourcePermissionType::View.'') {
                     $view[] = $resourceId;
                 }
             }
@@ -360,18 +353,18 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest == 'permissions') {
+        if ('permissions' == $dataRequest) {
             $this->page->SetJsonResponse($this->GetUserResourcePermissions());
-        } elseif ($dataRequest == 'groups') {
+        } elseif ('groups' == $dataRequest) {
             $this->page->SetJsonResponse($this->GetUserGroups());
-        } elseif ($dataRequest == 'all') {
+        } elseif ('all' == $dataRequest) {
             $users = $this->userRepository->GetAll();
             $this->page->SetJsonResponse($users);
-        } elseif ($dataRequest == 'template') {
+        } elseif ('template' == $dataRequest) {
             $this->ShowTemplateCSV();
-        } elseif ($dataRequest == 'export') {
+        } elseif ('export' == $dataRequest) {
             $this->ExportUsers();
-        } elseif ($dataRequest == 'update') {
+        } elseif ('update' == $dataRequest) {
             $this->ShowUpdate();
         }
     }
@@ -382,6 +375,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     public function GetUserResourcePermissions()
     {
         $user = $this->userRepository->LoadById($this->page->GetUserId());
+
         return ['full' => $user->GetAllowedResourceIds(), 'view' => $user->GetAllowedViewResourceIds()];
     }
 
@@ -394,6 +388,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         foreach ($this->page->GetAttributes() as $attribute) {
             $attributes[] = new AttributeValue($attribute->Id, $attribute->Value);
         }
+
         return $attributes;
     }
 
@@ -412,7 +407,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     {
         Log::Debug('Loading validators for %s', $action);
 
-        if ($action == ManageUsersActions::UpdateUser) {
+        if (ManageUsersActions::UpdateUser == $action) {
             $this->page->RegisterValidator('emailformat', new EmailValidator($this->page->GetEmail()));
             $this->page->RegisterValidator(
                 'uniqueemail',
@@ -435,7 +430,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
             );
         }
 
-        if ($action == ManageUsersActions::AddUser) {
+        if (ManageUsersActions::AddUser == $action) {
             $this->page->RegisterValidator('addUserEmailformat', new EmailValidator($this->page->GetEmail()));
             $this->page->RegisterValidator(
                 'addUserUniqueemail',
@@ -458,7 +453,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
             );
         }
 
-        if ($action == ManageUsersActions::ChangeAttribute) {
+        if (ManageUsersActions::ChangeAttribute == $action) {
             $this->page->RegisterValidator(
                 'attributeValidator',
                 new AttributeValidatorInline(
@@ -472,7 +467,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
             );
         }
 
-        if ($action == ManageUsersActions::ImportUsers) {
+        if (ManageUsersActions::ImportUsers == $action) {
             $this->page->RegisterValidator('fileExtensionValidator', new FileExtensionValidator('csv', $this->page->GetImportFile()));
         }
     }
@@ -524,6 +519,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     /**
      * @param User $user
+     *
      * @return BookableResource[]
      */
     private function GetResourcesThatCurrentUserCanAdminister($user)
@@ -535,6 +531,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                 $resources[] = $resource;
             }
         }
+
         return $resources;
     }
 
@@ -568,12 +565,13 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
         $rows = $csv->GetRows();
 
-        if (count($rows) == 0) {
+        if (0 == count($rows)) {
             $this->page->SetImportResult(new CsvImportResult(0, [], 'Empty file or missing header row'));
+
             return;
         }
 
-        for ($i = 0; $i < count($rows); $i++) {
+        for ($i = 0; $i < count($rows); ++$i) {
             $shouldUpdate = $this->page->GetUpdateOnImport();
 
             $row = $rows[$i];
@@ -585,7 +583,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                 $emailValidator->Validate();
                 if (!$emailValidator->IsValid()) {
                     $evMsgs = $emailValidator->Messages();
-                    $messages[] = $evMsgs[0] . " ({$row->email})";
+                    $messages[] = $evMsgs[0]." ({$row->email})";
                     continue;
                 }
 
@@ -595,12 +593,12 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
                     if (!$uniqueEmailValidator->IsValid()) {
                         $uevMsgs = $uniqueEmailValidator->Messages();
-                        $messages[] = $uevMsgs[0] . " ({$row->email})";
+                        $messages[] = $uevMsgs[0]." ({$row->email})";
                         continue;
                     }
                     if (!$uniqueUsernameValidator->IsValid()) {
                         $uuvMsgs = $uniqueUsernameValidator->Messages();
-                        $messages[] = $uuvMsgs[0] . " ({$row->username})";
+                        $messages[] = $uuvMsgs[0]." ({$row->username})";
                         continue;
                     }
                 }
@@ -613,17 +611,17 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                 $user = null;
                 if ($shouldUpdate) {
                     $user = $this->manageUsersService->LoadUser($row->email);
-                    if ($user->Id() == null) {
+                    if (null == $user->Id()) {
                         $shouldUpdate = false;
                     } else {
                         $user->ChangeName($row->firstName, $row->lastName);
-                        if ($row->password !== "password") {
+                        if ('password' !== $row->password) {
                             $password = $this->passwordEncryption->EncryptPassword($row->password);
                             $user->ChangePassword($password->EncryptedPassword(), $password->Salt());
                         }
                         $user->ChangeTimezone($timezone);
                         $user->ChangeAttributes($row->phone, $row->organization, $row->position);
-                        if ($status == AccountStatus::ACTIVE) {
+                        if (AccountStatus::ACTIVE == $status) {
                             $user->Activate();
                         } else {
                             $user->Deactivate();
@@ -653,16 +651,16 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                     }
                 }
 
-                if ($user !== null) {
+                if (null !== $user) {
                     if (count($userGroups) > 0) {
                         $user->ChangeGroups($userGroups);
                     }
 
-                    if ($row->credits != null) {
+                    if (null != $row->credits) {
                         $user->ChangeCurrentCredits($row->credits);
                     }
 
-                    if ($row->color != null) {
+                    if (null != $row->color) {
                         $user->ChangePreference(UserPreferences::RESERVATION_COLOR, $row->color);
                     }
 
@@ -681,7 +679,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                     }
                 }
 
-                $importCount++;
+                ++$importCount;
             } catch (Exception $ex) {
                 Log::Error('Error importing users. %s', $ex);
             }
@@ -722,7 +720,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
     private function DetermineStatus($status)
     {
-        if ($status == AccountStatus::INACTIVE || strtolower($status) == 'inactive') {
+        if (AccountStatus::INACTIVE == $status || 'inactive' == strtolower($status)) {
             return AccountStatus::INACTIVE;
         }
 

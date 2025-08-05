@@ -4,6 +4,7 @@ interface ICalendarExportValidator
 {
     /**
      * @abstract
+     *
      * @return bool
      */
     public function IsValid();

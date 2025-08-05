@@ -1,23 +1,25 @@
 <?php
 
 /**
- * Example for overriding validation urls
+ * Example for overriding validation urls.
  *
  * PHP Version 5
  *
  * @file     example_custom_urls.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Joachim Fritschi <jfritschi@freenet.de>
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 // Load the settings from the central config file
 require_once 'config.php';
 // Load the CAS lib
-require_once $phpcas_path . '/CAS.php';
+require_once $phpcas_path.'/CAS.php';
 
 // Enable debugging
 phpCAS::setDebug();
@@ -41,9 +43,9 @@ phpCAS::setNoCasServerValidation();
 phpCAS::setServerProxyValidateURL('https://cas.example.org:1443/proxyValidate');
 // Override the validation url for any CAS 1.0, 2.0 and 3.0 validation
 // Example of the URL for the version of CAS 2.0 validation
-//phpCAS::setServerServiceValidateURL('https://cas.example.org:1443/serviceValidate');
-//Override the validation url for any SAML11 validation
-//phpCAS::setServerSamlValidateURL('https://cas.example.org:1443/samlValidate');
+// phpCAS::setServerServiceValidateURL('https://cas.example.org:1443/serviceValidate');
+// Override the validation url for any SAML11 validation
+// phpCAS::setServerSamlValidateURL('https://cas.example.org:1443/samlValidate');
 
 // force CAS authentication
 phpCAS::forceAuthentication();
@@ -64,7 +66,7 @@ if (isset($_REQUEST['logout'])) {
   </head>
   <body>
     <h1>Successfull Authentication!</h1>
-    <?php require 'script_info.php' ?>
+    <?php require 'script_info.php'; ?>
     <p>the user's login is <b><?php echo phpCAS::getUser(); ?></b>.</p>
     <p>phpCAS version is <b><?php echo phpCAS::getVersion(); ?></b>.</p>
     <p><a href="?logout=">Logout</a></p>

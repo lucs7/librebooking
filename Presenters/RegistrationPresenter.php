@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
 
 class RegisterActions
 {
@@ -43,11 +43,10 @@ class RegistrationPresenter extends ActionPresenter
     private $termsRepository;
 
     /**
-     * @param IRegistrationPage $page
-     * @param IRegistration|null $registration
-     * @param IAuthentication|null $authentication
-     * @param ICaptchaService|null $captchaService
-     * @param IAttributeService|null $attributeService
+     * @param IRegistration|null             $registration
+     * @param IAuthentication|null           $authentication
+     * @param ICaptchaService|null           $captchaService
+     * @param IAttributeService|null         $attributeService
      * @param ITermsOfServiceRepository|null $termsOfServiceRepository
      */
     public function __construct(
@@ -56,7 +55,7 @@ class RegistrationPresenter extends ActionPresenter
         $authentication = null,
         $captchaService = null,
         $attributeService = null,
-        $termsOfServiceRepository = null
+        $termsOfServiceRepository = null,
     ) {
         parent::__construct($page);
 
@@ -164,6 +163,7 @@ class RegistrationPresenter extends ActionPresenter
         foreach ($this->page->GetAttributes() as $attribute) {
             $attributes[] = new AttributeValue($attribute->Id, $attribute->Value);
         }
+
         return $attributes;
     }
 
@@ -218,7 +218,7 @@ class RegistrationPresenter extends ActionPresenter
     private function PopulateTerms()
     {
         $terms = $this->termsRepository->Load();
-        if ($terms != null && $terms->AppliesToRegistration()) {
+        if (null != $terms && $terms->AppliesToRegistration()) {
             $this->page->SetTerms($terms);
         }
     }

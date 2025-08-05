@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/ProxiedService/Testabel.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -47,11 +49,13 @@
  *		}
  *
  * @class    CAS_ProxiedService_Testabel
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 interface CAS_ProxiedService_Testable
 {
@@ -65,8 +69,9 @@ interface CAS_ProxiedService_Testable
      * @param CAS_Client $casClient Cas client object
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after a proxy ticket has
-     *         already been initialized/set.
+     *
+     * @throws CAS_OutOfSequenceException if called after a proxy ticket has
+     *                                    already been initialized/set
      */
     public function setCasClient(CAS_Client $casClient);
 }

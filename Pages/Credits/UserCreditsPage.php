@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Credits/UserCreditsPresenter.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+require_once ROOT_DIR.'Presenters/Credits/UserCreditsPresenter.php';
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Pages/SecurePage.php';
 
 interface IUserCreditsPage extends IPage, IActionPage
 {
@@ -16,9 +16,6 @@ interface IUserCreditsPage extends IPage, IActionPage
      */
     public function SetCreditCosts($costs);
 
-    /**
-     * @param CreditCost $cost
-     */
     public function SetCreditCost(CreditCost $cost);
 
     /**

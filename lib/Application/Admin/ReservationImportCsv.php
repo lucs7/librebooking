@@ -14,8 +14,8 @@ class ReservationImportCsvRow
     private $indexes = [];
 
     /**
-     * @param $values array
-     * @param $indexes array
+     * @param $values     array
+     * @param $indexes    array
      * @param $attributes CustomAttribute[]
      */
     public function __construct($values, $indexes, $attributes)
@@ -24,7 +24,7 @@ class ReservationImportCsvRow
         $this->indexes = $indexes;
 
         $this->email = strtolower($this->valueOrDefault('email'));
-        $this->resourceNames = (!array_key_exists('resourceNames', $this->indexes) || $indexes['resourceNames'] === false) ? []
+        $this->resourceNames = (!array_key_exists('resourceNames', $this->indexes) || false === $indexes['resourceNames']) ? []
                         : array_map('trim', explode(',', htmlspecialchars($values[$indexes['resourceNames']])));
         $this->title = $this->valueOrDefault('title');
         $this->description = $this->valueOrDefault('description');
@@ -42,12 +42,14 @@ class ReservationImportCsvRow
         if (!$isValid) {
             Log::Debug('Reservation import row is not valid. Missing email, resource or dates');
         }
+
         return $isValid;
     }
 
     /**
-     * @param string[] $values
+     * @param string[]          $values
      * @param CustomAttribute[] $attributes
+     *
      * @return bool|string[]
      */
     public static function GetHeaders($values, $attributes)
@@ -75,7 +77,7 @@ class ReservationImportCsvRow
     {
         $values = array_map('strtolower', $values);
         $index = array_search($columnName, $values);
-        if ($index === false) {
+        if (false === $index) {
             return false;
         }
 
@@ -84,12 +86,13 @@ class ReservationImportCsvRow
 
     /**
      * @param $column string
+     *
      * @return string
      */
     private function valueOrDefault($column)
     {
-        return ($this->indexes[$column] === false ||
-                !array_key_exists($this->indexes[$column], $this->values)) ? ''
+        return (false === $this->indexes[$column]
+                || !array_key_exists($this->indexes[$column], $this->values)) ? ''
                 : htmlspecialchars(trim($this->values[$this->indexes[$column]]));
     }
 }
@@ -112,7 +115,6 @@ class ReservationImportCsv
     private $attributes;
 
     /**
-     * @param UploadedFile $file
      * @param CustomAttribute[] $attributes
      */
     public function __construct(UploadedFile $file, $attributes)
@@ -133,8 +135,9 @@ class ReservationImportCsv
         $contents = $this->RemoveUTF8BOM($contents);
         $csvRows = preg_split('/\n|\r\n?/', $contents);
 
-        if (count($csvRows) == 0) {
+        if (0 == count($csvRows)) {
             Log::Debug('No rows in reservation import file');
+
             return $rows;
         }
 
@@ -144,10 +147,11 @@ class ReservationImportCsv
 
         if (!$headers) {
             Log::Debug('No headers in reservation import file');
+
             return $rows;
         }
 
-        for ($i = 1; $i < count($csvRows); $i++) {
+        for ($i = 1; $i < count($csvRows); ++$i) {
             $values = str_getcsv($csvRows[$i]);
 
             $row = new ReservationImportCsvRow($values, $headers, $this->attributes);

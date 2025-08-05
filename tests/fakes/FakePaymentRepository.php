@@ -48,7 +48,9 @@ class FakePaymentRepository implements IPaymentRepository
         $this->_CreditCost = [new CreditCost()];
     }
 
-    public function DeleteCreditCost($creditCount) { }
+    public function DeleteCreditCost($creditCount)
+    {
+    }
 
     public function GetCreditCosts()
     {
@@ -102,6 +104,7 @@ class FakePaymentRepository implements IPaymentRepository
     public function GetTransactionLogView($transactionLogId)
     {
         $this->_LastTransactionLogId = $transactionLogId;
+
         return $this->_TransactionLogView;
     }
 }

@@ -25,7 +25,7 @@ class RequiredEmailDomainValidator extends ValidatorBase implements IValidator
 
         foreach ($allDomains as $d) {
             $d = str_replace('@', '', trim($d));
-            if (BookedStringHelper::EndsWith($trimmed, '@' . $d)) {
+            if (BookedStringHelper::EndsWith($trimmed, '@'.$d)) {
                 return;
             }
         }

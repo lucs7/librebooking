@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/MonitorDisplayPresenter.php');
+require_once ROOT_DIR.'Presenters/MonitorDisplayPresenter.php';
 
 class MonitorDisplayPresenterTest extends TestBase
 {

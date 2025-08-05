@@ -1,23 +1,18 @@
 <?php
 
 /**
-*
-*
-* Translated by lujisheng in CSDN (Simplified Chinese)
-*
-* http://blog.csdn.net/lujisheng/article/details/7821538
-*
-* Converted and edited by mingminghome (Traditional Chinese & Simplified Chinese))
-* E-mail: mingminghomework@gmail.com
-*
-*
-* Tested on Booked Scheduler 2.4.2
-*
-*
-*
-*/
-require_once('Language.php');
-require_once('en_us.php');
+ * Translated by lujisheng in CSDN (Simplified Chinese).
+ *
+ * http://blog.csdn.net/lujisheng/article/details/7821538
+ *
+ * Converted and edited by mingminghome (Traditional Chinese & Simplified Chinese))
+ * E-mail: mingminghomework@gmail.com
+ *
+ *
+ * Tested on Booked Scheduler 2.4.2
+ */
+require_once 'Language.php';
+require_once 'en_us.php';
 
 class zh_tw extends en_us
 {
@@ -614,8 +609,8 @@ class zh_tw extends en_us
         $strings['ReservationEndingSoonSubject'] = '%s 的預約即將結束';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = '您沒有以前的預訂';
         $strings['PastReservations'] = '以前的預訂';
         $strings['AllNoPastReservations'] = '在過去的%s天內沒有以前的預訂';
@@ -623,35 +618,34 @@ class zh_tw extends en_us
         $strings['Yesterday'] = '昨天';
         $strings['EarlierThisWeek'] = '本週早些時候';
         $strings['PreviousWeek'] = '上週';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = '您的團體沒有即將到來的預訂';
         $strings['GroupUpcomingReservations'] = '我的團體即將到來的預訂';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = '使用Facebook登入時發生錯誤。請重試。';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = '您沒有等待審批的預訂';
         $strings['PendingApprovalReservations'] = '等待審批的預訂';
         $strings['LaterThisMonth'] = '本月晚些時候';
         $strings['LaterThisYear'] = '本年晚些時候';
-        $strings['Remaining'] = '剩餘';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = '剩餘';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = '沒有遺失的退房預訂';
-        $strings['MissingCheckOutReservations'] = '遺失的退房預訂';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = '遺失的退房預訂';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = '由於您在此預訂中的任何資源都沒有權限，因此無法查看預訂詳細信息';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Producing mySql query string
+ * Producing mySql query string.
  */
 class MySqlScript
 {
@@ -22,7 +22,8 @@ class MySqlScript
 
     /**
      * Return the mySql script files directory path
-     * $param null
+     * $param null.
+     *
      * @return string path to directory where mySql script are located
      */
     public function Name()
@@ -31,8 +32,9 @@ class MySqlScript
     }
 
     /**
-     * Replace the default string values
-     * @param string $search databasename, username, etc ...
+     * Replace the default string values.
+     *
+     * @param string $search  databasename, username, etc ...
      * @param string $replace configured databasename, configured username, etc ...
      */
     public function Replace($search, $replace)
@@ -41,12 +43,13 @@ class MySqlScript
     }
 
     /**
-     * Contruct and return mySql statement string
+     * Contruct and return mySql statement string.
+     *
      * @return string $sql query string
      */
     public function GetFullSql()
     {
-        $f = fopen($this->path, "r");
+        $f = fopen($this->path, 'r');
         $sql = fread($f, filesize($this->path));
         fclose($f);
 

@@ -13,13 +13,13 @@ class ReservationAccessory
     public $QuantityReserved;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $Name;
 
     /**
-     * @param int $accessoryId
-     * @param int $quantityReserved
+     * @param int    $accessoryId
+     * @param int    $quantityReserved
      * @param string $accessoryName
      */
     public function __construct($accessoryId, $quantityReserved, $accessoryName = null)
@@ -31,6 +31,6 @@ class ReservationAccessory
 
     public function __toString()
     {
-        return sprintf("ReservationAccessory id:%d quantity reserved:%d", $this->AccessoryId, $this->QuantityReserved);
+        return sprintf('ReservationAccessory id:%d quantity reserved:%d', $this->AccessoryId, $this->QuantityReserved);
     }
 }

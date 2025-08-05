@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class ManageQuotasActions
 {
@@ -37,19 +37,12 @@ class ManageQuotasPresenter extends ActionPresenter
      */
     private $quotaRepository;
 
-    /**
-     * @param IManageQuotasPage $page
-     * @param IResourceRepository $resourceRepository
-     * @param IGroupViewRepository $groupRepository
-     * @param IScheduleRepository $scheduleRepository
-     * @param IQuotaRepository&IQuotaViewRepository $quotaRepository
-     */
     public function __construct(
         IManageQuotasPage $page,
         IResourceRepository $resourceRepository,
         IGroupViewRepository $groupRepository,
         IScheduleRepository $scheduleRepository,
-        IQuotaRepository&IQuotaViewRepository $quotaRepository
+        IQuotaRepository&IQuotaViewRepository $quotaRepository,
     ) {
         parent::__construct($page);
 

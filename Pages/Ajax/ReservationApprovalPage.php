@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/IReservationSaveResultsView.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationApprovalPresenter.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Pages/Ajax/IReservationSaveResultsView.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationApprovalPresenter.php';
 
 interface IReservationApprovalPage extends IReservationSaveResultsView
 {
@@ -57,7 +57,7 @@ class ReservationApprovalPage extends SecurePage implements IReservationApproval
     public function SetErrors($errors)
     {
         if (!empty($errors)) {
-            $this->SetJson(['approved' => "false"], $errors);
+            $this->SetJson(['approved' => 'false'], $errors);
         }
     }
 

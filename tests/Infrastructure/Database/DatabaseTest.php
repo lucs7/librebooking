@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Database/namespace.php');
+require_once ROOT_DIR.'lib/Database/namespace.php';
 
 class DatabaseTest extends TestBase
 {
-    public $db = null;
+    public $db;
 
     public function testParameterStoresCorrectParamNameAndValue()
     {

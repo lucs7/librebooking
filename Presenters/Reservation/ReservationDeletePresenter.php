@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 interface IReservationDeletePresenter
 {
@@ -41,7 +41,7 @@ class ReservationDeletePresenter implements IReservationDeletePresenter
         IReservationDeletePage $page,
         IDeleteReservationPersistenceService $persistenceService,
         IReservationHandler $handler,
-        UserSession $userSession
+        UserSession $userSession,
     ) {
         $this->page = $page;
         $this->persistenceService = $persistenceService;
@@ -67,7 +67,7 @@ class ReservationDeletePresenter implements IReservationDeletePresenter
      */
     public function HandleReservation($reservationSeries)
     {
-        Log::Debug("Deleting reservation %s", $reservationSeries->CurrentInstance()->ReferenceNumber());
+        Log::Debug('Deleting reservation %s', $reservationSeries->CurrentInstance()->ReferenceNumber());
 
         $this->handler->Handle($reservationSeries, $this->page);
     }

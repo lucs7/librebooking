@@ -1,20 +1,20 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Persistence/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/namespace.php');
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Server/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Persistence/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Validation/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Notification/namespace.php';
 
 interface IReservationHandler
 {
     /**
      * @param ReservationSeries|ExistingReservationSeries $reservationSeries
-     * @param IReservationSaveResultsView $view
+     *
      * @return bool if the reservation was handled or not
      */
     public function Handle($reservationSeries, IReservationSaveResultsView $view);
@@ -46,7 +46,7 @@ class ReservationHandler implements IReservationHandler
         IReservationPersistenceService $persistenceService,
         IReservationValidationService $validationService,
         IReservationNotificationService $notificationService,
-        IReservationRetryOptions $retryOptions
+        IReservationRetryOptions $retryOptions,
     ) {
         $this->persistenceService = $persistenceService;
         $this->validationService = $validationService;
@@ -56,9 +56,10 @@ class ReservationHandler implements IReservationHandler
 
     /**
      * @static
-     * @param $reservationAction string|ReservationAction
+     *
+     * @param $reservationAction  string|ReservationAction
      * @param $persistenceService null|IReservationPersistenceService
-     * @param UserSession $session
+     *
      * @return IReservationHandler
      */
     public static function Create($reservationAction, $persistenceService, UserSession $session)
@@ -82,8 +83,9 @@ class ReservationHandler implements IReservationHandler
 
     /**
      * @param ReservationSeries|ExistingReservationSeries $reservationSeries
-     * @param IReservationSaveResultsView $view
+     *
      * @return bool if the reservation was handled or not
+     *
      * @throws Exception
      */
     public function Handle($reservationSeries, IReservationSaveResultsView $view)
@@ -97,7 +99,7 @@ class ReservationHandler implements IReservationHandler
                 $this->persistenceService->Persist($reservationSeries);
             } catch (Exception $ex) {
                 Log::Error('Error saving reservation: %s', $ex);
-                throw($ex);
+                throw $ex;
             }
 
             $this->notificationService->Notify($reservationSeries);

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class TermsOfServiceValidator extends ValidatorBase implements IValidator
 {
@@ -14,7 +14,6 @@ class TermsOfServiceValidator extends ValidatorBase implements IValidator
     private $hasAcknowledged;
 
     /**
-     * @param ITermsOfServiceRepository $termsOfServiceRepository
      * @param bool $hasAcknowledged
      */
     public function __construct(ITermsOfServiceRepository $termsOfServiceRepository, $hasAcknowledged)
@@ -29,7 +28,7 @@ class TermsOfServiceValidator extends ValidatorBase implements IValidator
 
         $terms = $this->termsOfServiceRepository->Load();
 
-        if ($terms != null && $terms->AppliesToRegistration()) {
+        if (null != $terms && $terms->AppliesToRegistration()) {
             $this->isValid = $this->hasAcknowledged;
         }
     }

@@ -153,41 +153,41 @@ class ReportCommandBuilder
      */
     private $limitWithin = false;
     /**
-     * @var null|int
+     * @var int|null
      */
-    private $scheduleIds = null;
+    private $scheduleIds;
     /**
-     * @var null|int
+     * @var int|null
      */
-    private $userId = null;
+    private $userId;
     /**
-     * @var null|int
+     * @var int|null
      */
-    private $participantId = null;
+    private $participantId;
     /**
-     * @var null|int
+     * @var int|null
      */
-    private $resourceIds = null;
+    private $resourceIds;
     /**
-     * @var null|int
+     * @var int|null
      */
-    private $resourceTypeIds = null;
+    private $resourceTypeIds;
     /**
-     * @var null|int
+     * @var int|null
      */
-    private $accessoryIds = null;
+    private $accessoryIds;
     /**
-     * @var null|int
+     * @var int|null
      */
-    private $groupIds = null;
+    private $groupIds;
     /**
-     * @var null|Date
+     * @var Date|null
      */
-    private $startDate = null;
+    private $startDate;
     /**
-     * @var null|Date
+     * @var Date|null
      */
-    private $endDate = null;
+    private $endDate;
     /**
      * @var bool
      */
@@ -224,6 +224,7 @@ class ReportCommandBuilder
     {
         $this->fullList = true;
         $this->listUsers = true;
+
         return $this;
     }
 
@@ -233,6 +234,7 @@ class ReportCommandBuilder
     public function SelectCount()
     {
         $this->count = true;
+
         return $this;
     }
 
@@ -245,6 +247,7 @@ class ReportCommandBuilder
         $this->limitWithin = true;
         $this->startDate = Date::Min();
         $this->endDate = Date::Max();
+
         return $this;
     }
 
@@ -254,6 +257,7 @@ class ReportCommandBuilder
     public function SelectDuration()
     {
         $this->duration = true;
+
         return $this;
     }
 
@@ -264,6 +268,7 @@ class ReportCommandBuilder
     {
         $this->joinResources = true;
         $this->listResources = true;
+
         return $this;
     }
 
@@ -274,6 +279,7 @@ class ReportCommandBuilder
     {
         $this->joinAccessories = true;
         $this->listAccessories = true;
+
         return $this;
     }
 
@@ -283,12 +289,11 @@ class ReportCommandBuilder
     public function IncludingBlackouts()
     {
         $this->joinBlackouts = true;
+
         return $this;
     }
 
     /**
-     * @param Date $start
-     * @param Date $end
      * @return ReportCommandBuilder
      */
     public function Within(Date $start, Date $end)
@@ -296,82 +301,97 @@ class ReportCommandBuilder
         $this->limitWithin = true;
         $this->startDate = $start;
         $this->endDate = $end;
+
         return $this;
     }
 
     /**
      * @param int[] $resourceIds
+     *
      * @return ReportCommandBuilder
      */
     public function WithResourceIds($resourceIds)
     {
         $this->joinResources = !empty($resourceIds);
         $this->resourceIds = is_array($resourceIds) ? $resourceIds : [$resourceIds];
+
         return $this;
     }
 
     /**
      * @param int[] $resourceTypeIds
+     *
      * @return ReportCommandBuilder
      */
     public function WithResourceTypeIds($resourceTypeIds)
     {
         $this->joinResources = !empty($resourceTypeIds);
         $this->resourceTypeIds = is_array($resourceTypeIds) ? $resourceTypeIds : [$resourceTypeIds];
+
         return $this;
     }
 
     /**
      * @param int $userId
+     *
      * @return ReportCommandBuilder
      */
     public function WithUserId($userId)
     {
         $this->userId = $userId;
+
         return $this;
     }
 
     /**
      * @param int $userId
+     *
      * @return ReportCommandBuilder
      */
     public function WithParticipantId($userId)
     {
         $this->joinParticipants = true;
         $this->participantId = $userId;
+
         return $this;
     }
 
     /**
      * @param int[] $scheduleIds
+     *
      * @return ReportCommandBuilder
      */
     public function WithScheduleIds($scheduleIds)
     {
         $this->joinResources = !empty($scheduleIds);
         $this->scheduleIds = is_array($scheduleIds) ? $scheduleIds : [$scheduleIds];
+
         return $this;
     }
 
     /**
      * @param int[] $groupIds
+     *
      * @return ReportCommandBuilder
      */
     public function WithGroupIds($groupIds)
     {
         $this->joinGroups = true;
         $this->groupIds = is_array($groupIds) ? $groupIds : [$groupIds];
+
         return $this;
     }
 
     /**
      * @param int[] $accessoryIds
+     *
      * @return ReportCommandBuilder
      */
     public function WithAccessoryIds($accessoryIds)
     {
         $this->joinAccessories = !empty($accessoryIds);
         $this->accessoryIds = is_array($accessoryIds) ? $accessoryIds : [$accessoryIds];
+
         return $this;
     }
 
@@ -383,6 +403,7 @@ class ReportCommandBuilder
         $this->joinGroups = true;
         $this->listGroups = true;
         $this->groupByGroup = true;
+
         return $this;
     }
 
@@ -394,6 +415,7 @@ class ReportCommandBuilder
         $this->joinResources = true;
         $this->listResources = true;
         $this->groupByResource = true;
+
         return $this;
     }
 
@@ -404,6 +426,7 @@ class ReportCommandBuilder
     {
         $this->listUsers = true;
         $this->groupByUser = true;
+
         return $this;
     }
 
@@ -415,16 +438,19 @@ class ReportCommandBuilder
         $this->joinResources = true;
         $this->listSchedules = true;
         $this->groupBySchedule = true;
+
         return $this;
     }
 
     /**
      * @param int $limit
+     *
      * @return ReportCommandBuilder
      */
     public function LimitedTo($limit)
     {
         $this->limit = $limit;
+
         return $this;
     }
 
@@ -434,6 +460,7 @@ class ReportCommandBuilder
     public function WithDeleted()
     {
         $this->includeDeleted = true;
+
         return $this;
     }
 
@@ -560,7 +587,6 @@ class ReportCommandBuilder
             $and->Append(self::USER_ID_FRAGMENT);
             $this->AddParameter(new Parameter(ParameterNames::USER_ID, $this->userId));
         }
-
 
         if (!empty($this->participantId)) {
             $this->AddParameter(new Parameter(ParameterNames::PARTICIPANT_ID, $this->participantId));

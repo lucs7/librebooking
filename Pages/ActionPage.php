@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+require_once ROOT_DIR.'Pages/Page.php';
 
 interface IActionPage extends IPage
 {
@@ -37,12 +37,14 @@ abstract class ActionPage extends Page implements IActionPage
             throw $ex;
         }
     }
+
     /**
      * @return bool
      */
     public function TakingAction()
     {
         $action = $this->GetAction();
+
         return !empty($action);
     }
 
@@ -52,11 +54,12 @@ abstract class ActionPage extends Page implements IActionPage
     public function RequestingData()
     {
         $dataRequest = $this->GetDataRequest();
+
         return !empty($dataRequest);
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetAction()
     {
@@ -64,7 +67,7 @@ abstract class ActionPage extends Page implements IActionPage
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetDataRequest()
     {
@@ -78,6 +81,7 @@ abstract class ActionPage extends Page implements IActionPage
     {
         if (parent::IsValid()) {
             Log::Debug('Action passed all validations');
+
             return true;
         }
 
@@ -99,6 +103,7 @@ abstract class ActionPage extends Page implements IActionPage
         } else {
             $this->SetJson($errors);
         }
+
         return false;
     }
 
@@ -109,6 +114,7 @@ abstract class ActionPage extends Page implements IActionPage
 
     /**
      * @param $dataRequest string
+     *
      * @return void
      */
     abstract public function ProcessDataRequest($dataRequest);

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/FullName.php');
+require_once ROOT_DIR.'Domain/Values/FullName.php';
 
 class TransactionLogView
 {
@@ -84,6 +84,7 @@ class TransactionLogView
 
     /**
      * @param array $row
+     *
      * @return TransactionLogView
      */
     public static function Populate($row)

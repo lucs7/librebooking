@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_us.php');
+require_once 'Language.php';
+require_once 'en_us.php';
 
 class en_gb extends en_us
 {
@@ -21,9 +21,9 @@ class en_gb extends en_us
         $dates['reservation_email'] = 'd/m/Y @ H:i (e)';
         $dates['res_popup'] = 'd/m/Y H:i';
         $dates['dashboard'] = 'l, d/m/Y H:i';
-        $dates['period_time'] = "H:i";
+        $dates['period_time'] = 'H:i';
         $dates['timepicker'] = 'H:i';
-        $dates['general_date_js'] = "dd/mm/yy";
+        $dates['general_date_js'] = 'dd/mm/yy';
         $dates['short_datetime'] = 'j/n/y H:i';
         $dates['schedule_daily'] = 'l, d/m/Y';
         $dates['res_popup_time'] = 'D, d/n H:i';
@@ -37,6 +37,7 @@ class en_gb extends en_us
         $dates['report_date'] = '%d/%m';
 
         $this->Dates = $dates;
+
         return $this->Dates;
     }
 }

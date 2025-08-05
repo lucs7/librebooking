@@ -19,9 +19,10 @@ class Installer
     }
 
     /**
-     * @param $should_create_db bool
-     * @param $should_create_user bool
+     * @param $should_create_db          bool
+     * @param $should_create_user        bool
      * @param $should_create_sample_data bool
+     *
      * @return array|InstallationResult[]
      */
     public function InstallFresh($should_create_db, $should_create_user, $should_create_sample_data)
@@ -35,20 +36,20 @@ class Installer
         $database_password = $config->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_PASSWORD);
         $timezone = $config->GetKey(ConfigKeys::DEFAULT_TIMEZONE);
 
-        $create_database = new MySqlScript(ROOT_DIR . 'database_schema/create-db.sql');
+        $create_database = new MySqlScript(ROOT_DIR.'database_schema/create-db.sql');
         $create_database->Replace('librebooking', $database_name);
 
-        $create_user = new MySqlScript(ROOT_DIR . 'database_schema/create-user.sql');
+        $create_user = new MySqlScript(ROOT_DIR.'database_schema/create-user.sql');
         $create_user->Replace('librebooking', $database_name);
         $create_user->Replace('lb_user', $database_user);
         $create_user->Replace('localhost', $hostname);
         $create_user->Replace('password', $database_password);
 
-        $populate_sample_data = new MySqlScript(ROOT_DIR . 'database_schema/sample-data-utf8.sql');
+        $populate_sample_data = new MySqlScript(ROOT_DIR.'database_schema/sample-data-utf8.sql');
         $populate_sample_data->Replace('librebooking', $database_name);
 
-        $create_schema = new MySqlScript(ROOT_DIR . 'database_schema/create-schema.sql');
-        $populate_data = new MySqlScript(ROOT_DIR . 'database_schema/create-data.sql');
+        $create_schema = new MySqlScript(ROOT_DIR.'database_schema/create-schema.sql');
+        $populate_data = new MySqlScript(ROOT_DIR.'database_schema/create-data.sql');
         $populate_data->Replace('America/New_York', $timezone);
 
         if ($should_create_db) {
@@ -65,7 +66,7 @@ class Installer
 
         $results[] = $this->ExecuteScript($hostname, $database_name, $this->user, $this->password, $populate_data);
 
-        /**
+        /*
          * Populate sample data given in /LibreBooking/database_schema/sample-data-utf8.sql
          */
         if ($should_create_sample_data) {
@@ -73,6 +74,7 @@ class Installer
         }
 
         $results = array_merge($results, $upgradeResults);
+
         return $results;
     }
 
@@ -83,7 +85,7 @@ class Installer
     {
         $results = [];
 
-        $upgradeDir = ROOT_DIR . 'database_schema/upgrades';
+        $upgradeDir = ROOT_DIR.'database_schema/upgrades';
         $upgrades = scandir($upgradeDir);
 
         $currentVersion = $this->GetVersion();
@@ -91,7 +93,7 @@ class Installer
         usort($upgrades, [$this, 'SortDirectories']);
 
         foreach ($upgrades as $upgrade) {
-            if ($upgrade === '.' || $upgrade === '..' || strpos($upgrade, '.') === 0) {
+            if ('.' === $upgrade || '..' === $upgrade || 0 === strpos($upgrade, '.')) {
                 continue;
             }
 
@@ -106,6 +108,7 @@ class Installer
      * @param string $upgradeDir
      * @param string $versionNumber
      * @param string $currentVersion
+     *
      * @return array|InstallationResult[]
      */
     private function ExecuteUpgrade($upgradeDir, $versionNumber, $currentVersion)
@@ -131,6 +134,7 @@ class Installer
                 $results[] = $this->ExecuteScript($hostname, $database_name, $database_user, $database_password, $populate_data);
             }
         }
+
         return $results;
     }
 
@@ -142,6 +146,7 @@ class Installer
         if ($d1 == $d2) {
             return 0;
         }
+
         return ($d1 < $d2) ? -1 : 1;
     }
 
@@ -156,20 +161,22 @@ class Installer
         $link = @mysqli_connect($hostname, $db_user, $db_password);
         if (!$link) {
             $result->SetConnectionError();
+
             return $result;
         }
 
         $select_db_result = @mysqli_select_db($link, $database_name);
         if (!$select_db_result) {
             $result->SetAuthenticationError();
+
             return $result;
         }
 
-        @mysqli_query($link, "SET foreign_key_checks = 0;");
+        @mysqli_query($link, 'SET foreign_key_checks = 0;');
 
         $sqlArray = explode(';', $script->GetFullSql());
         foreach ($sqlArray as $stmt) {
-            if (strlen($stmt) > 3 && substr(ltrim($stmt), 0, 2) != '/*') {
+            if (strlen($stmt) > 3 && '/*' != substr(ltrim($stmt), 0, 2)) {
                 $queryResult = @mysqli_query($link, $stmt);
                 if (!$queryResult) {
                     $sqlErrorCode = mysqli_errno($link);
@@ -180,7 +187,7 @@ class Installer
             }
         }
 
-        @mysqli_query($link, "SET foreign_key_checks = 1;");
+        @mysqli_query($link, 'SET foreign_key_checks = 1;');
 
         $result->SetResult($sqlErrorCode, $sqlErrorText, $sqlStmt);
 
@@ -226,7 +233,7 @@ class Installer
         if ($row = mysqli_fetch_assoc($result)) {
             $versionNumber = $row['version_number'];
 
-            if ($versionNumber == 2.1) {
+            if (2.1 == $versionNumber) {
                 // bug in 2.2 upgrade did not insert version number, check for table instead
 
                 $getCustomAttributes = 'SELECT * FROM custom_attributes';
@@ -234,6 +241,7 @@ class Installer
 
                 if ($customAttributesResults) {
                     mysqli_query($link, "insert into dbversion values('2.2', now())");
+
                     return 2.2;
                 }
             }
@@ -241,17 +249,17 @@ class Installer
             return $versionNumber;
         }
 
-        return 2.8; //returns the current db version being installed
+        return 2.8; // returns the current db version being installed
     }
 
     public function ClearCachedTemplates()
     {
         try {
-            $templateDirectory = ROOT_DIR . 'tpl_c';
+            $templateDirectory = ROOT_DIR.'tpl_c';
             $d = dir($templateDirectory);
             while ($entry = $d->read()) {
-                if ($entry != "." && $entry != "..") {
-                    @unlink($templateDirectory . '/' . $entry);
+                if ('.' != $entry && '..' != $entry) {
+                    @unlink($templateDirectory.'/'.$entry);
                 }
             }
             $d->close();

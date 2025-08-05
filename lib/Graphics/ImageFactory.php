@@ -15,7 +15,7 @@ class ImageFactory implements IImageFactory
     public function Load($pathToImage)
     {
         if (!extension_loaded('gd')) {
-            die('gd extension is required for image upload');
+            exit('gd extension is required for image upload');
         }
 
         try {
@@ -24,7 +24,7 @@ class ImageFactory implements IImageFactory
 
             return new Image($image);
         } catch (Exception $err) {
-            die('Error loading image: ' . $err->getMessage());
+            exit('Error loading image: '.$err->getMessage());
         }
     }
 }

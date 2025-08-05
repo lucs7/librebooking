@@ -18,7 +18,7 @@ class FakeUserRepository implements IUserRepository
     /**
      * @var int|null
      */
-    public $_Exists = null;
+    public $_Exists;
 
     /**
      * @var UserDto
@@ -46,8 +46,10 @@ class FakeUserRepository implements IUserRepository
     {
         $this->_User = new FakeUser(123);
     }
+
     /**
      * @param int $userId
+     *
      * @return User
      */
     public function LoadById($userId)
@@ -55,11 +57,13 @@ class FakeUserRepository implements IUserRepository
         if (array_key_exists($userId, $this->_UserById)) {
             return $this->_UserById[$userId];
         }
+
         return $this->_User;
     }
 
     /**
      * @param string $publicId
+     *
      * @return User
      */
     public function LoadByPublicId($publicId)
@@ -69,6 +73,7 @@ class FakeUserRepository implements IUserRepository
 
     /**
      * @param string $userName
+     *
      * @return User
      */
     public function LoadByUsername($userName)
@@ -77,7 +82,6 @@ class FakeUserRepository implements IUserRepository
     }
 
     /**
-     * @param User $user
      * @return void
      */
     public function Update(User $user)
@@ -86,17 +90,18 @@ class FakeUserRepository implements IUserRepository
     }
 
     /**
-     * @param User $user
      * @return int
      */
     public function Add(User $user)
     {
         $this->_AddedUser = $user;
+
         return null;
     }
 
     /**
      * @param $userId int
+     *
      * @return void
      */
     public function DeleteById($userId)
@@ -106,11 +111,12 @@ class FakeUserRepository implements IUserRepository
 
     /**
      * @param int $userId
+     *
      * @return UserDto
      */
     public function GetById($userId)
     {
-        if ($this->_UserDto != null) {
+        if (null != $this->_UserDto) {
             return $this->_UserDto;
         }
 
@@ -126,12 +132,13 @@ class FakeUserRepository implements IUserRepository
     }
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param null|string $sortField
-     * @param null|string $sortDirection
-     * @param null|ISqlFilter $filter
+     * @param int               $pageNumber
+     * @param int               $pageSize
+     * @param string|null       $sortField
+     * @param string|null       $sortDirection
+     * @param ISqlFilter|null   $filter
      * @param AccountStatus|int $accountStatus
+     *
      * @return PageableData|UserItemView[]
      */
     public function GetList(
@@ -140,13 +147,14 @@ class FakeUserRepository implements IUserRepository
         $sortField = null,
         $sortDirection = null,
         $filter = null,
-        $accountStatus = AccountStatus::ALL
+        $accountStatus = AccountStatus::ALL,
     ) {
         return $this->_UserList;
     }
 
     /**
      * @param int $resourceId
+     *
      * @return array|UserDto[]
      */
     public function GetResourceAdmins($resourceId)
@@ -166,6 +174,7 @@ class FakeUserRepository implements IUserRepository
 
     /**
      * @param int $userId
+     *
      * @return array|UserDto[]
      */
     public function GetGroupAdmins($userId)
@@ -175,8 +184,9 @@ class FakeUserRepository implements IUserRepository
     }
 
     /**
-     * @param $userId int
+     * @param $userId     int
      * @param $roleLevels int|null|array|int[]
+     *
      * @return array|UserGroup[]
      */
     public function LoadGroups($userId, $roleLevels = null)
@@ -188,6 +198,7 @@ class FakeUserRepository implements IUserRepository
     /**
      * @param string $emailAddress
      * @param string $userName
+     *
      * @return int|null
      */
     public function UserExists($emailAddress, $userName)

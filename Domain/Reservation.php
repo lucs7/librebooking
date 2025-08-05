@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'Domain/Values/FullName.php');
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'Domain/Values/FullName.php';
 
 class Reservation
 {
@@ -75,13 +75,12 @@ class Reservation
      */
     protected $creditsRequired;
 
-
     /**
      * @return Date
      */
     public function PreviousEndDate()
     {
-        return $this->previousEnd == null ? new NullDate() : $this->previousEnd;
+        return null == $this->previousEnd ? new NullDate() : $this->previousEnd;
     }
 
     protected $reservationId;
@@ -236,14 +235,16 @@ class Reservation
         $this->startDate = $reservationDate->GetBegin();
         $this->endDate = $reservationDate->GetEnd();
 
-        if ($this->previousStart != null && !($this->previousStart->Equals($reservationDate->GetBegin())) && $this->CheckinDate()->LessThan($this->startDate)) {
+        if (null != $this->previousStart && !$this->previousStart->Equals($reservationDate->GetBegin()) && $this->CheckinDate()->LessThan($this->startDate)) {
             $this->WithCheckin(new NullDate(), $this->CheckoutDate());
         }
     }
 
     /**
      * @internal
+     *
      * @param array|int[] $participantIds
+     *
      * @return void
      */
     public function WithParticipants($participantIds)
@@ -263,7 +264,9 @@ class Reservation
 
     /**
      * @internal
+     *
      * @param array|int[] $inviteeIds
+     *
      * @return void
      */
     public function WithInvitees($inviteeIds)
@@ -283,6 +286,7 @@ class Reservation
 
     /**
      * @param array|int[] $participantIds
+     *
      * @return int
      */
     public function ChangeParticipants($participantIds)
@@ -382,6 +386,7 @@ class Reservation
 
     /**
      * @param array|int[] $inviteeIds
+     *
      * @return int
      */
     public function ChangeInvitees($inviteeIds)
@@ -399,6 +404,7 @@ class Reservation
 
     /**
      * @param string[] $invitedGuests
+     *
      * @return int
      */
     public function ChangeInvitedGuests($invitedGuests)
@@ -432,6 +438,7 @@ class Reservation
 
     /**
      * @param string[] $participatingGuests
+     *
      * @return int
      */
     public function ChangeParticipatingGuests($participatingGuests)
@@ -516,11 +523,12 @@ class Reservation
      */
     public function IsNew()
     {
-        return $this->ReservationId() == null;
+        return null == $this->ReservationId();
     }
 
     /**
      * @param int $inviteeId
+     *
      * @return bool whether the invitation was accepted
      */
     public function AcceptInvitation($inviteeId)
@@ -538,6 +546,7 @@ class Reservation
 
     /**
      * @param int $userId
+     *
      * @return bool whether the user joined
      */
     public function JoinReservation($userId)
@@ -559,12 +568,14 @@ class Reservation
 
     /**
      * @param int $inviteeId
+     *
      * @return bool whether the invitation was declined
      */
     public function DeclineInvitation($inviteeId)
     {
         if (in_array($inviteeId, $this->_inviteeIds)) {
             $this->removedInvitees[] = $inviteeId;
+
             return true;
         }
 
@@ -573,6 +584,7 @@ class Reservation
 
     /**
      * @param string $email
+     *
      * @return bool whether the invitation was accepted
      */
     public function AcceptGuestInvitation($email)
@@ -590,12 +602,14 @@ class Reservation
 
     /**
      * @param string $email
+     *
      * @return bool whether the invitation was declined
      */
     public function DeclineGuestInvitation($email)
     {
         if (in_array($email, $this->_invitedGuests)) {
             $this->removedInvitedGuests[] = $email;
+
             return true;
         }
 
@@ -604,6 +618,7 @@ class Reservation
 
     /**
      * @param int $participantId
+     *
      * @return bool whether the participant was removed
      */
     public function CancelParticipation($participantId)
@@ -611,9 +626,10 @@ class Reservation
         if (in_array($participantId, $this->_participantIds)) {
             $this->removedParticipants[] = $participantId;
             $index = array_search($participantId, $this->_participantIds);
-            if ($index !== false) {
+            if (false !== $index) {
                 array_splice($this->_participantIds, $index, 1);
             }
+
             return true;
         }
 
@@ -625,7 +641,7 @@ class Reservation
      */
     public function CheckinDate()
     {
-        return $this->checkinDate == null ? new NullDate() : $this->checkinDate;
+        return null == $this->checkinDate ? new NullDate() : $this->checkinDate;
     }
 
     /**
@@ -633,7 +649,7 @@ class Reservation
      */
     public function IsCheckedIn()
     {
-        return $this->checkinDate != null && $this->checkinDate->ToString() != '';
+        return null != $this->checkinDate && '' != $this->checkinDate->ToString();
     }
 
     public function Checkin()
@@ -646,7 +662,7 @@ class Reservation
      */
     public function CheckoutDate()
     {
-        return $this->checkoutDate == null ? new NullDate() : $this->checkoutDate;
+        return null == $this->checkoutDate ? new NullDate() : $this->checkoutDate;
     }
 
     /**
@@ -654,7 +670,7 @@ class Reservation
      */
     public function IsCheckedOut()
     {
-        return $this->checkoutDate != null && $this->checkoutDate->ToString() != '';
+        return null != $this->checkoutDate && '' != $this->checkoutDate->ToString();
     }
 
     public function Checkout()
@@ -669,10 +685,6 @@ class Reservation
         return $res1->StartDate()->Compare($res2->StartDate());
     }
 
-    /**
-     * @param Date $checkinDate
-     * @param Date $checkoutDate
-     */
     public function WithCheckin(Date $checkinDate, Date $checkoutDate)
     {
         $this->checkinDate = $checkinDate;
@@ -692,6 +704,7 @@ class Reservation
         if ($this->EndDate()->GreaterThan(Date::Now())) {
             return $this->creditsRequired;
         }
+
         return 0;
     }
 
@@ -712,6 +725,7 @@ class Reservation
         if ($this->EndDate()->GreaterThan(Date::Now())) {
             return empty($this->creditsConsumed) ? 0 : $this->creditsConsumed;
         }
+
         return 0;
     }
 }
@@ -719,14 +733,15 @@ class Reservation
 class ReferenceNumberGenerator
 {
     /**
-     * Just for testing
+     * Just for testing.
+     *
      * @var string
      */
-    public static $__referenceNumber = null;
+    public static $__referenceNumber;
 
     public static function Generate()
     {
-        if (self::$__referenceNumber == null) {
+        if (null == self::$__referenceNumber) {
             return str_replace('.', '', uniqid('', true));
         }
 

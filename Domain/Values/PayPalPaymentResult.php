@@ -29,6 +29,7 @@ class PayPalPaymentResult
 
     /**
      * @param string $jsonString
+     *
      * @return PayPalPaymentResult
      */
     public static function FromJsonString($jsonString)

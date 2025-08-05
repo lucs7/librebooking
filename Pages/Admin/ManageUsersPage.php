@@ -1,17 +1,18 @@
 <?php
 
-require_once(ROOT_DIR . 'config/timezones.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageUsersPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'config/timezones.php';
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageUsersPresenter.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 interface IManageUsersPage extends IPageable, IActionPage
 {
     /**
      * @param UserItemView[] $users
+     *
      * @return void
      */
     public function BindUsers($users);
@@ -23,12 +24,12 @@ interface IManageUsersPage extends IPageable, IActionPage
 
     /**
      * @param BookableResource[] $resources
+     *
      * @return void
      */
     public function BindResources($resources);
 
     /**
-     * @param mixed $objectToSerialize
      * @return void
      */
     public function SetJsonResponse($objectToSerialize);
@@ -168,7 +169,6 @@ interface IManageUsersPage extends IPageable, IActionPage
     public function GetUpdateOnImport();
 
     /**
-     * @param User $user
      * @param CustomAttribute[] $attributes
      */
     public function ShowUserUpdate(User $user, $attributes);
@@ -177,12 +177,12 @@ interface IManageUsersPage extends IPageable, IActionPage
 class ManageUsersPage extends ActionPage implements IManageUsersPage
 {
     /**
-     * @var \ManageUsersPresenter
+     * @var ManageUsersPresenter
      */
     protected $_presenter;
 
     /**
-     * @var \PageablePage
+     * @var PageablePage
      */
     protected $pageable;
 
@@ -221,7 +221,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Set('PerUserColors', $config->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_PER_USER_COLORS, new BooleanConverter()));
         $this->Set('CreditsEnabled', $config->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter()));
         $url = $this->server->GetUrl();
-        $exportUrl = BookedStringHelper::Contains($url, '?') ? $url . '&dr=export' : $this->server->GetRequestUri() . '?dr=export';
+        $exportUrl = BookedStringHelper::Contains($url, '?') ? $url.'&dr=export' : $this->server->GetRequestUri().'?dr=export';
         $this->Set('ExportUrl', $exportUrl);
 
         $this->RenderTemplate();
@@ -257,8 +257,8 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
     public function GetPageSize()
     {
         /* replaced by dataTable */
-        /*return $this->pageable->GetPageSize();*/
-        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
+        /* return $this->pageable->GetPageSize(); */
+        throw new LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     public function BindUsers($users)
@@ -291,6 +291,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
 
     /**
      * @param BookableResource[] $resources
+     *
      * @return void
      */
     public function BindResources($resources)
@@ -315,7 +316,6 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
     }
 
     /**
-     * @param mixed $objectToSerialize
      * @return void
      */
     public function SetJsonResponse($objectToSerialize)
@@ -387,6 +387,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
     public function GetFilterStatusId()
     {
         $statusId = $this->GetQuerystring(QueryStringKeys::ACCOUNT_STATUS);
+
         return empty($statusId) ? AccountStatus::ALL : $statusId;
     }
 
@@ -418,7 +419,6 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
     {
         return $this->GetForm(FormKeys::NAME);
     }
-
 
     public function ShowTemplateCSV($attributes)
     {

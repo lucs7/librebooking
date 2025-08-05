@@ -4,9 +4,9 @@ class LoginTime
 {
     /**
      * @var null
-     * Only for testing
+     *           Only for testing
      */
-    public static $Now = null;
+    public static $Now;
 
     private static $_format = 'Y-m-d H:i:s';
 

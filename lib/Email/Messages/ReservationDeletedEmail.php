@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
+require_once ROOT_DIR.'lib/Email/Messages/ReservationEmailMessage.php';
 
 class ReservationDeletedEmail extends ReservationEmailMessage
 {
@@ -18,7 +18,7 @@ class ReservationDeletedEmail extends ReservationEmailMessage
         if (method_exists($this->reservationSeries, 'GetDeleteReason')) {
             $this->Set('DeleteReason', $this->reservationSeries->GetDeleteReason());
         }
-        $this->Set("Deleted", true);
+        $this->Set('Deleted', true);
     }
 
     protected function GetTemplateName()

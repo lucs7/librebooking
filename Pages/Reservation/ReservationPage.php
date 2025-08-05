@@ -1,13 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenter.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationPresenter.php';
 
 interface IReservationPage extends IPage
 {
     /**
      * @param $startPeriods array|SchedulePeriod[]
-     * @param $endPeriods array|SchedulePeriod[]
+     * @param $endPeriods   array|SchedulePeriod[]
+     *
      * @parma $lockDates bool
      */
     public function BindPeriods($startPeriods, $endPeriods, $lockPeriods);
@@ -27,16 +28,8 @@ interface IReservationPage extends IPage
      */
     public function BindResourceGroups($groups);
 
-    /**
-     * @param SchedulePeriod $selectedStart
-     * @param Date $startDate
-     */
     public function SetSelectedStart(SchedulePeriod $selectedStart, Date $startDate);
 
-    /**
-     * @param SchedulePeriod $selectedEnd
-     * @param Date $endDate
-     */
     public function SetSelectedEnd(SchedulePeriod $selectedEnd, Date $endDate);
 
     /**
@@ -44,9 +37,6 @@ interface IReservationPage extends IPage
      */
     public function SetRepeatTerminationDate($repeatTerminationDate);
 
-    /**
-     * @param UserDto $user
-     */
     public function SetReservationUser(UserDto $user);
 
     /**
@@ -79,9 +69,6 @@ interface IReservationPage extends IPage
      */
     public function SetAttachments($attachments);
 
-    /**
-     * @param $canChangeUser
-     */
     public function SetCanChangeUser($canChangeUser);
 
     /**
@@ -115,20 +102,17 @@ interface IReservationPage extends IPage
     public function SetAllowParticipantsToJoin($allowParticipation);
 
     /**
-     * @param int $reminderValue
+     * @param int                         $reminderValue
      * @param ReservationReminderInterval $reminderInterval
      */
     public function SetStartReminder($reminderValue, $reminderInterval);
 
     /**
-     * @param int $reminderValue
+     * @param int                         $reminderValue
      * @param ReservationReminderInterval $reminderInterval
      */
     public function SetEndReminder($reminderValue, $reminderInterval);
 
-    /**
-     * @param DateRange $availability
-     */
     public function SetAvailability(DateRange $availability);
 
     /**
@@ -214,24 +198,24 @@ abstract class ReservationPage extends Page implements IReservationPage
         $this->Set(
             'RepeatOptions',
             [
-                                          'none' => ['key' => 'DoesNotRepeat', 'everyKey' => ''],
-                                          'daily' => ['key' => 'Daily', 'everyKey' => 'days'],
-                                          'weekly' => ['key' => 'Weekly', 'everyKey' => 'weeks'],
-                                          'monthly' => ['key' => 'Monthly', 'everyKey' => 'months'],
-                                          'yearly' => ['key' => 'Yearly', 'everyKey' => 'years'],
-                                  ]
+                'none' => ['key' => 'DoesNotRepeat', 'everyKey' => ''],
+                'daily' => ['key' => 'Daily', 'everyKey' => 'days'],
+                'weekly' => ['key' => 'Weekly', 'everyKey' => 'weeks'],
+                'monthly' => ['key' => 'Monthly', 'everyKey' => 'months'],
+                'yearly' => ['key' => 'Yearly', 'everyKey' => 'years'],
+            ]
         );
         $this->Set(
             'DayNames',
             [
-                                     0 => 'DaySundayAbbr',
-                                     1 => 'DayMondayAbbr',
-                                     2 => 'DayTuesdayAbbr',
-                                     3 => 'DayWednesdayAbbr',
-                                     4 => 'DayThursdayAbbr',
-                                     5 => 'DayFridayAbbr',
-                                     6 => 'DaySaturdayAbbr',
-                             ]
+                0 => 'DaySundayAbbr',
+                1 => 'DayMondayAbbr',
+                2 => 'DayTuesdayAbbr',
+                3 => 'DayWednesdayAbbr',
+                4 => 'DayThursdayAbbr',
+                5 => 'DayFridayAbbr',
+                6 => 'DaySaturdayAbbr',
+            ]
         );
 
         $this->Set('TitleRequired', $config->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_TITLE_REQUIRED, new BooleanConverter()));
@@ -241,6 +225,7 @@ abstract class ReservationPage extends Page implements IReservationPage
 
         if ($this->IsUnavailable()) {
             $this->RedirectToError(ErrorMessages::RESERVATION_NOT_AVAILABLE);
+
             return;
         }
 
@@ -366,12 +351,14 @@ abstract class ReservationPage extends Page implements IReservationPage
         if (!empty($redirect)) {
             return $redirect;
         }
+
         return $this->GetLastPage(Pages::SCHEDULE);
     }
 
     protected function LoadInitializerFactory()
     {
         $userRepository = new UserRepository();
+
         return new ReservationInitializerFactory(
             new ScheduleRepository(),
             $userRepository,

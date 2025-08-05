@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class QuartzyImportPage extends ActionPage
 {
@@ -30,6 +30,7 @@ class QuartzyImportPage extends ActionPage
 
     /**
      * @param $dataRequest string
+     *
      * @return void
      */
     public function ProcessDataRequest($dataRequest)
@@ -64,7 +65,7 @@ class QuartzyImportPresenter extends ActionPresenter
      * @var QuartzyImportPage
      */
     private $page;
-    private $defaultScheduleId = null;
+    private $defaultScheduleId;
     private $schedules = [];
     private $resources = [];
     private $groupRepository;
@@ -95,29 +96,30 @@ class QuartzyImportPresenter extends ActionPresenter
 
         $error = $file->Error();
         if (!empty($error)) {
-            die($error);
+            exit($error);
         }
         $zip = new ZipArchive();
 
-        if ($zip->open($file->TemporaryName()) === true) {
-            $extractDirectory = str_replace('.tmp', '', $file->TemporaryName()) . 'zip';
+        if (true === $zip->open($file->TemporaryName())) {
+            $extractDirectory = str_replace('.tmp', '', $file->TemporaryName()).'zip';
             $zip->extractTo($extractDirectory);
             $zip->close();
             $this->LoadData($extractDirectory);
 
             $this->removeDirectory($extractDirectory);
         } else {
-            die('Could not extract your Quartzy file.');
+            exit('Could not extract your Quartzy file.');
         }
     }
 
     private function removeDirectory($path)
     {
-        $files = glob($path . '/*');
+        $files = glob($path.'/*');
         foreach ($files as $file) {
             is_dir($file) ? $this->removeDirectory($file) : unlink($file);
         }
         rmdir($path);
+
         return;
     }
 
@@ -129,8 +131,9 @@ class QuartzyImportPresenter extends ActionPresenter
     private function LoadData($extractDirectory)
     {
         $directories = array_diff(scandir($extractDirectory), ['..', '.']);
-        if (count($directories) == 0) {
-            echo('No data found in your Quartzy file.');
+        if (0 == count($directories)) {
+            echo 'No data found in your Quartzy file.';
+
             return;
         }
 
@@ -145,7 +148,7 @@ class QuartzyImportPresenter extends ActionPresenter
 
     private function AddSchedule($scheduleName, $rootDir)
     {
-        if ($this->defaultScheduleId == null) {
+        if (null == $this->defaultScheduleId) {
             $this->schedules = $this->scheduleRepository->GetAll();
             /** @var Schedule $schedule */
             foreach ($this->schedules as $schedule) {
@@ -165,18 +168,18 @@ class QuartzyImportPresenter extends ActionPresenter
             }
         }
 
-        if ($scheduleId == 0) {
+        if (0 == $scheduleId) {
             Log::Debug('QuartzyImport Schedule does not exist %s', $scheduleName);
             $scheduleId = $this->scheduleRepository->Add(new Schedule(0, htmlspecialchars($scheduleName), false, 0, 7), $this->defaultScheduleId);
         }
 
-        $this->AddEquipment($scheduleId, $rootDir . '/' . $scheduleName);
+        $this->AddEquipment($scheduleId, $rootDir.'/'.$scheduleName);
     }
 
     private function AddEquipment($scheduleId, $scheduleDirectory)
     {
-        $lines = $this->GetCsvData($scheduleDirectory . '/Equipment.csv');
-        for ($i = 1; $i < count($lines); $i++) {
+        $lines = $this->GetCsvData($scheduleDirectory.'/Equipment.csv');
+        for ($i = 1; $i < count($lines); ++$i) {
             $line = $lines[$i];
             try {
                 $this->AddResource($line, $scheduleId, $scheduleDirectory);
@@ -189,8 +192,8 @@ class QuartzyImportPresenter extends ActionPresenter
     private function GetCsvData($path)
     {
         $lines = [];
-        if (($handle = fopen($path, "r")) !== false) {
-            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+        if (($handle = fopen($path, 'r')) !== false) {
+            while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 $lines[] = $data;
             }
             fclose($handle);
@@ -222,7 +225,7 @@ class QuartzyImportPresenter extends ActionPresenter
             }
         }
 
-        if ($resourceId == 0) {
+        if (0 == $resourceId) {
             $adminGroupId = $this->AddResourceAdmin($managedBy, $name);
             $resource = new BookableResource(
                 0,
@@ -242,13 +245,13 @@ class QuartzyImportPresenter extends ActionPresenter
                 $scheduleId,
                 $adminGroupId
             );
-            if ($enabled != 'YES') {
+            if ('YES' != $enabled) {
                 $resource->ChangeStatus(ResourceStatus::UNAVAILABLE);
             }
             $resourceId = $this->resourceRepository->Add($resource);
         }
 
-        $this->AddReservations($resourceId, $scheduleDirectory . '/Equipment/' . $name);
+        $this->AddReservations($resourceId, $scheduleDirectory.'/Equipment/'.$name);
     }
 
     private function AddReservations($resourceId, $resourceDirectory)
@@ -258,9 +261,9 @@ class QuartzyImportPresenter extends ActionPresenter
         }
 
         ServiceLocator::GetDatabase()
-                      ->Execute(new AdHocCommand('delete rs from reservation_series rs inner join reservation_resources rr on rs.series_id = rr.series_id where rr.resource_id = ' . $resourceId));
-        $lines = $this->GetCsvData($resourceDirectory . '/Booking Calendar.csv');
-        for ($i = 1; $i < count($lines); $i++) {
+                      ->Execute(new AdHocCommand('delete rs from reservation_series rs inner join reservation_resources rr on rs.series_id = rr.series_id where rr.resource_id = '.$resourceId));
+        $lines = $this->GetCsvData($resourceDirectory.'/Booking Calendar.csv');
+        for ($i = 1; $i < count($lines); ++$i) {
             $line = $lines[$i];
             try {
                 $this->AddReservation($line, $resourceId);
@@ -285,7 +288,7 @@ class QuartzyImportPresenter extends ActionPresenter
             }
         }
 
-        if ($adminGroup == null) {
+        if (null == $adminGroup) {
             $adminGroup = new Group(0, htmlspecialchars($adminGroupName));
             $adminGroup->ChangeRoles([RoleLevel::RESOURCE_ADMIN]);
             $id = $this->groupRepository->Add($adminGroup);
@@ -326,7 +329,7 @@ class QuartzyImportPresenter extends ActionPresenter
 
     private function AddReservation($line, $resourceId)
     {
-        //Log::Debug('Adding reservation %s', var_export($line, true));
+        // Log::Debug('Adding reservation %s', var_export($line, true));
         $resource = $this->resourceRepository->LoadById($resourceId);
 
         $name = $line[0];
@@ -341,7 +344,7 @@ class QuartzyImportPresenter extends ActionPresenter
         $endDate = Date::ParseExact($ends);
 
         $nameParts = explode(' ', $name, 2);
-        if (count($nameParts) != 2) {
+        if (2 != count($nameParts)) {
             $nameParts = ['', ''];
         }
         $userId = $this->AddUser($email, $nameParts[0], $nameParts[1]);

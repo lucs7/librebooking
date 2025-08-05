@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Controllers/GroupSaveController.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Group/GroupCreatedResponse.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Group/GroupRequest.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'WebServices/Controllers/GroupSaveController.php';
+require_once ROOT_DIR.'WebServices/Responses/Group/GroupCreatedResponse.php';
+require_once ROOT_DIR.'WebServices/Requests/Group/GroupRequest.php';
 
 class GroupsWriteWebService
 {
@@ -19,9 +19,13 @@ class GroupsWriteWebService
 
     /**
      * @name CreateGroup
+     *
      * @description Creates a new group
+     *
      * @request GroupRequest
+     *
      * @response GroupCreatedResponse
+     *
      * @return void
      */
     public function Create()
@@ -46,10 +50,13 @@ class GroupsWriteWebService
 
     /**
      * @name UpdateGroup
+     *
      * @description Updates and existing group
+     *
      * @request GroupRequest
+     *
      * @response GroupUpdatedResponse
-     * @param $groupId
+     *
      * @return void
      */
     public function Update($groupId)
@@ -74,9 +81,13 @@ class GroupsWriteWebService
 
     /**
      * @name DeleteGroup
+     *
      * @description Deletes an existing group
+     *
      * @response DeletedResponse
+     *
      * @param int $groupId
+     *
      * @return void
      */
     public function Delete($groupId)
@@ -98,10 +109,14 @@ class GroupsWriteWebService
 
     /**
      * @name ChangeGroupRoles
+     *
      * @description Updates the roles for an existing group
      * roleIds : 1 (Group Administrator), 2 (Application Administrator), 3 (Resource Administrator), 4 (Schedule Administrator)
+     *
      * @response GroupUpdatedResponse
+     *
      * @param int $groupId
+     *
      * @return void
      */
     public function Roles($groupId)
@@ -126,9 +141,13 @@ class GroupsWriteWebService
 
     /**
      * @name ChangeGroupPermissions
+     *
      * @description Updates the permissions for an existing group
+     *
      * @response GroupUpdatedResponse
+     *
      * @param int $groupId
+     *
      * @return void
      */
     public function Permissions($groupId)
@@ -153,9 +172,13 @@ class GroupsWriteWebService
 
     /**
      * @name ChangeGroupUsers
+     *
      * @description Updates the permissions for an existing group
+     *
      * @response GroupUpdatedResponse
+     *
      * @param int $groupId
+     *
      * @return void
      */
     public function Users($groupId)

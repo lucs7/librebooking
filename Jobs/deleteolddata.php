@@ -1,30 +1,31 @@
 <?php
+
 /**
-*  Cron Example:
-*  This script must be executed at a specific time to be enabled
-*  * * * * * /usr/bin/env php -f ${WWW_DIR}/librebooking/Jobs/sendmissedcheckin.php
-
-*  Each * correspods to Minute Hour Day_Of_Month Month Day_Of_Week, respectively
-
-*  /usr/bin/env php -f                                  -> the path to php (run "which php" to know what it is)
-*  ${WWW_DIR}/librebooking/Jobs/sendmissedcheckin.php   -> the path to this script
-*/
-define('ROOT_DIR', __DIR__ . '/../');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Jobs/JobCop.php');
+ *  Cron Example:
+ *  This script must be executed at a specific time to be enabled
+ *  * * * * * /usr/bin/env php -f ${WWW_DIR}/librebooking/Jobs/sendmissedcheckin.php
+ *
+ *  Each * correspods to Minute Hour Day_Of_Month Month Day_Of_Week, respectively
+ *
+ *  /usr/bin/env php -f                                  -> the path to php (run "which php" to know what it is)
+ *  ${WWW_DIR}/librebooking/Jobs/sendmissedcheckin.php   -> the path to this script
+ */
+define('ROOT_DIR', __DIR__.'/../');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Jobs/JobCop.php';
 
 Log::Debug('Running deleteolddata.php');
 
 JobCop::EnsureCommandLine();
 
-//Checks if years specified are positive (only 1+ years old data can be permanently deleted)
-if ((Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::YEARS_OLD_DATA)) > 0){
+// Checks if years specified are positive (only 1+ years old data can be permanently deleted)
+if (Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::YEARS_OLD_DATA) > 0) {
     try {
-        //Delete announcements, blackouts and reservations older than $deleteBefore (years -> -2 = 2+ years older)
-        $deleteBefore = Date::Now()->AddYears(-(Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::YEARS_OLD_DATA)));
+        // Delete announcements, blackouts and reservations older than $deleteBefore (years -> -2 = 2+ years older)
+        $deleteBefore = Date::Now()->AddYears(-Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::YEARS_OLD_DATA));
 
-        //ANNOUNCEMENTS
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::DELETE_OLD_ANNOUNCEMENTS, new BooleanConverter())){
+        // ANNOUNCEMENTS
+        if (Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::DELETE_OLD_ANNOUNCEMENTS, new BooleanConverter())) {
             $getAnnouncements = GetAnnoucementsIdsToDeleteQuery($deleteBefore);
             $reader = ServiceLocator::GetDatabase()->Query($getAnnouncements);
             Log::Debug('Getting %s old announcements', $reader->NumRows());
@@ -35,30 +36,30 @@ if ((Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, Co
             $reader->Free();
         }
 
-        //BLACKOUTS
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::DELETE_OLD_BLACKOUTS, new BooleanConverter())){
+        // BLACKOUTS
+        if (Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::DELETE_OLD_BLACKOUTS, new BooleanConverter())) {
             $getBlackouts = GetBlackoutsIdsToDeleteQuery($deleteBefore);
             $reader = ServiceLocator::GetDatabase()->Query($getBlackouts);
             Log::Debug('Getting %s old blackouts', $reader->NumRows());
             while ($row = $reader->GetRow()) {
                 $blackoutId = $row[ColumnNames::BLACKOUT_SERIES_ID];
-                DeleteBlackoutsQuery($blackoutId);      
+                DeleteBlackoutsQuery($blackoutId);
             }
             $reader->Free();
         }
 
-        //RESERVATIONS
-        if (Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::DELETE_OLD_RESERVATIONS, new BooleanConverter())){
+        // RESERVATIONS
+        if (Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, ConfigKeys::DELETE_OLD_RESERVATIONS, new BooleanConverter())) {
             $getReservations = GetReservationsIdsToDeleteQuery($deleteBefore);
             $reader = ServiceLocator::GetDatabase()->Query($getReservations);
             Log::Debug('Getting %s old reservations', $reader->NumRows());
             while ($row = $reader->GetRow()) {
                 $reservationId = $row[ColumnNames::RESERVATION_SERIES_ID];
 
-                //RESERVATION USERS
+                // RESERVATION USERS
                 $getReservationUsers = GetReservationUsersToDelete($reservationId);
                 $auxReader = ServiceLocator::GetDatabase()->Query($getReservationUsers);
-                while ($auxRow = $auxReader->GetRow()){
+                while ($auxRow = $auxReader->GetRow()) {
                     $reservationUser = $auxRow[ColumnNames::RESERVATION_INSTANCE_ID];
                     DeleteReservationUsersQuery($reservationUser);
                 }
@@ -68,24 +69,20 @@ if ((Configuration::Instance()->GetSectionKey(ConfigSection::DELETE_OLD_DATA, Co
             }
             $reader->Free();
         }
-
-    } catch (Exception $ex){
+    } catch (Exception $ex) {
         Log::Error('Error running deleteolddata.php: %s', $ex);
     }
-}
-else {
+} else {
     Log::Error('Error running deleteolddata.php');
     Log::Error('Invalid years.old.data value in config file, value must be positive!');
 }
 Log::Debug('Finished running deleteolddata.php');
 
-
-
-//GET INSTANCES FUNCTIONS
+// GET INSTANCES FUNCTIONS
 
 //          ->  ANNOUNCEMENTS
-function GetAnnoucementsIdsToDeleteQuery($deleteBefore){
-
+function GetAnnoucementsIdsToDeleteQuery($deleteBefore)
+{
     $annoucementsIds = new AdHocCommand(
         "   SELECT announcementid
             FROM announcements
@@ -96,8 +93,8 @@ function GetAnnoucementsIdsToDeleteQuery($deleteBefore){
 }
 
 //          ->  BLACKOUTS
-function GetBlackoutsIdsToDeleteQuery($deleteBefore){
-
+function GetBlackoutsIdsToDeleteQuery($deleteBefore)
+{
     $blackoutsIds = new AdHocCommand(
         "   SELECT blackout_series_id
             FROM blackout_series
@@ -116,18 +113,20 @@ function GetBlackoutsIdsToDeleteQuery($deleteBefore){
 }
 
 //          ->  RESERVATION USERS
-function GetReservationUsersToDelete($reservationSeriesId){ 
+function GetReservationUsersToDelete($reservationSeriesId)
+{
     $reservationInstance = new AdHocCommand(
         "   SELECT reservation_instance_id
             FROM reservation_instances
             WHERE series_id = '{$reservationSeriesId}'"
     );
+
     return $reservationInstance;
 }
 
 //          -> RESERVATIONS
-function GetReservationsIdsToDeleteQuery($deleteBefore) {
-
+function GetReservationsIdsToDeleteQuery($deleteBefore)
+{
     $reservationIds = new AdHocCommand(
         "   SELECT reservation_series.series_id
             FROM reservation_series
@@ -145,11 +144,11 @@ function GetReservationsIdsToDeleteQuery($deleteBefore) {
     return $reservationIds;
 }
 
-
-//DELETE INSTANCES FUNCTIONS
+// DELETE INSTANCES FUNCTIONS
 
 //          ->  ANNOUNCEMENTS
-function DeleteAnnouncementsQuery($announcementid){
+function DeleteAnnouncementsQuery($announcementid)
+{
     Log::Debug('Deleting announcement with id %s', $announcementid);
 
     $deleteGroupAnnouncements = new AdHocCommand(
@@ -174,7 +173,8 @@ function DeleteAnnouncementsQuery($announcementid){
 }
 
 //          ->    BLACKOUTS
-function DeleteBlackoutsQuery($blackoutid){
+function DeleteBlackoutsQuery($blackoutid)
+{
     Log::Debug('Deleting blackout with id %s', $blackoutid);
 
     $deleteBlackoutSeriesResources = new AdHocCommand(
@@ -199,7 +199,8 @@ function DeleteBlackoutsQuery($blackoutid){
 }
 
 //          ->    RESERVATION USERS
-function DeleteReservationUsersQuery($reservationInstanceId){
+function DeleteReservationUsersQuery($reservationInstanceId)
+{
     $deleteReservationGuests = new AdHocCommand(
         "DELETE FROM reservation_guests
         WHERE reservation_instance_id = '{$reservationInstanceId}'"
@@ -214,7 +215,8 @@ function DeleteReservationUsersQuery($reservationInstanceId){
 }
 
 //          ->    RESERVATIONS
-function DeleteReservationsQuery($reservationId){
+function DeleteReservationsQuery($reservationId)
+{
     Log::Debug('Deleting reservation with id %s', $reservationId);
 
     $deleteReservationAcessories = new AdHocCommand(
@@ -250,7 +252,7 @@ function DeleteReservationsQuery($reservationId){
     $deleteReservationSeries = new AdHocCommand(
         "DELETE FROM reservation_series
         WHERE series_id = '{$reservationId}'"
-    );    
+    );
     ServiceLocator::GetDatabase()->Execute($deleteReservationSeries);
 
     Log::Debug('Reservation with id %s deleted', $reservationId);

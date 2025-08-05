@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/JsonRequest.php');
+require_once ROOT_DIR.'lib/WebService/JsonRequest.php';
 
 class UpdateUserPasswordRequest extends JsonRequest
 {
@@ -10,6 +10,7 @@ class UpdateUserPasswordRequest extends JsonRequest
     {
         $request = new UpdateUserPasswordRequest();
         $request->password = 'plaintext password';
+
         return $request;
     }
 }

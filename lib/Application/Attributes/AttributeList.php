@@ -9,12 +9,14 @@ interface IEntityAttributeList
 
     /**
      * @param null $entityId
+     *
      * @return array|CustomAttribute[]
      */
     public function GetDefinitions($entityId = null);
 
     /**
      * @param $entityId int|null
+     *
      * @return array|LBAttribute[]
      */
     public function GetAttributes($entityId = null);
@@ -79,6 +81,7 @@ class AttributeList implements IEntityAttributeList
 
     /**
      * @param null $entityId
+     *
      * @return array|CustomAttribute[]
      */
     public function GetDefinitions($entityId = null)
@@ -122,7 +125,7 @@ class AttributeList implements IEntityAttributeList
                 $definition = $this->entityDefinitions[$entityId][$attributeId];
             }
 
-            if ($definition != null) {
+            if (null != $definition) {
                 if (empty($entityId) || !array_key_exists($entityId, $this->values) || !array_key_exists(
                     $attributeId,
                     $this->values[$entityId]
@@ -142,7 +145,8 @@ class AttributeList implements IEntityAttributeList
 
     /**
      * @param $attributeId int
-     * @param $entityId int
+     * @param $entityId    int
+     *
      * @return bool
      */
     private function AttributeExistsAndIsNotEntity($attributeId, $entityId)
@@ -152,22 +156,24 @@ class AttributeList implements IEntityAttributeList
 
     /**
      * @param $attributeId int
-     * @param $entityId int
+     * @param $entityId    int
+     *
      * @return bool
      */
     private function EntityAttributeExists($attributeId, $entityId)
     {
-        return $this->IsEntityAttribute($attributeId, $entityId) &&
-        array_key_exists($entityId, $this->entityDefinitions) && array_key_exists($attributeId, $this->entityDefinitions[$entityId]);
+        return $this->IsEntityAttribute($attributeId, $entityId)
+        && array_key_exists($entityId, $this->entityDefinitions) && array_key_exists($attributeId, $this->entityDefinitions[$entityId]);
     }
 
     /**
      * @param $attributeId int
-     * @param $entityId int
+     * @param $entityId    int
+     *
      * @return bool
      */
     private function IsEntityAttribute($attributeId, $entityId)
     {
-        return array_key_exists($attributeId, $this->entityAttributes) && ($entityId != null && array_key_exists($entityId, $this->entityDefinitions));
+        return array_key_exists($attributeId, $this->entityAttributes) && (null != $entityId && array_key_exists($entityId, $this->entityDefinitions));
     }
 }

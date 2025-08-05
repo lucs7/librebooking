@@ -1,14 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/Schedule/SchedulePageBuilder.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
+require_once ROOT_DIR.'lib/Server/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/Schedule/SchedulePageBuilder.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
 
 interface ISchedulePresenter
 {
@@ -42,19 +42,12 @@ class SchedulePresenter extends ActionPresenter implements ISchedulePresenter
      */
     private $_reservationService;
 
-    /**
-     * @param ISchedulePage $page
-     * @param IScheduleService $scheduleService
-     * @param IResourceService $resourceService
-     * @param ISchedulePageBuilder $schedulePageBuilder
-     * @param IReservationService $reservationService
-     */
     public function __construct(
         ISchedulePage $page,
         IScheduleService $scheduleService,
         IResourceService $resourceService,
         ISchedulePageBuilder $schedulePageBuilder,
-        IReservationService $reservationService
+        IReservationService $reservationService,
     ) {
         parent::__construct($page);
         $this->_page = $page;
@@ -70,8 +63,9 @@ class SchedulePresenter extends ActionPresenter implements ISchedulePresenter
 
         $schedules = $this->_scheduleService->GetAll($showInaccessibleResources, $user);
 
-        if (count($schedules) == 0) {
+        if (0 == count($schedules)) {
             $this->_page->ShowPermissionError(true);
+
             return;
         }
 
@@ -139,7 +133,7 @@ class SchedulePresenter extends ActionPresenter implements ISchedulePresenter
 
     /**
      * Gets the resources the user has permissions (full access and view only permissions)
-     * This is used to block a user from seeing reservation details if he has no permissions to its resources
+     * This is used to block a user from seeing reservation details if he has no permissions to its resources.
      */
     public function UserResourcePermissions()
     {

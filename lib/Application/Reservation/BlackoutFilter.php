@@ -2,16 +2,16 @@
 
 class BlackoutFilter
 {
-    private $startDate = null;
-    private $endDate = null;
-    private $scheduleId = null;
-    private $resourceId = null;
+    private $startDate;
+    private $endDate;
+    private $scheduleId;
+    private $resourceId;
 
     /**
      * @param Date $startDate
      * @param Date $endDate
-     * @param int $scheduleId
-     * @param int $resourceId
+     * @param int  $scheduleId
+     * @param int  $resourceId
      */
     public function __construct($startDate = null, $endDate = null, $scheduleId = null, $resourceId = null)
     {

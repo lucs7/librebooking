@@ -3,9 +3,10 @@
 class Paths
 {
     /**
-     * Filesystem directory for storing reservation attachments. Always contains trailing slash
+     * Filesystem directory for storing reservation attachments. Always contains trailing slash.
      *
      * @static
+     *
      * @return string
      */
     public static function ReservationAttachments()
@@ -13,15 +14,15 @@ class Paths
         $uploadDir = Configuration::Instance()->GetSectionKey(ConfigSection::UPLOADS, ConfigKeys::UPLOAD_RESERVATION_ATTACHMENTS);
 
         if (empty($uploadDir)) {
-            $uploadDir = dirname(__FILE__) . '/' . ROOT_DIR . 'uploads/reservation';
+            $uploadDir = dirname(__FILE__).'/'.ROOT_DIR.'uploads/reservation';
         }
 
         if (!is_dir($uploadDir)) {
-            $uploadDir =  dirname(__FILE__) . '/' . ROOT_DIR . $uploadDir;
+            $uploadDir = dirname(__FILE__).'/'.ROOT_DIR.$uploadDir;
         }
 
         if (!BookedStringHelper::EndsWith($uploadDir, '/')) {
-            $uploadDir = $uploadDir . '/';
+            $uploadDir = $uploadDir.'/';
         }
 
         if (!is_dir($uploadDir)) {
@@ -33,32 +34,37 @@ class Paths
                 Log::Debug('Could not create %s', $uploadDir);
             }
         }
+
         return $uploadDir;
     }
 
     /**
-     * Filesystem directory for storing terms of service file. Always contains trailing slash
+     * Filesystem directory for storing terms of service file. Always contains trailing slash.
      *
      * @static
+     *
      * @return string
      */
     public static function Terms()
     {
-        return ROOT_DIR . 'Web/uploads/tos/';
+        return ROOT_DIR.'Web/uploads/tos/';
     }
 
     /**
-     * Filesystem directory for storing terms of email templates for given language. Always contains trailing slash
+     * Filesystem directory for storing terms of email templates for given language. Always contains trailing slash.
      *
      * @static
+     *
      * @param $language string
+     *
      * @return string
      */
     public static function EmailTemplates($language)
     {
         if (AvailableLanguages::Contains($language)) {
-            return dirname(__FILE__) . '/' . ROOT_DIR . "lang/$language/";
+            return dirname(__FILE__).'/'.ROOT_DIR."lang/$language/";
         }
-        return dirname(__FILE__) . '/' . ROOT_DIR . "lang/en_us/";
+
+        return dirname(__FILE__).'/'.ROOT_DIR.'lang/en_us/';
     }
 }

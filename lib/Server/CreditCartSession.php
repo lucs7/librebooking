@@ -9,10 +9,10 @@ class CreditCartSession
     public $UserId;
 
     /**
-     * @param float $creditQuantity
-     * @param float $costPerCredit
+     * @param float  $creditQuantity
+     * @param float  $costPerCredit
      * @param string $currency
-     * @param int $userId
+     * @param int    $userId
      */
     public function __construct($creditQuantity, $costPerCredit, $currency, $userId)
     {

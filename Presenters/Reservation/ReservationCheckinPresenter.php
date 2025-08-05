@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ReservationCheckinPresenter
 {
@@ -28,7 +28,7 @@ class ReservationCheckinPresenter
         IReservationCheckinPage $page,
         IUpdateReservationPersistenceService $persistenceService,
         IReservationHandler $handler,
-        UserSession $userSession
+        UserSession $userSession,
     ) {
         $this->page = $page;
         $this->persistenceService = $persistenceService;
@@ -41,7 +41,7 @@ class ReservationCheckinPresenter
         $referenceNumber = $this->page->GetReferenceNumber();
         $action = $this->page->GetAction();
 
-        if ($action != ReservationAction::Checkin) {
+        if (ReservationAction::Checkin != $action) {
             $action = ReservationAction::Checkout;
         }
 
@@ -49,7 +49,7 @@ class ReservationCheckinPresenter
 
         $reservationSeries = $this->persistenceService->LoadByReferenceNumber($referenceNumber);
 
-        if ($action == ReservationAction::Checkin) {
+        if (ReservationAction::Checkin == $action) {
             $reservationSeries->Checkin($this->userSession);
         } else {
             $reservationSeries->Checkout($this->userSession);

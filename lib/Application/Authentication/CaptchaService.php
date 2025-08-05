@@ -1,19 +1,23 @@
 <?php
 
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-    require_once ROOT_DIR . 'vendor/autoload.php';
+if (file_exists(ROOT_DIR.'vendor/autoload.php')) {
+    require_once ROOT_DIR.'vendor/autoload.php';
 }
 
-interface ICaptchaService {
+interface ICaptchaService
+{
     /**
      * @abstract
+     *
      * @return string
      */
     public function GetImageUrl();
 
     /**
      * @abstract
+     *
      * @param string $captchaValue
+     *
      * @return bool
      */
     public function IsCorrect($captchaValue);
@@ -31,6 +35,7 @@ class NullCaptchaService implements ICaptchaService
 
     /**
      * @param string $captchaValue
+     *
      * @return bool
      */
     public function IsCorrect($captchaValue)
@@ -47,8 +52,9 @@ class CaptchaService implements ICaptchaService
 
     public function GetImageUrl()
     {
-        $url = new Url(Configuration::Instance()->GetScriptUrl() . '/Services/Authentication/show-captcha.php');
+        $url = new Url(Configuration::Instance()->GetScriptUrl().'/Services/Authentication/show-captcha.php');
         $url->AddQueryString('show', 'true');
+
         return $url->__toString();
     }
 
@@ -56,19 +62,20 @@ class CaptchaService implements ICaptchaService
     {
         $isValid = $captchaValue == $_SESSION['phrase'];
 
-        Log::Debug('Checking captcha value. Value entered: %s. Correct value: %s.  IsValid: %s', $captchaValue,$_SESSION['phrase'] , (int)$isValid);
+        Log::Debug('Checking captcha value. Value entered: %s. Correct value: %s.  IsValid: %s', $captchaValue, $_SESSION['phrase'], (int) $isValid);
 
         return $isValid;
     }
 
     /**
      * @static
+     *
      * @return ICaptchaService
      */
     public static function Create()
     {
-        if (Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ENABLE_CAPTCHA, new BooleanConverter()) ||
-            (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_CAPTCHA_ON_LOGIN, new BooleanConverter()))
+        if (Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ENABLE_CAPTCHA, new BooleanConverter())
+            || Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_CAPTCHA_ON_LOGIN, new BooleanConverter())
         ) {
             if (Configuration::Instance()->GetSectionKey(
                 ConfigSection::RECAPTCHA,
@@ -79,6 +86,7 @@ class CaptchaService implements ICaptchaService
                 //				Log::Debug('Using ReCaptchaService');
                 return new ReCaptchaService();
             }
+
             //			Log::Debug('Using CaptchaService');
             return new CaptchaService();
         }
@@ -99,6 +107,7 @@ class ReCaptchaService implements ICaptchaService
 
     /**
      * @param string $captchaValue
+     *
      * @return bool
      */
     public function IsCorrect($captchaValue)
@@ -108,30 +117,30 @@ class ReCaptchaService implements ICaptchaService
         $privatekey = Configuration::Instance()->GetSectionKey(ConfigSection::RECAPTCHA, ConfigKeys::RECAPTCHA_PRIVATE_KEY);
 
         $configuredMethod = Configuration::Instance()->GetSectionKey(ConfigSection::RECAPTCHA, ConfigKeys::RECAPTCHA_REQUEST_METHOD);
-        $method = new \ReCaptcha\RequestMethod\Post();
-        switch ($configuredMethod)
-        {
+        $method = new ReCaptcha\RequestMethod\Post();
+        switch ($configuredMethod) {
             case null:
             case '':
             case 'post':
                 break;
             case 'socket':
-                $method = new \ReCaptcha\RequestMethod\SocketPost();
+                $method = new ReCaptcha\RequestMethod\SocketPost();
                 break;
             case 'curl':
-                $method = new \ReCaptcha\RequestMethod\CurlPost();
+                $method = new ReCaptcha\RequestMethod\CurlPost();
                 break;
             default:
                 Log::Error('Invalid ReCaptcha request method: %s. Fallback to', $configuredMethod);
         }
 
-        $recap = new \ReCaptcha\ReCaptcha($privatekey, $method);
-        $resp = $recap->verify($server->GetForm('g-recaptcha-response'),$server->GetRemoteAddress());
+        $recap = new ReCaptcha\ReCaptcha($privatekey, $method);
+        $resp = $recap->verify($server->GetForm('g-recaptcha-response'), $server->GetRemoteAddress());
 
         $success = $resp->isSuccess();
         Log::Debug('ReCaptcha IsValid: %s', $success ? 'TRUE' : 'FALSE');
-        if (!$success)
+        if (!$success) {
             Log::Debug('ReCaptcha error codes: %s', join(', ', $resp->getErrorCodes()));
+        }
 
         return $success;
     }

@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/InviteeAddedEmail.php');
+require_once ROOT_DIR.'lib/Email/Messages/ReservationEmailMessage.php';
+require_once ROOT_DIR.'lib/Email/Messages/InviteeAddedEmail.php';
 
 class ParticipantAddedEmail extends InviteeAddedEmail
 {

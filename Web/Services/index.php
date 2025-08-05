@@ -2,32 +2,32 @@
 
 define('ROOT_DIR', '../../');
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'lib/WebService/Slim/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'lib/WebService/Slim/namespace.php';
 
-require_once(ROOT_DIR . 'WebServices/AuthenticationWebService.php');
-require_once(ROOT_DIR . 'WebServices/ReservationsWebService.php');
-require_once(ROOT_DIR . 'WebServices/ReservationWriteWebService.php');
-require_once(ROOT_DIR . 'WebServices/ResourcesWebService.php');
-require_once(ROOT_DIR . 'WebServices/ResourcesWriteWebService.php');
-require_once(ROOT_DIR . 'WebServices/UsersWebService.php');
-require_once(ROOT_DIR . 'WebServices/UsersWriteWebService.php');
-require_once(ROOT_DIR . 'WebServices/SchedulesWebService.php');
-require_once(ROOT_DIR . 'WebServices/AttributesWebService.php');
-require_once(ROOT_DIR . 'WebServices/AttributesWriteWebService.php');
-require_once(ROOT_DIR . 'WebServices/GroupsWebService.php');
-require_once(ROOT_DIR . 'WebServices/GroupsWriteWebService.php');
-require_once(ROOT_DIR . 'WebServices/AccessoriesWebService.php');
-require_once(ROOT_DIR . 'WebServices/AccountWebService.php');
+require_once ROOT_DIR.'WebServices/AuthenticationWebService.php';
+require_once ROOT_DIR.'WebServices/ReservationsWebService.php';
+require_once ROOT_DIR.'WebServices/ReservationWriteWebService.php';
+require_once ROOT_DIR.'WebServices/ResourcesWebService.php';
+require_once ROOT_DIR.'WebServices/ResourcesWriteWebService.php';
+require_once ROOT_DIR.'WebServices/UsersWebService.php';
+require_once ROOT_DIR.'WebServices/UsersWriteWebService.php';
+require_once ROOT_DIR.'WebServices/SchedulesWebService.php';
+require_once ROOT_DIR.'WebServices/AttributesWebService.php';
+require_once ROOT_DIR.'WebServices/AttributesWriteWebService.php';
+require_once ROOT_DIR.'WebServices/GroupsWebService.php';
+require_once ROOT_DIR.'WebServices/GroupsWriteWebService.php';
+require_once ROOT_DIR.'WebServices/AccessoriesWebService.php';
+require_once ROOT_DIR.'WebServices/AccountWebService.php';
 
-require_once(ROOT_DIR . 'Web/Services/Help/ApiHelpPage.php');
+require_once ROOT_DIR.'Web/Services/Help/ApiHelpPage.php';
 
 if (!Configuration::Instance()->GetSectionKey(ConfigSection::API, ConfigKeys::API_ENABLED, new BooleanConverter())) {
-    die("LibreBooking API has been configured as disabled.<br/><br/>Set \$conf['settings']['api']['enabled'] = 'true' to enable.");
+    exit("LibreBooking API has been configured as disabled.<br/><br/>Set \$conf['settings']['api']['enabled'] = 'true' to enable.");
 }
 
-\Slim\Slim::registerAutoloader();
-$app = new \Slim\Slim();
+Slim\Slim::registerAutoloader();
+$app = new Slim\Slim();
 
 $server = new SlimServer($app);
 ServiceLocator::SetApiServer(apiServer: $server);
@@ -53,7 +53,7 @@ $app->hook('slim.before.dispatch', function () use ($app, $server, $registry) {
         if (!$wasHandled) {
             $app->halt(
                 RestResponse::UNAUTHORIZED_CODE,
-                'You must be authenticated in order to access this service.<br/>' . $server->GetFullServiceUrl(WebServices::Login)
+                'You must be authenticated in order to access this service.<br/>'.$server->GetFullServiceUrl(WebServices::Login)
             );
         }
 
@@ -73,8 +73,8 @@ $app->hook('slim.before.dispatch', function () use ($app, $server, $registry) {
     }
 });
 
-$app->error(function (\Exception $e) use ($app) {
-    require_once(ROOT_DIR . 'lib/Common/Logging/Log.php');
+$app->error(function (Exception $e) use ($app) {
+    require_once ROOT_DIR.'lib/Common/Logging/Log.php';
     Log::Error('Slim Exception. %s', $e);
     $app->response()->header('Content-Type', 'application/json');
     $app->response()->status(RestResponse::SERVER_ERROR);
@@ -83,22 +83,22 @@ $app->error(function (\Exception $e) use ($app) {
 
 $app->run();
 
-function RegisterHelp(SlimWebServiceRegistry $registry, \Slim\Slim $app)
+function RegisterHelp(SlimWebServiceRegistry $registry, Slim\Slim $app)
 {
     $app->get('/', function () use ($registry, $app) {
         // Print API documentation
         ApiHelpPage::Render($registry, $app);
-    })->name("Default");
+    })->name('Default');
 
     $app->get('/Help', function () use ($registry, $app) {
         // Print API documentation
         ApiHelpPage::Render($registry, $app);
-    })->name("Help");
+    })->name('Help');
 }
 
 function RegisterAuthentication(SlimServer $server, SlimWebServiceRegistry $registry)
 {
-    $api_access_group_id = GetConfigGroup(config_group: "Authentication.group");
+    $api_access_group_id = GetConfigGroup(config_group: 'Authentication.group');
     $webService = new AuthenticationWebService(
         $server,
         new WebServiceAuthentication(PluginManager::Instance()->LoadAuthentication(), new UserSessionRepository()),
@@ -261,9 +261,10 @@ function RegisterAccounts(SlimServer $server, SlimWebServiceRegistry $registry)
     $registry->AddCategory($category);
 }
 
-function GetConfigGroup(string $config_group): string|null {
+function GetConfigGroup(string $config_group): ?string
+{
     $group_name = Configuration::Instance()->GetSectionKey(ConfigSection::API, $config_group) ?? '';
-    if ($group_name == '') {
+    if ('' == $group_name) {
         return null;
     }
     $groupRepository = new GroupRepository();
@@ -273,6 +274,7 @@ function GetConfigGroup(string $config_group): string|null {
             return $group->Id();
         }
     }
-    die("Unable to find group: '$group_name' for API group '$config_group'. Please contact the administrator to resolve this issue in the `config.php` file.");
+    exit("Unable to find group: '$group_name' for API group '$config_group'. Please contact the administrator to resolve this issue in the `config.php` file.");
+
     return null;
 }

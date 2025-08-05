@@ -1,11 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Accessory.php');
+require_once ROOT_DIR.'Domain/Accessory.php';
 
 interface IAccessoryRepository
 {
     /**
      * @param int $accessoryId
+     *
      * @return Accessory
      */
     public function LoadById($accessoryId);
@@ -16,19 +17,18 @@ interface IAccessoryRepository
     public function LoadAll();
 
     /**
-     * @param Accessory $accessory
      * @return int
      */
     public function Add(Accessory $accessory);
 
     /**
-     * @param Accessory $accessory
      * @return void
      */
     public function Update(Accessory $accessory);
 
     /**
      * @param int $accessoryId
+     *
      * @return void
      */
     public function Delete($accessoryId);
@@ -38,6 +38,7 @@ class AccessoryRepository implements IAccessoryRepository
 {
     /**
      * @param int $accessoryId
+     *
      * @return Accessory
      */
     public function LoadById($accessoryId)
@@ -61,7 +62,6 @@ class AccessoryRepository implements IAccessoryRepository
     }
 
     /**
-     * @param Accessory $accessory
      * @return int
      */
     public function Add(Accessory $accessory)
@@ -70,7 +70,6 @@ class AccessoryRepository implements IAccessoryRepository
     }
 
     /**
-     * @param Accessory $accessory
      * @return void
      */
     public function Update(Accessory $accessory)
@@ -84,6 +83,7 @@ class AccessoryRepository implements IAccessoryRepository
 
     /**
      * @param int $accessoryId
+     *
      * @return void
      */
     public function Delete($accessoryId)
@@ -116,6 +116,7 @@ class AccessoryRepository implements IAccessoryRepository
         }
 
         $reader->Free();
+
         return $accessories;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageThemePresenter.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageThemePresenter.php';
 
 class ManageThemePage extends ActionPage
 {
@@ -24,6 +24,7 @@ class ManageThemePage extends ActionPage
 
     /**
      * @param $dataRequest string
+     *
      * @return void
      */
     public function ProcessDataRequest($dataRequest)
@@ -40,7 +41,7 @@ class ManageThemePage extends ActionPage
     }
 
     /**
-     * @return null|UploadedFile
+     * @return UploadedFile|null
      */
     public function GetLogoFile()
     {
@@ -48,7 +49,7 @@ class ManageThemePage extends ActionPage
     }
 
     /**
-     * @return null|UploadedFile
+     * @return UploadedFile|null
      */
     public function GetCssFile()
     {
@@ -56,7 +57,7 @@ class ManageThemePage extends ActionPage
     }
 
     /**
-     * @return null|UploadedFile
+     * @return UploadedFile|null
      */
     public function GetFaviconFile()
     {

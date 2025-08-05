@@ -23,6 +23,7 @@ class Url
 
     /**
      * @param $urlFragment string
+     *
      * @return Url
      */
     public function Add($urlFragment)
@@ -39,6 +40,7 @@ class Url
     /**
      * @param string $name
      * @param string $value
+     *
      * @return Url
      */
     public function AddQueryString($name, $value)
@@ -49,7 +51,7 @@ class Url
         }
 
         $this->hasQuestionMark = true;
-        $this->url .= sprintf("$char%s=%s", $name, urlencode($value ?? ""));
+        $this->url .= sprintf("$char%s=%s", $name, urlencode($value ?? ''));
 
         return $this;
     }

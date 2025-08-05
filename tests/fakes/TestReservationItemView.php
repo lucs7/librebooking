@@ -5,13 +5,11 @@ class TestReservationItemView extends ReservationItemView
     public $_RequiresCheckin = false;
 
     /**
-     * @param null|string $id
-     * @param Date $startDate
-     * @param Date $endDate
-     * @param int $resourceId
+     * @param string|null $id
+     * @param int         $resourceId
      * @param string|null $referenceNumber
      */
-    public function __construct($id, Date $startDate, Date $endDate, $resourceId = 1, $referenceNumber = "referencenumber")
+    public function __construct($id, Date $startDate, Date $endDate, $resourceId = 1, $referenceNumber = 'referencenumber')
     {
         parent::__construct();
 
@@ -28,6 +26,7 @@ class TestReservationItemView extends ReservationItemView
     public function WithSeriesId($seriesId)
     {
         $this->SeriesId = $seriesId;
+
         return $this;
     }
 
@@ -44,7 +43,7 @@ class TestBlackoutItemView extends BlackoutItemView
         Date $startDate,
         Date $endDate,
         $resourceId,
-        $seriesId = 1
+        $seriesId = 1,
     ) {
         parent::__construct($instanceId, $startDate, $endDate, $resourceId, null, null, null, null, null, null, null, $seriesId, null, null);
     }
@@ -52,6 +51,7 @@ class TestBlackoutItemView extends BlackoutItemView
     public function WithScheduleId($scheduleId)
     {
         $this->ScheduleId = $scheduleId;
+
         return $this;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/CalendarPage.php');
-require_once(ROOT_DIR . 'Presenters/Calendar/CalendarPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/GuestPermissionServiceFactory.php');
+require_once ROOT_DIR.'Pages/CalendarPage.php';
+require_once ROOT_DIR.'Presenters/Calendar/CalendarPresenter.php';
+require_once ROOT_DIR.'lib/Application/Authorization/GuestPermissionServiceFactory.php';
 
 class ViewCalendarPage extends CalendarPage
 {
@@ -43,7 +43,7 @@ class ViewCalendarPage extends CalendarPage
     {
         URIScriptValidator::validate($_SERVER['REQUEST_URI']);
         ParamsValidator::validate(RouteParamsKeys::VIEW_CALENDAR, $_SERVER['REQUEST_URI'], true);
-        
+
         $this->Set('pageUrl', Pages::VIEW_CALENDAR);
         $this->Set('CreateReservationPage', Pages::GUEST_RESERVATION);
         $this->Set('HideCreate', !Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_ALLOW_GUEST_BOOKING, new BooleanConverter()));

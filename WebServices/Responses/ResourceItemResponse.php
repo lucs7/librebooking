@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class ResourceItemResponse extends RestResponse
 {
@@ -35,7 +35,7 @@ class ResourceItemResponse extends RestResponse
         $this->AddService($server, WebServices::GetResource, [WebServiceParams::ResourceId => $this->id]);
     }
 
-    private function BuildParentList($resourceGroupId, &$parents=[])
+    private function BuildParentList($resourceGroupId, &$parents = [])
     {
         $groupsReader = ServiceLocator::GetDatabase()->Query(new GetResourceGroupCommand($resourceGroupId));
         if ($group = $groupsReader->GetRow()) {

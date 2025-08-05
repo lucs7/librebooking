@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/InviteeAddedEmailNotification.php');
+require_once ROOT_DIR.'lib/Application/Reservation/Notification/InviteeAddedEmailNotification.php';
 
 class InviteeUpdatedEmailNotification extends InviteeAddedEmailNotification
 {
@@ -29,7 +29,7 @@ class InviteeUpdatedEmailNotification extends InviteeAddedEmailNotification
 
         $instance = $reservationSeries->CurrentInstance();
         foreach ($instance->UnchangedInvitees() as $userId) {
-            if ($owner == null) {
+            if (null == $owner) {
                 $owner = $this->userRepository->LoadById($reservationSeries->UserId());
             }
 
@@ -40,7 +40,7 @@ class InviteeUpdatedEmailNotification extends InviteeAddedEmailNotification
         }
 
         foreach ($instance->RemovedInvitees() as $userId) {
-            if ($owner == null) {
+            if (null == $owner) {
                 $owner = $this->userRepository->LoadById($reservationSeries->UserId());
             }
 

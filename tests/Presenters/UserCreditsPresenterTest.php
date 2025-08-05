@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Credits/UserCreditsPresenter.php');
+require_once ROOT_DIR.'Presenters/Credits/UserCreditsPresenter.php';
 
 class UserCreditsPresenterTest extends TestBase
 {
@@ -88,7 +88,7 @@ class UserCreditsPresenterTest extends TestBase
                 'gatewaydate',
                 'PayPal',
                 10
-            )
+            ),
         ]);
 
         $this->presenter->GetTransactionLog($this->fakeUser);

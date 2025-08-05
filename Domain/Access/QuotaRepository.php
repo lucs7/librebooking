@@ -4,20 +4,21 @@ interface IQuotaRepository
 {
     /**
      * @abstract
+     *
      * @return array|Quota[]
      */
     public function LoadAll();
 
     /**
      * @abstract
-     * @param Quota $quota
+     *
      * @return void
      */
     public function Add(Quota $quota);
 
     /**
      * @abstract
-     * @param $quotaId
+     *
      * @return void
      */
     public function DeleteById($quotaId);
@@ -27,6 +28,7 @@ interface IQuotaViewRepository
 {
     /**
      * @abstract
+     *
      * @return array|QuotaItemView[]
      */
     public function GetAll();
@@ -58,6 +60,7 @@ class QuotaRepository implements IQuotaRepository, IQuotaViewRepository
             $quotas[] = new Quota($quotaId, $duration, $limit, $resourceId, $groupId, $scheduleId, $enforcedStartTime, $enforcedEndTime, $enforcedDays, $scope);
         }
         $reader->Free();
+
         return $quotas;
     }
 
@@ -101,11 +104,11 @@ class QuotaRepository implements IQuotaRepository, IQuotaViewRepository
         }
 
         $reader->Free();
+
         return $quotas;
     }
 
     /**
-     * @param Quota $quota
      * @return void
      */
     public function Add(Quota $quota)
@@ -127,12 +130,11 @@ class QuotaRepository implements IQuotaRepository, IQuotaViewRepository
     }
 
     /**
-     * @param $quotaId
      * @return void
      */
     public function DeleteById($quotaId)
     {
-        //TODO:  Make this delete a quota instead of the id
+        // TODO:  Make this delete a quota instead of the id
         $command = new DeleteQuotaCommand($quotaId);
         ServiceLocator::GetDatabase()->Execute($command);
     }
@@ -155,17 +157,17 @@ class QuotaItemView
     public $Scope;
 
     /**
-     * @param int $quotaId
-     * @param float $limit
-     * @param string $unit
-     * @param string $duration
-     * @param string $groupName
-     * @param string $resourceName
-     * @param string $scheduleName
+     * @param int         $quotaId
+     * @param float       $limit
+     * @param string      $unit
+     * @param string      $duration
+     * @param string      $groupName
+     * @param string      $resourceName
+     * @param string      $scheduleName
      * @param string|null $enforcedStartTime
      * @param string|null $enforcedEndTime
      * @param array|int[] $enforcedDays
-     * @param string $scope
+     * @param string      $scope
      */
     public function __construct(
         $quotaId,
@@ -178,7 +180,7 @@ class QuotaItemView
         $enforcedStartTime,
         $enforcedEndTime,
         $enforcedDays,
-        $scope
+        $scope,
     ) {
         $this->Id = $quotaId;
         $this->Limit = $limit;

@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Presenters/Search/SearchReservationsPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Pages/ActionPage.php';
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Presenters/Search/SearchReservationsPresenter.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 interface ISearchReservationsPage extends IActionPage
 {
@@ -23,7 +23,7 @@ interface ISearchReservationsPage extends IActionPage
 
     /**
      * @param ReservationItemView[] $reservations
-     * @param string $timezone
+     * @param string                $timezone
      */
     public function ShowReservations($reservations, $timezone);
 

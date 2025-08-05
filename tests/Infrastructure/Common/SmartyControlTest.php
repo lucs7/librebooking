@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/SmartyControls/namespace.php');
+require_once ROOT_DIR.'lib/Common/SmartyControls/namespace.php';
 
 class SmartyControlTest extends TestBase
 {
@@ -12,7 +12,7 @@ class SmartyControlTest extends TestBase
     private $_expectedValue = 'expected___value';
     private $_expectedName;
     private $_expectedStyle;
-    private $_id = "id";
+    private $_id = 'id';
 
     public function setUp(): void
     {
@@ -61,6 +61,7 @@ class SmartyControlTest extends TestBase
         $expectedName = $this->_expectedName;
         $expectedValue = $this->_expectedValue;
         $expectedStyle = $this->_expectedStyle;
+
         return "<input type=\"$type\" name=\"$expectedName\" id=\"{$this->_id}\" value=\"$expectedValue\" style=\"font-size:12px;\" class=\"something\" />";
     }
 }

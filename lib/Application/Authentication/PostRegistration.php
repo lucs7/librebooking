@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class PostRegistration implements IPostRegistration
 {
@@ -22,7 +22,7 @@ class PostRegistration implements IPostRegistration
 
     public function HandleSelfRegistration(User $user, IRegistrationPage $page, ILoginContext $loginContext)
     {
-        if ($user->StatusId() == AccountStatus::ACTIVE) {
+        if (AccountStatus::ACTIVE == $user->StatusId()) {
             Log::Debug('PostRegistration - Handling activate user %s', $user->EmailAddress());
             $this->authentication->Login($user->EmailAddress(), $loginContext);
             $page->Redirect(Pages::UrlFromId($user->Homepage()));

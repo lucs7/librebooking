@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Requests/Account/AccountRequestBase.php');
+require_once ROOT_DIR.'WebServices/Requests/Account/AccountRequestBase.php';
 
 class UpdateAccountRequest extends AccountRequestBase
 {

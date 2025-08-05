@@ -15,8 +15,9 @@ class ResourceMaximumNoticeRule implements IReservationValidationRule
     /**
      * @see IReservationValidationRule::Validate()
      *
-     * @param ReservationSeries $reservationSeries
-     * @param null|ReservationRetryParameter[] $retryParameters
+     * @param ReservationSeries                $reservationSeries
+     * @param ReservationRetryParameter[]|null $retryParameters
+     *
      * @return ReservationRuleResult
      */
     public function Validate($reservationSeries, $retryParameters)
@@ -32,7 +33,7 @@ class ResourceMaximumNoticeRule implements IReservationValidationRule
                 /* @var $instance Reservation */
                 foreach ($this->GetInstances($reservationSeries) as $instance) {
                     if ($instance->EndDate()->GreaterThan($maxEndDate)) {
-                        return new ReservationRuleResult(false, $r->GetString("MaxNoticeError", $maxEndDate->ToTimezone($this->userSession->Timezone)->Format($r->GeneralDateTimeFormat())));
+                        return new ReservationRuleResult(false, $r->GetString('MaxNoticeError', $maxEndDate->ToTimezone($this->userSession->Timezone)->Format($r->GeneralDateTimeFormat())));
                     }
                 }
             }
@@ -43,6 +44,7 @@ class ResourceMaximumNoticeRule implements IReservationValidationRule
 
     /**
      * @param ReservationSeries $reservationSeries
+     *
      * @return Reservation[]
      */
     protected function GetInstances($reservationSeries)

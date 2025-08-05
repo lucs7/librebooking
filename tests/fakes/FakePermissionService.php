@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
 
 class FakePermissionService implements IPermissionService
 {
@@ -52,6 +52,7 @@ class FakePermissionService implements IPermissionService
         if (is_array($this->_CanViewResource)) {
             return $this->_CanViewResource[$resource->GetResourceId()];
         }
+
         return $this->_CanViewResource;
     }
 }
@@ -68,6 +69,6 @@ class FakePermissionServiceFactory implements IPermissionServiceFactory
      */
     public function GetPermissionService()
     {
-        return ($this->service == null) ? new FakePermissionService() : $this->service;
+        return (null == $this->service) ? new FakePermissionService() : $this->service;
     }
 }

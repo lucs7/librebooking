@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Announcement.php');
+require_once ROOT_DIR.'Domain/Announcement.php';
 
 class AnnouncementRepository implements IAnnouncementRepository
 {
@@ -40,9 +40,6 @@ class AnnouncementRepository implements IAnnouncementRepository
         return $announcements;
     }
 
-    /**
-     * @param Announcement $announcement
-     */
     public function Add(Announcement $announcement)
     {
         $db = ServiceLocator::GetDatabase();
@@ -75,6 +72,7 @@ class AnnouncementRepository implements IAnnouncementRepository
 
     /**
      * @param int $announcementId
+     *
      * @return Announcement
      */
     public function LoadById($announcementId)
@@ -87,6 +85,7 @@ class AnnouncementRepository implements IAnnouncementRepository
         }
 
         $reader->Free();
+
         return $announcement;
     }
 
@@ -100,27 +99,24 @@ class AnnouncementRepository implements IAnnouncementRepository
 interface IAnnouncementRepository
 {
     /**
-     * Gets all announcements to be displayed for the user
+     * Gets all announcements to be displayed for the user.
+     *
      * @param int $page
+     *
      * @return Announcement[]
      */
     public function GetFuture($page);
 
     /**
-     * @param null|string $sortField
-     * @param null|string $sortDirection
+     * @param string|null $sortField
+     * @param string|null $sortDirection
+     *
      * @return Announcement[]|array
      */
     public function GetAll($sortField = null, $sortDirection = null);
 
-    /**
-     * @param Announcement $announcement
-     */
     public function Add(Announcement $announcement);
 
-    /**
-     * @param Announcement $announcement
-     */
     public function Update(Announcement $announcement);
 
     /**
@@ -130,6 +126,7 @@ interface IAnnouncementRepository
 
     /**
      * @param int $announcementId
+     *
      * @return Announcement
      */
     public function LoadById($announcementId);

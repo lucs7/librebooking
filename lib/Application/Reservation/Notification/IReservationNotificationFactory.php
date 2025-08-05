@@ -4,7 +4,8 @@ interface IReservationNotificationFactory
 {
     /**
      * @param ReservationAction $reservationAction
-     * @param UserSession $userSession
+     * @param UserSession       $userSession
+     *
      * @return IReservationNotificationService
      */
     public function Create($reservationAction, $userSession);

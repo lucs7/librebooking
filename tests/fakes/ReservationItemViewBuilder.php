@@ -28,12 +28,14 @@ class ReservationItemViewBuilder
     public function WithStartDate(Date $startDate)
     {
         $this->startDate = $startDate;
+
         return $this;
     }
 
     public function WithEndDate(Date $endDate)
     {
         $this->endDate = $endDate;
+
         return $this;
     }
 

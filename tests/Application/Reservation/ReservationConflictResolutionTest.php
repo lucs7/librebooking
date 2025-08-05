@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/ManageBlackoutsService.php');
+require_once ROOT_DIR.'lib/Application/Reservation/ManageBlackoutsService.php';
 
 class ReservationConflictResolutionTest extends TestBase
 {

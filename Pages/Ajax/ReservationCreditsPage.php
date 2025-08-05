@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationCreditsPresenter.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationCreditsPresenter.php';
 
 interface IReservationCreditsPage extends IRepeatOptionsComposite
 {
@@ -45,7 +45,7 @@ interface IReservationCreditsPage extends IRepeatOptionsComposite
     public function GetReferenceNumber();
 
     /**
-     * @param int $creditsRequired
+     * @param int    $creditsRequired
      * @param string $cost
      */
     public function SetCreditRequired($creditsRequired, $cost);

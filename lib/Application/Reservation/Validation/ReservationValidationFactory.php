@@ -21,6 +21,7 @@ class ReservationValidationFactory implements IReservationValidationFactory
     {
         if (array_key_exists($reservationAction, $this->creationStrategies)) {
             $createMethod = $this->creationStrategies[$reservationAction];
+
             return $this->$createMethod($userSession);
         }
 
@@ -30,18 +31,21 @@ class ReservationValidationFactory implements IReservationValidationFactory
     private function CreateAddService(UserSession $userSession)
     {
         $factory = PluginManager::Instance()->LoadPreReservation();
+
         return $factory->CreatePreAddService($userSession);
     }
 
     private function CreateUpdateService(UserSession $userSession)
     {
         $factory = PluginManager::Instance()->LoadPreReservation();
+
         return $factory->CreatePreUpdateService($userSession);
     }
 
     private function CreateDeleteService(UserSession $userSession)
     {
         $factory = PluginManager::Instance()->LoadPreReservation();
+
         return $factory->CreatePreDeleteService($userSession);
     }
 
@@ -51,6 +55,7 @@ class ReservationValidationFactory implements IReservationValidationFactory
         if (method_exists($factory, 'CreatePreApprovalService')) {
             return $factory->CreatePreApprovalService($userSession);
         }
+
         return new NullReservationValidationService();
     }
 
@@ -60,6 +65,7 @@ class ReservationValidationFactory implements IReservationValidationFactory
         if (method_exists($factory, 'CreatePreCheckinService')) {
             return $factory->CreatePreCheckinService($userSession);
         }
+
         return new NullReservationValidationService();
     }
 
@@ -69,6 +75,7 @@ class ReservationValidationFactory implements IReservationValidationFactory
         if (method_exists($factory, 'CreatePreCheckoutService')) {
             return $factory->CreatePreCheckoutService($userSession);
         }
+
         return new NullReservationValidationService();
     }
 }

@@ -15,7 +15,7 @@ class GroupResponse extends RestResponse
     {
         $this->id = $group->Id();
         $this->name = $group->Name();
-        $adminId =  $group->AdminGroupId();
+        $adminId = $group->AdminGroupId();
         if (!empty($adminId)) {
             $this->adminGroup = $server->GetServiceUrl(WebServices::GetGroup, [WebServiceParams::GroupId => $group->AdminGroupId()]);
         }
@@ -36,7 +36,7 @@ class GroupResponse extends RestResponse
             $this->roles[] = $roleId;
         }
 
-        $this->isDefault = (bool)$group->IsDefault();
+        $this->isDefault = (bool) $group->IsDefault();
     }
 
     public static function Example()
@@ -55,7 +55,7 @@ class ExampleGroupResponse extends GroupResponse
         $this->permissions = ['http://url/to/resource'];
         $this->viewPermissions = ['http://url/to/resource'];
         $this->users = ['http://url/to/user'];
-        $this->roles = [1,2];
+        $this->roles = [1, 2];
         $this->isDefault = true;
     }
 }

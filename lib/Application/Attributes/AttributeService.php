@@ -1,44 +1,48 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/Helpers/StopWatch.php');
+require_once ROOT_DIR.'lib/Common/Helpers/StopWatch.php';
 
 interface IAttributeService
 {
     /**
      * @abstract
-     * @param $category CustomAttributeCategory|int
+     *
+     * @param $category  CustomAttributeCategory|int
      * @param $entityIds array|int[]|int
+     *
      * @return IEntityAttributeList
      */
     public function GetAttributes($category, $entityIds = []);
 
     /**
-     * @param $category int|CustomAttributeCategory
-     * @param $attributeValues AttributeValue[]|array
-     * @param $entityIds int[]
+     * @param      $category        int|CustomAttributeCategory
+     * @param      $attributeValues AttributeValue[]|array
+     * @param      $entityIds       int[]
      * @param bool $ignoreEmpty
      * @param bool $isAdmin
+     *
      * @return AttributeServiceValidationResult
      */
     public function Validate($category, $attributeValues, $entityIds = [], $ignoreEmpty = false, $isAdmin = false);
 
     /**
      * @param $category int|CustomAttributeCategory
+     *
      * @return array|CustomAttribute[]
      */
     public function GetByCategory($category);
 
     /**
      * @param $attributeId int
+     *
      * @return CustomAttribute
      */
     public function GetById($attributeId);
 
     /**
-     * @param UserSession $userSession
-     * @param ReservationView $reservationView
-     * @param int $requestedUserId
+     * @param int   $requestedUserId
      * @param int[] $requestedResourceIds
+     *
      * @return Attribute[]
      */
     public function GetReservationAttributes(UserSession $userSession, ReservationView $reservationView, $requestedUserId = 0, $requestedResourceIds = []);
@@ -71,7 +75,6 @@ class AttributeService implements IAttributeService
     private $permissionService;
 
     /**
-     * @param IAttributeRepository $attributeRepository
      * @param IPermissionService|null $permissionService
      */
     public function __construct(IAttributeRepository $attributeRepository, $permissionService = null)
@@ -85,7 +88,7 @@ class AttributeService implements IAttributeService
      */
     public function GetAuthorizationService()
     {
-        if ($this->authorizationService == null) {
+        if (null == $this->authorizationService) {
             $this->authorizationService = PluginManager::Instance()->LoadAuthorization();
         }
 
@@ -102,7 +105,7 @@ class AttributeService implements IAttributeService
      */
     public function GetResourceService()
     {
-        if ($this->resourceService == null) {
+        if (null == $this->resourceService) {
             $permissionService = empty($this->permissionService) ? PluginManager::Instance()->LoadPermission() : $this->permissionService;
             $this->resourceService = new ResourceService(
                 new ResourceRepository(),
@@ -165,9 +168,9 @@ class AttributeService implements IAttributeService
 
         $attributes = $this->attributeRepository->GetByCategory($category);
         foreach ($attributes as $attribute) {
-            if (!empty($entityIds) &&
-                (($attribute->UniquePerEntity() && count(array_intersect($entityIds, $attribute->EntityIds())) == 0) ||
-                ($attribute->HasSecondaryEntities() && count(array_intersect($entityIds, $attribute->SecondaryEntityIds())) == 0))) {
+            if (!empty($entityIds)
+                && (($attribute->UniquePerEntity() && 0 == count(array_intersect($entityIds, $attribute->EntityIds())))
+                || ($attribute->HasSecondaryEntities() && 0 == count(array_intersect($entityIds, $attribute->SecondaryEntityIds()))))) {
                 continue;
             }
 
@@ -216,7 +219,7 @@ class AttributeService implements IAttributeService
 
     public function GetReservationAttributes(UserSession $userSession, ReservationView $reservationView, $requestedUserId = 0, $requestedResourceIds = [])
     {
-        if ($requestedUserId == 0) {
+        if (0 == $requestedUserId) {
             $requestedUserId = $reservationView->OwnerId;
         }
         if (empty($requestedResourceIds)) {
@@ -229,11 +232,11 @@ class AttributeService implements IAttributeService
         $customAttributes = $this->GetByCategory(CustomAttributeCategory::RESERVATION);
         foreach ($customAttributes as $attribute) {
             $secondaryCategory = $attribute->SecondaryCategory();
-            if (empty($secondaryCategory) ||
-                    (
-                        $secondaryCategory == CustomAttributeCategory::USER &&
-                            $this->AvailableForUser($userSession, $requestedUserId, $secondaryCategory, $attribute) ||
-                    (($secondaryCategory == CustomAttributeCategory::RESOURCE || $secondaryCategory == CustomAttributeCategory::RESOURCE_TYPE)
+            if (empty($secondaryCategory)
+                    || (
+                        CustomAttributeCategory::USER == $secondaryCategory
+                            && $this->AvailableForUser($userSession, $requestedUserId, $secondaryCategory, $attribute)
+                    || ((CustomAttributeCategory::RESOURCE == $secondaryCategory || CustomAttributeCategory::RESOURCE_TYPE == $secondaryCategory)
                             && $this->AvailableForResource($userSession, $secondaryCategory, $attribute, $requestedResourceIds))
                     )
             ) {
@@ -254,30 +257,31 @@ class AttributeService implements IAttributeService
     }
 
     /**
-     * @param UserSession $userSession
-     * @param int $requestedUserId
-     * @param string $secondaryCategory
+     * @param int             $requestedUserId
+     * @param string          $secondaryCategory
      * @param CustomAttribute $attribute
+     *
      * @return bool
      */
     private function AvailableForUser(UserSession $userSession, $requestedUserId, $secondaryCategory, $attribute)
     {
-        return $secondaryCategory == CustomAttributeCategory::USER &&
-            in_array($requestedUserId, $attribute->SecondaryEntityIds()) &&
-            $this->CanReserveFor($userSession, $requestedUserId);
+        return CustomAttributeCategory::USER == $secondaryCategory
+            && in_array($requestedUserId, $attribute->SecondaryEntityIds())
+            && $this->CanReserveFor($userSession, $requestedUserId);
     }
 
     /**
-     * @param UserSession $userSession
-     * @param string $secondaryCategory
+     * @param UserSession     $userSession
+     * @param string          $secondaryCategory
      * @param CustomAttribute $attribute
-     * @param int[] $requestedResourceIds
+     * @param int[]           $requestedResourceIds
+     *
      * @return bool
      */
     private function AvailableForResource($userSession, $secondaryCategory, $attribute, $requestedResourceIds)
     {
-        if ($secondaryCategory == CustomAttributeCategory::RESOURCE || $secondaryCategory == CustomAttributeCategory::RESOURCE_TYPE) {
-            if ($secondaryCategory == CustomAttributeCategory::RESOURCE) {
+        if (CustomAttributeCategory::RESOURCE == $secondaryCategory || CustomAttributeCategory::RESOURCE_TYPE == $secondaryCategory) {
+            if (CustomAttributeCategory::RESOURCE == $secondaryCategory) {
                 $applies = array_intersect($attribute->SecondaryEntityIds(), $requestedResourceIds);
                 $allowed = array_intersect($attribute->SecondaryEntityIds(), array_keys($this->GetAllowedResources($userSession)));
 
@@ -286,7 +290,7 @@ class AttributeService implements IAttributeService
                 return count($applies) > 0 && count($allowed) > 0;
             }
 
-            if ($secondaryCategory == CustomAttributeCategory::RESOURCE_TYPE) {
+            if (CustomAttributeCategory::RESOURCE_TYPE == $secondaryCategory) {
                 $allowedResources = $this->GetAllowedResources($userSession);
 
                 foreach ($requestedResourceIds as $resourceId) {
@@ -308,7 +312,7 @@ class AttributeService implements IAttributeService
 
     private function GetAllowedResources($userSession)
     {
-        if ($this->allowedResources == null) {
+        if (null == $this->allowedResources) {
             $this->allowedResources = [];
             $resources = $this->GetResourceService()->GetAllResources(false, $userSession);
             foreach ($resources as $resource) {
@@ -319,7 +323,6 @@ class AttributeService implements IAttributeService
         return $this->allowedResources;
     }
 }
-
 
 class AttributeServiceValidationResult
 {
@@ -339,8 +342,8 @@ class AttributeServiceValidationResult
     private $invalidAttributes;
 
     /**
-     * @param int $isValid
-     * @param string[] $errors
+     * @param int                $isValid
+     * @param string[]           $errors
      * @param InvalidAttribute[] $invalidAttributes
      */
     public function __construct($isValid, $errors, $invalidAttributes = [])

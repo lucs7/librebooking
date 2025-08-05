@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/CalendarPage.php');
-require_once(ROOT_DIR . 'Presenters/Calendar/CalendarPresenter.php');
+require_once ROOT_DIR.'Pages/CalendarPage.php';
+require_once ROOT_DIR.'Presenters/Calendar/CalendarPresenter.php';
 
 class CalendarPresenterTest extends TestBase
 {
@@ -82,7 +82,7 @@ class CalendarPresenterTest extends TestBase
 
         $userId = $this->fakeUser->UserId;
         $defaultScheduleId = 10;
-        $userTimezone = "America/New_York";
+        $userTimezone = 'America/New_York';
 
         $calendarType = CalendarTypes::Month;
 
@@ -95,7 +95,7 @@ class CalendarPresenterTest extends TestBase
         $referenceNumber = 'refnum';
         $resourceName = 'resource name';
 
-        //$res = new ScheduleReservation(1, $startDate, $endDate, null, $summary, $resourceId, $userId, $fname, $lname, $referenceNumber, ReservationStatus::Created);
+        // $res = new ScheduleReservation(1, $startDate, $endDate, null, $summary, $resourceId, $userId, $fname, $lname, $referenceNumber, ReservationStatus::Created);
         $res = new ReservationItemView($referenceNumber, $startDate, $endDate, 'resource name', $resourceId, 1, null, null, $summary, null, $fname, $lname, $userId);
 
         $r1 = new FakeBookableResource(1, 'dude1');
@@ -103,7 +103,7 @@ class CalendarPresenterTest extends TestBase
 
         $resources = [$r1, $r2];
         /** @var Schedule[] $schedules */
-        $schedules = [new Schedule(1, null, false, 2, null), new Schedule($defaultScheduleId, null, true, 3, null),];
+        $schedules = [new Schedule(1, null, false, 2, null), new Schedule($defaultScheduleId, null, true, 3, null)];
 
         $this->scheduleRepository
             ->expects($this->atLeastOnce())
@@ -131,7 +131,6 @@ class CalendarPresenterTest extends TestBase
             ->expects($this->atLeastOnce())
             ->method('GetResourceId')
             ->willReturn(null);
-
 
         $this->page
             ->expects($this->atLeastOnce())

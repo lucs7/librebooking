@@ -74,7 +74,7 @@ class FakeReservationViewRepository implements IReservationViewRepository
         $scheduleIds = ReservationViewRepository::ALL_SCHEDULES,
         $resourceIds = ReservationViewRepository::ALL_RESOURCES,
         $consolidateByReferenceNumber = false,
-        $participantIds = ReservationViewRepository::ALL_USERS
+        $participantIds = ReservationViewRepository::ALL_USERS,
     ) {
         $this->_LastScheduleIds = $scheduleIds;
         $this->_LastResourceIds = $resourceIds;
@@ -95,6 +95,7 @@ class FakeReservationViewRepository implements IReservationViewRepository
     public function GetList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null)
     {
         $this->_Filter = $filter;
+
         return $this->_FilterResults;
     }
 

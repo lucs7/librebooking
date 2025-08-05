@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ParticipationPresenter.php');
+require_once ROOT_DIR.'Presenters/ParticipationPresenter.php';
 
 class ParticipationPresenterTest extends TestBase
 {
@@ -371,7 +371,6 @@ class FakeParticipationNotification implements IParticipationNotification
     {
         $this->_Notified = true;
     }
-
 
     public function NotifyGuest(ExistingReservationSeries $series, $guestEmail, $invitationAction)
     {

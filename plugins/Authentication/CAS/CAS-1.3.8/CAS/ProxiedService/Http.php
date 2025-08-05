@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/ProxiedService/Http.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -32,11 +34,13 @@
  * and receiving proxied HTTP requests.
  *
  * @class    CAS_ProxiedService_Http
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 interface CAS_ProxiedService_Http
 {
@@ -45,12 +49,13 @@ interface CAS_ProxiedService_Http
     *********************************************************/
 
     /**
-     * Set the URL of the Request
+     * Set the URL of the Request.
      *
      * @param string $url Url to set
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function setUrl($url);
 
@@ -61,8 +66,9 @@ interface CAS_ProxiedService_Http
     /**
      * Perform the request.
      *
-     * @return bool TRUE on success, FALSE on failure.
-     * @throws CAS_OutOfSequenceException If called multiple times.
+     * @return bool TRUE on success, FALSE on failure
+     *
+     * @throws CAS_OutOfSequenceException if called multiple times
      */
     public function send();
 
@@ -73,8 +79,9 @@ interface CAS_ProxiedService_Http
     /**
      * Answer the headers of the response.
      *
-     * @return array An array of header strings.
-     * @throws CAS_OutOfSequenceException If called before the Request has been sent.
+     * @return array an array of header strings
+     *
+     * @throws CAS_OutOfSequenceException if called before the Request has been sent
      */
     public function getResponseHeaders();
 
@@ -82,7 +89,8 @@ interface CAS_ProxiedService_Http
      * Answer the body of response.
      *
      * @return string
-     * @throws CAS_OutOfSequenceException If called before the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called before the Request has been sent
      */
     public function getResponseBody();
 }

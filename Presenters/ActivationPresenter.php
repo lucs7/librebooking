@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ActivationPage.php');
+require_once ROOT_DIR.'Pages/ActivationPage.php';
 
 class ActivationPresenter
 {

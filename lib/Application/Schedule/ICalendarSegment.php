@@ -9,12 +9,14 @@ interface ICalendarSegment
 
     /**
      * @abstract
+     *
      * @return Date
      */
     public function LastDay();
 
     /**
      * @param $reservations array|CalendarReservation[]
+     *
      * @return void
      */
     public function AddReservations($reservations);
@@ -35,7 +37,7 @@ interface ICalendarSegment
     public function GetNextDate();
 
     /**
-     * @return  array|CalendarReservation[]
+     * @return array|CalendarReservation[]
      */
     public function Reservations();
 }

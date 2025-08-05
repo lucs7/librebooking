@@ -7,9 +7,6 @@ class LBAttribute
      */
     private $attributeDefinition;
 
-    /**
-     * @var mixed
-     */
     private $value;
 
     public function __construct(CustomAttribute $attributeDefinition, $value = null)
@@ -34,9 +31,6 @@ class LBAttribute
         return $this->attributeDefinition->Id();
     }
 
-    /**
-     * @return mixed
-     */
     public function Value()
     {
         return $this->value;

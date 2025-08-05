@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class GroupRepositoryTest extends TestBase
 {
@@ -23,7 +23,7 @@ class GroupRepositoryTest extends TestBase
 
     public function testCanGetPageableListOfGroups()
     {
-        $filter = new SqlFilterEquals("cn", "cv");
+        $filter = new SqlFilterEquals('cn', 'cv');
         $pageNum = 10;
         $pageSize = 100;
         $count = 1000;
@@ -44,7 +44,7 @@ class GroupRepositoryTest extends TestBase
         $results = $list->Results();
         $this->assertEquals(GroupItemView::Create($rows[0]), $results[0]);
         $this->assertEquals(GroupItemView::Create($rows[1]), $results[1]);
-        $this->assertTrue($this->db->ContainsCommand($expected), "missing select group command");
+        $this->assertTrue($this->db->ContainsCommand($expected), 'missing select group command');
 
         $pageInfo = $list->PageInfo();
         $this->assertEquals($count, $pageInfo->Total);
@@ -90,12 +90,10 @@ class GroupRepositoryTest extends TestBase
         $permissions = [
             [ColumnNames::GROUP_ID => 1, ColumnNames::RESOURCE_ID => 1],
             [ColumnNames::GROUP_ID => 1, ColumnNames::RESOURCE_ID => 2],
-
         ];
         $roles = [
             [ColumnNames::ROLE_ID => 1, ColumnNames::ROLE_NAME => 'thing', ColumnNames::ROLE_LEVEL => RoleLevel::NONE],
             [ColumnNames::ROLE_ID => 2, ColumnNames::ROLE_NAME => 'name', ColumnNames::ROLE_LEVEL => RoleLevel::GROUP_ADMIN],
-
         ];
         $this->db->SetRow(0, $rows);
         $this->db->SetRow(1, $groupUsers);
@@ -278,7 +276,7 @@ class GroupRepositoryTest extends TestBase
         $this->assertEquals(GroupItemView::Create($rows[0]), $groups[0]);
         $this->assertEquals(GroupItemView::Create($rows[1]), $groups[1]);
 
-        $this->assertTrue($this->db->ContainsCommand($getGroupsCommand), "missing select group command");
+        $this->assertTrue($this->db->ContainsCommand($getGroupsCommand), 'missing select group command');
     }
 
     private function GetGroupUserRow($userId, $firstName, $lastName)

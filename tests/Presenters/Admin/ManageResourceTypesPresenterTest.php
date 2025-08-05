@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManageResourceTypesPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/ManageResourceTypesPresenter.php';
 
 class ManageResourceTypesPresenterTest extends TestBase
 {

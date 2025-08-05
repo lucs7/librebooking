@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Responses/CustomAttributes/CustomAttributeResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/ResourceItemResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Group/GroupItemResponse.php');
+require_once ROOT_DIR.'WebServices/Responses/CustomAttributes/CustomAttributeResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/ResourceItemResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Group/GroupItemResponse.php';
 
 class UserResponse extends RestResponse
 {
@@ -90,7 +90,7 @@ class UserGroupItemResponse extends RestResponse
     public $roleIds;
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $name
      */
     public function __construct(IRestServer $server, public $id, public $name)

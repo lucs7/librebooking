@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class ResourceResponse extends RestResponse
 {
@@ -35,8 +35,7 @@ class ResourceResponse extends RestResponse
     public $maxConcurrentReservations;
 
     /**
-     * @param IRestServer $server
-     * @param BookableResource $resource
+     * @param BookableResource     $resource
      * @param IEntityAttributeList $attributes
      */
     public function __construct(IRestServer $server, $resource, $attributes)
@@ -72,10 +71,10 @@ class ResourceResponse extends RestResponse
 
         $attributeValues = $attributes->GetAttributes($resourceId);
 
-        $i=0;
+        $i = 0;
         foreach ($attributeValues as $av) {
             $this->customAttributes[] = new CustomAttributeResponse($server, $av->Id(), $av->Label(), $av->Value());
-            $i++;
+            ++$i;
         }
 
         if ($resource->GetIsCalendarSubscriptionAllowed()) {
@@ -84,7 +83,6 @@ class ResourceResponse extends RestResponse
         }
         $this->AddService($server, WebServices::GetResource, [WebServiceParams::ResourceId => $resourceId]);
     }
-
 
     public static function Example()
     {
@@ -106,7 +104,7 @@ class ExampleResourceResponse extends ResourceResponse
         $this->maxLength = $length;
         $this->minLength = $length;
         $this->maxNotice = $length;
-        $this->minNoticeAdd= $length;
+        $this->minNoticeAdd = $length;
         $this->minNoticeUpdate = $length;
         $this->minNoticeDelete = $length;
         $this->requiresApproval = true;

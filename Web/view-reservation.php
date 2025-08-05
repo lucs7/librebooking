@@ -2,7 +2,7 @@
 
 define('ROOT_DIR', '../');
 
-require_once(ROOT_DIR . 'Pages/Reservation/ReadOnlyReservationPage.php');
+require_once ROOT_DIR.'Pages/Reservation/ReadOnlyReservationPage.php';
 
 $page = new ReadOnlyReservationPage();
 

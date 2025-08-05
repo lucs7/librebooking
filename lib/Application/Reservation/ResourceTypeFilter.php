@@ -3,7 +3,7 @@
 class ResourceTypeFilter implements IResourceFilter
 {
     /**
-     * @var int[] $resourcetypeids
+     * @var int[]
      */
     private $resourcetypeids = [];
 
@@ -21,6 +21,7 @@ class ResourceTypeFilter implements IResourceFilter
 
     /**
      * @param IResource $assignment
+     *
      * @return bool
      */
     public function ShouldInclude($assignment)

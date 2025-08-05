@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Presenters/Integrate/SlackPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'Presenters/Integrate/SlackPresenter.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 interface ISlackPage
 {
@@ -21,9 +21,6 @@ interface ISlackPage
      */
     public function GetToken();
 
-    /**
-     * @param SlackResponse $response
-     */
     public function BindResponse(SlackResponse $response);
 
     /**

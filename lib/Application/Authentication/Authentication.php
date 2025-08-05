@@ -1,17 +1,17 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Database/namespace.php');
-require_once(ROOT_DIR . 'lib/Database/Commands/namespace.php');
-require_once(ROOT_DIR . 'Domain/Values/RoleLevel.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Database/namespace.php';
+require_once ROOT_DIR.'lib/Database/Commands/namespace.php';
+require_once ROOT_DIR.'Domain/Values/RoleLevel.php';
 
 class Authentication implements IAuthentication
 {
     /**
      * @var PasswordMigration
      */
-    private $passwordMigration = null;
+    private $passwordMigration;
 
     /**
      * @var IRoleService
@@ -99,12 +99,11 @@ class Authentication implements IAuthentication
 
         if ($valid) {
             Log::Debug('Successful user authentication for %s', $username);
-          }
-          else {
+        } else {
             Log::Error('Failed user authentication for %s', $username);
-          }
-        
-          return $valid;
+        }
+
+        return $valid;
     }
 
     public function Login($username, $loginContext)
@@ -112,7 +111,7 @@ class Authentication implements IAuthentication
         Log::Debug('Logging in with user: %s', $username);
 
         $user = $this->userRepository->LoadByUsername($username);
-        if ($user->StatusId() == AccountStatus::ACTIVE) {
+        if (AccountStatus::ACTIVE == $user->StatusId()) {
             $loginData = $loginContext->GetData();
             $loginTime = LoginTime::Now();
             $language = $user->Language();
@@ -148,8 +147,8 @@ class Authentication implements IAuthentication
     }
 
     /**
-     * @param User $user
      * @param string $loginTime
+     *
      * @return UserSession
      */
     private function GetUserSession(User $user, $loginTime)

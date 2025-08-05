@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class CalendarWeekTest extends TestBase
 {
@@ -12,7 +12,7 @@ class CalendarWeekTest extends TestBase
         $startsBeforeWeek->EndDate = Date::Parse('2011-07-31 12:00', 'UTC');
 
         $endsAfterWeek = new ReservationItemView();
-        ;
+
         $endsAfterWeek->StartDate = Date::Parse('2011-08-06 12:00', 'UTC');
         $endsAfterWeek->EndDate = Date::Parse('2012-08-08 12:00', 'UTC');
 

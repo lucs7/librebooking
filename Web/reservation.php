@@ -2,8 +2,8 @@
 
 define('ROOT_DIR', '../');
 
-require_once(ROOT_DIR . 'Pages/Reservation/NewReservationPage.php');
-require_once(ROOT_DIR . 'Pages/Reservation/ExistingReservationPage.php');
+require_once ROOT_DIR.'Pages/Reservation/NewReservationPage.php';
+require_once ROOT_DIR.'Pages/Reservation/ExistingReservationPage.php';
 
 $server = ServiceLocator::GetServer();
 

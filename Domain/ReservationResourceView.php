@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/BookableResource.php');
+require_once ROOT_DIR.'Domain/BookableResource.php';
 
 class ReservationResourceView implements IResource
 {
@@ -22,7 +22,7 @@ class ReservationResourceView implements IResource
         $scheduleAdminGroupId,
         $enableCheckin,
         $autoReleaseMinutes,
-        $statusId = ResourceStatus::AVAILABLE
+        $statusId = ResourceStatus::AVAILABLE,
     ) {
         $this->id = $resourceId;
         $this->resourceName = $resourceName;
@@ -59,7 +59,8 @@ class ReservationResourceView implements IResource
     }
 
     /**
-     * alias of GetId()
+     * alias of GetId().
+     *
      * @return int
      */
     public function GetResourceId()

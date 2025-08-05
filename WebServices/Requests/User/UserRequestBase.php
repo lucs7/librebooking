@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/JsonRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/CustomAttributes/AttributeValueRequest.php');
+require_once ROOT_DIR.'lib/WebService/JsonRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/CustomAttributes/AttributeValueRequest.php';
 
 abstract class UserRequestBase extends JsonRequest
 {
@@ -26,6 +26,7 @@ abstract class UserRequestBase extends JsonRequest
         if (!empty($this->customAttributes)) {
             return $this->customAttributes;
         }
+
         return [];
     }
 }

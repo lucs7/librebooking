@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class eu_es extends en_gb
 {
@@ -574,7 +574,6 @@ class eu_es extends en_gb
         $strings['SelectUser'] = 'Aukeratu erabiltzailea';
         // End Install
 
-
         // Errors
         $strings['LoginError'] = 'Ez da Erabiltzaile Izena (Identifikadorea) eta pasahitz horrekin ezer aurkitu';
         $strings['ReservationFailed'] = 'Zure erreserba ezin izan da burutu';
@@ -717,8 +716,8 @@ class eu_es extends en_gb
         $strings['GuestAccountCreatedSubject'] = 'Kontuaren xehetasunak';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Ez duzu aurreko erreserik';
         $strings['PastReservations'] = 'Aurreko erreserak';
         $strings['AllNoPastReservations'] = 'Ez dago aurreko erreserarik azken %s egunetan';
@@ -726,37 +725,37 @@ class eu_es extends en_gb
         $strings['Yesterday'] = 'Atzo';
         $strings['EarlierThisWeek'] = 'Aurreko astean';
         $strings['PreviousWeek'] = 'Aurreko astean';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Zure taldeak ez du etorriko erreserbarik';
         $strings['GroupUpcomingReservations'] = 'Nire Taldeen Hurrengo Erreserba(k)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Facebook-en saioa hastean errorea gertatu da. Mesedez, saiatu berriro.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Ez duzu onartu beharreko erreserbarik';
         $strings['PendingApprovalReservations'] = 'Onartzea zaindako erreserbak';
         $strings['LaterThisMonth'] = 'Hilabete honetan geroago';
         $strings['LaterThisYear'] = 'Aurten geroago';
         $strings['Remaining'] = 'Geratzen dena';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Ez dago irteerako erreserbarik falta';
-        $strings['MissingCheckOutReservations'] = 'Irteerako erreserbak falta dira';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Irteerako erreserbak falta dira';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Ezinezkoa da erreserbaaren xehetasunak ikustea, erreserba honetan dagoen edozein baliabideen baimenik ez delako';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
+
         return $this->Strings;
     }
 
@@ -779,6 +778,7 @@ class eu_es extends en_gb
         $days['letter'] = ['I', 'A', 'A', 'A', 'O', 'O', 'L'];
 
         $this->Days = $days;
+
         return $this->Days;
     }
 
@@ -797,12 +797,14 @@ class eu_es extends en_gb
         $months['abbr'] = ['Urt', 'Ots', 'Mar', 'Api', 'Mai', 'Eka', 'Uzt', 'Abu', 'Ira', 'Urr', 'Aza', 'Abe'];
 
         $this->Months = $months;
+
         return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         return $this->Letters;
     }
 

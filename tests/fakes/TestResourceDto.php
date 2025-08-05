@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/ResourceRepository.php');
+require_once ROOT_DIR.'Domain/Access/ResourceRepository.php';
 
 class TestResourceDto extends ResourceDto
 {
@@ -20,7 +20,7 @@ class TestResourceDto extends ResourceDto
         $isAutoReleased = false,
         $autoReleaseMinutes = null,
         $color = null,
-        $maxConcurrentReservations = null
+        $maxConcurrentReservations = null,
     ) {
         parent::__construct(
             $id,
@@ -28,7 +28,7 @@ class TestResourceDto extends ResourceDto
             $canAccess,
             $canBook,
             $scheduleId,
-            ($minLength == null ? TimeInterval::None() : $minLength),
+            null == $minLength ? TimeInterval::None() : $minLength,
             $resourceTypeId,
             $adminGroupId,
             $scheduleAdminGroupId,

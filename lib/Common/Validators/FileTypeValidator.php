@@ -3,7 +3,7 @@
 class FileTypeValidator extends ValidatorBase implements IValidator
 {
     /**
-     * @var null|UploadedFile
+     * @var UploadedFile|null
      */
     private $file;
 
@@ -13,7 +13,7 @@ class FileTypeValidator extends ValidatorBase implements IValidator
     private $allowedTypes;
 
     /**
-     * @param UploadedFile|null $file
+     * @param UploadedFile|null     $file
      * @param array|string|string[] $allowedTypes
      */
     public function __construct($file, $allowedTypes = [])
@@ -28,7 +28,7 @@ class FileTypeValidator extends ValidatorBase implements IValidator
 
     public function Validate()
     {
-        if ($this->file == null) {
+        if (null == $this->file) {
             return;
         }
         $this->isValid = in_array($this->file->Extension(), $this->allowedTypes);

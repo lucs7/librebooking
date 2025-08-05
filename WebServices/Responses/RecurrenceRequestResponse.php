@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class RecurrenceRequestResponse
 {
@@ -27,8 +27,8 @@ class ExampleRecurrenceRequestResponse extends RecurrenceRequestResponse
     public function __construct()
     {
         $this->interval = 3;
-        $this->monthlyType = RepeatMonthlyType::DayOfMonth . '|' . RepeatMonthlyType::DayOfWeek . '|null';
-        $this->type = RepeatType::Daily . '|' . RepeatType::Monthly . '|' . RepeatType::None . '|' . RepeatType::Weekly . '|' . RepeatType::Yearly;
+        $this->monthlyType = RepeatMonthlyType::DayOfMonth.'|'.RepeatMonthlyType::DayOfWeek.'|null';
+        $this->type = RepeatType::Daily.'|'.RepeatType::Monthly.'|'.RepeatType::None.'|'.RepeatType::Weekly.'|'.RepeatType::Yearly;
         $this->weekdays = [0, 1, 2, 3, 4, 5, 6];
         $this->repeatTerminationDate = Date::Now()->ToIso();
     }

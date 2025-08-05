@@ -1,15 +1,16 @@
 <?php
-/**
-File in Authentication plugin package for ver 2.1.4 LibreBooking
-to implement Single Sign On Capability.  Based on code from the
-LibreBooking Authentication Ldap plugin as well as a SAML
-Authentication plugin for Moodle 1.9+.
-See http://moodle.org/mod/data/view.php?d=13&rid=2574
-This plugin uses the SimpleSAMLPHP version 1.8.2 libraries.
-http://simplesamlphp.org/
-*/
 
-require_once(ROOT_DIR . '/lib/Config/namespace.php');
+/**
+ * File in Authentication plugin package for ver 2.1.4 LibreBooking
+ * to implement Single Sign On Capability.  Based on code from the
+ * LibreBooking Authentication Ldap plugin as well as a SAML
+ * Authentication plugin for Moodle 1.9+.
+ * See http://moodle.org/mod/data/view.php?d=13&rid=2574
+ * This plugin uses the SimpleSAMLPHP version 1.8.2 libraries.
+ * http://simplesamlphp.org/.
+ */
+
+require_once ROOT_DIR.'/lib/Config/namespace.php';
 
 class SamlOptions
 {
@@ -17,10 +18,10 @@ class SamlOptions
 
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/Saml.config.php');
+        require_once dirname(__FILE__).'/Saml.config.php';
 
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/Saml.config.php',
+            dirname(__FILE__).'/Saml.config.php',
             SamlConfig::CONFIG_ID
         );
     }

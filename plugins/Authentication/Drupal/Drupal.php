@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'plugins/Authentication/Drupal/Drupal.config.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'lib/Database/MySQL/namespace.php');
+require_once ROOT_DIR.'plugins/Authentication/Drupal/Drupal.config.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'lib/Database/MySQL/namespace.php';
 
 define('DRUPAL_HASH_COUNT', 15);
 define('DRUPAL_MIN_HASH_COUNT', 7);
@@ -22,11 +22,11 @@ class Drupal extends Authentication implements IAuthentication
     private $_registration;
 
     /**
-     * Needed to register user if they are logging in to Drupal but do not have a LibreBooking account yet
+     * Needed to register user if they are logging in to Drupal but do not have a LibreBooking account yet.
      */
     private function GetRegistration()
     {
-        if ($this->_registration == null) {
+        if (null == $this->_registration) {
             $this->_registration = new Registration();
         }
 
@@ -42,14 +42,14 @@ class Drupal extends Authentication implements IAuthentication
      */
     public function __construct(IAuthentication $authentication)
     {
-        $drupal_config_path = dirname(__FILE__) . '/Drupal.config.php';
-        require_once($drupal_config_path);
+        $drupal_config_path = dirname(__FILE__).'/Drupal.config.php';
+        require_once $drupal_config_path;
 
         $config = Configuration::Instance();
         $config->Register($drupal_config_path, 'DRUPAL');
 
         $drupalDir = $config->File('DRUPAL')->GetKey('drupal.root.dir');
-        require_once($drupalDir . '/sites/default/settings.php');
+        require_once $drupalDir.'/sites/default/settings.php';
 
         $this->db = $databases['default']['default'];
 
@@ -60,7 +60,8 @@ class Drupal extends Authentication implements IAuthentication
     }
 
     /**
-     * Called first to validate credentials
+     * Called first to validate credentials.
+     *
      * @see IAuthorization::Validate()
      */
     public function Validate($username, $password)
@@ -69,19 +70,23 @@ class Drupal extends Authentication implements IAuthentication
 
         if (!$account) {
             Log::Debug('DRUPAL: Could not find Drupal account for user=%s', $username);
+
             return false;
         }
         if (!$this->user_check_password($password, $account)) {
             Log::Debug('DRUPAL: Drupal account found but password was incorrect for user=%s', $username);
+
             return false;
         }
 
         Log::Debug('DRUPAL: User was found. user=%s, Drupal username=%s, Drupal email=%s, LibreBooking admin email=%s', $username, $account->name, $account->mail, Configuration::Instance()->GetAdminEmail());
+
         return true;
     }
 
     /**
-     * Called after Validate returns true
+     * Called after Validate returns true.
+     *
      * @see IAuthorization::Login()
      */
     public function Login($username, $loginContext)
@@ -99,6 +104,7 @@ class Drupal extends Authentication implements IAuthentication
             null,
             null
         ));
+
         return $this->authToDecorate->Login($username, $loginContext);
     }
 
@@ -118,10 +124,6 @@ class Drupal extends Authentication implements IAuthentication
         return false;
     }
 
-    /**
-     * @param $username
-     * @return mixed
-     */
     private function GetDrupalAccount($username)
     {
         $db = $this->db;
@@ -140,8 +142,8 @@ class Drupal extends Authentication implements IAuthentication
             $query .= 'ON user__roles.entity_id = users_field_data.uid WHERE (name = @user OR mail = @user) ';
             $query .= 'AND bundle = @bundle AND roles_target_id IN (';
             $delimiter = '';
-            for ($i = 0; $i < $nb_roles; $i++) {
-                $query .= $delimiter . '@role' . $i;
+            for ($i = 0; $i < $nb_roles; ++$i) {
+                $query .= $delimiter.'@role'.$i;
                 $delimiter = ', ';
             }
             $query .= ')';
@@ -153,7 +155,7 @@ class Drupal extends Authentication implements IAuthentication
             $command->AddParameter(new Parameter('@bundle', 'user'));
             $rid = 0;
             foreach ($this->allowed_roles as $role) {
-                $command->AddParameter(new Parameter('@role' . $rid++, $role));
+                $command->AddParameter(new Parameter('@role'.$rid++, $role));
             }
         }
         $reader = $drupalDb->Query($command);
@@ -163,6 +165,7 @@ class Drupal extends Authentication implements IAuthentication
             foreach ($row as $k => $v) {
                 $account->$k = $v;
             }
+
             return $account;
         }
 
@@ -194,13 +197,13 @@ class Drupal extends Authentication implements IAuthentication
     }
 
     /**
-     * Copyright Drupal
+     * Copyright Drupal.
+     *
      * @see \includes\password.inc
      */
-
     public function user_check_password($password, $account)
     {
-        if (substr($account->pass, 0, 2) == 'U$') {
+        if ('U$' == substr($account->pass, 0, 2)) {
             // This may be an updated password from user_update_7000(). Such hashes
             // have 'U' added as the first character and need an extra md5().
             $stored_hash = substr($account->pass, 1);
@@ -211,7 +214,7 @@ class Drupal extends Authentication implements IAuthentication
 
         $type = substr($stored_hash, 0, 4);
         // Drupal 10.1.0 uses password_hash(), see https://www.drupal.org/node/3322420
-        if ($type == '$2y$') {
+        if ('$2y$' == $type) {
             return password_verify($password, $stored_hash);
         }
 
@@ -231,7 +234,8 @@ class Drupal extends Authentication implements IAuthentication
             default:
                 return false;
         }
-        return ($hash && $stored_hash == $hash);
+
+        return $hash && $stored_hash == $hash;
     }
 
     public function _password_crypt($algo, $password, $setting)
@@ -243,7 +247,7 @@ class Drupal extends Authentication implements IAuthentication
         // The first 12 characters of an existing hash are its setting string.
         $setting = substr($setting, 0, 12);
 
-        if ($setting[0] != '$' || $setting[2] != '$') {
+        if ('$' != $setting[0] || '$' != $setting[2]) {
             return false;
         }
         $count_log2 = $this->_password_get_count_log2($setting);
@@ -253,7 +257,7 @@ class Drupal extends Authentication implements IAuthentication
         }
         $salt = substr($setting, 4, 8);
         // Hashes must have an 8 character salt.
-        if (strlen($salt) != 8) {
+        if (8 != strlen($salt)) {
             return false;
         }
 
@@ -261,22 +265,24 @@ class Drupal extends Authentication implements IAuthentication
         $count = 1 << $count_log2;
 
         // We rely on the hash() function being available in PHP 5.2+.
-        $hash = hash($algo, $salt . $password, true);
+        $hash = hash($algo, $salt.$password, true);
         do {
-            $hash = hash($algo, $hash . $password, true);
+            $hash = hash($algo, $hash.$password, true);
         } while (--$count);
 
         $len = strlen($hash);
-        $output = $setting . $this->_password_base64_encode($hash, $len);
+        $output = $setting.$this->_password_base64_encode($hash, $len);
         // _password_base64_encode() of a 16 byte MD5 will always be 22 characters.
         // _password_base64_encode() of a 64 byte sha512 will always be 86 characters.
         $expected = 12 + ceil((8 * $len) / 6);
+
         return (strlen($output) == $expected) ? substr($output, 0, DRUPAL_HASH_LENGTH) : false;
     }
 
     public function _password_get_count_log2($setting)
     {
         $itoa64 = $this->_password_itoa64();
+
         return strpos($itoa64, $setting[3]);
     }
 
@@ -287,22 +293,22 @@ class Drupal extends Authentication implements IAuthentication
         $itoa64 = $this->_password_itoa64();
         do {
             $value = ord($input[$i++]);
-            $output .= $itoa64[$value & 0x3f];
+            $output .= $itoa64[$value & 0x3F];
             if ($i < $count) {
                 $value |= ord($input[$i]) << 8;
             }
-            $output .= $itoa64[($value >> 6) & 0x3f];
+            $output .= $itoa64[($value >> 6) & 0x3F];
             if ($i++ >= $count) {
                 break;
             }
             if ($i < $count) {
                 $value |= ord($input[$i]) << 16;
             }
-            $output .= $itoa64[($value >> 12) & 0x3f];
+            $output .= $itoa64[($value >> 12) & 0x3F];
             if ($i++ >= $count) {
                 break;
             }
-            $output .= $itoa64[($value >> 18) & 0x3f];
+            $output .= $itoa64[($value >> 18) & 0x3F];
         } while ($i < $count);
 
         return $output;

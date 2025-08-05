@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'Pages/LoginPage.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'Pages/LoginPage.php';
 
 class WebAuthenticationTest extends TestBase
 {
@@ -59,7 +59,7 @@ class WebAuthenticationTest extends TestBase
         $now = mktime(10, 11, 12, 1, 2, 2000);
         LoginTime::$Now = $now;
 
-        $hashedValue = sprintf("%s|%s", $id, $now);
+        $hashedValue = sprintf('%s|%s', $id, $now);
 
         $session = new UserSession($id);
         $session->LoginTime = $now;
@@ -81,7 +81,7 @@ class WebAuthenticationTest extends TestBase
         $rows = [
             ColumnNames::USER_ID => $userid,
             ColumnNames::LAST_LOGIN => $lastLogin,
-            ColumnNames::EMAIL => $email
+            ColumnNames::EMAIL => $email,
         ];
         $this->db->SetRows([$rows]);
 
@@ -109,7 +109,7 @@ class WebAuthenticationTest extends TestBase
         $rows = [[
             ColumnNames::USER_ID => $userid,
             ColumnNames::LAST_LOGIN => 'not the same thing',
-            ColumnNames::EMAIL => $email
+            ColumnNames::EMAIL => $email,
         ]];
         $this->db->SetRows($rows);
 

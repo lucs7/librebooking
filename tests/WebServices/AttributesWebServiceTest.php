@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/AttributesWebService.php');
+require_once ROOT_DIR.'WebServices/AttributesWebService.php';
 
 class AttributesWebServiceTest extends TestBase
 {
@@ -28,7 +28,6 @@ class AttributesWebServiceTest extends TestBase
 
         $this->service = new AttributesWebService($this->server, $this->attributeService);
     }
-
 
     public function testGetsSingleAttribute()
     {

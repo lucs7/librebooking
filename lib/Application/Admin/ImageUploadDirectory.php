@@ -9,7 +9,7 @@ class ImageUploadDirectory
             return $uploadDir;
         }
 
-        $dir = ROOT_DIR . $uploadDir;
+        $dir = ROOT_DIR.$uploadDir;
         if (!is_dir($dir)) {
             @mkdir($dir);
         }
@@ -24,6 +24,6 @@ class ImageUploadDirectory
 
     public function GetPath()
     {
-        return Configuration::Instance()->GetScriptUrl() . '/' . Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL);
+        return Configuration::Instance()->GetScriptUrl().'/'.Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL);
     }
 }

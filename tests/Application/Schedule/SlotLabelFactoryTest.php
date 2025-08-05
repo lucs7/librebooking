@@ -73,7 +73,7 @@ class SlotLabelFactoryTest extends TestBase
         $value = $factory->Format($this->reservation);
 
         $this->assertEquals(
-            $this->reservation->StartDate->ToTimezone($this->fakeUser->Timezone)->Format($this->fakeResources->GetDateFormat('res_popup')) . ' ' . $this->reservation->EndDate->ToTimezone($this->fakeUser->Timezone)->Format($this->fakeResources->GetDateFormat('res_popup')),
+            $this->reservation->StartDate->ToTimezone($this->fakeUser->Timezone)->Format($this->fakeResources->GetDateFormat('res_popup')).' '.$this->reservation->EndDate->ToTimezone($this->fakeUser->Timezone)->Format($this->fakeResources->GetDateFormat('res_popup')),
             $value
         );
     }

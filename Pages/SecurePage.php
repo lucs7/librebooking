@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'Pages/ActionPage.php';
+require_once ROOT_DIR.'lib/Config/namespace.php';
 
 abstract class SecurePage extends Page
 {
@@ -12,13 +12,13 @@ abstract class SecurePage extends Page
 
         if (!$this->IsAuthenticated()) {
             $this->RedirectResume($this->GetResumeUrl());
-            die();
+            exit;
         }
     }
 
     protected function GetResumeUrl()
     {
-        return sprintf("%s%s?%s=%s", $this->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->server->GetUrl()));
+        return sprintf('%s%s?%s=%s', $this->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->server->GetUrl()));
     }
 }
 
@@ -35,7 +35,7 @@ class SecureActionPageDecorator extends ActionPage
 
         if (!$this->page->IsAuthenticated()) {
             $this->RedirectResume($this->GetResumeUrl());
-            die();
+            exit;
         }
     }
 
@@ -56,7 +56,7 @@ class SecureActionPageDecorator extends ActionPage
 
     protected function GetResumeUrl()
     {
-        return sprintf("%s%s?%s=%s", $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl()));
+        return sprintf('%s%s?%s=%s', $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl()));
     }
 
     public function TakingAction()
@@ -131,20 +131,20 @@ class RoleRestrictedPageDecorator extends SecureActionPageDecorator
             if ($user->IsAdmin) {
                 $isAllowed = true;
             }
-            if ($roleId == RoleLevel::GROUP_ADMIN && $user->IsGroupAdmin) {
+            if (RoleLevel::GROUP_ADMIN == $roleId && $user->IsGroupAdmin) {
                 $isAllowed = true;
             }
-            if ($roleId == RoleLevel::RESOURCE_ADMIN && $user->IsResourceAdmin) {
+            if (RoleLevel::RESOURCE_ADMIN == $roleId && $user->IsResourceAdmin) {
                 $isAllowed = true;
             }
-            if ($roleId == RoleLevel::SCHEDULE_ADMIN && $user->IsScheduleAdmin) {
+            if (RoleLevel::SCHEDULE_ADMIN == $roleId && $user->IsScheduleAdmin) {
                 $isAllowed = true;
             }
         }
 
         if (!$isAllowed) {
             $this->RedirectResume($this->GetResumeUrl());
-            die();
+            exit;
         }
     }
 }
@@ -162,7 +162,7 @@ class SecurePageDecorator extends Page implements IPage
 
         if (!$this->page->IsAuthenticated()) {
             $this->RedirectResume($this->GetResumeUrl());
-            die();
+            exit;
         }
     }
 
@@ -203,6 +203,6 @@ class SecurePageDecorator extends Page implements IPage
 
     protected function GetResumeUrl()
     {
-        return sprintf("%s%s?%s=%s", $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl()));
+        return sprintf('%s%s?%s=%s', $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl()));
     }
 }

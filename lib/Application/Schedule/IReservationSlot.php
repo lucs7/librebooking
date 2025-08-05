@@ -29,7 +29,6 @@ interface IReservationSlot
 
     /**
      * @return int
-     *
      */
     public function PeriodSpan();
 
@@ -55,6 +54,7 @@ interface IReservationSlot
 
     /**
      * @param $date Date
+     *
      * @return bool
      */
     public function IsPastDate(Date $date);
@@ -76,18 +76,17 @@ interface IReservationSlot
 
     /**
      * @param string $timezone
+     *
      * @return IReservationSlot
      */
     public function ToTimezone($timezone);
 
     /**
-     * @param UserSession $session
      * @return bool
      */
     public function IsOwnedBy(UserSession $session);
 
     /**
-     * @param UserSession $session
      * @return bool
      */
     public function IsParticipating(UserSession $session);
@@ -118,7 +117,6 @@ interface IReservationSlot
     public function TextColor();
 
     /**
-     * @param Date $date
      * @return bool
      */
     public function CollidesWith(Date $date);

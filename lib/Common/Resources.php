@@ -1,14 +1,13 @@
 <?php
 
-require_once(ROOT_DIR . 'lang/AvailableLanguages.php');
+require_once ROOT_DIR.'lang/AvailableLanguages.php';
 
 interface IResourceLocalization
 {
     /**
      * @abstract
-     * @param $key
+     *
      * @param array|string $args
-     * @return string
      */
     public function GetString($key, $args = []): string;
 
@@ -73,7 +72,7 @@ class Resources implements IResourceLocalization
 
     protected function __construct()
     {
-        $this->LanguageDirectory = dirname(__FILE__) . '/../../lang/';
+        $this->LanguageDirectory = dirname(__FILE__).'/../../lang/';
 
         $this->systemDateKeys['js_general_date'] = 'yy-mm-dd';
         $this->systemDateKeys['js_general_datetime'] = 'yy-mm-dd HH:mm';
@@ -94,6 +93,7 @@ class Resources implements IResourceLocalization
         $resources = new Resources();
         $resources->SetCurrentLanguage($resources->GetLanguageCode());
         $resources->LoadOverrides();
+
         return $resources;
     }
 
@@ -107,6 +107,7 @@ class Resources implements IResourceLocalization
         }
 
         setlocale(LC_ALL, self::$_instance->CurrentLanguage);
+
         return self::$_instance;
     }
 
@@ -117,6 +118,7 @@ class Resources implements IResourceLocalization
 
     /**
      * @param string $languageCode
+     *
      * @return bool
      */
     public function SetLanguage($languageCode)
@@ -126,13 +128,14 @@ class Resources implements IResourceLocalization
 
     /**
      * @param string $languageCode
+     *
      * @return bool
      */
     public function IsLanguageSupported($languageCode)
     {
-        return !empty($languageCode) &&
-        (array_key_exists($languageCode, $this->AvailableLanguages) &&
-                file_exists($this->LanguageDirectory . $this->AvailableLanguages[$languageCode]->LanguageFile));
+        return !empty($languageCode)
+        && (array_key_exists($languageCode, $this->AvailableLanguages)
+                && file_exists($this->LanguageDirectory.$this->AvailableLanguages[$languageCode]->LanguageFile));
     }
 
     public function GetString($key, $args = []): string
@@ -152,13 +155,14 @@ class Resources implements IResourceLocalization
         }
         $sprintf_args = '';
 
-        for ($i = 0; $i < count($args); $i++) {
-            $sprintf_args .= "'" . addslashes($args[$i]) . "',";
+        for ($i = 0; $i < count($args); ++$i) {
+            $sprintf_args .= "'".addslashes($args[$i])."',";
         }
 
         $sprintf_args = substr($sprintf_args, 0, strlen($sprintf_args) - 1);
         $string = addslashes($strings[$key]);
         $return = eval("return sprintf('$string', $sprintf_args);");
+
         return $return;
     }
 
@@ -220,7 +224,6 @@ class Resources implements IResourceLocalization
     }
 
     /**
-     * @param $languageCode
      * @return bool
      */
     private function SetCurrentLanguage($languageCode)
@@ -235,7 +238,7 @@ class Resources implements IResourceLocalization
             $languageSettings = $this->AvailableLanguages[$languageCode];
             $this->LanguageFile = $languageSettings->LanguageFile;
 
-            require_once($this->LanguageDirectory . $this->LanguageFile);
+            require_once $this->LanguageDirectory.$this->LanguageFile;
 
             $class = $languageSettings->LanguageClass;
             $this->_lang = new $class();
@@ -255,7 +258,7 @@ class Resources implements IResourceLocalization
     private function GetLanguageCode()
     {
         $cookie = ServiceLocator::GetServer()->GetCookie(CookieKeys::LANGUAGE);
-        if ($cookie != null) {
+        if (null != $cookie) {
             return $cookie;
         } else {
             return Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE);
@@ -269,10 +272,10 @@ class Resources implements IResourceLocalization
 
     private function LoadOverrides()
     {
-        $overrideFile = ROOT_DIR . 'config/lang-overrides.php';
+        $overrideFile = ROOT_DIR.'config/lang-overrides.php';
         if (file_exists($overrideFile)) {
             global $langOverrides;
-            include_once($overrideFile);
+            include_once $overrideFile;
             $this->_lang->Strings = array_merge($this->_lang->Strings, $langOverrides);
         }
     }

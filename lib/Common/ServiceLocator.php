@@ -5,38 +5,36 @@ class ServiceLocator
     /**
      * @var Database
      */
-    private static $_database = null;
+    private static $_database;
 
     /**
      * @var Server
      */
-    private static $_server = null;
+    private static $_server;
 
-    /**
-     * @var IRestServer
-     */
-    private static IRestServer|null $_apiServer = null;
+    private static ?IRestServer $_apiServer = null;
 
     /**
      * @var IEmailService
      */
-    private static $_emailService = null;
+    private static $_emailService;
 
     /**
-     * @var \Booked\IFileSystem
+     * @var Booked\IFileSystem
      */
-    private static $_fileSystem = null;
+    private static $_fileSystem;
 
     /**
      * @return Database
      */
     public static function GetDatabase()
     {
-        require_once(ROOT_DIR . 'lib/Database/namespace.php');
+        require_once ROOT_DIR.'lib/Database/namespace.php';
 
-        if (self::$_database == null) {
+        if (null == self::$_database) {
             self::$_database = DatabaseFactory::GetDatabase();
         }
+
         return self::$_database;
     }
 
@@ -48,7 +46,7 @@ class ServiceLocator
     /**
      * @return Server
      */
-    public static function GetApiServer(): IRestServer|null
+    public static function GetApiServer(): ?IRestServer
     {
         return self::$_apiServer;
     }
@@ -63,11 +61,12 @@ class ServiceLocator
      */
     public static function GetServer()
     {
-        require_once(ROOT_DIR . 'lib/Server/namespace.php');
+        require_once ROOT_DIR.'lib/Server/namespace.php';
 
-        if (self::$_server == null) {
+        if (null == self::$_server) {
             self::$_server = new Server();
         }
+
         return self::$_server;
     }
 
@@ -78,20 +77,22 @@ class ServiceLocator
 
     /**
      * @static
+     *
      * @return IEmailService
      */
     public static function GetEmailService()
     {
-        require_once(ROOT_DIR . 'lib/Email/namespace.php');
+        require_once ROOT_DIR.'lib/Email/namespace.php';
 
-        if (self::$_emailService == null) {
+        if (null == self::$_emailService) {
             if (Configuration::Instance()->GetKey(ConfigKeys::ENABLE_EMAIL, new BooleanConverter())) {
                 self::$_emailService = new EmailService();
-//                self::$_emailService = new EmailLogger();
+            //                self::$_emailService = new EmailLogger();
             } else {
                 self::$_emailService = new NullEmailService();
             }
         }
+
         return self::$_emailService;
     }
 
@@ -102,25 +103,26 @@ class ServiceLocator
 
     /**
      * @static
-     * @return \Booked\FileSystem
+     *
+     * @return Booked\FileSystem
      */
     public static function GetFileSystem()
     {
-        require_once(ROOT_DIR . 'lib/FileSystem/namespace.php');
+        require_once ROOT_DIR.'lib/FileSystem/namespace.php';
 
-        if (self::$_fileSystem == null) {
-            self::$_fileSystem = new \Booked\FileSystem();
+        if (null == self::$_fileSystem) {
+            self::$_fileSystem = new Booked\FileSystem();
         }
 
         return self::$_fileSystem;
     }
 
-    public static function SetFileSystem(\Booked\IFileSystem $fileSystem)
+    public static function SetFileSystem(Booked\IFileSystem $fileSystem)
     {
         self::$_fileSystem = $fileSystem;
     }
 
-    public static function GetUserSession(): UserSession|null
+    public static function GetUserSession(): ?UserSession
     {
         if (!is_null(self::$_server)) {
             $userSession = self::$_server->GetUserSession();
@@ -131,7 +133,7 @@ class ServiceLocator
         if (is_null(self::$_apiServer)) {
             return null;
         }
+
         return self::$_apiServer->GetSession();
     }
-
 }

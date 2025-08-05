@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Server/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 abstract class ReservationPresenterBase implements IReservationPresenter
 {
@@ -42,7 +42,7 @@ class ReservationPresenter extends ReservationPresenterBase
     public function __construct(
         INewReservationPage $page,
         IReservationInitializerFactory $initializationFactory,
-        INewReservationPreconditionService $preconditionService
+        INewReservationPreconditionService $preconditionService,
     ) {
         parent::__construct($page);
 
@@ -86,7 +86,7 @@ class EditReservationPresenter extends ReservationPresenterBase
         IExistingReservationPage $page,
         IReservationInitializerFactory $initializationFactory,
         EditReservationPreconditionService $preconditionService,
-        IReservationViewRepository $reservationViewRepository
+        IReservationViewRepository $reservationViewRepository,
     ) {
         parent::__construct($page);
 

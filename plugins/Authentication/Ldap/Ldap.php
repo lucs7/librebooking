@@ -2,11 +2,12 @@
 
 @define('LDAP_OPT_DIAGNOSTIC_MESSAGE', 0x0032);
 @putenv('LDAPTLS_REQCERT=never');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'plugins/Authentication/Ldap/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'plugins/Authentication/Ldap/namespace.php';
 
 /**
- * Provides LDAP authentication/synchronization for LibreBooking
+ * Provides LDAP authentication/synchronization for LibreBooking.
+ *
  * @see IAuthorization
  */
 class Ldap extends Authentication implements IAuthentication
@@ -53,7 +54,7 @@ class Ldap extends Authentication implements IAuthentication
 
     private function GetRegistration()
     {
-        if ($this->_registration == null) {
+        if (null == $this->_registration) {
             $this->_registration = new Registration();
         }
 
@@ -67,18 +68,17 @@ class Ldap extends Authentication implements IAuthentication
 
     private function GetEncryption()
     {
-        if ($this->_encryption == null) {
+        if (null == $this->_encryption) {
             $this->_encryption = new PasswordEncryption();
         }
 
         return $this->_encryption;
     }
 
-
     /**
-     * @param IAuthentication $authentication Authentication class to decorate
-     * @param Ldap2Wrapper $ldapImplementation The actual LDAP implementation to work against
-     * @param LdapOptions $ldapOptions Options to use for LDAP configuration
+     * @param IAuthentication $authentication     Authentication class to decorate
+     * @param Ldap2Wrapper    $ldapImplementation The actual LDAP implementation to work against
+     * @param LdapOptions     $ldapOptions        Options to use for LDAP configuration
      */
     public function __construct(IAuthentication $authentication, $ldapImplementation = null, $ldapOptions = null)
     {
@@ -89,7 +89,7 @@ class Ldap extends Authentication implements IAuthentication
         $this->authToDecorate = $authentication;
 
         $this->options = $ldapOptions;
-        if ($ldapOptions == null) {
+        if (null == $ldapOptions) {
             $this->options = new LdapOptions();
         }
 
@@ -98,7 +98,7 @@ class Ldap extends Authentication implements IAuthentication
         }
 
         $this->ldap = $ldapImplementation;
-        if ($ldapImplementation == null) {
+        if (null == $ldapImplementation) {
             $this->ldap = new Ldap2Wrapper($this->options);
         }
     }
@@ -111,19 +111,20 @@ class Ldap extends Authentication implements IAuthentication
         $connected = $this->ldap->Connect();
 
         if (!$connected) {
-            throw new Exception("Could not connect to LDAP server. Please check your LDAP configuration settings");
+            throw new Exception('Could not connect to LDAP server. Please check your LDAP configuration settings');
         }
         $filter = $this->options->Filter();
         $isValid = $this->ldap->Authenticate($username, $password, $filter);
-        Log::Debug("Result of LDAP Authenticate for user %s: %d", $username, $isValid);
+        Log::Debug('Result of LDAP Authenticate for user %s: %d', $username, $isValid);
 
         if ($isValid) {
             $this->user = $this->ldap->GetLdapUser($username);
             $userLoaded = $this->LdapUserExists();
 
             if (!$userLoaded) {
-                Log::Error("Could not load user details from LDAP. Check your ldap settings. User: %s", $username);
+                Log::Error('Could not load user details from LDAP. Check your ldap settings. User: %s', $username);
             }
+
             return $userLoaded;
         } else {
             if ($this->options->RetryAgainstDatabase()) {
@@ -163,7 +164,7 @@ class Ldap extends Authentication implements IAuthentication
 
     private function LdapUserExists()
     {
-        return $this->user != null;
+        return null != $this->user;
     }
 
     private function Synchronize($username)

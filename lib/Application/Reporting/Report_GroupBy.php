@@ -23,16 +23,16 @@ class Report_GroupBy
 
     public function Add(ReportCommandBuilder $builder)
     {
-        if ($this->groupBy == self::GROUP) {
+        if (self::GROUP == $this->groupBy) {
             $builder->GroupByGroup();
         }
-        if ($this->groupBy == self::SCHEDULE) {
+        if (self::SCHEDULE == $this->groupBy) {
             $builder->GroupBySchedule();
         }
-        if ($this->groupBy == self::USER) {
+        if (self::USER == $this->groupBy) {
             $builder->GroupByUser();
         }
-        if ($this->groupBy == self::RESOURCE) {
+        if (self::RESOURCE == $this->groupBy) {
             $builder->GroupByResource();
         }
     }

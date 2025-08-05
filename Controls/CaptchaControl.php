@@ -1,11 +1,11 @@
 <?php
 
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-    require_once ROOT_DIR . 'vendor/autoload.php';
+if (file_exists(ROOT_DIR.'vendor/autoload.php')) {
+    require_once ROOT_DIR.'vendor/autoload.php';
 }
 
-require_once(ROOT_DIR . 'Controls/Control.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'Controls/Control.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 class CaptchaControl extends Control
 {

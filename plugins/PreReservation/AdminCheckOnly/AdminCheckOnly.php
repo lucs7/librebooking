@@ -1,7 +1,7 @@
 <?php
 
-require_once(dirname(__FILE__) . '/AdminCheckInOnlyValidation.php');
-require_once(dirname(__FILE__) . '/AdminCheckOutOnlyValidation.php');
+require_once dirname(__FILE__).'/AdminCheckInOnlyValidation.php';
+require_once dirname(__FILE__).'/AdminCheckOutOnlyValidation.php';
 
 class AdminCheckOnly implements IPreReservationFactory
 {
@@ -14,17 +14,17 @@ class AdminCheckOnly implements IPreReservationFactory
     {
         $this->factoryToDecorate = $factoryToDecorate;
 
-        require_once(dirname(__FILE__) . '/AdminCheckOnly.config.php');
+        require_once dirname(__FILE__).'/AdminCheckOnly.config.php';
 
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/AdminCheckOnly.config.php',
+            dirname(__FILE__).'/AdminCheckOnly.config.php',
             'AdminCheckOnly'
         );
     }
 
     public function CreatePreAddService(UserSession $userSession)
     {
-        return  $this->factoryToDecorate->CreatePreAddService($userSession);
+        return $this->factoryToDecorate->CreatePreAddService($userSession);
     }
 
     public function CreatePreUpdateService(UserSession $userSession)
@@ -43,22 +43,22 @@ class AdminCheckOnly implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreCheckinService(UserSession $userSession)
     {
         $base = $this->factoryToDecorate->CreatePreCheckinService($userSession);
+
         return new AdminCheckInOnlyValidation($base, $userSession);
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreCheckoutService(UserSession $userSession)
     {
         $base = $this->factoryToDecorate->CreatePreCheckoutService($userSession);
+
         return new AdminCheckOutOnlyValidation($base, $userSession);
     }
 }

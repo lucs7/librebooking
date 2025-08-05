@@ -25,9 +25,9 @@ class ResourceStatusReason
     private $statusId;
 
     /**
-     * @param int|null $id
+     * @param int|null           $id
      * @param int|ResourceStatus $statusId
-     * @param string|null $description
+     * @param string|null        $description
      */
     public function __construct($id, $statusId, $description = null)
     {

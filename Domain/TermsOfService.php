@@ -12,7 +12,7 @@ class TermsOfService
     private $applicability;
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $termsText
      * @param string $termsUrl
      * @param string $filename
@@ -32,6 +32,7 @@ class TermsOfService
      * @param string $termsUrl
      * @param string $filename
      * @param string $applicability
+     *
      * @return TermsOfService
      */
     public static function Create($termsText, $termsUrl, $filename, $applicability)
@@ -84,7 +85,7 @@ class TermsOfService
      */
     public function AppliesToReservation()
     {
-        return $this->Applicability() == self::RESERVATION;
+        return self::RESERVATION == $this->Applicability();
     }
 
     /**
@@ -92,7 +93,7 @@ class TermsOfService
      */
     public function AppliesToRegistration()
     {
-        return $this->Applicability() == self::REGISTRATION;
+        return self::REGISTRATION == $this->Applicability();
     }
 
     /**
@@ -103,13 +104,13 @@ class TermsOfService
         $scriptUrl = Configuration::Instance()->GetScriptUrl();
 
         if ($this->IsText()) {
-            return $scriptUrl . '/tos.php';
+            return $scriptUrl.'/tos.php';
         }
         if ($this->IsUrl()) {
             return $this->termsUrl;
         }
 
-        return $scriptUrl . "/uploads/tos/{$this->filename}";
+        return $scriptUrl."/uploads/tos/{$this->filename}";
     }
 
     /**

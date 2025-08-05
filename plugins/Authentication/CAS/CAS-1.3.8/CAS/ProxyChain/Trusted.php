@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/ProxyChain/Trusted.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -33,11 +35,13 @@
  * trusted proxy.
  *
  * @class    CAS_ProxyChain_Trusted
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 class CAS_ProxyChain_Trusted extends CAS_ProxyChain implements CAS_ProxyChain_Interface
 {
@@ -50,6 +54,6 @@ class CAS_ProxyChain_Trusted extends CAS_ProxyChain implements CAS_ProxyChain_In
      */
     protected function isSizeValid(array $list)
     {
-        return (sizeof($this->chain) <= sizeof($list));
+        return sizeof($this->chain) <= sizeof($list);
     }
 }

@@ -1,20 +1,20 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Calendar/CalendarFilters.php');
-require_once(ROOT_DIR . 'Presenters/Calendar/CalendarCommon.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Presenters/Calendar/CalendarFilters.php';
+require_once ROOT_DIR.'Presenters/Calendar/CalendarCommon.php';
 
 class CalendarPresenter extends CommonCalendarPresenter
 {
     /**
      * @param UserSession $userSession
-     * @param int $selectedScheduleId
-     * @param int $selectedResourceId
+     * @param int         $selectedScheduleId
+     * @param int         $selectedResourceId
      */
     protected function BindEvents($userSession, $selectedScheduleId, $selectedResourceId, $selectedUserId, $selectedParticipantId)
     {
@@ -90,8 +90,9 @@ class CalendarPresenter extends CommonCalendarPresenter
     }
 
     /**
-     * @param SchedulePeriod $slot
+     * @param SchedulePeriod        $slot
      * @param ReservationItemView[] $reservations
+     *
      * @return bool
      */
     private function OverlapsAnyReservation($slot, $reservations)
@@ -101,12 +102,14 @@ class CalendarPresenter extends CommonCalendarPresenter
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-     * @param SchedulePeriod $slot
+     * @param SchedulePeriod     $slot
      * @param BlackoutItemView[] $blackouts
+     *
      * @return bool
      */
     private function OverlapsAnyBlackout($slot, $blackouts)
@@ -116,6 +119,7 @@ class CalendarPresenter extends CommonCalendarPresenter
                 return true;
             }
         }
+
         return false;
     }
 }

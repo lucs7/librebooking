@@ -1,12 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 interface IReservationConflictResolution
 {
     /**
-     * @param ReservationItemView $existingReservation
-     * @param Blackout $blackout
      * @return bool
      */
     public function Handle(ReservationItemView $existingReservation, Blackout $blackout);
@@ -24,16 +22,18 @@ abstract class ReservationConflictResolution implements IReservationConflictReso
 
     /**
      * @param string|ReservationConflictResolution $resolutionType
+     *
      * @return ReservationConflictResolution
      */
     public static function Create($resolutionType)
     {
-        if ($resolutionType == self::Delete) {
+        if (self::Delete == $resolutionType) {
             return new ReservationConflictDelete(new ReservationRepository(), new DeleteReservationNotificationService(new UserRepository(), new AttributeRepository()));
         }
-        if ($resolutionType == self::BookAround) {
+        if (self::BookAround == $resolutionType) {
             return new ReservationConflictBookAround();
         }
+
         return new ReservationConflictNotify();
     }
 }
@@ -95,16 +95,19 @@ class ReservationConflictBookAround extends ReservationConflictResolution
 
             $blackout->SetDate(new DateRange($originalStart, $reservationStart->ToTimezone($timezone)));
             $blackout->GetSeries()->AddBlackout(new Blackout(new DateRange($reservationEnd->ToTimezone($timezone), $originalEnd)));
+
             return true;
         }
 
         if ($originalStart->LessThan($reservationStart) && $originalEnd->GreaterThan($reservationStart) && $originalEnd->LessThanOrEqual($reservationEnd)) {
             $blackout->SetDate(new DateRange($originalStart, $reservationStart->ToTimezone($timezone)));
+
             return true;
         }
 
         if ($originalStart->GreaterThan($reservationStart) && $originalStart->LessThanOrEqual($reservationEnd) && $originalEnd->GreaterThan($reservationEnd)) {
             $blackout->SetDate(new DateRange($reservationEnd->ToTimezone($timezone), $originalEnd));
+
             return true;
         }
 

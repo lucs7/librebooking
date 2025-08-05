@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/UnavailableResourcesPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/UnavailableResourcesPresenter.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class UnavailableResourcesPresenter
 {
@@ -32,7 +32,7 @@ class UnavailableResourcesPresenter
         IReservationConflictIdentifier $reservationConflictIdentifier,
         UserSession $userSession,
         IResourceRepository $resourceRepository,
-        IReservationRepository $reservationRepository
+        IReservationRepository $reservationRepository,
     ) {
         $this->page = $page;
         $this->reservationConflictIdentifier = $reservationConflictIdentifier;
@@ -44,8 +44,8 @@ class UnavailableResourcesPresenter
     public function PageLoad()
     {
         $duration = DateRange::Create(
-            $this->page->GetStartDate() . ' ' . $this->page->GetStartTime(),
-            $this->page->GetEndDate() . ' ' . $this->page->GetEndTime(),
+            $this->page->GetStartDate().' '.$this->page->GetStartTime(),
+            $this->page->GetEndDate().' '.$this->page->GetEndTime(),
             $this->userSession->Timezone
         );
 
@@ -63,7 +63,7 @@ class UnavailableResourcesPresenter
 
         foreach ($resources as $resource) {
             if (!$existingSeries) {
-                $series = ReservationSeries::Create($this->userSession->UserId, $resource, "", "", $duration, new RepeatNone(), $this->userSession);
+                $series = ReservationSeries::Create($this->userSession->UserId, $resource, '', '', $duration, new RepeatNone(), $this->userSession);
             }
             $conflict = $this->reservationConflictIdentifier->GetConflicts($series);
 

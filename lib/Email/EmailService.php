@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class EmailService implements IEmailService
 {
@@ -21,9 +21,9 @@ class EmailService implements IEmailService
             $phpMailer->CharSet = 'UTF-8';
 
             $mailer = $this->Config('mailer');
-            if ($mailer === 'smtp') {
+            if ('smtp' === $mailer) {
                 $phpMailer->isSMTP();
-            } elseif ($mailer === 'sendmail') {
+            } elseif ('sendmail' === $mailer) {
                 $phpMailer->isSendmail();
                 $phpMailer->Sendmail = $this->Config('sendmail.path');
             }
@@ -93,8 +93,8 @@ class EmailService implements IEmailService
     }
 
     /**
-     * @param $key
      * @param IConvert|null $converter
+     *
      * @return mixed|string
      */
     private function Config($key, $converter = null)
@@ -104,6 +104,7 @@ class EmailService implements IEmailService
 
     /**
      * @param $possibleArray array|EmailAddress[]
+     *
      * @return array|EmailAddress[]
      */
     private function ensureArray($possibleArray)
@@ -118,9 +119,6 @@ class EmailService implements IEmailService
 
 class NullEmailService implements IEmailService
 {
-    /**
-     * @param IEmailMessage $emailMessage
-     */
     public function Send(IEmailMessage $emailMessage)
     {
         // no-op

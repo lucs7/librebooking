@@ -10,7 +10,6 @@ class PasswordValidator extends ValidatorBase implements IValidator
 
     /**
      * @param string $currentPasswordPlainText
-     * @param User $user
      */
     public function __construct($currentPasswordPlainText, User $user)
     {

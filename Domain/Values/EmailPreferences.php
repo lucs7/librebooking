@@ -22,12 +22,13 @@ class EmailPreferences implements IEmailPreferences
     public function Exists($eventCategory, $eventType)
     {
         $key = $this->ToKey($eventCategory, $eventType);
+
         return isset($this->preferences[$key]);
     }
 
     private function ToKey($eventCategory, $eventType)
     {
-        return $eventCategory . '|' . $eventType;
+        return $eventCategory.'|'.$eventType;
     }
 
     public function AddPreference(IDomainEvent $event)
@@ -61,31 +62,31 @@ interface IEmailPreferences
 {
     /**
      * @abstract
+     *
      * @param EventCategory|string $eventCategory
-     * @param string $eventType
+     * @param string               $eventType
+     *
      * @return bool
      */
     public function Exists($eventCategory, $eventType);
 
     /**
      * @abstract
-     * @param IDomainEvent $event
      */
     public function AddPreference(IDomainEvent $event);
 
-    /**
-     * @param IDomainEvent $event
-     */
     public function RemovePreference(IDomainEvent $event);
 
     /**
      * @abstract
+     *
      * @return array|IDomainEvent[]
      */
     public function GetAdded();
 
     /**
      * @abstract
+     *
      * @return array|IDomainEvent[]
      */
     public function GetRemoved();

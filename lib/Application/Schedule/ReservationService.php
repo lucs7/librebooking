@@ -20,7 +20,7 @@ class ReservationService implements IReservationService
 
     public function GetReservations(DateRange $dateRangeUtc, $scheduleId, $targetTimezone, $resourceIds = null)
     {
-        $filterResourcesInCode = $resourceIds != null && is_array($resourceIds) && count($resourceIds) > 100;
+        $filterResourcesInCode = null != $resourceIds && is_array($resourceIds) && count($resourceIds) > 100;
         $resourceKeys = [];
         if ($filterResourcesInCode) {
             $resourceKeys = array_combine($resourceIds, $resourceIds);
@@ -33,10 +33,10 @@ class ReservationService implements IReservationService
             null,
             null,
             $scheduleId,
-            ($filterResourcesInCode ? [] : $resourceIds)
+            $filterResourcesInCode ? [] : $resourceIds
         );
         Log::Debug(
-            "Found %s reservations for schedule %s between %s and %s",
+            'Found %s reservations for schedule %s between %s and %s',
             count($reservations),
             $scheduleId,
             $dateRangeUtc->GetBegin(),
@@ -52,7 +52,7 @@ class ReservationService implements IReservationService
         }
 
         $blackouts = $this->_repository->GetBlackoutsWithin($dateRangeUtc, $scheduleId);
-        Log::Debug("Found %s blackouts for schedule %s between %s and %s", count($blackouts), $scheduleId, $dateRangeUtc->GetBegin(), $dateRangeUtc->GetEnd());
+        Log::Debug('Found %s blackouts for schedule %s between %s and %s', count($blackouts), $scheduleId, $dateRangeUtc->GetBegin(), $dateRangeUtc->GetEnd());
 
         foreach ($blackouts as $blackout) {
             $reservationListing->AddBlackout($blackout);
@@ -82,20 +82,21 @@ class ReservationService implements IReservationService
 interface IReservationService
 {
     /**
-     * @param DateRange $dateRangeUtc range of dates to search against in UTC
-     * @param int $scheduleId
-     * @param string $targetTimezone timezone to convert the results to
-     * @param null|int $resourceIds
+     * @param DateRange $dateRangeUtc   range of dates to search against in UTC
+     * @param int       $scheduleId
+     * @param string    $targetTimezone timezone to convert the results to
+     * @param int|null  $resourceIds
+     *
      * @return IReservationListing
      */
     public function GetReservations(DateRange $dateRangeUtc, $scheduleId, $targetTimezone, $resourceIds = null);
 
     /**
-     * @param DateRange $dateRange
-     * @param int $scheduleId
-     * @param null|int[] $resourceIds
-     * @param null|int $ownerId
-     * @param null|int $participantId
+     * @param int        $scheduleId
+     * @param int[]|null $resourceIds
+     * @param int|null   $ownerId
+     * @param int|null   $participantId
+     *
      * @return ReservationListItem[]
      */
     public function Search(DateRange $dateRange, $scheduleId, $resourceIds = null, $ownerId = null, $participantId = null);

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/ResourcesWriteWebService.php');
+require_once ROOT_DIR.'WebServices/ResourcesWriteWebService.php';
 
 class ResourcesWriteWebServiceTest extends TestBase
 {

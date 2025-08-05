@@ -3,7 +3,7 @@
 abstract class ExceptionHandler
 {
     /**
-     * @var ExceptionHandler $handler
+     * @var ExceptionHandler
      */
     private static $handler;
 
@@ -38,7 +38,7 @@ class WebExceptionHandler extends ExceptionHandler
 
     public function HandleException($exception)
     {
-        error_log('Error: ' . $exception);
+        error_log('Error: '.$exception);
         ob_start();
         debug_print_backtrace();
         error_log(ob_get_clean());

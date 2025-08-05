@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
+require_once ROOT_DIR.'lib/Common/Validators/namespace.php';
 
 class TimeIntervalValidator extends ValidatorBase
 {

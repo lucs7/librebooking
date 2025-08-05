@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/JsonRequest.php');
+require_once ROOT_DIR.'lib/WebService/JsonRequest.php';
 
 class GroupRequest extends JsonRequest
 {

@@ -1,22 +1,23 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/AccountDeletedEmail.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'lib/Email/Messages/AccountDeletedEmail.php';
 
 interface IManageUsersService
 {
     /**
-     * @param $username string
-     * @param $email string
-     * @param $firstName string
-     * @param $lastName string
-     * @param $password string
-     * @param $timezone string
-     * @param $language string
-     * @param $homePageId int
-     * @param $extraAttributes array|string[]
+     * @param $username         string
+     * @param $email            string
+     * @param $firstName        string
+     * @param $lastName         string
+     * @param $password         string
+     * @param $timezone         string
+     * @param $language         string
+     * @param $homePageId       int
+     * @param $extraAttributes  array|string[]
      * @param $customAttributes array|AttributeValue[]
+     *
      * @return User
      */
     public function AddUser(
@@ -29,30 +30,31 @@ interface IManageUsersService
         $language,
         $homePageId,
         $extraAttributes,
-        $customAttributes
+        $customAttributes,
     );
 
     /**
-     * @param $userId int
-     * @param $username string
-     * @param $email string
-     * @param $firstName string
-     * @param $lastName string
-     * @param $timezone string
-     * @param $extraAttributes string[]|array
+     * @param $userId           int
+     * @param $username         string
+     * @param $email            string
+     * @param $firstName        string
+     * @param $lastName         string
+     * @param $timezone         string
+     * @param $extraAttributes  string[]|array
      * @param $customAttributes AttributeValue[]
+     *
      * @return User
      */
     public function UpdateUser($userId, $username, $email, $firstName, $lastName, $timezone, $extraAttributes, $customAttributes);
 
     /**
-     * @param $userId int
+     * @param $userId    int
      * @param $attribute AttributeValue
      */
     public function ChangeAttribute($userId, $attribute);
 
     /**
-     * @param $userId int
+     * @param $userId     int
      * @param $attributes AttributeValue[]
      */
     public function ChangeAttributes($userId, $attributes);
@@ -63,19 +65,20 @@ interface IManageUsersService
     public function DeleteUser($userId);
 
     /**
-     * @param User $user
+     * @param User  $user
      * @param int[] $groupIds
      */
     public function ChangeGroups($user, $groupIds);
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $password
      */
     public function UpdatePassword($userId, $password);
 
     /**
      * @param string $email
+     *
      * @return User
      */
     public function LoadUser($email);
@@ -113,7 +116,7 @@ class ManageUsersService implements IManageUsersService
         IUserRepository $userRepository,
         IGroupRepository $groupRepository,
         IUserViewRepository $userViewRepository,
-        PasswordEncryption $passwordEncryption
+        PasswordEncryption $passwordEncryption,
     ) {
         $this->registration = $registration;
         $this->userRepository = $userRepository;
@@ -132,7 +135,7 @@ class ManageUsersService implements IManageUsersService
         $language,
         $homePageId,
         $extraAttributes,
-        $customAttributes
+        $customAttributes,
     ) {
         $user = $this->registration->Register(
             $username,

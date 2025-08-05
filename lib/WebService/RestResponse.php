@@ -18,12 +18,12 @@ class RestResponse
     /**
      * @var string
      */
-    public $message = null;
+    public $message;
 
     /**
-     * @param IRestServer $server
      * @param string $serviceName
-     * @param array $params
+     * @param array  $params
+     *
      * @return void
      */
     public function AddService(IRestServer $server, $serviceName, $params = [])
@@ -35,6 +35,7 @@ class RestResponse
     /**
      * @param string $href
      * @param string $title
+     *
      * @return void
      */
     public function AddLink($href, $title)
@@ -51,6 +52,7 @@ class RestResponse
     {
         $response = new RestResponse();
         $response->message = 'The requested resource was not found';
+
         return $response;
     }
 
@@ -58,6 +60,7 @@ class RestResponse
     {
         $response = new RestResponse();
         $response->message = 'You do not have access to the requested resource';
+
         return $response;
     }
 }

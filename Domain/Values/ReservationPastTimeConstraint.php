@@ -13,11 +13,11 @@ class ReservationPastTimeConstraint
             $constraint = ReservationStartTimeConstraint::_DEFAULT;
         }
 
-        if ($constraint == ReservationStartTimeConstraint::NONE) {
+        if (ReservationStartTimeConstraint::NONE == $constraint) {
             return false;
         }
 
-        if ($constraint == ReservationStartTimeConstraint::CURRENT) {
+        if (ReservationStartTimeConstraint::CURRENT == $constraint) {
             return $end->LessThan(Date::Now());
         }
 

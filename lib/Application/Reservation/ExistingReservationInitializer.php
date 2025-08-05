@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/ReservationInitializerBase.php');
-require_once(ROOT_DIR . 'Pages/Reservation/ExistingReservationPage.php');
+require_once ROOT_DIR.'lib/Application/Reservation/ReservationInitializerBase.php';
+require_once ROOT_DIR.'Pages/Reservation/ExistingReservationPage.php';
 
 class ExistingReservationInitializer extends ReservationInitializerBase implements IReservationComponentInitializer
 {
@@ -20,16 +20,6 @@ class ExistingReservationInitializer extends ReservationInitializerBase implemen
      */
     private $reservationBinder;
 
-    /**
-     * @param IExistingReservationPage $page
-     * @param IReservationComponentBinder $userBinder
-     * @param IReservationComponentBinder $dateBinder
-     * @param IReservationComponentBinder $resourceBinder
-     * @param IReservationComponentBinder $reservationBinder
-     * @param ReservationView $reservationView
-     * @param UserSession $userSession
-     * @param ITermsOfServiceRepository $termsOfServiceRepository
-     */
     public function __construct(
         IExistingReservationPage $page,
         IReservationComponentBinder $userBinder,
@@ -38,7 +28,7 @@ class ExistingReservationInitializer extends ReservationInitializerBase implemen
         IReservationComponentBinder $reservationBinder,
         ReservationView $reservationView,
         UserSession $userSession,
-        ITermsOfServiceRepository $termsOfServiceRepository
+        ITermsOfServiceRepository $termsOfServiceRepository,
     ) {
         $this->page = $page;
         $this->reservationView = $reservationView;

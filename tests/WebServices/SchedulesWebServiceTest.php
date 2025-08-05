@@ -1,8 +1,6 @@
 <?php
 
-use function PHPUnit\Framework\matches;
-
-require_once(ROOT_DIR . 'WebServices/SchedulesWebService.php');
+require_once ROOT_DIR.'WebServices/SchedulesWebService.php';
 
 class SchedulesWebServiceTest extends TestBase
 {
@@ -120,10 +118,10 @@ class SchedulesWebServiceTest extends TestBase
         $matcher = $this->exactly(7);
         $layout->expects($matcher)
                 ->method('GetLayout')
-                ->willReturnCallback(function($date) use (
-                        $periods1, $periods2, $periods3, $periods4, $periods5,
-                        $periods6, $periods7,
-                        $date1, $date2, $date3, $date4, $date5, $date6, $date7) {
+                ->willReturnCallback(function ($date) use (
+                    $periods1, $periods2, $periods3, $periods4, $periods5,
+                    $periods6, $periods7,
+                    $date1, $date2, $date3, $date4, $date5, $date6, $date7) {
                     return match (true) {
                         $this->equalTo($date1)->evaluate($date, returnResult: true) => $periods1,
                         $this->equalTo($date2)->evaluate($date, returnResult: true) => $periods2,
@@ -132,7 +130,7 @@ class SchedulesWebServiceTest extends TestBase
                         $this->equalTo($date5)->evaluate($date, returnResult: true) => $periods5,
                         $this->equalTo($date6)->evaluate($date, returnResult: true) => $periods6,
                         $this->equalTo($date7)->evaluate($date, returnResult: true) => $periods7,
-                        default => throw new Exception('Unexpected date')
+                        default => throw new Exception('Unexpected date'),
                     };
                 });
 

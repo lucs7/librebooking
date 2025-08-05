@@ -7,7 +7,6 @@ class Accessory
      */
     private $id;
 
-
     /**
      * @var string
      */
@@ -24,9 +23,9 @@ class Accessory
     private $resources = [];
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $name
-     * @param int $quantityAvailable
+     * @param int    $quantityAvailable
      */
     public function __construct($id, $name, $quantityAvailable)
     {
@@ -53,6 +52,7 @@ class Accessory
 
     /**
      * @param string $name
+     *
      * @return void
      */
     public function SetName($name)
@@ -100,8 +100,10 @@ class Accessory
 
     /**
      * @static
+     *
      * @param string $name
-     * @param int $quantity
+     * @param int    $quantity
+     *
      * @return Accessory
      */
     public static function Create($name, $quantity)
@@ -140,6 +142,7 @@ class Accessory
 
     /**
      * @param int $resourceId
+     *
      * @return ResourceAccessory
      */
     public function GetResource($resourceId)
@@ -163,8 +166,7 @@ class ResourceAccessory
     public function __construct($resourceId, $minQuantity, $maxQuantity)
     {
         $this->ResourceId = $resourceId;
-        $this->MinQuantity = empty($minQuantity) ? null : (int)$minQuantity;
-        $this->MaxQuantity = empty($maxQuantity) ? null : (int)$maxQuantity;
-        ;
+        $this->MinQuantity = empty($minQuantity) ? null : (int) $minQuantity;
+        $this->MaxQuantity = empty($maxQuantity) ? null : (int) $maxQuantity;
     }
 }

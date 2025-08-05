@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
 
 class RepeatOptionsTest extends TestBase
 {
-    //http://www.timeanddate.com/calendar/
+    // http://www.timeanddate.com/calendar/
 
     public function setUp(): void
     {
@@ -58,8 +58,8 @@ class RepeatOptionsTest extends TestBase
         $lastDate = DateRange::Create('2010-04-01 08:30', '2010-04-01 10:30', 'CST');
 
         $this->assertEquals($totalDates, count($repeatedDates));
-        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString().' '.$repeatedDates[0]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString().' '.$repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testRepeatWeeklyCreatesRecurrenceOnSpecifiedDaysEveryIntervalUntilEndAcrossDST()
@@ -83,13 +83,12 @@ class RepeatOptionsTest extends TestBase
         $forthDate = DateRange::Create('2010-02-26 08:30', '2010-02-26 10:30', $timezone);
         $lastDate = DateRange::Create('2010-03-26 08:30', '2010-03-26 10:30', $timezone);
 
-
         $this->assertEquals($totalDates, count($repeatedDates));
-        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($secondDate->Equals($repeatedDates[1]), $secondDate->ToString() . ' ' . $repeatedDates[1]->ToString());
-        $this->assertTrue($thirdDate->Equals($repeatedDates[2]), $thirdDate->ToString() . ' ' . $repeatedDates[2]->ToString());
-        $this->assertTrue($forthDate->Equals($repeatedDates[3]), $forthDate->ToString() . ' ' . $repeatedDates[3]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString().' '.$repeatedDates[0]->ToString());
+        $this->assertTrue($secondDate->Equals($repeatedDates[1]), $secondDate->ToString().' '.$repeatedDates[1]->ToString());
+        $this->assertTrue($thirdDate->Equals($repeatedDates[2]), $thirdDate->ToString().' '.$repeatedDates[2]->ToString());
+        $this->assertTrue($forthDate->Equals($repeatedDates[3]), $forthDate->ToString().' '.$repeatedDates[3]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString().' '.$repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testRepeatWeeklyCreatesRecurrenceOnSingleDayEveryIntervalUntilEndAcrossDST()
@@ -112,9 +111,9 @@ class RepeatOptionsTest extends TestBase
         $lastDate = DateRange::Create('2010-03-31 08:30', '2010-03-31 10:30', $timezone);
 
         $this->assertEquals($totalDates, count($repeatedDates));
-        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($forthDate->Equals($repeatedDates[3]), $forthDate->ToString() . ' ' . $repeatedDates[3]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString().' '.$repeatedDates[0]->ToString());
+        $this->assertTrue($forthDate->Equals($repeatedDates[3]), $forthDate->ToString().' '.$repeatedDates[3]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString().' '.$repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testMonthlyRepeatDayOfMonthWhenDayIsInAllMonths()
@@ -136,9 +135,9 @@ class RepeatOptionsTest extends TestBase
         $lastDate = DateRange::Create('2011-09-11 08:30', '2011-09-11 10:30', $timezone);
 
         $this->assertEquals($totalDates, count($repeatedDates));
-        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($secondDate->Equals($repeatedDates[1]), $secondDate->ToString() . ' ' . $repeatedDates[1]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString().' '.$repeatedDates[0]->ToString());
+        $this->assertTrue($secondDate->Equals($repeatedDates[1]), $secondDate->ToString().' '.$repeatedDates[1]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString().' '.$repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testMonthlyRepeatDayOfMonthWhenDayIsNotInAllMonths()
@@ -163,17 +162,17 @@ class RepeatOptionsTest extends TestBase
         $date6 = DateRange::Create('2018-12-31 08:30', '2018-12-31 10:30', $timezone);
 
         $this->assertEquals($totalDates, count($repeatedDates));
-        $this->assertTrue($date1->Equals($repeatedDates[0]), $date1->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($date2->Equals($repeatedDates[1]), $date2->ToString() . ' ' . $repeatedDates[1]->ToString());
-        $this->assertTrue($date3->Equals($repeatedDates[2]), $date3->ToString() . ' ' . $repeatedDates[2]->ToString());
-        $this->assertTrue($date4->Equals($repeatedDates[3]), $date4->ToString() . ' ' . $repeatedDates[3]->ToString());
-        $this->assertTrue($date5->Equals($repeatedDates[4]), $date5->ToString() . ' ' . $repeatedDates[4]->ToString());
-        $this->assertTrue($date6->Equals($repeatedDates[5]), $date6->ToString() . ' ' . $repeatedDates[5]->ToString());
+        $this->assertTrue($date1->Equals($repeatedDates[0]), $date1->ToString().' '.$repeatedDates[0]->ToString());
+        $this->assertTrue($date2->Equals($repeatedDates[1]), $date2->ToString().' '.$repeatedDates[1]->ToString());
+        $this->assertTrue($date3->Equals($repeatedDates[2]), $date3->ToString().' '.$repeatedDates[2]->ToString());
+        $this->assertTrue($date4->Equals($repeatedDates[3]), $date4->ToString().' '.$repeatedDates[3]->ToString());
+        $this->assertTrue($date5->Equals($repeatedDates[4]), $date5->ToString().' '.$repeatedDates[4]->ToString());
+        $this->assertTrue($date6->Equals($repeatedDates[5]), $date6->ToString().' '.$repeatedDates[5]->ToString());
     }
 
     public function testMonthlyRepeatDayOfWeekWhenWeekIsInAllMonths()
     {
-        //http://www.timeanddate.com/calendar/
+        // http://www.timeanddate.com/calendar/
         $timezone = 'EST';
         $reservationStart = Date::Parse('2010-03-01 08:30', $timezone); // first monday
         $reservationEnd = Date::Parse('2010-03-01 10:30', $timezone);
@@ -191,14 +190,14 @@ class RepeatOptionsTest extends TestBase
         $lastDate = DateRange::Create('2011-09-05 08:30', '2011-09-05 10:30', $timezone);
 
         $this->assertEquals($totalDates, count($repeatedDates));
-        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($secondDate->Equals($repeatedDates[1]), $secondDate->ToString() . ' ' . $repeatedDates[1]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString().' '.$repeatedDates[0]->ToString());
+        $this->assertTrue($secondDate->Equals($repeatedDates[1]), $secondDate->ToString().' '.$repeatedDates[1]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString().' '.$repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testMonthlyRepeatDayOfWeekWhenWeekIsNotInAllMonths()
     {
-        //http://www.timeanddate.com/calendar/
+        // http://www.timeanddate.com/calendar/
         $timezone = 'EST';
         $reservationStart = Date::Parse('2010-03-31 08:30', $timezone); // fifth wednesday
         $reservationEnd = Date::Parse('2010-03-31 10:30', $timezone);
@@ -215,8 +214,8 @@ class RepeatOptionsTest extends TestBase
         $lastDate = DateRange::Create('2010-09-29 08:30', '2010-09-29 10:30', $timezone);
 
         $this->assertEquals($totalDates, count($repeatedDates));
-        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString().' '.$repeatedDates[0]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString().' '.$repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testYearlyRepeat()
@@ -237,8 +236,8 @@ class RepeatOptionsTest extends TestBase
         $lastDate = DateRange::Create('2014-03-31 08:30', '2014-03-31 10:30', $timezone);
 
         $this->assertEquals($totalDates, count($repeatedDates));
-        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString() . ' ' . $repeatedDates[0]->ToString());
-        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates-1]), $lastDate->ToString() . ' ' . $repeatedDates[$totalDates-1]->ToString());
+        $this->assertTrue($firstDate->Equals($repeatedDates[0]), $firstDate->ToString().' '.$repeatedDates[0]->ToString());
+        $this->assertTrue($lastDate->Equals($repeatedDates[$totalDates - 1]), $lastDate->ToString().' '.$repeatedDates[$totalDates - 1]->ToString());
     }
 
     public function testFactoryCreatesRepeatDailyOptions()
@@ -339,7 +338,7 @@ class RepeatOptionsTest extends TestBase
         $custom = new RepeatCustom([]);
         $config = RepeatConfiguration::Create($custom->RepeatType(), $custom->ConfigurationString());
         $this->assertEquals(RepeatType::Custom, $config->Type);
-        $this->assertEquals("", $config->Interval);
+        $this->assertEquals('', $config->Interval);
         $this->assertEquals(new NullDate(), $config->TerminationDate);
     }
 
@@ -426,7 +425,7 @@ class RepeatOptionsTest extends TestBase
     {
         $timezone = 'America/Chicago';
         $reservationDate = DateRange::Create('2020-02-02 2:30', '2020-02-03 4:00', $timezone);
-        $repeatDates = [new Date('2020-02-05', $timezone), new Date('2020-02-22', $timezone), new Date('2020-05-19', $timezone),];
+        $repeatDates = [new Date('2020-02-05', $timezone), new Date('2020-02-22', $timezone), new Date('2020-05-19', $timezone)];
         $repeat = new RepeatCustom($repeatDates);
 
         $dates = $repeat->GetDates($reservationDate);

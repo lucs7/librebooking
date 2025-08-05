@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
 
 class UserTest extends TestBase
 {

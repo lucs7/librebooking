@@ -5,12 +5,9 @@ class Parameter
     /**
      * @var string
      */
-    public $Name = null;
+    public $Name;
 
-    /**
-     * @var mixed
-     */
-    public $Value = null;
+    public $Value;
 
     public function __construct($name = null, $value = null)
     {

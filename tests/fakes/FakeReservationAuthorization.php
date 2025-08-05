@@ -8,7 +8,6 @@ class FakeReservationAuthorization implements IReservationAuthorization
     public $_CanViewDetails = true;
 
     /**
-     * @param UserSession $currentUser
      * @return bool
      */
     public function CanChangeUsers(UserSession $currentUser)
@@ -17,8 +16,6 @@ class FakeReservationAuthorization implements IReservationAuthorization
     }
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $currentUser
      * @return bool
      */
     public function CanEdit(ReservationView $reservationView, UserSession $currentUser)
@@ -27,8 +24,6 @@ class FakeReservationAuthorization implements IReservationAuthorization
     }
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $currentUser
      * @return bool
      */
     public function CanApprove(ReservationView $reservationView, UserSession $currentUser)
@@ -37,8 +32,6 @@ class FakeReservationAuthorization implements IReservationAuthorization
     }
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $currentUser
      * @return bool
      */
     public function CanViewDetails(ReservationView $reservationView, UserSession $currentUser)

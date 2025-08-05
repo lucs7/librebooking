@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Validators/AccountRequestValidator.php');
+require_once ROOT_DIR.'WebServices/Validators/AccountRequestValidator.php';
 
 class AccountRequestValidatorTest extends TestBase
 {
@@ -55,7 +55,7 @@ class AccountRequestValidatorTest extends TestBase
         $this->userRepository->_Exists = null;
 
         $errors = $this->validator->ValidateCreate($request);
-        $this->assertTrue(count($errors) == 6);
+        $this->assertTrue(6 == count($errors));
     }
 
     public function testCreateValidatesEmailFormat()
@@ -66,7 +66,7 @@ class AccountRequestValidatorTest extends TestBase
         $this->userRepository->_Exists = null;
 
         $errors = $this->validator->ValidateCreate($request);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     public function testCreateValidatesExistingEmail()
@@ -77,7 +77,7 @@ class AccountRequestValidatorTest extends TestBase
         $this->userRepository->_Exists = 1;
 
         $errors = $this->validator->ValidateCreate($request);
-        $this->assertTrue(count($errors) == 2);
+        $this->assertTrue(2 == count($errors));
     }
 
     public function testCreateValidatesAttributes()
@@ -87,7 +87,7 @@ class AccountRequestValidatorTest extends TestBase
         $this->attributeService->_ValidationResult = $result;
 
         $errors = $this->validator->ValidateCreate($request);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     public function testWhenUpdateRequestIsJunk()
@@ -106,7 +106,7 @@ class AccountRequestValidatorTest extends TestBase
         $request->timezone = ' ';
 
         $errors = $this->validator->ValidateUpdate($request, $this->session);
-        $this->assertTrue(count($errors) == 3);
+        $this->assertTrue(3 == count($errors));
     }
 
     public function testUpdateValidatesEmailFormat()
@@ -115,7 +115,7 @@ class AccountRequestValidatorTest extends TestBase
         $request = UpdateAccountRequest::Example();
         $request->emailAddress = 'aaaaaa.com';
         $errors = $this->validator->ValidateUpdate($request, $this->session);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     public function testUpdateValidatesExistingEmail()
@@ -126,7 +126,7 @@ class AccountRequestValidatorTest extends TestBase
         $this->userRepository->_Exists = 2;
 
         $errors = $this->validator->ValidateUpdate($request, $this->session);
-        $this->assertTrue(count($errors) == 2);
+        $this->assertTrue(2 == count($errors));
     }
 
     public function testUpdateValidatesAttributes()
@@ -136,7 +136,7 @@ class AccountRequestValidatorTest extends TestBase
         $this->attributeService->_ValidationResult = $result;
 
         $errors = $this->validator->ValidateUpdate($request, $this->session);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     public function testValidatePasswordRequired()
@@ -144,7 +144,7 @@ class AccountRequestValidatorTest extends TestBase
         $request = UpdateAccountPasswordRequest::Example();
         $request->newPassword = '';
         $errors = $this->validator->ValidatePasswordUpdate($request, $this->session);
-        $this->assertTrue(count($errors) == 2);
+        $this->assertTrue(2 == count($errors));
     }
 
     public function testValidatePasswordMatch()
@@ -160,7 +160,7 @@ class AccountRequestValidatorTest extends TestBase
         $this->userRepository->_User->passwordSalt = $pw->Salt();
 
         $errors = $this->validator->ValidatePasswordUpdate($request, $this->session);
-        $this->assertTrue(count($errors) == 0);
+        $this->assertTrue(0 == count($errors));
     }
 
     public function testValidatePasswordDoesNotMatch()
@@ -176,7 +176,7 @@ class AccountRequestValidatorTest extends TestBase
         $this->userRepository->_User->passwordSalt = $pw->Salt();
 
         $errors = $this->validator->ValidatePasswordUpdate($request, $this->session);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     private function expectsAttributeValidator()

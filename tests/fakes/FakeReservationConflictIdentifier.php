@@ -5,7 +5,7 @@ class FakeReservationConflictIdentifier implements IReservationConflictIdentifie
     /**
      * @var ReservationConflictResult
      */
-    public $_Conflicts = null;
+    public $_Conflicts;
 
     /**
      * @var ReservationConflictResult
@@ -24,6 +24,7 @@ class FakeReservationConflictIdentifier implements IReservationConflictIdentifie
         if (!empty($this->_IndexedConflicts)) {
             return $this->_IndexedConflicts[$this->_GetConflictCall++];
         }
+
         return $this->_Conflicts;
     }
 }

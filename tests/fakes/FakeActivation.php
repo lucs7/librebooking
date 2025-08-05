@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class FakeActivation implements IAccountActivation
 {
@@ -32,11 +32,13 @@ class FakeActivation implements IAccountActivation
 
     /**
      * @param string $activationCode
+     *
      * @return ActivationResult
      */
     public function Activate($activationCode)
     {
         $this->_LastActivationCode = $activationCode;
+
         return $this->_ActivationResult;
     }
 }

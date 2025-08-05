@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'Pages/Credits/CheckoutPage.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Server/CreditCartSession.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'Pages/Credits/CheckoutPage.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Server/CreditCartSession.php';
 
 class CheckoutPresenter extends ActionPresenter
 {
@@ -57,6 +57,7 @@ class CheckoutPresenter extends ActionPresenter
         }
         if (!isset($cost)) {
             Log::Error('Could not find cost for credit count %s', $creditCount);
+
             return;
         }
 
@@ -65,7 +66,7 @@ class CheckoutPresenter extends ActionPresenter
 
         $total = $cost->GetTotal($creditQuantity);
 
-        if ($creditQuantity == 0) {
+        if (0 == $creditQuantity) {
             $this->page->SetEmptyCart(true);
         } else {
             $this->page->SetTotals($total, $cost, $creditQuantity);
@@ -93,11 +94,11 @@ class CheckoutPresenter extends ActionPresenter
     {
         $gateway = $this->paymentRepository->GetPayPalGateway();
 
-        /** @var CreditCartSession $cart  */
+        /** @var CreditCartSession $cart */
         $cart = ServiceLocator::GetServer()->GetSession(SessionKeys::CREDIT_CART);
         $payment = $gateway->ExecutePayment($cart, $this->page->GetPaymentId(), $this->page->GetPayerId(), $this->paymentLogger);
 
-        if (isset($payment->status) && $payment->status == "COMPLETED") {
+        if (isset($payment->status) && 'COMPLETED' == $payment->status) {
             $user = $this->userRepository->LoadById(ServiceLocator::GetServer()->GetUserSession()->UserId);
             $user->AddCredits($cart->Quantity, Resources::GetInstance()->GetString('NoteCreditsPurchased'));
             $this->userRepository->Update($user);
@@ -114,11 +115,11 @@ class CheckoutPresenter extends ActionPresenter
 
         $gateway = $this->paymentRepository->GetStripeGateway();
 
-        /** @var CreditCartSession $cart  */
+        /** @var CreditCartSession $cart */
         $cart = ServiceLocator::GetServer()->GetSession(SessionKeys::CREDIT_CART);
         $result = $gateway->Charge($cart, $userSession->Email, $token, $this->paymentLogger);
 
-        if ($result == true) {
+        if (true == $result) {
             $user = $this->userRepository->LoadById($userSession->UserId);
             $user->AddCredits($cart->Quantity, Resources::GetInstance()->GetString('NoteCreditsPurchased'));
             $this->userRepository->Update($user);

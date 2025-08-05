@@ -4,35 +4,35 @@ interface IRoleService
 {
     /**
      * @abstract
-     * @param User $user
+     *
      * @return bool
      */
     public function IsApplicationAdministrator(User $user);
 
     /**
      * @abstract
-     * @param User $user
+     *
      * @return bool
      */
     public function IsResourceAdministrator(User $user);
 
     /**
      * @abstract
-     * @param User $user
+     *
      * @return bool
      */
     public function IsGroupAdministrator(User $user);
 
     /**
      * @abstract
-     * @param User $user
+     *
      * @return bool
      */
     public function IsScheduleAdministrator(User $user);
 
     /**
-     * @param UserSession $userSession
      * @param int $otherUserId
+     *
      * @return bool
      */
     public function IsAdminFor(UserSession $userSession, $otherUserId);
@@ -42,37 +42,39 @@ interface IAuthorizationService extends IRoleService
 {
     /**
      * @abstract
+     *
      * @param UserSession $reserver user who is requesting access to perform action
+     *
      * @return bool
      */
     public function CanReserveForOthers(UserSession $reserver);
 
     /**
      * @abstract
-     * @param UserSession $reserver user who is requesting access to perform action
-     * @param int $reserveForId user to reserve for
+     *
+     * @param UserSession $reserver     user who is requesting access to perform action
+     * @param int         $reserveForId user to reserve for
+     *
      * @return bool
      */
     public function CanReserveFor(UserSession $reserver, $reserveForId);
 
     /**
      * @abstract
-     * @param UserSession $approver user who is requesting access to perform action
-     * @param int $approveForId user to approve for
+     *
+     * @param UserSession $approver     user who is requesting access to perform action
+     * @param int         $approveForId user to approve for
+     *
      * @return bool
      */
     public function CanApproveFor(UserSession $approver, $approveForId);
 
     /**
-     * @param UserSession $user
-     * @param IResource $resource
      * @return bool
      */
     public function CanEditForResource(UserSession $user, IResource $resource);
 
     /**
-     * @param UserSession $user
-     * @param IResource $resource
      * @return bool
      */
     public function CanApproveForResource(UserSession $user, IResource $resource);
@@ -92,6 +94,7 @@ class AuthorizationService implements IAuthorizationService
 
     /**
      * @param UserSession $reserver user who is requesting access to perform action
+     *
      * @return bool
      */
     public function CanReserveForOthers(UserSession $reserver)
@@ -106,8 +109,9 @@ class AuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param UserSession $reserver user who is requesting access to perform action
-     * @param int $reserveForId user to reserve for
+     * @param UserSession $reserver     user who is requesting access to perform action
+     * @param int         $reserveForId user to reserve for
+     *
      * @return bool
      */
     public function CanReserveFor(UserSession $reserver, $reserveForId)
@@ -120,8 +124,9 @@ class AuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param UserSession $approver user who is requesting access to perform action
-     * @param int $approveForId user to approve for
+     * @param UserSession $approver     user who is requesting access to perform action
+     * @param int         $approveForId user to approve for
+     *
      * @return bool
      */
     public function CanApproveFor(UserSession $approver, $approveForId)
@@ -130,7 +135,6 @@ class AuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function IsApplicationAdministrator(User $user)
@@ -143,7 +147,6 @@ class AuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function IsResourceAdministrator(User $user)
@@ -152,7 +155,6 @@ class AuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function IsGroupAdministrator(User $user)
@@ -161,7 +163,6 @@ class AuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param User $user
      * @return bool
      */
     public function IsScheduleAdministrator(User $user)
@@ -170,8 +171,8 @@ class AuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param UserSession $userSession
      * @param int $otherUserId
+     *
      * @return bool
      */
     public function IsAdminFor(UserSession $userSession, $otherUserId)
@@ -192,8 +193,6 @@ class AuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param UserSession $userSession
-     * @param IResource $resource
      * @return bool
      */
     public function CanEditForResource(UserSession $userSession, IResource $resource)
@@ -212,8 +211,6 @@ class AuthorizationService implements IAuthorizationService
     }
 
     /**
-     * @param UserSession $userSession
-     * @param IResource $resource
      * @return bool
      */
     public function CanApproveForResource(UserSession $userSession, IResource $resource)

@@ -3,9 +3,9 @@
 class SlotLabelFactory
 {
     /**
-     * @var null|UserSession
+     * @var UserSession|null
      */
-    private $user = null;
+    private $user;
 
     /**
      * @var IAuthorizationService
@@ -20,35 +20,36 @@ class SlotLabelFactory
     public function __construct($user = null, $authorizationService = null, $attributeRepository = null)
     {
         $this->user = $user;
-        if ($this->user == null) {
+        if (null == $this->user) {
             $this->user = ServiceLocator::GetServer()->GetUserSession();
         }
 
         $this->authorizationService = $authorizationService;
-        if ($this->authorizationService == null) {
+        if (null == $this->authorizationService) {
             $this->authorizationService = new AuthorizationService(new UserRepository());
         }
 
         $this->attributeRepository = $attributeRepository;
-        if ($this->attributeRepository == null) {
+        if (null == $this->attributeRepository) {
             $this->attributeRepository = new AttributeRepository();
         }
     }
 
     /**
      * @static
-     * @param ReservationItemView $reservation
+     *
      * @return string
      */
     public static function Create(ReservationItemView $reservation)
     {
         $f = new SlotLabelFactory();
+
         return $f->Format($reservation);
     }
 
     /**
-     * @param ReservationItemView $reservation
      * @param string $format
+     *
      * @return string
      */
     public function Format(ReservationItemView $reservation, $format = null)
@@ -72,7 +73,7 @@ class SlotLabelFactory
             return '';
         }
 
-        if(!in_array($reservation->ResourceId,$this->UserResourcePermissions($this->user->UserId)) && !$reservation->IsUserOwner($this->user->UserId) && !$reservation->IsUserInvited($this->user->UserId) && !$reservation->IsUserParticipating($this->user->UserId)){
+        if (!in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId)) && !$reservation->IsUserOwner($this->user->UserId) && !$reservation->IsUserInvited($this->user->UserId) && !$reservation->IsUserParticipating($this->user->UserId)) {
             return '';
         }
 
@@ -83,7 +84,7 @@ class SlotLabelFactory
             );
         }
 
-        if ($format == 'none' || empty($format)) {
+        if ('none' == $format || empty($format)) {
             return '';
         }
 
@@ -115,7 +116,7 @@ class SlotLabelFactory
 
         $matches = $matches[0];
         if (count($matches) > 0) {
-            for ($m = 0; $m < count($matches); $m++) {
+            for ($m = 0; $m < count($matches); ++$m) {
                 $id = filter_var($matches[$m], FILTER_SANITIZE_NUMBER_INT);
                 $value = $reservation->GetAttributeValue($id);
 
@@ -129,10 +130,10 @@ class SlotLabelFactory
             foreach ($attributes as $attribute) {
                 $entityIds = [$this->user->UserId];
                 // check if this is a unique custom attribute
-                if ((!$attribute->UniquePerEntity() && !$attribute->HasSecondaryEntities()) ||
-                    (($attribute->UniquePerEntity() && count(array_intersect($entityIds, $attribute->EntityIds()))) ||
-                        ($attribute->HasSecondaryEntities() && count(array_intersect($entityIds, $attribute->SecondaryEntityIds()))))) {
-                    $attributesLabel->Append($attribute->Label() . ': ' . $reservation->GetAttributeValue($attribute->Id()) . ', ');
+                if ((!$attribute->UniquePerEntity() && !$attribute->HasSecondaryEntities())
+                    || (($attribute->UniquePerEntity() && count(array_intersect($entityIds, $attribute->EntityIds())))
+                        || ($attribute->HasSecondaryEntities() && count(array_intersect($entityIds, $attribute->SecondaryEntityIds()))))) {
+                    $attributesLabel->Append($attribute->Label().': '.$reservation->GetAttributeValue($attribute->Id()).', ');
                 }
             }
             $label = str_replace('{reservationAttributes}', rtrim($attributesLabel->ToString(), ', '), $label);
@@ -144,12 +145,13 @@ class SlotLabelFactory
     protected function GetFullName(ReservationItemView $reservation)
     {
         $name = new FullName($reservation->FirstName, $reservation->LastName);
+
         return $name->__toString();
     }
 
-     /**
+    /**
      * Gets the resources the user has permissions (full access and view only permissions)
-     * This is used to block a user from seeing reservation details if he has no permissions to it's resources
+     * This is used to block a user from seeing reservation details if he has no permissions to it's resources.
      */
     private function UserResourcePermissions($userId)
     {
@@ -158,13 +160,13 @@ class SlotLabelFactory
 
         $resourceIds = $resourceRepo->GetUserResourcePermissions($userId);
 
-        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId,$resourceIds);
+        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId, $resourceIds);
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){    
+        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId, $resourceIds);
         }
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 
@@ -185,6 +187,7 @@ class AdminSlotLabelFactory extends SlotLabelFactory
     protected function GetFullName(ReservationItemView $reservation)
     {
         $name = new FullName($reservation->FirstName, $reservation->LastName);
+
         return $name->__toString();
     }
 }
@@ -208,7 +211,7 @@ class SlotLabelResource implements IResource
      */
     private $scheduleId;
     /**
-     * @var int|null $scheduleAdminGroupId
+     * @var int|null
      */
     private $scheduleAdminGroupId;
     /**

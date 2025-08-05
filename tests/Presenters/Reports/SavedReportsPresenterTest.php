@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reports/SavedReportsPresenter.php');
+require_once ROOT_DIR.'Presenters/Reports/SavedReportsPresenter.php';
 
 class SavedReportsPresenterTest extends TestBase
 {

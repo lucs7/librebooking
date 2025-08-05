@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageAnnouncementsPresenter.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageAnnouncementsPresenter.php';
 
 interface IManageAnnouncementsPage extends IActionPage
 {
@@ -47,6 +47,7 @@ interface IManageAnnouncementsPage extends IActionPage
 
     /**
      * @param $announcements Announcement[]
+     *
      * @return void
      */
     public function BindAnnouncements($announcements);
@@ -157,6 +158,7 @@ class ManageAnnouncementsPage extends ActionPage implements IManageAnnouncements
     {
         $this->SetJson(['users' => $number]);
     }
+
     public function GetGroups()
     {
         $groupIds = $this->GetForm(FormKeys::GROUP_ID);

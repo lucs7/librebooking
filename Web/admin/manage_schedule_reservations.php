@@ -2,7 +2,7 @@
 
 define('ROOT_DIR', '../../');
 
-require_once(ROOT_DIR . 'Pages/Admin/ScheduleAdminManageReservationsPage.php');
+require_once ROOT_DIR.'Pages/Admin/ScheduleAdminManageReservationsPage.php';
 
 $page = new RoleRestrictedPageDecorator(new ScheduleAdminManageReservationsPage(), [RoleLevel::SCHEDULE_ADMIN]);
 $page->PageLoad();

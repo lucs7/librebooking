@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManageEmailTemplatesPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/ManageEmailTemplatesPresenter.php';
 
 class ManageEmailTemplatesPresenterTest extends TestBase
 {
@@ -38,15 +38,15 @@ class ManageEmailTemplatesPresenterTest extends TestBase
 
     public function testLoadsRequestedTemplate()
     {
-        $contents = "{* copyright
+        $contents = '{* copyright
         copyright
         *}
-        template contents here";
+        template contents here';
 
         $this->page->_TemplateName = 'file1.tpl';
         $this->page->_Language = 'en_us';
         $this->fileSystem->_Exists = false;
-        $this->fileSystem->_ExpectedContents[Paths::EmailTemplates('en_us') . $this->page->_TemplateName] = $contents;
+        $this->fileSystem->_ExpectedContents[Paths::EmailTemplates('en_us').$this->page->_TemplateName] = $contents;
 
         $this->presenter->LoadTemplate();
 
@@ -57,10 +57,10 @@ class ManageEmailTemplatesPresenterTest extends TestBase
     {
         $contents = 'contents';
         $this->page->_Language = 'en_us';
-        $this->fileSystem->_Exists[Paths::EmailTemplates('en_us') . 'file1-custom.tpl'] = true;
+        $this->fileSystem->_Exists[Paths::EmailTemplates('en_us').'file1-custom.tpl'] = true;
         $this->page->_TemplateName = 'file1.tpl';
 
-        $this->fileSystem->_ExpectedContents[Paths::EmailTemplates('en_us') . 'file1-custom.tpl'] = $contents;
+        $this->fileSystem->_ExpectedContents[Paths::EmailTemplates('en_us').'file1-custom.tpl'] = $contents;
 
         $this->presenter->LoadTemplate();
 

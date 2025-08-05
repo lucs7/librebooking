@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/EmailMessage.php');
-require_once(ROOT_DIR . 'Pages/Pages.php');
+require_once ROOT_DIR.'lib/Email/EmailMessage.php';
+require_once ROOT_DIR.'Pages/Pages.php';
 
 class ReservationAvailableEmail extends EmailMessage
 {
@@ -32,9 +32,9 @@ class ReservationAvailableEmail extends EmailMessage
         return $this->Translate(
             'ReservationAvailableSubject',
             [
-                                        $this->resource->GetName(),
-                                        $this->request->StartDate()->ToTimezone($this->user->Timezone())->Format(Resources::GetInstance()
-                                                                                                                          ->ShortDateTimeFormat())]
+                $this->resource->GetName(),
+                $this->request->StartDate()->ToTimezone($this->user->Timezone())->Format(Resources::GetInstance()
+                                                                                                  ->ShortDateTimeFormat())]
         );
     }
 

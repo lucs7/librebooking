@@ -20,12 +20,14 @@ class ResourceStatusFilter implements IResourceFilter
 
     /**
      * @param IResource $resource
+     *
      * @return bool
      */
     public function ShouldInclude($resource)
     {
-        if ($resource->GetStatusId() != ResourceStatus::AVAILABLE) {
+        if (ResourceStatus::AVAILABLE != $resource->GetStatusId()) {
             $user = $this->userRepository->LoadById($this->user->UserId);
+
             return $user->IsResourceAdminFor($resource);
         }
 

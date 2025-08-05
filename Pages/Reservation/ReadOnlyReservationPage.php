@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Pages/Reservation/NewReservationPage.php');
-require_once(ROOT_DIR . 'Pages/Reservation/ExistingReservationPage.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/GuestPermissionServiceFactory.php');
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Pages/Reservation/NewReservationPage.php';
+require_once ROOT_DIR.'Pages/Reservation/ExistingReservationPage.php';
+require_once ROOT_DIR.'lib/Application/Authorization/GuestPermissionServiceFactory.php';
 
 class ReadOnlyReservationPage extends ExistingReservationPage
 {

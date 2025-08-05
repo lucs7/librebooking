@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Schedule/ResourceService.php');
+require_once ROOT_DIR.'lib/Application/Schedule/ResourceService.php';
 
 class ResourceServiceTest extends TestBase
 {
@@ -76,14 +76,14 @@ class ResourceServiceTest extends TestBase
                 ->method('CanAccessResource')
                 ->willReturnCallback(function ($res, $u) use ($matcher, $resource1, $resource2, $resource3, $resource4, $user) {
                     $this->assertEquals($u, $user);
-                    match ($matcher->numberOfInvocations())
-                    {
+                    match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals($res, $resource1),
                         2 => $this->assertEquals($res, $resource2),
                         3 => $this->assertEquals($res, $resource3),
-                        4 => $this->assertEquals($res, $resource4)
+                        4 => $this->assertEquals($res, $resource4),
                     };
-                    return $matcher->numberOfInvocations() == 4 ? false : true;
+
+                    return 4 == $matcher->numberOfInvocations() ? false : true;
                 });
 
         $this->permissionService
@@ -190,15 +190,14 @@ class ResourceServiceTest extends TestBase
         $this->permissionService
                 ->expects($matcher)
                 ->method('CanAccessResource')
-                ->willReturnCallback(function($res, $ses) use ($resource1, $resource2, $session, $matcher)
-                {
+                ->willReturnCallback(function ($res, $ses) use ($resource1, $resource2, $session, $matcher) {
                     $this->assertEquals($ses, $session);
-                    match ($matcher->numberOfInvocations())
-                    {
+                    match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals($res, $resource1),
                         2 => $this->assertEquals($res, $resource2),
                     };
-                    return $matcher->numberOfInvocations() == 2;
+
+                    return 2 == $matcher->numberOfInvocations();
                 });
 
         $this->permissionService
@@ -209,7 +208,6 @@ class ResourceServiceTest extends TestBase
                     $this->equalTo($session)
                 )
                 ->willReturn(true);
-
 
         $this->userRepository->expects($this->any())
                              ->method('LoadById')
@@ -348,7 +346,7 @@ class ResourceServiceTest extends TestBase
 
     public function testGetsAccessoriesFromRepository()
     {
-        $accessories = [new Accessory(4, "lksjdf", 23)];
+        $accessories = [new Accessory(4, 'lksjdf', 23)];
 
         $this->accessoryRepository
                 ->expects($this->once())

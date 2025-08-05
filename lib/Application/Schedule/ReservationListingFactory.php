@@ -3,8 +3,9 @@
 interface IReservationListingFactory
 {
     /**
-     * @param string $targetTimezone
+     * @param string         $targetTimezone
      * @param DateRange|null $acceptableDateRange
+     *
      * @return IMutableReservationListing
      */
     public function CreateReservationListing($targetTimezone, $acceptableDateRange = null);

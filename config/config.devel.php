@@ -5,7 +5,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-/**
+/*
  * Application configuration
  */
 $conf['settings']['app.title'] = 'LibreBooking';            // application title
@@ -31,7 +31,7 @@ $conf['settings']['registration.notify.admin'] = 'false';       // whether the r
 $conf['settings']['inactivity.timeout'] = '30';                 // minutes before the user is automatically logged out
 $conf['settings']['name.format'] = '{first} {last}';            // display format when showing user names
 $conf['settings']['css.extension.file'] = '';                   // full or relative url to an additional css file to include. this can be used to override the default style
-$conf['settings']['css.theme'] = 'default';                          //default, dimgray, dark_red, dark_green, french_blue, orange,
+$conf['settings']['css.theme'] = 'default';                          // default, dimgray, dark_red, dark_green, french_blue, orange,
 $conf['settings']['disable.password.reset'] = 'false';          // if the password reset functionality should be disabled
 $conf['settings']['home.url'] = '';                             // the url to open when the logo is clicked
 $conf['settings']['logout.url'] = '';                           // the url to be directed to after logging out
@@ -47,13 +47,13 @@ $conf['settings']['schedule']['show.week.numbers'] = 'false';
 $conf['settings']['schedule']['fast.reservation.load'] = 'false';  // Experimental: Use new algorithm to load reservations faster in the schedule. Currently does not support concurrent reservations. With larger number of resources this can be 10x or 100x faster. Only runs with the StandardSchedule otherwise will fall back to legacy mode.
 $conf['settings']['schedule']['load.mobile.views'] = 'true';                    // if the mobile views should be loaded on mobile devices. If false, the desktop views will be loaded instead
 $conf['settings']['schedule']['auto.scroll.today'] = 'true';               // if the schedule should automatically scroll to today when the page is loaded
-/**
+/*
  * ical integration configuration
  */
 $conf['settings']['ics']['subscription.key'] = '';              // must be set to allow webcal subscriptions
 $conf['settings']['ics']['future.days'] = '30';
 $conf['settings']['ics']['past.days'] = '0';
-/**
+/*
  * Privacy configuration
  */
 $conf['settings']['privacy']['view.schedules'] = 'true';                // if unauthenticated users can view schedules
@@ -62,7 +62,7 @@ $conf['settings']['privacy']['hide.user.details'] = 'false';                // i
 $conf['settings']['privacy']['hide.reservation.details'] = 'false';         // if reservation details should be displayed to non-administrators. options are true, false, current, future, past
 $conf['settings']['privacy']['allow.guest.reservations'] = 'false';         // if reservations can be made by users without a LibreBooking account, if true this overrides schedule and resource visibility
 $conf['settings']['privacy']['public.future.days'] = '1';                     // How many days in the future unauthenticated users can see/make reservations
-/**
+/*
  * Reservation specific configuration
  */
 $conf['settings']['reservation']['start.time.constraint'] = 'future';       // when reservations can be created or edited. options are future, current, none
@@ -79,7 +79,7 @@ $conf['settings']['reservation']['title.required'] = 'false';
 $conf['settings']['reservation']['description.required'] = 'false';
 $conf['settings']['reservation']['checkin.admin.only'] = 'true';
 $conf['settings']['reservation']['checkout.admin.only'] = 'true';
-/**
+/*
  * Email notification configuration
  */
 $conf['settings']['reservation.notify']['resource.admin.add'] = 'false';
@@ -94,13 +94,13 @@ $conf['settings']['reservation.notify']['group.admin.add'] = 'false';
 $conf['settings']['reservation.notify']['group.admin.update'] = 'false';
 $conf['settings']['reservation.notify']['group.admin.delete'] = 'false';
 $conf['settings']['reservation.notify']['group.admin.approval'] = 'false';
-/**
+/*
  * File upload configuration
  */
 $conf['settings']['uploads']['enable.reservation.attachments'] = 'false';   // if reservation attachments can be uploaded
 $conf['settings']['uploads']['reservation.attachment.path'] = 'uploads/reservation';    // full or relative (to the root of your installation) filesystem path to store reservation attachments
 $conf['settings']['uploads']['reservation.attachment.extensions'] = 'txt,jpg,gif,png,doc,docx,pdf,xls,xlsx,ppt,pptx,csv';   // comma separated list of file extensions that users are allowed to attach. leave empty to allow all extensions
-/**
+/*
  * Database configuration
  */
 $conf['settings']['database']['type'] = 'mysql';
@@ -108,7 +108,7 @@ $conf['settings']['database']['user'] = 'test';        // database user with per
 $conf['settings']['database']['password'] = 'test';
 $conf['settings']['database']['hostspec'] = '127.0.0.1';      // ip, dns or named pipe
 $conf['settings']['database']['name'] = 'librebooking';
-/**
+/*
  * Mail server configuration
  */
 $conf['settings']['phpmailer']['mailer'] = 'smtp';              // options are 'mail', 'smtp' or 'sendmail'
@@ -120,7 +120,7 @@ $conf['settings']['phpmailer']['smtp.username'] = '';
 $conf['settings']['phpmailer']['smtp.password'] = '';
 $conf['settings']['phpmailer']['sendmail.path'] = '/usr/sbin/sendmail';
 $conf['settings']['phpmailer']['smtp.debug'] = 'false';
-/**
+/*
  * Plugin configuration.  For more on plugins, see readme_installation.html
  */
 $conf['settings']['plugins']['Authentication'] = '';
@@ -131,42 +131,42 @@ $conf['settings']['plugins']['PostRegistration'] = '';
 $conf['settings']['plugins']['PreReservation'] = '';
 $conf['settings']['plugins']['PostReservation'] = '';
 $conf['settings']['plugins']['Styling'] = '';
-/**
+/*
  * Installation settings
  */
 $conf['settings']['install.password'] = '';
-/**
+/*
  * Pages
  */
 $conf['settings']['pages']['enable.configuration'] = 'true';
-/**
+/*
  * API
  */
 $conf['settings']['api']['enabled'] = 'false';
 $conf['settings']['api']['allow.self.registration'] = 'false';
-/**
+/*
  * ReCaptcha
  */
 $conf['settings']['recaptcha']['enabled'] = 'false';
 $conf['settings']['recaptcha']['public.key'] = '';
 $conf['settings']['recaptcha']['private.key'] = '';
 $conf['settings']['recaptcha']['request.method'] = 'curl'; // options are curl, post or socket. default: post
-/**
+/*
  * Email
  */
 $conf['settings']['email']['default.from.address'] = '';
 $conf['settings']['email']['default.from.name'] = '';
-/**
+/*
  * Reports
  */
 $conf['settings']['reports']['allow.all.users'] = 'false';
-/**
+/*
  * Account Password Rules
  */
 $conf['settings']['password']['minimum.letters'] = '6';
 $conf['settings']['password']['minimum.numbers'] = '0';
 $conf['settings']['password']['upper.and.lower'] = 'false';
-/**
+/*
  * Label display settings
  */
 $conf['settings']['reservation.labels']['ics.summary'] = '{title}';
@@ -175,7 +175,7 @@ $conf['settings']['reservation.labels']['rss.description'] = '<div><span>Start</
 $conf['settings']['reservation.labels']['my.calendar'] = '{resourcename} {title}';
 $conf['settings']['reservation.labels']['resource.calendar'] = '{name}';
 $conf['settings']['reservation.labels']['reservation.popup'] = ''; // Format for what to display in reservation popups. Possible values: {name} {dates} {title} {resources} {participants} {accessories} {description} {attributes} {pending} {duration}. Custom attributes can be added using att with the attribute id. For example {att1}
-/**
+/*
  * Security header settings
  */
 $conf['settings']['security']['security.headers'] = 'false'; // Enable the following options
@@ -183,8 +183,8 @@ $conf['settings']['security']['security.strict-transport'] = 'max-age=31536000';
 $conf['settings']['security']['security.x-frame'] = 'deny';
 $conf['settings']['security']['security.x-xss'] = '1; mode=block';
 $conf['settings']['security']['security.x-content-type'] = 'nosniff';
-$conf['settings']['security']['security.content-security-policy'] = ""; // Requires careful tuning (know what your doing)
-/**
+$conf['settings']['security']['security.content-security-policy'] = ''; // Requires careful tuning (know what your doing)
+/*
  * Google Analytics settings
  */
 $conf['settings']['google.analytics']['tracking.id'] = ''; // if set, Google Analytics tracking code will be added to every page in LibreBooking
@@ -196,59 +196,59 @@ $conf['settings']['authentication']['allow.oauth2.login'] = 'false';
 $conf['settings']['authentication']['required.email.domains'] = '';
 $conf['settings']['authentication']['hide.booked.login.prompt'] = 'false';
 $conf['settings']['authentication']['captcha.on.login'] = 'false';
-/**
+/*
  * Credits
  */
 $conf['settings']['credits']['enabled'] = 'false';
 $conf['settings']['credits']['allow.purchase'] = 'false';
-/**
+/*
  * Slack integration
  */
 $conf['settings']['slack']['token'] = '';
-/**
+/*
  * Tablet view
  */
 $conf['settings']['tablet.view']['allow.guest.reservations'] = 'false';
 $conf['settings']['tablet.view']['auto.suggest.emails'] = 'false';
-/**
+/*
  * Registration
  */
 $conf['settings']['registration']['require.phone'] = 'false';
 $conf['settings']['registration']['require.position'] = 'false';
 $conf['settings']['registration']['require.organization'] = 'false';
-$conf['settings']['registration']['hide.phone'] = 'false';                  //Hide phone field when 'true', but show it when the phone is required
-$conf['settings']['registration']['hide.position'] = 'false';               //Hide position field when 'true', but show it when the phone is required
-$conf['settings']['registration']['hide.organization'] = 'false';           //Hide organization field when 'true', but show it when the phone is required
-/**
+$conf['settings']['registration']['hide.phone'] = 'false';                  // Hide phone field when 'true', but show it when the phone is required
+$conf['settings']['registration']['hide.position'] = 'false';               // Hide position field when 'true', but show it when the phone is required
+$conf['settings']['registration']['hide.organization'] = 'false';           // Hide organization field when 'true', but show it when the phone is required
+/*
  * Error logging
  */
-$conf['settings']['logging']['folder'] = '/var/log/librebooking/log'; //Absolute path to folder were the log will be written, writing permissions to the folder are required
-$conf['settings']['logging']['level'] = 'debug'; //Set to none disable logs, error to only log errors or debug to log all messages to the app.log file
-$conf['settings']['logging']['sql'] = 'false'; //Set to true no enable the creation of and sql.log file
+$conf['settings']['logging']['folder'] = '/var/log/librebooking/log'; // Absolute path to folder were the log will be written, writing permissions to the folder are required
+$conf['settings']['logging']['level'] = 'debug'; // Set to none disable logs, error to only log errors or debug to log all messages to the app.log file
+$conf['settings']['logging']['sql'] = 'false'; // Set to true no enable the creation of and sql.log file
 
 // IN THE REDIRECT URIs (OF THE AUTHENTICATION YOU ARE USING) YOU NEED TO ADD THE PATH FROM THE WEBSITE DOMAIN TO THE
 // WEB/GOOGLE-AUTH.PHP or WEB/FACEBOOK-AUTH.PHP or WEB/MICROSOFT-AUTH.PHP (depending on the services you are using)
 // EG: http://localhost/Web/facebook-auth.php
-/**
+/*
  * Google login configuration
  */
 $conf['settings']['authentication']['google.client.id'] = '';
 $conf['settings']['authentication']['google.client.secret'] = '';
 $conf['settings']['authentication']['google.redirect.uri'] = '/Web/google-auth.php';
-/**
+/*
  * Microsoft login configuration
  */
 $conf['settings']['authentication']['microsoft.client.id'] = '';
-$conf['settings']['authentication']['microsoft.tenant.id'] = 'common'; //Replace with your tenant id if the app is single tenant
+$conf['settings']['authentication']['microsoft.tenant.id'] = 'common'; // Replace with your tenant id if the app is single tenant
 $conf['settings']['authentication']['microsoft.client.secret'] = '';
 $conf['settings']['authentication']['microsoft.redirect.uri'] = '/Web/microsoft-auth.php';
-/**
+/*
  * Facebook login configuration
  */
 $conf['settings']['authentication']['facebook.client.id'] = '';
 $conf['settings']['authentication']['facebook.client.secret'] = '';
 $conf['settings']['authentication']['facebook.redirect.uri'] = '/Web/facebook-auth.php';
-/**
+/*
  * Keycloak login configuration
  */
 $conf['settings']['authentication']['keycloak.url'] = '';
@@ -256,7 +256,7 @@ $conf['settings']['authentication']['keycloak.realm'] = '';
 $conf['settings']['authentication']['keycloak.client.id'] = '';
 $conf['settings']['authentication']['keycloak.client.secret'] = '';
 $conf['settings']['authentication']['keycloak.client.uri'] = '/Web/keycloak-auth.php';
-/**
+/*
  * OAuth2 login configuration
  */
 $conf['settings']['authentication']['oauth2.name'] = 'OAuth2';
@@ -266,20 +266,20 @@ $conf['settings']['authentication']['oauth2.url.userinfo'] = '';
 $conf['settings']['authentication']['oauth2.client.id'] = '';
 $conf['settings']['authentication']['oauth2.client.secret'] = '';
 $conf['settings']['authentication']['oauth2.client.uri'] = '/Web/oauth2-auth.php';
-/**
+/*
  * Delete old data job configuration
  * Activate the deleteolddata.php as a background job to use this feature
  */
-$conf['settings']['delete.old.data']['years.old.data'] = '3';               //Choose how long a blackout, announcement and reservation stay in the database (in years) counting from the end date
-$conf['settings']['delete.old.data']['delete.old.announcements'] = 'false'; //Choose if this feature deletes old announcements from database
-$conf['settings']['delete.old.data']['delete.old.blackouts'] = 'false';     //Choose if this feature deletes old blackouts from database
-$conf['settings']['delete.old.data']['delete.old.reservations'] = 'false';  //Choose if this feature deletes old reservations from database
+$conf['settings']['delete.old.data']['years.old.data'] = '3';               // Choose how long a blackout, announcement and reservation stay in the database (in years) counting from the end date
+$conf['settings']['delete.old.data']['delete.old.announcements'] = 'false'; // Choose if this feature deletes old announcements from database
+$conf['settings']['delete.old.data']['delete.old.blackouts'] = 'false';     // Choose if this feature deletes old blackouts from database
+$conf['settings']['delete.old.data']['delete.old.reservations'] = 'false';  // Choose if this feature deletes old reservations from database
 
-/**
+/*
  * API Granularity Settings
  */
 $conf['settings']['api']['Authentication.group'] = ''; // If a group is specified then a user must be in the group in order to sucessfully authenticate. Unless the user is an Admin.
-/**
+/*
  * API access restrictions. These only provide additional restrictions. They do
  * not provide additional permissions.
  *

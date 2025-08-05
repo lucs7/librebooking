@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManageResourceGroupsPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/ManageResourceGroupsPresenter.php';
 
 class ManageResourceGroupsPresenterTest extends TestBase
 {
@@ -18,7 +18,6 @@ class ManageResourceGroupsPresenterTest extends TestBase
      * @var IResourceRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceRepository;
-
 
     public function setUp(): void
     {

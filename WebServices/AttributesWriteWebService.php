@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Controllers/AttributeSaveController.php');
-require_once(ROOT_DIR . 'WebServices/Responses/CustomAttributes/CustomAttributeCreatedResponse.php');
-require_once(ROOT_DIR . 'WebServices/Requests/CustomAttributes/CustomAttributeRequest.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'WebServices/Controllers/AttributeSaveController.php';
+require_once ROOT_DIR.'WebServices/Responses/CustomAttributes/CustomAttributeCreatedResponse.php';
+require_once ROOT_DIR.'WebServices/Requests/CustomAttributes/CustomAttributeRequest.php';
 
 class AttributesWriteWebService
 {
@@ -20,13 +20,17 @@ class AttributesWriteWebService
 
     /**
      * @name CreateCustomAttribute
+     *
      * @description Creates a new custom attribute.
      * Allowed values for type: 1 (single line),  2 (multi line), 3 (select list), 4 (checkbox), 5 (datetime)
      * Allowed values for categoryId: 1 (reservation), 2 (user), 4 (resource), 5 (resource type)
      * appliesToIds only allowed for category 2, 4, 5 and must match the id of corresponding entities
      * secondaryCategoryId and secondaryEntityIds only applies to category 1 and must match the id of the corresponding entities
+     *
      * @request CustomAttributeRequest
+     *
      * @response CustomAttributeCreatedResponse
+     *
      * @return void
      */
     public function Create()
@@ -51,14 +55,17 @@ class AttributesWriteWebService
 
     /**
      * @name UpdateCustomAttribute
+     *
      * @description Updates and existing custom attribute
      * Allowed values for type: 1 (single line),  2 (multi line), 3 (select list), 4 (checkbox), 5 (datetime)
      * Allowed values for categoryId: 1 (reservation), 2 (user), 4 (resource), 5 (resource type)
      * appliesToIds only allowed for category 2, 4, 5 and must match the id of corresponding entities
      * secondaryCategoryId and secondaryEntityIds only applies to category 1 and must match the id of the corresponding entities
+     *
      * @request CustomAttributeRequest
+     *
      * @response CustomAttributeUpdatedResponse
-     * @param $attributeId
+     *
      * @return void
      */
     public function Update($attributeId)
@@ -83,9 +90,13 @@ class AttributesWriteWebService
 
     /**
      * @name DeleteCustomAttribute
+     *
      * @description Deletes an existing custom attribute
+     *
      * @response DeletedResponse
+     *
      * @param int $attributeId
+     *
      * @return void
      */
     public function Delete($attributeId)

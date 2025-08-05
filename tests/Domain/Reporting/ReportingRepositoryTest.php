@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class ReportingRepositoryTest extends TestBase
 {
@@ -41,13 +41,13 @@ class ReportingRepositoryTest extends TestBase
         $timezone = 'America/Chicago';
         $startDate = Date::Parse($startRange, $timezone);
         $endDate = Date::Parse($endRange, $timezone);
-        $resourceIds = [1,100];
+        $resourceIds = [1, 100];
         $scheduleIds = [2];
         $userId = 3;
-        $groupIds = [4,100];
+        $groupIds = [4, 100];
         $accessoryIds = [5];
         $participantId = 6;
-        $resourceTypeIds = [7,100];
+        $resourceTypeIds = [7, 100];
 
         $usage = new Report_Usage(Report_Usage::ACCESSORIES);
         $selection = new Report_ResultSelection(Report_ResultSelection::COUNT);
@@ -87,7 +87,7 @@ class ReportingRepositoryTest extends TestBase
         $expectedReport1->WithId(1);
 
         $serialized1 = ReportSerializer::Serialize($expectedReport1);
-        $serialized2 = "corrupted";
+        $serialized2 = 'corrupted';
 
         $rows = new SavedReportRow();
         $rows->With($userId, $report1, $date->ToDatabase(), $serialized1, 1)

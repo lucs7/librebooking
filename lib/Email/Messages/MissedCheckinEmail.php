@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
-require_once(ROOT_DIR . 'Pages/Pages.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
+require_once ROOT_DIR.'Pages/Pages.php';
 
 class MissedCheckinEmail extends EmailMessage
 {
@@ -36,10 +36,10 @@ class MissedCheckinEmail extends EmailMessage
         $this->Set('ResourceName', $this->reservation->ResourceName);
         $this->Set('Title', $this->reservation->Title);
         $this->Set('Description', $this->reservation->Description);
-        $this->Set('IsAutoRelease', $this->reservation->AutoReleaseMinutes != null);
+        $this->Set('IsAutoRelease', null != $this->reservation->AutoReleaseMinutes);
         $this->Set('AutoReleaseTime', $this->reservation->StartDate->AddMinutes($this->reservation->AutoReleaseMinutes));
         $this->Set('ReservationUrl', sprintf(
-            "%s?%s=%s",
+            '%s?%s=%s',
             Pages::RESERVATION,
             QueryStringKeys::REFERENCE_NUMBER,
             $this->reservation->ReferenceNumber

@@ -1,10 +1,11 @@
 <?php
+
 /**
  * @file ShibbolethOptions.php
  */
 
-require_once ROOT_DIR . '/lib/Config/namespace.php';
-require_once ROOT_DIR . 'lib/Common/Converters/namespace.php';
+require_once ROOT_DIR.'/lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/Converters/namespace.php';
 
 /**
  * Plugin configuration object.
@@ -15,6 +16,7 @@ class ShibbolethOptions
 {
     /**
      * Options map.
+     *
      * @var array
      */
     protected $_options;
@@ -24,10 +26,10 @@ class ShibbolethOptions
      */
     public function __construct()
     {
-        require_once dirname(__FILE__) . '/Shibboleth.config.php';
+        require_once dirname(__FILE__).'/Shibboleth.config.php';
         // load the plugin configuration from file.
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/Shibboleth.config.php',
+            dirname(__FILE__).'/Shibboleth.config.php',
             ShibbolethConfig::CONFIG_ID
         );
     }
@@ -35,13 +37,14 @@ class ShibbolethOptions
     /**
      * Returns a map of plugin configurations.
      *
-     * @return array A map of configuration options.
+     * @return array a map of configuration options
      */
     public function GetShibbolethOptions()
     {
-        if (! isset($this->_options)) {
+        if (!isset($this->_options)) {
             $this->InitShibbolethOptions();
         }
+
         return $this->_options;
     }
 
@@ -62,8 +65,8 @@ class ShibbolethOptions
     /**
      * Sets a configuration option.
      *
-     * @param string $key The config key.
-     * @param mixed $value The config value.
+     * @param string $key   the config key
+     * @param mixed  $value the config value
      */
     private function SetOption($key, $value)
     {
@@ -77,11 +80,12 @@ class ShibbolethOptions
     /**
      * Retrieves a configuration option value by its key.
      *
-     * @param string $keyName The config key.
-     * @param IConvert $converter A value converter.
-     * @return mixed The config value.
+     * @param string   $keyName   the config key
+     * @param IConvert $converter a value converter
+     *
+     * @return mixed the config value
      */
-    protected function GetConfig($keyName, IConvert $converter = null)
+    protected function GetConfig($keyName, ?IConvert $converter = null)
     {
         return Configuration::Instance()->File(ShibbolethConfig::CONFIG_ID)->GetKey($keyName, $converter);
     }

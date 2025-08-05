@@ -1,13 +1,14 @@
 <?php
 
 // uncomment to allow self signed and untrusted certs for ldaps
-//putenv('LDAPTLS_REQCERT=never');
+// putenv('LDAPTLS_REQCERT=never');
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'plugins/Authentication/ActiveDirectory/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'plugins/Authentication/ActiveDirectory/namespace.php';
 
 /**
- * Provides ActiveDirectory LDAP authentication/synchronization for LibreBooking
+ * Provides ActiveDirectory LDAP authentication/synchronization for LibreBooking.
+ *
  * @see IAuthorization
  */
 class ActiveDirectory extends Authentication implements IAuthentication
@@ -35,7 +36,7 @@ class ActiveDirectory extends Authentication implements IAuthentication
     /**
      * @var ActiveDirectoryUser
      */
-    private $user = null;
+    private $user;
 
     /**
      * @var string
@@ -49,7 +50,7 @@ class ActiveDirectory extends Authentication implements IAuthentication
 
     private function GetRegistration()
     {
-        if ($this->_registration == null) {
+        if (null == $this->_registration) {
             $this->_registration = new Registration();
         }
 
@@ -57,9 +58,9 @@ class ActiveDirectory extends Authentication implements IAuthentication
     }
 
     /**
-     * @param IAuthentication $authentication Authentication class to decorate
-     * @param IActiveDirectory $ldapImplementation The actual LDAP implementation to work against
-     * @param ActiveDirectoryOptions $ldapOptions Options to use for LDAP configuration
+     * @param IAuthentication        $authentication     Authentication class to decorate
+     * @param IActiveDirectory       $ldapImplementation The actual LDAP implementation to work against
+     * @param ActiveDirectoryOptions $ldapOptions        Options to use for LDAP configuration
      */
     public function __construct(IAuthentication $authentication, $ldapImplementation = null, $ldapOptions = null)
     {
@@ -70,12 +71,12 @@ class ActiveDirectory extends Authentication implements IAuthentication
         $this->authToDecorate = $authentication;
 
         $this->options = $ldapOptions;
-        if ($ldapOptions == null) {
+        if (null == $ldapOptions) {
             $this->options = new ActiveDirectoryOptions();
         }
 
         $this->ldap = $ldapImplementation;
-        if ($ldapImplementation == null) {
+        if (null == $ldapImplementation) {
             $this->ldap = new AdLdapWrapper($this->options);
         }
     }
@@ -101,6 +102,7 @@ class ActiveDirectory extends Authentication implements IAuthentication
             if (!$userLoaded) {
                 Log::Error('Could not load user details from ActiveDirectory LDAP. Check your basedn setting. User: %s', $username);
             }
+
             return $userLoaded;
         } else {
             if ($this->options->RetryAgainstDatabase()) {
@@ -137,7 +139,7 @@ class ActiveDirectory extends Authentication implements IAuthentication
 
     private function LdapUserExists()
     {
-        return $this->user != null;
+        return null != $this->user;
     }
 
     private function Synchronize($username)

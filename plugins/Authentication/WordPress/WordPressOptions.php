@@ -1,16 +1,17 @@
 <?php
 
-require_once(ROOT_DIR . '/lib/Config/namespace.php');
+require_once ROOT_DIR.'/lib/Config/namespace.php';
 
 class WordPressOptions
 {
     public const CONFIG_ID = 'wordPress';
+
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/WordPress.config.php');
+        require_once dirname(__FILE__).'/WordPress.config.php';
 
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/WordPress.config.php',
+            dirname(__FILE__).'/WordPress.config.php',
             self::CONFIG_ID
         );
     }
@@ -25,13 +26,13 @@ class WordPressOptions
         $path = $this->GetConfig('wp_includes.directory');
 
         if (!BookedStringHelper::StartsWith($path, '/')) {
-            $path = ROOT_DIR . "/$path";
+            $path = ROOT_DIR."/$path";
         }
         if (BookedStringHelper::EndsWith($path, '/')) {
             return $path;
         }
 
-        return $path . '/';
+        return $path.'/';
     }
 
     private function GetConfig($keyName, $converter = null)

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Dashboard/UpcomingReservationsPresenter.php');
+require_once ROOT_DIR.'Presenters/Dashboard/UpcomingReservationsPresenter.php';
 
 class UpcomingReservationsPresenterTest extends TestBase
 {
@@ -43,7 +43,6 @@ class UpcomingReservationsPresenterTest extends TestBase
         $timezone = $this->fakeUser->Timezone;
 
         $reservations = [];
-
 
         $this->repository->expects($this->once())
             ->method('GetReservations')

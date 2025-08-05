@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/User/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Responses/UsersResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/UserResponse.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'lib/Application/User/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'WebServices/Responses/UsersResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/UserResponse.php';
 
 class UsersWebService
 {
@@ -26,7 +26,7 @@ class UsersWebService
     public function __construct(
         IRestServer $server,
         IUserRepositoryFactory $repositoryFactory,
-        IAttributeService $attributeService
+        IAttributeService $attributeService,
     ) {
         $this->server = $server;
         $this->repositoryFactory = $repositoryFactory;
@@ -35,11 +35,14 @@ class UsersWebService
 
     /**
      * @name GetAllUsers
+     *
      * @description Loads all users that the current user can see.
      * Optional query string parameters: username, email, firstName, lastName, phone, organization, position and any custom attributes.
      * If searching on custom attributes, the query string parameter has to be in the format att#=value.
      * For example, Users/?att1=ExpectedAttribute1Value
+     *
      * @response UsersResponse
+     *
      * @return void
      */
     public function GetUsers()
@@ -57,17 +60,20 @@ class UsersWebService
 
         $usersResponse = new UsersResponse($this->server, $data->Results(), $attributeLabels);
 
-        unset($data);
-        unset($attributeLabels);
+        unset($data, $attributeLabels);
 
         $this->server->WriteResponse($usersResponse);
     }
 
     /**
      * @name GetUser
+     *
      * @description Loads the requested user by Id
+     *
      * @response UserResponse
+     *
      * @param int $userId
+     *
      * @return void
      */
     public function GetUser($userId)
@@ -87,6 +93,7 @@ class UsersWebService
         $loadedUserId = $user->Id();
         if (empty($loadedUserId)) {
             $this->server->WriteResponse(RestResponse::NotFound(), RestResponse::NOT_FOUND_CODE);
+
             return;
         }
 
@@ -110,13 +117,14 @@ class UsersWebService
 
     /**
      * @param CustomAttribute[] $attributes
+     *
      * @return UserFilter
      */
     private function GetUserFilter($attributes)
     {
         $attributeFilters = [];
         foreach ($attributes as $attribute) {
-            $attributeValue = $this->server->GetQueryString(WebServiceQueryStringKeys::ATTRIBUTE_PREFIX . $attribute->Id());
+            $attributeValue = $this->server->GetQueryString(WebServiceQueryStringKeys::ATTRIBUTE_PREFIX.$attribute->Id());
             if (!empty($attributeValue)) {
                 $attributeFilters[] = new LBAttribute($attribute, $attributeValue);
             }

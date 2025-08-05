@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Controls/Dashboard/ResourceAvailabilityControl.php');
+require_once ROOT_DIR.'Controls/Dashboard/ResourceAvailabilityControl.php';
 
 class ResourceAvailabilityControlPresenter
 {
@@ -27,7 +27,7 @@ class ResourceAvailabilityControlPresenter
         IResourceAvailabilityControl $control,
         IResourceService $resourceService,
         IReservationViewRepository $reservationViewRepository,
-        IScheduleRepository $scheduleRepository
+        IScheduleRepository $scheduleRepository,
     ) {
         $this->control = $control;
         $this->resourceService = $resourceService;
@@ -47,15 +47,15 @@ class ResourceAvailabilityControlPresenter
         $allday = [];
 
         foreach ($resources as $resource) {
-            if ($resource->StatusId == ResourceStatus::HIDDEN) {
+            if (ResourceStatus::HIDDEN == $resource->StatusId) {
                 continue;
             }
             $reservation = $this->GetOngoingReservation($resource, $reservations);
 
-            if ($reservation != null) {
+            if (null != $reservation) {
                 $lastReservationBeforeOpening = $this->GetLastReservationBeforeAnOpening($resource, $reservations);
 
-                if ($lastReservationBeforeOpening == null) {
+                if (null == $lastReservationBeforeOpening) {
                     $lastReservationBeforeOpening = $reservation;
                 }
 
@@ -81,8 +81,9 @@ class ResourceAvailabilityControlPresenter
     }
 
     /**
-     * @param ResourceDto $resource
+     * @param ResourceDto             $resource
      * @param ReservationItemView[][] $reservations
+     *
      * @return ReservationItemView|null
      */
     private function GetOngoingReservation($resource, $reservations)
@@ -96,6 +97,7 @@ class ResourceAvailabilityControlPresenter
 
     /**
      * @param ReservationItemView[] $reservations
+     *
      * @return ReservationItemView[][]
      */
     private function GetReservations($reservations)
@@ -109,9 +111,10 @@ class ResourceAvailabilityControlPresenter
     }
 
     /**
-     * @param ResourceDto $resource
+     * @param ResourceDto             $resource
      * @param ReservationItemView[][] $reservations
-     * @return null|ReservationItemView
+     *
+     * @return ReservationItemView|null
      */
     private function GetLastReservationBeforeAnOpening($resource, $reservations)
     {
@@ -121,7 +124,7 @@ class ResourceAvailabilityControlPresenter
         }
 
         $resourceReservations = $reservations[$resourceId];
-        for ($i = 0; $i < count($resourceReservations) - 1; $i++) {
+        for ($i = 0; $i < count($resourceReservations) - 1; ++$i) {
             $current = $resourceReservations[$i];
             $next = $resourceReservations[$i + 1];
 

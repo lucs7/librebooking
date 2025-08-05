@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/IReservationSaveResultsView.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenterFactory.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Pages/Ajax/IReservationSaveResultsView.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationPresenterFactory.php';
 
 interface IReservationSavePage extends IReservationSaveResultsView, IRepeatOptionsComposite
 {
@@ -267,7 +267,6 @@ class ReservationSavePage extends SecurePage implements IReservationSavePage
         return $resources;
     }
 
-
     public function GetRepeatType()
     {
         return $this->GetForm(FormKeys::REPEAT_OPTIONS);
@@ -397,6 +396,7 @@ class ReservationSavePage extends SecurePage implements IReservationSavePage
             foreach ($accessories as $a) {
                 $af[] = new AccessoryFormElement($a);
             }
+
             return $af;
         }
 
@@ -419,6 +419,7 @@ class ReservationSavePage extends SecurePage implements IReservationSavePage
         if ($this->AttachmentsEnabled()) {
             return $this->server->GetFiles(FormKeys::RESERVATION_FILE);
         }
+
         return [];
     }
 
@@ -434,6 +435,7 @@ class ReservationSavePage extends SecurePage implements IReservationSavePage
     public function HasStartReminder()
     {
         $val = $this->server->GetForm(FormKeys::START_REMINDER_ENABLED);
+
         return !empty($val);
     }
 
@@ -450,6 +452,7 @@ class ReservationSavePage extends SecurePage implements IReservationSavePage
     public function HasEndReminder()
     {
         $val = $this->server->GetForm(FormKeys::END_REMINDER_ENABLED);
+
         return !empty($val);
     }
 
@@ -466,6 +469,7 @@ class ReservationSavePage extends SecurePage implements IReservationSavePage
     public function GetAllowParticipation()
     {
         $val = $this->server->GetForm(FormKeys::ALLOW_PARTICIPATION);
+
         return !empty($val);
     }
 
@@ -523,6 +527,7 @@ class AccessoryFormElement
     public static function Create($id, $quantity)
     {
         $element = new AccessoryFormElement("accessory!-!id=$id,quantity=$quantity,name=");
+
         return $element;
     }
 }

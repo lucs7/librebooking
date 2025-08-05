@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Pages/Authentication/ILoginBasePage.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'Pages/Authentication/ILoginBasePage.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class ExternalAuthLoginPage extends Page implements ILoginBasePage
 {
@@ -28,7 +28,7 @@ class ExternalAuthLoginPage extends Page implements ILoginBasePage
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetType()
     {

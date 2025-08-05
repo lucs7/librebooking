@@ -2,7 +2,7 @@
 
 define('ROOT_DIR', '../../');
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
 
 class ImportPage extends AdminPage
 {

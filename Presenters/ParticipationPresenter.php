@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ParticipationPage.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/namespace.php');
+require_once ROOT_DIR.'Pages/ParticipationPage.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Validation/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Notification/namespace.php';
 
 class ParticipationPresenter
 {
@@ -30,7 +30,7 @@ class ParticipationPresenter
         IParticipationPage $page,
         IReservationRepository $reservationRepository,
         IReservationViewRepository $reservationViewRepository,
-        IParticipationNotification $participationNotification
+        IParticipationNotification $participationNotification,
     ) {
         $this->page = $page;
         $this->reservationRepository = $reservationRepository;
@@ -45,8 +45,9 @@ class ParticipationPresenter
         if (!empty($invitationAction)) {
             $resultString = $this->HandleInvitationAction($invitationAction);
 
-            if ($this->page->GetResponseType() == 'json') {
+            if ('json' == $this->page->GetResponseType()) {
                 $this->page->DisplayResult($resultString);
+
                 return;
             }
 
@@ -66,7 +67,6 @@ class ParticipationPresenter
     }
 
     /**
-     * @param $invitationAction
      * @return string|null
      */
     private function HandleInvitationAction($invitationAction)
@@ -80,7 +80,7 @@ class ParticipationPresenter
 
         $series = $this->reservationRepository->LoadByReferenceNumber($referenceNumber);
 
-        if ($invitationAction == InvitationAction::Join || $invitationAction == InvitationAction::CancelInstance) {
+        if (InvitationAction::Join == $invitationAction || InvitationAction::CancelInstance == $invitationAction) {
             $rules = [new ReservationStartTimeRule(new ScheduleRepository()), new ResourceMinimumNoticeCurrentInstanceRuleUpdate($user), new ResourceMaximumNoticeCurrentInstanceRule($user)];
         } else {
             $rules = [new ReservationStartTimeRule(new ScheduleRepository()), new ResourceMinimumNoticeRuleAdd($user), new ResourceMaximumNoticeRule($user)];
@@ -96,21 +96,21 @@ class ParticipationPresenter
         }
 
         $error = null;
-        if ($invitationAction == InvitationAction::Accept) {
+        if (InvitationAction::Accept == $invitationAction) {
             $series->AcceptInvitation($userId);
 
             $error = $this->CheckCapacityAndReturnAnyError($series);
         }
-        if ($invitationAction == InvitationAction::Decline) {
+        if (InvitationAction::Decline == $invitationAction) {
             $series->DeclineInvitation($userId);
         }
-        if ($invitationAction == InvitationAction::CancelInstance) {
+        if (InvitationAction::CancelInstance == $invitationAction) {
             $series->CancelInstanceParticipation($userId);
         }
-        if ($invitationAction == InvitationAction::CancelAll) {
+        if (InvitationAction::CancelAll == $invitationAction) {
             $series->CancelAllParticipation($userId);
         }
-        if ($invitationAction == InvitationAction::Join) {
+        if (InvitationAction::Join == $invitationAction) {
             if (!$series->GetAllowParticipation()) {
                 $error = Resources::GetInstance()->GetString('ParticipationNotAllowed');
             } else {
@@ -118,7 +118,7 @@ class ParticipationPresenter
                 $error = $this->CheckCapacityAndReturnAnyError($series);
             }
         }
-        if ($invitationAction == InvitationAction::JoinAll) {
+        if (InvitationAction::JoinAll == $invitationAction) {
             if (!$series->GetAllowParticipation()) {
                 $error = Resources::GetInstance()->GetString('ParticipationNotAllowed');
             } else {
@@ -137,7 +137,8 @@ class ParticipationPresenter
 
     /**
      * @param ExistingReservationSeries $series
-     * @return mixed|null|string
+     *
+     * @return mixed|string|null
      */
     private function CheckCapacityAndReturnAnyError($series)
     {

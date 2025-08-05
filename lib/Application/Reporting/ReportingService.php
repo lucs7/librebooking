@@ -1,54 +1,47 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reporting/namespace.php');
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReportEmailMessage.php');
-require_once(ROOT_DIR . 'Domain/Access/ReportingRepository.php');
+require_once ROOT_DIR.'lib/Application/Reporting/namespace.php';
+require_once ROOT_DIR.'lib/Email/namespace.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReportEmailMessage.php';
+require_once ROOT_DIR.'Domain/Access/ReportingRepository.php';
 
 interface IReportingService
 {
     /**
-     * @param Report_Usage $usage
-     * @param Report_ResultSelection $selection
-     * @param Report_GroupBy $groupBy
-     * @param Report_Range $range
-     * @param Report_Filter $filter
      * @param string $timezone
+     *
      * @return IReport
      */
     public function GenerateCustomReport(Report_Usage $usage, Report_ResultSelection $selection, Report_GroupBy $groupBy, Report_Range $range, Report_Filter $filter, $timezone);
 
     /**
      * @param string $reportName
-     * @param int $userId
-     * @param Report_Usage $usage
-     * @param Report_ResultSelection $selection
-     * @param Report_GroupBy $groupBy
-     * @param Report_Range $range
-     * @param Report_Filter $filter
+     * @param int    $userId
      */
     public function Save($reportName, $userId, Report_Usage $usage, Report_ResultSelection $selection, Report_GroupBy $groupBy, Report_Range $range, Report_Filter $filter);
 
     /**
      * @param int $userId
+     *
      * @return array|SavedReport[]
      */
     public function GetSavedReports($userId);
 
     /**
-     * @param int $reportId
-     * @param int $userId
+     * @param int    $reportId
+     * @param int    $userId
      * @param string $timezone
+     *
      * @return IGeneratedSavedReport
      */
     public function GenerateSavedReport($reportId, $userId, $timezone);
 
     /**
      * @param IGeneratedSavedReport $report
-     * @param IReportDefinition $definition
-     * @param string $toAddress
-     * @param UserSession $reportUser
-     * @param string $selectedColumns
+     * @param IReportDefinition     $definition
+     * @param string                $toAddress
+     * @param UserSession           $reportUser
+     * @param string                $selectedColumns
      */
     public function SendReport($report, $definition, $toAddress, $reportUser, $selectedColumns);
 
@@ -59,12 +52,10 @@ interface IReportingService
     public function DeleteSavedReport($reportId, $userId);
 
     /**
-     * @param ICannedReport $cannedReport
      * @return IReport
      */
     public function GenerateCommonReport(ICannedReport $cannedReport);
 }
-
 
 class ReportingService implements IReportingService
 {
@@ -84,21 +75,20 @@ class ReportingService implements IReportingService
     private $scheduleRepository;
 
     /**
-     * @param IReportingRepository $repository
      * @param IAttributeRepository|null $attributeRepository
-     * @param IScheduleRepository|null $scheduleRepository
+     * @param IScheduleRepository|null  $scheduleRepository
      */
     public function __construct(IReportingRepository $repository, $attributeRepository = null, $scheduleRepository = null)
     {
         $this->repository = $repository;
 
         $this->attributeRepository = $attributeRepository;
-        if ($attributeRepository == null) {
+        if (null == $attributeRepository) {
             $this->attributeRepository = new AttributeRepository();
         }
 
         $this->scheduleRepository = $scheduleRepository;
-        if ($scheduleRepository == null) {
+        if (null == $scheduleRepository) {
             $this->scheduleRepository = new ScheduleRepository();
         }
     }
@@ -121,6 +111,7 @@ class ReportingService implements IReportingService
             $utilization = new ReportUtilizationData($data, $this->scheduleRepository, $range, $timezone);
             $data = $utilization->Rows();
         }
+
         return new CustomReport($data, $this->attributeRepository);
     }
 
@@ -139,7 +130,7 @@ class ReportingService implements IReportingService
     {
         $savedReport = $this->repository->LoadSavedReportForUser($reportId, $userId);
 
-        if ($savedReport == null) {
+        if (null == $savedReport) {
             return null;
         }
 
@@ -162,6 +153,7 @@ class ReportingService implements IReportingService
     public function GenerateCommonReport(ICannedReport $cannedReport)
     {
         $data = $this->repository->GetCustomReport($cannedReport->GetBuilder());
+
         return new CustomReport($data, $this->attributeRepository);
     }
 }

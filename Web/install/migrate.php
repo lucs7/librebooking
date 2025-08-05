@@ -2,11 +2,11 @@
 
 define('ROOT_DIR', '../../');
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'lib/Database/namespace.php');
-require_once(ROOT_DIR . 'lib/Database/MySQL/namespace.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'lib/Database/namespace.php';
+require_once ROOT_DIR.'lib/Database/MySQL/namespace.php';
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class MigrationPage extends Page
 {
@@ -153,7 +153,7 @@ class MigrationSession
             'username' => $legacyUserName,
             'password' => $legacyPassword,
             'hostspec' => $legacyHostSpec,
-            'databasename' => $legacyDatabaseName
+            'databasename' => $legacyDatabaseName,
         ]);
     }
 
@@ -163,6 +163,7 @@ class MigrationSession
         if (empty($id)) {
             return 0;
         }
+
         return $id;
     }
 
@@ -273,22 +274,22 @@ class MigrationPresenter
             $legacyDatabase = $this->GetLegacyDatabase();
             $currentDatabase = ServiceLocator::GetDatabase();
 
-            if ($runTarget == 'schedules') {
+            if ('schedules' == $runTarget) {
                 $this->MigrateSchedules($legacyDatabase, $currentDatabase);
             }
-            if ($runTarget == 'resources') {
+            if ('resources' == $runTarget) {
                 $this->MigrateResources($legacyDatabase, $currentDatabase);
             }
-            if ($runTarget == 'accessories') {
+            if ('accessories' == $runTarget) {
                 $this->MigrateAccessories($legacyDatabase, $currentDatabase);
             }
-            if ($runTarget == 'groups') {
+            if ('groups' == $runTarget) {
                 $this->MigrateGroups($legacyDatabase, $currentDatabase);
             }
-            if ($runTarget == 'users') {
+            if ('users' == $runTarget) {
                 $this->MigrateUsers($legacyDatabase, $currentDatabase);
             }
-            if ($runTarget == 'reservations') {
+            if ('reservations' == $runTarget) {
                 $this->MigrateReservations($legacyDatabase, $currentDatabase);
             }
         } catch (Exception $ex) {
@@ -331,10 +332,12 @@ class MigrationPresenter
             $legacyConnection->Connect();
             $legacyConnection->Disconnect();
             $this->page->SetLegacyConnectionSucceeded(true);
+
             return true;
         } catch (Exception $ex) {
             MigrationSession::ClearLegacyDb();
             $this->page->SetLegacyConnectionSucceeded(false);
+
             return false;
         }
     }
@@ -349,10 +352,12 @@ class MigrationPresenter
         if (empty($password) || $password != $this->page->GetInstallPassword()) {
             MigrationSession::SetPasswordOK(null);
             $this->page->SetInstallPasswordSucceeded(false);
+
             return false;
         }
         $this->page->SetInstallPasswordSucceeded(true);
         MigrationSession::SetPasswordOK(true);
+
         return true;
     }
 
@@ -368,7 +373,7 @@ class MigrationPresenter
         $knownIds = [];
         while ($row = $reader->GetRow()) {
             $knownIds[] = $row['legacyid'];
-            $schedulesMigrated++;
+            ++$schedulesMigrated;
         }
 
         Log::Debug('Start migrating schedules. Starting at row %s', $schedulesMigrated);
@@ -399,7 +404,7 @@ class MigrationPresenter
 
             $scheduleRepo->AddScheduleLayout($newId, $layout);
 
-            $schedulesMigrated++;
+            ++$schedulesMigrated;
             MigrationSession::SetLastScheduleRow($schedulesMigrated);
         }
 
@@ -427,7 +432,7 @@ class MigrationPresenter
         $knownIds = [];
         while ($row = $reader->GetRow()) {
             $knownIds[] = $row['legacyid'];
-            $resourcesMigrated++;
+            ++$resourcesMigrated;
         }
 
         Log::Debug('Start migrating resources. Starting at row %s', $resourcesMigrated);
@@ -481,7 +486,7 @@ class MigrationPresenter
 
             $currentDatabase->Execute(new AdHocCommand("update resources set legacyid = \"{$row['machid']}\" where resource_id = $newId"));
 
-            $resourcesMigrated++;
+            ++$resourcesMigrated;
             MigrationSession::SetLastResourceRow($resourcesMigrated);
         }
 
@@ -510,7 +515,7 @@ class MigrationPresenter
         $knownIds = [];
         while ($row = $reader->GetRow()) {
             $knownIds[] = $row['legacyid'];
-            $accessoriesMigrated++;
+            ++$accessoriesMigrated;
         }
         Log::Debug('Start migrating accessories. Starting at row %s', $accessoriesMigrated);
 
@@ -527,7 +532,7 @@ class MigrationPresenter
 
             $currentDatabase->Execute(new AdHocCommand("update accessories set legacyid = \"{$row['resourceid']}\" where accessory_id = $newId"));
 
-            $accessoriesMigrated++;
+            ++$accessoriesMigrated;
             MigrationSession::SetLastAccessoryRow($accessoriesMigrated);
         }
 
@@ -553,7 +558,7 @@ class MigrationPresenter
         $knownIds = [];
         while ($row = $reader->GetRow()) {
             $knownIds[] = $row['legacyid'];
-            $groupsMigrated++;
+            ++$groupsMigrated;
         }
 
         Log::Debug('Start migrating groups. Starting at row %s', $groupsMigrated);
@@ -571,7 +576,7 @@ class MigrationPresenter
 
             $currentDatabase->Execute(new AdHocCommand("update groups set legacyid = \"{$row['groupid']}\" where group_id = $newId"));
 
-            $groupsMigrated++;
+            ++$groupsMigrated;
             MigrationSession::SetLastGroupRow($groupsMigrated);
         }
 
@@ -597,7 +602,7 @@ class MigrationPresenter
         $knownIds = [];
         while ($row = $reader->GetRow()) {
             $knownIds[] = $row['legacyid'];
-            $usersMigrated++;
+            ++$usersMigrated;
         }
 
         Log::Debug('Start migrating users. Starting at row %s', $usersMigrated);
@@ -635,7 +640,7 @@ class MigrationPresenter
         while ($row = $reader->GetRow()) {
             $legacyId = $row['memberid'];
             if (in_array($legacyId, $knownIds)) {
-                Log::Debug("Skipping user %s", $legacyId);
+                Log::Debug('Skipping user %s', $legacyId);
                 continue;
             }
 
@@ -682,12 +687,12 @@ class MigrationPresenter
             }
 
             if (!empty($insertPermissionSqls)) {
-                $insertPermission = "insert ignore into user_resource_permissions (resource_id, user_id) values " . implode(',', $insertPermissionSqls);
+                $insertPermission = 'insert ignore into user_resource_permissions (resource_id, user_id) values '.implode(',', $insertPermissionSqls);
                 //				die($insertPermission);
                 $currentDatabase->ExecuteInsert(new AdHocCommand($insertPermission));
             }
 
-            $usersMigrated++;
+            ++$usersMigrated;
             MigrationSession::SetLastUserRow($usersMigrated);
         }
 
@@ -796,7 +801,7 @@ class MigrationPresenter
             $mappedUserId = $userMapping[$row['memberid']];
             $mappedResourceId = $resourceMapping[$row['machid']];
 
-            if ($row['is_blackout'] == 1) {
+            if (1 == $row['is_blackout']) {
                 // handle blackout
                 $blackout = BlackoutSeries::Create($mappedUserId, '', $date);
                 $blackout->AddResourceId($mappedResourceId);
@@ -861,7 +866,7 @@ class MigrationPresenter
                 }
             }
 
-            $reservationsMigrated++;
+            ++$reservationsMigrated;
             MigrationSession::SetLastReservationRow($reservationsMigrated);
         }
 
@@ -935,8 +940,8 @@ class MigrationPresenter
 
     private function BuildDateRange($startDate, $startTime, $endDate, $endTime)
     {
-        $s = date('Y-m-d', $startDate) . ' ' . $this->MinutesToTime($startTime);
-        $e = date('Y-m-d', $endDate) . ' ' . $this->MinutesToTime($endTime);
+        $s = date('Y-m-d', $startDate).' '.$this->MinutesToTime($startTime);
+        $e = date('Y-m-d', $endDate).' '.$this->MinutesToTime($endTime);
 
         return DateRange::Create($s, $e, Configuration::Instance()->GetDefaultTimezone());
     }
@@ -974,7 +979,7 @@ class ProgressCounts
         $this->MigratedCount = $migratedCount;
         $this->RemainingCount = $legacyCount - $migratedCount;
         if ($legacyCount > 0) {
-            $this->PercentComplete = round((($migratedCount / $legacyCount) * 100), 2);
+            $this->PercentComplete = round(($migratedCount / $legacyCount) * 100, 2);
         } else {
             $this->PercentComplete = 100;
         }

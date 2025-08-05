@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Controls/Dashboard/DashboardItem.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/AnnouncementPresenter.php');
+require_once ROOT_DIR.'Controls/Dashboard/DashboardItem.php';
+require_once ROOT_DIR.'Presenters/Dashboard/AnnouncementPresenter.php';
 
 class AnnouncementsControl extends DashboardItem implements IAnnouncementsControl
 {

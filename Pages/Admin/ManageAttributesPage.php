@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageAttributesPresenter.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageAttributesPresenter.php';
 
 interface IManageAttributesPage extends IActionPage
 {
@@ -18,17 +18,17 @@ interface IManageAttributesPage extends IActionPage
     public function GetType();
 
     /**
-     * return int|CustomAttributeCategory
+     * return int|CustomAttributeCategory.
      */
     public function GetCategory();
 
     /**
-     * return string
+     * return string.
      */
     public function GetValidationExpression();
 
     /**
-     * return bool
+     * return bool.
      */
     public function GetIsRequired();
 
@@ -38,12 +38,12 @@ interface IManageAttributesPage extends IActionPage
     public function GetEntityIds();
 
     /**
-     * return string
+     * return string.
      */
     public function GetPossibleValues();
 
     /**
-     * return int|CustomAttributeCategory
+     * return int|CustomAttributeCategory.
      */
     public function GetRequestedCategory();
 
@@ -53,7 +53,7 @@ interface IManageAttributesPage extends IActionPage
     public function GetSortOrder();
 
     /**
-     * return bool
+     * return bool.
      */
     public function GetIsAdminOnly();
 
@@ -109,11 +109,11 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     public function PageLoad()
     {
         $typeLookup = [
-                CustomAttributeTypes::SINGLE_LINE_TEXTBOX => 'SingleLineTextbox',
-                CustomAttributeTypes::MULTI_LINE_TEXTBOX => 'MultiLineTextbox',
-                CustomAttributeTypes::CHECKBOX => 'Checkbox',
-                CustomAttributeTypes::SELECT_LIST => 'SelectList',
-                CustomAttributeTypes::DATETIME => 'DateTime',
+            CustomAttributeTypes::SINGLE_LINE_TEXTBOX => 'SingleLineTextbox',
+            CustomAttributeTypes::MULTI_LINE_TEXTBOX => 'MultiLineTextbox',
+            CustomAttributeTypes::CHECKBOX => 'Checkbox',
+            CustomAttributeTypes::SELECT_LIST => 'SelectList',
+            CustomAttributeTypes::DATETIME => 'DateTime',
         ];
 
         $this->Set('Types', $typeLookup);
@@ -155,6 +155,7 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     public function GetIsRequired()
     {
         $required = $this->GetForm(FormKeys::ATTRIBUTE_IS_REQUIRED);
+
         return !empty($required);
     }
 
@@ -190,6 +191,7 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     public function GetIsAdminOnly()
     {
         $adminOnly = $this->GetForm(FormKeys::ATTRIBUTE_IS_ADMIN_ONLY);
+
         return !empty($adminOnly);
     }
 
@@ -231,12 +233,14 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     public function GetLimitAttributeScope()
     {
         $limit = $this->GetForm(FormKeys::ATTRIBUTE_LIMIT_SCOPE);
+
         return !empty($limit);
     }
 
     public function GetIsPrivate()
     {
         $isPrivate = $this->GetForm(FormKeys::ATTRIBUTE_IS_PRIVATE);
+
         return !empty($isPrivate);
     }
 

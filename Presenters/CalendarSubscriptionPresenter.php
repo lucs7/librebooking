@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class CalendarSubscriptionPresenter
 {
@@ -36,7 +36,7 @@ class CalendarSubscriptionPresenter
         IReservationViewRepository $reservationViewRepository,
         ICalendarExportValidator $validator,
         ICalendarSubscriptionService $subscriptionService,
-        IPrivacyFilter $filter
+        IPrivacyFilter $filter,
     ) {
         $this->page = $page;
         $this->reservationViewRepository = $reservationViewRepository;
@@ -62,7 +62,7 @@ class CalendarSubscriptionPresenter
 
         $pastDays = Configuration::Instance()->GetSectionKey(ConfigSection::ICS, ConfigKeys::ICS_PAST_DAYS, new IntConverter());
         $futureDays = Configuration::Instance()->GetSectionKey(ConfigSection::ICS, ConfigKeys::ICS_FUTURE_DAYS, new IntConverter());
-        if ($futureDays == 0) {
+        if (0 == $futureDays) {
             $futureDays = 30;
         }
 
@@ -93,8 +93,8 @@ class CalendarSubscriptionPresenter
             $rid = $resource->GetId();
         }
         if (!empty($accessoryIds)) {
-            ## No transformation is implemented. It is assumed the accessoryIds is provided as AccessoryName
-            ## filter is defined by LIKE "PATTERN%"
+            // # No transformation is implemented. It is assumed the accessoryIds is provided as AccessoryName
+            // # filter is defined by LIKE "PATTERN%"
             $aid = $accessoryIds;
         }
         if (!empty($userId)) {

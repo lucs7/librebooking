@@ -3,28 +3,21 @@
 interface IReservationAuthorization
 {
     /**
-     * @param UserSession $currentUser
      * @return bool
      */
     public function CanChangeUsers(UserSession $currentUser);
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $currentUser
      * @return bool
      */
     public function CanEdit(ReservationView $reservationView, UserSession $currentUser);
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $currentUser
      * @return bool
      */
     public function CanApprove(ReservationView $reservationView, UserSession $currentUser);
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $currentUser
      * @return bool
      */
     public function CanViewDetails(ReservationView $reservationView, UserSession $currentUser);
@@ -33,7 +26,7 @@ interface IReservationAuthorization
 class ReservationAuthorization implements IReservationAuthorization
 {
     /**
-     * @var \IAuthorizationService
+     * @var IAuthorizationService
      */
     private $authorizationService;
 
@@ -59,17 +52,17 @@ class ReservationAuthorization implements IReservationAuthorization
             }
         }
 
-        if ($allowedForAdmin && ($adminForUser || $adminForResource) && $startTimeConstraint !== ReservationStartTimeConstraint::NONE) {
+        if ($allowedForAdmin && ($adminForUser || $adminForResource) && ReservationStartTimeConstraint::NONE !== $startTimeConstraint) {
             return $adminForUser || $adminForResource;
         }
 
         $ongoingReservation = true;
 
-        if ($startTimeConstraint == ReservationStartTimeConstraint::CURRENT) {
+        if (ReservationStartTimeConstraint::CURRENT == $startTimeConstraint) {
             $ongoingReservation = Date::Now()->LessThan($reservationView->EndDate);
         }
 
-        if ($startTimeConstraint == ReservationStartTimeConstraint::FUTURE) {
+        if (ReservationStartTimeConstraint::FUTURE == $startTimeConstraint) {
             $ongoingReservation = Date::Now()->LessThan($reservationView->StartDate);
         }
 
@@ -117,8 +110,6 @@ class ReservationAuthorization implements IReservationAuthorization
     }
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $currentUser
      * @return bool
      */
     private function IsAccessibleTo(ReservationView $reservationView, UserSession $currentUser)

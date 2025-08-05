@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 class PasswordMigrationTest extends TestBase
 {
@@ -64,6 +64,6 @@ class PasswordMigrationTest extends TestBase
 
         $password->Migrate($userid);
         $encrypted = $fakeEncryption->Encrypt($this->plaintext, $salt);
-        $this->assertTrue($this->_db->ContainsCommand(new MigratePasswordCommand($userid, $encrypted, $salt)), "did not migrate the password");
+        $this->assertTrue($this->_db->ContainsCommand(new MigratePasswordCommand($userid, $encrypted, $salt)), 'did not migrate the password');
     }
 }

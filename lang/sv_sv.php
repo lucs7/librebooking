@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class sv_sv extends en_gb
 {
@@ -39,8 +39,8 @@ class sv_sv extends en_gb
         $dates['full_week'] = '\V\e\c\k\a W Y';		// tillagt ar
         $dates['full_month'] = 'F Y';		// tillagt ar
 
-
         $this->Dates = $dates;
+
         return $this->Dates;
     }
 
@@ -101,7 +101,6 @@ class sv_sv extends en_gb
         $strings['ViewAvailability'] = 'Visa tillgängliga lokaler';	// tillagt AR
         $strings['Dates'] = 'Datum';
         $strings['ReservationRequiresApproval'] = 'Bokningen är ännu <b>inte bekräftad</b>. Vi återkommer när den är godkänd och klar.';
-
 
         $strings['ShowHide'] = 'Visa/Dölj';
         $strings['Error'] = 'Fel';
@@ -261,8 +260,8 @@ class sv_sv extends en_gb
         $strings['Email'] = 'Email';
         $strings['EmailAddress'] = 'Email Adress';
         $strings['Phone'] = 'Telefon';	// ändrat AR
-        $strings['Organization']                        = 'Organisation';
-        $strings['Position']                            = 'Position';   // ändrat AR
+        $strings['Organization'] = 'Organisation';
+        $strings['Position'] = 'Position';   // ändrat AR
         $strings['Language'] = 'Språk';
         $strings['Permissions'] = 'Behörighet';
         $strings['Reset'] = 'Återställ';
@@ -282,9 +281,9 @@ class sv_sv extends en_gb
         $strings['OK'] = 'OK';
         $strings['Working'] = 'fungerar...';
         $strings['Login'] = 'Login';
-        $strings['AdditionalInformation']               = 'Ytterligare information'; // Ändrat AR
+        $strings['AdditionalInformation'] = 'Ytterligare information'; // Ändrat AR
         $strings['AllFieldsAreRequired'] = 'Alla fält är obligatoriska';
-        $strings['Optional']                            = 'Valfritt';
+        $strings['Optional'] = 'Valfritt';
         $strings['YourProfileWasUpdated'] = 'Din profil är uppdaterad';
         $strings['YourSettingsWereUpdated'] = 'Dina inställningar har uppdaterats';
         $strings['Register'] = 'Registrera';
@@ -383,8 +382,8 @@ class sv_sv extends en_gb
         $strings['TurnOnSubscription'] = 'Tillåt Prenumeration av denna kalender';
         $strings['SubscribeToCalendar'] = 'Prenumerera på denna kalender';
         $strings['SubscriptionsAreDisabled'] = 'Administratören har inaktiverat abonnemang av kalendern';
-        $strings['NoResourceAdministratorLabel'] = '(Ingen administratör av lokal)';// tjänst --> lokal
-        $strings['WhoCanManageThisResource'] = 'Vem kan hantera denna lokal?';// tjänst --> lokal
+        $strings['NoResourceAdministratorLabel'] = '(Ingen administratör av lokal)'; // tjänst --> lokal
+        $strings['WhoCanManageThisResource'] = 'Vem kan hantera denna lokal?'; // tjänst --> lokal
         $strings['ResourceAdministrator'] = 'Administratör av lokal'; // tjänst --> lokal
         $strings['Private'] = 'Privat';
         $strings['Accept'] = 'Acceptera';
@@ -408,7 +407,7 @@ class sv_sv extends en_gb
         $strings['CategoryGroup'] = 'Grupp';
         $strings['SortOrder'] = 'Sorteringsordning';
         $strings['Title'] = 'Rubrik';
-        $strings['AdditionalAttributes']                = 'Flera attribut';
+        $strings['AdditionalAttributes'] = 'Flera attribut';
         $strings['True'] = 'Sant';
         $strings['False'] = 'Falskt';
         $strings['NoResultsFound'] = 'Hittade inga rapporter';
@@ -446,9 +445,9 @@ class sv_sv extends en_gb
         // Errors
         $strings['LoginError'] = 'Användarnamn eller lösenord är felaktigt';
         $strings['ReservationFailed'] = 'Din bokning kunde inte göras';
-        $strings['MinNoticeError'] = 'Du kan inte boka med så kort varsel. Den första dagen som kan bokas direkt är %s.';	//
-        $strings['MaxNoticeError'] = 'Denna bokning kan inte göras så långt i framtiden. Det tidigaste datum som kan bokas är %s.';	//
-        $strings['MinNoticeErrorUpdate'] = 'Du kan inte ändra en bokning med så kort varsel.';	//
+        $strings['MinNoticeError'] = 'Du kan inte boka med så kort varsel. Den första dagen som kan bokas direkt är %s.';
+        $strings['MaxNoticeError'] = 'Denna bokning kan inte göras så långt i framtiden. Det tidigaste datum som kan bokas är %s.';
+        $strings['MinNoticeErrorUpdate'] = 'Du kan inte ändra en bokning med så kort varsel.';
         $strings['MinNoticeErrorDelete'] = 'Du kan inte ta bort en bokning med så kort varsel.';
         $strings['MinDurationError'] = 'Denna bokning måste vara minst %s.';
         $strings['MaxDurationError'] = 'Denna bokning kan inte vara längre än %s.';
@@ -488,7 +487,7 @@ class sv_sv extends en_gb
         $strings['Schedule'] = 'Kalender';
         $strings['Reservations'] = 'Bokningar';	// ändrat AR
         $strings['Account'] = 'Konto';
-        $strings['EditProfile']                         = 'Namn och organisation'; // Ändrat AR
+        $strings['EditProfile'] = 'Namn och organisation'; // Ändrat AR
         $strings['FindAnOpening'] = 'Hitta en öppning';
         $strings['OpenInvitations'] = 'Inbjudan';
         $strings['MyCalendar'] = 'Min kalender';
@@ -559,8 +558,8 @@ class sv_sv extends en_gb
         $strings['ReservationApprovalAdminSubjectWithResource'] = 'Underrättelse: En bokning av %s måste godkännas';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Du har inga tidigare bokningar';
         $strings['PastReservations'] = 'Tidigare bokningar';
         $strings['AllNoPastReservations'] = 'Det finns inga tidigare bokningar de senaste %s dagarna';
@@ -568,37 +567,37 @@ class sv_sv extends en_gb
         $strings['Yesterday'] = 'Igår';
         $strings['EarlierThisWeek'] = 'Tidigare den här veckan';
         $strings['PreviousWeek'] = 'Förra veckan';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Din grupp har inga kommande bokningar';
         $strings['GroupUpcomingReservations'] = 'Mina grupps kommande bokningar';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Ett fel inträffade vid inloggning med Facebook. Försök igen.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Du har inga bokningar som väntar på godkännande';
         $strings['PendingApprovalReservations'] = 'Bokningar väntar på godkännande';
         $strings['LaterThisMonth'] = 'Senare denna månad';
         $strings['LaterThisYear'] = 'Senare i år';
-        $strings['Remaining'] = 'Återstående';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Återstående';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Det finns inga saknade utcheckningsreservat';
-        $strings['MissingCheckOutReservations'] = 'Saknade utcheckningsreservat';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Saknade utcheckningsreservat';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Kan inte se detaljer om bokningen eftersom du inte har behörighet för någon av resurserna i denna bokning';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
+
         return $this->Strings;
     }
 
@@ -621,6 +620,7 @@ class sv_sv extends en_gb
         $days['letter'] = ['S', 'M', 'T', 'O', 'T', 'F', 'L'];
 
         $this->Days = $days;
+
         return $this->Days;
     }
 
@@ -639,12 +639,14 @@ class sv_sv extends en_gb
         $months['abbr'] = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
 
         $this->Months = $months;
+
         return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         return $this->Letters;
     }
 

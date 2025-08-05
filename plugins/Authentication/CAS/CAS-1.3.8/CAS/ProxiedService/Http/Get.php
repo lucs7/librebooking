@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/ProxiedService/Http/Get.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -59,16 +61,18 @@
  *	}
  *
  * @class    CAS_ProxiedService_Http_Get
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 class CAS_ProxiedService_Http_Get extends CAS_ProxiedService_Http_Abstract
 {
     /**
-     * Add any other parts of the request needed by concrete classes
+     * Add any other parts of the request needed by concrete classes.
      *
      * @param CAS_Request_RequestInterface $request request interface
      *

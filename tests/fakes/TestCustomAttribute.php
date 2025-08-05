@@ -12,22 +12,16 @@ class FakeCustomAttribute extends CustomAttribute
      */
     public $_IsConstraintSatisfied = true;
 
-    /**
-     * @var mixed
-     */
     public $_RequiredValueChecked;
 
-    /**
-     * @var mixed
-     */
     public $_ConstraintValueChecked;
 
     /**
-     * @param int $id
-     * @param bool $isRequiredOk
-     * @param bool $isRegexOk
+     * @param int   $id
+     * @param bool  $isRequiredOk
+     * @param bool  $isRegexOk
      * @param int[] $entityIds
-     * @param bool $adminOnly
+     * @param bool  $adminOnly
      */
     public function __construct($id = 1, $isRequiredOk = true, $isRegexOk = true, $entityIds = [], $adminOnly = false)
     {
@@ -44,12 +38,14 @@ class FakeCustomAttribute extends CustomAttribute
     public function SatisfiesRequired($value)
     {
         $this->_RequiredValueChecked = $value;
+
         return $this->_IsRequiredSatisfied;
     }
 
     public function SatisfiesConstraint($value)
     {
         $this->_ConstraintValueChecked = $value;
+
         return $this->_IsConstraintSatisfied;
     }
 

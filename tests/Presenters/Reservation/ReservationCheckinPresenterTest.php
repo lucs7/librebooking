@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationApprovalPage.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationCheckinPresenter.php');
+require_once ROOT_DIR.'Pages/Ajax/ReservationApprovalPage.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationCheckinPresenter.php';
 
 class ReservationCheckinPresenterTest extends TestBase
 {

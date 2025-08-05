@@ -3,23 +3,20 @@
 abstract class Control
 {
     /**
-     * @var SmartyPage|\Smarty\Smarty
+     * @var SmartyPage|Smarty\Smarty
      */
-    protected $smarty = null;
+    protected $smarty;
 
     /**
      * @var string
      */
-    protected $id = null;
+    protected $id;
 
     /**
-     * @var \Smarty\Data
+     * @var Smarty\Data
      */
-    protected $data = null;
+    protected $data;
 
-    /**
-     * @param SmartyPage $smarty
-     */
     public function __construct(SmartyPage $smarty)
     {
         $this->smarty = $smarty;

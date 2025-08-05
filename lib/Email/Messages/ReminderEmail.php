@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
-require_once(ROOT_DIR . 'Pages/Pages.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
+require_once ROOT_DIR.'Pages/Pages.php';
 
 abstract class ReminderEmail extends EmailMessage
 {
@@ -22,6 +22,7 @@ abstract class ReminderEmail extends EmailMessage
     public function To()
     {
         $name = new FullName($this->reminder->FirstName(), $this->reminder->LastName());
+
         return new EmailAddress($this->reminder->EmailAddress(), $name->__toString());
     }
 
@@ -36,17 +37,18 @@ abstract class ReminderEmail extends EmailMessage
         $this->Set('Title', $this->reminder->Title());
         $this->Set('Description', $this->reminder->Description());
         $this->Set('ReservationUrl', sprintf(
-            "%s?%s=%s",
+            '%s?%s=%s',
             Pages::RESERVATION,
             QueryStringKeys::REFERENCE_NUMBER,
             $this->reminder->ReferenceNumber()
         ));
         $this->Set('ICalUrl', sprintf(
-            "export/%s?%s=%s",
+            'export/%s?%s=%s',
             Pages::CALENDAR_EXPORT,
             QueryStringKeys::REFERENCE_NUMBER,
             $this->reminder->ReferenceNumber()
         ));
+
         return $this->FetchTemplate($this->GetTemplateName());
     }
 

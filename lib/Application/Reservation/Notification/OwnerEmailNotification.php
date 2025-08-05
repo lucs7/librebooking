@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/ReservationEvents.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationCreatedEmail.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationUpdatedEmail.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationDeletedEmail.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationApprovedEmail.php');
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/ReservationEvents.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationCreatedEmail.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationUpdatedEmail.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationDeletedEmail.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationApprovedEmail.php';
 
 abstract class OwnerEmailNotification implements IReservationNotification
 {
@@ -19,10 +19,6 @@ abstract class OwnerEmailNotification implements IReservationNotification
      */
     protected $_attributeRepo;
 
-    /**
-     * @param IUserRepository $userRepo
-     * @param IAttributeRepository $attributeRepo
-     */
     public function __construct(IUserRepository $userRepo, IAttributeRepository $attributeRepo)
     {
         $this->_userRepo = $userRepo;
@@ -31,6 +27,7 @@ abstract class OwnerEmailNotification implements IReservationNotification
 
     /**
      * @param ReservationSeries $reservation
+     *
      * @return void
      */
     public function Notify($reservation)
@@ -45,17 +42,15 @@ abstract class OwnerEmailNotification implements IReservationNotification
     }
 
     /**
-     * @abstract
      * @param $owner User
+     *
      * @return bool
      */
     abstract protected function ShouldSend(User $owner);
 
     /**
-     * @param User $owner
      * @param ReservationSeries|ExistingReservationSeries $reservation
-     * @param IAttributeRepository $attributeRepo
-     * @param IUserRepository $userRepository
+     *
      * @return EmailMessage
      */
     abstract protected function GetMessage(User $owner, $reservation, IAttributeRepository $attributeRepo, IUserRepository $userRepository);
@@ -91,6 +86,7 @@ class OwnerEmailApprovedNotification extends OwnerEmailNotification
 {
     /**
      * @param $owner User
+     *
      * @return bool
      */
     protected function ShouldSend(User $owner)
@@ -108,6 +104,7 @@ class OwnerEmailDeletedNotification extends OwnerEmailNotification
 {
     /**
      * @param $owner User
+     *
      * @return bool
      */
     protected function ShouldSend(User $owner)

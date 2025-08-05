@@ -55,19 +55,19 @@ class AuthenticatedUser
     /**
      * @var string[]|null
      */
-    private $groups = null;
+    private $groups;
 
     /**
-     * @param string $username
-     * @param string $email
-     * @param string $fname
-     * @param string $lname
-     * @param string $password
-     * @param string $languageCode
-     * @param string $timezoneName
-     * @param string $phone
-     * @param string $organization
-     * @param string $title
+     * @param string        $username
+     * @param string        $email
+     * @param string        $fname
+     * @param string        $lname
+     * @param string        $password
+     * @param string        $languageCode
+     * @param string        $timezoneName
+     * @param string        $phone
+     * @param string        $organization
+     * @param string        $title
      * @param string[]|null $groups
      */
     public function __construct($username, $email, $fname, $lname, $password, $languageCode, $timezoneName, $phone, $organization, $title, $groups = null)
@@ -83,7 +83,6 @@ class AuthenticatedUser
         $this->organization = $organization;
         $this->title = $title;
         $this->groups = is_null($groups) ? [] : $groups;
-        ;
     }
 
     /**

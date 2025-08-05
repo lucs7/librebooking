@@ -36,6 +36,7 @@ class ReservationListItem
         if ($this->HasBufferTime()) {
             return $this->item->BufferedTimes()->GetBegin();
         }
+
         return $this->item->GetStartDate();
     }
 
@@ -47,6 +48,7 @@ class ReservationListItem
         if ($this->HasBufferTime()) {
             return $this->item->BufferedTimes()->GetEnd();
         }
+
         return $this->item->GetEndDate();
     }
 
@@ -56,10 +58,8 @@ class ReservationListItem
     }
 
     /**
-     * @param SchedulePeriod $start
-     * @param SchedulePeriod $end
-     * @param Date $displayDate
      * @param int $span
+     *
      * @return IReservationSlot
      */
     public function BuildSlot(SchedulePeriod $start, SchedulePeriod $end, Date $displayDate, $span)
@@ -94,7 +94,7 @@ class ReservationListItem
     }
 
     /**
-     * @return null|TimeInterval
+     * @return TimeInterval|null
      */
     public function BufferTime()
     {
@@ -107,11 +107,11 @@ class ReservationListItem
     public function HasBufferTime()
     {
         $bufferTime = $this->BufferTime();
+
         return !empty($bufferTime) && $bufferTime->TotalSeconds() > 0;
     }
 
     /**
-     * @param Date $date
      * @return bool
      */
     public function CollidesWith(Date $date)
@@ -129,7 +129,6 @@ class ReservationListItem
     }
 
     /**
-     * @param DateRange $dateRange
      * @return bool
      */
     public function CollidesWithRange(DateRange $dateRange)
@@ -197,6 +196,7 @@ class ReservationListItem
 
     /**
      * @param $currentUser UserSession
+     *
      * @return ReservationListItemDto[]
      */
     public function AsDto($currentUser)
@@ -245,10 +245,10 @@ class ReservationListItem
             $pre->IsReservation = false;
             $pre->IsBuffer = true;
             $pre->IsBuffered = false;
-            $pre->Id = $this->Id() . 'buffer-pre';
+            $pre->Id = $this->Id().'buffer-pre';
             $pre->ReferenceNumber = $this->ReferenceNumber();
             $pre->ResourceId = $this->ResourceId();
-            $pre->Label = "";
+            $pre->Label = '';
 
             $post = new ReservationListItemDto();
             $post->StartDate = $this->EndDate()->Timestamp();
@@ -258,25 +258,28 @@ class ReservationListItem
             $post->IsReservation = false;
             $post->IsBuffer = true;
             $post->IsBuffered = false;
-            $post->Id = $this->Id() . 'buffer-post';
+            $post->Id = $this->Id().'buffer-post';
             $post->ReferenceNumber = $this->ReferenceNumber();
             $post->ResourceId = $this->ResourceId();
-            $post->Label = "";
+            $post->Label = '';
 
             return [$pre, $dto, $post];
         }
+
         return [$dto];
     }
 
     private function GetIsNew()
     {
         $newMinutes = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_UPDATE_HIGHLIGHT_MINUTES, new IntConverter());
+
         return $this->item->GetIsNew($newMinutes);
     }
 
     private function GetIsUpdated()
     {
         $updatedMinutes = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_UPDATE_HIGHLIGHT_MINUTES, new IntConverter());
+
         return $this->item->GetIsUpdated($updatedMinutes);
     }
 
@@ -359,7 +362,7 @@ class BufferItem extends ReservationListItem
 
     private function IsBefore()
     {
-        return $this->location == self::LOCATION_BEFORE;
+        return self::LOCATION_BEFORE == $this->location;
     }
 
     public function OccursOn(Date $date)
@@ -369,7 +372,7 @@ class BufferItem extends ReservationListItem
 
     public function Id()
     {
-        return $this->Id() . 'buffer_' . $this->location;
+        return $this->Id().'buffer_'.$this->location;
     }
 
     public function IsReservation()
@@ -399,10 +402,8 @@ class BlackoutListItem extends ReservationListItem
     }
 
     /**
-     * @param SchedulePeriod $start
-     * @param SchedulePeriod $end
-     * @param Date $displayDate
      * @param int $span
+     *
      * @return IReservationSlot
      */
     public function BuildSlot(SchedulePeriod $start, SchedulePeriod $end, Date $displayDate, $span)

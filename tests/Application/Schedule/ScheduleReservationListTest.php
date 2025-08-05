@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class ScheduleReservationListTest extends TestBase
 {
@@ -35,7 +35,7 @@ class ScheduleReservationListTest extends TestBase
 
         $layout->AppendBlockedPeriod(new Time(0, 0, 0, $userTz), new Time(2, 0, 0, $userTz));
 
-        for ($hour = 2; $hour <= 14; $hour++) {
+        for ($hour = 2; $hour <= 14; ++$hour) {
             $layout->AppendPeriod(new Time($hour, 0, 0, $userTz), new Time($hour, 30, 0, $userTz));
             $layout->AppendPeriod(new Time($hour, 30, 0, $userTz), new Time($hour + 1, 0, 0, $userTz));
         }
@@ -309,7 +309,7 @@ class ScheduleReservationListTest extends TestBase
         $this->assertEquals($slot9, $slots[8]);
         $this->assertEquals($slot10, $slots[9]);
         $this->assertEquals($slot11, $slots[10]);
-        $this->assertEquals($slot12, $slots[11], $slot12 . ' ' . $slots[11]);
+        $this->assertEquals($slot12, $slots[11], $slot12.' '.$slots[11]);
     }
 
     public function testReservationStartingBeforeLayoutPeriodAndEndingAfterLayoutPeriodIsCreatedProperly()
@@ -668,7 +668,7 @@ class ScheduleReservationListTest extends TestBase
             resourceId: 1,
             referenceNumber: 30
         );
-        $item->WithBufferTime(60*60);
+        $item->WithBufferTime(60 * 60);
         $r1 = new ReservationListItem($item);
 
         $list = new ScheduleReservationList([$r1], $layout, $listDate, false);
@@ -716,8 +716,8 @@ class ScheduleReservationListTest extends TestBase
             Date::Parse('2011-02-08 2:00', $tz)->ToUtc(),
             1
         );
-        $item1->WithBufferTime(60*60);
-        $item2->WithBufferTime(60*60);
+        $item1->WithBufferTime(60 * 60);
+        $item2->WithBufferTime(60 * 60);
         $r1 = new ReservationListItem($item1);
         $r2 = new ReservationListItem($item2);
 

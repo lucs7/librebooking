@@ -1,45 +1,47 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/User.php');
-require_once(ROOT_DIR . 'Domain/Values/AccountStatus.php');
-require_once(ROOT_DIR . 'Domain/Values/FullName.php');
-require_once(ROOT_DIR . 'Domain/Values/UserPreferences.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/AccountCreationEmail.php');
+require_once ROOT_DIR.'Domain/User.php';
+require_once ROOT_DIR.'Domain/Values/AccountStatus.php';
+require_once ROOT_DIR.'Domain/Values/FullName.php';
+require_once ROOT_DIR.'Domain/Values/UserPreferences.php';
+require_once ROOT_DIR.'lib/Email/Messages/AccountCreationEmail.php';
 
 interface IUserRepository extends IUserViewRepository
 {
     /**
      * @param int $userId
+     *
      * @return User
      */
     public function LoadById($userId);
 
     /**
      * @param string $publicId
+     *
      * @return User
      */
     public function LoadByPublicId($publicId);
 
     /**
      * @param string $userName
+     *
      * @return User
      */
     public function LoadByUsername($userName);
 
     /**
-     * @param User $user
      * @return void
      */
     public function Update(User $user);
 
     /**
-     * @param User $user
      * @return int
      */
     public function Add(User $user);
 
     /**
      * @param $userId int
+     *
      * @return void
      */
     public function DeleteById($userId);
@@ -65,7 +67,6 @@ class UserFilter
      */
     private $_and = [];
 
-
     public function __construct(
         $username = null,
         $email = null,
@@ -74,7 +75,7 @@ class UserFilter
         $phone = null,
         $organization = null,
         $position = null,
-        $attributes = null
+        $attributes = null,
     ) {
         $this->username = $username;
         $this->email = $email;
@@ -87,12 +88,12 @@ class UserFilter
     }
 
     /**
-     * @param ISqlFilter $filter
      * @return UserFilter
      */
     public function _And(ISqlFilter $filter)
     {
         $this->_and[] = $filter;
+
         return $this;
     }
 
@@ -123,9 +124,9 @@ class UserFilter
         }
 
         if (!empty($this->attributes)) {
-            $attributeFilter = AttributeFilter::Create('`'. TableNames::USERS_ALIAS . '`.`' . ColumnNames::USER_ID . '`', $this->attributes);
+            $attributeFilter = AttributeFilter::Create('`'.TableNames::USERS_ALIAS.'`.`'.ColumnNames::USER_ID.'`', $this->attributes);
 
-            if ($attributeFilter != null) {
+            if (null != $attributeFilter) {
                 $filter->_And($attributeFilter);
             }
         }
@@ -142,6 +143,7 @@ interface IUserViewRepository
 {
     /**
      * @param int $userId
+     *
      * @return UserDto
      */
     public function GetById($userId);
@@ -152,12 +154,13 @@ interface IUserViewRepository
     public function GetAll();
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param null|string $sortField
-     * @param null|string $sortDirection
-     * @param null|ISqlFilter $filter
+     * @param int               $pageNumber
+     * @param int               $pageSize
+     * @param string|null       $sortField
+     * @param string|null       $sortDirection
+     * @param ISqlFilter|null   $filter
      * @param AccountStatus|int $accountStatus
+     *
      * @return PageableData|UserItemView[]
      */
     public function GetList(
@@ -166,11 +169,12 @@ interface IUserViewRepository
         $sortField = null,
         $sortDirection = null,
         $filter = null,
-        $accountStatus = AccountStatus::ALL
+        $accountStatus = AccountStatus::ALL,
     );
 
     /**
      * @param int $resourceId
+     *
      * @return array|UserDto[]
      */
     public function GetResourceAdmins($resourceId);
@@ -182,13 +186,15 @@ interface IUserViewRepository
 
     /**
      * @param int $userId
+     *
      * @return array|UserDto[]
      */
     public function GetGroupAdmins($userId);
 
     /**
-     * @param $userId int
+     * @param $userId     int
      * @param $roleLevels int|null|array|int[]
+     *
      * @return array|UserGroup[]
      */
     public function LoadGroups($userId, $roleLevels = null);
@@ -196,6 +202,7 @@ interface IUserViewRepository
     /**
      * @param string $emailAddress
      * @param string $userName
+     *
      * @return int|null
      */
     public function UserExists($emailAddress, $userName);
@@ -205,22 +212,27 @@ interface IAccountActivationRepository
 {
     /**
      * @abstract
-     * @param User $user
+     *
      * @param string $activationCode
+     *
      * @return void
      */
     public function AddActivation(User $user, $activationCode);
 
     /**
      * @abstract
+     *
      * @param string $activationCode
+     *
      * @return int|null
      */
     public function FindUserIdByCode($activationCode);
 
     /**
      * @abstract
+     *
      * @param string $activationCode
+     *
      * @return void
      */
     public function DeleteActivation($activationCode);
@@ -267,13 +279,12 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
     }
 
     /**
-     * @param $userId
-     * @return null|UserDto
+     * @return UserDto|null
      */
     public function GetById($userId)
     {
-        if ($this->_cache->Exists($userId . 'dto')) {
-            return $this->_cache->Get($userId . 'dto');
+        if ($this->_cache->Exists($userId.'dto')) {
+            return $this->_cache->Get($userId.'dto');
         }
         $command = new GetUserByIdCommand($userId);
 
@@ -291,9 +302,10 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
                 $row[ColumnNames::CREDIT_COUNT]
             );
 
-            $this->_cache->Add($userId . 'dto', $user);
+            $this->_cache->Add($userId.'dto', $user);
 
             $reader->Free();
+
             return $user;
         }
 
@@ -308,20 +320,22 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
         $sortField = null,
         $sortDirection = null,
         $filter = null,
-        $accountStatus = AccountStatus::ALL
+        $accountStatus = AccountStatus::ALL,
     ) {
         $command = new GetAllUsersByStatusCommand($accountStatus);
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['UserItemView', 'Create'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize, $sortField, $sortDirection);
     }
 
     /**
      * @param $command SqlCommand
+     *
      * @return User
      */
     private function Load($command)
@@ -355,21 +369,25 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
             $this->_cache->Add($userId, $user);
 
             $reader->Free();
+
             return $user;
         } else {
             $reader->Free();
+
             return User::Null();
         }
     }
 
     /**
      * @param int $userId
+     *
      * @return User
      */
     public function LoadById($userId)
     {
         if (!$this->_cache->Exists($userId)) {
             $command = new GetUserByIdCommand($userId);
+
             return $this->Load($command);
         } else {
             return $this->_cache->Get($userId);
@@ -378,26 +396,29 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
     /**
      * @param string $publicId
+     *
      * @return User
      */
     public function LoadByPublicId($publicId)
     {
         $command = new GetUserByPublicIdCommand($publicId);
+
         return $this->Load($command);
     }
 
     /**
      * @param string $userName
+     *
      * @return User
      */
     public function LoadByUsername($userName)
     {
         $command = new LoginCommand(strtolower($userName));
+
         return $this->Load($command);
     }
 
     /**
-     * @param User $user
      * @return int
      */
     public function Add(User $user)
@@ -460,7 +481,6 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
     }
 
     /**
-     * @param User $user
      * @return void
      */
     public function Update(User $user)
@@ -576,6 +596,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
     /**
      * @param int $resourceId
+     *
      * @return array|UserDto[]
      */
     public function GetResourceAdmins($resourceId)
@@ -629,6 +650,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
     /**
      * @param int $userId
+     *
      * @return array|UserDto[]
      */
     public function GetGroupAdmins($userId)
@@ -662,7 +684,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
         $reader = ServiceLocator::GetDatabase()->Query($command);
 
         while ($row = $reader->GetRow()) {
-            if ($row[ColumnNames::PERMISSION_TYPE] == ResourcePermissionType::Full) {
+            if (ResourcePermissionType::Full == $row[ColumnNames::PERMISSION_TYPE]) {
                 $allowedResourceIds['full'][] = $row[ColumnNames::RESOURCE_ID];
             } else {
                 $allowedResourceIds['view'][] = $row[ColumnNames::RESOURCE_ID];
@@ -670,6 +692,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
         }
 
         $reader->Free();
+
         return $allowedResourceIds;
     }
 
@@ -720,6 +743,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
     /**
      * @param $emailAddress string
+     *
      * @return User
      */
     public function FindByEmail($emailAddress)
@@ -729,16 +753,18 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return $this->LoadById($row[ColumnNames::USER_ID]);
         }
 
         $reader->Free();
+
         return null;
     }
 
     /**
      * @param $userId int
-     * @param $user User
+     * @param $user   User
      */
     private function LoadAttributes($userId, $user)
     {
@@ -762,6 +788,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
     /**
      * @param string $activationCode
+     *
      * @return int|null
      */
     public function FindUserIdByCode($activationCode)
@@ -769,6 +796,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
         $reader = ServiceLocator::GetDatabase()->Query(new GetUserIdByActivationCodeCommand($activationCode));
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return $row[ColumnNames::USER_ID];
         }
 
@@ -779,6 +807,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
     /**
      * @param string $activationCode
+     *
      * @return void
      */
     public function DeleteActivation($activationCode)
@@ -788,6 +817,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
     /**
      * @param int $userId
+     *
      * @return array|UserGroup[]
      */
     private function LoadOwnedGroups($userId)
@@ -799,6 +829,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
         }
 
         $reader->Free();
+
         return $groups;
     }
 
@@ -808,6 +839,7 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return $row[ColumnNames::USER_ID];
         }
 
@@ -822,10 +854,12 @@ class UserRepository implements IUserRepository, IAccountActivationRepository
 
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return $row['count'];
         }
 
         $reader->Free();
+
         return 0;
     }
 }
@@ -850,7 +884,7 @@ class UserDto
         $timezone = null,
         $languageCode = null,
         $preferences = null,
-        $currentCreditCount = null
+        $currentCreditCount = null,
     ) {
         $this->UserId = $userId;
         $this->FirstName = $firstName;
@@ -859,7 +893,7 @@ class UserDto
         $this->Timezone = $timezone;
         $this->LanguageCode = $languageCode;
         $name = new FullName($this->FirstName(), $this->LastName());
-        $this->FullName = $name->__toString() . " ({$this->EmailAddress})";
+        $this->FullName = $name->__toString()." ({$this->EmailAddress})";
         $this->Preferences = UserPreferences::Parse($preferences)->All();
         $this->CurrentCreditCount = $currentCreditCount;
     }
@@ -971,7 +1005,7 @@ class UserItemView
 
     public function IsActive()
     {
-        return $this->StatusId == AccountStatus::ACTIVE;
+        return AccountStatus::ACTIVE == $this->StatusId;
     }
 
     public static function Create($row)
@@ -1019,7 +1053,8 @@ class UserItemView
 
     /**
      * @param $attributeId int
-     * @return null|string
+     *
+     * @return string|null
      */
     public function GetAttributeValue($attributeId)
     {

@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/AccessoryAggregation.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/AccessoryAggregation.php';
 
 class AvailableAccessoriesPresenter
 {
@@ -34,7 +34,7 @@ class AvailableAccessoriesPresenter
     {
         $accessories = $this->accessoryRepository->LoadAll();
 
-        $duration = DateRange::Create($this->page->GetStartDate() . ' ' . $this->page->GetStartTime(), $this->page->GetEndDate() . ' ' . $this->page->GetEndTime(), $this->userSession->Timezone);
+        $duration = DateRange::Create($this->page->GetStartDate().' '.$this->page->GetStartTime(), $this->page->GetEndDate().' '.$this->page->GetEndTime(), $this->userSession->Timezone);
         $accessoryReservations = $this->reservationViewRepository->GetAccessoriesWithin($duration);
 
         $aggregation = new AccessoryAggregation($accessories, $duration);
@@ -51,7 +51,7 @@ class AvailableAccessoriesPresenter
             $id = $accessory->GetId();
 
             $available = $accessory->GetQuantityAvailable();
-            if ($available != null) {
+            if (null != $available) {
                 $reserved = $aggregation->GetQuantity($id);
                 $realAvailability[] = new AccessoryAvailability($id, max(0, $available - $reserved));
             } else {

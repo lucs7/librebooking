@@ -1,14 +1,16 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Reservation/ExistingReservationPage.php');
+require_once ROOT_DIR.'Pages/Reservation/ExistingReservationPage.php';
 
 class FakeExistingReservationPage extends FakePageBase implements IExistingReservationPage
 {
     public $_CheckInRequired = false;
     public $_CheckOutRequired = false;
-    public $_AutoReleaseMinutes = null;
+    public $_AutoReleaseMinutes;
 
-    public function BindViewableResourceReservations($resourceIds) { }
+    public function BindViewableResourceReservations($resourceIds)
+    {
+    }
 
     public function GetReferenceNumber()
     {

@@ -1,23 +1,25 @@
 <?php
 
 /**
- *   Example for proxied service with session support and POST support
+ *   Example for proxied service with session support and POST support.
  *
  * PHP Version 5
  *
  * @file     example_service_POST.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Joachim Fritschi <jfritschi@freenet.de>
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 // Load the settings from the central config file
 require_once 'config.php';
 // Load the CAS lib
-require_once $phpcas_path . '/CAS.php';
+require_once $phpcas_path.'/CAS.php';
 
 // Enable debugging
 phpCAS::setDebug();
@@ -66,39 +68,37 @@ phpCAS::allowProxyChain(new CAS_ProxyChain([$pgtUrlRegexp]));
 // THIS SETTING IS HOWEVER NOT RECOMMENDED FOR PRODUCTION AND HAS SECURITY
 // IMPLICATIONS: YOU ARE ALLOWING ANY SERVICE TO ACT ON BEHALF OF A USER
 // ON THIS SERVICE.
-//phpCAS::allowProxyChain(new CAS_ProxyChain_Any);
+// phpCAS::allowProxyChain(new CAS_ProxyChain_Any);
 
 // force CAS authentication
 phpCAS::forceAuthentication();
 
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+if ('POST' != $_SERVER['REQUEST_METHOD']) {
     header('HTTP/1.1 400 Bad Request');
-    print
-        "<h1>I only respond to POST requests. This is a "
-        . $_SERVER['REQUEST_METHOD'] . " request.</h1>";
+    echo '<h1>I only respond to POST requests. This is a '
+        .$_SERVER['REQUEST_METHOD'].' request.</h1>';
     exit;
 }
 if (empty($_POST['favorite_color'])) {
     header('HTTP/1.1 400 Bad Request');
-    print '<h1>You must post a <strong>favorite_color</strong>.</h1>';
+    echo '<h1>You must post a <strong>favorite_color</strong>.</h1>';
     exit;
 }
 
-print '<h1>I am a service that responds to POST requests.</h1>';
+echo '<h1>I am a service that responds to POST requests.</h1>';
 
 // at this step, the user has been authenticated by the CAS server
 // and the user's login name can be read with phpCAS::getUser().
 require 'script_info.php';
 
 // for this test, simply print that the authentication was successfull
-echo '<p>The user\'s login is <b>' . phpCAS::getUser() . '</b>.</p>';
+echo '<p>The user\'s login is <b>'.phpCAS::getUser().'</b>.</p>';
 
-print
-    '<h1>Your favorite color is ' . htmlentities($_POST['favorite_color'])
-    . '</h1>';
+echo '<h1>Your favorite color is '.htmlentities($_POST['favorite_color'])
+    .'</h1>';
 
 // increment the number of requests of the session and print it
 if (!isset($_SESSION['n'])) {
     $_SESSION['n'] = 0;
 }
-echo '<p>request #' . (++$_SESSION['n']) . '</p>';
+echo '<p>request #'.(++$_SESSION['n']).'</p>';

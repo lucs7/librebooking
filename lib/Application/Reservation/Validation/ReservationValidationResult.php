@@ -11,23 +11,23 @@ class ReservationValidationResult implements IReservationValidationResult
     private $_canJoinWaitList;
 
     /**
-     * @param $canBeSaved bool
-     * @param $errors string[]
-     * @param $warnings string[]
-     * @param bool $canBeRetried
+     * @param                                   $canBeSaved      bool
+     * @param                                   $errors          string[]
+     * @param                                   $warnings        string[]
+     * @param bool                              $canBeRetried
      * @param array|ReservationRetryParameter[] $retryParams
-     * @param array|string[] $retryMessages
-     * @param bool $canJoinWaitList
+     * @param array|string[]                    $retryMessages
+     * @param bool                              $canJoinWaitList
      */
     public function __construct($canBeSaved = true, $errors = null, $warnings = null, $canBeRetried = false, $retryParams = [], $retryMessages = [], $canJoinWaitList = false)
     {
         $this->_canBeSaved = $canBeSaved;
-        $this->_errors = $errors == null ? [] : $errors;
-        $this->_warnings = $warnings == null ? [] : $warnings;
+        $this->_errors = null == $errors ? [] : $errors;
+        $this->_warnings = null == $warnings ? [] : $warnings;
         $this->_canBeRetried = $canBeRetried;
-        $this->_retryParams = $retryParams == null ? [] : $retryParams;
-        $this->_retryMessages = $retryMessages == null ? [] : $retryMessages;
-        $this->_canJoinWaitList = $canJoinWaitList == null ? false : $canJoinWaitList;
+        $this->_retryParams = null == $retryParams ? [] : $retryParams;
+        $this->_retryMessages = null == $retryMessages ? [] : $retryMessages;
+        $this->_canJoinWaitList = null == $canJoinWaitList ? false : $canJoinWaitList;
     }
 
     public function CanBeSaved()

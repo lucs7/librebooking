@@ -1,29 +1,32 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Requests/Resource/ResourceRequest.php');
-require_once(ROOT_DIR . 'WebServices/Validators/ResourceRequestValidator.php');
-require_once(ROOT_DIR . 'Domain/Access/ResourceRepository.php');
+require_once ROOT_DIR.'WebServices/Requests/Resource/ResourceRequest.php';
+require_once ROOT_DIR.'WebServices/Validators/ResourceRequestValidator.php';
+require_once ROOT_DIR.'Domain/Access/ResourceRepository.php';
 
 interface IResourceSaveController
 {
     /**
-     * @param ResourceRequest $request
+     * @param ResourceRequest       $request
      * @param WebServiceUserSession $session
+     *
      * @return ResourceControllerResult
      */
     public function Create($request, $session);
 
     /**
-     * @param int $resourceId
-     * @param ResourceRequest $request
+     * @param int                   $resourceId
+     * @param ResourceRequest       $request
      * @param WebServiceUserSession $session
+     *
      * @return ResourceControllerResult
      */
     public function Update($resourceId, $request, $session);
 
     /**
-     * @param int $resourceId
+     * @param int                   $resourceId
      * @param WebServiceUserSession $session
+     *
      * @return ResourceControllerResult
      */
     public function Delete($resourceId, $session);
@@ -77,8 +80,9 @@ class ResourceSaveController implements IResourceSaveController
     }
 
     /**
-     * @param int $resourceId
+     * @param int                   $resourceId
      * @param WebServiceUserSession $session
+     *
      * @return ResourceControllerResult
      */
     public function Delete($resourceId, $session)
@@ -95,7 +99,8 @@ class ResourceSaveController implements IResourceSaveController
 
     /**
      * @param ResourceRequest $request
-     * @param int $resourceId
+     * @param int             $resourceId
+     *
      * @return BookableResource
      */
     private function BuildResource($request, $resourceId)

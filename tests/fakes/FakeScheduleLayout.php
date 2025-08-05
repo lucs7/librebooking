@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class FakeScheduleLayout implements IScheduleLayout
 {
@@ -46,8 +46,8 @@ class FakeScheduleLayout implements IScheduleLayout
     }
 
     /**
-     * @param Date $layoutDate
      * @param bool $hideBlockedPeriods
+     *
      * @return SchedulePeriod[]|array of SchedulePeriod objects
      */
     public function GetLayout(Date $layoutDate, $hideBlockedPeriods = false)
@@ -60,7 +60,6 @@ class FakeScheduleLayout implements IScheduleLayout
     }
 
     /**
-     * @param Date $date
      * @param SchedulePeriod[] $layout
      */
     public function _AddDailyLayout(Date $date, $layout)
@@ -69,7 +68,6 @@ class FakeScheduleLayout implements IScheduleLayout
     }
 
     /**
-     * @param Date $date
      * @return SchedulePeriod|null period which occurs at this datetime. Includes start time, excludes end time. null if no match is found
      */
     public function GetPeriod(Date $date): ?SchedulePeriod
@@ -79,9 +77,8 @@ class FakeScheduleLayout implements IScheduleLayout
     }
 
     /**
-     * @param Date $startDate
-     * @param Date $endDate
      * @return SlotCount
+     *
      * @internal param $scheduleId
      */
     public function GetSlotCount(Date $startDate, Date $endDate)
@@ -118,40 +115,41 @@ class FakeScheduleLayout implements IScheduleLayout
     }
 
     /**
-     * Appends a period to the schedule layout
+     * Appends a period to the schedule layout.
      *
-     * @param Time $startTime starting time of the schedule in specified timezone
-     * @param Time $endTime ending time of the schedule in specified timezone
-     * @param string $label optional label for the period
+     * @param Time               $startTime starting time of the schedule in specified timezone
+     * @param Time               $endTime   ending time of the schedule in specified timezone
+     * @param string             $label     optional label for the period
      * @param DayOfWeek|int|null $dayOfWeek
      */
     public function AppendPeriod(Time $startTime, Time $endTime, $label = null, $dayOfWeek = null)
     {
-        throw new \LogicException('AppendPeriod not implemented in FakeScheduleLayout');
+        throw new LogicException('AppendPeriod not implemented in FakeScheduleLayout');
     }
 
     /**
-     * Appends a period that is not reservable to the schedule layout
+     * Appends a period that is not reservable to the schedule layout.
      *
-     * @param Time $startTime starting time of the schedule in specified timezone
-     * @param Time $endTime ending time of the schedule in specified timezone
-     * @param string $label optional label for the period
+     * @param Time               $startTime starting time of the schedule in specified timezone
+     * @param Time               $endTime   ending time of the schedule in specified timezone
+     * @param string             $label     optional label for the period
      * @param DayOfWeek|int|null $dayOfWeek
+     *
      * @return void
      */
     public function AppendBlockedPeriod(Time $startTime, Time $endTime, $label = null, $dayOfWeek = null)
     {
-        throw new \LogicException('AppendBlockedPeriod not implemented in FakeScheduleLayout');
+        throw new LogicException('AppendBlockedPeriod not implemented in FakeScheduleLayout');
     }
 
     /**
-     *
      * @param DayOfWeek|int|null $dayOfWeek
+     *
      * @return LayoutPeriod[] array of LayoutPeriod
      */
     public function GetSlots($dayOfWeek = null)
     {
-        throw new \LogicException('GetSlots not implemented in FakeScheduleLayout');
+        throw new LogicException('GetSlots not implemented in FakeScheduleLayout');
     }
 
     /**
@@ -159,6 +157,6 @@ class FakeScheduleLayout implements IScheduleLayout
      */
     public function GetType()
     {
-        throw new \LogicException('GetType not implemented in FakeScheduleLayout');
+        throw new LogicException('GetType not implemented in FakeScheduleLayout');
     }
 }

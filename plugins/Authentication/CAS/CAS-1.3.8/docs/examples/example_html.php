@@ -1,23 +1,25 @@
 <?php
 
 /**
- * Example that changes html of phpcas messages
+ * Example that changes html of phpcas messages.
  *
  * PHP Version 5
  *
  * @file     example_html.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Joachim Fritschi <jfritschi@freenet.de>
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 // Load the settings from the central config file
 require_once 'config.php';
 // Load the CAS lib
-require_once $phpcas_path . '/CAS.php';
+require_once $phpcas_path.'/CAS.php';
 
 // Enable debugging
 phpCAS::setDebug();
@@ -69,7 +71,7 @@ phpCAS::forceAuthentication();
   </head>
   <body>
     <h1>Successfull Authentication!</h1>
-    <?php require 'script_info.php' ?>
+    <?php require 'script_info.php'; ?>
     <p>the user's login is <b><?php echo phpCAS::getUser(); ?></b>.</p>
     <p>phpCAS version is <b><?php echo phpCAS::getVersion(); ?></b>.</p>
   </body>

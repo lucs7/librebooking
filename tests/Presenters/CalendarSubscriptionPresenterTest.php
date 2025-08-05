@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Export/CalendarSubscriptionPage.php');
-require_once(ROOT_DIR . 'Presenters/CalendarSubscriptionPresenter.php');
+require_once ROOT_DIR.'Pages/Export/CalendarSubscriptionPage.php';
+require_once ROOT_DIR.'Presenters/CalendarSubscriptionPresenter.php';
 
 class CalendarSubscriptionPresenterTest extends TestBase
 {
@@ -40,7 +40,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         parent::setup();
 
         $this->repo = $this->createMock('IReservationViewRepository');
-        $this->page = new FakeCalendarSubscriptionPage();//$this->createMock('ICalendarSubscriptionPage');
+        $this->page = new FakeCalendarSubscriptionPage(); // $this->createMock('ICalendarSubscriptionPage');
         $this->validator = $this->createMock('ICalendarExportValidator');
         $this->service = $this->createMock('ICalendarSubscriptionService');
         $this->privacyFilter = new FakePrivacyFilter();
@@ -146,8 +146,8 @@ class CalendarSubscriptionPresenterTest extends TestBase
     {
         $publicId = '1';
         $reservationResult = [
-                new TestReservationItemView(1, Date::Now(), Date::Now(), 1),
-                new TestReservationItemView(2, Date::Now(), Date::Now(), 2),
+            new TestReservationItemView(1, Date::Now(), Date::Now(), 1),
+            new TestReservationItemView(2, Date::Now(), Date::Now(), 2),
         ];
 
         $resourceIds = [2];
@@ -186,7 +186,7 @@ class FakeCalendarSubscriptionPage implements ICalendarSubscriptionPage
 
     public $UserId;
 
-    public $SubscriptionKey = "123";
+    public $SubscriptionKey = '123';
     public $PastDays;
     public $FutureDays;
 

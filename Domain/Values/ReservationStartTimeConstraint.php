@@ -9,31 +9,31 @@ class ReservationStartTimeConstraint
 
     /**
      * @static
-     * @param string $startTimeConstraint
+     *
      * @return bool
      */
-    public static function IsCurrent(string|null $startTimeConstraint)
+    public static function IsCurrent(?string $startTimeConstraint)
     {
-        return strtolower($startTimeConstraint ?? "") == self::CURRENT;
+        return self::CURRENT == strtolower($startTimeConstraint ?? '');
     }
 
     /**
      * @static
-     * @param string $startTimeConstraint
+     *
      * @return bool
      */
-    public static function IsNone(string|null $startTimeConstraint)
+    public static function IsNone(?string $startTimeConstraint)
     {
-        return strtolower($startTimeConstraint ?? "") == self::NONE;
+        return self::NONE == strtolower($startTimeConstraint ?? '');
     }
 
     /**
      * @static
-     * @param string $startTimeConstraint
+     *
      * @return bool
      */
-    public static function IsFuture(string|null $startTimeConstraint)
+    public static function IsFuture(?string $startTimeConstraint)
     {
-        return strtolower($startTimeConstraint ?? "") == self::FUTURE;
+        return self::FUTURE == strtolower($startTimeConstraint ?? '');
     }
 }

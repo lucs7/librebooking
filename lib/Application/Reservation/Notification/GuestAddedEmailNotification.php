@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/GuestAddedEmail.php');
+require_once ROOT_DIR.'lib/Email/Messages/GuestAddedEmail.php';
 
 class GuestAddedEmailNotification implements IReservationNotification
 {

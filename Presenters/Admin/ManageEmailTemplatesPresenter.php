@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageEmailTemplatesPage.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/ManageEmailTemplatesPage.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 class EmailTemplatesActions
 {
@@ -17,7 +17,7 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
     private $page;
 
     /**
-     * @var \Booked\FileSystem
+     * @var Booked\FileSystem
      */
     private $filesystem;
 
@@ -39,12 +39,12 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
     }
 
     /**
-     * @param $language
      * @return string
      */
     private function GetTemplatePath($language)
     {
         $path = Paths::EmailTemplates($language);
+
         return $path;
     }
 
@@ -57,14 +57,15 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
         if (empty($language)) {
             $language = Resources::GetInstance()->CurrentLanguage;
         }
+
         return $language;
     }
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest == 'template') {
+        if ('template' == $dataRequest) {
             $this->LoadTemplate();
-        } elseif ($dataRequest == 'originalTemplate') {
+        } elseif ('originalTemplate' == $dataRequest) {
             $this->LoadOriginalTemplate();
         }
     }
@@ -77,20 +78,20 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
     public function LoadTemplate()
     {
         $templateName = strtolower($this->page->GetTemplateName());
-        if (!BookedStringHelper::EndsWith($templateName, ".tpl")
-            || BookedStringHelper::Contains($templateName, "..")
-            || BookedStringHelper::Contains($templateName, "\\")
-            || BookedStringHelper::Contains($templateName, "/")) {
-            return "";
+        if (!BookedStringHelper::EndsWith($templateName, '.tpl')
+            || BookedStringHelper::Contains($templateName, '..')
+            || BookedStringHelper::Contains($templateName, '\\')
+            || BookedStringHelper::Contains($templateName, '/')) {
+            return '';
         }
-        $templatePath = Paths::EmailTemplates($this->GetSelectedLanguage()) . $this->page->GetTemplateName();
+        $templatePath = Paths::EmailTemplates($this->GetSelectedLanguage()).$this->page->GetTemplateName();
         $customTemplatePath = str_replace('.tpl', '-custom.tpl', $templatePath);
         if ($this->filesystem->Exists($customTemplatePath)) {
             $contents = $this->filesystem->GetFileContents($customTemplatePath);
         } elseif ($this->filesystem->Exists($templatePath)) {
             $contents = $this->filesystem->GetFileContents($templatePath);
         } else {
-            $defaultTemplatePath = Paths::EmailTemplates('en_us') . $this->page->GetTemplateName();
+            $defaultTemplatePath = Paths::EmailTemplates('en_us').$this->page->GetTemplateName();
             $contents = $this->filesystem->GetFileContents($defaultTemplatePath);
         }
         $this->page->BindTemplate($this->RemoveComments($contents));
@@ -99,13 +100,13 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
     public function LoadOriginalTemplate()
     {
         $templateName = strtolower($this->page->GetTemplateName());
-        if (!BookedStringHelper::EndsWith($templateName, ".tpl")
-            || BookedStringHelper::Contains($templateName, "..")
-            || BookedStringHelper::Contains($templateName, "\\")
-            || BookedStringHelper::Contains($templateName, "/")) {
-            return "";
+        if (!BookedStringHelper::EndsWith($templateName, '.tpl')
+            || BookedStringHelper::Contains($templateName, '..')
+            || BookedStringHelper::Contains($templateName, '\\')
+            || BookedStringHelper::Contains($templateName, '/')) {
+            return '';
         }
-        $templatePath = Paths::EmailTemplates($this->GetSelectedLanguage()) . $this->page->GetTemplateName();
+        $templatePath = Paths::EmailTemplates($this->GetSelectedLanguage()).$this->page->GetTemplateName();
         $contents = $this->filesystem->GetFileContents($templatePath);
         $this->page->BindTemplate($this->RemoveComments($contents));
     }
@@ -162,6 +163,7 @@ class EmailTemplateFile
     {
         $parts = explode('/', $fullTemplatePath);
         $fileName = $parts[count($parts) - 1];
+
         return new EmailTemplateFile(str_replace('.tpl', '', $fileName), $fileName);
     }
 
@@ -170,9 +172,9 @@ class EmailTemplateFile
         $templateList = [];
         foreach ($templates as $template) {
             if (
-                BookedStringHelper::Contains($template, 'help.tpl') ||
-                BookedStringHelper::Contains($template, 'help-admin.tpl') ||
-                BookedStringHelper::Contains($template, '-custom.tpl')
+                BookedStringHelper::Contains($template, 'help.tpl')
+                || BookedStringHelper::Contains($template, 'help-admin.tpl')
+                || BookedStringHelper::Contains($template, '-custom.tpl')
             ) {
                 continue;
             }

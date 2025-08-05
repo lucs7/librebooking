@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ResourceMinimumDurationRuleTest extends TestBase
 {
@@ -17,11 +17,11 @@ class ResourceMinimumDurationRuleTest extends TestBase
 
     public function testNotValidIfTheReservationIsShorterThanTheMinDurationForAnyResource()
     {
-        $resource1 = new FakeBookableResource(1, "1");
+        $resource1 = new FakeBookableResource(1, '1');
         $resource1->SetMinLength(null);
 
-        $resource2 = new FakeBookableResource(2, "2");
-        $resource2->SetMinLength("25h00m");
+        $resource2 = new FakeBookableResource(2, '2');
+        $resource2->SetMinLength('25h00m');
 
         $reservation = new TestReservationSeries();
 
@@ -38,8 +38,8 @@ class ResourceMinimumDurationRuleTest extends TestBase
 
     public function testOkIfReservationIsLongerThanTheMinDuration()
     {
-        $resource = new FakeBookableResource(1, "2");
-        $resource->SetMinLength("23h00m");
+        $resource = new FakeBookableResource(1, '2');
+        $resource->SetMinLength('23h00m');
 
         $reservation = new TestReservationSeries();
         $reservation->WithResource($resource);

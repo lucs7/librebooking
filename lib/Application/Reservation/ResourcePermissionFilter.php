@@ -3,12 +3,12 @@
 class ResourcePermissionFilter implements IResourceFilter
 {
     /**
-     * @var IPermissionService $permissionService
+     * @var IPermissionService
      */
     private $permissionService;
 
     /**
-     * @var UserSession $user
+     * @var UserSession
      */
     private $user;
 

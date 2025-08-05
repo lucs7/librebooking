@@ -10,6 +10,7 @@ class TestDateRange extends DateRange
     public static function CreateWithDays($days)
     {
         $now = Date::Now();
+
         return new DateRange($now->AddDays($days), $now->AddDays($days));
     }
 }

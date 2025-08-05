@@ -23,11 +23,12 @@ class ErrorMessages
 
     /**
      * @static
+     *
      * @return ErrorMessages
      */
     public static function Instance()
     {
-        if (self::$_instance == null) {
+        if (null == self::$_instance) {
             self::$_instance = new ErrorMessages();
         }
 

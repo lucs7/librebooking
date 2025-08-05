@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationCreatedEmailAdmin.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationUpdatedEmailAdmin.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationDeletedEmailAdmin.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationRequiresApprovalEmailAdmin.php');
+require_once ROOT_DIR.'lib/Email/Messages/ReservationCreatedEmailAdmin.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationUpdatedEmailAdmin.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationDeletedEmailAdmin.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationRequiresApprovalEmailAdmin.php';
 
 abstract class AdminEmailNotification implements IReservationNotification
 {
@@ -22,11 +22,6 @@ abstract class AdminEmailNotification implements IReservationNotification
      */
     protected $attributeRepository;
 
-    /**
-     * @param IUserRepository $userRepo
-     * @param IUserViewRepository $userViewRepo
-     * @param IAttributeRepository $attributeRepository
-     */
     public function __construct(IUserRepository $userRepo, IUserViewRepository $userViewRepo, IAttributeRepository $attributeRepository)
     {
         $this->userRepo = $userRepo;
@@ -36,6 +31,7 @@ abstract class AdminEmailNotification implements IReservationNotification
 
     /**
      * @param ReservationSeries $reservationSeries
+     *
      * @return void
      */
     public function Notify($reservationSeries)
@@ -56,7 +52,7 @@ abstract class AdminEmailNotification implements IReservationNotification
 
         $admins = array_merge($resourceAdmins, $applicationAdmins, $groupAdmins);
 
-        if (count($admins) == 0) {
+        if (0 == count($admins)) {
             // skip if there is nobody to send to
             return;
         }
@@ -80,28 +76,26 @@ abstract class AdminEmailNotification implements IReservationNotification
     }
 
     /**
-     * @param UserDto $admin
-     * @param User $owner
+     * @param UserDto           $admin
+     * @param User              $owner
      * @param ReservationSeries $reservationSeries
-     * @param BookableResource $resource
+     * @param BookableResource  $resource
+     *
      * @return IEmailMessage
      */
     abstract protected function GetMessage($admin, $owner, $reservationSeries, $resource);
 
     /**
-     * @param ReservationSeries $reservationSeries
      * @return bool
      */
     abstract protected function SendForResourceAdmins(ReservationSeries $reservationSeries);
 
     /**
-     * @param ReservationSeries $reservationSeries
      * @return bool
      */
     abstract protected function SendForApplicationAdmins(ReservationSeries $reservationSeries);
 
     /**
-     * @param ReservationSeries $reservationSeries
      * @return bool
      */
     abstract protected function SendForGroupAdmins(ReservationSeries $reservationSeries);
@@ -158,7 +152,6 @@ class AdminEmailUpdatedNotification extends AdminEmailNotification
         );
     }
 
-
     protected function SendForApplicationAdmins(ReservationSeries $reservationSeries)
     {
         return Configuration::Instance()->GetSectionKey(
@@ -194,7 +187,6 @@ class AdminEmailDeletedNotification extends AdminEmailNotification
         );
     }
 
-
     protected function SendForApplicationAdmins(ReservationSeries $reservationSeries)
     {
         return Configuration::Instance()->GetSectionKey(
@@ -223,8 +215,8 @@ class AdminEmailApprovalNotification extends AdminEmailNotification
 
     protected function SendForResourceAdmins(ReservationSeries $reservationSeries)
     {
-        return $reservationSeries->RequiresApproval() &&
-        Configuration::Instance()->GetSectionKey(
+        return $reservationSeries->RequiresApproval()
+        && Configuration::Instance()->GetSectionKey(
             ConfigSection::RESERVATION_NOTIFY,
             ConfigKeys::NOTIFY_APPROVAL_RESOURCE_ADMINS,
             new BooleanConverter()
@@ -233,8 +225,8 @@ class AdminEmailApprovalNotification extends AdminEmailNotification
 
     protected function SendForApplicationAdmins(ReservationSeries $reservationSeries)
     {
-        return $reservationSeries->RequiresApproval() &&
-        Configuration::Instance()->GetSectionKey(
+        return $reservationSeries->RequiresApproval()
+        && Configuration::Instance()->GetSectionKey(
             ConfigSection::RESERVATION_NOTIFY,
             ConfigKeys::NOTIFY_APPROVAL_APPLICATION_ADMINS,
             new BooleanConverter()
@@ -243,8 +235,8 @@ class AdminEmailApprovalNotification extends AdminEmailNotification
 
     protected function SendForGroupAdmins(ReservationSeries $reservationSeries)
     {
-        return $reservationSeries->RequiresApproval() &&
-        Configuration::Instance()->GetSectionKey(
+        return $reservationSeries->RequiresApproval()
+        && Configuration::Instance()->GetSectionKey(
             ConfigSection::RESERVATION_NOTIFY,
             ConfigKeys::NOTIFY_APPROVAL_GROUP_ADMINS,
             new BooleanConverter()

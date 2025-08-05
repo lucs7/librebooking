@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageAccessoriesPage.php');
+require_once ROOT_DIR.'Pages/Admin/ManageAccessoriesPage.php';
 
 class ManageAccessoriesPresenterTest extends TestBase
 {

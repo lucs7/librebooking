@@ -37,8 +37,8 @@ class Group
     private $roleIds = [];
 
     /**
-     * @param $id int
-     * @param $name string
+     * @param $id        int
+     * @param $name      string
      * @param $isDefault int
      */
     public function __construct($id, $name, $isDefault = 0)
@@ -82,6 +82,7 @@ class Group
 
     /**
      * @param $groupName string
+     *
      * @return void
      */
     public function Rename($groupName)
@@ -99,6 +100,7 @@ class Group
 
     /**
      * @param $userId int
+     *
      * @return void
      */
     public function AddUser($userId)
@@ -110,6 +112,7 @@ class Group
 
     /**
      * @param $userId int
+     *
      * @return void
      */
     public function RemoveUser($userId)
@@ -121,6 +124,7 @@ class Group
 
     /**
      * @param $userIds int[]|array
+     *
      * @return void
      */
     public function ChangeUsers($userIds)
@@ -139,6 +143,7 @@ class Group
 
     /**
      * @internal
+     *
      * @return int[] array of userIds
      */
     public function AddedUsers()
@@ -148,6 +153,7 @@ class Group
 
     /**
      * @internal
+     *
      * @return int[] array of userIds
      */
     public function RemovedUsers()
@@ -157,6 +163,7 @@ class Group
 
     /**
      * @internal
+     *
      * @return array|int[]
      */
     public function AddedRoles()
@@ -166,6 +173,7 @@ class Group
 
     /**
      * @internal
+     *
      * @return array|int[]
      */
     public function RemovedRoles()
@@ -175,7 +183,7 @@ class Group
 
     /**
      * @internal
-     * @param $groupId
+     *
      * @return void
      */
     public function WithId($groupId)
@@ -185,7 +193,9 @@ class Group
 
     /**
      * @internal
+     *
      * @param $userId int
+     *
      * @return void
      */
     public function WithUser($userId)
@@ -195,7 +205,9 @@ class Group
 
     /**
      * @internal
+     *
      * @param $groupId int
+     *
      * @return void
      */
     public function WithGroupAdmin($groupId)
@@ -204,7 +216,6 @@ class Group
     }
 
     /**
-     * @param $userId
      * @return bool
      */
     public function HasMember($userId)
@@ -222,6 +233,7 @@ class Group
 
     /**
      * @param int $allowedResourceId
+     *
      * @return void
      */
     public function WithFullPermission($allowedResourceId)
@@ -232,6 +244,7 @@ class Group
 
     /**
      * @param int $viewableResourceId
+     *
      * @return void
      */
     public function WithViewablePermission($viewableResourceId)
@@ -242,6 +255,7 @@ class Group
 
     /**
      * @param $role int
+     *
      * @return void
      */
     public function WithRole($role)
@@ -252,6 +266,7 @@ class Group
 
     /**
      * @param int[] $viewableResourceIds
+     *
      * @return void
      */
     public function ChangeViewPermissions($viewableResourceIds = [])
@@ -271,6 +286,7 @@ class Group
 
     /**
      * @param int[] $allowedResourceIds
+     *
      * @return void
      */
     public function ChangeAllowedPermissions($allowedResourceIds = [])
@@ -290,6 +306,7 @@ class Group
 
     /**
      * @internal
+     *
      * @return int[]|array of resourceIds
      */
     public function RemovedPermissions()
@@ -299,6 +316,7 @@ class Group
 
     /**
      * @internal
+     *
      * @return int[]|array of resourceIds
      */
     public function AddedPermissions()
@@ -316,6 +334,7 @@ class Group
 
     /**
      * @internal
+     *
      * @return int[]|array of resourceIds
      */
     public function AddedViewPermissions()
@@ -341,6 +360,7 @@ class Group
 
     /**
      * @param $roleIds int[]|array
+     *
      * @return void
      */
     public function ChangeRoles($roleIds)
@@ -360,6 +380,7 @@ class Group
 
     /**
      * @param $groupId int
+     *
      * @return void
      */
     public function ChangeAdmin($groupId)

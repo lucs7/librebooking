@@ -44,6 +44,7 @@ interface IEmailMessage
 
     /**
      * @abstract
+     *
      * @param string $contents
      * @param string $fileName
      */
@@ -51,18 +52,21 @@ interface IEmailMessage
 
     /**
      * @abstract
+     *
      * @return bool
      */
     public function HasStringAttachment();
 
     /**
      * @abstract
+     *
      * @return string|null
      */
     public function AttachmentContents();
 
     /**
      * @abstract
+     *
      * @return string|null
      */
     public function AttachmentFileName();

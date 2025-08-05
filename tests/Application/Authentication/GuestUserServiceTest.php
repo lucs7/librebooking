@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/GuestUserService.php');
+require_once ROOT_DIR.'lib/Application/Authentication/GuestUserService.php';
 
 class GuestUserServiceTest extends TestBase
 {

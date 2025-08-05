@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class FakeScheduleRepository implements IScheduleRepository
 {
@@ -48,27 +48,27 @@ class FakeScheduleRepository implements IScheduleRepository
 
     public static function Initialize()
     {
-        self::$Schedule1 = new Schedule(1, "schedule 1", true, '09:00', '20:00', 0, 1);
+        self::$Schedule1 = new Schedule(1, 'schedule 1', true, '09:00', '20:00', 0, 1);
     }
 
     public function GetRows()
     {
         return [
-                self::GetRow(
-                    $this->_DefaultScheduleId,
-                    'schedule 1',
-                    1,
-                    $this->_DefaultDayStart,
-                    $this->_DefaultDaysVisible,
-                    'America/Chicago',
-                    null,
-                    false,
-                    null,
-                    null,
-                    '2018-01-01',
-                    '2019-01-1'
-                ),
-                self::GetRow(2, 'schedule 2', 0, 0, 5, 'America/Chicago'),
+            self::GetRow(
+                $this->_DefaultScheduleId,
+                'schedule 1',
+                1,
+                $this->_DefaultDayStart,
+                $this->_DefaultDaysVisible,
+                'America/Chicago',
+                null,
+                false,
+                null,
+                null,
+                '2018-01-01',
+                '2019-01-1'
+            ),
+            self::GetRow(2, 'schedule 2', 0, 0, 5, 'America/Chicago'),
         ];
     }
 
@@ -102,6 +102,7 @@ class FakeScheduleRepository implements IScheduleRepository
         if (!empty($this->_Schedules)) {
             return $this->_Schedules;
         }
+
         return [new Schedule($this->_DefaultScheduleId, 'defaultsched', true, $this->_DefaultDayStart, $this->_DefaultDaysVisible)];
     }
 
@@ -109,6 +110,7 @@ class FakeScheduleRepository implements IScheduleRepository
     {
         $schedule1 = new Schedule(100, 'sched1', false, DayOfWeek::MONDAY, 7);
         $defaultSchedule = new Schedule($this->_DefaultScheduleId, 'defaultsched', true, Schedule::Today, 7);
+
         return [$schedule1, $defaultSchedule];
     }
 
@@ -126,30 +128,31 @@ class FakeScheduleRepository implements IScheduleRepository
         $availableStart = null,
         $availableEnd = null,
         $totalConcurrentReservations = 0,
-        $maxResourcesPerReservation = 0
+        $maxResourcesPerReservation = 0,
     ) {
         return [
-                ColumnNames::SCHEDULE_ID => $id,
-                ColumnNames::SCHEDULE_NAME => $name,
-                ColumnNames::SCHEDULE_DEFAULT => $isDefault,
-                ColumnNames::SCHEDULE_WEEKDAY_START => $weekdayStart,
-                ColumnNames::SCHEDULE_DAYS_VISIBLE => $daysVisible,
-                ColumnNames::TIMEZONE_NAME => $timezone,
-                ColumnNames::LAYOUT_ID => $layoutId,
-                ColumnNames::ALLOW_CALENDAR_SUBSCRIPTION => $allowCalendarSubscription,
-                ColumnNames::PUBLIC_ID => $publicId,
-                ColumnNames::SCHEDULE_ADMIN_GROUP_ID => $adminId,
-                ColumnNames::SCHEDULE_AVAILABLE_START_DATE => $availableStart,
-                ColumnNames::SCHEDULE_AVAILABLE_END_DATE => $availableEnd,
-                ColumnNames::SCHEDULE_DEFAULT_STYLE => ScheduleStyle::Standard,
-                ColumnNames::LAYOUT_TYPE => ScheduleLayout::Standard,
-                ColumnNames::TOTAL_CONCURRENT_RESERVATIONS => $totalConcurrentReservations,
-                ColumnNames::MAX_RESOURCES_PER_RESERVATION => $maxResourcesPerReservation,
+            ColumnNames::SCHEDULE_ID => $id,
+            ColumnNames::SCHEDULE_NAME => $name,
+            ColumnNames::SCHEDULE_DEFAULT => $isDefault,
+            ColumnNames::SCHEDULE_WEEKDAY_START => $weekdayStart,
+            ColumnNames::SCHEDULE_DAYS_VISIBLE => $daysVisible,
+            ColumnNames::TIMEZONE_NAME => $timezone,
+            ColumnNames::LAYOUT_ID => $layoutId,
+            ColumnNames::ALLOW_CALENDAR_SUBSCRIPTION => $allowCalendarSubscription,
+            ColumnNames::PUBLIC_ID => $publicId,
+            ColumnNames::SCHEDULE_ADMIN_GROUP_ID => $adminId,
+            ColumnNames::SCHEDULE_AVAILABLE_START_DATE => $availableStart,
+            ColumnNames::SCHEDULE_AVAILABLE_END_DATE => $availableEnd,
+            ColumnNames::SCHEDULE_DEFAULT_STYLE => ScheduleStyle::Standard,
+            ColumnNames::LAYOUT_TYPE => ScheduleLayout::Standard,
+            ColumnNames::TOTAL_CONCURRENT_RESERVATIONS => $totalConcurrentReservations,
+            ColumnNames::MAX_RESOURCES_PER_RESERVATION => $maxResourcesPerReservation,
         ];
     }
 
     /**
      * @param int $scheduleId
+     *
      * @return Schedule
      */
     public function LoadById($scheduleId)
@@ -159,6 +162,7 @@ class FakeScheduleRepository implements IScheduleRepository
 
     /**
      * @param string $publicId
+     *
      * @return Schedule
      */
     public function LoadByPublicId($publicId)
@@ -166,25 +170,19 @@ class FakeScheduleRepository implements IScheduleRepository
         return $this->_Schedule;
     }
 
-    /**
-     * @param Schedule $schedule
-     */
     public function Update(Schedule $schedule)
     {
         // TODO: Implement Update() method.
     }
 
-    /**
-     * @param Schedule $schedule
-     */
     public function Delete(Schedule $schedule)
     {
         // TODO: Implement Delete() method.
     }
 
     /**
-     * @param Schedule $schedule
      * @param int $copyLayoutFromScheduleId
+     *
      * @return int $insertedScheduleId
      */
     public function Add(Schedule $schedule, $copyLayoutFromScheduleId)
@@ -194,8 +192,9 @@ class FakeScheduleRepository implements IScheduleRepository
     }
 
     /**
-     * @param int $scheduleId
+     * @param int            $scheduleId
      * @param ILayoutFactory $layoutFactory factory to use to create the schedule layout
+     *
      * @return IScheduleLayout
      */
     public function GetLayout($scheduleId, ILayoutFactory $layoutFactory)
@@ -204,11 +203,12 @@ class FakeScheduleRepository implements IScheduleRepository
     }
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int         $pageNumber
+     * @param int         $pageSize
      * @param string|null $sortField
      * @param string|null $sortDirection
-     * @param ISqlFilter $filter
+     * @param ISqlFilter  $filter
+     *
      * @return PageableData|Schedule[]
      */
     public function GetList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null)
@@ -219,7 +219,6 @@ class FakeScheduleRepository implements IScheduleRepository
 
     /**
      * @param int $scheduleId
-     * @param ScheduleLayout $layout
      */
     public function UpdatePeakTimes($scheduleId, ScheduleLayout $layout)
     {
@@ -232,7 +231,7 @@ class FakeScheduleRepository implements IScheduleRepository
     }
 
     /**
-     * @param Date $date
+     * @param Date             $date
      * @param SchedulePeriod[] $periods
      */
     public function _AddCustomLayout($date, $periods)
@@ -241,9 +240,8 @@ class FakeScheduleRepository implements IScheduleRepository
     }
 
     /**
-     * @param Date $start
-     * @param Date $end
      * @param int $scheduleId
+     *
      * @return SchedulePeriod[]
      */
     public function GetCustomLayoutPeriodsInRange(Date $start, Date $end, $scheduleId)
@@ -254,8 +252,6 @@ class FakeScheduleRepository implements IScheduleRepository
 
     /**
      * @param int $scheduleId
-     * @param Date $start
-     * @param Date $end
      */
     public function AddCustomLayoutPeriod($scheduleId, Date $start, Date $end)
     {
@@ -264,7 +260,6 @@ class FakeScheduleRepository implements IScheduleRepository
 
     /**
      * @param int $scheduleId
-     * @param Date $start
      */
     public function DeleteCustomLayoutPeriod($scheduleId, Date $start)
     {

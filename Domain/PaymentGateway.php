@@ -1,9 +1,8 @@
 <?php
 
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-    require_once ROOT_DIR . 'vendor/autoload.php';
+if (file_exists(ROOT_DIR.'vendor/autoload.php')) {
+    require_once ROOT_DIR.'vendor/autoload.php';
 }
-
 
 class PaymentGateways
 {
@@ -73,13 +72,13 @@ interface IPaymentTransactionLogger
      * @param string $userId
      * @param string $status
      * @param string $invoiceNumber
-     * @param int $transactionId
-     * @param float $totalAmount
-     * @param float $transactionFee
+     * @param int    $transactionId
+     * @param float  $totalAmount
+     * @param float  $transactionFee
      * @param string $currency
      * @param string $transactionHref
      * @param string $refundHref
-     * @param Date $dateCreated
+     * @param Date   $dateCreated
      * @param string $gatewayDateCreated
      * @param string $gatewayName
      * @param string $gatewayResponse
@@ -97,18 +96,18 @@ interface IPaymentTransactionLogger
         $dateCreated,
         $gatewayDateCreated,
         $gatewayName,
-        $gatewayResponse
+        $gatewayResponse,
     );
 
     /**
      * @param string $paymentTransactionLogId
      * @param string $status
-     * @param int $transactionId
-     * @param float $totalRefundAmount
-     * @param float $paymentRefundAmount
-     * @param float $feeRefundAmount
+     * @param int    $transactionId
+     * @param float  $totalRefundAmount
+     * @param float  $paymentRefundAmount
+     * @param float  $feeRefundAmount
      * @param string $transactionHref
-     * @param Date $dateCreated
+     * @param Date   $dateCreated
      * @param string $gatewayDateCreated
      * @param string $refundResponse
      */
@@ -122,7 +121,7 @@ interface IPaymentTransactionLogger
         $transactionHref,
         $dateCreated,
         $gatewayDateCreated,
-        $refundResponse
+        $refundResponse,
     );
 }
 
@@ -141,7 +140,7 @@ class PaymentTransactionLogger implements IPaymentTransactionLogger
         $dateCreated,
         $gatewayDateCreated,
         $gatewayName,
-        $gatewayResponse
+        $gatewayResponse,
     ) {
         ServiceLocator::GetDatabase()->Execute(new AddPaymentTransactionLogCommand(
             $userId,
@@ -170,7 +169,7 @@ class PaymentTransactionLogger implements IPaymentTransactionLogger
         $transactionHref,
         $dateCreated,
         $gatewayDateCreated,
-        $refundResponse
+        $refundResponse,
     ) {
         ServiceLocator::GetDatabase()->Execute(new AddRefundTransactionLogCommand(
             $paymentTransactionLogId,
@@ -214,7 +213,7 @@ class PayPalGateway implements IPaymentGateway
     private $environment;
 
     /**
-     * @param bool $enabled
+     * @param bool   $enabled
      * @param string $clientId
      * @param string $secret
      * @param string $environment
@@ -233,11 +232,13 @@ class PayPalGateway implements IPaymentGateway
      * @param string $clientId
      * @param string $secret
      * @param string $environment
+     *
      * @return PayPalGateway
      */
     public static function Create($clientId, $secret, $environment)
     {
         $enabled = (!empty($clientId) && !empty($secret) && !empty($environment));
+
         return new PayPalGateway($enabled, $clientId, $secret, $environment);
     }
 
@@ -299,18 +300,19 @@ class PayPalGateway implements IPaymentGateway
 
     private function GetBaseUrl()
     {
-        $baseUrl = "https://api.paypal.com";
+        $baseUrl = 'https://api.paypal.com';
         $paypalEnvironment = $this->Environment();
-        if (strtolower($paypalEnvironment) == "sandbox") {
-            $baseUrl = "https://api-m.sandbox.paypal.com";
+        if ('sandbox' == strtolower($paypalEnvironment)) {
+            $baseUrl = 'https://api-m.sandbox.paypal.com';
         }
+
         return $baseUrl;
     }
 
     /**
-     * @param CreditCartSession $cart
      * @param string $returnUrl
      * @param string $cancelUrl
+     *
      * @return object
      */
     public function CreatePayment(CreditCartSession $cart, $returnUrl, $cancelUrl)
@@ -318,24 +320,24 @@ class PayPalGateway implements IPaymentGateway
         $resources = Resources::GetInstance();
         $baseUrl = $this->GetBaseUrl();
         $token = $this->GetAuthToken($baseUrl);
-        $body = "";
+        $body = '';
 
         try {
             Log::Debug('PayPal Checkout/Orders CartId/invoice number: %s, Total: %s', $cart->Id(), $cart->Total());
             $checkoutUrl = "$baseUrl/v2/checkout/orders";
-            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', "Authorization" => "Bearer $token"];
+            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', 'Authorization' => "Bearer $token"];
             $purchaseRequest = ['description' => $resources->GetString('CreditPurchase'), 'amount' => ['value' => "{$cart->Total()}", 'currency_code' => $cart->Currency]];
             $data = [
                 'intent' => 'CAPTURE',
                 'application_context' => ['return_url' => $returnUrl, 'cancel_url' => $cancelUrl],
-                'purchase_units' => [$purchaseRequest]
+                'purchase_units' => [$purchaseRequest],
             ];
             $body = Unirest\Request\Body::json($data);
             Unirest\Request::verifyPeer(false);
             $response = Unirest\Request::post($checkoutUrl, $headers, $body);
 
             if (Log::DebugEnabled()) {
-                Log::Debug("PayPal Checkout/Orders Url: %s, Request: %s, Response: %s", $checkoutUrl, $body, json_encode($response->body));
+                Log::Debug('PayPal Checkout/Orders Url: %s, Request: %s, Response: %s', $checkoutUrl, $body, json_encode($response->body));
             }
 
             return $response->body;
@@ -353,10 +355,9 @@ class PayPalGateway implements IPaymentGateway
     }
 
     /**
-     * @param CreditCartSession $cart
      * @param string $paymentId
      * @param string $payerId
-     * @param IPaymentTransactionLogger $logger
+     *
      * @return object
      */
     public function ExecutePayment(CreditCartSession $cart, $paymentId, $payerId, IPaymentTransactionLogger $logger)
@@ -366,18 +367,18 @@ class PayPalGateway implements IPaymentGateway
         try {
             Log::Debug('PayPal Capture CartId/invoice number: %s, Total: %s', $cart->Id(), $cart->Total());
             $checkoutUrl = "$baseUrl/v2/checkout/orders/$paymentId/capture";
-            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', "Authorization" => "Bearer $token"];
+            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', 'Authorization' => "Bearer $token"];
             Unirest\Request::verifyPeer(false);
             $response = Unirest\Request::post($checkoutUrl, $headers);
 
             $sale = $response->body->purchase_units[0]->payments->captures[0];
-            $self = "";
-            $refund = "";
+            $self = '';
+            $refund = '';
             foreach ($sale->links as $link) {
-                if ($link->rel == "self") {
+                if ('self' == $link->rel) {
                     $self = $link->href;
                 }
-                if ($link->rel == "refund") {
+                if ('refund' == $link->rel) {
                     $refund = $link->href;
                 }
             }
@@ -402,20 +403,20 @@ class PayPalGateway implements IPaymentGateway
                 json_encode($response->body)
             );
             if (Log::DebugEnabled()) {
-                Log::Debug("PayPal Capture Url: %s, Response: %s", $checkoutUrl, json_encode($response->body));
+                Log::Debug('PayPal Capture Url: %s, Response: %s', $checkoutUrl, json_encode($response->body));
             }
 
             return $response->body;
         } catch (Exception $exception) {
             Log::Error('PayPal Capture error details. CartId/invoice number: %s, Total: %s, Error: %s', $cart->Id(), $cart->Total(), $exception);
         }
+
         return null;
     }
 
     /**
-     * @param TransactionLogView $log
      * @param float $amount
-     * @param IPaymentTransactionLogger $logger
+     *
      * @return object
      */
     public function Refund(TransactionLogView $log, $amount, IPaymentTransactionLogger $logger)
@@ -427,19 +428,19 @@ class PayPalGateway implements IPaymentGateway
             Log::Debug('PayPal Refund. TransactionId: %s, InvoiceNumber: %s, Total: %s', $log->TransactionId, $log->InvoiceNumber, $amount);
             $refundUrl = "$baseUrl/v2/payments/captures/{$log->InvoiceNumber}/refund";
             //			$refundUrl = "$baseUrl/v2/payments/captures/{$log->TransactionId}/refund";
-            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', "Authorization" => "Bearer $token"];
+            $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', 'Authorization' => "Bearer $token"];
             $data = ['amount' => ['value' => "{$amount}", 'currency_code' => $log->Currency]];
             $body = Unirest\Request\Body::json($data);
             Unirest\Request::verifyPeer(false);
             $response = Unirest\Request::post($refundUrl, $headers, $body);
 
             if (Log::DebugEnabled()) {
-                Log::Debug("PayPal Refund Url: %s, Request: %s, Response: %s", $refundUrl, $body, json_encode($response->body));
+                Log::Debug('PayPal Refund Url: %s, Request: %s, Response: %s', $refundUrl, $body, json_encode($response->body));
             }
 
-            $self = "";
+            $self = '';
             foreach ($response->body->links as $link) {
-                if ($link->rel == "self") {
+                if ('self' == $link->rel) {
                     $self = $link->href;
                 }
             }
@@ -455,7 +456,7 @@ class PayPalGateway implements IPaymentGateway
                 $breakdown ? $breakdown->paypal_fee->value : 0,
                 $self,
                 Date::Now(),
-                $response->body->create_time ? $response->body->create_time : "",
+                $response->body->create_time ? $response->body->create_time : '',
                 json_encode($response->body)
             );
 
@@ -499,7 +500,7 @@ class StripeGateway implements IPaymentGateway
     public $_LastRefundAmount;
 
     /**
-     * @param bool $enabled
+     * @param bool   $enabled
      * @param string $publishableKey
      * @param string $secretKey
      */
@@ -515,11 +516,13 @@ class StripeGateway implements IPaymentGateway
     /**
      * @param string $publishableKey
      * @param string $secretKey
+     *
      * @return StripeGateway
      */
     public static function Create($publishableKey, $secretKey)
     {
         $enabled = (!empty($publishableKey) && !empty($secretKey));
+
         return new StripeGateway($enabled, $publishableKey, $secretKey);
     }
 
@@ -558,30 +561,29 @@ class StripeGateway implements IPaymentGateway
     }
 
     /**
-     * @param CreditCartSession $cart
      * @param string $email
      * @param string $token
-     * @param IPaymentTransactionLogger $logger
+     *
      * @return bool
      */
     public function Charge(CreditCartSession $cart, $email, $token, IPaymentTransactionLogger $logger)
     {
         try {
-            \Stripe\Stripe::setApiKey($this->SecretKey());
+            Stripe\Stripe::setApiKey($this->SecretKey());
 
-            $customer = \Stripe\Customer::create([
+            $customer = Stripe\Customer::create([
                 'email' => $email,
-                'source' => $token
+                'source' => $token,
             ]);
 
-            $currency = new \Booked\Currency($cart->Currency);
+            $currency = new Booked\Currency($cart->Currency);
 
-            $charge = \Stripe\Charge::create([
+            $charge = Stripe\Charge::create([
                 'customer' => $customer->id,
                 'amount' => $currency->ToStripe($cart->Total()),
                 'currency' => strtolower($cart->Currency),
                 'description' => Resources::GetInstance()->GetString('Credits'),
-                'expand' => ['balance_transaction']
+                'expand' => ['balance_transaction'],
             ]);
 
             if (Log::DebugEnabled()) {
@@ -603,8 +605,9 @@ class StripeGateway implements IPaymentGateway
                 $this->GetGatewayType(),
                 json_encode($charge)
             );
-            return $charge->status == 'succeeded';
-        } catch (\Stripe\Exception\CardException $ex) {
+
+            return 'succeeded' == $charge->status;
+        } catch (Stripe\Exception\CardException $ex) {
             // Declined
             $body = $ex->getJsonBody();
             $err = $body['error'];
@@ -616,15 +619,15 @@ class StripeGateway implements IPaymentGateway
                 $err['param'],
                 $err['message']
             );
-        } catch (\Stripe\Exception\RateLimitException $ex) {
+        } catch (Stripe\Exception\RateLimitException $ex) {
             Log::Error('Stripe - too many requests. %s', $ex);
-        } catch (\Stripe\Exception\InvalidRequestException $ex) {
+        } catch (Stripe\Exception\InvalidRequestException $ex) {
             Log::Error('Stripe - invalid request. %s', $ex);
-        } catch (\Stripe\Exception\AuthenticationException $ex) {
+        } catch (Stripe\Exception\AuthenticationException $ex) {
             Log::Error('Stripe - authentication error. %s', $ex);
-        } catch (\Stripe\Exception\ApiConnectionException $ex) {
+        } catch (Stripe\Exception\ApiConnectionException $ex) {
             Log::Error('Stripe - connection failure. %s', $ex);
-        } catch (\Stripe\Exception\ApiErrorException $ex) {
+        } catch (Stripe\Exception\ApiErrorException $ex) {
             Log::Error('Stripe - error. %s', $ex);
         } catch (Exception $ex) {
             Log::Error('Stripe - internal error. %s', $ex);
@@ -634,21 +637,20 @@ class StripeGateway implements IPaymentGateway
     }
 
     /**
-     * @param TransactionLogView $log
      * @param float $amount
-     * @param IPaymentTransactionLogger $logger
+     *
      * @return bool
      */
     public function Refund(TransactionLogView $log, $amount, IPaymentTransactionLogger $logger)
     {
         try {
-            $currency = new \Booked\Currency($log->Currency);
+            $currency = new Booked\Currency($log->Currency);
 
-            \Stripe\Stripe::setApiKey($this->SecretKey());
-            $refund = \Stripe\Refund::create([
+            Stripe\Stripe::setApiKey($this->SecretKey());
+            $refund = Stripe\Refund::create([
                 'charge' => $log->TransactionId,
                 'amount' => $currency->ToStripe($amount),
-                'expand' => ['balance_transaction']
+                'expand' => ['balance_transaction'],
             ]);
 
             if (Log::DebugEnabled()) {
@@ -668,8 +670,8 @@ class StripeGateway implements IPaymentGateway
                 json_encode($refund)
             );
 
-            return $refund->status == 'succeeded';
-        } catch (\Stripe\Exception\CardException $ex) {
+            return 'succeeded' == $refund->status;
+        } catch (Stripe\Exception\CardException $ex) {
             // Declined
             $body = $ex->getJsonBody();
             $err = $body['error'];
@@ -681,15 +683,15 @@ class StripeGateway implements IPaymentGateway
                 $err['param'],
                 $err['message']
             );
-        } catch (\Stripe\Exception\RateLimitException $ex) {
+        } catch (Stripe\Exception\RateLimitException $ex) {
             Log::Error('Stripe refund - too many requests. %s', $ex);
-        } catch (\Stripe\Exception\InvalidRequestException $ex) {
+        } catch (Stripe\Exception\InvalidRequestException $ex) {
             Log::Error('Stripe refund - invalid request. %s', $ex);
-        } catch (\Stripe\Exception\AuthenticationException $ex) {
+        } catch (Stripe\Exception\AuthenticationException $ex) {
             Log::Error('Stripe refund - authentication error. %s', $ex);
-        } catch (\Stripe\Exception\ApiConnectionException $ex) {
+        } catch (Stripe\Exception\ApiConnectionException $ex) {
             Log::Error('Stripe refund - connection failure. %s', $ex);
-        } catch (\Stripe\Exception\ApiErrorException $ex) {
+        } catch (Stripe\Exception\ApiErrorException $ex) {
             Log::Error('Stripe - error. %s', $ex);
         } catch (Exception $ex) {
             Log::Error('Stripe refund - internal error. %s', $ex);

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Responses/Group/GroupItemResponse.php');
+require_once ROOT_DIR.'WebServices/Responses/Group/GroupItemResponse.php';
 
 class GroupsResponse extends RestResponse
 {
@@ -10,7 +10,6 @@ class GroupsResponse extends RestResponse
     public $groups;
 
     /**
-     * @param IRestServer $server
      * @param array|GroupItemView[] $groups
      */
     public function __construct(IRestServer $server, $groups)

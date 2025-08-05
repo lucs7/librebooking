@@ -1,12 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Responses/SchedulesResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/ScheduleResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Schedule/ScheduleSlotsResponse.php');
-require_once(ROOT_DIR . 'Presenters/Schedule/SchedulePresenter.php');
-require_once(ROOT_DIR . 'Pages/SchedulePage.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'WebServices/Responses/SchedulesResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/ScheduleResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Schedule/ScheduleSlotsResponse.php';
+require_once ROOT_DIR.'Presenters/Schedule/SchedulePresenter.php';
+require_once ROOT_DIR.'Pages/SchedulePage.php';
 
 class SchedulesWebService
 {
@@ -34,8 +34,11 @@ class SchedulesWebService
 
     /**
      * @name GetAllSchedules
+     *
      * @description Loads all schedules
+     *
      * @response SchedulesResponse
+     *
      * @return void
      */
     public function GetSchedules()
@@ -47,16 +50,18 @@ class SchedulesWebService
 
     /**
      * @name GetSchedule
+     *
      * @description Loads a specific schedule by id
+     *
      * @response ScheduleResponse
-     * @param $scheduleId
+     *
      * @return void
      */
     public function GetSchedule($scheduleId)
     {
         $schedule = $this->scheduleRepository->LoadById($scheduleId);
 
-        if ($schedule != null) {
+        if (null != $schedule) {
             $layout = $this->scheduleRepository->GetLayout($schedule->GetId(), new ScheduleLayoutFactory($this->server->GetSession()->Timezone));
             $this->server->WriteResponse(new ScheduleResponse($this->server, $schedule, $layout));
         } else {
@@ -66,12 +71,14 @@ class SchedulesWebService
 
     /**
      * @name GetSlots
+     *
      * @description Loads slots for a specific schedule
      * Optional query string parameters:  resourceId, startDateTime, endDateTime.
      * If no dates are provided the default schedule dates will be returned.
      * If dates do not include the timezone offset, the timezone of the authenticated user will be assumed.
+     *
      * @response ScheduleSlotsResponse
-     * @param $scheduleId
+     *
      * @return void
      */
     public function GetSlots($scheduleId)
@@ -118,7 +125,6 @@ class SchedulesWebService
     }
 }
 
-
 class ScheduleWebServicePageBuilder extends SchedulePageBuilder
 {
     private $startDate;
@@ -160,9 +166,10 @@ class ScheduleWebServicePageBuilder extends SchedulePageBuilder
 
     public function GetScheduleDates(UserSession $user, ISchedule $schedule, ISchedulePage $page)
     {
-        if ($this->startDate != null && $this->endDate != null) {
+        if (null != $this->startDate && null != $this->endDate) {
             return new DateRange($this->startDate, $this->endDate->AddDays(1));
         }
+
         return parent::GetScheduleDates($user, $schedule, $page);
     }
 }
@@ -270,7 +277,7 @@ class ScheduleWebServiceView implements ISchedulePage
 
     public function GetSelectedDate()
     {
-        return empty($this->startDate) ? null : $this->startDate->Format("Y-m-d");
+        return empty($this->startDate) ? null : $this->startDate->Format('Y-m-d');
     }
 
     public function GetSelectedDates()
@@ -468,7 +475,7 @@ class ScheduleWebServiceView implements ISchedulePage
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function IsPermissionError()
     {
@@ -495,7 +502,6 @@ class ScheduleWebServiceView implements ISchedulePage
     {
         // no-op
     }
-
 
     public function GetSortField()
     {

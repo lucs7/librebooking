@@ -1,15 +1,16 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'lib/external/Slim/Slim.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 class ApiPermissions
 {
     public function __construct(
         public bool $isWrite,
         public int|string|null $roGroupId,
-        public int|string|null $rwGroupId
-    ) { }
+        public int|string|null $rwGroupId,
+    ) {
+    }
 
     public function IsUserAllowedApiAccess(int|string $userId): bool
     {
@@ -22,19 +23,21 @@ class ApiPermissions
             if (is_numeric($this->roGroupId)) {
                 return UserGroupHelper::isUserInGroup(groupId: $this->roGroupId, userId: $userId);
             }
+
             return true;
         }
 
         if (is_numeric($this->roGroupId)) {
             return UserGroupHelper::isUserInGroup(groupId: $this->roGroupId, userId: $userId);
         }
+
         return true;
     }
 
-    public function IsSet(): bool {
-        return (is_numeric($this->roGroupId) || is_numeric($this->rwGroupId));
+    public function IsSet(): bool
+    {
+        return is_numeric($this->roGroupId) || is_numeric($this->rwGroupId);
     }
-
 }
 
 class SlimWebServiceRegistry
@@ -69,9 +72,6 @@ class SlimWebServiceRegistry
         $this->slim = $slim;
     }
 
-    /**
-     * @param SlimWebServiceRegistryCategory $category
-     */
     public function AddCategory(SlimWebServiceRegistryCategory $category)
     {
         foreach ($category->Gets() as $registration) {
@@ -109,7 +109,7 @@ class SlimWebServiceRegistry
         $categories = $this->categories;
 
         usort($categories, function ($a, $b) {
-            /**
+            /*
              * @var SlimWebServiceRegistryCategory $a
              * @var SlimWebServiceRegistryCategory $b
              */
@@ -122,6 +122,7 @@ class SlimWebServiceRegistry
 
     /**
      * @param string $routeName
+     *
      * @return bool
      */
     public function IsSecure($routeName)
@@ -131,6 +132,7 @@ class SlimWebServiceRegistry
 
     /**
      * @param string $routeName
+     *
      * @return bool
      */
     public function IsLimitedToAdmin($routeName)
@@ -143,10 +145,12 @@ class SlimWebServiceRegistry
         if (!array_key_exists($routeName, $this->apiPermissionRoutes)) {
             return true;
         }
+
         return $this->apiPermissionRoutes[$routeName]->IsUserAllowedApiAccess(userId: $userId);
     }
 
-    private function SecureRegistration(SlimServiceRegistration $registration, ApiPermissions $apiPermissions) {
+    private function SecureRegistration(SlimServiceRegistration $registration, ApiPermissions $apiPermissions)
+    {
         if ($registration->IsSecure()) {
             $this->secureRoutes[$registration->RouteName()] = true;
         }

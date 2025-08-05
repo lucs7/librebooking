@@ -38,7 +38,6 @@ class ReservationHandlerTest extends TestBase
              ->method('SetWarnings')
              ->with($this->equalTo($validationResult->GetWarnings()));
 
-
         $handler = new ReservationHandler($persistenceService, $validationService, $notificationService, $retryOptions);
         $handler->Handle($series, $page);
 

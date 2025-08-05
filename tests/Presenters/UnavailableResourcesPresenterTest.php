@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/UnavailableResourcesPage.php');
-require_once(ROOT_DIR . 'Presenters/UnavailableResourcesPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/ResourceAvailability.php');
+require_once ROOT_DIR.'Pages/Ajax/UnavailableResourcesPage.php';
+require_once ROOT_DIR.'Presenters/UnavailableResourcesPresenter.php';
+require_once ROOT_DIR.'lib/Application/Reservation/ResourceAvailability.php';
 
 class UnavailableResourcesPresenterTest extends TestBase
 {
@@ -61,7 +61,7 @@ class UnavailableResourcesPresenterTest extends TestBase
         $series = $builder->Build();
         $this->reservationRepository->_Series = $series;
 
-        $this->page->_ReferenceNumber = "123";
+        $this->page->_ReferenceNumber = '123';
         $this->presenter->PageLoad();
 
         $bound = $this->page->_BoundAvailability;
@@ -78,7 +78,7 @@ class UnavailableResourcesPresenterTest extends TestBase
         $this->reservationConflictIdentifier->_IndexedConflicts[] = new FakeReservationConflictResult();
         $this->reservationConflictIdentifier->_IndexedConflicts[] = new FakeReservationConflictResult(false);
 
-        $this->page->_ReferenceNumber = "";
+        $this->page->_ReferenceNumber = '';
         $this->presenter->PageLoad();
 
         $bound = $this->page->_BoundAvailability;
@@ -111,7 +111,7 @@ class FakeAvailableResourcesPage implements IAvailableResourcesPage
 
     public function GetDuration()
     {
-        return DateRange::Create($this->_StartDate . ' ' . $this->_StartTime, $this->_EndDate . ' ' . $this->_EndTime, $this->_User->Timezone);
+        return DateRange::Create($this->_StartDate.' '.$this->_StartTime, $this->_EndDate.' '.$this->_EndTime, $this->_User->Timezone);
     }
 
     public function GetStartDate()

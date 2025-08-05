@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/AccessoryRepository.php');
-require_once(ROOT_DIR . 'Domain/Access/ReservationRepository.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/AccessoryAggregation.php');
+require_once ROOT_DIR.'Domain/Access/AccessoryRepository.php';
+require_once ROOT_DIR.'Domain/Access/ReservationRepository.php';
+require_once ROOT_DIR.'lib/Application/Reservation/AccessoryAggregation.php';
 
 class AccessoryAvailabilityRule implements IReservationValidationRule
 {
@@ -33,7 +33,7 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
         $conflicts = [];
         $reservationAccessories = $reservationSeries->Accessories();
 
-        if (count($reservationAccessories) == 0) {
+        if (0 == count($reservationAccessories)) {
             // no accessories to be reserved, no need to proceed
             return new ReservationRuleResult();
         }
@@ -47,7 +47,7 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
             }
         }
 
-        if (count($accessories) == 0) {
+        if (0 == count($accessories)) {
             // no accessories with limited quantity to be reserved, no need to proceed
             return new ReservationRuleResult();
         }
@@ -56,8 +56,8 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
         /** @var Reservation $reservation */
         foreach ($reservations as $reservation) {
             $dates = $reservation->Duration()->Dates();
-            for ($i = 0; $i < count($dates); $i++) {
-                if ($i == 0) {
+            for ($i = 0; $i < count($dates); ++$i) {
+                if (0 == $i) {
                     $start = $reservation->StartDate();
                 } else {
                     $start = $dates[$i]->GetDate();
@@ -70,7 +70,7 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
 
                 $range = new DateRange($start, $end);
 
-                Log::Debug("Checking for accessory conflicts, reference number %s date %s", $reservation->ReferenceNumber(), $range);
+                Log::Debug('Checking for accessory conflicts, reference number %s date %s', $reservation->ReferenceNumber(), $range);
 
                 $accessoryReservations = $this->reservationRepository->GetAccessoriesWithin($range);
 
@@ -88,7 +88,7 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
 
                     if ($requested + $alreadyReserved > $accessory->QuantityAvailable()) {
                         Log::Debug(
-                            "Accessory over limit. Reference Number %s, Date %s, Quantity already reserved %s, Quantity requested: %s",
+                            'Accessory over limit. Reference Number %s, Date %s, Quantity already reserved %s, Quantity requested: %s',
                             $reservation->ReferenceNumber(),
                             $reservation->Duration(),
                             $alreadyReserved,
@@ -107,13 +107,12 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
             }
         }
 
-
-
         return new ReservationRuleResult();
     }
 
     /**
      * @param array $conflicts
+     *
      * @return string
      */
     protected function GetErrorString($conflicts)
@@ -136,12 +135,12 @@ class AccessoryAvailabilityRule implements IReservationValidationRule
 class AccessoryToCheck
 {
     /**
-     * @var \Accessory
+     * @var Accessory
      */
     private $accessory;
 
     /**
-     * @var \ReservationAccessory
+     * @var ReservationAccessory
      */
     private $reservationAccessory;
 

@@ -1,12 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
+require_once ROOT_DIR.'Domain/namespace.php';
 
 class ForgotPasswordEmail extends EmailMessage
 {
     /**
-     * @var \User
+     * @var User
      */
     private $user;
 
@@ -45,6 +45,7 @@ class ForgotPasswordEmail extends EmailMessage
     public function Body()
     {
         $this->Set('TemporaryPassword', $this->temporaryPassword);
+
         return $this->FetchTemplate('ResetPassword.tpl');
     }
 }

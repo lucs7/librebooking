@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Responses/CustomAttributes/CustomAttributeDefinitionResponse.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'WebServices/Responses/CustomAttributes/CustomAttributeDefinitionResponse.php';
 
 class CustomAttributesResponse extends RestResponse
 {
@@ -11,7 +11,6 @@ class CustomAttributesResponse extends RestResponse
     public $attributes = [];
 
     /**
-     * @param IRestServer $server
      * @param array|CustomAttribute[] $attributes
      */
     public function __construct(IRestServer $server, $attributes)

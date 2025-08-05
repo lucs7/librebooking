@@ -13,28 +13,27 @@ class PostReservationExample implements IPostReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationNotificationService
      */
     public function CreatePostAddService(UserSession $userSession)
     {
         // custom logic to be executed
         $base = $this->factoryToDecorate->CreatePostAddService($userSession);
+
         return new PostReservationCreatedExample($base);
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationNotificationService
      */
     public function CreatePostUpdateService(UserSession $userSession)
     {
         $base = $this->factoryToDecorate->CreatePostUpdateService($userSession);
+
         return new PostReservationUpdateExample($base);
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationNotificationService
      */
     public function CreatePostDeleteService(UserSession $userSession)
@@ -44,7 +43,6 @@ class PostReservationExample implements IPostReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationNotificationService
      */
     public function CreatePostApproveService(UserSession $userSession)
@@ -54,7 +52,6 @@ class PostReservationExample implements IPostReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationNotificationService
      */
     public function CreatePostCheckinService(UserSession $userSession)
@@ -63,7 +60,6 @@ class PostReservationExample implements IPostReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationNotificationService
      */
     public function CreatePostCheckoutService(UserSession $userSession)
@@ -86,6 +82,7 @@ class PostReservationCreatedExample implements IReservationNotificationService
 
     /**
      * @param $reservationSeries ReservationSeries|ExistingReservationSeries
+     *
      * @return void
      */
     public function Notify($reservationSeries)
@@ -111,6 +108,7 @@ class PostReservationUpdateExample implements IReservationNotificationService
 
     /**
      * @param $reservationSeries ReservationSeries|ExistingReservationSeries
+     *
      * @return void
      */
     public function Notify($reservationSeries)

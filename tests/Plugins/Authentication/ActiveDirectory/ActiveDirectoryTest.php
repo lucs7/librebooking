@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'plugins/Authentication/ActiveDirectory/namespace.php');
+require_once ROOT_DIR.'plugins/Authentication/ActiveDirectory/namespace.php';
 
 class ActiveDirectoryTest extends TestBase
 {
@@ -67,11 +67,11 @@ class ActiveDirectoryTest extends TestBase
         $ldapEntry->title = '';
 
         $mapping = ['sn' => 'sn',
-                        'givenname' => 'givenname',
-                        'mail' => 'mail',
-                        'telephonenumber' => 'telephonenumber',
-                        'physicaldeliveryofficename' => 'physicaldeliveryofficename',
-                        'title' => 'title'];
+            'givenname' => 'givenname',
+            'mail' => 'mail',
+            'telephonenumber' => 'telephonenumber',
+            'physicaldeliveryofficename' => 'physicaldeliveryofficename',
+            'title' => 'title'];
 
         $this->ldapUser = new ActiveDirectoryUser($ldapEntry, $mapping, 'group1,group2,group3');
 
@@ -226,7 +226,7 @@ class ActiveDirectoryTest extends TestBase
         $this->assertEquals($base, $options['base_dn']);
         $this->assertEquals(false, $options['use_ssl']);
         $this->assertEquals($accountSuffix, $options['account_suffix']);
-        $this->assertEquals(intval($version), $options['ldap_version'], "version should be int");
+        $this->assertEquals(intval($version), $options['ldap_version'], 'version should be int');
     }
 
     public function testGetAllHosts()
@@ -239,7 +239,7 @@ class ActiveDirectoryTest extends TestBase
 
         $options = new ActiveDirectoryOptions();
 
-        $this->assertEquals(['localhost', 'localhost.2'], $options->Controllers(), "comma separated values should become array");
+        $this->assertEquals(['localhost', 'localhost.2'], $options->Controllers(), 'comma separated values should become array');
     }
 
     public function testConvertsEmailToUserName()
@@ -266,7 +266,7 @@ class ActiveDirectoryTest extends TestBase
 
     public function testCanGetAttributeMapping()
     {
-        $attributeMapping = "sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename";
+        $attributeMapping = 'sn= sn,givenname =givenname,mail=email ,telephonenumber=phone, physicaldeliveryofficename=physicaldeliveryofficename';
 
         $configFile = new FakeConfigFile();
         $configFile->SetKey(ActiveDirectoryConfig::ATTRIBUTE_MAPPING, $attributeMapping);
@@ -274,7 +274,7 @@ class ActiveDirectoryTest extends TestBase
 
         $options = new ActiveDirectoryOptions();
 
-        $expectedAttributes = [ 'sn', 'givenname', 'email', 'phone', 'physicaldeliveryofficename', 'title'];
+        $expectedAttributes = ['sn', 'givenname', 'email', 'phone', 'physicaldeliveryofficename', 'title'];
         $this->assertEquals($expectedAttributes, $options->Attributes());
     }
 
@@ -286,15 +286,15 @@ class ActiveDirectoryTest extends TestBase
 
         $options = new ActiveDirectoryOptions();
 
-        $expectedAttributes = [ 'sn', 'givenname', 'mail', 'telephonenumber', 'physicaldeliveryofficename', 'title'];
+        $expectedAttributes = ['sn', 'givenname', 'mail', 'telephonenumber', 'physicaldeliveryofficename', 'title'];
         $this->assertEquals($expectedAttributes, $options->Attributes());
     }
 
     public function testMapsUserAttributes()
     {
         $mapping = ['sn' => 'sn',
-                        'givenname' => 'givenname',
-                        'mail' => 'fooName',];
+            'givenname' => 'givenname',
+            'mail' => 'fooName', ];
 
         $entry = new TestAdLdapEntry();
         $entry->sn = 'sn';

@@ -1,7 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/AccessoriesWebService.php');
-
+require_once ROOT_DIR.'WebServices/AccessoriesWebService.php';
 
 class AccessoriesWebServiceTest extends TestBase
 {

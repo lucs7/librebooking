@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . '/PreReservationExampleValidation.php');
+require_once dirname(__FILE__).'/PreReservationExampleValidation.php';
 
 class PreReservationExample implements IPreReservationFactory
 {
@@ -13,10 +13,10 @@ class PreReservationExample implements IPreReservationFactory
     {
         $this->factoryToDecorate = $factoryToDecorate;
 
-        require_once(dirname(__FILE__) . '/PreReservationExample.config.php');
+        require_once dirname(__FILE__).'/PreReservationExample.config.php';
 
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/PreReservationExample.config.php',
+            dirname(__FILE__).'/PreReservationExample.config.php',
             'PreReservationExample'
         );
     }
@@ -24,12 +24,14 @@ class PreReservationExample implements IPreReservationFactory
     public function CreatePreAddService(UserSession $userSession)
     {
         $base = $this->factoryToDecorate->CreatePreAddService($userSession);
+
         return new PreReservationExampleValidation($base);
     }
 
     public function CreatePreUpdateService(UserSession $userSession)
     {
-        $base =  $this->factoryToDecorate->CreatePreUpdateService($userSession);
+        $base = $this->factoryToDecorate->CreatePreUpdateService($userSession);
+
         return new PreReservationExampleValidation($base);
     }
 
@@ -39,7 +41,6 @@ class PreReservationExample implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreApprovalService(UserSession $userSession)
@@ -48,7 +49,6 @@ class PreReservationExample implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreCheckinService(UserSession $userSession)
@@ -57,7 +57,6 @@ class PreReservationExample implements IPreReservationFactory
     }
 
     /**
-     * @param UserSession $userSession
      * @return IReservationValidationService
      */
     public function CreatePreCheckoutService(UserSession $userSession)

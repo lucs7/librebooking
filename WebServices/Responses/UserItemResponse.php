@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class UserItemResponse extends RestResponse
 {
@@ -23,8 +23,6 @@ class UserItemResponse extends RestResponse
     public $reservationColor;
 
     /**
-     * @param IRestServer $server
-     * @param UserItemView $user
      * @param array|string[] $attributeLabels
      */
     public function __construct(IRestServer $server, UserItemView $user, $attributeLabels)

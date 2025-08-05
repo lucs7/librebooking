@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/JsonRequest.php');
+require_once ROOT_DIR.'lib/WebService/JsonRequest.php';
 
 abstract class AccountRequestBase extends JsonRequest
 {
@@ -48,6 +48,7 @@ abstract class AccountRequestBase extends JsonRequest
         if (!empty($this->customAttributes)) {
             return $this->customAttributes;
         }
+
         return [];
     }
 

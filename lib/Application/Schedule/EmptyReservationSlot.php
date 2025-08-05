@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/ReservationStartTimeConstraint.php');
+require_once ROOT_DIR.'Domain/Values/ReservationStartTimeConstraint.php';
 
 class EmptyReservationSlot implements IReservationSlot
 {
@@ -20,7 +20,7 @@ class EmptyReservationSlot implements IReservationSlot
     protected $_date;
 
     /**
-     * @var bool $_isReservable
+     * @var bool
      */
     protected $_isReservable;
 
@@ -71,7 +71,6 @@ class EmptyReservationSlot implements IReservationSlot
     {
         return $this->_begin;
     }
-
 
     public function End()
     {
@@ -170,6 +169,7 @@ class EmptyReservationSlot implements IReservationSlot
         }
 
         $range = new DateRange($this->_begin, $this->_end);
+
         return $range->Contains($date, false);
     }
 

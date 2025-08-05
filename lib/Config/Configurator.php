@@ -1,11 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/pear/Config.php');
+require_once ROOT_DIR.'lib/external/pear/Config.php';
 
 interface IConfigurationSettings
 {
     /**
      * @param string $file
+     *
      * @return array
      */
     public function GetSettings($file);
@@ -13,19 +14,21 @@ interface IConfigurationSettings
     /**
      * @param array $currentSettings
      * @param array $newSettings
-     * @param bool $removeMissingKeys
+     * @param bool  $removeMissingKeys
+     *
      * @return array
      */
     public function BuildConfig($currentSettings, $newSettings, $removeMissingKeys = false);
 
     /**
      * @param string $configFilePath
-     * @param array $mergedSettings
+     * @param array  $mergedSettings
      */
     public function WriteSettings($configFilePath, $mergedSettings);
 
     /**
      * @param string $configFilePath
+     *
      * @return bool
      */
     public function CanOverwriteFile($configFilePath);
@@ -62,6 +65,7 @@ class Configurator implements IConfigurationSettings
     /**
      * @param string $configPhp
      * @param string $distPhp
+     *
      * @return string
      */
     private function GetMerged($configPhp, $distPhp)
@@ -70,6 +74,7 @@ class Configurator implements IConfigurationSettings
         $newSettings = $this->GetSettings($distPhp);
 
         $settings = $this->BuildConfig($currentSettings, $newSettings, true);
+
         return [Configuration::SETTINGS => $settings];
     }
 
@@ -88,7 +93,7 @@ class Configurator implements IConfigurationSettings
         /** @var Config_Container $current */
         $current = $config->parseConfig($file, 'PHPArray');
 
-        $currentValues = $current->getItem("section", Configuration::SETTINGS)->toArray();
+        $currentValues = $current->getItem('section', Configuration::SETTINGS)->toArray();
 
         return $currentValues[Configuration::SETTINGS];
     }
@@ -116,11 +121,11 @@ class Configurator implements IConfigurationSettings
     private function AddErrorReporting($file)
     {
         $pathinfo = pathinfo($file);
-        if ($pathinfo['dirname'] != ROOT_DIR . 'config') {
+        if ($pathinfo['dirname'] != ROOT_DIR.'config') {
             return;
         }
         $contents = file_get_contents($file);
-        $new = str_replace("<?php", "<?php\r\nmysqli_report(MYSQLI_REPORT_OFF);\r\nerror_reporting(E_ALL & ~E_NOTICE);\r\n", $contents);
+        $new = str_replace('<?php', "<?php\r\nmysqli_report(MYSQLI_REPORT_OFF);\r\nerror_reporting(E_ALL & ~E_NOTICE);\r\n", $contents);
 
         file_put_contents($file, $new);
     }
@@ -136,7 +141,7 @@ class Configurator implements IConfigurationSettings
 
     private function CreateBackup($configFilePath)
     {
-        $backupPath = str_replace('.php', time() . '.php', $configFilePath);
+        $backupPath = str_replace('.php', time().'.php', $configFilePath);
         copy($configFilePath, $backupPath);
     }
 
@@ -147,10 +152,12 @@ class Configurator implements IConfigurationSettings
 
         if ($this->AreKeysTheSame($currentSettings, $newSettings)) {
             Log::Debug('Config file is already up to date. Skipping config merge.');
+
             return false;
         }
 
         Log::Debug('Config file is out of date. Merging new config options in.');
+
         return true;
     }
 
@@ -159,6 +166,7 @@ class Configurator implements IConfigurationSettings
         foreach ($new as $key => $val) {
             if (!array_key_exists($key, $current) || (is_array($new[$key]) && is_array($current[$key]) && !$this->AreKeysTheSame($current[$key], $new[$key]))) {
                 Log::Debug('Could not find key in config file: %s', $key);
+
                 return false;
             }
         }

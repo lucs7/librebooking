@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
 
 class GuestAccountCreationEmail extends EmailMessage
 {
@@ -45,6 +45,7 @@ class GuestAccountCreationEmail extends EmailMessage
     {
         $this->Set('EmailAddress', $this->user->EmailAddress());
         $this->Set('Password', $this->password);
+
         return $this->FetchTemplate('GuestAccountCreation.tpl');
     }
 }

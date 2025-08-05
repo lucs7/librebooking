@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'plugins/Authentication/CAS/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'plugins/Authentication/CAS/namespace.php';
 
 class CAS extends Authentication implements IAuthentication
 {
@@ -18,7 +18,7 @@ class CAS extends Authentication implements IAuthentication
      */
     private function GetRegistration()
     {
-        if ($this->registration == null) {
+        if (null == $this->registration) {
             $this->registration = new Registration();
         }
 
@@ -60,8 +60,10 @@ class CAS extends Authentication implements IAuthentication
             phpCAS::forceAuthentication();
         } catch (Exception $ex) {
             Log::Error('CAS exception: %s', $ex);
+
             return false;
         }
+
         return true;
     }
 
@@ -197,6 +199,7 @@ class CAS extends Authentication implements IAuthentication
                 if (!is_array($userGroups)) {
                     return [$userGroups];
                 }
+
                 return $userGroups;
             }
         }

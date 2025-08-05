@@ -8,11 +8,10 @@ class BooleanConverter implements IConvert
     }
 
     /**
-     * @param mixed $value
      * @return bool
      */
     public static function ConvertValue($value)
     {
-        return $value === true || strtolower($value) == 'true' || $value === 1 || $value === '1';
+        return true === $value || 'true' == strtolower($value) || 1 === $value || '1' === $value;
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/CreditCost.php');
-require_once(ROOT_DIR . 'Domain/PaymentGateway.php');
-require_once(ROOT_DIR . 'Domain/Values/PayPalPaymentResult.php');
-require_once(ROOT_DIR . 'Domain/Values/TransactionLogView.php');
-require_once(ROOT_DIR . 'Domain/Access/PageableDataStore.php');
-require_once(ROOT_DIR . 'lib/Database/namespace.php');
-require_once(ROOT_DIR . 'lib/Database/Commands/namespace.php');
+require_once ROOT_DIR.'Domain/CreditCost.php';
+require_once ROOT_DIR.'Domain/PaymentGateway.php';
+require_once ROOT_DIR.'Domain/Values/PayPalPaymentResult.php';
+require_once ROOT_DIR.'Domain/Values/TransactionLogView.php';
+require_once ROOT_DIR.'Domain/Access/PageableDataStore.php';
+require_once ROOT_DIR.'lib/Database/namespace.php';
+require_once ROOT_DIR.'lib/Database/Commands/namespace.php';
 
 interface IPaymentRepository
 {
@@ -25,14 +25,8 @@ interface IPaymentRepository
      */
     public function GetCreditCosts();
 
-    /**
-     * @param PayPalGateway $gateway
-     */
     public function UpdatePayPalGateway(PayPalGateway $gateway);
 
-    /**
-     * @param StripeGateway $gateway
-     */
     public function UpdateStripeGateway(StripeGateway $gateway);
 
     /**
@@ -46,18 +40,20 @@ interface IPaymentRepository
     public function GetStripeGateway();
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param int $userId
-     * @param string $sortField
-     * @param string $sortDirection
+     * @param int        $pageNumber
+     * @param int        $pageSize
+     * @param int        $userId
+     * @param string     $sortField
+     * @param string     $sortDirection
      * @param ISqlFilter $filter
+     *
      * @return PageableData|TransactionLogView[]
      */
     public function GetList($pageNumber, $pageSize, $userId = -1, $sortField = null, $sortDirection = null, $filter = null);
 
     /**
      * @param int $transactionLogId
+     *
      * @return TransactionLogView
      */
     public function GetTransactionLogView($transactionLogId);
@@ -80,7 +76,7 @@ class PaymentRepository implements IPaymentRepository
     {
         $reader = ServiceLocator::GetDatabase()->Query(new GetPaymentConfigurationCommand());
         $res = [];
-        for ($i=0;$i<$reader->NumRows();$i++) {
+        for ($i = 0; $i < $reader->NumRows(); ++$i) {
             $row = $reader->GetRow();
             $res[] = new CreditCost($row[ColumnNames::CREDIT_COUNT], $row[ColumnNames::CREDIT_COST], $row[ColumnNames::CREDIT_CURRENCY]);
         }
@@ -89,6 +85,7 @@ class PaymentRepository implements IPaymentRepository
         if (empty($res)) {
             $res[] = new CreditCost();
         }
+
         return $res;
     }
 
@@ -120,16 +117,17 @@ class PaymentRepository implements IPaymentRepository
 
         $reader = ServiceLocator::GetDatabase()->Query(new GetPaymentGatewaySettingsCommand(PaymentGateways::PAYPAL));
         while ($row = $reader->GetRow()) {
-            if ($row[ColumnNames::GATEWAY_SETTING_NAME] == PayPalGateway::CLIENT_ID) {
+            if (PayPalGateway::CLIENT_ID == $row[ColumnNames::GATEWAY_SETTING_NAME]) {
                 $clientId = $row[ColumnNames::GATEWAY_SETTING_VALUE];
-            } elseif ($row[ColumnNames::GATEWAY_SETTING_NAME] == PayPalGateway::SECRET) {
+            } elseif (PayPalGateway::SECRET == $row[ColumnNames::GATEWAY_SETTING_NAME]) {
                 $secret = $row[ColumnNames::GATEWAY_SETTING_VALUE];
-            } elseif ($row[ColumnNames::GATEWAY_SETTING_NAME] == PayPalGateway::ENVIRONMENT) {
+            } elseif (PayPalGateway::ENVIRONMENT == $row[ColumnNames::GATEWAY_SETTING_NAME]) {
                 $environment = $row[ColumnNames::GATEWAY_SETTING_VALUE];
             }
         }
 
         $reader->Free();
+
         return PayPalGateway::Create($clientId, $secret, $environment);
     }
 
@@ -140,40 +138,44 @@ class PaymentRepository implements IPaymentRepository
 
         $reader = ServiceLocator::GetDatabase()->Query(new GetPaymentGatewaySettingsCommand(PaymentGateways::STRIPE));
         while ($row = $reader->GetRow()) {
-            if ($row[ColumnNames::GATEWAY_SETTING_NAME] == StripeGateway::PUBLISHABLE_KEY) {
+            if (StripeGateway::PUBLISHABLE_KEY == $row[ColumnNames::GATEWAY_SETTING_NAME]) {
                 $publishableKey = $row[ColumnNames::GATEWAY_SETTING_VALUE];
-            } elseif ($row[ColumnNames::GATEWAY_SETTING_NAME] == StripeGateway::SECRET_KEY) {
+            } elseif (StripeGateway::SECRET_KEY == $row[ColumnNames::GATEWAY_SETTING_NAME]) {
                 $secretKey = $row[ColumnNames::GATEWAY_SETTING_VALUE];
             }
         }
 
         $reader->Free();
+
         return StripeGateway::Create($publishableKey, $secretKey);
     }
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param int $userId
-     * @param string $sortField
-     * @param string $sortDirection
+     * @param int        $pageNumber
+     * @param int        $pageSize
+     * @param int        $userId
+     * @param string     $sortField
+     * @param string     $sortDirection
      * @param ISqlFilter $filter
+     *
      * @return PageableData|TransactionLogView[]
      */
     public function GetList($pageNumber, $pageSize, $userId = -1, $sortField = null, $sortDirection = null, $filter = null)
     {
         $command = new GetAllTransactionLogsCommand($userId);
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['TransactionLogView', 'Populate'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize, $sortField, $sortDirection);
     }
 
     /**
      * @param int $transactionLogId
+     *
      * @return TransactionLogView
      */
     public function GetTransactionLogView($transactionLogId)
@@ -182,10 +184,12 @@ class PaymentRepository implements IPaymentRepository
         $reader = ServiceLocator::GetDatabase()->Query($command);
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return TransactionLogView::Populate($row);
         }
 
         $reader->Free();
+
         return null;
     }
 }

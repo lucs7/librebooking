@@ -22,22 +22,23 @@ class Report_ResultSelection
 
     public function Add(ReportCommandBuilder $builder)
     {
-        if ($this->selection == self::FULL_LIST) {
+        if (self::FULL_LIST == $this->selection) {
             $builder->SelectFullList();
         }
-        if ($this->selection == self::COUNT) {
+        if (self::COUNT == $this->selection) {
             $builder->SelectCount();
         }
-        if ($this->selection == self::TIME) {
+        if (self::TIME == $this->selection) {
             $builder->SelectTime();
         }
-        if ($this->selection == self::UTILIZATION) {
+        if (self::UTILIZATION == $this->selection) {
             $builder->SelectDuration()->IncludingBlackouts()->OfResources();
         }
     }
 
     /**
      * @param $selection string
+     *
      * @return bool
      */
     public function Equals($selection)

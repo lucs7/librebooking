@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Schedule/SlotLabelFactory.php');
+require_once ROOT_DIR.'lib/Application/Schedule/SlotLabelFactory.php';
 
 class ReservationSlot implements IReservationSlot
 {
@@ -50,18 +50,14 @@ class ReservationSlot implements IReservationSlot
     protected $_endPeriod;
 
     /**
-     * @param SchedulePeriod $begin
-     * @param SchedulePeriod $end
-     * @param Date $displayDate
      * @param int $periodSpan
-     * @param IReservedItemView $reservation
      */
     public function __construct(
         SchedulePeriod $begin,
         SchedulePeriod $end,
         Date $displayDate,
         $periodSpan,
-        IReservedItemView $reservation
+        IReservedItemView $reservation,
     ) {
         $this->_reservation = $reservation;
         $this->_begin = $begin->BeginDate();
@@ -126,6 +122,7 @@ class ReservationSlot implements IReservationSlot
 
     /**
      * @param SlotLabelFactory|null $factory
+     *
      * @return string
      */
     public function Label($factory = null)
@@ -133,6 +130,7 @@ class ReservationSlot implements IReservationSlot
         if (empty($factory)) {
             return SlotLabelFactory::Create($this->_reservation);
         }
+
         return $factory->Format($this->_reservation);
     }
 
@@ -174,6 +172,7 @@ class ReservationSlot implements IReservationSlot
         }
         $maxCheckinTime = $this->BeginDate()->AddMinutes($min);
         $d = DateDiff::BetweenDates(Date::Now(), $maxCheckinTime);
+
         return $d->Minutes();
     }
 
@@ -199,7 +198,7 @@ class ReservationSlot implements IReservationSlot
 
     public function __toString()
     {
-        return sprintf("Start: %s, End: %s, Span: %s", $this->Begin(), $this->End(), $this->PeriodSpan());
+        return sprintf('Start: %s, End: %s, Span: %s', $this->Begin(), $this->End(), $this->PeriodSpan());
     }
 
     public function BeginSlotId()
@@ -266,19 +265,21 @@ class ReservationSlot implements IReservationSlot
     {
         $newMinutes = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_UPDATE_HIGHLIGHT_MINUTES, new IntConverter());
         $modifiedDate = $this->_reservation->ModifiedDate;
+
         return
-            ($newMinutes > 0) &&
-            (empty($modifiedDate)) &&
-            ($this->_reservation->CreatedDate->AddMinutes($newMinutes)->GreaterThanOrEqual(Date::Now()));
+            ($newMinutes > 0)
+            && (empty($modifiedDate))
+            && $this->_reservation->CreatedDate->AddMinutes($newMinutes)->GreaterThanOrEqual(Date::Now());
     }
 
     public function IsUpdated()
     {
         $newMinutes = Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_UPDATE_HIGHLIGHT_MINUTES, new IntConverter());
         $modifiedDate = $this->_reservation->ModifiedDate;
+
         return
-            ($newMinutes > 0) &&
-            (!empty($modifiedDate)) &&
-            ($this->_reservation->ModifiedDate->AddMinutes($newMinutes)->GreaterThanOrEqual(Date::Now()));
+            ($newMinutes > 0)
+            && (!empty($modifiedDate))
+            && $this->_reservation->ModifiedDate->AddMinutes($newMinutes)->GreaterThanOrEqual(Date::Now());
     }
 }

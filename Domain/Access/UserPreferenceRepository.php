@@ -1,29 +1,35 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/User.php');
+require_once ROOT_DIR.'Domain/User.php';
 
 interface IUserPreferenceRepository
 {
     /**
      * @abstract
+     *
      * @param $userId int
+     *
      * @return array|string[] values, indexed by name
      */
     public function GetAllUserPreferences($userId);
 
     /**
      * @abstract
-     * @param $userId int
+     *
+     * @param $userId         int
      * @param $preferenceName string
+     *
      * @return string|null
      */
     public function GetUserPreference($userId, $preferenceName);
 
     /**
      * @abstract
-     * @param $userId int
-     * @param $preferenceName string
+     *
+     * @param $userId          int
+     * @param $preferenceName  string
      * @param $preferenceValue string
+     *
      * @return void
      */
     public function SetUserPreference($userId, $preferenceName, $preferenceValue);
@@ -33,6 +39,7 @@ class UserPreferenceRepository implements IUserPreferenceRepository
 {
     /**
      * @param $userId int
+     *
      * @return array|string[] values, indexed by name
      */
     public function GetAllUserPreferences($userId)
@@ -45,12 +52,14 @@ class UserPreferenceRepository implements IUserPreferenceRepository
         }
 
         $reader->Free();
+
         return $rv;
     }
 
     /**
-     * @param $userId int
+     * @param $userId         int
      * @param $preferenceName string
+     *
      * @return string|null
      */
     public function GetUserPreference($userId, $preferenceName)
@@ -59,17 +68,20 @@ class UserPreferenceRepository implements IUserPreferenceRepository
 
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return $row[ColumnNames::PREFERENCE_VALUE];
         }
 
         $reader->Free();
+
         return null;
     }
 
     /**
-     * @param $userId int
-     * @param $preferenceName string
+     * @param $userId          int
+     * @param $preferenceName  string
      * @param $preferenceValue string
+     *
      * @return void
      */
     public function SetUserPreference($userId, $preferenceName, $preferenceValue)

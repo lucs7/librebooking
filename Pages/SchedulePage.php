@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/Schedule/SchedulePresenter.php');
-require_once(ROOT_DIR . 'Presenters/Schedule/LoadReservationRequest.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/Schedule/SchedulePresenter.php';
+require_once ROOT_DIR.'Presenters/Schedule/LoadReservationRequest.php';
 
 interface ISchedulePage extends IActionPage
 {
@@ -86,6 +86,7 @@ interface ISchedulePage extends IActionPage
 
     /**
      * @param int $scheduleId
+     *
      * @return string|ScheduleStyle
      */
     public function GetScheduleStyle($scheduleId);
@@ -125,9 +126,6 @@ interface ISchedulePage extends IActionPage
      */
     public function GetParticipantText();
 
-    /**
-     * @param ResourceGroupTree $resourceGroupTree
-     */
     public function SetResourceGroupTree(ResourceGroupTree $resourceGroupTree);
 
     /**
@@ -175,9 +173,6 @@ interface ISchedulePage extends IActionPage
      */
     public function SetFilter($resourceFilter);
 
-    /**
-     * @param CalendarSubscriptionUrl $subscriptionUrl
-     */
     public function SetSubscriptionUrl(CalendarSubscriptionUrl $subscriptionUrl);
 
     /**
@@ -186,8 +181,6 @@ interface ISchedulePage extends IActionPage
     public function ShowPermissionError($shouldShow);
 
     /**
-     * @param UserSession $user
-     * @param Schedule $schedule
      * @return string
      */
     public function GetDisplayTimezone(UserSession $user, Schedule $schedule);
@@ -204,13 +197,10 @@ interface ISchedulePage extends IActionPage
 
     /**
      * @param DateRange $availability
-     * @param bool $tooEarly
+     * @param bool      $tooEarly
      */
     public function BindScheduleAvailability($availability, $tooEarly);
 
-    /**
-     * @param $viewableResourceReservations
-     */
     public function BindViewableResourceReservations($resourceIds);
 
     /**
@@ -293,7 +283,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
         $endLoad = microtime(true);
 
-        if ($user->IsAdmin && $this->resourceCount == 0 && !$this->_isFiltered) {
+        if ($user->IsAdmin && 0 == $this->resourceCount && !$this->_isFiltered) {
             $this->Set('ShowResourceWarning', true);
         }
 
@@ -311,7 +301,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
         $this->Set('FastReservationLoad', Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_FAST_RESERVATION_LOAD, new BooleanConverter()) ?? false);
 
         if ($this->IsMobile && !$this->IsTablet) {
-            if ($this->ScheduleStyle == ScheduleStyle::Tall) {
+            if (ScheduleStyle::Tall == $this->ScheduleStyle) {
                 $this->Display('Schedule/schedule-flipped.tpl');
             } else {
                 $this->Display('Schedule/schedule-mobile.tpl');
@@ -334,7 +324,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest === "reservations") {
+        if ('reservations' === $dataRequest) {
             $this->_presenter->LoadReservations();
         } else {
             $this->_presenter->GetLayout(ServiceLocator::GetServer()->GetUserSession());
@@ -460,7 +450,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
     public function GetScheduleStyle($scheduleId)
     {
         $cookie = $this->server->GetCookie("schedule-style-$scheduleId");
-        if ($cookie != null) {
+        if (null != $cookie) {
             return $cookie;
         }
 
@@ -470,8 +460,8 @@ class SchedulePage extends ActionPage implements ISchedulePage
     public function SetScheduleStyle($style)
     {
         $this->ScheduleStyle = $style;
-        $this->Set('CookieName', 'schedule-style-' . $this->GetVar('ScheduleId'));
-        $this->Set("ScheduleStyle", $style);
+        $this->Set('CookieName', 'schedule-style-'.$this->GetVar('ScheduleId'));
+        $this->Set('ScheduleStyle', $style);
     }
 
     /**
@@ -534,17 +524,18 @@ class SchedulePage extends ActionPage implements ISchedulePage
     public function GetMaxParticipants()
     {
         $max = $this->GetQuerystring(FormKeys::MAX_PARTICIPANTS);
+
         return intval($max);
     }
 
     public function GetResourceAttributes()
     {
-        return AttributeFormParser::GetAttributes($this->GetQuerystring('r' . FormKeys::ATTRIBUTE_PREFIX));
+        return AttributeFormParser::GetAttributes($this->GetQuerystring('r'.FormKeys::ATTRIBUTE_PREFIX));
     }
 
     public function GetResourceTypeAttributes()
     {
-        return AttributeFormParser::GetAttributes($this->GetQuerystring('rt' . FormKeys::ATTRIBUTE_PREFIX));
+        return AttributeFormParser::GetAttributes($this->GetQuerystring('rt'.FormKeys::ATTRIBUTE_PREFIX));
     }
 
     public function SetFilter($resourceFilter)
@@ -587,7 +578,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function FilterCleared()
     {
-        return $this->GetQuerystring('clearFilter') == '1';
+        return '1' == $this->GetQuerystring('clearFilter');
     }
 
     public function BindScheduleAvailability($availability, $tooEarly)
@@ -623,6 +614,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
             }
         }
         $builder = new LoadReservationRequestBuilder();
+
         return $builder
             ->WithRange(Date::Parse($this->GetForm(FormKeys::BEGIN_DATE), $timezone), Date::Parse($this->GetForm(FormKeys::END_DATE), $timezone))
             ->WithResources($resourceIds)

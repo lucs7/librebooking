@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
+require_once ROOT_DIR.'lib/Application/Admin/namespace.php';
 
 class ScheduleAdminManageReservationsServiceTest extends TestBase
 {

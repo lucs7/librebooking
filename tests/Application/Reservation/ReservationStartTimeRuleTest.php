@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ReservationStartTimeRuleTest extends TestBase
 {
@@ -98,7 +98,7 @@ class ReservationStartTimeRuleTest extends TestBase
         $start = $now->AddDays(-5);
         $end = $now->AddDays(5);
 
-        $periodStart =  Date::Parse('2011-04-04 12:13:16', 'UTC');
+        $periodStart = Date::Parse('2011-04-04 12:13:16', 'UTC');
         $periodEnd = Date::Parse('2011-04-04 12:13:17', 'UTC');
 
         $reservation = new TestReservationSeries();
@@ -115,7 +115,6 @@ class ReservationStartTimeRuleTest extends TestBase
                 ->method('GetPeriod')
                 ->with($this->equalTo($end))
                 ->willReturn($period);
-
 
         $rule = new ReservationStartTimeRule($this->scheduleRepository);
         $result = $rule->Validate($reservation, null);
@@ -151,7 +150,6 @@ class ReservationStartTimeRuleTest extends TestBase
                 ->method('GetPeriod')
                 ->with($this->equalTo($end))
                 ->willReturn($period);
-
 
         $rule = new ReservationStartTimeRule($this->scheduleRepository);
         $result = $rule->Validate($reservation, null);

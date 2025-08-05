@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Controllers/AccountController.php');
+require_once ROOT_DIR.'WebServices/Controllers/AccountController.php';
 
 class AccountControllerTest extends TestBase
 {

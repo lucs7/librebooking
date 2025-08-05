@@ -1,29 +1,32 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Validators/RequestRequiredValueValidator.php');
-require_once(ROOT_DIR . 'WebServices/Requests/User/CreateUserRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/User/UpdateUserRequest.php');
+require_once ROOT_DIR.'lib/Common/Validators/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'WebServices/Validators/RequestRequiredValueValidator.php';
+require_once ROOT_DIR.'WebServices/Requests/User/CreateUserRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/User/UpdateUserRequest.php';
 
 interface IUserRequestValidator
 {
     /**
      * @param CreateUserRequest $createRequest
+     *
      * @return array|string[]
      */
     public function ValidateCreateRequest($createRequest);
 
     /**
-     * @param int $userId
+     * @param int               $userId
      * @param UpdateUserRequest $updateRequest
+     *
      * @return array|string[]
      */
     public function ValidateUpdateRequest($userId, $updateRequest);
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $password
+     *
      * @return string[]
      */
     public function ValidateUpdatePasswordRequest($userId, $password);
@@ -73,7 +76,6 @@ class UserRequestValidator implements IUserRequestValidator
         return $this->Validate($updateRequest, $validators);
     }
 
-
     public function ValidateUpdatePasswordRequest($userId, $password)
     {
         $validator = new PasswordComplexityValidator($password);
@@ -88,7 +90,8 @@ class UserRequestValidator implements IUserRequestValidator
 
     /**
      * @param CreateUserRequest|UpdateUserRequest $request
-     * @param IValidator[] $additionalValidators
+     * @param IValidator[]                        $additionalValidators
+     *
      * @return array|string[]
      */
     private function Validate($request, $additionalValidators = [])
@@ -116,6 +119,7 @@ class UserRequestValidator implements IUserRequestValidator
                 }
             }
         }
+
         return $errors;
     }
 }

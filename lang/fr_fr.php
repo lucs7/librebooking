@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class fr_fr extends en_gb
 {
@@ -81,7 +81,7 @@ class fr_fr extends en_gb
         $strings['repeatDayOfWeek'] = 'Jour de la semaine';
         $strings['RepeatUntilPrompt'] = 'Jusqu\'au';
         $strings['RepeatEveryPrompt'] = 'Tous les';
-        $strings['RepeatDaysPrompt'] = 'On';//
+        $strings['RepeatDaysPrompt'] = 'On';
         $strings['CreateReservationHeading'] = 'Créer une nouvelle réservation';
         $strings['EditReservationHeading'] = 'Editer la réservation %s';
         $strings['ViewReservationHeading'] = 'Visualisation de la réservation %s';
@@ -161,7 +161,7 @@ class fr_fr extends en_gb
         $strings['QuickSlotCreation'] = 'Créer des créneaux toutes les %s minutes entre %s et %s';
         $strings['ApplyUpdatesTo'] = 'Appliquer les Mises à jour à';
         $strings['CancelParticipation'] = 'Annuler la Participation';
-        $strings['Attending'] = 'Attending';//
+        $strings['Attending'] = 'Attending';
         $strings['QuotaConfiguration'] = 'Sur %s pour %s les utilisateurs de %s sont limités à %s %s par %s';
         $strings['QuotaEnforcement'] = 'Contrainte %s %s';
         $strings['reservations'] = 'réservations';
@@ -980,8 +980,8 @@ class fr_fr extends en_gb
         $strings['ResourceStatusChangedSubject'] = 'La disponibilité de %s a changé';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Vous n\'avez aucune réservation passée';
         $strings['PastReservations'] = 'Réservations passées';
         $strings['AllNoPastReservations'] = 'Il n\'y a aucune réservation passée au cours des %s derniers jours';
@@ -989,37 +989,37 @@ class fr_fr extends en_gb
         $strings['Yesterday'] = 'Hier';
         $strings['EarlierThisWeek'] = 'Plus tôt cette semaine';
         $strings['PreviousWeek'] = 'Semaine précédente';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Votre groupe n\'a aucune réservation à venir';
         $strings['GroupUpcomingReservations'] = 'Prochaines réservations de mon/des groupes';
-        //End Group Upcoming Reservations
-        
-        //Facebook Login SDK Error
-        $strings['FacebookLoginErrorMessage'] = 'Une erreur est survenue lors de la connexion avec Facebook. Veuillez réessayer.';
-        //End Facebook Login SDK Error
+        // End Group Upcoming Reservations
 
-        //Pending Approval Reservations in Dashboard
+        // Facebook Login SDK Error
+        $strings['FacebookLoginErrorMessage'] = 'Une erreur est survenue lors de la connexion avec Facebook. Veuillez réessayer.';
+        // End Facebook Login SDK Error
+
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Vous n\'avez aucune réservation en attente d\'approbation';
         $strings['PendingApprovalReservations'] = 'Réservations en attente d\'approbation';
         $strings['LaterThisMonth'] = 'Plus tard ce mois-ci';
         $strings['LaterThisYear'] = 'Plus tard cette année';
-        $strings['Remaining'] = 'Restant';    
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Restant';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Il n\'y a pas de réservations de départ manquantes';
-        $strings['MissingCheckOutReservations'] = 'Réservations de départ manquantes';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Réservations de départ manquantes';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Impossible de voir les détails de la réservation car vous n\'avez pas les autorisations pour l\'un des ressources dans cette réservation';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
+
         return $this->Strings;
     }
 
@@ -1045,6 +1045,7 @@ class fr_fr extends en_gb
         $days['letter'] = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
 
         $this->Days = $days;
+
         return $this->Days;
     }
 
@@ -1063,12 +1064,14 @@ class fr_fr extends en_gb
         $months['abbr'] = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
 
         $this->Months = $months;
+
         return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         return $this->Letters;
     }
 

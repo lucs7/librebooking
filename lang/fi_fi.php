@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class fi_fi extends en_gb
 {
@@ -388,7 +388,7 @@ class fi_fi extends en_gb
         $strings['Choose'] = 'Valitse';
         $strings['All'] = 'kaikki';
         $strings['ViewAsChart'] = 'Katso Kaaviona';
-//
+
         $strings['ReservedResources'] = 'Varatut Resurssit';
         $strings['ReservedAccessories'] = 'Varatut Tarvikkeet';
         $strings['ResourceUsageTimeBooked'] = 'Resurssien käyttö - Varatut ajat';
@@ -729,7 +729,7 @@ class fi_fi extends en_gb
         $strings['MissedCheckout'] = 'Puuttuva Uloskirjaus';
 
         // TÄHÄN
-//
+        //
         // End Strings
 
         // Errors
@@ -908,10 +908,10 @@ class fi_fi extends en_gb
         $strings['InviteeAddedSubjectWithResource'] = '%s Kutsui Sinut Varaukseen for %s :lle';
         $strings['MissedCheckinEmailSubject'] = 'Sisäänkirjaus puuttuu %s :lta';
         $strings['ReservationShareSubject'] = '%s Jakoi Varauksen %s :lle';
-        //End Email Subjects
+        // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Sinulla ei ole aikaisempia varauksia';
         $strings['PastReservations'] = 'Aikaisemmat varaukset';
         $strings['AllNoPastReservations'] = 'Viimeisen %s päivän aikana ei ole aikaisempia varauksia';
@@ -919,34 +919,34 @@ class fi_fi extends en_gb
         $strings['Yesterday'] = 'Eilen';
         $strings['EarlierThisWeek'] = 'Aiemmin tällä viikolla';
         $strings['PreviousWeek'] = 'Edellinen viikko';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Ryhmällänne ei ole tulevia varauksia';
         $strings['GroupUpcomingReservations'] = 'Ryhmäni tulevat varaukset';
-        //End Group Upcoming Reservations
-    
-        //Facebook Login SDK Error
-        $strings['FacebookLoginErrorMessage'] = 'Virhe kirjautuessa Facebookin kanssa. Yritä uudelleen.';
-        //End Facebook Login SDK Error
+        // End Group Upcoming Reservations
 
-        //Pending Approval Reservations in Dashboard
+        // Facebook Login SDK Error
+        $strings['FacebookLoginErrorMessage'] = 'Virhe kirjautuessa Facebookin kanssa. Yritä uudelleen.';
+        // End Facebook Login SDK Error
+
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Sinulla ei ole odottavia hyväksyttäviä varauksia';
         $strings['PendingApprovalReservations'] = 'Odottaa hyväksyntää olevat varaukset';
         $strings['LaterThisMonth'] = 'Myöhemmin tänä kuukautena';
         $strings['LaterThisYear'] = 'Myöhemmin tänä vuonna';
         $strings['Remaining'] = 'Jäljellä oleva';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Puuttuvia uloskirjautumisvarauksia ei ole';
-        $strings['MissingCheckOutReservations'] = 'Puuttuvat uloskirjautumisvaraukset';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Puuttuvat uloskirjautumisvaraukset';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Et voi nähdä varauksen tietoja, koska sinulla ei ole oikeuksia mihinkään tämän varauksen resursseista';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 
@@ -975,6 +975,7 @@ class fi_fi extends en_gb
         $days['letter'] = ['S', 'M', 'T', 'K', 'T', 'P', 'L'];
 
         $this->Days = $days;
+
         return $this->Days;
     }
 
@@ -996,6 +997,7 @@ class fi_fi extends en_gb
         $months['abbr'] = ['Tam', 'Hel', 'Maa', 'Huh', 'Tou', 'Kes', 'Hei', 'Elo', 'Syy', 'Lok', 'Mar', 'Jou'];
 
         $this->Months = $months;
+
         return $this->Months;
     }
 
@@ -1005,6 +1007,7 @@ class fi_fi extends en_gb
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         return $this->Letters;
     }
 

@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Pages/Admin/ManageResourceGroupsPage.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Pages/Admin/ManageResourceGroupsPage.php';
 
 class ManageResourceGroupsActions
 {
@@ -29,7 +29,7 @@ class ManageResourceGroupsPresenter extends ActionPresenter
 
     public function __construct(
         IManageResourceGroupsPage $page,
-        IResourceRepository $resourceRepository
+        IResourceRepository $resourceRepository,
     ) {
         parent::__construct($page);
 

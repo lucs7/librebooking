@@ -16,11 +16,12 @@ class CalendarSubscriptionUrl
 
         if (empty($subscriptionKey)) {
             $this->url = new Url('#');
+
             return;
         }
 
         $scriptUrl = $config->GetScriptUrl();
-        $scriptUrl .= '/export/' . self::PAGE_TOKEN;
+        $scriptUrl .= '/export/'.self::PAGE_TOKEN;
         $url = new Url($scriptUrl);
 
         $url->AddQueryString(QueryStringKeys::USER_ID, $userPublicId);
@@ -33,12 +34,14 @@ class CalendarSubscriptionUrl
     public function GetWebcalUrl()
     {
         $scriptUrl = $this->url->ToString();
+
         return str_replace(self::PAGE_TOKEN, Pages::CALENDAR_SUBSCRIBE, $scriptUrl);
     }
 
     public function GetAtomUrl()
     {
         $scriptUrl = $this->url->ToString();
+
         return str_replace(self::PAGE_TOKEN, Pages::CALENDAR_SUBSCRIBE_ATOM, $scriptUrl);
     }
 

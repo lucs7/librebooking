@@ -1,42 +1,35 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Account/CreateAccountRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Account/UpdateAccountRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Account/UpdateAccountPasswordRequest.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Account/AccountResponse.php');
-require_once(ROOT_DIR . 'WebServices/Validators/AccountRequestValidator.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'WebServices/Requests/Account/CreateAccountRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/Account/UpdateAccountRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/Account/UpdateAccountPasswordRequest.php';
+require_once ROOT_DIR.'WebServices/Responses/Account/AccountResponse.php';
+require_once ROOT_DIR.'WebServices/Validators/AccountRequestValidator.php';
 
 interface IAccountController
 {
     /**
-     * @param CreateAccountRequest $request
      * @return AccountControllerResult
      */
     public function Create(CreateAccountRequest $request);
 
     /**
-     * @param UpdateAccountRequest $request
-     * @param WebServiceUserSession $session
      * @return AccountControllerResult
      */
     public function Update(UpdateAccountRequest $request, WebServiceUserSession $session);
 
     /**
-     * @param UpdateAccountPasswordRequest $request
-     * @param WebServiceUserSession $session
      * @return AccountControllerResult
      */
     public function UpdatePassword(UpdateAccountPasswordRequest $request, WebServiceUserSession $session);
 
     /**
-     * @param WebServiceUserSession $session
      * @return User
      */
     public function LoadUser(WebServiceUserSession $session);
 
     /**
-     * @param WebServiceUserSession $session
      * @return IEntityAttributeList
      */
     public function GetUserAttributes(WebServiceUserSession $session);
@@ -66,7 +59,7 @@ class AccountController implements IAccountController
         IUserRepository $userRepository,
         private readonly IAccountRequestValidator $requestValidator,
         PasswordEncryption $passwordEncryption,
-        IAttributeService $attributeService
+        IAttributeService $attributeService,
     ) {
         $this->registration = $registration;
         $this->userRepository = $userRepository;
@@ -102,7 +95,7 @@ class AccountController implements IAccountController
             $request->acceptTermsOfService
         );
 
-        return new AccountControllerResult($user->Id(), null, $user->StatusId() == AccountStatus::AWAITING_ACTIVATION ? [] : null);
+        return new AccountControllerResult($user->Id(), null, AccountStatus::AWAITING_ACTIVATION == $user->StatusId() ? [] : null);
     }
 
     public function Update(UpdateAccountRequest $request, WebServiceUserSession $session)
@@ -163,7 +156,7 @@ class AccountController implements IAccountController
 class AccountControllerResult
 {
     /**
-     * @param int $userId
+     * @param int            $userId
      * @param array|string[] $errors
      * @param array|string[] $messages
      */

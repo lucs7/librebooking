@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Controls/Control.php');
+require_once ROOT_DIR.'Controls/Control.php';
 
 class DatePickerSetupControl extends Control
 {
@@ -13,11 +13,11 @@ class DatePickerSetupControl extends Control
     {
         $this->SetDefault('NumberOfMonths', 1);
         $this->SetDefault('ShowButtonPanel', 'false');
-        $controlId = $this->Get("ControlId");
+        $controlId = $this->Get('ControlId');
         $controlId = str_replace(']', '\\\\]', str_replace('[', '\\\\[', $controlId));
         $altId = $this->Get('AltId');
 
-        $elementsToTrigger = '#' . $controlId;
+        $elementsToTrigger = '#'.$controlId;
         if (!empty($altId)) {
             $altId = str_replace(']', '\\\\]', str_replace('[', '\\\\[', $altId));
             $elementsToTrigger .= ",#$altId";
@@ -43,7 +43,7 @@ class DatePickerSetupControl extends Control
         $this->SetDefault('MinDate', null);
         $this->SetDefault('MaxDate', null);
 
-        if ($controlId == 'datepicker') {
+        if ('datepicker' == $controlId) {
             $this->Display('Controls/DatePickerSetup.tpl');
         } else {
             $this->Display('Controls/DateSetup.tpl');
@@ -53,10 +53,11 @@ class DatePickerSetupControl extends Control
     private function SetDefault($key, $value)
     {
         $item = $this->Get($key);
-        if ($item == null) {
+        if (null == $item) {
             $this->Set($key, $value);
         }
     }
+
     private function GetJsDayNames($dayKey)
     {
         return $this->GetJsArrayValues(Resources::GetInstance()->GetDays($dayKey));
@@ -69,6 +70,6 @@ class DatePickerSetupControl extends Control
 
     private function GetJsArrayValues($values)
     {
-        return "['" . implode("','", $values) . "']";
+        return "['".implode("','", $values)."']";
     }
 }

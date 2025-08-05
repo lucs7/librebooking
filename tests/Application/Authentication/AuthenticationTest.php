@@ -1,10 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Server/namespace.php';
+require_once ROOT_DIR.'lib/Config/namespace.php';
 
 class AuthenticationTest extends TestBase
 {
@@ -78,7 +77,7 @@ class AuthenticationTest extends TestBase
         $this->lname = 'Name';
         $this->email = 'my@email.com';
         $this->isAdmin = true;
-        $this->timezone = "US/Central";
+        $this->timezone = 'US/Central';
         $this->lastLogin = time();
         $this->homepageId = 2;
         $this->languageCode = 'en_us';
@@ -269,6 +268,7 @@ class FakeFirstRegistrationStrategy implements IFirstRegistrationStrategy
     public function HandleLogin(User $user, IUserRepository $userRepository, IGroupRepository $groupRepository)
     {
         $this->_Handled = true;
+
         return $user;
     }
 }

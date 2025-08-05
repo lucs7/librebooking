@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 interface IUserDetailsPopupPage
 {
@@ -34,6 +34,7 @@ class UserDetailsPopupPage extends Page implements IUserDetailsPopupPage
      * @param UserDetailsPopupPresenter $presenter
      */
     private $presenter;
+
     public function __construct()
     {
         parent::__construct('', 1);
@@ -102,6 +103,7 @@ class UserDetailsPopupPresenter
         $this->userRepository = $userRepository;
         $this->attributeService = $attributeService;
     }
+
     /**
      * @param $currentUser UserSession
      */

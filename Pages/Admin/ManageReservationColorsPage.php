@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 interface IManageReservationColorsPage extends IActionPage
 {
@@ -78,7 +78,7 @@ class ManageReservationColorsPresenter extends ActionPresenter
     public function Add()
     {
         $attributes = $this->page->GetAttributes();
-        if (count($attributes) == 1) {
+        if (1 == count($attributes)) {
             $colorRule = ReservationColorRule::Create($attributes[0]->Id, $attributes[0]->Value, $this->page->GetColor());
             $this->reservationRepository->AddReservationColorRule($colorRule);
         }

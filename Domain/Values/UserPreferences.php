@@ -12,6 +12,7 @@ class UserPreferences
 
     /**
      * @param string $allPreferences
+     *
      * @return UserPreferences
      */
     public static function Parse($allPreferences)
@@ -30,7 +31,7 @@ class UserPreferences
 
         foreach ($pairs as $pair) {
             $nv = explode('=', $pair);
-            if (count($nv) != 2) {
+            if (2 != count($nv)) {
                 continue;
             }
             $preferences->Add($nv[0], $nv[1]);
@@ -40,7 +41,7 @@ class UserPreferences
     }
 
     /**
-     * @param $name string
+     * @param $name  string
      * @param $value string
      */
     public function Add($name, $value)
@@ -50,12 +51,13 @@ class UserPreferences
 
     /**
      * @param $name string
-     * @return null|string
+     *
+     * @return string|null
      */
     public function Get($name)
     {
-        if ($name == UserPreferences::RESERVATION_COLOR &&
-            Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_PER_USER_COLORS, new BooleanConverter()) == false) {
+        if (UserPreferences::RESERVATION_COLOR == $name
+            && false == Configuration::Instance()->GetSectionKey(ConfigSection::SCHEDULE, ConfigKeys::SCHEDULE_PER_USER_COLORS, new BooleanConverter())) {
             return null;
         }
 
@@ -67,7 +69,7 @@ class UserPreferences
     }
 
     /**
-     * @param $name string
+     * @param $name  string
      * @param $value string
      */
     public function Update($name, $value)
@@ -77,12 +79,12 @@ class UserPreferences
         if (array_key_exists($name, $this->preferences)) {
             $currentValue = $this->preferences[$name];
             if ($value != $currentValue) {
-                Log::Debug('changed ' . $name);
+                Log::Debug('changed '.$name);
 
                 $this->changed[] = $name;
             }
         } else {
-            Log::Debug('added ' . $name);
+            Log::Debug('added '.$name);
             $this->added[] = $name;
         }
 

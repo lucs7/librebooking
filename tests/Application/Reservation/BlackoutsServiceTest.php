@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\MockObject\MockObject;
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/ManageBlackoutsService.php');
+require_once ROOT_DIR.'lib/Application/Reservation/ManageBlackoutsService.php';
 
 class BlackoutsServiceTest extends TestBase
 {
@@ -226,7 +226,6 @@ class BlackoutsServiceTest extends TestBase
     {
         $blackoutId = 123;
         $scope = SeriesUpdateScope::ThisInstance;
-
 
         $this->service->Delete($blackoutId, $scope);
         $this->assertEquals($blackoutId, $this->blackoutRepository->_DeletedId);

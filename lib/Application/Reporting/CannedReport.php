@@ -101,24 +101,28 @@ class CannedReport implements ICannedReport
     public function GetBuilder()
     {
         $methodName = $this->method;
+
         return $this->$methodName();
     }
 
     private function LimitToToday(ReportCommandBuilder $builder)
     {
         $builder->Within($this->todayRange->Start(), $this->todayRange->End());
+
         return $builder;
     }
 
     private function LimitToWeek(ReportCommandBuilder $builder)
     {
         $builder->Within($this->weekRange->Start(), $this->weekRange->End());
+
         return $builder;
     }
 
     private function LimitToMonth(ReportCommandBuilder $builder)
     {
         $builder->Within($this->monthRange->Start(), $this->monthRange->End());
+
         return $builder;
     }
 

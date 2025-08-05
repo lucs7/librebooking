@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Export/CalendarExportPage.php');
-require_once(ROOT_DIR . 'Presenters/CalendarExportPresenter.php');
+require_once ROOT_DIR.'Pages/Export/CalendarExportPage.php';
+require_once ROOT_DIR.'Presenters/CalendarExportPresenter.php';
 
 class CalendarExportPresenterTest extends TestBase
 {
@@ -98,9 +98,9 @@ class CalendarExportPresenterTest extends TestBase
         $user = new FakeUserSession();
         $res = new ReservationItemView();
         $res->OwnerId = $user->UserId + 1;
-        $res->OwnerFirstName = "f";
-        $res->OwnerLastName = "l";
-        $res->OwnerEmailAddress = "e@m.com";
+        $res->OwnerFirstName = 'f';
+        $res->OwnerLastName = 'l';
+        $res->OwnerEmailAddress = 'e@m.com';
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
         $this->assertEquals($res->OwnerEmailAddress, $reservationView->OrganizerEmail);
@@ -114,9 +114,9 @@ class CalendarExportPresenterTest extends TestBase
         $user = new FakeUserSession();
         $res = new ReservationItemView();
         $res->OwnerId = $user->UserId;
-        $res->OwnerFirstName = "f";
-        $res->OwnerLastName = "l";
-        $res->OwnerEmailAddress = "e@m.com";
+        $res->OwnerFirstName = 'f';
+        $res->OwnerLastName = 'l';
+        $res->OwnerEmailAddress = 'e@m.com';
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
         $this->assertEquals('e-noreply@m.com', $reservationView->OrganizerEmail);

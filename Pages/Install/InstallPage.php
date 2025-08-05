@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Presenters/Install/InstallPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'Presenters/Install/InstallPresenter.php';
+require_once ROOT_DIR.'lib/Application/Admin/namespace.php';
 
 interface IInstallPage
 {
@@ -75,13 +75,15 @@ interface IInstallPage
 
     /**
      * @param $results array|InstallationResult[]
+     *
      * @return void
      */
     public function SetInstallResults($results);
 
     /**
-     * @param $results array|InstallationResult[]
+     * @param $results        array|InstallationResult[]
      * @param $currentVersion string
+     *
      * @return void
      */
     public function SetUpgradeResults($results, $currentVersion);
@@ -106,9 +108,6 @@ interface IInstallPage
      */
     public function ShowInstallOptions($showInstallOptions);
 
-    /**
-     * @param $showUpToDateMessage
-     */
     public function ShowUpToDate($showUpToDateMessage);
 
     /**
@@ -121,7 +120,7 @@ interface IInstallPage
 class InstallPage extends Page implements IInstallPage
 {
     /**
-     * @var \InstallPresenter
+     * @var InstallPresenter
      */
     private $presenter;
 
@@ -177,7 +176,8 @@ class InstallPage extends Page implements IInstallPage
     }
 
     /**
-     * Set values for displayed template - install.tpl
+     * Set values for displayed template - install.tpl.
+     *
      * @param string $dbname database name
      * @param string $dbuser mysql user for your database e.g LibreBooking
      * @param string $dbhost server address/name where mySql lives
@@ -192,6 +192,7 @@ class InstallPage extends Page implements IInstallPage
     public function RunningInstall()
     {
         $run_install = $this->GetForm('run_install');
+
         return !empty($run_install);
     }
 
@@ -201,6 +202,7 @@ class InstallPage extends Page implements IInstallPage
     public function RunningUpgrade()
     {
         $run_upgrade = $this->GetForm('run_upgrade');
+
         return !empty($run_upgrade);
     }
 
@@ -217,23 +219,27 @@ class InstallPage extends Page implements IInstallPage
     public function GetShouldCreateDatabase()
     {
         $x = $this->GetForm('create_database');
-        return isset($x) && $x == true;
+
+        return isset($x) && true == $x;
     }
 
     public function GetShouldCreateUser()
     {
         $x = $this->GetForm('create_user');
-        return isset($x) && $x == true;
+
+        return isset($x) && true == $x;
     }
 
     public function GetShouldCreateSampleData()
     {
         $x = $this->GetForm('create_sample_data');
-        return isset($x) && $x == true;
+
+        return isset($x) && true == $x;
     }
 
     /**
      * @param $results array|InstallationResult[]
+     *
      * @return void
      */
     public function SetInstallResults($results)
@@ -251,8 +257,9 @@ class InstallPage extends Page implements IInstallPage
     }
 
     /**
-     * @param $results array|InstallationResult[]
+     * @param $results        array|InstallationResult[]
      * @param $currentVersion string
+     *
      * @return void
      */
     public function SetUpgradeResults($results, $currentVersion)
@@ -302,9 +309,6 @@ class InstallPage extends Page implements IInstallPage
         $this->Set('ShowInstallOptions', $showInstallOptions);
     }
 
-    /**
-     * @param $showUpToDateMessage
-     */
     public function ShowUpToDate($showUpToDateMessage)
     {
         $this->Set('ShowUpToDateMessage', $showUpToDateMessage);

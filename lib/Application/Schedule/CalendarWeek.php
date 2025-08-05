@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Schedule.php');
+require_once ROOT_DIR.'Domain/Schedule.php';
 
 class CalendarWeek implements ICalendarSegment
 {
@@ -28,7 +28,7 @@ class CalendarWeek implements ICalendarSegment
     {
         $this->timezone = $timezone;
 
-        for ($i = 0; $i < 7; $i++) {
+        for ($i = 0; $i < 7; ++$i) {
             $this->indexedDays[$i] = CalendarDay::Null();
         }
     }
@@ -41,7 +41,7 @@ class CalendarWeek implements ICalendarSegment
 
         $start = $date->Weekday();
 
-        if ($firstDayOfWeek == Schedule::Today) {
+        if (Schedule::Today == $firstDayOfWeek) {
             $firstDayOfWeek = 0;
         }
 
@@ -53,7 +53,7 @@ class CalendarWeek implements ICalendarSegment
 
         $date = $date->AddDays($adjustedDays);
 
-        for ($i = 0; $i < 7; $i++) {
+        for ($i = 0; $i < 7; ++$i) {
             $week->AddDay(new CalendarDay($date->AddDays($i)));
         }
 
@@ -94,6 +94,7 @@ class CalendarWeek implements ICalendarSegment
 
     /**
      * @param CalendarReservation $reservation
+     *
      * @return void
      */
     public function AddReservation($reservation)

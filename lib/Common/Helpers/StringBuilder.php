@@ -11,12 +11,12 @@ class StringBuilder
 
     public function AppendLine($string = '')
     {
-        $this->_string[] = $string . "\n";
+        $this->_string[] = $string."\n";
     }
 
     public function PrependLine($string = '')
     {
-        array_unshift($this->_string, $string . "\n");
+        array_unshift($this->_string, $string."\n");
     }
 
     public function Count()

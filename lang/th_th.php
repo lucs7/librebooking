@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class th_th extends en_gb
 {
@@ -17,30 +17,29 @@ class th_th extends en_gb
     {
         $dates = [];
 
-        /**
-            * Additional code to support the Thai and Buddhist calendar year
-            * Also encountered problems in the display of the Thai day in $dates['res_popup'] & $dates['dashboard'] Welcome suggestions
-            * Code เพิ่มเติมเพื่อสนับสนุนปฏิทินไทยและพุทธศักราช
-            * ยังพบปัญหาในการแสดงวันภาษาไทยใน $dates['res_popup'] และ $dates['dashboard'] ยินดีรับคำแนะนำ
-        */
+        /*
+         * Additional code to support the Thai and Buddhist calendar year
+         * Also encountered problems in the display of the Thai day in $dates['res_popup'] & $dates['dashboard'] Welcome suggestions
+         * Code เพิ่มเติมเพื่อสนับสนุนปฏิทินไทยและพุทธศักราช
+         * ยังพบปัญหาในการแสดงวันภาษาไทยใน $dates['res_popup'] และ $dates['dashboard'] ยินดีรับคำแนะนำ
+         */
 
-
-        $dates['general_date'] = 'd/m/'.(date('Y')+543);
-        $dates['general_datetime'] = 'd/m/'.(date('Y')+543).' H:i:s';
-        $dates['short_datetime'] = 'd/m/'.(date('Y')+543).' H:i';
-        $dates['schedule_daily'] = 'l, d/m/'.(date('Y')+543);
-        $dates['reservation_email'] = 'd/m/'.(date('Y')+543).' @ H:i (e)';
-        $dates['res_popup'] = 'd/m/'.(date('Y')+543).' H:i'; //
+        $dates['general_date'] = 'd/m/'.(date('Y') + 543);
+        $dates['general_datetime'] = 'd/m/'.(date('Y') + 543).' H:i:s';
+        $dates['short_datetime'] = 'd/m/'.(date('Y') + 543).' H:i';
+        $dates['schedule_daily'] = 'l, d/m/'.(date('Y') + 543);
+        $dates['reservation_email'] = 'd/m/'.(date('Y') + 543).' @ H:i (e)';
+        $dates['res_popup'] = 'd/m/'.(date('Y') + 543).' H:i';
         $dates['res_popup_time'] = 'H:i';
-        $dates['short_reservation_date'] = 'd/m/'.(date('Y')+543).' H:i';
-        $dates['dashboard'] = 'd/m/'.(date('Y')+543).' H:i';
-        //$dates['dashboard'] = $this->_LoadDayThai(date('D')).', d/m/'.(date('Y')+543).' H:i'; // Test Display Thai Day in Dashboard
+        $dates['short_reservation_date'] = 'd/m/'.(date('Y') + 543).' H:i';
+        $dates['dashboard'] = 'd/m/'.(date('Y') + 543).' H:i';
+        // $dates['dashboard'] = $this->_LoadDayThai(date('D')).', d/m/'.(date('Y')+543).' H:i'; // Test Display Thai Day in Dashboard
         $dates['period_time'] = 'H:i';
-        $dates['mobile_reservation_date'] = 'd/m/'.(date('Y')+543).' H:i';
-        $dates['general_date_js'] = 'dd/mm/'.(date('Y')+543);
-        $dates['momentjs_datetime'] = 'D/M/'.(date('Y')+543).' h:mm A';
+        $dates['mobile_reservation_date'] = 'd/m/'.(date('Y') + 543).' H:i';
+        $dates['general_date_js'] = 'dd/mm/'.(date('Y') + 543);
+        $dates['momentjs_datetime'] = 'D/M/'.(date('Y') + 543).' h:mm A';
         $dates['calendar_time'] = 'h:mmt';
-        $dates['calendar_dates'] = 'd/M/'.(date('Y')+543);
+        $dates['calendar_dates'] = 'd/M/'.(date('Y') + 543);
 
         $this->Dates = $dates;
 
@@ -637,7 +636,6 @@ class th_th extends en_gb
         $strings['Schedules'] = 'ตารางการจอง';
         $strings['NotifyUser'] = 'เตือนผู้ใช้';
 
-
         // End Strings
 
         // Install
@@ -836,8 +834,8 @@ class th_th extends en_gb
         $strings['MissedCheckinEmailSubject'] = 'ไม่ได้รับการเช็คอินสำหรับ %s';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'คุณไม่มีการจองที่ผ่านมา';
         $strings['PastReservations'] = 'การจองที่ผ่านมา';
         $strings['AllNoPastReservations'] = 'ไม่มีการจองที่ผ่านมาใน %s วันที่ผ่านมา';
@@ -845,35 +843,34 @@ class th_th extends en_gb
         $strings['Yesterday'] = 'เมื่อวาน';
         $strings['EarlierThisWeek'] = 'ก่อนหน้านี้ในสัปดาห์นี้';
         $strings['PreviousWeek'] = 'สัปดาห์ที่แล้ว';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'กลุ่มของคุณไม่มีการจองที่จะมาถึง';
         $strings['GroupUpcomingReservations'] = 'การจองที่มีต่อไปของกลุ่มของฉัน';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'เกิดข้อผิดพลาดขณะเข้าสู่ระบบด้วย Facebook กรุณาลองอีกครั้ง';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'คุณไม่มีการจองที่รอการอนุมัติ';
         $strings['PendingApprovalReservations'] = 'การจองรอการอนุมัติ';
         $strings['LaterThisMonth'] = 'ในภายหลังเดือนนี้';
         $strings['LaterThisYear'] = 'ในภายหลังปีนี้';
-        $strings['Remaining'] = 'ที่เหลือ';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'ที่เหลือ';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'ไม่มีการจองเช็คเอาท์ที่ขาดหายไป';
-        $strings['MissingCheckOutReservations'] = 'การจองเช็คเอาท์ที่ขาดหายไป';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'การจองเช็คเอาท์ที่ขาดหายไป';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'ไม่สามารถดูรายละเอียดการจองเนื่องจากคุณไม่มีสิทธิ์ที่เพียงพอที่จะเข้าถึงทรัพยากรใด ๆ ในการจองนี้';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

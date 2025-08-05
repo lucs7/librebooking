@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Schedule.php');
+require_once ROOT_DIR.'Domain/Schedule.php';
 
 class FakeSchedule extends Schedule
 {

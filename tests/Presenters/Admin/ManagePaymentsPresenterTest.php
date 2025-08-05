@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManagePaymentsPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/ManagePaymentsPresenter.php';
 
 class ManagePaymentsPresenterTest extends TestBase
 {
@@ -91,7 +91,7 @@ class ManagePaymentsPresenterTest extends TestBase
         $this->page->_PageSize = 50;
 
         $this->paymentRepository->_TransactionLogs = new PageableData([
-            $this->GetTransactionLogView()
+            $this->GetTransactionLogView(),
         ]);
 
         $this->presenter->GetTransactionLog();
@@ -121,7 +121,7 @@ class ManagePaymentsPresenterTest extends TestBase
         $this->paymentRepository->_TransactionLogView = $this->GetTransactionLogView();
 
         $gateway = $this->paymentRepository->_PayPal;
-        $gateway->_Refund->state = "completed";
+        $gateway->_Refund->state = 'completed';
 
         $this->presenter->IssueRefund();
 

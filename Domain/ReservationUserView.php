@@ -14,14 +14,14 @@ class ReservationUserView
         $this->UserId = $userId;
         $this->FirstName = $firstName;
         $this->LastName = $lastName;
-        $this->FullName = $firstName . ' ' . $lastName;
+        $this->FullName = $firstName.' '.$lastName;
         $this->Email = $email;
         $this->LevelId = $levelId;
     }
 
     public function IsOwner()
     {
-        return $this->LevelId == ReservationUserLevel::OWNER;
+        return ReservationUserLevel::OWNER == $this->LevelId;
     }
 
     public function __toString()

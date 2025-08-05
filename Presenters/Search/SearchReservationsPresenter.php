@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Pages/Search/SearchReservationsPage.php');
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Pages/Search/SearchReservationsPage.php';
 
 class SearchReservationsPresenter extends ActionPresenter
 {
@@ -31,7 +31,7 @@ class SearchReservationsPresenter extends ActionPresenter
         UserSession $user,
         IReservationViewRepository $reservationViewRepository,
         IResourceService $resourceService,
-        IScheduleService $scheduleService
+        IScheduleService $scheduleService,
     ) {
         parent::__construct($page);
 
@@ -89,11 +89,11 @@ class SearchReservationsPresenter extends ActionPresenter
 
         $today = Date::Now()->ToTimezone($timezone);
 
-        if ($range == 'tomorrow') {
+        if ('tomorrow' == $range) {
             return new DateRange($today->AddDays(1)->GetDate(), $today->AddDays(2)->GetDate());
         }
 
-        if ($range == 'thisweek') {
+        if ('thisweek' == $range) {
             $weekday = $today->Weekday();
             $adjustedDays = (0 - $weekday);
 
@@ -106,7 +106,7 @@ class SearchReservationsPresenter extends ActionPresenter
             return new DateRange($startDate, $startDate->AddDays(6));
         }
 
-        if ($range == 'daterange') {
+        if ('daterange' == $range) {
             $start = $this->page->GetRequestedStartDate();
             $end = $this->page->GetRequestedEndDate();
 
@@ -116,6 +116,7 @@ class SearchReservationsPresenter extends ActionPresenter
             if (empty($end)) {
                 $end = Date::Now()->ToTimezone($timezone)->AddMonths(1);
             }
+
             return new DateRange(Date::Parse($start, $timezone), Date::Parse($end, $timezone));
         }
 
@@ -138,6 +139,7 @@ class ReservationsSearchFilter
 {
     /**
      * @param Date|null $startDate
+     *
      * @return SqlFilterNull
      */
     public static function GetFilter($startDate, $endDate, $userId, $resourceIds, $scheduleIds, $title, $description, $referenceNumber)
@@ -156,12 +158,12 @@ class ReservationsSearchFilter
             $endFilter = new SqlFilterGreaterThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_END, 2), $startDate->ToDatabase(), true);
         }
         if (!empty($endDate)) {
-            if ($startFilter == null) {
+            if (null == $startFilter) {
                 $startFilter = new SqlFilterLessThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_START, 3), $endDate->ToDatabase(), true);
             } else {
                 $startFilter->_And(new SqlFilterLessThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_START, 4), $endDate->ToDatabase(), true));
             }
-            if ($endFilter == null) {
+            if (null == $endFilter) {
                 $endFilter = new SqlFilterLessThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_END, 3), $endDate->ToDatabase(), true);
             } else {
                 $endFilter->_And(new SqlFilterLessThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_END, 4), $endDate->ToDatabase(), true));
@@ -190,7 +192,7 @@ class ReservationsSearchFilter
             }
         }
 
-        if ($surroundFilter != null || $startFilter != null || $endFilter != null) {
+        if (null != $surroundFilter || null != $startFilter || null != $endFilter) {
             $dateFilter = new SqlFilterNull(true);
             $dateFilter->_Or($surroundFilter)->_Or($startFilter)->_Or($endFilter);
             $filter->_And($dateFilter);

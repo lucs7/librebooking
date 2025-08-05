@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class DailyLayoutTest extends TestBase
 {
@@ -50,7 +50,7 @@ class DailyLayoutTest extends TestBase
         $displayDate = Date::Parse('2010-03-17', 'America/Chicago');
 
         $periods[] = new SchedulePeriod(Date::Parse('2010-03-16 20:30'), Date::Parse('2010-03-17 12:30'));
-        $periods[] = new SchedulePeriod(Date::Parse('2010-03-17 12:30'), Date::Parse('2010-03-17 20:30'), "start");
+        $periods[] = new SchedulePeriod(Date::Parse('2010-03-17 12:30'), Date::Parse('2010-03-17 20:30'), 'start');
         $periods[] = new SchedulePeriod(Date::Parse('2010-03-17 20:30'), Date::Parse('2010-03-18 12:30'));
 
         $scheduleLayout = $this->createMock('IScheduleLayout');
@@ -59,7 +59,7 @@ class DailyLayoutTest extends TestBase
             ->with($this->equalTo($displayDate))
             ->willReturn($periods);
 
-        $layout = new DailyLayout(new ReservationListing("America/Chicago"), $scheduleLayout);
+        $layout = new DailyLayout(new ReservationListing('America/Chicago'), $scheduleLayout);
         $labels = $layout->GetLabels($displayDate);
 
         $this->assertEquals('12:00', $labels[0]);
@@ -97,34 +97,34 @@ class DailyLayoutTest extends TestBase
             ->method('FitsToHours')
             ->willReturn(true);
 
-        $layout = new DailyLayout(new ReservationListing("America/Chicago"), $scheduleLayout);
+        $layout = new DailyLayout(new ReservationListing('America/Chicago'), $scheduleLayout);
         $labels = $layout->GetPeriods($displayDate, true);
 
         $i = 0;
         $this->assertEquals('12:00', $labels[$i]->Label($displayDate));
         $this->assertEquals(1, $labels[$i]->Span());
-        $i++;
+        ++$i;
         $this->assertEquals('06:30', $labels[$i]->Label($displayDate));
         $this->assertEquals(1, $labels[$i]->Span());
-        $i++;
+        ++$i;
         $this->assertEquals('07:30', $labels[$i]->Label($displayDate));
         $this->assertEquals(1, $labels[$i]->Span());
-        $i++;
+        ++$i;
         $this->assertEquals('08:00', $labels[$i]->Label($displayDate));
         $this->assertEquals(4, $labels[$i]->Span());
-        $i++;
+        ++$i;
         $this->assertEquals('09:00', $labels[$i]->Label($displayDate));
         $this->assertEquals(2, $labels[$i]->Span());
-        $i++;
+        ++$i;
         $this->assertEquals('10:00', $labels[$i]->Label($displayDate));
         $this->assertEquals(1, $labels[$i]->Span());
-        $i++;
+        ++$i;
         $this->assertEquals('11:00', $labels[$i]->Label($displayDate));
         $this->assertEquals(2, $labels[$i]->Span());
-        $i++;
+        ++$i;
         $this->assertEquals('02:00', $labels[$i]->Label($displayDate));
         $this->assertEquals(1, $labels[$i]->Span());
-        $i++;
+        ++$i;
         $this->assertEquals('05:30', $labels[$i]->Label($displayDate));
         $this->assertEquals(1, $labels[$i]->Span());
     }
@@ -165,12 +165,12 @@ class DailyLayoutTest extends TestBase
 class TestReservationListItem extends ReservationListItem
 {
     /**
-     * @var \Date
+     * @var Date
      */
     private $start;
 
     /**
-     * @var \Date
+     * @var Date
      */
     private $end;
 
@@ -207,12 +207,12 @@ class TestReservationListItem extends ReservationListItem
 class TestBlackoutListItem extends BlackoutListItem
 {
     /**
-     * @var \Date
+     * @var Date
      */
     private $start;
 
     /**
-     * @var \Date
+     * @var Date
      */
     private $end;
 

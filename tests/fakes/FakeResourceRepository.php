@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/ResourceRepository.php');
+require_once ROOT_DIR.'Domain/Access/ResourceRepository.php';
 
 class FakeResourceRepository implements IResourceRepository
 {
@@ -29,28 +29,39 @@ class FakeResourceRepository implements IResourceRepository
 
     public function GetResourceIdList(): array
     {
-         throw new Exception('Not implemented');
+        throw new Exception('Not implemented');
     }
 
-    public function GetUserResourceList() {
+    public function GetUserResourceList()
+    {
         return null;
     }
 
-    public function GetUserResourceIdList(): array { 
+    public function GetUserResourceIdList(): array
+    {
         return [];
     }
 
-    public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null) {
+    public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null)
+    {
         return null;
     }
 
-    public function GetUserResourcePermissions($userId, $resourceIds = []) { }
+    public function GetUserResourcePermissions($userId, $resourceIds = [])
+    {
+    }
 
-    public function GetUserGroupResourcePermissions($userId, $resourceIds = []) { }
+    public function GetUserGroupResourcePermissions($userId, $resourceIds = [])
+    {
+    }
 
-    public function GetResourceAdminResourceIds($userId, $resourceIds = []) { }
+    public function GetResourceAdminResourceIds($userId, $resourceIds = [])
+    {
+    }
 
-    public function GetScheduleAdminResourceIds($userId, $resourceIds = []) { }
+    public function GetScheduleAdminResourceIds($userId, $resourceIds = [])
+    {
+    }
 
     public function GetScheduleResources($scheduleId)
     {
@@ -62,6 +73,7 @@ class FakeResourceRepository implements IResourceRepository
         if (isset($this->_ResourceList[$resourceId])) {
             return $this->_ResourceList[$resourceId];
         }
+
         return $this->_Resource;
     }
 
@@ -207,7 +219,7 @@ class FakeResourceRepository implements IResourceRepository
         $pageNumber = null,
         $pageSize = null,
         $filter = null,
-        $accountStatus = AccountStatus::ACTIVE
+        $accountStatus = AccountStatus::ACTIVE,
     ) {
         // TODO: Implement GetUsersWithPermission() method.
         return null;

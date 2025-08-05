@@ -1,6 +1,6 @@
 <?php
 
-require_once('Language.php');
+require_once 'Language.php';
 
 class en_us extends Language
 {
@@ -1023,7 +1023,7 @@ class en_us extends Language
         $strings['ResourceStatusChangedSubject'] = 'The availability of %s has changed';
         // End Email Subjects
 
-        //Past Reservations
+        // Past Reservations
         $strings['NoPastReservations'] = 'You have no past reservations';
         $strings['PastReservations'] = 'Past Reservations';
         $strings['AllNoPastReservations'] = 'There are no past reservations in previous %s days';
@@ -1031,44 +1031,44 @@ class en_us extends Language
         $strings['Yesterday'] = 'Yesterday';
         $strings['EarlierThisWeek'] = 'Earlier This Week';
         $strings['PreviousWeek'] = 'Previous Week';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['GroupUpcomingReservations'] = 'My Group(s) Upcoming Reservations';
         $strings['NoGroupUpcomingReservations'] = 'Your group has no upcoming reservations';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'An error occured while logging in with facebook. Please try again.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'You have no reservations pending approval';
         $strings['PendingApprovalReservations'] = 'Pending Approval Reservations';
         $strings['LaterThisMonth'] = 'Later This Month';
         $strings['LaterThisYear'] = 'Later This Year';
         $strings['Other'] = 'Other';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'There are no missing check out reservations';
         $strings['MissingCheckOutReservations'] = 'Missing Check Out Reservations';
-        //End Missing Check In/Out Reservations in Dashboard
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Can\'t see reservation details because you don\'t have permissions to any of the resources in this reservation';
-        //End Schedule Resource Permissions
+        // End Schedule Resource Permissions
 
-        //View Resource
+        // View Resource
         $strings['Check'] = 'Check';
         $strings['PermissionType'] = 'Permission Type';
         $strings['NoResourcesToView'] = 'No available resources';
-        //End View Resource
+        // End View Resource
 
-        //Datatables
-        $strings['Info'] = "Showing page _PAGE_ of _PAGES_ of _MAX_";
-        $strings['LengthMenu'] = "Display _MENU_ records per page";
-        //End Datatables
+        // Datatables
+        $strings['Info'] = 'Showing page _PAGE_ of _PAGES_ of _MAX_';
+        $strings['LengthMenu'] = 'Display _MENU_ records per page';
+        // End Datatables
 
         $this->Strings = $strings;
 

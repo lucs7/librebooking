@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
 
 class ManageAccessoriesActions
 {
@@ -28,11 +28,6 @@ class ManageAccessoriesPresenter extends ActionPresenter
      */
     private $resourceRepository;
 
-    /**
-     * @param IManageAccessoriesPage $page
-     * @param IResourceRepository $resourceRepository
-     * @param IAccessoryRepository $accessoryRepository
-     */
     public function __construct(IManageAccessoriesPage $page, IResourceRepository $resourceRepository, IAccessoryRepository $accessoryRepository)
     {
         parent::__construct($page);

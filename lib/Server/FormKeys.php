@@ -182,7 +182,7 @@ class FormKeys
     public const PK = 'pk';
     public const PERMISSION_TYPE = 'PERMISSION_TYPE';
 
-    public const QUOTA_SCOPE= 'QUOTA_SCOPE';
+    public const QUOTA_SCOPE = 'QUOTA_SCOPE';
 
     public const REFERENCE_NUMBER = 'referenceNumber';
     public const REFUND_AMOUNT = 'REFUND_AMOUNT';
@@ -289,6 +289,7 @@ class FormKeys
     public static function Evaluate($formKey)
     {
         $key = strtoupper($formKey);
+
         return eval("return FormKeys::$key;");
     }
 }

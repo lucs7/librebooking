@@ -31,11 +31,11 @@ class LoadReservationRequest
 
     /**
      * @param DateRange $dateRange
-     * @param int $scheduleId
-     * @param int[] $resourceIds
-     * @param Date[] $specificDates
-     * @param int|null $ownerId
-     * @param int|null $participantId
+     * @param int       $scheduleId
+     * @param int[]     $resourceIds
+     * @param Date[]    $specificDates
+     * @param int|null  $ownerId
+     * @param int|null  $participantId
      */
     public function __construct($dateRange, $scheduleId, $resourceIds, $specificDates, $ownerId, $participantId)
     {
@@ -128,38 +128,44 @@ class LoadReservationRequestBuilder
     {
         $this->start = $start;
         $this->end = $end->AddDays(1);
+
         return $this;
     }
 
     /**
      * @param $resourceIds int[]
+     *
      * @return LoadReservationRequestBuilder
      */
     public function WithResources($resourceIds)
     {
         $this->resourceIds = $resourceIds;
+
         return $this;
     }
-
 
     public function WithScheduleId($scheduleId)
     {
         $this->scheduleId = $scheduleId;
+
         return $this;
     }
 
     /**
      * @param Date[] $dates
+     *
      * @return LoadReservationRequestBuilder
      */
     public function WithSpecificDates($dates)
     {
         $this->specificDates = $dates;
+
         return $this;
     }
 
     /**
      * @param $owner string
+     *
      * @return LoadReservationRequestBuilder
      */
     public function WithOwner($owner)
@@ -173,6 +179,7 @@ class LoadReservationRequestBuilder
 
     /**
      * @param $participant string
+     *
      * @return LoadReservationRequestBuilder
      */
     public function WithParticipant($participant)

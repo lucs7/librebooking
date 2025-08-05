@@ -1,13 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 interface IManageResourceGroupsPage extends IActionPage
 {
-    /**
-     * @param ResourceGroupTree $resourceGroups
-     */
     public function BindResourceGroups(ResourceGroupTree $resourceGroups);
 
     /**
@@ -35,9 +32,6 @@ interface IManageResourceGroupsPage extends IActionPage
      */
     public function GetParentId();
 
-    /**
-     * @param ResourceGroup $newGroup
-     */
     public function BindNewGroup(ResourceGroup $newGroup);
 
     /**
@@ -91,6 +85,7 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
 
     /**
      * @param $dataRequest string
+     *
      * @return void
      */
     public function ProcessDataRequest($dataRequest)
@@ -170,9 +165,10 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
     {
         $groupId = $this->GetQuerystring(QueryStringKeys::GROUP_ID);
 
-        if (empty($groupId) || strtolower($groupId) == 'null') {
+        if (empty($groupId) || 'null' == strtolower($groupId)) {
             return null;
         }
+
         return $groupId;
     }
 

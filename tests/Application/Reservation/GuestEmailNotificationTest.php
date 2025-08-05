@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Notification/namespace.php';
 
 class GuestEmailNotificationTest extends TestBase
 {
@@ -98,7 +98,7 @@ class GuestEmailNotificationTest extends TestBase
         $instance1 = new TestReservation();
         $instance1->WithParticipatingGuest($guest1);
         $instance1->WithParticipatingGuest($guest2);
-        $instance1->ChangeInvitedGuests(['new@1.com', 'new@2.com' ]);
+        $instance1->ChangeInvitedGuests(['new@1.com', 'new@2.com']);
 
         $series = new TestReservationSeries();
         $series->WithOwnerId($ownerId);

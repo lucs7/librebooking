@@ -3,7 +3,6 @@
 interface IReservationRetryOptions
 {
     /**
-     * @param ReservationSeries $series
      * @param ReservationRetryParameter[] $retryParameters
      */
     public function AdjustReservation(ReservationSeries $series, $retryParameters);
@@ -28,7 +27,7 @@ class ReservationRetryOptions implements IReservationRetryOptions
 
     public function AdjustReservation(ReservationSeries $series, $retryParameters)
     {
-        $shouldSkipConflicts = ReservationRetryParameter::GetValue(ReservationRetryParameter::$SKIP_CONFLICTS, $retryParameters, new BooleanConverter()) == true;
+        $shouldSkipConflicts = true == ReservationRetryParameter::GetValue(ReservationRetryParameter::$SKIP_CONFLICTS, $retryParameters, new BooleanConverter());
         if (!$shouldSkipConflicts) {
             return;
         }

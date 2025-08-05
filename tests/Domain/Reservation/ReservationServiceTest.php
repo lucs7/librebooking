@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class ReservationServiceTest extends TestBase
 {
@@ -102,6 +102,7 @@ class TestReservationListing implements IMutableReservationListing
 
     /**
      * @param Date $date
+     *
      * @return IDateReservationListing
      */
     public function OnDate($date)
@@ -112,6 +113,7 @@ class TestReservationListing implements IMutableReservationListing
 
     /**
      * @param ReservationItemView $reservation
+     *
      * @return void
      */
     public function Add($reservation)
@@ -121,6 +123,7 @@ class TestReservationListing implements IMutableReservationListing
 
     /**
      * @param BlackoutItemView $blackout
+     *
      * @return void
      */
     public function AddBlackout($blackout)
@@ -130,6 +133,7 @@ class TestReservationListing implements IMutableReservationListing
 
     /**
      * @param int $resourceId
+     *
      * @return IReservationListing
      */
     public function ForResource($resourceId)
@@ -139,8 +143,8 @@ class TestReservationListing implements IMutableReservationListing
     }
 
     /**
-     * @param Date $date
      * @param int $resourceId
+     *
      * @return array|ReservationListItem[]
      */
     public function OnDateForResource(Date $date, $resourceId)

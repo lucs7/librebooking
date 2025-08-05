@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class FakeResourceService implements IResourceService
 {
@@ -20,11 +20,12 @@ class FakeResourceService implements IResourceService
     public $_LastFilter;
 
     /**
-     * Gets resource list for a schedule
-     * @param int $scheduleId
-     * @param bool $includeInaccessibleResources
-     * @param UserSession $user
+     * Gets resource list for a schedule.
+     *
+     * @param int                         $scheduleId
+     * @param bool                        $includeInaccessibleResources
      * @param ScheduleResourceFilter|null $filter
+     *
      * @return array|ResourceDto[]
      */
     public function GetScheduleResources($scheduleId, $includeInaccessibleResources, UserSession $user, $filter = null)
@@ -35,6 +36,7 @@ class FakeResourceService implements IResourceService
     public function GetAllResources($includeInaccessibleResources, UserSession $user, $filter = null, $pageNumber = null, $pageSize = null)
     {
         $this->_LastFilter = $filter;
+
         return $this->_AllResources;
     }
 
@@ -49,7 +51,7 @@ class FakeResourceService implements IResourceService
 
     /**
      * @param int $scheduleId
-     * @param UserSession $user
+     *
      * @return ResourceGroupTree
      */
     public function GetResourceGroups($scheduleId, UserSession $user)
@@ -87,6 +89,7 @@ class FakeResourceService implements IResourceService
 
     /**
      * @param int $resourceId
+     *
      * @return BookableResource
      */
     public function GetResource($resourceId)

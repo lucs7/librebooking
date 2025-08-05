@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Pages/Admin/Import/ICalImportPage.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Pages/Admin/Import/ICalImportPage.php';
 
 use Sabre\VObject\Reader;
 
@@ -54,7 +54,7 @@ class ICalImportPresenter extends ActionPresenter
         IResourceRepository $resourceRepository,
         IReservationRepository $reservationRepository,
         IRegistration $registration,
-        IScheduleRepository $scheduleRepository
+        IScheduleRepository $scheduleRepository,
     ) {
         parent::__construct($page);
         $this->page = $page;
@@ -78,19 +78,19 @@ class ICalImportPresenter extends ActionPresenter
 
         $error = $file->Error();
         if (!empty($error)) {
-            die($error);
+            exit($error);
         }
 
         $contents = $file->Contents();
 
         if (empty($contents)) {
-            die('Invalid import file');
+            exit('Invalid import file');
         }
 
         try {
             $vcalendar = Reader::read($contents);
-        } catch (\Exception $e) {
-            die('Invalid import file: ' . $e->getMessage());
+        } catch (Exception $e) {
+            exit('Invalid import file: '.$e->getMessage());
         }
 
         $events = $vcalendar->VEVENT;
@@ -100,7 +100,7 @@ class ICalImportPresenter extends ActionPresenter
             try {
                 $location = (string) $event->LOCATION;
                 if (empty($location)) {
-                    $numberSkipped++;
+                    ++$numberSkipped;
                     Log::Debug('Skipping ics import - missing resource');
                     continue;
                 }
@@ -116,8 +116,8 @@ class ICalImportPresenter extends ActionPresenter
                 $start = Date::Parse($start->format('Y-m-d H:i:s'));
                 $end = Date::Parse($end->format('Y-m-d H:i:s'));
 
-                $title = isset($event->SUMMARY) ? htmlspecialchars((string)$event->SUMMARY) : '';
-                $description = isset($event->DESCRIPTION) ? htmlspecialchars((string)$event->DESCRIPTION) : '';
+                $title = isset($event->SUMMARY) ? htmlspecialchars((string) $event->SUMMARY) : '';
+                $description = isset($event->DESCRIPTION) ? htmlspecialchars((string) $event->DESCRIPTION) : '';
 
                 $reservation = ReservationSeries::Create(
                     $user->Id(),
@@ -133,7 +133,7 @@ class ICalImportPresenter extends ActionPresenter
 
                 if (isset($event->ATTENDEE)) {
                     foreach ($event->select('ATTENDEE') as $attendee) {
-                        $email = (string)$attendee;
+                        $email = (string) $attendee;
                         $participant = $this->GetOrCreateUser($email);
                         $participantIds[] = $participant->Id();
                     }
@@ -145,7 +145,7 @@ class ICalImportPresenter extends ActionPresenter
 
                 Log::Debug('Importing reservation on %s - %s for %s', $start, $end, $location);
                 $this->reservationRepository->Add($reservation);
-                $numberImported++;
+                ++$numberImported;
             } catch (Exception $ex) {
                 Log::Error('Error importing event from ICS. %s', $ex);
             }
@@ -168,7 +168,7 @@ class ICalImportPresenter extends ActionPresenter
 
         $user = $this->userRepository->LoadByUsername($email);
 
-        if ($user->Id() == null) {
+        if (null == $user->Id()) {
             $encoded = htmlspecialchars($email);
             $user = $this->registration->Register(
                 $encoded,
@@ -183,6 +183,7 @@ class ICalImportPresenter extends ActionPresenter
         }
 
         $this->userCache[$email] = $user;
+
         return $user;
     }
 
@@ -194,7 +195,7 @@ class ICalImportPresenter extends ActionPresenter
             return $this->resourceCache[$resourceName];
         }
 
-        if ($resource->GetId() == null) {
+        if (null == $resource->GetId()) {
             $encoded = htmlspecialchars($resourceName);
             $resource = BookableResource::CreateNew($resourceName, $this->GetDefaultScheduleId());
             $id = $this->resourceRepository->Add($resource);
@@ -208,7 +209,7 @@ class ICalImportPresenter extends ActionPresenter
 
     private function GetDefaultScheduleId()
     {
-        if ($this->defaultScheduleId != null) {
+        if (null != $this->defaultScheduleId) {
             return $this->defaultScheduleId;
         }
 
@@ -216,11 +217,13 @@ class ICalImportPresenter extends ActionPresenter
         foreach ($schedules as $schedule) {
             if ($schedule->GetIsDefault()) {
                 $this->defaultScheduleId = $schedule->GetId();
+
                 return $this->defaultScheduleId;
             }
         }
 
         $this->defaultScheduleId = $schedules[0]->GetId();
+
         return $this->defaultScheduleId;
     }
 

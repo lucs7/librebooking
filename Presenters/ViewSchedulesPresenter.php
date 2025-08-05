@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'config/timezones.php');        //NEEDED?
+require_once ROOT_DIR.'config/timezones.php';        // NEEDED?
 
 class ViewSchedulesPresenter
 {
@@ -28,7 +28,7 @@ class ViewSchedulesPresenter
         ScheduleViewerViewSchedulesPage $page,
         ResourceRepository $resourceRepo,
         ManageScheduleService $manageSchedulesService,
-        IGroupViewRepository $groupViewRepository
+        IGroupViewRepository $groupViewRepository,
     ) {
         $this->page = $page;
         $this->resourceRepo = $resourceRepo;
@@ -65,7 +65,7 @@ class ViewSchedulesPresenter
         $all = $this->resourceRepo->GetResourceList();
         /** @var BookableResource $resource */
         foreach ($all as $resource) {
-            if ($resource->GetStatusId() != 0) {
+            if (0 != $resource->GetStatusId()) {
                 $resources[$resource->GetScheduleId()][] = $resource;
             }
         }

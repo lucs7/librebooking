@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/ReservationStartTimeConstraint.php');
+require_once ROOT_DIR.'Domain/Values/ReservationStartTimeConstraint.php';
 
 class ReservationStartTimeRule implements IReservationValidationRule
 {
@@ -16,8 +16,9 @@ class ReservationStartTimeRule implements IReservationValidationRule
 
     /**
      * @param ReservationSeries $reservationSeries
-     * @param $retryParameters
+     *
      * @return ReservationRuleResult
+     *
      * @throws Exception
      */
     public function Validate($reservationSeries, $retryParameters)
@@ -28,14 +29,14 @@ class ReservationStartTimeRule implements IReservationValidationRule
             $constraint = ReservationStartTimeConstraint::_DEFAULT;
         }
 
-        if ($constraint == ReservationStartTimeConstraint::NONE) {
+        if (ReservationStartTimeConstraint::NONE == $constraint) {
             return new ReservationRuleResult();
         }
 
         $currentInstance = $reservationSeries->CurrentInstance();
 
         $dateThatShouldBeLessThanNow = $currentInstance->StartDate();
-        if ($constraint == ReservationStartTimeConstraint::CURRENT) {
+        if (ReservationStartTimeConstraint::CURRENT == $constraint) {
             $timezone = $dateThatShouldBeLessThanNow->Timezone();
             /** @var SchedulePeriod $currentPeriod */
             $currentPeriod = $this->scheduleRepository
@@ -43,9 +44,10 @@ class ReservationStartTimeRule implements IReservationValidationRule
                     ->GetPeriod($currentInstance->EndDate());
             $dateThatShouldBeLessThanNow = $currentPeriod->BeginDate();
         }
-        Log::Debug("Start Time Rule: Comparing %s to %s", $dateThatShouldBeLessThanNow, Date::Now());
+        Log::Debug('Start Time Rule: Comparing %s to %s', $dateThatShouldBeLessThanNow, Date::Now());
 
         $startIsInFuture = $dateThatShouldBeLessThanNow->Compare(Date::Now()) >= 0;
+
         return new ReservationRuleResult($startIsInFuture, Resources::GetInstance()->GetString('StartIsInPast'));
     }
 }

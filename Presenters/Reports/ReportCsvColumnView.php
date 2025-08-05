@@ -35,6 +35,7 @@ class ReportCsvColumnView
         }
 
         $this->skippedIterations[] = $iteration;
+
         return false;
     }
 

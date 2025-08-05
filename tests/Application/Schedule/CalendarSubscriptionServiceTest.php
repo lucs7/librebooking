@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class CalendarSubscriptionServiceTest extends TestBase
 {

@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class es extends en_gb
 {
@@ -985,7 +985,7 @@ class es extends en_gb
         $strings['ResourceStatusChangedSubject'] = 'La disponibilidad de %s ha cambiado';
         // End Email Subjects
 
-        //Past Reservations
+        // Past Reservations
         $strings['NoPastReservations'] = 'No tienes reservas pasadas';
         $strings['PastReservations'] = 'Reservas pasadas';
         $strings['AllNoPastReservations'] = 'No hay reservas pasadas en los %s días anteriores';
@@ -993,45 +993,45 @@ class es extends en_gb
         $strings['Yesterday'] = 'Ayer';
         $strings['EarlierThisWeek'] = 'A principio de esta semana';
         $strings['PreviousWeek'] = 'Semana pasada';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Tu grupo no tiene reservas futuras';
         $strings['GroupUpcomingReservations'] = 'Próximas reservas de mi(s) grupo(s)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Se produjo un error al iniciar sesión con Facebook. Por favor, inténtelo de nuevo.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'No tienes reservas pendientes de aprobación';
         $strings['PendingApprovalReservations'] = 'Reservas pendientes de aprobación';
         $strings['LaterThisMonth'] = 'Más tarde este mes';
         $strings['LaterThisYear'] = 'Más tarde este año';
         $strings['Remaining'] = 'Restante';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'No hay reservas de salida que falten';
         $strings['MissingCheckOutReservations'] = 'Reservas de salida que faltan';
-        //End Missing Check In/Out Reservations in Dashboard
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'No se pueden ver los detalles de la reserva porque no tienes permisos para ninguno de los recursos en esta reserva';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
-        //View Resource
+        // View Resource
         $strings['Check'] = 'Consultar';
         $strings['PermissionType'] = 'Tipo de permiso';
         $strings['NoResourcesToView'] = 'No hay recursos disponibles';
-        //End View Resource
+        // End View Resource
 
-        //Datatables
-        $strings['Info'] = "Mostrando página _PAGE_ de _PAGES_ de _MAX_";
-        $strings['LengthMenu'] = "Mostrar _MENU_ registros";
-        //End Datatables
+        // Datatables
+        $strings['Info'] = 'Mostrando página _PAGE_ de _PAGES_ de _MAX_';
+        $strings['LengthMenu'] = 'Mostrar _MENU_ registros';
+        // End Datatables
 
         $this->Strings = $strings;
 
@@ -1083,6 +1083,7 @@ class es extends en_gb
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         return $this->Letters;
     }
 

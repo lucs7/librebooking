@@ -7,8 +7,8 @@ class ReservationAttachmentView
     private string $fileName;
 
     /**
-     * @param int $fileId
-     * @param int $seriesId
+     * @param int    $fileId
+     * @param int    $seriesId
      * @param string $fileName
      */
     public function __construct($fileId, $seriesId, $fileName)

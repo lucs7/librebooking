@@ -4,14 +4,15 @@ class PageableDataStore
 {
     /**
      * Returns a limited query based on page number and size
-     * If nulls are passed for both $pageNumber, $pageSize then all results are returned
+     * If nulls are passed for both $pageNumber, $pageSize then all results are returned.
      *
-     * @param SqlCommand $command
-     * @param callable $listBuilder callback to for each row of results
-     * @param int|null $pageNumber
-     * @param int|null $pageSize
+     * @param SqlCommand  $command
+     * @param callable    $listBuilder   callback to for each row of results
+     * @param int|null    $pageNumber
+     * @param int|null    $pageSize
      * @param string|null $sortField
      * @param string|null $sortDirection
+     *
      * @return PageableData
      */
     public static function GetList($command, $listBuilder, $pageNumber = null, $pageSize = null, $sortField = null, $sortDirection = null)
@@ -27,7 +28,7 @@ class PageableDataStore
             $command = new SortCommand($command, $sortField, $sortDirection);
         }
 
-        if ((empty($pageNumber) && empty($pageSize)) || $pageSize == PageInfo::All) {
+        if ((empty($pageNumber) && empty($pageSize)) || PageInfo::All == $pageSize) {
             $resultReader = $db->Query($command);
         } else {
             $totalReader = $db->Query(new CountCommand($command));
@@ -43,7 +44,7 @@ class PageableDataStore
 
         while ($row = $resultReader->GetRow()) {
             $results[] = call_user_func($listBuilder, $row);
-            $totalCounter++;
+            ++$totalCounter;
         }
         $resultReader->Free();
 
@@ -103,14 +104,14 @@ class PageInfo
         $this->Total = $totalResults;
         $this->CurrentPage = $pageNumber;
         $this->PageSize = $pageSize;
-        $this->TotalPages = ceil($totalResults/max($pageSize, 1));
-        $this->ResultsStart = ($pageNumber-1) * $pageSize + 1;
-        $this->ResultsEnd = min(($pageNumber * $pageSize), $totalResults);
+        $this->TotalPages = ceil($totalResults / max($pageSize, 1));
+        $this->ResultsStart = ($pageNumber - 1) * $pageSize + 1;
+        $this->ResultsEnd = min($pageNumber * $pageSize, $totalResults);
     }
 
     public static function Create($total, $pageNumber, $pageSize)
     {
-        if ($pageSize == self::All) {
+        if (self::All == $pageSize) {
             return new PageInfoAll($total);
         }
 

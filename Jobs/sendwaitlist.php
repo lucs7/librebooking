@@ -1,14 +1,14 @@
 <?php
-/**
-*  Cron Example:
-*  This script must be executed every minute for to enable waitlist notification emails
-*  * * * * * /usr/bin/env php -f ${WWW_DIR}/librebooking/Jobs/sendwaitlist.php
-*/
 
-define('ROOT_DIR', __DIR__ . '/../');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Jobs/JobCop.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationAvailableEmail.php');
+/**
+ *  Cron Example:
+ *  This script must be executed every minute for to enable waitlist notification emails
+ *  * * * * * /usr/bin/env php -f ${WWW_DIR}/librebooking/Jobs/sendwaitlist.php
+ */
+define('ROOT_DIR', __DIR__.'/../');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Jobs/JobCop.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationAvailableEmail.php';
 
 Log::Debug('Running sendwaitlist.php');
 

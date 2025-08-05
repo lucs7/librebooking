@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
+require_once ROOT_DIR.'lib/Config/namespace.php';
 
 class DatabaseFactory
 {
-    private static $_instance = null;
+    private static $_instance;
 
     public static function GetDatabase()
     {
@@ -15,7 +15,7 @@ class DatabaseFactory
             $hostSpec = Configuration::Instance()->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_HOSTSPEC);
             $dbName = Configuration::Instance()->GetSectionKey(ConfigSection::DATABASE, ConfigKeys::DATABASE_NAME);
 
-            require_once(ROOT_DIR . 'lib/Database/MySQL/namespace.php');
+            require_once ROOT_DIR.'lib/Database/MySQL/namespace.php';
             self::$_instance = new Database(new MySqlConnection($dbUser, $dbPassword, $hostSpec, $dbName));
         }
 

@@ -1,10 +1,11 @@
 <?php
+
 /**
-Serbian translation by velisa@velisa.net
+ * Serbian translation by velisa@velisa.net.
  */
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class sr_sr extends en_gb
 {
@@ -644,8 +645,8 @@ class sr_sr extends en_gb
         $strings['UserAdded'] = 'Dodat je novi korisnik';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Nemate prethodne rezervacije';
         $strings['PastReservations'] = 'Prethodne rezervacije';
         $strings['AllNoPastReservations'] = 'Nema prethodnih rezervacija u poslednjih %s dana';
@@ -653,35 +654,34 @@ class sr_sr extends en_gb
         $strings['Yesterday'] = 'Juče';
         $strings['EarlierThisWeek'] = 'Ranije ove nedelje';
         $strings['PreviousWeek'] = 'Prethodna nedelja';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Vaša grupa nema nadolazeće rezervacije';
         $strings['GroupUpcomingReservations'] = 'Nadolazeće rezervacije moje grupe(ova)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Došlo je do greške prilikom prijavljivanja putem Facebooka. Molimo pokušajte ponovo.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Nemate rezervacija koje čekaju odobrenje';
         $strings['PendingApprovalReservations'] = 'Rezervacije koje čekaju odobrenje';
         $strings['LaterThisMonth'] = 'Kasnije ovog meseca';
         $strings['LaterThisYear'] = 'Kasnije ove godine';
-        $strings['Remaining'] = 'Preostalo';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Preostalo';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nema propuštenih rezervacija za odjavu';
-        $strings['MissingCheckOutReservations'] = 'Propuštene rezervacije za odjavu';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Propuštene rezervacije za odjavu';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Ne možete videti detalje rezervacije jer nemate dozvole za nijedan od resursa u ovoj rezervaciji';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

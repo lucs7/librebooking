@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationDeletePresenter.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationDeletePage.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationDeletePresenter.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationDeletePage.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ReservationDeletePresenterTest extends TestBase
 {
@@ -105,7 +105,6 @@ class ReservationDeletePresenterTest extends TestBase
             ->method('Handle')
             ->with($this->equalTo($series), $this->equalTo($this->page))
             ->willReturn(true);
-
 
         $this->presenter->HandleReservation($series);
     }

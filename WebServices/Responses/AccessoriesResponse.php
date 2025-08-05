@@ -8,7 +8,6 @@ class AccessoriesResponse extends RestResponse
     public $accessories;
 
     /**
-     * @param IRestServer $server
      * @param AccessoryDto[] $accessories
      */
     public function __construct(IRestServer $server, $accessories)

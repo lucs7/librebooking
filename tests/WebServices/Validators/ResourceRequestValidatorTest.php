@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Validators/ResourceRequestValidator.php');
+require_once ROOT_DIR.'WebServices/Validators/ResourceRequestValidator.php';
 
 class ResourceRequestValidatorTest extends TestBase
 {

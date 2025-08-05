@@ -30,7 +30,7 @@ abstract class EmailMessage implements IEmailMessage
         $this->Set('ScriptUrl', Configuration::Instance()->GetScriptUrl());
         $this->Set('Charset', $resources->Charset);
         $appTitle = Configuration::Instance()->GetKey(ConfigKeys::APP_TITLE);
-        $this->Set('AppTitle', (empty($appTitle) ? 'LibreBooking' : $appTitle));
+        $this->Set('AppTitle', empty($appTitle) ? 'LibreBooking' : $appTitle);
     }
 
     protected function Set($var, $value)
@@ -44,7 +44,7 @@ abstract class EmailMessage implements IEmailMessage
         $body = $this->email->FetchLocalized($templateName, $this->enforceCustomTemplate);
         $footer = $includeHeaders ? $this->email->fetch('Email/emailfooter.tpl') : '';
 
-        return $header . $body . $footer;
+        return $header.$body.$footer;
     }
 
     protected function Translate($key, $args = [])
@@ -52,6 +52,7 @@ abstract class EmailMessage implements IEmailMessage
         if (!is_array($args)) {
             $args = [$args];
         }
+
         return $this->email->SmartyTranslate(['key' => $key, 'args' => implode(',', $args)], $this->email);
     }
 

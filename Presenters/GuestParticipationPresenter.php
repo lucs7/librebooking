@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Notification/namespace.php';
 
 class GuestParticipationPresenter
 {
@@ -26,7 +26,7 @@ class GuestParticipationPresenter
         IGuestParticipationPage $page,
         IReservationRepository $reservationRepository,
         IUserRepository $userRepository,
-        IParticipationNotification $participationNotification
+        IParticipationNotification $participationNotification,
     ) {
         $this->page = $page;
         $this->reservationRepository = $reservationRepository;
@@ -47,7 +47,6 @@ class GuestParticipationPresenter
     }
 
     /**
-     * @param $invitationAction
      * @return InvitationResult
      */
     private function HandleInvitationAction($invitationAction)
@@ -61,7 +60,7 @@ class GuestParticipationPresenter
         $series = $this->reservationRepository->LoadByReferenceNumber($referenceNumber);
         $result = InvitationResult::None();
 
-        if ($invitationAction == InvitationAction::Accept) {
+        if (InvitationAction::Accept == $invitationAction) {
             if ($user->IsRegistered()) {
                 // if email is already registered, then add user as participant and delete guest
                 $series->AcceptGuestAsUserInvitation($email, $user);
@@ -83,12 +82,13 @@ class GuestParticipationPresenter
 
                     if ($numberOfParticipants > $resource->GetMaxParticipants()) {
                         $result = InvitationResult::MaxCapacity($resource->GetName(), $resource->GetMaxParticipants());
+
                         return $result;
                     }
                 }
             }
         }
-        if ($invitationAction == InvitationAction::Decline) {
+        if (InvitationAction::Decline == $invitationAction) {
             $series->DeclineGuestInvitation($email);
             $result = InvitationResult::Declined($series);
         }
@@ -156,8 +156,6 @@ class InvitationResult
     }
 
     /**
-     * @param ExistingReservationSeries $series
-     * @param User $user
      * @return InvitationResult
      */
     public static function AcceptedAsUser(ExistingReservationSeries $series, User $user)
@@ -171,7 +169,6 @@ class InvitationResult
     }
 
     /**
-     * @param ExistingReservationSeries $series
      * @return InvitationResult
      */
     public static function AcceptedAsGuest(ExistingReservationSeries $series)
@@ -183,10 +180,10 @@ class InvitationResult
         return $result;
     }
 
-
     /**
      * @param string $resourceName
-     * @param int $maxParticipants
+     * @param int    $maxParticipants
+     *
      * @return InvitationResult
      */
     public static function MaxCapacity($resourceName, $maxParticipants)
@@ -199,7 +196,6 @@ class InvitationResult
     }
 
     /**
-     * @param ExistingReservationSeries $series
      * @return InvitationResult
      */
     public static function Declined(ExistingReservationSeries $series)

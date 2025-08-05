@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/GuestReservationPresenter.php');
+require_once ROOT_DIR.'Presenters/Reservation/GuestReservationPresenter.php';
 
 class GuestReservationPresenterTest extends TestBase
 {

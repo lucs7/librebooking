@@ -62,7 +62,7 @@ class SavedReport implements ISavedReport
         Report_ResultSelection $selection,
         Report_GroupBy $groupBy,
         Report_Range $range,
-        Report_Filter $filter
+        Report_Filter $filter,
     ) {
         $this->reportName = $reportName;
         $this->userId = $userId;
@@ -223,9 +223,6 @@ class SavedReport implements ISavedReport
         return $this->userId;
     }
 
-    /**
-     * @param Date $date
-     */
     public function WithDateCreated(Date $date)
     {
         $this->dateCreated = $date;
@@ -249,11 +246,12 @@ class SavedReport implements ISavedReport
 
     /**
      * @static
+     *
      * @param string $reportName
-     * @param int $userId
-     * @param Date $dateCreated
+     * @param int    $userId
      * @param string $serialized
-     * @param int $reportId
+     * @param int    $reportId
+     *
      * @return SavedReport
      */
     public static function FromDatabase($reportName, $userId, Date $dateCreated, $serialized, $reportId)
@@ -261,6 +259,7 @@ class SavedReport implements ISavedReport
         $savedReport = ReportSerializer::Deserialize($reportName, $userId, $serialized);
         $savedReport->WithDateCreated($dateCreated);
         $savedReport->WithId($reportId);
+
         return $savedReport;
     }
 }
@@ -269,7 +268,7 @@ class ReportSerializer
 {
     /**
      * @static
-     * @param SavedReport $report
+     *
      * @return string
      */
     public static function Serialize(SavedReport $report)
@@ -297,9 +296,11 @@ class ReportSerializer
 
     /**
      * @static
+     *
      * @param string $reportName
-     * @param int $userId
+     * @param int    $userId
      * @param string $serialized
+     *
      * @return SavedReport
      */
     public static function Deserialize($reportName, $userId, $serialized)
@@ -309,7 +310,7 @@ class ReportSerializer
         foreach ($pairs as $pair) {
             $keyValue = explode('=', $pair);
 
-            if (count($keyValue) == 2) {
+            if (2 == count($keyValue)) {
                 $values[$keyValue[0]] = $keyValue[1];
             }
         }
@@ -327,7 +328,9 @@ class ReportSerializer
 
     /**
      * @static
+     *
      * @param array $values
+     *
      * @return Report_Usage
      */
     private static function GetUsage($values)
@@ -341,7 +344,9 @@ class ReportSerializer
 
     /**
      * @static
+     *
      * @param array $values
+     *
      * @return Report_ResultSelection
      */
     private static function GetSelection($values)
@@ -355,7 +360,9 @@ class ReportSerializer
 
     /**
      * @static
+     *
      * @param array $values
+     *
      * @return Report_GroupBy
      */
     private static function GetGroupBy($values)
@@ -369,7 +376,9 @@ class ReportSerializer
 
     /**
      * @static
+     *
      * @param array $values
+     *
      * @return Report_Range
      */
     private static function GetRange($values)
@@ -386,7 +395,9 @@ class ReportSerializer
 
     /**
      * @static
+     *
      * @param array $values
+     *
      * @return Report_Filter
      */
     private static function GetFilter($values)

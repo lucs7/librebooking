@@ -16,29 +16,28 @@ class CalendarFilters
     private $resourceGroupTree;
 
     /**
-     * @param array|Schedule[] $schedules
+     * @param array|Schedule[]    $schedules
      * @param array|ResourceDto[] $resources
-     * @param int $selectedScheduleId
-     * @param int $selectedResourceId
-     * @param ResourceGroupTree $resourceGroupTree
+     * @param int                 $selectedScheduleId
+     * @param int                 $selectedResourceId
      */
     public function __construct($schedules, $resources, $selectedScheduleId, $selectedResourceId, ResourceGroupTree $resourceGroupTree)
     {
         $this->resourceGroupTree = $resourceGroupTree;
 
         if (!empty($resources)) {
-            $this->filters[] = new CalendarFilter(self::FilterSchedule, null, Resources::GetInstance()->GetString("AllReservations"), (empty($selectedResourceId) && empty($selectedScheduleId)));
+            $this->filters[] = new CalendarFilter(self::FilterSchedule, null, Resources::GetInstance()->GetString('AllReservations'), empty($selectedResourceId) && empty($selectedScheduleId));
         }
         foreach ($schedules as $schedule) {
             if ($this->ScheduleContainsNoResources($schedule, $resources)) {
                 continue;
             }
 
-            $filter = new CalendarFilter(self::FilterSchedule, $schedule->GetId(), $schedule->GetName(), (empty($selectedResourceId) && $selectedScheduleId == $schedule->GetId()));
+            $filter = new CalendarFilter(self::FilterSchedule, $schedule->GetId(), $schedule->GetName(), empty($selectedResourceId) && $selectedScheduleId == $schedule->GetId());
 
             foreach ($resources as $resource) {
                 if ($resource->GetScheduleId() == $schedule->GetId()) {
-                    $filter->AddSubFilter(new CalendarFilter(self::FilterResource, $resource->GetResourceId(), $resource->GetName(), ($selectedResourceId == $resource->GetResourceId())));
+                    $filter->AddSubFilter(new CalendarFilter(self::FilterResource, $resource->GetResourceId(), $resource->GetName(), $selectedResourceId == $resource->GetResourceId()));
                 }
             }
 
@@ -71,8 +70,8 @@ class CalendarFilters
     }
 
     /**
-     * @param Schedule $schedule
      * @param ResourceDto[] $resources
+     *
      * @return bool
      */
     private function ScheduleContainsNoResources(Schedule $schedule, $resources)

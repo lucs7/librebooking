@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/BlackoutRepository.php');
+require_once ROOT_DIR.'Domain/Access/BlackoutRepository.php';
 
 class BlackoutRepositoryTest extends TestBase
 {

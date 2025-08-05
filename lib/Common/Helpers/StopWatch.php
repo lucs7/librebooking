@@ -29,6 +29,7 @@ class StopWatch
     {
         $sw = new StopWatch();
         $sw->Start();
+
         return $sw;
     }
 
@@ -47,6 +48,7 @@ class StopWatch
 
     /**
      * @param string $label
+     *
      * @return float
      */
     public function GetRecordSeconds($label)
@@ -57,6 +59,7 @@ class StopWatch
     /**
      * @param string $label1
      * @param string $label2
+     *
      * @return float
      */
     public function TimeBetween($label1, $label2)

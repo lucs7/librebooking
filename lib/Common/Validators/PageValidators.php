@@ -60,6 +60,7 @@ class PageValidators
         if (!array_key_exists($id, $this->validators)) {
             return new NullValidator();
         }
+
         return $this->validators[$id];
     }
 }

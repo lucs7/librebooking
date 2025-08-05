@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/GroupImportCsv.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/CsvImportResult.php');
-require_once(ROOT_DIR . 'Pages/Admin/ManageGroupsPage.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'lib/Application/Admin/GroupImportCsv.php';
+require_once ROOT_DIR.'lib/Application/Admin/CsvImportResult.php';
+require_once ROOT_DIR.'Pages/Admin/ManageGroupsPage.php';
 
 class ManageGroupsActions
 {
@@ -49,19 +49,12 @@ class ManageGroupsPresenter extends ActionPresenter
      */
     private $userRepository;
 
-    /**
-     * @param IManageGroupsPage $page
-     * @param IGroupRepository&IGroupViewRepository $groupRepository
-     * @param IResourceRepository $resourceRepository
-     * @param IScheduleRepository $scheduleRepository
-     * @param IUserRepository $userRepository
-     */
     public function __construct(
         IManageGroupsPage $page,
         IGroupRepository&IGroupViewRepository $groupRepository,
         IResourceRepository $resourceRepository,
         IScheduleRepository $scheduleRepository,
-        IUserRepository $userRepository
+        IUserRepository $userRepository,
     ) {
         parent::__construct($page);
 
@@ -87,7 +80,7 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function PageLoad()
     {
-        if ($this->page->GetGroupId() != null) {
+        if (null != $this->page->GetGroupId()) {
             $groupList = $this->groupRepository->GetList(
                 1,
                 1,
@@ -117,7 +110,7 @@ class ManageGroupsPresenter extends ActionPresenter
             new RoleDto(1, 'Group Admin', RoleLevel::GROUP_ADMIN),
             new RoleDto(2, 'Application Admin', RoleLevel::APPLICATION_ADMIN),
             new RoleDto(3, 'Resource Admin', RoleLevel::RESOURCE_ADMIN),
-            new RoleDto(4, 'Schedule Admin', RoleLevel::SCHEDULE_ADMIN)
+            new RoleDto(4, 'Schedule Admin', RoleLevel::SCHEDULE_ADMIN),
         ]);
         $this->page->BindAdminGroups($this->groupRepository->GetGroupsByRole(RoleLevel::GROUP_ADMIN));
     }
@@ -138,10 +131,10 @@ class ManageGroupsPresenter extends ActionPresenter
             $resourceId = $split[0];
             $permissionType = $split[1];
 
-            if ($permissionType === ResourcePermissionType::Full . '') {
+            if ($permissionType === ResourcePermissionType::Full.'') {
                 $allowed[] = $resourceId;
             } else {
-                if ($permissionType === ResourcePermissionType::View . '') {
+                if ($permissionType === ResourcePermissionType::View.'') {
                     $view[] = $resourceId;
                 }
             }
@@ -155,7 +148,7 @@ class ManageGroupsPresenter extends ActionPresenter
     public function ChangeRoles()
     {
         $groupId = $this->page->GetGroupId();
-        Log::Debug("Changing roles for groupId: %s", $groupId);
+        Log::Debug('Changing roles for groupId: %s', $groupId);
 
         $group = $this->groupRepository->LoadById($groupId);
         $roles = [];
@@ -193,9 +186,11 @@ class ManageGroupsPresenter extends ActionPresenter
                 break;
             case 'export':
                 $this->Export();
+
                 return;
             case 'template':
                 $this->page->ShowTemplateCsv();
+
                 return;
         }
 
@@ -208,6 +203,7 @@ class ManageGroupsPresenter extends ActionPresenter
     public function GetGroupResourcePermissions()
     {
         $group = $this->groupRepository->LoadById($this->page->GetGroupId());
+
         return ['full' => $group->AllowedResourceIds(), 'view' => $group->AllowedViewResourceIds()];
     }
 
@@ -216,7 +212,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $groupId = $this->page->GetGroupId();
         $userId = $this->page->GetUserId();
 
-        Log::Debug("Adding userId: %s to groupId: %s", $userId, $groupId);
+        Log::Debug('Adding userId: %s to groupId: %s', $userId, $groupId);
 
         $group = $this->groupRepository->LoadById($groupId);
         $group->AddUser($userId);
@@ -254,6 +250,7 @@ class ManageGroupsPresenter extends ActionPresenter
         Log::Debug('Adding new group with name: %s, isdefault: %s', $groupName, $isDefault);
 
         $group = new Group(0, $groupName, $isDefault);
+
         return $this->groupRepository->Add($group);
     }
 
@@ -275,7 +272,7 @@ class ManageGroupsPresenter extends ActionPresenter
     {
         $groupId = $this->page->GetGroupId();
 
-        Log::Debug("Deleting groupId: %s", $groupId);
+        Log::Debug('Deleting groupId: %s', $groupId);
 
         $group = $this->groupRepository->LoadById($groupId);
         $this->groupRepository->Remove($group);
@@ -286,7 +283,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $groupId = $this->page->GetGroupId();
         $adminGroupId = $this->page->GetAdminGroupId();
 
-        Log::Debug("Changing admin for groupId: %s to %s", $groupId, $adminGroupId);
+        Log::Debug('Changing admin for groupId: %s to %s', $groupId, $adminGroupId);
 
         $group = $this->groupRepository->LoadById($groupId);
 
@@ -470,10 +467,10 @@ class ManageGroupsPresenter extends ActionPresenter
         }
 
         foreach ($groupPermissions as $groupPermission) {
-            if ($groupPermission->PermissionType() == ResourcePermissionType::Full) {
+            if (ResourcePermissionType::Full == $groupPermission->PermissionType()) {
                 $indexedPermissionsWrite[$groupPermission->GroupId()][] = $groupPermission;
             }
-            if ($groupPermission->PermissionType() == ResourcePermissionType::View) {
+            if (ResourcePermissionType::View == $groupPermission->PermissionType()) {
                 $indexedPermissionsRead[$groupPermission->GroupId()][] = $groupPermission;
             }
         }
@@ -518,12 +515,13 @@ class ManageGroupsPresenter extends ActionPresenter
 
         $rows = $csv->GetRows();
 
-        if (count($rows) == 0) {
+        if (0 == count($rows)) {
             $this->page->SetImportResult(new CsvImportResult(0, [], 'Empty file or missing header row'));
+
             return;
         }
 
-        for ($i = 0; $i < count($rows); $i++) {
+        for ($i = 0; $i < count($rows); ++$i) {
             $row = $rows[$i];
 
             $shouldUpdate = $this->page->GetUpdateOnImport() && array_key_exists($row->name, $groupsIndexed);
@@ -575,7 +573,7 @@ class ManageGroupsPresenter extends ActionPresenter
                     $this->groupRepository->Update($group);
                 }
 
-                $importCount++;
+                ++$importCount;
             } catch (Exception $ex) {
                 Log::Error('Error importing groups. %s', $ex);
             }
@@ -586,7 +584,7 @@ class ManageGroupsPresenter extends ActionPresenter
 
     public function LoadValidators($action)
     {
-        if ($action == ManageGroupsActions::Import) {
+        if (ManageGroupsActions::Import == $action) {
             $this->page->RegisterValidator('fileExtensionValidator', new FileExtensionValidator('csv', $this->page->GetImportFile()));
         }
     }
@@ -639,7 +637,7 @@ class UserGroupResults
 {
     /**
      * @param UserItemView[] $users
-     * @param int $totalUsers
+     * @param int            $totalUsers
      */
     public function __construct($users, $totalUsers)
     {

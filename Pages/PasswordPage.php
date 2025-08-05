@@ -1,13 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/PasswordPresenter.php');
-
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/PasswordPresenter.php';
 
 interface IPasswordPage extends IPage
 {
     public function GetCurrentPassword();
+
     public function GetPassword();
+
     public function GetPasswordConfirmation();
 
     public function ResettingPassword();
@@ -23,7 +24,7 @@ interface IPasswordPage extends IPage
 class PasswordPage extends SecurePage implements IPasswordPage
 {
     /**
-     * @var \PasswordPresenter
+     * @var PasswordPresenter
      */
     private $presenter;
 

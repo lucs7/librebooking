@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/UserSessionRepository.php');
+require_once ROOT_DIR.'Domain/Access/UserSessionRepository.php';
 
 class WebServiceSecurity
 {
@@ -23,24 +23,28 @@ class WebServiceSecurity
 
         if (empty($sessionToken) || empty($userId)) {
             Log::Debug('Empty token or userId');
+
             return false;
         }
 
         $session = $this->repository->LoadBySessionToken($sessionToken);
 
-        if ($session != null && $session->IsExpired()) {
+        if (null != $session && $session->IsExpired()) {
             Log::Debug('Session is expired');
             $this->repository->Delete($session);
+
             return false;
         }
 
-        if ($session == null || $session->UserId != $userId) {
+        if (null == $session || $session->UserId != $userId) {
             Log::Debug('Session token does not match user session token');
+
             return false;
         }
 
         if ($requireAdminRole && !$session->IsAdmin) {
             Log::Debug('Route is limited to application administrators and this user is not an admin');
+
             return false;
         }
 

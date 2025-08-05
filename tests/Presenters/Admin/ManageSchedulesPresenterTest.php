@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManageSchedulesPresenter.php');
-require_once(ROOT_DIR . 'Pages/Admin/ManageSchedulesPage.php');
+require_once ROOT_DIR.'Presenters/Admin/ManageSchedulesPresenter.php';
+require_once ROOT_DIR.'Pages/Admin/ManageSchedulesPage.php';
 
 class ManageSchedulesPresenterTest extends TestBase
 {
@@ -91,7 +91,7 @@ class ManageSchedulesPresenterTest extends TestBase
         $reservableSlots = [];
         $blockedSlots = [];
 
-        for ($i = 0; $i < 7; $i++) {
+        for ($i = 0; $i < 7; ++$i) {
             $reservableSlots[$i] = '00:00 - 01:00 Label 1 A\n1:00- 2:00\r\n02:00 -3:30\n03:30-12:00\r\n';
             $blockedSlots[$i] = '00:00 - 01:00 Label 1 A\n1:00- 2:00\r\n02:00 -3:30\n03:30-12:00\r\n';
         }
@@ -198,12 +198,10 @@ class ManageSchedulesPresenterTest extends TestBase
         $matcher = $this->exactly(2);
         $this->resourceRepo->expects($matcher)
                 ->method('Update')
-                ->willReturnCallback(function ($resource) use ($matcher, $resource1, $resource2)
-                {
-                    match ($matcher->numberOfInvocations())
-                    {
+                ->willReturnCallback(function ($resource) use ($matcher, $resource1, $resource2) {
+                    match ($matcher->numberOfInvocations()) {
                         1 => $this->assertEquals($resource, $resource1),
-                        2 => $this->assertEquals($resource, $resource2)
+                        2 => $this->assertEquals($resource, $resource2),
                     };
                 });
 

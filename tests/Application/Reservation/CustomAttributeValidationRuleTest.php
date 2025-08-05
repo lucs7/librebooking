@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Validation/namespace.php';
 
 class CustomAttributeValidationRuleTest extends TestBase
 {
@@ -55,8 +55,8 @@ class CustomAttributeValidationRuleTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                              ->method('LoadById')
                              ->willReturnMap([
-                                [$this->reservation->UserId(), $this->user],
-                                [$this->reservation->BookedBy()->UserId, $this->bookedBy]
+                                 [$this->reservation->UserId(), $this->user],
+                                 [$this->reservation->BookedBy()->UserId, $this->bookedBy],
                              ]);
 
         $this->rule = new CustomAttributeValidationRule($this->attributeService, $this->userRepository);
@@ -72,8 +72,8 @@ class CustomAttributeValidationRuleTest extends TestBase
         $errors = ['error1', 'error2'];
 
         $validationResult = new AttributeServiceValidationResult(false, $errors, [
-                new InvalidAttribute(new FakeCustomAttribute(), 'error1'),
-                new InvalidAttribute(new FakeCustomAttribute(), 'error2')]);
+            new InvalidAttribute(new FakeCustomAttribute(), 'error1'),
+            new InvalidAttribute(new FakeCustomAttribute(), 'error2')]);
 
         $this->attributeService->expects($this->once())
                 ->method('Validate')
@@ -105,7 +105,7 @@ class CustomAttributeValidationRuleTest extends TestBase
         $this->assertEquals(true, $result->IsValid());
     }
 
-    public function testWhenUserIsAnAdmin_ThenEvaluateAdminOnlyAttributes()
+    public function testWhenUserIsAnAdminThenEvaluateAdminOnlyAttributes()
     {
         $this->bookedBy->_IsAdminForUser = true;
         $validationResult = new AttributeServiceValidationResult(true, []);
@@ -120,7 +120,7 @@ class CustomAttributeValidationRuleTest extends TestBase
         $this->assertEquals(true, $result->IsValid());
     }
 
-    public function testWhenTheInvalidAttributeIsForASecondaryUser_AndTheReservationUserIsNotThatUser()
+    public function testWhenTheInvalidAttributeIsForASecondaryUserAndTheReservationUserIsNotThatUser()
     {
         $this->reservation->WithAttributeValue(new AttributeValue(1, null));
 
@@ -144,7 +144,7 @@ class CustomAttributeValidationRuleTest extends TestBase
         $this->assertEmpty($result->ErrorMessage());
     }
 
-    public function testWhenTheInvalidAttributeIsForASecondaryResource_AndTheReservationDoesNotHaveThatResource()
+    public function testWhenTheInvalidAttributeIsForASecondaryResourceAndTheReservationDoesNotHaveThatResource()
     {
         $this->reservation->WithResource(new FakeBookableResource(1));
         $this->reservation->WithAttributeValue(new AttributeValue(1, null));
@@ -169,7 +169,7 @@ class CustomAttributeValidationRuleTest extends TestBase
         $this->assertEmpty($result->ErrorMessage());
     }
 
-    public function testWhenTheInvalidAttributeIsForASecondaryResourceType_AndTheReservationDoesNotHaveAResourceWithThatResourceType()
+    public function testWhenTheInvalidAttributeIsForASecondaryResourceTypeAndTheReservationDoesNotHaveAResourceWithThatResourceType()
     {
         $resource = new FakeBookableResource(1);
         $resource->SetResourceTypeId(1);

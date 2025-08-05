@@ -23,6 +23,7 @@ interface IReportColumns
 {
     /**
      * @param $columnName string
+     *
      * @return bool
      */
     public function Exists($columnName);

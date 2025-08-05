@@ -131,12 +131,8 @@ class ScheduleSlotsResponse extends RestResponse
     public $dates = [];
 
     /**
-     * @param IRestServer $server
-     * @param int $scheduleId
-     * @param IDailyLayout $dailyLayout
-     * @param DateRange $dates
+     * @param int           $scheduleId
      * @param ResourceDto[] $resources
-     * @param IPrivacyFilter $privacyFilter
      */
     public function __construct(IRestServer $server, private $scheduleId, IDailyLayout $dailyLayout, DateRange $dates, $resources, IPrivacyFilter $privacyFilter)
     {

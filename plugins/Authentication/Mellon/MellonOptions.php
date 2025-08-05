@@ -1,14 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . '/lib/Config/namespace.php');
+require_once ROOT_DIR.'/lib/Config/namespace.php';
 
 class MellonOptions
 {
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/MellonConfig.php');
+        require_once dirname(__FILE__).'/MellonConfig.php';
 
-        Configuration::Instance()->Register(dirname(__FILE__) . '/Mellon.config.php', MellonConfig::CONFIG_ID);
+        Configuration::Instance()->Register(dirname(__FILE__).'/Mellon.config.php', MellonConfig::CONFIG_ID);
     }
 
     private function GetConfig($keyName, $converter = null)

@@ -17,7 +17,7 @@ abstract class SeriesEvent
     private $priority;
 
     /**
-     * @var \ReservationSeries
+     * @var ReservationSeries
      */
     protected $series;
 
@@ -28,6 +28,7 @@ abstract class SeriesEvent
 
     /**
      * @param int|SeriesEventPriority $priority
+     *
      * @return void
      */
     protected function SetPriority($priority)
@@ -60,7 +61,6 @@ abstract class SeriesEvent
     }
 
     /**
-     * @param ReservationSeries $series
      * @param int|SeriesEventPriority $priority
      */
     public function __construct(ReservationSeries $series, $priority = SeriesEventPriority::Normal)
@@ -72,7 +72,7 @@ abstract class SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s-%s", get_class($this), $this->id);
+        return sprintf('%s-%s', get_class($this), $this->id);
     }
 
     public static function Compare(SeriesEvent $event1, SeriesEvent $event2)
@@ -109,7 +109,7 @@ class InstanceAddedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->instance->ReferenceNumber());
+        return sprintf('%s%s', get_class($this), $this->instance->ReferenceNumber());
     }
 }
 
@@ -136,7 +136,7 @@ class InstanceRemovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->instance->ReferenceNumber());
+        return sprintf('%s%s', get_class($this), $this->instance->ReferenceNumber());
     }
 }
 
@@ -163,7 +163,7 @@ class InstanceUpdatedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->instance->ReferenceNumber());
+        return sprintf('%s%s', get_class($this), $this->instance->ReferenceNumber());
     }
 }
 
@@ -176,7 +176,7 @@ class SeriesBranchedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->series->SeriesId());
+        return sprintf('%s%s', get_class($this), $this->series->SeriesId());
     }
 }
 
@@ -197,7 +197,7 @@ class SeriesDeletedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->series->SeriesId());
+        return sprintf('%s%s', get_class($this), $this->series->SeriesId());
     }
 }
 
@@ -241,7 +241,7 @@ class ResourceRemovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s%s", get_class($this), $this->ResourceId(), $this->series->SeriesId());
+        return sprintf('%s%s%s', get_class($this), $this->ResourceId(), $this->series->SeriesId());
     }
 }
 
@@ -258,9 +258,7 @@ class ResourceAddedEvent extends SeriesEvent
     private $resourceLevel;
 
     /**
-     * @param BookableResource $resource
      * @param int|ResourceLevel $resourceLevel
-     * @param ExistingReservationSeries $series
      */
     public function __construct(BookableResource $resource, $resourceLevel, ExistingReservationSeries $series)
     {
@@ -293,7 +291,7 @@ class ResourceAddedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s%s", get_class($this), $this->ResourceId(), $this->series->SeriesId());
+        return sprintf('%s%s%s', get_class($this), $this->ResourceId(), $this->series->SeriesId());
     }
 
     public function ResourceLevel()
@@ -311,7 +309,7 @@ class SeriesApprovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->series->SeriesId());
+        return sprintf('%s%s', get_class($this), $this->series->SeriesId());
     }
 }
 
@@ -334,7 +332,7 @@ class AccessoryAddedEvent extends SeriesEvent
     }
 
     /**
-     * @var \ReservationAccessory
+     * @var ReservationAccessory
      */
     private $accessory;
 
@@ -347,7 +345,7 @@ class AccessoryAddedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->accessory->__toString());
+        return sprintf('%s%s', get_class($this), $this->accessory->__toString());
     }
 }
 
@@ -362,7 +360,7 @@ class AccessoryRemovedEvent extends SeriesEvent
     }
 
     /**
-     * @var \ReservationAccessory
+     * @var ReservationAccessory
      */
     private $accessory;
 
@@ -375,7 +373,7 @@ class AccessoryRemovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->accessory->__toString());
+        return sprintf('%s%s', get_class($this), $this->accessory->__toString());
     }
 }
 
@@ -389,16 +387,13 @@ class AttributeAddedEvent extends SeriesEvent
         return $this->attribute->AttributeId;
     }
 
-    /**
-     * @return mixed
-     */
     public function Value()
     {
         return $this->attribute->Value;
     }
 
     /**
-     * @var \AttributeValue
+     * @var AttributeValue
      */
     private $attribute;
 
@@ -411,7 +406,7 @@ class AttributeAddedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->attribute->__toString());
+        return sprintf('%s%s', get_class($this), $this->attribute->__toString());
     }
 }
 
@@ -426,7 +421,7 @@ class AttributeRemovedEvent extends SeriesEvent
     }
 
     /**
-     * @var \AttributeValue
+     * @var AttributeValue
      */
     private $attribute;
 
@@ -439,7 +434,7 @@ class AttributeRemovedEvent extends SeriesEvent
 
     public function __toString()
     {
-        return sprintf("%s%s", get_class($this), $this->attribute->__toString());
+        return sprintf('%s%s', get_class($this), $this->attribute->__toString());
     }
 }
 
@@ -456,7 +451,6 @@ class OwnerChangedEvent extends SeriesEvent
     private $newOwnerId;
 
     /**
-     * @param ExistingReservationSeries $series
      * @param int $oldOwnerId
      * @param int $newOwnerId
      */
@@ -494,7 +488,7 @@ class OwnerChangedEvent extends SeriesEvent
     public function __toString()
     {
         return sprintf(
-            "%s%s%s%s",
+            '%s%s%s%s',
             get_class($this),
             $this->OldOwnerId(),
             $this->NewOwnerId(),
@@ -516,8 +510,7 @@ class AttachmentRemovedEvent extends SeriesEvent
     private $extension;
 
     /**
-     * @param ExistingReservationSeries $series
-     * @param int $fileId
+     * @param int    $fileId
      * @param string $extension
      */
     public function __construct(ExistingReservationSeries $series, $fileId, $extension)
@@ -537,16 +530,16 @@ class AttachmentRemovedEvent extends SeriesEvent
     }
 
     /**
-     * return string
+     * return string.
      */
     public function FileName()
     {
-        return $this->fileId . '.' . $this->extension;
+        return $this->fileId.'.'.$this->extension;
     }
 
     public function __toString()
     {
-        return sprintf("%s%s%s", get_class($this), $this->FileId(), $this->series->SeriesId());
+        return sprintf('%s%s%s', get_class($this), $this->FileId(), $this->series->SeriesId());
     }
 }
 
@@ -556,8 +549,7 @@ class ReminderAddedEvent extends SeriesEvent
     private $reminderType;
 
     /**
-     * @param ExistingReservationSeries $series
-     * @param int $minutesPrior
+     * @param int                         $minutesPrior
      * @param ReservationReminderType|int $reminderType
      */
     public function __construct(ExistingReservationSeries $series, $minutesPrior, $reminderType)
@@ -570,7 +562,7 @@ class ReminderAddedEvent extends SeriesEvent
     public function __toString()
     {
         return sprintf(
-            "%s%s%s%s",
+            '%s%s%s%s',
             get_class($this),
             $this->MinutesPrior(),
             $this->ReminderType(),
@@ -611,7 +603,6 @@ class ReminderRemovedEvent extends SeriesEvent
     }
 
     /**
-     * @param ExistingReservationSeries $series
      * @param int|ReservationReminderType $reminderType
      */
     public function __construct(ExistingReservationSeries $series, $reminderType)
@@ -623,7 +614,7 @@ class ReminderRemovedEvent extends SeriesEvent
     public function __toString()
     {
         return sprintf(
-            "%s%s%s",
+            '%s%s%s',
             get_class($this),
             $this->ReminderType(),
             $this->series->SeriesId()

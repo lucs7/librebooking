@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Group/GroupResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Group/GroupsResponse.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'WebServices/Responses/Group/GroupResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Group/GroupsResponse.php';
 
 class GroupsWebService
 {
@@ -24,7 +24,7 @@ class GroupsWebService
     public function __construct(
         IRestServer $server,
         IGroupRepository $groupRepository,
-        IGroupViewRepository $groupViewRepository
+        IGroupViewRepository $groupViewRepository,
     ) {
         $this->server = $server;
         $this->groupRepository = $groupRepository;
@@ -33,8 +33,11 @@ class GroupsWebService
 
     /**
      * @name GetAllGroups
+     *
      * @description Loads all groups
+     *
      * @response GroupsResponse
+     *
      * @return void
      */
     public function GetGroups()
@@ -47,16 +50,20 @@ class GroupsWebService
 
     /**
      * @name GetGroup
+     *
      * @description Loads a specific group by id
+     *
      * @response GroupResponse
+     *
      * @param int $groupId
+     *
      * @return void
      */
     public function GetGroup($groupId)
     {
         $group = $this->groupRepository->LoadById($groupId);
 
-        if ($group != null) {
+        if (null != $group) {
             $this->server->WriteResponse(new GroupResponse($this->server, $group));
         } else {
             $this->server->WriteResponse(RestResponse::NotFound(), RestResponse::NOT_FOUND_CODE);

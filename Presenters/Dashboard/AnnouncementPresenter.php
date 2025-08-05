@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
 
 class AnnouncementPresenter
 {
@@ -10,9 +10,8 @@ class AnnouncementPresenter
     private $_permissionService;
 
     /**
-     * @param IAnnouncementsControl $control the control to populate
+     * @param IAnnouncementsControl   $control       the control to populate
      * @param IAnnouncementRepository $announcements Announcements domain object
-     * @param IPermissionService $permissionService
      */
     public function __construct(IAnnouncementsControl $control, IAnnouncementRepository $announcements, IPermissionService $permissionService)
     {

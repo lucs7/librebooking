@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageGroupsPage.php');
-require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/ManageGroupsPage.php';
+require_once ROOT_DIR.'lib/Application/Admin/namespace.php';
 
 class GroupAdminManageGroupsPage extends ManageGroupsPage
 {

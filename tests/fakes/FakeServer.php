@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
+require_once ROOT_DIR.'lib/Server/namespace.php';
 
 class FakeServer extends Server
 {
@@ -37,6 +37,7 @@ class FakeServer extends Server
 
     /**
      * @param string $name
+     *
      * @return string
      */
     public function GetCookie($name)
@@ -61,6 +62,7 @@ class FakeServer extends Server
         if (array_key_exists($name, $this->Session)) {
             return $this->Session[$name];
         }
+
         return null;
     }
 
@@ -80,6 +82,7 @@ class FakeServer extends Server
         if (isset($this->Get[$name])) {
             return $this->Get[$name];
         }
+
         return null;
     }
 

@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Responses/ReservationsResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/ReservationResponse.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'WebServices/Responses/ReservationsResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/ReservationResponse.php';
 
 class ReservationsWebService
 {
@@ -31,7 +31,7 @@ class ReservationsWebService
         IRestServer $server,
         IReservationViewRepository $reservationViewRepository,
         IPrivacyFilter $privacyFilter,
-        IAttributeService $attributeService
+        IAttributeService $attributeService,
     ) {
         $this->server = $server;
         $this->reservationViewRepository = $reservationViewRepository;
@@ -41,11 +41,14 @@ class ReservationsWebService
 
     /**
      * @name GetReservations
+     *
      * @description Gets a list of reservations for the specified parameters.
      * Optional query string parameters: userId, resourceId, scheduleId, startDateTime, endDateTime.
      * If no dates are provided, reservations for the next two weeks will be returned.
      * If dates do not include the timezone offset, the timezone of the authenticated user will be assumed.
+     *
      * @response ReservationsResponse
+     *
      * @return void
      */
     public function GetReservations()
@@ -86,9 +89,13 @@ class ReservationsWebService
 
     /**
      * @name GetReservation
+     *
      * @param string $referenceNumber
+     *
      * @description Loads a specific reservation by reference number
+     *
      * @response ReservationResponse
+     *
      * @return void
      */
     public function GetReservation($referenceNumber)
@@ -110,6 +117,7 @@ class ReservationsWebService
      * @param int|null $userId
      * @param int|null $resourceId
      * @param int|null $scheduleId
+     *
      * @return bool
      */
     private function FilterProvided($userId, $resourceId, $scheduleId)
@@ -135,6 +143,7 @@ class ReservationsWebService
 
     /**
      * @param string $queryStringKey
+     *
      * @return Date
      */
     private function GetBaseDate($queryStringKey, $defaultNumberOfDays = 0)

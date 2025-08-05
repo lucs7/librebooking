@@ -1,11 +1,11 @@
 <?php
 
 // debugging tools / libs
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-    require ROOT_DIR . 'vendor/autoload.php';
+if (file_exists(ROOT_DIR.'vendor/autoload.php')) {
+    require ROOT_DIR.'vendor/autoload.php';
 }
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 interface IStylingPluginPage
 {
@@ -23,14 +23,14 @@ class StylingPluginPage implements IStylingPluginPage
         $path = $factory->AdditionalCSS($userSession);
         if (empty($path)) {
             http_response_code(200);
-            die();
+            exit;
         }
         if (!file_exists($path)) {
             http_response_code(404);
-            die();
+            exit;
         }
         http_response_code(200);
         readfile($path);
-        die();
+        exit;
     }
 }

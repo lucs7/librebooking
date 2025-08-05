@@ -1,10 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'plugins/Authentication/WordPress/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'plugins/Authentication/WordPress/namespace.php';
 
 /**
- * Provides WordPress authentication/synchronization for LibreBooking
+ * Provides WordPress authentication/synchronization for LibreBooking.
+ *
  * @see IAuthorization
  */
 class WordPress extends Authentication implements IAuthentication
@@ -39,7 +40,7 @@ class WordPress extends Authentication implements IAuthentication
 
     private function GetRegistration()
     {
-        if ($this->_registration == null) {
+        if (null == $this->_registration) {
             $this->_registration = new Registration();
         }
 
@@ -55,8 +56,8 @@ class WordPress extends Authentication implements IAuthentication
 
         $this->options = new WordPressOptions();
 
-        require_once($this->options->GetPath() . '../wp-load.php');
-        require_once($this->options->GetPath() . 'pluggable.php');
+        require_once $this->options->GetPath().'../wp-load.php';
+        require_once $this->options->GetPath().'pluggable.php';
 
         if (!function_exists('wp_authenticate')) {
             throw new Exception('Could not load WordPress authentication hook. Please verify wp_includes.directory config setting');
@@ -71,6 +72,7 @@ class WordPress extends Authentication implements IAuthentication
 
         if (is_wp_error($user)) {
             Log::Error('WordPress authentication error: %s', $user->get_error_message());
+
             return false;
         }
 
@@ -78,11 +80,13 @@ class WordPress extends Authentication implements IAuthentication
             Log::Debug('WordPress authentication successful. User=%s', $username);
             $this->user = $user;
             $this->password = $password;
+
             return true;
         } else {
             Log::Debug('WordPress authentication failed. User=%s', $username);
             if ($this->options->RetryAgainstDatabase()) {
                 Log::Debug('WordPress authentication retrying against database');
+
                 return $this->authToDecorate->Validate($username, $password);
             }
         }
@@ -115,7 +119,7 @@ class WordPress extends Authentication implements IAuthentication
 
     private function UserExists()
     {
-        return $this->user != null && $this->user->exists();
+        return null != $this->user && $this->user->exists();
     }
 
     private function Synchronize()

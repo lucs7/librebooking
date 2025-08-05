@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/ProxiedService.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -38,11 +40,13 @@
  * implement the CAS_ProxiedService_Testable interface to facilitate unit testing.
  *
  * @class    CAS_ProxiedService
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 interface CAS_ProxiedService
 {
@@ -50,7 +54,8 @@ interface CAS_ProxiedService
      * Answer a service identifier (URL) for whom we should fetch a proxy ticket.
      *
      * @return string
-     * @throws Exception If no service url is available.
+     *
+     * @throws Exception if no service url is available
      */
     public function getServiceUrl();
 
@@ -61,9 +66,10 @@ interface CAS_ProxiedService
      * @param string $proxyTicket Proxy ticket string
      *
      * @return void
-     * @throws InvalidArgumentException If the $proxyTicket is invalid.
-     * @throws CAS_OutOfSequenceException If called after a proxy ticket has
-     * already been initialized/set.
+     *
+     * @throws InvalidArgumentException   if the $proxyTicket is invalid
+     * @throws CAS_OutOfSequenceException if called after a proxy ticket has
+     *                                    already been initialized/set
      */
     public function setProxyTicket($proxyTicket);
 }

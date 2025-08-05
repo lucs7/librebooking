@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageReservationsPresenter.php');
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageReservationsPresenter.php';
 
 interface IManageReservationsPage extends IPageable, IActionPage
 {
@@ -59,6 +59,7 @@ interface IManageReservationsPage extends IPageable, IActionPage
 
     /**
      * @param Date $date |null
+     *
      * @return void
      */
     public function SetEndDate($date);
@@ -243,7 +244,7 @@ interface IManageReservationsPage extends IPageable, IActionPage
     public function GetValue();
 
     /**
-     * return string
+     * return string.
      */
     public function GetName();
 
@@ -334,6 +335,7 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
 
     /**
      * @var PageablePage
+     *
      * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
      */
     protected $pageablePage;
@@ -352,7 +354,7 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
             new TermsOfServiceRepository()
         );
 
-        /**
+        /*
          *  @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
          */
         $this->pageablePage = new PageablePage($this);
@@ -371,7 +373,7 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         $userTimezone = $this->server->GetUserSession()->Timezone;
 
         $this->Set('Timezone', $userTimezone);
-        $this->Set('CsvExportUrl', ServiceLocator::GetServer()->GetUrl() . '&' . QueryStringKeys::FORMAT . '=csv');
+        $this->Set('CsvExportUrl', ServiceLocator::GetServer()->GetUrl().'&'.QueryStringKeys::FORMAT.'=csv');
         $this->presenter->PageLoad($userTimezone);
     }
 
@@ -497,8 +499,8 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
     public function GetPageSize()
     {
         /* replaced by dataTable */
-        //return $this->pageablePage->GetPageSize();
-        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
+        // return $this->pageablePage->GetPageSize();
+        throw new LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     public function BindPageInfo(PageInfo $pageInfo)
@@ -573,12 +575,12 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
 
     public function SetResourceStatusFilterId($statusId)
     {
-        $this->Set('ResourceStatusFilterId', $statusId != '' ? intval($statusId) : '');
+        $this->Set('ResourceStatusFilterId', '' != $statusId ? intval($statusId) : '');
     }
 
     public function SetResourceStatusReasonFilterId($reasonId)
     {
-        $this->Set('ResourceStatusReasonFilterId', $reasonId != '' ? intval($reasonId) : '');
+        $this->Set('ResourceStatusReasonFilterId', '' != $reasonId ? intval($reasonId) : '');
     }
 
     public function GetResourceStatusFilterId()
@@ -724,21 +726,21 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
 
     public function GetMissedCheckin()
     {
-        return (bool)$this->GetQuerystring(QueryStringKeys::MISSED_CHECKIN);
+        return (bool) $this->GetQuerystring(QueryStringKeys::MISSED_CHECKIN);
     }
 
     public function GetMissedCheckout()
     {
-        return (bool)$this->GetQuerystring(QueryStringKeys::MISSED_CHECKOUT);
+        return (bool) $this->GetQuerystring(QueryStringKeys::MISSED_CHECKOUT);
     }
 
     public function SetMissedCheckin($missedCheckin)
     {
-        $this->Set('MissedCheckin', (bool)$missedCheckin);
+        $this->Set('MissedCheckin', (bool) $missedCheckin);
     }
 
     public function SetMissedCheckout($missedCheckout)
     {
-        $this->Set('MissedCheckout', (bool)$missedCheckout);
+        $this->Set('MissedCheckout', (bool) $missedCheckout);
     }
 }

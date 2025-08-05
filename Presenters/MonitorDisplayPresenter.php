@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Pages/MonitorDisplayPage.php');
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Pages/MonitorDisplayPage.php';
 
 class MonitorDisplayPresenter extends ActionPresenter
 {
@@ -35,7 +35,7 @@ class MonitorDisplayPresenter extends ActionPresenter
         IResourceService $resourceService,
         IReservationService $reservationService,
         IScheduleService $scheduleService,
-        ILayoutFactory $layoutFactory
+        ILayoutFactory $layoutFactory,
     ) {
         parent::__construct($page);
         $this->page = $page;
@@ -68,9 +68,9 @@ class MonitorDisplayPresenter extends ActionPresenter
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest == 'resources') {
+        if ('resources' == $dataRequest) {
             $this->RequestResources();
-        } elseif ($dataRequest == 'schedule') {
+        } elseif ('schedule' == $dataRequest) {
             $this->RequestSchedule();
         }
     }
@@ -95,7 +95,7 @@ class MonitorDisplayPresenter extends ActionPresenter
         $resources = $this->GetResources($scheduleId);
         $displayResources = $resources;
 
-        if ($resourceId != -1) {
+        if (-1 != $resourceId) {
             foreach ($resources as $r) {
                 if ($r->GetResourceId() == $resourceId) {
                     $displayResources = [$r];

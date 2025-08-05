@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
-class URIValidatorTest  extends TestBase
+class URIValidatorTest extends TestBase
 {
     public function testValidPathIsAccepted()
     {

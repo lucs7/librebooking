@@ -1,13 +1,13 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Account/CreateAccountRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Account/UpdateAccountRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Account/UpdateAccountPasswordRequest.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Account/AccountResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Account/AccountActionResponse.php');
-require_once(ROOT_DIR . 'WebServices/Controllers/AccountController.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'WebServices/Requests/Account/CreateAccountRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/Account/UpdateAccountRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/Account/UpdateAccountPasswordRequest.php';
+require_once ROOT_DIR.'WebServices/Responses/Account/AccountResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Account/AccountActionResponse.php';
+require_once ROOT_DIR.'WebServices/Controllers/AccountController.php';
 
 class AccountWebService
 {
@@ -23,8 +23,11 @@ class AccountWebService
 
     /**
      * @name GetAccount
+     *
      * @description Gets the currently authenticated users's account information
+     *
      * @response AccountResponse
+     *
      * @return void
      */
     public function GetAccount()
@@ -34,6 +37,7 @@ class AccountWebService
         $userId = $user->Id();
         if (empty($userId)) {
             $this->server->WriteResponse(RestResponse::NotFound(), RestResponse::NOT_FOUND_CODE);
+
             return;
         }
 
@@ -43,9 +47,13 @@ class AccountWebService
 
     /**
      * @name CreateAccount
+     *
      * @description Creates a user account. This does not authenticate
+     *
      * @request CreateAccountRequest
+     *
      * @response AccountCreatedResponse
+     *
      * @return void
      */
     public function Create()
@@ -55,6 +63,7 @@ class AccountWebService
                 new FailedResponse(['allow.self.registration is not enabled for the API']),
                 RestResponse::UNAUTHORIZED_CODE
             );
+
             return;
         }
 
@@ -84,9 +93,13 @@ class AccountWebService
 
     /**
      * @name UpdateAccount
+     *
      * @description Updates an existing user account
+     *
      * @request UpdateAccountRequest
+     *
      * @response AccountUpdatedResponse
+     *
      * @return void
      */
     public function Update($userId)
@@ -117,9 +130,13 @@ class AccountWebService
 
     /**
      * @name UpdatePassword
+     *
      * @description Updates the password for an existing user
+     *
      * @request UpdateAccountPasswordRequest
+     *
      * @response AccountUpdatedResponse
+     *
      * @return void
      */
     public function UpdatePassword($userId)

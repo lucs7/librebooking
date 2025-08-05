@@ -2,7 +2,7 @@
 
 define('ROOT_DIR', '../../');
 
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationSavePage.php');
+require_once ROOT_DIR.'Pages/Ajax/ReservationSavePage.php';
 
 $page = new ReservationSavePage();
 $page->PageLoad();

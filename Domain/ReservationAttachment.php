@@ -99,12 +99,13 @@ class ReservationAttachment
 
     /**
      * @static
+     *
      * @param string $fileName
      * @param string $fileType
-     * @param int $fileSize
-     * @param mixed $fileContent
+     * @param int    $fileSize
      * @param string $fileExtension
-     * @param int $seriesId
+     * @param int    $seriesId
+     *
      * @return ReservationAttachment
      */
     public static function Create($fileName, $fileType, $fileSize, $fileContent, $fileExtension, $seriesId)

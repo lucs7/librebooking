@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ActivationPresenter.php');
+require_once ROOT_DIR.'Presenters/ActivationPresenter.php';
 
 class ActivationPresenterTest extends TestBase
 {

@@ -1,16 +1,16 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ForgotPasswordEmail.php');
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Email/Messages/ForgotPasswordEmail.php';
 
 class ForgotPwdPresenter
 {
     /**
      * @var IForgotPwdPage
      */
-    private $_page = null;
+    private $_page;
 
     public function __construct(IForgotPwdPage $page)
     {
@@ -22,6 +22,7 @@ class ForgotPwdPresenter
         if (Configuration::Instance()->GetKey(ConfigKeys::DISABLE_PASSWORD_RESET, new BooleanConverter())
                 || !PluginManager::Instance()->LoadAuthentication()->ShowForgotPasswordPrompt()) {
             $this->_page->SetEnabled(false);
+
             return;
         }
 
@@ -46,7 +47,7 @@ class ForgotPwdPresenter
         $userRepository = new UserRepository();
         $user = $userRepository->FindByEmail($emailAddress);
 
-        if ($user != null) {
+        if (null != $user) {
             $user->ChangePassword($encrypted, $salt);
             $userRepository->Update($user);
 

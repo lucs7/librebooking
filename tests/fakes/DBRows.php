@@ -42,7 +42,7 @@ class ReminderNoticeRow
         $lname = 'lname',
         $timezone = 'UTC',
         $reminder_minutes = 100,
-        $language = 'en_us'
+        $language = 'en_us',
     ) {
         if (empty($startDate)) {
             $startDate = Date::Now()->ToDatabase();
@@ -90,7 +90,7 @@ class ReservationRow
         $seriesId,
         $ownerId,
         $statusId,
-        $allowParticipation
+        $allowParticipation,
     ) {
         $this->row = [
             ColumnNames::RESERVATION_INSTANCE_ID => $reservationId,
@@ -129,13 +129,14 @@ class ReservationInstanceRow
     }
 
     /**
-     * @param int $instanceId
-     * @param string $referenceNum
+     * @param int       $instanceId
+     * @param string    $referenceNum
      * @param DateRange $duration
-     * @param Date $checkinTime
-     * @param Date $checkoutTime
-     * @param Date $previousEnd
-     * @param int $creditCount
+     * @param Date      $checkinTime
+     * @param Date      $checkoutTime
+     * @param Date      $previousEnd
+     * @param int       $creditCount
+     *
      * @return ReservationInstanceRow
      */
     public function WithInstance($instanceId, $referenceNum, $duration, $checkinTime = null, $checkoutTime = null, $previousEnd = null, $creditCount = null)
@@ -146,10 +147,10 @@ class ReservationInstanceRow
             ColumnNames::REFERENCE_NUMBER => $referenceNum,
             ColumnNames::RESERVATION_START => $duration->GetBegin()->ToDatabase(),
             ColumnNames::RESERVATION_END => $duration->GetEnd()->ToDatabase(),
-            ColumnNames::CHECKIN_DATE => $checkinTime == null ? null : $checkinTime->ToDatabase(),
-            ColumnNames::CHECKOUT_DATE => $checkoutTime == null ? null : $checkoutTime->ToDatabase(),
-            ColumnNames::PREVIOUS_END_DATE => $previousEnd == null ? null : $previousEnd->ToDatabase(),
-            ColumnNames::CREDIT_COUNT => $creditCount
+            ColumnNames::CHECKIN_DATE => null == $checkinTime ? null : $checkinTime->ToDatabase(),
+            ColumnNames::CHECKOUT_DATE => null == $checkoutTime ? null : $checkoutTime->ToDatabase(),
+            ColumnNames::PREVIOUS_END_DATE => null == $previousEnd ? null : $previousEnd->ToDatabase(),
+            ColumnNames::CREDIT_COUNT => $creditCount,
         ];
 
         return $this;
@@ -206,7 +207,7 @@ class ReservationResourceRow
         $creditCount = null,
         $peakCreditCount = null,
         $minNoticeUpdate = null,
-        $minNoticeDelete = null
+        $minNoticeDelete = null,
     ) {
         $this->seriesId = $seriesId;
         $this->resourceName = $resourceName;
@@ -234,12 +235,14 @@ class ReservationResourceRow
     public function WithPrimary($resourceId)
     {
         $this->AddRow($resourceId, ResourceLevel::Primary);
+
         return $this;
     }
 
     public function WithAdditional($resourceId)
     {
         $this->AddRow($resourceId, ResourceLevel::Additional);
+
         return $this;
     }
 
@@ -301,6 +304,7 @@ class ReservationUserRow
     /**
      * @param Reservation $instance
      * @param array|int[] $participantIds
+     *
      * @return ReservationUserRow
      */
     public function WithParticipants($instance, $participantIds)
@@ -308,12 +312,14 @@ class ReservationUserRow
         foreach ($participantIds as $id) {
             $this->AddRow($instance->ReferenceNumber(), $id, ReservationUserLevel::PARTICIPANT);
         }
+
         return $this;
     }
 
     /**
      * @param Reservation $instance
      * @param array|int[] $inviteeIds
+     *
      * @return ReservationUserRow
      */
     public function WithInvitees($instance, $inviteeIds)
@@ -321,6 +327,7 @@ class ReservationUserRow
         foreach ($inviteeIds as $id) {
             $this->AddRow($instance->ReferenceNumber(), $id, ReservationUserLevel::INVITEE);
         }
+
         return $this;
     }
 }
@@ -342,8 +349,9 @@ class ReservationGuestRow
     }
 
     /**
-     * @param Reservation $instance
+     * @param Reservation    $instance
      * @param array|string[] $participants
+     *
      * @return ReservationUserRow
      */
     public function WithParticipants($instance, $participants)
@@ -351,12 +359,14 @@ class ReservationGuestRow
         foreach ($participants as $email) {
             $this->AddRow($instance->ReferenceNumber(), $email, ReservationUserLevel::PARTICIPANT);
         }
+
         return $this;
     }
 
     /**
      * @param Reservation $instance
      * @param array|int[] $invitees
+     *
      * @return ReservationUserRow
      */
     public function WithInvitees($instance, $invitees)
@@ -364,6 +374,7 @@ class ReservationGuestRow
         foreach ($invitees as $email) {
             $this->AddRow($instance->ReferenceNumber(), $email, ReservationUserLevel::INVITEE);
         }
+
         return $this;
     }
 }
@@ -489,7 +500,7 @@ class ResourceGroupRow
         $this->rows[] = [
             ColumnNames::RESOURCE_GROUP_ID => $groupId,
             ColumnNames::RESOURCE_GROUP_NAME => $groupName,
-            ColumnNames::RESOURCE_GROUP_PARENT_ID => $groupParentId
+            ColumnNames::RESOURCE_GROUP_PARENT_ID => $groupParentId,
         ];
 
         return $this;
@@ -533,7 +544,7 @@ class ResourceTypeRow
             ColumnNames::RESOURCE_TYPE_ID => $typeId,
             ColumnNames::RESOURCE_TYPE_NAME => $name,
             ColumnNames::RESOURCE_TYPE_DESCRIPTION => $description,
-            ColumnNames::ATTRIBUTE_LIST => '1=a!sep!2=b'
+            ColumnNames::ATTRIBUTE_LIST => '1=a!sep!2=b',
         ];
 
         return $this;
@@ -561,7 +572,7 @@ class BlackoutSeriesRow
             ColumnNames::REPEAT_OPTIONS => $repeatConfiguration,
             ColumnNames::BLACKOUT_START => $start,
             ColumnNames::BLACKOUT_END => $end,
-            ColumnNames::BLACKOUT_INSTANCE_ID => 1
+            ColumnNames::BLACKOUT_INSTANCE_ID => 1,
         ];
 
         return $this;

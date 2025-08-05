@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/JsonRequest.php');
+require_once ROOT_DIR.'lib/WebService/JsonRequest.php';
 
 class CustomAttributeRequest extends JsonRequest
 {
@@ -82,12 +82,12 @@ class ExampleCustomAttributeRequest extends CustomAttributeRequest
         $this->categoryId = 1;
         $this->regex = 'validation regex';
         $this->required = true;
-        $this->possibleValues = ['possible','values','only valid for select list'];
+        $this->possibleValues = ['possible', 'values', 'only valid for select list'];
         $this->sortOrder = 100;
         $this->appliesToIds = [10];
         $this->adminOnly = true;
         $this->isPrivate = true;
         $this->secondaryCategoryId = 1;
-        $this->secondaryEntityIds = [1,2];
+        $this->secondaryEntityIds = [1, 2];
     }
 }

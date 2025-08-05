@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationMovePresenter.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationMovePage.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationMovePresenter.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationMovePage.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ReservationMovePresenterTest extends TestBase
 {

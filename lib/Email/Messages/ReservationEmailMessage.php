@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
-require_once(ROOT_DIR . 'Pages/Pages.php');
-require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
+require_once ROOT_DIR.'Pages/Pages.php';
+require_once ROOT_DIR.'Pages/Export/CalendarExportDisplay.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 abstract class ReservationEmailMessage extends EmailMessage
 {
@@ -44,7 +44,7 @@ abstract class ReservationEmailMessage extends EmailMessage
         ReservationSeries $reservationSeries,
         $language,
         IAttributeRepository $attributeRepository,
-        IUserRepository $userRepository
+        IUserRepository $userRepository,
     ) {
         if (empty($language)) {
             $language = $reservationOwner->Language();
@@ -60,7 +60,6 @@ abstract class ReservationEmailMessage extends EmailMessage
     }
 
     /**
-     * @abstract
      * @return string
      */
     abstract protected function GetTemplateName();
@@ -76,16 +75,19 @@ abstract class ReservationEmailMessage extends EmailMessage
     public function Body()
     {
         $this->PopulateTemplate();
+
         return $this->FetchTemplate($this->GetTemplateName());
     }
 
     public function From()
     {
         $bookedBy = $this->reservationSeries->BookedBy();
-        if ($bookedBy != null) {
+        if (null != $bookedBy) {
             $name = new FullName($bookedBy->FirstName, $bookedBy->LastName);
+
             return new EmailAddress($bookedBy->Email, $name->__toString());
         }
+
         return new EmailAddress($this->reservationOwner->EmailAddress(), $this->reservationOwner->FullName());
     }
 
@@ -116,14 +118,14 @@ abstract class ReservationEmailMessage extends EmailMessage
         $this->Set('RepeatRanges', $repeatRanges);
         $this->Set('RequiresApproval', $this->reservationSeries->RequiresApproval());
 
-        $this->Set('ReservationUrl', sprintf("%s?%s=%s", Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber()));
+        $this->Set('ReservationUrl', sprintf('%s?%s=%s', Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber()));
 
-        $icalUrl = sprintf("export/%s?%s=%s", Pages::CALENDAR_EXPORT, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber());
+        $icalUrl = sprintf('export/%s?%s=%s', Pages::CALENDAR_EXPORT, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber());
         $this->Set('ICalUrl', $icalUrl);
 
         $googleDateFormat = Resources::GetInstance()->GetDateFormat('google');
         $googleCalendarUrl = sprintf(
-            "https://www.google.com/calendar/event?action=TEMPLATE&text=%s&dates=%s/%s&ctz=%s&details=%s&location=%s&trp=false&sprop=&sprop=name:",
+            'https://www.google.com/calendar/event?action=TEMPLATE&text=%s&dates=%s/%s&ctz=%s&details=%s&location=%s&trp=false&sprop=&sprop=name:',
             urlencode($this->reservationSeries->Title()),
             $currentInstance->StartDate()->ToUtc()->Format($googleDateFormat),
             $currentInstance->EndDate()->ToUtc()->Format($googleDateFormat),
@@ -143,7 +145,7 @@ abstract class ReservationEmailMessage extends EmailMessage
         $attributes = $this->attributeRepository->GetByCategory(CustomAttributeCategory::RESERVATION);
         $attributeValues = [];
         foreach ($attributes as $attribute) {
-            if (($attribute->HasSecondaryEntities()) && in_array($this->reservationSeries->ResourceId(), $attribute->SecondaryEntityIds())) {
+            if ($attribute->HasSecondaryEntities() && in_array($this->reservationSeries->ResourceId(), $attribute->SecondaryEntityIds())) {
                 $attributeValues[] = new LBAttribute($attribute, $this->reservationSeries->GetAttributeValue($attribute->Id()));
             }
         }
@@ -151,7 +153,7 @@ abstract class ReservationEmailMessage extends EmailMessage
         $this->Set('Attributes', $attributeValues);
 
         $bookedBy = $this->reservationSeries->BookedBy();
-        if ($bookedBy != null && ($bookedBy->UserId != $this->reservationOwner->Id())) {
+        if (null != $bookedBy && ($bookedBy->UserId != $this->reservationOwner->Id())) {
             $this->Set('CreatedBy', new FullName($bookedBy->FirstName, $bookedBy->LastName));
         }
 
@@ -162,7 +164,7 @@ abstract class ReservationEmailMessage extends EmailMessage
             }
 
             if ($resource->IsAutoReleased()) {
-                if ($minimumAutoRelease == null || $resource->GetAutoReleaseMinutes() < $minimumAutoRelease) {
+                if (null == $minimumAutoRelease || $resource->GetAutoReleaseMinutes() < $minimumAutoRelease) {
                     $minimumAutoRelease = $resource->GetAutoReleaseMinutes();
                 }
             }
@@ -193,7 +195,7 @@ abstract class ReservationEmailMessage extends EmailMessage
 
     private function GetFullImagePath($img)
     {
-        return Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL) . '/' . $img;
+        return Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL).'/'.$img;
     }
 
     /**

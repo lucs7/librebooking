@@ -1,13 +1,13 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Calendar/CalendarFilters.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Presenters/Calendar/CalendarFilters.php';
 
 class CalendarActions
 {
@@ -62,9 +62,6 @@ interface ICommonCalendarPage extends IActionPage
      */
     public function SetFirstDay($firstDay);
 
-    /**
-     * @param CalendarSubscriptionDetails $subscriptionDetails
-     */
     public function BindSubscription(CalendarSubscriptionDetails $subscriptionDetails);
 
     /**
@@ -83,17 +80,17 @@ interface ICommonCalendarPage extends IActionPage
     public function BindFilters($filters);
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function GetScheduleId();
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function GetResourceId();
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function GetGroupId();
 
@@ -110,12 +107,12 @@ interface ICommonCalendarPage extends IActionPage
     public function RenderSubscriptionDetails();
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function GetUserId();
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function GetParticipantId();
 }
@@ -150,6 +147,7 @@ abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarP
 
     /**
      * @param Date $displayDate
+     *
      * @return void
      */
     public function SetDisplayDate($displayDate)
@@ -170,6 +168,7 @@ abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarP
 
     /**
      * @param CalendarFilters $filters
+     *
      * @return void
      */
     public function BindFilters($filters)
@@ -177,7 +176,6 @@ abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarP
         $this->Set('filters', $filters);
         $this->Set('IsAccessible', !$filters->IsEmpty());
         $this->Set('ResourceGroupsAsJson', json_encode($filters->GetResourceGroupTree()->GetGroups(false)));
-        ;
     }
 
     public function GetScheduleId()
@@ -207,6 +205,7 @@ abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarP
 
     /**
      * @param $scheduleId null|int
+     *
      * @return void
      */
     public function SetScheduleId($scheduleId)
@@ -216,6 +215,7 @@ abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarP
 
     /**
      * @param $resourceId null|int
+     *
      * @return void
      */
     public function SetResourceId($resourceId)
@@ -224,9 +224,6 @@ abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarP
         $this->Set('ResourceId', empty($resourceId) ? '' : $resourceId);
     }
 
-    /**
-     * @param CalendarSubscriptionDetails $details
-     */
     public function BindSubscription(CalendarSubscriptionDetails $details)
     {
         $this->Set('IsSubscriptionAllowed', $details->IsAllowed());
@@ -239,7 +236,7 @@ abstract class CommonCalendarPage extends ActionPage implements ICommonCalendarP
      */
     public function SetFirstDay($firstDay)
     {
-        $this->Set('FirstDay', $firstDay == Schedule::Today ? 0 : $firstDay);
+        $this->Set('FirstDay', Schedule::Today == $firstDay ? 0 : $firstDay);
     }
 
     /**
@@ -323,7 +320,7 @@ abstract class CommonCalendarPresenter extends ActionPresenter
         IResourceService $resourceService,
         ICalendarSubscriptionService $subscriptionService,
         IPrivacyFilter $privacyFilter,
-        SlotLabelFactory $factory
+        SlotLabelFactory $factory,
     ) {
         parent::__construct($page);
         $this->page = $page;
@@ -359,7 +356,7 @@ abstract class CommonCalendarPresenter extends ActionPresenter
         }
 
         $selectedSchedule = $this->GetSelectedSchedule($schedules, $selectedScheduleId);
-        if ($selectedSchedule->GetId() == 0) {
+        if (0 == $selectedSchedule->GetId()) {
             $selectedScheduleId = null;
         }
 
@@ -409,7 +406,7 @@ abstract class CommonCalendarPresenter extends ActionPresenter
             $selectedResourceId = $resourceGroups->GetResourceIds($selectedGroupId);
         }
 
-        if ($userSession->UserId != 0) {
+        if (0 != $userSession->UserId) {
             $user = $this->userRepository->LoadById($userSession->UserId);
             $userCalendarFilter = new UserCalendarFilter($selectedResourceId, $selectedScheduleId, $selectedGroupId);
             $user->ChangePreference(UserPreferences::CALENDAR_FILTER, $userCalendarFilter->Serialize());
@@ -420,7 +417,7 @@ abstract class CommonCalendarPresenter extends ActionPresenter
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest == 'events') {
+        if ('events' == $dataRequest) {
             $this->BindCalendarEvents();
         } else {
             $this->BindSubscriptionDetails(ServiceLocator::GetServer()->GetUserSession(), $this->page->GetResourceId(), $this->page->GetScheduleId());
@@ -438,7 +435,8 @@ abstract class CommonCalendarPresenter extends ActionPresenter
 
     /**
      * @param array|Schedule[] $schedules
-     * @param int $scheduleId
+     * @param int              $scheduleId
+     *
      * @return Schedule
      */
     protected function GetSelectedSchedule($schedules, $scheduleId)
@@ -471,6 +469,7 @@ abstract class CommonCalendarPresenter extends ActionPresenter
         if (empty($startDate)) {
             return Date::Now()->ToTimezone($timezone);
         }
+
         return Date::Parse($startDate, $timezone);
     }
 
@@ -488,17 +487,17 @@ abstract class CommonCalendarPresenter extends ActionPresenter
 
     /**
      * @param UserSession $userSession
-     * @param int $selectedScheduleId
-     * @param int $selectedResourceId
-     * @param int|null $selectedUserId
-     * @param int|null $selectedParticipantId
+     * @param int         $selectedScheduleId
+     * @param int         $selectedResourceId
+     * @param int|null    $selectedUserId
+     * @param int|null    $selectedParticipantId
      */
     abstract protected function BindEvents($userSession, $selectedScheduleId, $selectedResourceId, $selectedUserId, $selectedParticipantId);
 
     /**
      * @param UserSession $userSession
-     * @param int $resourceId
-     * @param int $scheduleId
+     * @param int         $resourceId
+     * @param int         $scheduleId
      */
     abstract protected function BindSubscriptionDetails($userSession, $resourceId, $scheduleId);
 }
@@ -526,6 +525,7 @@ class UserCalendarFilter
 
     /**
      * @param string $string
+     *
      * @return UserCalendarFilter
      */
     public static function Deserialize($string)
@@ -534,6 +534,7 @@ class UserCalendarFilter
         $resourceId = isset($parts[0]) ? $parts[0] : null;
         $scheduleId = isset($parts[1]) ? $parts[1] : null;
         $groupId = isset($parts[2]) ? $parts[2] : null;
+
         return new UserCalendarFilter($resourceId, $scheduleId, $groupId);
     }
 }

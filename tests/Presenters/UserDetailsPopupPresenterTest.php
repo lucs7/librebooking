@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/UserDetailsPopupPage.php');
+require_once ROOT_DIR.'Pages/Ajax/UserDetailsPopupPage.php';
 
 class UserDetailsPopupPresenterTest extends TestBase
 {
@@ -41,7 +41,7 @@ class UserDetailsPopupPresenterTest extends TestBase
         $this->presenter = new UserDetailsPopupPresenter($this->page, $this->privacyFilter, $this->userRepository, $this->attributeService);
     }
 
-    public function testWhenUserCannotAccessDetails_ThenDoNotBindAnything()
+    public function testWhenUserCannotAccessDetailsThenDoNotBindAnything()
     {
         $this->privacyFilter->_CanViewUser = false;
 
@@ -50,7 +50,7 @@ class UserDetailsPopupPresenterTest extends TestBase
         $this->assertFalse($this->page->_CanViewUser);
     }
 
-    public function testWhenUserCannotAccessDetails_ThenBindUser()
+    public function testWhenUserCannotAccessDetailsThenBindUser()
     {
         $this->privacyFilter->_CanViewUser = true;
 

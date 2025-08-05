@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
+require_once ROOT_DIR.'lib/Application/Admin/namespace.php';
 
 class GroupAdminManageReservationsServiceTest extends TestBase
 {
@@ -24,7 +24,7 @@ class GroupAdminManageReservationsServiceTest extends TestBase
         $service = new GroupAdminManageReservationsService($reservationRepo, $userRepo, $reservationAuth, $handler, $persistenceService);
 
         $reservationRows = FakeReservationRepository::GetReservationRows();
-        $this->db->SetRow(0, [ [ColumnNames::TOTAL => 4] ]);
+        $this->db->SetRow(0, [[ColumnNames::TOTAL => 4]]);
         $this->db->SetRow(1, $reservationRows);
 
         $filter = new ReservationFilter();

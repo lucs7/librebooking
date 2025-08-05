@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationEmailMessage.php';
 
 class ReservationApprovedEmail extends ReservationEmailMessage
 {

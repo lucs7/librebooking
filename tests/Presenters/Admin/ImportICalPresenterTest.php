@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/Import/ICalImportPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/Import/ICalImportPresenter.php';
 
 class ImportICalPresenterTest extends TestBase
 {
@@ -56,15 +56,14 @@ class ImportICalPresenterTest extends TestBase
     public function testParseIcs()
     {
         $this->markTestSkipped('just parses ics file');
-        $ical   = new ICal(ROOT_DIR . 'tests/Presenters/Admin/MyCal.ics');
+        $ical = new ICal(ROOT_DIR.'tests/Presenters/Admin/MyCal.ics');
         $events = $ical->events();
 
         //		var_dump($events[1]);
         foreach ($events as $event) {
-
-//			$user = $this->GetOrCreateUser($event['ORGANIZER']);
+            //			$user = $this->GetOrCreateUser($event['ORGANIZER']);
             //			$resource = $this->GetOrCreateResource($event['LOCATION']);
-//
+            //
             //			$reservation = ReservationSeries::Create($user->Id(), $resource, $title, $description, $date, new RepeatNone(), $bookedBy);
             //			$reservation->ChangeParticipants($participantIds);
             if (array_key_exists('ATTENDEE_array', $event)) {
@@ -72,25 +71,25 @@ class ImportICalPresenterTest extends TestBase
                     var_dump($attendee);
                 }
             }
-            $ts =  date('Y-m-d H:i:s', $ical->iCalDateToUnixTimestamp($event['DTSTART']));
+            $ts = date('Y-m-d H:i:s', $ical->iCalDateToUnixTimestamp($event['DTSTART']));
             $parsed = Date::Parse($ts, 'UTC');
-            echo $parsed . '\n';
+            echo $parsed.'\n';
             $start = Date::Parse($event['DTSTART'], 'UTC');
-            echo $start->ToString() . '\n';
-            echo 'SUMMARY: ' . @$event['SUMMARY'] . "<br />\n";
-            echo 'DTSTART: ' . $event['DTSTART'] . ' - UNIX-Time: ' . $ical->iCalDateToUnixTimestamp($event['DTSTART']) . "<br />\n";
-            echo 'DTEND: ' . $event['DTEND'] . "<br />\n";
-            echo 'DTSTAMP: ' . $event['DTSTAMP'] . "<br />\n";
-            echo 'UID: ' . @$event['UID'] . "<br />\n";
-            echo 'CREATED: ' . @$event['CREATED'] . "<br />\n";
-            echo 'LAST-MODIFIED: ' . @$event['LAST-MODIFIED'] . "<br />\n";
-            echo 'DESCRIPTION: ' . @$event['DESCRIPTION'] . "<br />\n";
-            echo 'LOCATION: ' . @$event['LOCATION'] . "<br />\n";
-            echo 'SEQUENCE: ' . @$event['SEQUENCE'] . "<br />\n";
-            echo 'STATUS: ' . @$event['STATUS'] . "<br />\n";
-            echo 'TRANSP: ' . @$event['TRANSP'] . "<br />\n";
-            echo 'ORGANIZER: ' . @$event['ORGANIZER'] . "<br />\n";
-            echo 'ATTENDEE(S): ' . @$event['ATTENDEE'] . "<br />\n";
+            echo $start->ToString().'\n';
+            echo 'SUMMARY: '.@$event['SUMMARY']."<br />\n";
+            echo 'DTSTART: '.$event['DTSTART'].' - UNIX-Time: '.$ical->iCalDateToUnixTimestamp($event['DTSTART'])."<br />\n";
+            echo 'DTEND: '.$event['DTEND']."<br />\n";
+            echo 'DTSTAMP: '.$event['DTSTAMP']."<br />\n";
+            echo 'UID: '.@$event['UID']."<br />\n";
+            echo 'CREATED: '.@$event['CREATED']."<br />\n";
+            echo 'LAST-MODIFIED: '.@$event['LAST-MODIFIED']."<br />\n";
+            echo 'DESCRIPTION: '.@$event['DESCRIPTION']."<br />\n";
+            echo 'LOCATION: '.@$event['LOCATION']."<br />\n";
+            echo 'SEQUENCE: '.@$event['SEQUENCE']."<br />\n";
+            echo 'STATUS: '.@$event['STATUS']."<br />\n";
+            echo 'TRANSP: '.@$event['TRANSP']."<br />\n";
+            echo 'ORGANIZER: '.@$event['ORGANIZER']."<br />\n";
+            echo 'ATTENDEE(S): '.@$event['ATTENDEE']."<br />\n";
             echo '<hr/>';
         }
     }

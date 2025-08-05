@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class ResourcesResponse extends RestResponse
 {
@@ -10,9 +10,8 @@ class ResourcesResponse extends RestResponse
     public $resources;
 
     /**
-     * @param IRestServer $server
      * @param array|BookableResource[] $resources
-     * @param IEntityAttributeList $attributes
+     * @param IEntityAttributeList     $attributes
      */
     public function __construct(IRestServer $server, $resources, $attributes)
     {

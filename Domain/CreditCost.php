@@ -1,12 +1,13 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/Currency.php');
+require_once ROOT_DIR.'Domain/Values/Currency.php';
 use Booked\Currency;
 
 class CreditCost
 {
     /**
-     * Number of Credits for the given cost
+     * Number of Credits for the given cost.
+     *
      * @var int
      */
     private $count;
@@ -20,7 +21,7 @@ class CreditCost
     private $currency;
 
     /**
-     * @param float $cost
+     * @param float  $cost
      * @param string $currency
      */
     public function __construct($count = 1, $cost = 0.0, $currency = 'USD')
@@ -56,17 +57,20 @@ class CreditCost
 
     /**
      * @param float|null $amount
+     *
      * @return string
      */
     public function FormatCurrency($amount = null)
     {
         $toFormat = is_null($amount) ? $this->Cost() : $amount;
         $currency = new Currency($this->Currency());
+
         return $currency->Format($toFormat);
     }
 
     /**
      * @param float $quantity
+     *
      * @return float
      */
     public function GetTotal($quantity)
@@ -76,11 +80,13 @@ class CreditCost
 
     /**
      * @param float $quantity
+     *
      * @return string
      */
     public function GetFormattedTotal($quantity)
     {
         $total = $this->GetTotal($quantity);
+
         return $this->FormatCurrency($total);
     }
 }

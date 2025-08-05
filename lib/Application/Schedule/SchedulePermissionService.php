@@ -13,8 +13,6 @@ class SchedulePermissionService implements IPermissionService
     }
 
     /**
-     * @param IPermissibleResource $resource
-     * @param UserSession $user
      * @return bool
      */
     public function CanAccessResource(IPermissibleResource $resource, UserSession $user)
@@ -23,8 +21,6 @@ class SchedulePermissionService implements IPermissionService
     }
 
     /**
-     * @param IPermissibleResource $resource
-     * @param UserSession $user
      * @return bool
      */
     public function CanBookResource(IPermissibleResource $resource, UserSession $user)
@@ -33,8 +29,6 @@ class SchedulePermissionService implements IPermissionService
     }
 
     /**
-     * @param IPermissibleResource $resource
-     * @param UserSession $user
      * @return bool
      */
     public function CanViewResource(IPermissibleResource $resource, UserSession $user)

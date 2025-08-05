@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class FakeResourceAccess extends ResourceRepository
 {
@@ -74,7 +74,7 @@ class FakeResourceAccess extends ResourceRepository
         $peakCreditCount = null,
         $minNoticeUpdate = null,
         $minNoticeDelete = null,
-        $additionalProperties = null
+        $additionalProperties = null,
     ) {
         $this->rows[] = [ColumnNames::RESOURCE_ID => $id,
             ColumnNames::RESOURCE_NAME => $name,

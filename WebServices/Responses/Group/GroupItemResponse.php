@@ -21,7 +21,7 @@ class GroupItemResponse extends RestResponse
     {
         $this->id = $group->Id();
         $this->name = $group->Name();
-        $this->isDefault = (bool)$group->IsDefault();
+        $this->isDefault = (bool) $group->IsDefault();
 
         $this->AddService($server, WebServices::GetGroup, [WebServiceParams::GroupId => $group->Id()]);
     }

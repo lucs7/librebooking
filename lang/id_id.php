@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class id_id extends en_gb
 {
@@ -481,8 +481,6 @@ class id_id extends en_gb
         $strings['InvalidEndReminderTime'] = 'Waktu akhir pengingat anda tidak sah.';
         // End Errors
 
-
-
         // Page Titles
         $strings['CreateReservation'] = 'Buat Reservasi';
         $strings['EditReservation'] = 'Ubah Reservasi';
@@ -574,8 +572,8 @@ class id_id extends en_gb
         $strings['ReservationEndingSoonSubject'] = 'Reservasi untuk %s akan segera berakhir';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Anda tidak memiliki reservasi sebelumnya';
         $strings['PastReservations'] = 'Reservasi Sebelumnya';
         $strings['AllNoPastReservations'] = 'Tidak ada reservasi sebelumnya dalam %s hari terakhir';
@@ -583,37 +581,37 @@ class id_id extends en_gb
         $strings['Yesterday'] = 'Kemarin';
         $strings['EarlierThisWeek'] = 'Lebih awal pekan ini';
         $strings['PreviousWeek'] = 'Pekan sebelumnya';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Grup Anda tidak memiliki reservasi mendatang';
         $strings['GroupUpcomingReservations'] = 'Reservasi Mendatang Grup Saya';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Terjadi kesalahan saat login dengan Facebook. Silakan coba lagi.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Anda tidak memiliki reservasi yang menunggu persetujuan';
         $strings['PendingApprovalReservations'] = 'Pemesanan Menunggu Persetujuan';
         $strings['LaterThisMonth'] = 'Nanti Bulan Ini';
         $strings['LaterThisYear'] = 'Nanti Tahun Ini';
         $strings['Remaining'] = 'Sisa';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Tidak ada reservasi check out yang hilang';
-        $strings['MissingCheckOutReservations'] = 'Reservasi Check Out yang Hilang';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Reservasi Check Out yang Hilang';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Tidak dapat melihat detail pemesanan karena Anda tidak memiliki izin untuk salah satu dari sumber daya dalam pemesanan ini';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
+
         return $this->Strings;
     }
 
@@ -636,6 +634,7 @@ class id_id extends en_gb
         $days['letter'] = ['M', 'S', 'S', 'R', 'K', 'J', 'S'];
 
         $this->Days = $days;
+
         return $this->Days;
     }
 
@@ -654,12 +653,14 @@ class id_id extends en_gb
         $months['abbr'] = ['Jan', 'Peb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nop', 'Des'];
 
         $this->Months = $months;
+
         return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         return $this->Letters;
     }
 

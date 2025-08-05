@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . '/lib/Config/namespace.php');
+require_once ROOT_DIR.'/lib/Config/namespace.php';
 
 class LdapOptions
 {
@@ -8,10 +8,10 @@ class LdapOptions
 
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/Ldap.config.php');
+        require_once dirname(__FILE__).'/Ldap.config.php';
 
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/Ldap.config.php',
+            dirname(__FILE__).'/Ldap.config.php',
             LdapConfig::CONFIG_ID
         );
     }
@@ -60,7 +60,7 @@ class LdapOptions
     {
         $hosts = explode(',', $this->GetConfig(LdapConfig::HOST));
 
-        for ($i = 0; $i < count($hosts); $i++) {
+        for ($i = 0; $i < count($hosts); ++$i) {
             $hosts[$i] = trim($hosts[$i]);
         }
 
@@ -80,6 +80,7 @@ class LdapOptions
     public function Attributes()
     {
         $attributes = $this->AttributeMapping();
+
         return array_values($attributes);
     }
 

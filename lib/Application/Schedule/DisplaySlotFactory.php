@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class DisplaySlotFactory
 {
@@ -32,25 +32,29 @@ class DisplaySlotFactory
     private function IsMyReservation(IReservationSlot $slot)
     {
         $mySession = ServiceLocator::GetServer()->GetUserSession();
+
         return $slot->IsOwnedBy($mySession);
     }
 
     private function IsAdminFor(IReservationSlot $slot)
     {
         $mySession = ServiceLocator::GetServer()->GetUserSession();
+
         return $mySession->IsAdmin || $mySession->IsAdminForGroup($slot->OwnerGroupIds());
     }
 
     private function AmIParticipating(IReservationSlot $slot)
     {
         $mySession = ServiceLocator::GetServer()->GetUserSession();
+
         return $slot->IsParticipating($mySession);
     }
 
     /**
      * @param SchedulePeriod[] $periods
-     * @param Date $start
-     * @param Date $end
+     * @param Date             $start
+     * @param Date             $end
+     *
      * @return string
      */
     public function GetCondensedPeriodLabel($periods, $start, $end)
@@ -58,12 +62,13 @@ class DisplaySlotFactory
         foreach ($periods as $period) {
             if ($period->IsLabelled()) {
                 if ($period->BeginDate()->Equals($start)) {
-                    return $period->Label() . ' - ' . $period->LabelEnd();
+                    return $period->Label().' - '.$period->LabelEnd();
                 }
             }
         }
         $format = Resources::GetInstance()->GetDateFormat('period_time');
-        return $start->Format($format) . ' - ' . $end->Format($format);
+
+        return $start->Format($format).' - '.$end->Format($format);
     }
 }
 
@@ -108,25 +113,29 @@ class StaticDisplaySlotFactory
     private function IsMyReservation(IReservationSlot $slot)
     {
         $mySession = ServiceLocator::GetServer()->GetUserSession();
+
         return $slot->IsOwnedBy($mySession);
     }
 
     private function IsAdminFor(IReservationSlot $slot)
     {
         $mySession = ServiceLocator::GetServer()->GetUserSession();
+
         return $mySession->IsAdmin || $mySession->IsAdminForGroup($slot->OwnerGroupIds());
     }
 
     private function AmIParticipating(IReservationSlot $slot)
     {
         $mySession = ServiceLocator::GetServer()->GetUserSession();
+
         return $slot->IsParticipating($mySession);
     }
 
     /**
      * @param SchedulePeriod[] $periods
-     * @param Date $start
-     * @param Date $end
+     * @param Date             $start
+     * @param Date             $end
+     *
      * @return string
      */
     public function GetCondensedPeriodLabel($periods, $start, $end)
@@ -134,11 +143,12 @@ class StaticDisplaySlotFactory
         foreach ($periods as $period) {
             if ($period->IsLabelled()) {
                 if ($period->BeginDate()->Equals($start)) {
-                    return $period->Label() . ' - ' . $period->LabelEnd();
+                    return $period->Label().' - '.$period->LabelEnd();
                 }
             }
         }
         $format = Resources::GetInstance()->GetDateFormat('period_time');
-        return $start->Format($format) . ' - ' . $end->Format($format);
+
+        return $start->Format($format).' - '.$end->Format($format);
     }
 }

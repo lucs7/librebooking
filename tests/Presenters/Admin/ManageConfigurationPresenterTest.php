@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManageConfigurationPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/ManageConfigurationPresenter.php';
 
 class ManageConfigurationPresenterTest extends TestBase
 {
@@ -31,7 +31,7 @@ class ManageConfigurationPresenterTest extends TestBase
         $this->page = new FakeManageConfigurationPage();
         $this->configSettings = $this->createMock('IConfigurationSettings');
 
-        $this->configFilePath = ROOT_DIR . 'config/config.php';
+        $this->configFilePath = ROOT_DIR.'config/config.php';
 
         $this->presenter = new ManageConfigurationPresenter($this->page, $this->configSettings);
         $this->fakeConfig->SetSectionKey(ConfigSection::PAGES, ConfigKeys::PAGES_ENABLE_CONFIGURATION, 'true');
@@ -126,8 +126,9 @@ class ManageConfigurationPresenterTest extends TestBase
     private function getDefaultConfigValues()
     {
         $config = new Config();
-        $current = $config->parseConfig(ROOT_DIR . 'config/config.dist.php', 'PHPArray');
-        $currentValues = $current->getItem("section", Configuration::SETTINGS)->toArray();
+        $current = $config->parseConfig(ROOT_DIR.'config/config.dist.php', 'PHPArray');
+        $currentValues = $current->getItem('section', Configuration::SETTINGS)->toArray();
+
         return $currentValues[Configuration::SETTINGS];
     }
 
@@ -199,17 +200,11 @@ class FakeManageConfigurationPage extends FakeActionPageBase implements IManageC
         $this->_ConfigFileWritable = $isFileWritable;
     }
 
-    /**
-     * @param ConfigSetting $configSetting
-     */
     public function AddSectionSetting(ConfigSetting $configSetting)
     {
         $this->_SectionSettings[$configSetting->Section][] = $configSetting;
     }
 
-    /**
-     * @param ConfigSetting $configSetting
-     */
     public function AddSetting(ConfigSetting $configSetting)
     {
         $this->_Settings[] = $configSetting;

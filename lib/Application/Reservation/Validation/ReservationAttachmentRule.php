@@ -4,7 +4,7 @@ class ReservationAttachmentRule implements IReservationValidationRule
 {
     /**
      * @param ReservationSeries $reservationSeries
-     * @param $retryParameters
+     *
      * @return ReservationRuleResult
      */
     public function Validate($reservationSeries, $retryParameters)

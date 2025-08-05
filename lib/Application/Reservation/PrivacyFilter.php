@@ -1,21 +1,21 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/ReservationAuthorization.php');
+require_once ROOT_DIR.'lib/Application/Reservation/ReservationAuthorization.php';
 
 interface IPrivacyFilter
 {
     /**
-     * @param UserSession $currentUser
      * @param ReservationView|null $reservationView
-     * @param int|null $ownerId
+     * @param int|null             $ownerId
+     *
      * @return bool
      */
     public function CanViewUser(UserSession $currentUser, $reservationView = null, $ownerId = null);
 
     /**
-     * @param UserSession $currentUser
      * @param ReservationView|null $reservationView
-     * @param int|null $ownerId
+     * @param int|null             $ownerId
+     *
      * @return bool
      */
     public function CanViewDetails(UserSession $currentUser, $reservationView = null, $ownerId = null);
@@ -31,7 +31,6 @@ class PrivacyFilter implements IPrivacyFilter
     private $reservationAuthorization;
 
     /**
-     *
      * @param $reservationAuthorization IReservationAuthorization
      */
     public function __construct($reservationAuthorization = null)
@@ -57,7 +56,7 @@ class PrivacyFilter implements IPrivacyFilter
     {
         $hideReservationDetails = ReservationDetailsFilter::HideReservationDetails();
 
-        if ($reservationView != null) {
+        if (null != $reservationView) {
             /** @var ReservationView $reservationView */
             $hideReservationDetails = ReservationDetailsFilter::HideReservationDetails($reservationView->StartDate, $reservationView->EndDate);
         }
@@ -71,11 +70,11 @@ class PrivacyFilter implements IPrivacyFilter
             return true;
         }
 
-        if ($ownerId != null && $userSession->UserId == $ownerId) {
+        if (null != $ownerId && $userSession->UserId == $ownerId) {
             return true;
         }
 
-        if ($reservationView != null && is_a($reservationView, 'ReservationView')) {
+        if (null != $reservationView && is_a($reservationView, 'ReservationView')) {
             return $this->IsAuthorized($reservationView, $userSession);
         }
 
@@ -83,8 +82,6 @@ class PrivacyFilter implements IPrivacyFilter
     }
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $userSession
      * @return bool
      */
     private function IsAuthorized(ReservationView $reservationView, UserSession $userSession)
@@ -101,33 +98,27 @@ class PrivacyFilter implements IPrivacyFilter
     }
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $userSession
      * @return bool
      */
     private function IsCached(ReservationView $reservationView, UserSession $userSession)
     {
-        return array_key_exists($reservationView->ReferenceNumber . $userSession->UserId, $this->cache);
+        return array_key_exists($reservationView->ReferenceNumber.$userSession->UserId, $this->cache);
     }
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $userSession
      * @param bool $canView
      */
     private function Cache(ReservationView $reservationView, UserSession $userSession, $canView)
     {
-        $this->cache[$reservationView->ReferenceNumber . $userSession->UserId] = $canView;
+        $this->cache[$reservationView->ReferenceNumber.$userSession->UserId] = $canView;
     }
 
     /**
-     * @param ReservationView $reservationView
-     * @param UserSession $userSession
      * @return bool
      */
     private function GetCachedValue(ReservationView $reservationView, UserSession $userSession)
     {
-        return $this->cache[$reservationView->ReferenceNumber . $userSession->UserId];
+        return $this->cache[$reservationView->ReferenceNumber.$userSession->UserId];
     }
 }
 

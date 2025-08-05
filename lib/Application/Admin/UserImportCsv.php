@@ -22,8 +22,8 @@ class UserImportCsvRow
     private $indexes = [];
 
     /**
-     * @param $values array
-     * @param $indexes array
+     * @param $values     array
+     * @param $indexes    array
      * @param $attributes CustomAttribute[]
      */
     public function __construct($values, $indexes, $attributes)
@@ -44,7 +44,7 @@ class UserImportCsvRow
         $this->status = $this->valueOrDefault('status');
         $this->credits = $this->valueOrDefault('credits');
         $this->color = $this->valueOrDefault('color');
-        $this->groups = (!array_key_exists('groups', $this->indexes) || $indexes['groups'] === false) ? [] : array_map('trim', explode(',', htmlspecialchars($values[$indexes['groups']])));
+        $this->groups = (!array_key_exists('groups', $this->indexes) || false === $indexes['groups']) ? [] : array_map('trim', explode(',', htmlspecialchars($values[$indexes['groups']])));
         foreach ($attributes as $label => $attribute) {
             $this->attributes[$label] = $this->valueOrDefault($label);
         }
@@ -56,12 +56,14 @@ class UserImportCsvRow
         if (!$isValid) {
             Log::Debug('User import row is not valid. Username %s, Email %s', $this->username, $this->email);
         }
+
         return $isValid;
     }
 
     /**
-     * @param string[] $values
+     * @param string[]          $values
      * @param CustomAttribute[] $attributes
+     *
      * @return bool|string[]
      */
     public static function GetHeaders($values, $attributes)
@@ -99,7 +101,7 @@ class UserImportCsvRow
     private static function indexOrFalse($columnName, $values)
     {
         $index = array_search($columnName, $values);
-        if ($index === false) {
+        if (false === $index) {
             return false;
         }
 
@@ -108,11 +110,12 @@ class UserImportCsvRow
 
     /**
      * @param $column string
+     *
      * @return string
      */
     private function valueOrDefault($column)
     {
-        return ($this->indexes[$column] === false || !array_key_exists($this->indexes[$column], $this->values)) ? '' : $this->tryToGetEscapedValue($this->values[$this->indexes[$column]]);
+        return (false === $this->indexes[$column] || !array_key_exists($this->indexes[$column], $this->values)) ? '' : $this->tryToGetEscapedValue($this->values[$this->indexes[$column]]);
     }
 
     private function tryToGetEscapedValue($v)
@@ -145,7 +148,6 @@ class UserImportCsv
     private $attributes;
 
     /**
-     * @param UploadedFile $file
      * @param CustomAttribute[] $attributes
      */
     public function __construct(UploadedFile $file, $attributes)
@@ -166,8 +168,9 @@ class UserImportCsv
         $contents = $this->RemoveUTF8BOM($contents);
         $csvRows = preg_split('/\n|\r\n?/', $contents);
 
-        if (count($csvRows) == 0) {
+        if (0 == count($csvRows)) {
             Log::Debug('No rows in user import file');
+
             return $rows;
         }
 
@@ -177,10 +180,11 @@ class UserImportCsv
 
         if (!$headers) {
             Log::Debug('No headers in user import file');
+
             return $rows;
         }
 
-        for ($i = 1; $i < count($csvRows); $i++) {
+        for ($i = 1; $i < count($csvRows); ++$i) {
             $values = str_getcsv($csvRows[$i]);
 
             $row = new UserImportCsvRow($values, $headers, $this->attributes);

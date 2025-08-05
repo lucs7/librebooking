@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/IReservationNotificationService.php');
+require_once ROOT_DIR.'lib/Application/Reservation/Notification/IReservationNotificationService.php';
 
 class FakeReservationNotificationService implements IReservationNotificationService
 {

@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reports/ReportActions.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Pages/Reports/SavedReportsPage.php');
-require_once(ROOT_DIR . 'lib/Application/Reporting/namespace.php');
+require_once ROOT_DIR.'Presenters/Reports/ReportActions.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Pages/Reports/SavedReportsPage.php';
+require_once ROOT_DIR.'lib/Application/Reporting/namespace.php';
 
 class SavedReportsPresenter extends ActionPresenter
 {
@@ -63,7 +63,7 @@ class SavedReportsPresenter extends ActionPresenter
         $userId = $this->user->UserId;
         $report = $this->service->GenerateSavedReport($reportId, $userId, $this->user->Timezone);
 
-        if ($report != null) {
+        if (null != $report) {
             Log::Debug('Loading saved report for userId: %s, reportId %s', $userId, $reportId);
             $user = $this->userRepository->LoadById($userId);
 
@@ -96,7 +96,7 @@ class SavedReportsPresenter extends ActionPresenter
         $userId = $this->user->UserId;
         $report = $this->service->GenerateSavedReport($reportId, $userId, $this->user->Timezone);
 
-        if ($report != null) {
+        if (null != $report) {
             Log::Debug('Loading saved report for userId: %s, reportId %s', $userId, $reportId);
             $user = $this->userRepository->LoadById($userId);
 

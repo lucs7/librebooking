@@ -1,30 +1,34 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Presenters/Install/ConfigurePresenter.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'Presenters/Install/ConfigurePresenter.php';
 
 interface IConfgurePage
 {
     /**
      * @abstract
+     *
      * @param bool $isPasswordMissing
      */
     public function SetPasswordMissing($isPasswordMissing);
 
     /**
      * @abstract
+     *
      * @return string
      */
     public function GetInstallPassword();
 
     /**
      * @abstract
+     *
      * @param bool $showPasswordPrompt
      */
     public function SetShowPasswordPrompt($showPasswordPrompt);
 
     /**
      * @abstract
+     *
      * @param bool $showInvalidPassword
      */
     public function SetShowInvalidPassword($showInvalidPassword);
@@ -36,6 +40,7 @@ interface IConfgurePage
 
     /**
      * @abstract
+     *
      * @param string $manualConfig
      */
     public function ShowManualConfig($manualConfig);

@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/ScheduleLayout.php');
-require_once(ROOT_DIR . 'Domain/Schedule.php');
-require_once(ROOT_DIR . 'Domain/SchedulePeriod.php');
-require_once(ROOT_DIR . 'lib/Database/Commands/namespace.php');
+require_once ROOT_DIR.'Domain/ScheduleLayout.php';
+require_once ROOT_DIR.'Domain/Schedule.php';
+require_once ROOT_DIR.'Domain/SchedulePeriod.php';
+require_once ROOT_DIR.'lib/Database/Commands/namespace.php';
 
 interface IScheduleRepository
 {
@@ -14,87 +14,79 @@ interface IScheduleRepository
 
     /**
      * @param int $scheduleId
+     *
      * @return Schedule
      */
     public function LoadById($scheduleId);
 
     /**
      * @param string $publicId
+     *
      * @return Schedule
      */
     public function LoadByPublicId($publicId);
 
-    /**
-     * @param Schedule $schedule
-     */
     public function Update(Schedule $schedule);
 
-    /**
-     * @param Schedule $schedule
-     */
     public function Delete(Schedule $schedule);
 
     /**
-     * @param Schedule $schedule
      * @param int $copyLayoutFromScheduleId
+     *
      * @return int $insertedScheduleId
      */
     public function Add(Schedule $schedule, $copyLayoutFromScheduleId);
 
     /**
-     * @param int $scheduleId
+     * @param int            $scheduleId
      * @param ILayoutFactory $layoutFactory factory to use to create the schedule layout
+     *
      * @return IScheduleLayout
      */
     public function GetLayout($scheduleId, ILayoutFactory $layoutFactory);
 
     /**
      * @param int $scheduleId
-     * @param ILayoutCreation $layout
      */
     public function AddScheduleLayout($scheduleId, ILayoutCreation $layout);
 
     /**
-     * @param Date $periodDate
      * @param int $scheduleId
+     *
      * @return SchedulePeriod[]
      */
     public function GetCustomLayoutPeriods(Date $periodDate, $scheduleId);
 
     /**
-     * @param Date $start
-     * @param Date $end
      * @param int $scheduleId
+     *
      * @return SchedulePeriod[]
      */
     public function GetCustomLayoutPeriodsInRange(Date $start, Date $end, $scheduleId);
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int         $pageNumber
+     * @param int         $pageSize
      * @param string|null $sortField
      * @param string|null $sortDirection
-     * @param ISqlFilter $filter
+     * @param ISqlFilter  $filter
+     *
      * @return PageableData|Schedule[]
      */
     public function GetList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null);
 
     /**
      * @param int $scheduleId
-     * @param ScheduleLayout $layout
      */
     public function UpdatePeakTimes($scheduleId, ScheduleLayout $layout);
 
     /**
      * @param int $scheduleId
-     * @param Date $start
-     * @param Date $end
      */
     public function AddCustomLayoutPeriod($scheduleId, Date $start, Date $end);
 
     /**
      * @param int $scheduleId
-     * @param Date $start
      */
     public function DeleteCustomLayoutPeriod($scheduleId, Date $start);
 
@@ -112,8 +104,8 @@ interface ILayoutFactory
     public function CreateLayout();
 
     /**
-     * @param IScheduleRepository $repository
      * @param int $scheduleId
+     *
      * @return IScheduleLayout
      */
     public function CreateCustomLayout(IScheduleRepository $repository, $scheduleId);
@@ -206,6 +198,7 @@ class ScheduleRepository implements IScheduleRepository
             $reader->Free();
 
             $this->_cache->Add($scheduleId, $schedule);
+
             return $schedule;
         }
 
@@ -286,8 +279,8 @@ class ScheduleRepository implements IScheduleRepository
         $layout = null;
 
         while ($row = $reader->GetRow()) {
-            if ($layout == null) {
-                if ($row[ColumnNames::LAYOUT_TYPE] == 1) {
+            if (null == $layout) {
+                if (1 == $row[ColumnNames::LAYOUT_TYPE]) {
                     $layout = $layoutFactory->CreateCustomLayout($this, $scheduleId);
                 } else {
                     $layout = $layoutFactory->CreateLayout();
@@ -301,7 +294,7 @@ class ScheduleRepository implements IScheduleRepository
             $periodType = $row[ColumnNames::BLOCK_CODE];
             $dayOfWeek = $row[ColumnNames::BLOCK_DAY_OF_WEEK];
 
-            if ($periodType == PeriodTypes::RESERVABLE) {
+            if (PeriodTypes::RESERVABLE == $periodType) {
                 $layout->AppendPeriod($start, $end, $label, $dayOfWeek);
             } else {
                 $layout->AppendBlockedPeriod($start, $end, $label, $dayOfWeek);
@@ -368,7 +361,7 @@ class ScheduleRepository implements IScheduleRepository
         $addLayoutCommand = new AddLayoutCommand($timezone, $layoutType);
         $layoutId = $db->ExecuteInsert($addLayoutCommand);
 
-        if ($layoutType == ScheduleLayout::Standard) {
+        if (ScheduleLayout::Standard == $layoutType) {
             $days = [null];
             if ($layout->UsesDailyLayouts()) {
                 $days = DayOfWeek::Days();
@@ -390,22 +383,24 @@ class ScheduleRepository implements IScheduleRepository
     }
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int         $pageNumber
+     * @param int         $pageSize
      * @param string|null $sortField
      * @param string|null $sortDirection
-     * @param ISqlFilter $filter
+     * @param ISqlFilter  $filter
+     *
      * @return PageableData|Schedule[]
      */
     public function GetList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null)
     {
         $command = new GetAllSchedulesCommand();
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['Schedule', 'FromRow'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize);
     }
 

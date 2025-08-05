@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class AuthenticationResponse extends RestResponse
 {
@@ -12,8 +12,10 @@ class AuthenticationResponse extends RestResponse
 
     /**
      * @static
-     * @param $server IRestServer
+     *
+     * @param $server      IRestServer
      * @param $userSession WebServiceUserSession
+     *
      * @return AuthenticationResponse
      */
     public static function Success(IRestServer $server, $userSession, $version)
@@ -26,8 +28,8 @@ class AuthenticationResponse extends RestResponse
         $response->version = $version;
 
         $response->AddService($server, WebServices::Logout);
-        //$response->AddService($server, WebServices::MyBookings, array($userSession->PublicId));
-        //$response->AddService($server, WebServices::AllBookings);
+        // $response->AddService($server, WebServices::MyBookings, array($userSession->PublicId));
+        // $response->AddService($server, WebServices::AllBookings);
         //		$response->AddAction(RestAction::MyBookings());
         //		$response->AddAction(RestAction::CreateBooking());
 
@@ -36,12 +38,14 @@ class AuthenticationResponse extends RestResponse
 
     /**
      * @static
+     *
      * @return AuthenticationResponse
      */
     public static function Failed()
     {
         $response = new AuthenticationResponse();
         $response->message = 'Login failed. Invalid username or password.';
+
         return $response;
     }
 
@@ -49,6 +53,7 @@ class AuthenticationResponse extends RestResponse
     {
         $response = new AuthenticationResponse();
         $response->message = 'Login failed. API access not authorized.';
+
         return $response;
     }
 

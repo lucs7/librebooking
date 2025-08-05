@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/NotificationPreferencesPresenter.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/NotificationPreferencesPresenter.php';
 
 interface INotificationPreferencesPage extends IPage
 {
@@ -132,32 +132,32 @@ class NotificationPreferencesPage extends SecurePage implements INotificationPre
 
     public function GetApproved()
     {
-        return (bool)$this->GetForm(ReservationEvent::Approved);
+        return (bool) $this->GetForm(ReservationEvent::Approved);
     }
 
     public function GetCreated()
     {
-        return (bool)$this->GetForm(ReservationEvent::Created);
+        return (bool) $this->GetForm(ReservationEvent::Created);
     }
 
     public function GetUpdated()
     {
-        return (bool)$this->GetForm(ReservationEvent::Updated);
+        return (bool) $this->GetForm(ReservationEvent::Updated);
     }
 
     public function GetDeleted()
     {
-        return (bool)$this->GetForm(ReservationEvent::Deleted);
+        return (bool) $this->GetForm(ReservationEvent::Deleted);
     }
 
     public function GetSeriesEnding()
     {
-        return (bool)$this->GetForm(ReservationEvent::SeriesEnding);
+        return (bool) $this->GetForm(ReservationEvent::SeriesEnding);
     }
 
     public function GetParticipantChanged()
     {
-        return (bool)$this->GetForm(ReservationEvent::ParticipationChanged);
+        return (bool) $this->GetForm(ReservationEvent::ParticipationChanged);
     }
 
     public function SetPreferencesSaved($werePreferencesUpdated)

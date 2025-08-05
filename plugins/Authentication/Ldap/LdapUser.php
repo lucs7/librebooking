@@ -13,8 +13,8 @@ class LdapUser
     private $groups;
 
     /**
-     * @param $entry Net_LDAP2_Entry
-     * @param $mapping string[]|array
+     * @param $entry      Net_LDAP2_Entry
+     * @param $mapping    string[]|array
      * @param $userGroups string[]
      */
     public function __construct($entry, $mapping, $userGroups = [])
@@ -72,7 +72,8 @@ class LdapUser
 
     /**
      * @param Net_LDAP2_Entry $entry
-     * @param string $field
+     * @param string          $field
+     *
      * @return string
      */
     private function Get($entry, $field)

@@ -1,31 +1,35 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageQuotasPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageQuotasPresenter.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 interface IManageQuotasPage extends IActionPage
 {
     /**
      * @param array|BookableResource[] $resources
+     *
      * @return void
      */
     public function BindResources($resources);
 
     /**
      * @param array|GroupItemView[] $groups
+     *
      * @return void
      */
     public function BindGroups($groups);
 
     /**
      * @param array|Schedule[] $schedules
+     *
      * @return void
      */
     public function BindSchedules($schedules);
 
     /**
      * @param array|QuotaItemView[] $quotas
+     *
      * @return void
      */
     public function BindQuotas($quotas);
@@ -99,7 +103,7 @@ interface IManageQuotasPage extends IActionPage
 class ManageQuotasPage extends ActionPage implements IManageQuotasPage
 {
     /**
-     * @var \ManageQuotasPresenter
+     * @var ManageQuotasPresenter
      */
     private $presenter;
 
@@ -120,13 +124,13 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
         $this->presenter->PageLoad();
 
         $this->Set('DayNames', [
-                0 => 'DaySundayAbbr',
-                1 => 'DayMondayAbbr',
-                2 => 'DayTuesdayAbbr',
-                3 => 'DayWednesdayAbbr',
-                4 => 'DayThursdayAbbr',
-                5 => 'DayFridayAbbr',
-                6 => 'DaySaturdayAbbr',
+            0 => 'DaySundayAbbr',
+            1 => 'DayMondayAbbr',
+            2 => 'DayTuesdayAbbr',
+            3 => 'DayWednesdayAbbr',
+            4 => 'DayThursdayAbbr',
+            5 => 'DayFridayAbbr',
+            6 => 'DaySaturdayAbbr',
         ]);
         $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('timepicker'));
 
@@ -145,6 +149,7 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
 
     /**
      * @param array|BookableResource[] $resources
+     *
      * @return void
      */
     public function BindResources($resources)
@@ -154,6 +159,7 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
 
     /**
      * @param array|GroupItemView[] $groups
+     *
      * @return void
      */
     public function BindGroups($groups)
@@ -161,9 +167,9 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
         $this->Set('Groups', $groups);
     }
 
-
     /**
      * @param array|Schedule[] $schedules
+     *
      * @return void
      */
     public function BindSchedules($schedules)
@@ -173,6 +179,7 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
 
     /**
      * @param array|QuotaItemView[] $quotas
+     *
      * @return void
      */
     public function BindQuotas($quotas)

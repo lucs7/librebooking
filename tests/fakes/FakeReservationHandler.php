@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR. 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class FakeReservationHandler implements IReservationHandler
 {
@@ -23,6 +23,7 @@ class FakeReservationHandler implements IReservationHandler
     {
         $this->_LastSeries = $reservationSeries;
         $view->SetErrors($this->_Errors);
+
         return $this->_Success;
     }
 }

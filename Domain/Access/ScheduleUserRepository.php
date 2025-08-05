@@ -1,11 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/ResourcePermissionType.php');
+require_once ROOT_DIR.'Domain/Values/ResourcePermissionType.php';
 
 interface IScheduleUserRepository
 {
     /**
-     * @param $userId
      * @return IScheduleUser
      */
     public function GetUser($userId);
@@ -16,6 +15,7 @@ class ScheduleUserRepository implements IScheduleUserRepository
     public function GetUser($userId)
     {
         $userPermissions = $this->GetUserPermissions($userId);
+
         return new ScheduleUser(
             $userId,
             $userPermissions['full'],
@@ -34,7 +34,7 @@ class ScheduleUserRepository implements IScheduleUserRepository
         $resources['view'] = [];
 
         while ($row = $reader->GetRow()) {
-            if ($row[ColumnNames::PERMISSION_TYPE] == ResourcePermissionType::Full) {
+            if (ResourcePermissionType::Full == $row[ColumnNames::PERMISSION_TYPE]) {
                 $resources['full'][] = new ScheduleResource($row[ColumnNames::RESOURCE_ID], $row[ColumnNames::RESOURCE_NAME]);
             } else {
                 $resources['view'][] = new ScheduleResource($row[ColumnNames::RESOURCE_ID], $row[ColumnNames::RESOURCE_NAME]);
@@ -47,7 +47,6 @@ class ScheduleUserRepository implements IScheduleUserRepository
     }
 
     /**
-     * @param $userId
      * @return array|ScheduleGroup[]
      */
     private function GetGroupPermissions($userId)
@@ -74,7 +73,7 @@ class ScheduleUserRepository implements IScheduleUserRepository
             $viewOnly = [];
             foreach ($resourceList as $resourceItem) {
                 $permissionType = $resourceItem[2];
-                if ($permissionType == ResourcePermissionType::View) {
+                if (ResourcePermissionType::View == $permissionType) {
                     $viewOnly[] = new ScheduleResource($resourceItem[0], $resourceItem[1]);
                 } else {
                     $resources[] = new ScheduleResource($resourceItem[0], $resourceItem[1]);
@@ -111,25 +110,29 @@ interface IScheduleUser
     public function Id();
 
     /**
-     * The resources that the user or any of their groups has permission to
+     * The resources that the user or any of their groups has permission to.
+     *
      * @return array|ScheduleResource[]
      */
     public function GetAllResources();
 
     /**
-     * The resources that the user or any of their groups has bookable permission to
+     * The resources that the user or any of their groups has bookable permission to.
+     *
      * @return array|ScheduleResource[]
      */
     public function GetBookableResources();
 
     /**
-     * The resources that the user or any of their groups has view permission to
+     * The resources that the user or any of their groups has view permission to.
+     *
      * @return array|ScheduleResource[]
      */
     public function GetViewOnlyResources();
 
     /**
-     * The resources that the user or any of their groups has admin access to
+     * The resources that the user or any of their groups has admin access to.
+     *
      * @return array|ScheduleResource[]
      */
     public function GetAdminResources();
@@ -144,10 +147,10 @@ class ScheduleUser implements IScheduleUser
     private $_adminResources;
 
     /**
-     * @param int $userId ;
+     * @param int                      $userId                ;
      * @param array|ScheduleResource[] $userPermissionsFull
      * @param array|ScheduleResource[] $userPermissionsView
-     * @param array|ScheduleGroup[] $groupPermissions
+     * @param array|ScheduleGroup[]    $groupPermissions
      * @param array|ScheduleResource[] $groupAdminPermissions
      */
     public function __construct($userId, $userPermissionsFull, $userPermissionsView, $groupPermissions, $groupAdminPermissions)
@@ -256,7 +259,7 @@ class ScheduleGroup
     private $allResources;
 
     /**
-     * @param int $group_id
+     * @param int                $group_id
      * @param ScheduleResource[] $bookableResources
      * @param ScheduleResource[] $viewOnlyResources
      */
@@ -307,7 +310,7 @@ class ScheduleResource
     private $_name;
 
     /**
-     * @param int $resourceId
+     * @param int    $resourceId
      * @param string $name
      */
     public function __construct($resourceId, $name)
@@ -335,7 +338,7 @@ class ScheduleResource
     public function __toString()
     {
         // needed for array_unique
-        return (string)$this->_resourceId;
+        return (string) $this->_resourceId;
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/UserSessionRepository.php');
+require_once ROOT_DIR.'Domain/Access/UserSessionRepository.php';
 
 class UserSessionRepositoryTest extends TestBase
 {

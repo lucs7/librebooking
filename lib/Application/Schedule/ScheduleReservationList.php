@@ -74,9 +74,7 @@ class ScheduleReservationList implements IScheduleReservationList
 
     /**
      * @param array|ReservationListItem[] $items
-     * @param IScheduleLayout $layout
-     * @param Date $layoutDate
-     * @param bool $hideBlockedPeriods
+     * @param bool                        $hideBlockedPeriods
      */
     public function __construct($items, IScheduleLayout $layout, Date $layoutDate, $hideBlockedPeriods = false)
     {
@@ -100,11 +98,11 @@ class ScheduleReservationList implements IScheduleReservationList
 
         $slots = [];
 
-        for ($currentIndex = 0; $currentIndex < count($this->_layoutItems); $currentIndex++) {
+        for ($currentIndex = 0; $currentIndex < count($this->_layoutItems); ++$currentIndex) {
             $layoutItem = $this->_layoutItems[$currentIndex];
             $item = $this->GetItemStartingAt($layoutItem->BeginDate());
 
-            if ($item != null) {
+            if (null != $item) {
                 if ($this->ItemEndsOnFutureDate($item)) {
                     $endTime = $this->_layoutDateEnd;
                 } else {
@@ -161,8 +159,8 @@ class ScheduleReservationList implements IScheduleReservationList
 
     private function IndexItem(ReservationListItem $item)
     {
-        if (($item->StartDate()->Compare($this->_lastLayoutTime) >= 0) ||
-                ($item->EndDate()->Compare($this->_firstLayoutTime) <= 0)) {
+        if (($item->StartDate()->Compare($this->_lastLayoutTime) >= 0)
+                || ($item->EndDate()->Compare($this->_firstLayoutTime) <= 0)) {
             // skip the item if it starts after this layout or ends before it
             return;
         }
@@ -184,13 +182,13 @@ class ScheduleReservationList implements IScheduleReservationList
 
     private function ItemStartsOnPastDate(ReservationListItem $item)
     {
-        //Log::Debug("PAST");
+        // Log::Debug("PAST");
         return $item->StartDate()->Compare($this->_layoutDateStart) <= 0;
     }
 
     private function ItemEndsOnFutureDate(ReservationListItem $item)
     {
-        //Log::Debug("%s %s %s", $reservation->GetReferenceNumber(), $reservation->GetEndDate()->GetDate(), $this->_layoutDateEnd->GetDate());
+        // Log::Debug("%s %s %s", $reservation->GetReferenceNumber(), $reservation->GetEndDate()->GetDate(), $this->_layoutDateEnd->GetDate());
         return $item->EndDate()->Compare($this->_layoutDateEnd) >= 0;
     }
 
@@ -217,7 +215,6 @@ class ScheduleReservationList implements IScheduleReservationList
     }
 
     /**
-     * @param Date $endingTime
      * @return int index of $_layoutItems which has the corresponding $endingTime
      */
     private function GetLayoutIndexEndingAt(Date $endingTime)
@@ -232,7 +229,6 @@ class ScheduleReservationList implements IScheduleReservationList
     }
 
     /**
-     * @param Date $beginTime
      * @return ReservationListItem
      */
     private function GetItemStartingAt(Date $beginTime)
@@ -241,16 +237,16 @@ class ScheduleReservationList implements IScheduleReservationList
         if (array_key_exists($timeKey, $this->_itemsByStartTime)) {
             return $this->_itemsByStartTime[$timeKey];
         }
+
         return null;
     }
 
     /**
-     * @param Date $endingTime
      * @return int index of $_layoutItems which has the closest ending time to $endingTime without going past it
      */
     private function FindClosestLayoutIndexBeforeEndingTime(Date $endingTime)
     {
-        for ($i = count($this->_layoutItems) - 1; $i >= 0; $i--) {
+        for ($i = count($this->_layoutItems) - 1; $i >= 0; --$i) {
             $currentItem = $this->_layoutItems[$i];
 
             if ($currentItem->BeginDate()->LessThan($endingTime)) {
@@ -262,12 +258,11 @@ class ScheduleReservationList implements IScheduleReservationList
     }
 
     /**
-     * @param ReservationListItem $item
      * @return SchedulePeriod which has the closest starting time to $endingTime without going prior to it
      */
     private function FindClosestLayoutIndexBeforeStartingTime(ReservationListItem $item)
     {
-        for ($i = count($this->_layoutItems) - 1; $i >= 0; $i--) {
+        for ($i = count($this->_layoutItems) - 1; $i >= 0; --$i) {
             $currentItem = $this->_layoutItems[$i];
 
             if ($currentItem->BeginDate()->LessThan($item->StartDate())) {
@@ -280,32 +275,33 @@ class ScheduleReservationList implements IScheduleReservationList
         }
 
         Log::Error('Could not find a fitting starting slot for reservation. Item %s', var_export($item, true));
+
         return null;
     }
 
     /**
-     * @param ReservationListItem $item
      * @return bool
      */
     private function ItemIsNotOnLayoutBoundary(ReservationListItem $item)
     {
         $timeKey = $item->StartDate()->Timestamp();
-        return !(array_key_exists($timeKey, $this->_layoutByStartTime));
+
+        return !array_key_exists($timeKey, $this->_layoutByStartTime);
     }
 
     private function Collides(ReservationListItem $item, $itemIndex)
     {
         $previousItem = $itemIndex > 0 ? $this->_items[--$itemIndex] : null;
-        $nextItem = $itemIndex < count($this->_items)-1 ? $this->_items[++$itemIndex] : null;
+        $nextItem = $itemIndex < count($this->_items) - 1 ? $this->_items[++$itemIndex] : null;
 
         $itemDateRange = new DateRange($item->StartDate(), $item->EndDate());
-        if ($previousItem != null) {
+        if (null != $previousItem) {
             if ($itemDateRange->Overlaps(new DateRange($previousItem->StartDate(), $previousItem->EndDate()))) {
                 return true;
             }
         }
 
-        if ($nextItem != null) {
+        if (null != $nextItem) {
             if ($itemDateRange->Overlaps(new DateRange($nextItem->StartDate(), $nextItem->EndDate()))) {
                 return true;
             }
@@ -323,7 +319,6 @@ class LayoutIndexCache
     private $_cache = [];
 
     /**
-     * @param Date $date
      * @return bool
      */
     public function Contains(Date $date)
@@ -332,10 +327,7 @@ class LayoutIndexCache
     }
 
     /**
-     * @param Date $date
      * @param SchedulePeriod[] $schedulePeriods
-     * @param Date $startDate
-     * @param Date $endDate
      */
     public function Add(Date $date, $schedulePeriods, Date $startDate, Date $endDate)
     {
@@ -362,15 +354,13 @@ class CachedLayoutIndex
 
     /**
      * @param SchedulePeriod[] $schedulePeriods
-     * @param Date $startDate
-     * @param Date $endDate
      */
     public function __construct($schedulePeriods, Date $startDate, Date $endDate)
     {
         $this->_firstLayoutTime = $endDate;
         $this->_lastLayoutTime = $startDate;
 
-        for ($i = 0; $i < count($schedulePeriods); $i++) {
+        for ($i = 0; $i < count($schedulePeriods); ++$i) {
             /** @var Date $itemBegin */
             $itemBegin = $schedulePeriods[$i]->BeginDate();
             $itemEnd = $schedulePeriods[$i]->EndDate();

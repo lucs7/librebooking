@@ -2,7 +2,7 @@
 
 define('ROOT_DIR', '../../');
 
-require_once(ROOT_DIR . 'Pages/Admin/ResourceAdminManageReservationsPage.php');
+require_once ROOT_DIR.'Pages/Admin/ResourceAdminManageReservationsPage.php';
 
 class GroupAdminManageReservationsPage extends ManageReservationsPage
 {

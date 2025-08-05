@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'config/timezones.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'lib/Config/Configurator.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageConfigurationPresenter.php');
+require_once ROOT_DIR.'config/timezones.php';
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'lib/Config/Configurator.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageConfigurationPresenter.php';
 
 interface IManageConfigurationPage extends IActionPage
 {
@@ -17,14 +17,8 @@ interface IManageConfigurationPage extends IActionPage
      */
     public function SetIsConfigFileWritable($isFileWritable);
 
-    /**
-     * @param ConfigSetting $configSetting
-     */
     public function AddSetting(ConfigSetting $configSetting);
 
-    /**
-     * @param ConfigSetting $configSetting
-     */
     public function AddSectionSetting(ConfigSetting $configSetting);
 
     /**
@@ -171,13 +165,13 @@ class ManageConfigurationPage extends ActionPage implements IManageConfiguration
     public function AddSetting(ConfigSetting $configSetting)
     {
         $this->settings[] = $configSetting;
-        $this->settingNames->Append($configSetting->Name . ',');
+        $this->settingNames->Append($configSetting->Name.',');
     }
 
     public function AddSectionSetting(ConfigSetting $configSetting)
     {
         $this->sectionSettings[$configSetting->Section][] = $configSetting;
-        $this->settingNames->Append($configSetting->Name . ',');
+        $this->settingNames->Append($configSetting->Name.',');
     }
 
     private function PopulateTimezones()
@@ -247,26 +241,32 @@ class ManageConfigurationPage extends ActionPage implements IManageConfiguration
     {
         $this->Set('AuthorizationPluginValues', $values);
     }
+
     public function SetPermissionPluginValues($values)
     {
         $this->Set('PermissionPluginValues', $values);
     }
+
     public function SetPostRegistrationPluginValues($values)
     {
         $this->Set('PostRegistrationPluginValues', $values);
     }
+
     public function SetPreReservationPluginValues($values)
     {
         $this->Set('PreReservationPluginValues', $values);
     }
+
     public function SetPostReservationPluginValues($values)
     {
         $this->Set('PostReservationPluginValues', $values);
     }
+
     public function SetStylingPluginValues($values)
     {
         $this->Set('StylingPluginValues', $values);
     }
+
     public function SetExportPluginValues($values)
     {
         $this->Set('ExportPluginValues', $values);

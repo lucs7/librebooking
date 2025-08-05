@@ -4,17 +4,17 @@ class PasswordEncryption
 {
     /**
      * @internal only for testing, use EncryptPassword
-     * @param $password
-     * @param $salt
+     *
      * @return string
      */
     public function Encrypt($password, $salt)
     {
-        return sha1($password . $salt);
+        return sha1($password.$salt);
     }
 
     /**
      * @param $plainTextPassword string
+     *
      * @return EncryptedPassword
      */
     public function EncryptPassword($plainTextPassword)
@@ -22,6 +22,7 @@ class PasswordEncryption
         $salt = $this->Salt();
 
         $encrypted = $this->Encrypt($plainTextPassword, $salt);
+
         return new EncryptedPassword($encrypted, $salt);
     }
 
@@ -53,7 +54,7 @@ class EncryptedPassword
 
     /**
      * @param $encryptedPassword string
-     * @param $salt string
+     * @param $salt              string
      */
     public function __construct($encryptedPassword, $salt)
     {

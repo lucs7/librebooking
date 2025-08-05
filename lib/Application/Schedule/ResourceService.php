@@ -1,27 +1,29 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 interface IResourceService
 {
     /**
-     * Gets resource list for a schedule
-     * @param int $scheduleId
-     * @param bool $includeInaccessibleResources
-     * @param UserSession $user
+     * Gets resource list for a schedule.
+     *
+     * @param int                         $scheduleId
+     * @param bool                        $includeInaccessibleResources
      * @param ScheduleResourceFilter|null $filter
+     *
      * @return array|ResourceDto[]
      */
     public function GetScheduleResources($scheduleId, $includeInaccessibleResources, UserSession $user, $filter = null);
 
     /**
-     * Gets resource list
-     * @param bool $includeInaccessibleResources
-     * @param UserSession $user
+     * Gets resource list.
+     *
+     * @param bool                        $includeInaccessibleResources
      * @param ScheduleResourceFilter|null $filter
-     * @param null $pageNumber
-     * @param null $pageSize
+     * @param null                        $pageNumber
+     * @param null                        $pageSize
+     *
      * @return array|ResourceDto[]
      */
     public function GetAllResources($includeInaccessibleResources, UserSession $user, $filter = null, $pageNumber = null, $pageSize = null);
@@ -33,7 +35,7 @@ interface IResourceService
 
     /**
      * @param int $scheduleId
-     * @param UserSession $user
+     *
      * @return ResourceGroupTree
      */
     public function GetResourceGroups($scheduleId, UserSession $user);
@@ -55,6 +57,7 @@ interface IResourceService
 
     /**
      * @param int $resourceId
+     *
      * @return BookableResource
      */
     public function GetResource($resourceId);
@@ -92,7 +95,7 @@ class ResourceService implements IResourceService
         IPermissionService $permissionService,
         IAttributeService $attributeService,
         IUserRepository $userRepository,
-        IAccessoryRepository $accessoryRepository
+        IAccessoryRepository $accessoryRepository,
     ) {
         $this->_resourceRepository = $resourceRepository;
         $this->_permissionService = $permissionService;
@@ -117,7 +120,7 @@ class ResourceService implements IResourceService
 
     public function GetScheduleResources($scheduleId, $includeInaccessibleResources, UserSession $user, $filter = null)
     {
-        if ($filter == null) {
+        if (null == $filter) {
             $filter = new ScheduleResourceFilter();
         }
 
@@ -129,11 +132,11 @@ class ResourceService implements IResourceService
 
     public function GetAllResources($includeInaccessibleResources, UserSession $user, $filter = null, $pageNumber = null, $pageSize = null)
     {
-        if ($filter == null) {
+        if (null == $filter) {
             $filter = new ScheduleResourceFilter();
         }
 
-        if ($pageNumber != null || $pageSize != null) {
+        if (null != $pageNumber || null != $pageSize) {
             $resources = $this->_resourceRepository->GetList($pageNumber, $pageSize);
             $resources = $resources->Results();
         } else {
@@ -145,10 +148,11 @@ class ResourceService implements IResourceService
     }
 
     /**
-     * @param $resources array|BookableResource[]
-     * @param $user UserSession
-     * @param $includeInaccessibleResources bool
+     * @param       $resources                    array|BookableResource[]
+     * @param       $user                         UserSession
+     * @param       $includeInaccessibleResources bool
      * @param int[] $resourceIds
+     *
      * @return array|ResourceDto[]
      */
     private function Filter($resources, $user, $includeInaccessibleResources, $resourceIds = null)

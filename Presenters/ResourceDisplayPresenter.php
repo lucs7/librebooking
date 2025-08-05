@@ -1,11 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Pages/Ajax/IReservationSaveResultsView.php');
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Pages/Ajax/IReservationSaveResultsView.php';
 
 class ResourceDisplayPresenter extends ActionPresenter
 {
@@ -80,7 +80,7 @@ class ResourceDisplayPresenter extends ActionPresenter
         IGuestUserService $guestUserService,
         IAttributeService $attributeService,
         IReservationRepository $reservationRepository,
-        ITermsOfServiceRepository $termsOfServiceRepository
+        ITermsOfServiceRepository $termsOfServiceRepository,
     ) {
         parent::__construct($page);
         $this->page = $page;
@@ -151,6 +151,7 @@ class ResourceDisplayPresenter extends ActionPresenter
 
         if (!$resource->GetIsCalendarSubscriptionAllowed()) {
             $this->page->DisplayNotEnabled();
+
             return;
         }
 
@@ -163,9 +164,9 @@ class ResourceDisplayPresenter extends ActionPresenter
 
         $layout = $this->scheduleRepository->GetLayout($scheduleId, new ScheduleLayoutFactory($timezone));
         $slots = $layout->GetLayout($now, true);
-        if(!empty($startDate)){
+        if (!empty($startDate)) {
             $reservationDate = $startDate;
-        }else{
+        } else {
             $reservationDate = $now;
             if ($slots[count($slots) - 1]->EndDate()->LessThanOrEqual($now)) {
                 $now = $now->AddDays(1)->GetDate();
@@ -209,7 +210,7 @@ class ResourceDisplayPresenter extends ActionPresenter
 
         /** @var ReservationListItem $r */
         foreach ($reservationList as $r) {
-            if (($next == null || $r->StartDate()->LessThan($next->StartDate())) && $r->StartDate()->GreaterThan($now)) {
+            if ((null == $next || $r->StartDate()->LessThan($next->StartDate())) && $r->StartDate()->GreaterThan($now)) {
                 $next = $r;
             }
 
@@ -228,7 +229,7 @@ class ResourceDisplayPresenter extends ActionPresenter
         }
 
         $this->SetTermsOfService();
-        $this->page->SetIsAvailableNow($current == null);
+        $this->page->SetIsAvailableNow(null == $current);
         $this->page->DisplayAvailability($dailyLayout, $now, $reservationDate->GetDate(), $current, $next, $upcoming, $requiresCheckin, $checkinReferenceNumber);
     }
 
@@ -239,22 +240,21 @@ class ResourceDisplayPresenter extends ActionPresenter
         $email = $this->page->GetEmail();
 
         $reservationDate = Date::Parse($this->page->GetBeginDate(), $timezone)->Format('Y-m-d ');
-        $date = DateRange::Create($reservationDate . $this->page->GetBeginTime(), $reservationDate . $this->page->GetEndTime(), $timezone);
+        $date = DateRange::Create($reservationDate.$this->page->GetBeginTime(), $reservationDate.$this->page->GetEndTime(), $timezone);
 
         $maxFutureDays = Configuration::Instance()->GetSectionKey(ConfigSection::PRIVACY, ConfigKeys::PRIVACY_PUBLIC_FUTURE_DAYS, new IntConverter());
-        if ($maxFutureDays == 0) {
+        if (0 == $maxFutureDays) {
             $maxFutureDays = 1;
         }
-        $maxDate = Date::Now()->ToTimezone($timezone)->AddDays($maxFutureDays+1)->GetDate();
+        $maxDate = Date::Now()->ToTimezone($timezone)->AddDays($maxFutureDays + 1)->GetDate();
 
         $resultCollector = new ReservationResultCollector();
 
         if ($date->GetBegin()->GreaterThan($maxDate)) {
             $resultCollector->SetSaveSuccessfulMessage(false);
-            $resultCollector->SetErrors(["Unauthorized"]);
+            $resultCollector->SetErrors(['Unauthorized']);
             $success = false;
-        }else{
-
+        } else {
             $userSession = $this->guestUserService->CreateOrLoad($email);
             $resource = $this->resourceRepository->LoadById($resourceId);
 
@@ -288,7 +288,7 @@ class ResourceDisplayPresenter extends ActionPresenter
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest == 'display') {
+        if ('display' == $dataRequest) {
             $resourceId = $this->page->GetPublicResourceId();
             $startDate = $this->page->GetStartDate();
             $this->DisplayResource($resourceId, $startDate);
@@ -297,7 +297,7 @@ class ResourceDisplayPresenter extends ActionPresenter
 
     protected function LoadValidators($action)
     {
-        if ($action == 'reserve') {
+        if ('reserve' == $action) {
             $this->page->RegisterValidator('emailformat', new EmailValidator($this->page->GetEmail()));
             if (!Configuration::Instance()->GetSectionKey(ConfigSection::TABLET_VIEW, ConfigKeys::TABLET_VIEW_ALLOW_GUESTS, new BooleanConverter())) {
                 $this->page->RegisterValidator('guestdenied', new RestrictedGuestValidator($this->page->GetEmail(), $this->guestUserService));
@@ -307,7 +307,7 @@ class ResourceDisplayPresenter extends ActionPresenter
 
     private function GetHandler($userSession)
     {
-        if ($this->reservationCreateHandler == null) {
+        if (null == $this->reservationCreateHandler) {
             return ReservationHandler::Create(
                 ReservationAction::Create,
                 new AddReservationPersistenceService($this->reservationRepository),
@@ -320,7 +320,7 @@ class ResourceDisplayPresenter extends ActionPresenter
 
     private function GetCheckinHandler($userSession)
     {
-        if ($this->reservationCheckinHandler == null) {
+        if (null == $this->reservationCheckinHandler) {
             return ReservationHandler::Create(ReservationAction::Checkin, new UpdateReservationPersistenceService($this->reservationRepository), $userSession);
         }
 
@@ -330,7 +330,7 @@ class ResourceDisplayPresenter extends ActionPresenter
     private function SetTermsOfService()
     {
         $termsOfService = $this->termsOfServiceRepository->Load();
-        if ($termsOfService != null && $termsOfService->AppliesToReservation()) {
+        if (null != $termsOfService && $termsOfService->AppliesToReservation()) {
             $this->page->SetTerms($termsOfService);
         }
     }

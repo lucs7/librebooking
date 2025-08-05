@@ -1,35 +1,34 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/WebService/WebServiceUserSession.php');
+require_once ROOT_DIR.'Domain/Values/WebService/WebServiceUserSession.php';
 
 interface IUserSessionRepository
 {
     /**
      * @param int $userId
+     *
      * @return WebServiceUserSession|null
      */
     public function LoadByUserId($userId);
 
     /**
      * @param string $sessionToken
+     *
      * @return WebServiceUserSession
      */
     public function LoadBySessionToken($sessionToken);
 
     /**
-     * @param WebServiceUserSession $session
      * @return void
      */
     public function Add(WebServiceUserSession $session);
 
     /**
-     * @param WebServiceUserSession $session
      * @return void
      */
     public function Update(WebServiceUserSession $session);
 
     /**
-     * @param WebServiceUserSession $session
      * @return void
      */
     public function Delete(WebServiceUserSession $session);
@@ -47,9 +46,11 @@ class UserSessionRepository implements IUserSessionRepository
         $reader = ServiceLocator::GetDatabase()->Query(new GetUserSessionByUserIdCommand($userId));
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return unserialize($row[ColumnNames::USER_SESSION]);
         }
         $reader->Free();
+
         return null;
     }
 
@@ -58,9 +59,11 @@ class UserSessionRepository implements IUserSessionRepository
         $reader = ServiceLocator::GetDatabase()->Query(new GetUserSessionBySessionTokenCommand($sessionToken));
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return unserialize($row[ColumnNames::USER_SESSION]);
         }
         $reader->Free();
+
         return null;
     }
 

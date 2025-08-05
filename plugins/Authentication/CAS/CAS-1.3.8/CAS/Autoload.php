@@ -1,21 +1,23 @@
 <?php
 
 /**
- * Autoloader Class
+ * Autoloader Class.
  *
  *  PHP Version 5
  *
  * @file      CAS/Autoload.php
+ *
  * @category  Authentication
- * @package   SimpleCAS
+ *
  * @author    Brett Bieber <brett.bieber@gmail.com>
  * @copyright 2008 Regents of the University of Nebraska
  * @license   http://www1.unl.edu/wdn/wiki/Software_License BSD License
- * @link      http://code.google.com/p/simplecas/
+ *
+ * @see      http://code.google.com/p/simplecas/
  **/
 
 /**
- * Autoload a class
+ * Autoload a class.
  *
  * @param string $class Classname to load
  *
@@ -26,38 +28,39 @@ function CAS_autoload($class)
     // Static to hold the Include Path to CAS
     static $include_path;
     // Check only for CAS classes
-    if (substr($class, 0, 4) !== 'CAS_') {
+    if ('CAS_' !== substr($class, 0, 4)) {
         return false;
     }
     // Setup the include path if it's not already set from a previous call
     if (empty($include_path)) {
-        $include_path = [dirname(dirname(__FILE__)), dirname(dirname(__FILE__)) . '/../test/' ];
+        $include_path = [dirname(dirname(__FILE__)), dirname(dirname(__FILE__)).'/../test/'];
     }
 
     // Declare local variable to store the expected full path to the file
 
     foreach ($include_path as $path) {
-        $file_path = $path . '/' . str_replace('_', '/', $class) . '.php';
+        $file_path = $path.'/'.str_replace('_', '/', $class).'.php';
         $fp = @fopen($file_path, 'r', true);
         if ($fp) {
             fclose($fp);
             include $file_path;
             if (!class_exists($class, false) && !interface_exists($class, false)) {
-                die(
+                exit(
                     new Exception(
-                        'Class ' . $class . ' was not present in ' .
-                        $file_path .
+                        'Class '.$class.' was not present in '.
+                        $file_path.
                         ' [CAS_autoload]'
                     )
                 );
             }
+
             return true;
         }
     }
     $e = new Exception(
-        'Class ' . $class . ' could not be loaded from ' .
-        $file_path . ', file does not exist (Path="'
-        . implode(':', $include_path) .'") [CAS_autoload]'
+        'Class '.$class.' could not be loaded from '.
+        $file_path.', file does not exist (Path="'
+        .implode(':', $include_path).'") [CAS_autoload]'
     );
     $trace = $e->getTrace();
     if (isset($trace[2]) && isset($trace[2]['function'])
@@ -70,11 +73,11 @@ function CAS_autoload($class)
     ) {
         return false;
     }
-    die((string) $e);
+    exit((string) $e);
 }
 
 // set up __autoload
-if (!(spl_autoload_functions())
+if (!spl_autoload_functions()
     || !in_array('CAS_autoload', spl_autoload_functions())
 ) {
     spl_autoload_register('CAS_autoload');

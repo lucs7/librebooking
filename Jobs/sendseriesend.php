@@ -1,14 +1,14 @@
 <?php
-/**
-*  Cron Example:
-*  This script must be executed every day for to enable series ending email functionality
-*  0 0 * * * /usr/bin/env php -f ${WWW_DIR}/librebooking/Jobs/sendseriesend.php
-*/
 
-define('ROOT_DIR', __DIR__ . '/../');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Jobs/JobCop.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationSeriesEndingEmail.php');
+/**
+ *  Cron Example:
+ *  This script must be executed every day for to enable series ending email functionality
+ *  0 0 * * * /usr/bin/env php -f ${WWW_DIR}/librebooking/Jobs/sendseriesend.php
+ */
+define('ROOT_DIR', __DIR__.'/../');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Jobs/JobCop.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationSeriesEndingEmail.php';
 
 Log::Debug('Running sendseriesend.php');
 
@@ -57,6 +57,7 @@ WHERE
     $instancesEnding->AddParameter(new Parameter(ParameterNames::END_DATE, $searchEnd));
     $instancesEnding->AddParameter(new Parameter(ParameterNames::EVENT_CATEGORY, EventCategory::Reservation));
     $instancesEnding->AddParameter(new Parameter(ParameterNames::EVENT_TYPE, ReservationEvent::SeriesEnding));
+
     return $instancesEnding;
 }
 

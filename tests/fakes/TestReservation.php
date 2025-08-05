@@ -3,9 +3,9 @@
 class TestReservation extends Reservation
 {
     /**
-     * @param string $referenceNumber
+     * @param string    $referenceNumber
      * @param DateRange $reservationDate
-     * @param int $reservationId
+     * @param int       $reservationId
      */
     public function __construct($referenceNumber = null, $reservationDate = null, $reservationId = null)
     {
@@ -22,13 +22,13 @@ class TestReservation extends Reservation
             $this->SetReferenceNumber(uniqid('', true));
         }
 
-        if ($reservationDate != null) {
+        if (null != $reservationDate) {
             $this->SetReservationDate($reservationDate);
         } else {
             $this->SetReservationDate(new TestDateRange());
         }
 
-        if ($reservationId == null) {
+        if (null == $reservationId) {
             $reservationId = uniqid();
         }
         $this->SetReservationId($reservationId);

@@ -4,7 +4,7 @@ class ResourceParticipationRule implements IReservationValidationRule
 {
     /**
      * @param ReservationSeries $reservationSeries
-     * @param $retryParameters
+     *
      * @return ReservationRuleResult
      */
     public function Validate($reservationSeries, $retryParameters)
@@ -39,6 +39,7 @@ class ResourceParticipationRule implements IReservationValidationRule
         if (strlen($message) > 0) {
             return new ReservationRuleResult(false, $message);
         }
+
         return new ReservationRuleResult();
     }
 }

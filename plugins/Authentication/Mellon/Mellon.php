@@ -1,10 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'plugins/Authentication/Mellon/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'plugins/Authentication/Mellon/namespace.php';
 
 /**
  * Provides Apache mod_auth_mellon authentication/synchronization for Booked.
+ *
  * @see IAuthorization
  */
 class Mellon extends Authentication implements IAuthentication
@@ -16,7 +17,7 @@ class Mellon extends Authentication implements IAuthentication
 
     private function GetRegistration()
     {
-        if ($this->_registration == null) {
+        if (null == $this->_registration) {
             $this->_registration = new Registration();
         }
 
@@ -33,6 +34,7 @@ class Mellon extends Authentication implements IAuthentication
     public function Validate($username, $password)
     {
         $username = $_SERVER['REMOTE_USER'];
+
         return true;
     }
 
@@ -57,18 +59,18 @@ class Mellon extends Authentication implements IAuthentication
         $registration = $this->GetRegistration();
         $registration->Synchronize(
             new AuthenticatedUser(
-                            $username,
-                            $username . '@' . $this->options->EmailDomain(),
-                            $_SERVER[$this->options->KeyGivenName()],
-                            $_SERVER[$this->options->KeySurname()],
-                            BookedStringHelper::Random(12),
-                            Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
-                            Configuration::Instance()->GetDefaultTimezone(),
-                            null,
-                            null,
-                            null,
-                            $this->GetGroups($loginContext)
-                        )
+                $username,
+                $username.'@'.$this->options->EmailDomain(),
+                $_SERVER[$this->options->KeyGivenName()],
+                $_SERVER[$this->options->KeySurname()],
+                BookedStringHelper::Random(12),
+                Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE),
+                Configuration::Instance()->GetDefaultTimezone(),
+                null,
+                null,
+                null,
+                $this->GetGroups($loginContext)
+            )
         );
     }
 
@@ -91,7 +93,7 @@ class Mellon extends Authentication implements IAuthentication
 
     public function AreCredentialsKnown()
     {
-        return (bool)$_SERVER['REMOTE_USER'];
+        return (bool) $_SERVER['REMOTE_USER'];
     }
 
     public function ShowUsernamePrompt()

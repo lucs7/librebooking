@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'Pages/Credits/UserCreditsPage.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'Pages/Credits/UserCreditsPage.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
 
 class UserCreditsPresenter extends ActionPresenter
 {
@@ -29,7 +29,7 @@ class UserCreditsPresenter extends ActionPresenter
         IUserCreditsPage $page,
         IUserRepository $userRepository,
         IPaymentRepository $paymentRepository,
-        ICreditRepository $creditRepository
+        ICreditRepository $creditRepository,
     ) {
         parent::__construct($page);
 
@@ -51,14 +51,14 @@ class UserCreditsPresenter extends ActionPresenter
     }
 
     /**
-     * @param string $dataRequest
+     * @param string      $dataRequest
      * @param UserSession $userSession
      */
     public function ProcessDataRequest($dataRequest, $userSession)
     {
-        if ($dataRequest == 'creditLog') {
+        if ('creditLog' == $dataRequest) {
             $this->GetCreditLog($userSession);
-        } elseif ($dataRequest == 'transactionLog') {
+        } elseif ('transactionLog' == $dataRequest) {
             $this->GetTransactionLog($userSession);
         } else {
             $quantity = $this->page->GetQuantity();
@@ -72,10 +72,11 @@ class UserCreditsPresenter extends ActionPresenter
                 }
             }
             if (!isset($cost)) { // Error if not found
-                echo "ERR|ERR";
+                echo 'ERR|ERR';
+
                 return;
             }
-            $this->page->SetTotalCost($cost->FormatCurrency($cost->Cost())."|".$cost->GetFormattedTotal($quantity));
+            $this->page->SetTotalCost($cost->FormatCurrency($cost->Cost()).'|'.$cost->GetFormattedTotal($quantity));
         }
     }
 

@@ -7,11 +7,9 @@ header('Access-Control-Allow-Methods: "PUT, GET, POST, DELETE, OPTIONS"');
 
 define('ROOT_DIR', '../../');
 
-require_once(ROOT_DIR . 'Pages/Export/EmbeddedCalendarPage.php');
+require_once ROOT_DIR.'Pages/Export/EmbeddedCalendarPage.php';
 
+// if (Configuration::Instance()->GetSectionKey('ics', 'require.login', new BooleanConverter()))
 
-//if (Configuration::Instance()->GetSectionKey('ics', 'require.login', new BooleanConverter()))
-{
-    $page = new EmbeddedCalendarPage();
-    $page->PageLoad();
-}
+$page = new EmbeddedCalendarPage();
+$page->PageLoad();

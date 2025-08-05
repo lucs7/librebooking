@@ -1,47 +1,45 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/BlackoutFilter.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Validation/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/BlackoutFilter.php';
 
 interface IManageBlackoutsService
 {
     /**
      * @abstract
-     * @param $pageNumber int
-     * @param $pageSize int
-     * @param $sortField string
+     *
+     * @param $pageNumber    int
+     * @param $pageSize      int
+     * @param $sortField     string
      * @param $sortDirection string
-     * @param $filter BlackoutFilter
-     * @param $user UserSession
+     * @param $filter        BlackoutFilter
+     * @param $user          UserSession
+     *
      * @return PageableData
      */
     public function LoadFiltered($pageNumber, $pageSize, $sortField, $sortDirection, $filter, $user);
 
     /**
-     * @param DateRange $blackoutDate
      * @param array|int[] $resourceIds
-     * @param string $title
-     * @param IReservationConflictResolution $reservationConflictResolution
-     * @param IRepeatOptions $repeatOptions
+     * @param string      $title
+     *
      * @return IBlackoutValidationResult
      */
     public function Add(DateRange $blackoutDate, $resourceIds, $title, IReservationConflictResolution $reservationConflictResolution, IRepeatOptions $repeatOptions);
 
     /**
-     * @param int $blackoutInstanceId
-     * @param DateRange $blackoutDate
-     * @param array|int[] $resourceIds
-     * @param string $title
-     * @param IReservationConflictResolution $reservationConflictResolution
-     * @param IRepeatOptions $repeatOptions
+     * @param int                      $blackoutInstanceId
+     * @param array|int[]              $resourceIds
+     * @param string                   $title
      * @param SeriesUpdateScope|string $scope
+     *
      * @return IBlackoutValidationResult
      */
     public function Update($blackoutInstanceId, DateRange $blackoutDate, $resourceIds, $title, IReservationConflictResolution $reservationConflictResolution, IRepeatOptions $repeatOptions, $scope);
 
     /**
-     * @param int $blackoutId
+     * @param int    $blackoutId
      * @param string $updateScope
      */
     public function Delete($blackoutId, $updateScope);
@@ -49,6 +47,7 @@ interface IManageBlackoutsService
     /**
      * @param int $blackoutId
      * @param int $userId
+     *
      * @return BlackoutSeries|null
      */
     public function LoadBlackout($blackoutId, $userId);
@@ -127,8 +126,9 @@ class ManageBlackoutsService implements IManageBlackoutsService
     }
 
     /**
-     * @param BlackoutSeries $blackoutSeries
+     * @param BlackoutSeries                 $blackoutSeries
      * @param IReservationConflictResolution $reservationConflictResolution
+     *
      * @return array|ReservationItemView[]
      */
     private function GetConflictingReservations($blackoutSeries, $reservationConflictResolution)
@@ -152,6 +152,7 @@ class ManageBlackoutsService implements IManageBlackoutsService
 
     /**
      * @param BlackoutSeries $blackoutSeries
+     *
      * @return array|BlackoutItemView[]
      */
     private function GetConflictingBlackouts($blackoutSeries)
@@ -178,7 +179,7 @@ class ManageBlackoutsService implements IManageBlackoutsService
 
     public function Delete($blackoutId, $updateScope)
     {
-        if ($updateScope == SeriesUpdateScope::FullSeries) {
+        if (SeriesUpdateScope::FullSeries == $updateScope) {
             $this->blackoutRepository->DeleteSeries($blackoutId);
         } else {
             $this->blackoutRepository->Delete($blackoutId);
@@ -209,7 +210,7 @@ class ManageBlackoutsService implements IManageBlackoutsService
 
         $blackoutSeries = $this->LoadBlackout($blackoutInstanceId, $userId);
 
-        if ($blackoutSeries == null) {
+        if (null == $blackoutSeries) {
             return new BlackoutSecurityValidationResult();
         }
 

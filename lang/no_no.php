@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class no_no extends en_gb
 {
@@ -62,7 +62,7 @@ class no_no extends en_gb
         $strings['Error'] = 'Feil';
         $strings['ReturnToPreviousPage'] = 'Tilbake til forrige side';
         $strings['UnknownError'] = 'Ukjent feil';
-        $strings['InsufficientPermissionsError'] = 'Du har ikke tilgangsrettigheter til dette objektet';  //usikker på oversettelse resource
+        $strings['InsufficientPermissionsError'] = 'Du har ikke tilgangsrettigheter til dette objektet';  // usikker på oversettelse resource
         $strings['MissingReservationResourceError'] = 'Leieobjekt ikke valgt';
         $strings['MissingReservationScheduleError'] = 'Bookingkalender ikke valgt';
         $strings['DoesNotRepeat'] = 'Repeteres ikke';
@@ -99,7 +99,7 @@ class no_no extends en_gb
         $strings['Tomorrow'] = 'I morgen';
         $strings['LaterThisWeek'] = 'Senere denne uken';
         $strings['NextWeek'] = 'Neste uke';
-        $strings['SignOut'] = 'Logg ut';                                                //usikker oversettelse
+        $strings['SignOut'] = 'Logg ut';                                                // usikker oversettelse
         $strings['LayoutDescription'] = 'Starter på %s, viser %s dager om gangen';
         $strings['AllResources'] = 'Alle ressurser';
         $strings['TakeOffline'] = 'Deaktiver nettvisning';
@@ -117,7 +117,7 @@ class no_no extends en_gb
         $strings['Notes'] = 'Anmerkninger';
         $strings['NoNotesLabel'] = '(ingen anmerkninger)';
         $strings['NoTitleLabel'] = '(ingen tittel)';
-        $strings['UsageConfiguration'] = 'Konfigurasjon bruk';                    //usikker oversettelse
+        $strings['UsageConfiguration'] = 'Konfigurasjon bruk';                    // usikker oversettelse
         $strings['ChangeConfiguration'] = 'Endre konfigurasjon';
         $strings['ResourceMinLength'] = 'Reservasjonen må ha en varighet på minst %s';
         $strings['ResourceMinLengthNone'] = 'Det er ingen minimum reservasjonstid';
@@ -313,9 +313,9 @@ class no_no extends en_gb
         $strings['Unreservable'] = 'Ikke reserverbar';
         $strings['Reserved'] = 'Reservert';
         $strings['MyReservation'] = 'Min reservasjon';
-        $strings['Pending'] = 'venter';                                                       //pending? se bruk før endelig oversettelse
+        $strings['Pending'] = 'venter';                                                       // pending? se bruk før endelig oversettelse
         $strings['Past'] = 'Foregående';
-        $strings['Restricted'] = 'Begrenset';                                                    //restricted?? se bruk før endelig oversettelse
+        $strings['Restricted'] = 'Begrenset';                                                    // restricted?? se bruk før endelig oversettelse
         $strings['ViewAll'] = 'View All';
         $strings['MoveResourcesAndReservations'] = 'Flytt enheter og reservasjoner til';
         $strings['TurnOffSubscription'] = 'Slå av kalenderabbonement';
@@ -378,7 +378,7 @@ class no_no extends en_gb
         $strings['TotalTime'] = 'Total Tid';
         $strings['Count'] = 'regn ut';
         $strings['Usage'] = 'Bruk';
-        $strings['AggregateBy'] = 'Legg til ved';                                                //????????
+        $strings['AggregateBy'] = 'Legg til ved';                                                // ????????
         $strings['Range'] = 'utvalgsstørrelse';
         $strings['Choose'] = 'Velg';
         $strings['All'] = 'Alt';
@@ -632,8 +632,8 @@ class no_no extends en_gb
         $strings['UserAdded'] = 'En ny bruker er lagt til';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Du har ingen tidligere reservasjoner';
         $strings['PastReservations'] = 'Tidligere reservasjoner';
         $strings['AllNoPastReservations'] = 'Det er ingen tidligere reservasjoner de siste %s dagene';
@@ -641,35 +641,34 @@ class no_no extends en_gb
         $strings['Yesterday'] = 'I går';
         $strings['EarlierThisWeek'] = 'Tidligere denne uken';
         $strings['PreviousWeek'] = 'Forrige uke';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Din gruppe har ingen kommende reservasjoner';
         $strings['GroupUpcomingReservations'] = 'Mine grupp(er) kommende reservasjoner';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Det oppstod en feil under pålogging med Facebook. Prøv igjen.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Du har ingen reservasjoner som venter på godkjenning';
         $strings['PendingApprovalReservations'] = 'Reservasjoner venter på godkjenning';
         $strings['LaterThisMonth'] = 'Senere denne måneden';
         $strings['LaterThisYear'] = 'Senere i år';
-        $strings['Remaining'] = 'Gjenstående';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Gjenstående';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Det er ingen manglende utsjekkingsreservasjoner';
-        $strings['MissingCheckOutReservations'] = 'Manglende utsjekkingsreservasjoner';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Manglende utsjekkingsreservasjoner';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Kan ikke se reservasjonsdetaljer fordi du ikke har tillatelser til noen av ressursene i denne reservasjonen';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 
@@ -698,6 +697,7 @@ class no_no extends en_gb
         $days['letter'] = ['S', 'M', 'T', 'O', 'T', 'F', 'L'];
 
         $this->Days = $days;
+
         return $this->Days;
     }
 
@@ -716,12 +716,14 @@ class no_no extends en_gb
         $months['abbr'] = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des'];
 
         $this->Months = $months;
+
         return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Æ', 'Ø', 'Å'];
+
         return $this->Letters;
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file ShibbolethConfig.php
  *
@@ -26,7 +27,6 @@ interface ShibbolethConfig
      * @var string
      */
     public const LASTNAME = 'shibboleth.lastname';
-
 
     /**
      * @var string

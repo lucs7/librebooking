@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationUserAvailabilityPage.php');
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationUserAvailabilityPage.php';
 
 class ReservationUserAvailabilityPresenter
 {
@@ -34,7 +34,7 @@ class ReservationUserAvailabilityPresenter
         IReservationViewRepository $reservationViewRepository,
         IScheduleRepository $scheduleRepository,
         IUserRepository $userRepository,
-        IResourceRepository $resourceRepository
+        IResourceRepository $resourceRepository,
     ) {
         $this->page = $page;
         $this->reservationViewRepository = $reservationViewRepository;
@@ -99,7 +99,7 @@ class ReservationUserAvailabilityPresenter
     }
 
     /**
-     * @param ReservationListing $reservationListing
+     * @param ReservationListing    $reservationListing
      * @param ReservationItemView[] $reservations
      */
     private function AddReservations($reservationListing, $reservations)
@@ -121,9 +121,9 @@ class ReservationUserAvailabilityPresenter
     }
 
     /**
-     * @param ReservationListing $reservationListing
+     * @param ReservationListing    $reservationListing
      * @param ReservationItemView[] $reservations
-     * @param int $userId
+     * @param int                   $userId
      */
     private function AddUsers($reservationListing, $reservations, $userId)
     {
@@ -136,7 +136,6 @@ class ReservationUserAvailabilityPresenter
     }
 
     /**
-     * @param UserSession $userSession
      * @return DateRange
      */
     private function GetReservationDuration(UserSession $userSession)
@@ -147,6 +146,7 @@ class ReservationUserAvailabilityPresenter
         $endTime = $this->page->GetEndTime();
 
         $timezone = $userSession->Timezone;
-        return DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $timezone);
+
+        return DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $timezone);
     }
 }

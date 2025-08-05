@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
 
 class InviteUserEmail extends EmailMessage
 {
@@ -52,6 +52,7 @@ class InviteUserEmail extends EmailMessage
         $this->Set('FullName', $this->fullName->__toString());
         $this->Set('AppTitle', Configuration::Instance()->GetKey(ConfigKeys::APP_TITLE));
         $this->Set('RegisterUrl', $registerUrl->ToString());
+
         return $this->FetchTemplate('InviteUser.tpl');
     }
 }

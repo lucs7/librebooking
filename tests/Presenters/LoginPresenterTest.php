@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/LoginPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'Pages/LoginPage.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'Presenters/LoginPresenter.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'Pages/LoginPage.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 class LoginPresenterTest extends TestBase
 {
@@ -139,21 +139,21 @@ class LoginPresenterTest extends TestBase
         $this->auth->_ValidateResult = false;
         $this->presenter->Login();
 
-        $this->assertEquals("", $this->page->_LastRedirect, "Does not redirect if auth fails");
-        $this->assertTrue($this->page->_ShowLoginError, "Should show login error if auth fails");
+        $this->assertEquals('', $this->page->_LastRedirect, 'Does not redirect if auth fails');
+        $this->assertTrue($this->page->_ShowLoginError, 'Should show login error if auth fails');
     }
 
     public function testAutoLoginIfCookieIsSet()
     {
         $this->page->_ResumeUrl = '/autologin/page/whatever.html';
-        $cookie = new Cookie(CookieKeys::PERSIST_LOGIN, "part1|part2");
+        $cookie = new Cookie(CookieKeys::PERSIST_LOGIN, 'part1|part2');
         $this->fakeServer->SetCookie($cookie);
 
         $this->auth->_CookieValidateResult = true;
 
         $this->presenter->PageLoad();
 
-        $this->assertTrue($this->auth->_CookieLoginCalled, "should try to auto login if persist cookie is set");
+        $this->assertTrue($this->auth->_CookieLoginCalled, 'should try to auto login if persist cookie is set');
         $this->assertEquals($cookie->Value, $this->auth->_LastLoginCookie);
         $this->assertEquals($this->page->_ResumeUrl, $this->page->_LastRedirect);
     }
@@ -163,7 +163,7 @@ class LoginPresenterTest extends TestBase
         $this->page->_ResumeUrl = '/autologin/page/whatever.html';
         $this->presenter->PageLoad();
 
-        $this->assertFalse($this->auth->_CookieLoginCalled, "should not try to auto login without persist cookie");
+        $this->assertFalse($this->auth->_CookieLoginCalled, 'should not try to auto login without persist cookie');
     }
 
     public function testCanChangeToKnownLanguage()
@@ -211,7 +211,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_PageLoadWasCalled = false;
     public $_Languages = [];
     public $_UseLogonName = false;
-    public $_ResumeUrl = "";
+    public $_ResumeUrl = '';
     public $_ShowLoginError = false;
     public $_requestedLanguage;
     public $_selectedLanguage;
@@ -223,17 +223,29 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     public $_ShowScheduleLink = false;
     public $_Announcements;
 
-    public function SetGoogleUrl($URL) {}
+    public function SetGoogleUrl($URL)
+    {
+    }
 
-    public function SetMicrosoftUrl($URL) {}
+    public function SetMicrosoftUrl($URL)
+    {
+    }
 
-    public function SetFacebookUrl($URL) {}
+    public function SetFacebookUrl($URL)
+    {
+    }
 
-    public function SetKeycloakUrl($URL) {}
+    public function SetKeycloakUrl($URL)
+    {
+    }
 
-    public function SetOauth2Url($URL) {}
+    public function SetOauth2Url($URL)
+    {
+    }
 
-    public function SetOauth2Name($Name) {}
+    public function SetOauth2Name($Name)
+    {
+    }
 
     public function PageLoad()
     {

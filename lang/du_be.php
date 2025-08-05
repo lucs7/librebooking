@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class du_be extends en_gb
 {
@@ -359,7 +359,6 @@ class du_be extends en_gb
         $strings['ForgotPassword'] = 'Paswoord vergeten';
         $strings['NotificationPreferences'] = 'Melding voorkeuren';
         $strings['ManageAnnouncements'] = 'Aankondigingen';
-        //
 
         // Day representations
         $strings['DaySundaySingle'] = 'Z';
@@ -388,10 +387,10 @@ class du_be extends en_gb
         $strings['InviteeAddedSubject'] = 'Uitnodiging reservering';
         $strings['ResetPassword'] = 'Verzoek om paswoord te resetten';
         $strings['ForgotPasswordEmailSent'] = 'Een email werd naar uw account gestuurd met de informatie om uw paswoord te resetten';
-        //End Email Subjects
+        // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'U heeft geen vorige reserveringen';
         $strings['PastReservations'] = 'Vorige reserveringen';
         $strings['AllNoPastReservations'] = 'Er zijn geen vorige reserveringen in de afgelopen %s dagen';
@@ -399,36 +398,37 @@ class du_be extends en_gb
         $strings['Yesterday'] = 'Gisteren';
         $strings['EarlierThisWeek'] = 'Eerder deze week';
         $strings['PreviousWeek'] = 'Vorige week';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Uw groep heeft geen toekomstige reserveringen';
         $strings['GroupUpcomingReservations'] = 'Aankomende reserveringen van mijn groep(en)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Er is een fout opgetreden bij het inloggen met Facebook. Probeer het opnieuw.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'U heeft geen reserveringen die wachten op goedkeuring';
         $strings['PendingApprovalReservations'] = 'Reserveringen in afwachting van goedkeuring';
         $strings['LaterThisMonth'] = 'Later deze maand';
         $strings['LaterThisYear'] = 'Later dit jaar';
         $strings['Remaining'] = 'Resterend';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Er zijn geen ontbrekende uitcheckreserveringen';
-        $strings['MissingCheckOutReservations'] = 'Ontbrekende uitcheckreserveringen';              
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Ontbrekende uitcheckreserveringen';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'U kunt geen details van de reservering zien omdat u geen toestemming heeft voor een van de bronnen in deze reservering';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
+
         return $this->Strings;
     }
 
@@ -451,6 +451,7 @@ class du_be extends en_gb
         $days['letter'] = ['Z', 'M', 'D', 'W', 'D', 'V', 'Z'];
 
         $this->Days = $days;
+
         return $this->Days;
     }
 
@@ -469,12 +470,14 @@ class du_be extends en_gb
         $months['abbr'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
 
         $this->Months = $months;
+
         return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         return $this->Letters;
     }
 

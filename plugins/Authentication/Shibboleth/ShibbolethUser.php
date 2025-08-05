@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file ShibbolethUser.php
  */
@@ -12,37 +13,42 @@ class ShibbolethUser
 {
     /**
      * The username.
+     *
      * @var string
      */
     private $_username;
 
     /**
      * The user's first name.
+     *
      * @var string
      */
     private $_firstname;
 
     /**
      * The user's last name.
+     *
      * @var string
      */
     private $_lastname;
 
     /**
      * The user's email address.
+     *
      * @var string
      */
     private $_email;
 
     /**
      * The user's phone number.
+     *
      * @var string
      */
     private $_phone;
 
-
     /**
      * The user's organization.
+     *
      * @var string
      */
     private $_organization;
@@ -51,8 +57,8 @@ class ShibbolethUser
      * Constructor.
      * Populates the object's members with given values.
      *
-     * @param array $values A map of user attributes.
-     * @param ShibbolethOptions $options The plugin configuration.
+     * @param array             $values  a map of user attributes
+     * @param ShibbolethOptions $options the plugin configuration
      */
     public function __construct(array $values, ShibbolethOptions $options)
     {
@@ -67,6 +73,7 @@ class ShibbolethUser
 
     /**
      * Retrieves the username.
+     *
      * @return string|null
      */
     public function GetUsername()
@@ -76,6 +83,7 @@ class ShibbolethUser
 
     /**
      * Retrieve's the user's first name.
+     *
      * @return string|null
      */
     public function GetFirstName()
@@ -85,6 +93,7 @@ class ShibbolethUser
 
     /**
      * Retrieves the user's last name.
+     *
      * @return string|null
      */
     public function GetLastName()
@@ -94,6 +103,7 @@ class ShibbolethUser
 
     /**
      * Retrieves the user's email address.
+     *
      * @return string|null
      */
     public function GetEmailAddress()
@@ -103,6 +113,7 @@ class ShibbolethUser
 
     /**
      * Retrieves the user's phone number.
+     *
      * @return string|null
      */
     public function GetPhone()
@@ -112,6 +123,7 @@ class ShibbolethUser
 
     /**
      * Retrieves the user's organization.
+     *
      * @return string|null
      */
     public function GetOrganization()
@@ -122,9 +134,10 @@ class ShibbolethUser
     /**
      * Retrieves a value from a given map by a given key.
      *
-     * @param array $values A map of key/value pairs.
-     * @param string $key The key.
-     * @return string|null The value, or NULL if none was found.
+     * @param array  $values a map of key/value pairs
+     * @param string $key    the key
+     *
+     * @return string|null the value, or NULL if none was found
      */
     protected function GetValue(array $values, $key)
     {
@@ -132,6 +145,7 @@ class ShibbolethUser
         if (array_key_exists($key, $values)) {
             $value = $values[$key];
         }
+
         return $value;
     }
 }

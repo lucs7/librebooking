@@ -20,28 +20,31 @@
  * PHP Version 5
  *
  * @class    CAS/ProxyTicketException.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
  *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
  * An Exception for errors related to fetching or validating proxy tickets.
  *
  * @class    CAS_ProxyTicketException
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 class CAS_ProxyTicketException extends BadMethodCallException implements CAS_Exception
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $message Message text
      * @param int    $code    Error code
@@ -52,9 +55,9 @@ class CAS_ProxyTicketException extends BadMethodCallException implements CAS_Exc
     {
         // Warn if the code is not in our allowed list
         $ptCodes = [
-        PHPCAS_SERVICE_PT_FAILURE,
-        PHPCAS_SERVICE_PT_NO_SERVER_RESPONSE,
-        PHPCAS_SERVICE_PT_BAD_SERVER_RESPONSE,
+            PHPCAS_SERVICE_PT_FAILURE,
+            PHPCAS_SERVICE_PT_NO_SERVER_RESPONSE,
+            PHPCAS_SERVICE_PT_BAD_SERVER_RESPONSE,
         ];
         if (!in_array($code, $ptCodes)) {
             trigger_error(

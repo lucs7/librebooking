@@ -7,30 +7,27 @@
  * Authentication plugin for Moodle 1.9+.
  * See http://moodle.org/mod/data/view.php?d=13&rid=2574
  * This plugin uses the SimpleSAMLPHP version 1.8.2 libraries.
- * http://simplesamlphp.org/
- *
+ * http://simplesamlphp.org/.
  */
 
 /**
- * PHP SAML CLASS FOR COMMUNICATING WITH Simple Saml PHP Service Provider
- *
+ * PHP SAML CLASS FOR COMMUNICATING WITH Simple Saml PHP Service Provider.
  */
 
 /**
- * Main adSAML class
- *
+ * Main adSAML class.
  */
 class adSAML
 {
     /**
-     * Name of the Simple Saml service provider instance
+     * Name of the Simple Saml service provider instance.
      *
      * @var string
      */
     private $ssphpSP = 'default-sp';
 
     /**
-     * Full directory path name that holds simpleSAMLphp library on your server
+     * Full directory path name that holds simpleSAMLphp library on your server.
      *
      * @var string
      */
@@ -38,14 +35,14 @@ class adSAML
 
     /**
      * Full directory path name that holds simpleSAMLphp config.php file
-     * on  your server
+     * on  your server.
      *
      * @var string
      */
     private $samlConfig;
 
     /**
-     * Instance of the helper class for Simple Saml Applications
+     * Instance of the helper class for Simple Saml Applications.
      *
      * @var SimpleSAML\Auth\Simple object
      */
@@ -53,36 +50,35 @@ class adSAML
 
     /**
      * Holds a list of user attributes obtained from SimpleSAMLphp
-     * Identity Provider (IDP)
+     * Identity Provider (IDP).
      *
      * @var associative array where attribute names are keys
      */
     private $userAttributes;
 
     /**
-     * Default Constructor
+     * Default Constructor.
      *
      * Instantiate an instance of the SimpleSAML\Auth\Simple class
      * and call requireAuth() to validate a user
      *
      * @param array $options Array of options to pass to the constructor
-     *
      */
     public function __construct($options = [])
     {
         // Auto load  libraries and
         // obtain simple SAML SP configuration data
-        $this->samlLib = $options["ssphp_lib"];
-        $this->samlConfig = $options["ssphp_config"];
-        require_once($this->samlLib . '/lib/_autoload.php');
+        $this->samlLib = $options['ssphp_lib'];
+        $this->samlConfig = $options['ssphp_config'];
+        require_once $this->samlLib.'/lib/_autoload.php';
 
         // You can specifically overide any of the default configuration options setup above
         if (count($options) > 0) {
-            if (array_key_exists("ssphp_sp", $options)) {
-                $this->ssphpSP = $options["ssphp_sp"];
+            if (array_key_exists('ssphp_sp', $options)) {
+                $this->ssphpSP = $options['ssphp_sp'];
             } else {
-                Log::Error("Could not connect to SAML service provider."
-                           . "  Please check your SAML configuration settings");
+                Log::Error('Could not connect to SAML service provider.'
+                           .'  Please check your SAML configuration settings');
             }
         }
 
@@ -91,14 +87,12 @@ class adSAML
 
     /**
      * Return true if user has logged into SimpleSAML logon page
-     * (user record exists in SimpleSAMLphp IDP data store)
+     * (user record exists in SimpleSAMLphp IDP data store).
      *
      * @return bool
      */
     public function authenticate()
     {
-
-
         // requireAuth() redirects user to SSO login page
         // where user needs to enter SSO username and password.
         // If user is not validated, then this function does not return
@@ -106,18 +100,20 @@ class adSAML
 
         $returnValue = false;
         if ($this->authSimple->isAuthenticated()) {
-            //obtain an array of attributes associated with this user
+            // obtain an array of attributes associated with this user
             $this->userAttributes = $this->authSimple->getAttributes();
             $returnValue = true;
         }
         $this->Cleanup();
+
         return $returnValue;
     }
 
     /**
      * After we know user is authetnicated,
      * then we can call getAttributes() method
-     * on $this->authSimple instance
+     * on $this->authSimple instance.
+     *
      * @return associative array of attributes
      */
     public function getAttributes()
@@ -128,12 +124,12 @@ class adSAML
     /**
      * Logout of SimpleSAML
      * Redirect to post-logout since SS logout function
-     * does not return
+     * does not return.
      */
     public function Logout()
     {
         $scriptUrl = Configuration::Instance()->GetScriptUrl();
-        $this->authSimple->logout(rtrim($scriptUrl, '/') . '/post-logout.php');
+        $this->authSimple->logout(rtrim($scriptUrl, '/').'/post-logout.php');
     }
 
     public function Cleanup()

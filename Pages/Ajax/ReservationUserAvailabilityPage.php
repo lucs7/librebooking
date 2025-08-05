@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationUserAvailabilityPresenter.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationUserAvailabilityPresenter.php';
 
 interface IReservationUserAvailabilityPage
 {
@@ -25,12 +25,12 @@ interface IReservationUserAvailabilityPage
     public function GetScheduleId();
 
     /**
-     * @param DailyLayout $dailyLayout
+     * @param DailyLayout        $dailyLayout
      * @param BookableResource[] $resources
-     * @param UserDto $user
-     * @param UserDto[] $participants
-     * @param UserDto[] $invitees
-     * @param DateRange $dateRange
+     * @param UserDto            $user
+     * @param UserDto[]          $participants
+     * @param UserDto[]          $invitees
+     * @param DateRange          $dateRange
      */
     public function Bind($dailyLayout, $resources, $user, $participants, $invitees, $dateRange);
 
@@ -43,10 +43,12 @@ interface IReservationUserAvailabilityPage
      * @return string
      */
     public function GetStartTime();
+
     /**
      * @return string
      */
     public function GetEndDate();
+
     /**
      * @return string
      */

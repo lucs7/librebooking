@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/ReservationStartTimeConstraint.php');
+require_once ROOT_DIR.'Domain/Values/ReservationStartTimeConstraint.php';
 
 class SeriesUpdateScope
 {
@@ -31,13 +31,14 @@ class SeriesUpdateScope
 
     /**
      * @param string $updateScope
+     *
      * @return bool
      */
     public static function IsValid($updateScope)
     {
-        return $updateScope == SeriesUpdateScope::FullSeries ||
-                $updateScope == SeriesUpdateScope::ThisInstance ||
-                $updateScope == SeriesUpdateScope::FutureInstances;
+        return SeriesUpdateScope::FullSeries == $updateScope
+                || SeriesUpdateScope::ThisInstance == $updateScope
+                || SeriesUpdateScope::FutureInstances == $updateScope;
     }
 }
 
@@ -45,6 +46,7 @@ interface ISeriesUpdateScope
 {
     /**
      * @param ExistingReservationSeries $series
+     *
      * @return Reservation[]
      */
     public function Instances($series);
@@ -61,20 +63,23 @@ interface ISeriesUpdateScope
 
     /**
      * @param ExistingReservationSeries $series
+     *
      * @return IRepeatOptions
      */
     public function GetRepeatOptions($series);
 
     /**
      * @param ExistingReservationSeries $series
-     * @param IRepeatOptions $repeatOptions
+     * @param IRepeatOptions            $repeatOptions
+     *
      * @return bool
      */
     public function CanChangeRepeatTo($series, $repeatOptions);
 
     /**
      * @param ExistingReservationSeries $series
-     * @param Reservation $instance
+     * @param Reservation               $instance
+     *
      * @return bool
      */
     public function ShouldInstanceBeRemoved($series, $instance);
@@ -93,14 +98,15 @@ abstract class SeriesUpdateScopeBase implements ISeriesUpdateScope
 
     /**
      * @param ExistingReservationSeries $series
-     * @param Date $compareDate
+     * @param Date                      $compareDate
+     *
      * @return array
      */
     protected function AllInstancesGreaterThan($series, $compareDate)
     {
         $instances = [];
         foreach ($series->_Instances() as $instance) {
-            if ($compareDate == null || $instance->StartDate()->Compare($compareDate) >= 0) {
+            if (null == $compareDate || $instance->StartDate()->Compare($compareDate) >= 0) {
                 $instances[] = $instance;
             }
         }
@@ -117,7 +123,8 @@ abstract class SeriesUpdateScopeBase implements ISeriesUpdateScope
 
     /**
      * @param ReservationSeries $series
-     * @param IRepeatOptions $targetRepeatOptions
+     * @param IRepeatOptions    $targetRepeatOptions
+     *
      * @return bool
      */
     public function CanChangeRepeatTo($series, $targetRepeatOptions)
@@ -190,6 +197,7 @@ class SeriesUpdateScope_Full extends SeriesUpdateScopeBase
 
     /**
      * @param ExistingReservationSeries $series
+     *
      * @return array
      */
     public function Instances($series)
@@ -204,7 +212,6 @@ class SeriesUpdateScope_Full extends SeriesUpdateScopeBase
 
     /**
      * @param ExistingReservationSeries $series
-     * @return mixed
      */
     public function EarliestDateToKeep($series)
     {
@@ -226,7 +233,8 @@ class SeriesUpdateScope_Full extends SeriesUpdateScopeBase
 
     /**
      * @param ReservationSeries $series
-     * @param IRepeatOptions $targetRepeatOptions
+     * @param IRepeatOptions    $targetRepeatOptions
+     *
      * @return bool
      */
     public function CanChangeRepeatTo($series, $targetRepeatOptions)
@@ -249,6 +257,7 @@ class SeriesUpdateScope_Full extends SeriesUpdateScopeBase
 
         if ($this->hasSameConfiguration) {
             $newEndDate = $series->RepeatOptions()->TerminationDate();
+
             // remove all instances past the new end date
             return $instance->StartDate()->GreaterThan($newEndDate);
         }

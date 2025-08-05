@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+require_once ROOT_DIR.'Pages/Page.php';
 
 class ErrorPage extends Page
 {
@@ -14,12 +14,12 @@ class ErrorPage extends Page
         $returnUrl = $this->server->GetQuerystring(QueryStringKeys::REDIRECT);
 
         if (empty($returnUrl)) {
-            $returnUrl = "index.php";
+            $returnUrl = 'index.php';
         }
 
         $errorMessageKey = ErrorMessages::Instance()->GetResourceKey($this->server->GetQuerystring(QueryStringKeys::MESSAGE_ID));
 
-        //TODO: Log
+        // TODO: Log
 
         $this->Set('ReturnUrl', urldecode($returnUrl));
         $this->Set('ErrorMessage', $errorMessageKey);

@@ -28,8 +28,6 @@ class DateRange
     private $weekends = 0;
 
     /**
-     * @param Date $begin
-     * @param Date $end
      * @param string $timezone
      */
     public function __construct(Date $begin, Date $end, $timezone = null)
@@ -49,7 +47,6 @@ class DateRange
         $this->_begin = $begin;
         $this->_end = $end;
 
-
         $this->weekdays = 0;
         $this->weekends = 0;
     }
@@ -58,6 +55,7 @@ class DateRange
      * @param string $beginString
      * @param string $endString
      * @param string $timezoneString
+     *
      * @return DateRange
      */
     public static function Create($beginString, $endString, $timezoneString)
@@ -66,9 +64,10 @@ class DateRange
     }
 
     /**
-     * Whether or not the $date is within the range.  Range boundaries are inclusive
-     * @param Date $date
+     * Whether or not the $date is within the range.  Range boundaries are inclusive.
+     *
      * @param bool $inclusive
+     *
      * @return bool
      */
     public function Contains(Date $date, $inclusive = true)
@@ -81,7 +80,6 @@ class DateRange
     }
 
     /**
-     * @param DateRange $dateRange
      * @return bool
      */
     public function ContainsRange(DateRange $dateRange)
@@ -90,20 +88,20 @@ class DateRange
     }
 
     /**
-     * Whether or not the date ranges overlap.  Dates that start or end on boundaries are excluded
-     * @param DateRange $dateRange
+     * Whether or not the date ranges overlap.  Dates that start or end on boundaries are excluded.
+     *
      * @return bool
      */
     public function Overlaps(DateRange $dateRange)
     {
-        return ($this->Contains($dateRange->GetBegin()) || $this->Contains($dateRange->GetEnd()) ||
-                $dateRange->Contains($this->GetBegin()) || $dateRange->Contains($this->GetEnd())) &&
-        (!$this->GetBegin()->Equals($dateRange->GetEnd()) && !$this->GetEnd()->Equals($dateRange->GetBegin()));
+        return ($this->Contains($dateRange->GetBegin()) || $this->Contains($dateRange->GetEnd())
+                || $dateRange->Contains($this->GetBegin()) || $dateRange->Contains($this->GetEnd()))
+        && (!$this->GetBegin()->Equals($dateRange->GetEnd()) && !$this->GetEnd()->Equals($dateRange->GetBegin()));
     }
 
     /**
-     * Whether or not any date within this range occurs on the provided date
-     * @param Date $date
+     * Whether or not any date within this range occurs on the provided date.
+     *
      * @return bool
      */
     public function OccursOn(Date $date)
@@ -123,8 +121,8 @@ class DateRange
             $endMidnight = $compare->GetEnd()->AddDays(1);
         }
 
-        return ($beginMidnight->DateCompare($date) <= 0 &&
-                $endMidnight->DateCompare($date) > 0);
+        return $beginMidnight->DateCompare($date) <= 0
+                && $endMidnight->DateCompare($date) > 0;
     }
 
     /**
@@ -158,7 +156,7 @@ class DateRange
 
         $dates = [$current];
 
-        for ($day = 0; $current->Compare($end) < 0; $day++) {
+        for ($day = 0; $current->Compare($end) < 0; ++$day) {
             $current = $current->AddDays(1);
             $dates[] = $current;
         }
@@ -167,7 +165,8 @@ class DateRange
     }
 
     /**
-     * Get all date times within the range. The first date will include the start time. The last date will include the end time. All other days will be at midnight
+     * Get all date times within the range. The first date will include the start time. The last date will include the end time. All other days will be at midnight.
+     *
      * @return Date[]
      */
     public function DateTimes()
@@ -182,11 +181,11 @@ class DateRange
         }
 
         $dates[] = $this->_end;
+
         return $dates;
     }
 
     /**
-     * @param DateRange $otherRange
      * @return bool
      */
     public function Equals(DateRange $otherRange)
@@ -196,6 +195,7 @@ class DateRange
 
     /**
      * @param string $timezone
+     *
      * @return DateRange
      */
     public function ToTimezone($timezone)
@@ -213,6 +213,7 @@ class DateRange
 
     /**
      * @param int $days
+     *
      * @return DateRange
      */
     public function AddDays($days)
@@ -225,7 +226,7 @@ class DateRange
      */
     public function ToString()
     {
-        return "\nBegin: " . $this->_begin->ToString() . " End: " . $this->_end->ToString() . "\n";
+        return "\nBegin: ".$this->_begin->ToString().' End: '.$this->_end->ToString()."\n";
     }
 
     public function __toString()
@@ -255,13 +256,13 @@ class DateRange
 
     private function CountDays()
     {
-        if ($this->weekends == 0 && $this->weekdays == 0) {
+        if (0 == $this->weekends && 0 == $this->weekdays) {
             // only count if it's not cached
             $dates = $this->Dates();
 
-            if (count($dates) == 0) {
+            if (0 == count($dates)) {
                 // just one day in range
-                if ($this->_begin->Weekday() == 0 || $this->_begin->Weekday() == 6) {
+                if (0 == $this->_begin->Weekday() || 6 == $this->_begin->Weekday()) {
                     $this->weekends = 1;
                 } else {
                     $this->weekdays = 1;
@@ -269,10 +270,10 @@ class DateRange
             }
 
             foreach ($dates as $date) {
-                if ($date->Weekday() == 0 || $date->Weekday() == 6) {
-                    $this->weekends++;
+                if (0 == $date->Weekday() || 6 == $date->Weekday()) {
+                    ++$this->weekends;
                 } else {
-                    $this->weekdays++;
+                    ++$this->weekdays;
                 }
             }
         }
@@ -317,7 +318,7 @@ class NullDateRange extends DateRange
      */
     public static function Instance()
     {
-        if (self::$instance == null) {
+        if (null == self::$instance) {
             self::$instance = new NullDateRange();
         }
 

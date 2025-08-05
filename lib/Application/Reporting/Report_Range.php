@@ -24,9 +24,7 @@ class Report_Range
     private $end;
 
     /**
-     * @param $range string|Report_Range
-     * @param $startString
-     * @param $endString
+     * @param        $range    string|Report_Range
      * @param string $timezone
      */
     public function __construct($range, $startString, $endString, $timezone = 'UTC')
@@ -37,15 +35,15 @@ class Report_Range
         $userTimezone = ServiceLocator::GetServer()->GetUserSession()->Timezone;
 
         $now = Date::Now()->ToTimezone($userTimezone);
-        if ($this->range == self::CURRENT_MONTH) {
+        if (self::CURRENT_MONTH == $this->range) {
             $this->start = Date::Create($now->Year(), $now->Month(), 1, 0, 0, 0, $userTimezone);
             $this->end = $this->start->AddMonths(1)->AddDays(-1);
         }
-        if ($this->range == self::CURRENT_WEEK) {
+        if (self::CURRENT_WEEK == $this->range) {
             $this->start = $now->GetDate()->AddDays(-$now->Weekday());
             $this->end = $this->Start()->AddDays(6);
         }
-        if ($this->range == self::TODAY) {
+        if (self::TODAY == $this->range) {
             $this->start = Date::Create($now->Year(), $now->Month(), $now->Day(), 0, 0, 0, $userTimezone);
             $this->end = $this->start;
         }
@@ -53,7 +51,7 @@ class Report_Range
 
     public function Add(ReportCommandBuilder $builder)
     {
-        if ($this->range != self::ALL_TIME) {
+        if (self::ALL_TIME != $this->range) {
             $builder->Within($this->start, $this->end);
         }
     }
@@ -81,6 +79,7 @@ class Report_Range
 
     /**
      * @static
+     *
      * @return Report_Range
      */
     public static function AllTime()
@@ -94,11 +93,13 @@ class Report_Range
     public function Dates()
     {
         $range = new DateRange($this->Start(), $this->End()->AddDays(1));
+
         return $range->Dates();
     }
 
     /**
      * @param string $range
+     *
      * @return bool
      */
     public function Equals($range)

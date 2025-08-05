@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Responses/ScheduleItemResponse.php');
+require_once ROOT_DIR.'WebServices/Responses/ScheduleItemResponse.php';
 
 class SchedulesResponse extends RestResponse
 {
@@ -10,7 +10,6 @@ class SchedulesResponse extends RestResponse
     public $schedules = [];
 
     /**
-     * @param IRestServer $server
      * @param array|Schedule[] $schedules
      */
     public function __construct(IRestServer $server, $schedules)

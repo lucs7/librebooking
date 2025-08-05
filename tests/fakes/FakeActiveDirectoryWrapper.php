@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'plugins/Authentication/ActiveDirectory/IActiveDirectory.php');
+require_once ROOT_DIR.'plugins/Authentication/ActiveDirectory/IActiveDirectory.php';
 
 class FakeActiveDirectoryWrapper implements IActiveDirectory
 {
@@ -18,6 +18,7 @@ class FakeActiveDirectoryWrapper implements IActiveDirectory
     public function Connect()
     {
         $this->_ConnectCalled = true;
+
         return $this->_ExpectedConnect;
     }
 

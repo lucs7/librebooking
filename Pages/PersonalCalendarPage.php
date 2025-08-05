@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/Calendar/PersonalCalendarPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/CalendarSubscriptionService.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/Calendar/PersonalCalendarPresenter.php';
+require_once ROOT_DIR.'lib/Application/Schedule/CalendarSubscriptionService.php';
 
 class PersonalCalendarPage extends CommonCalendarPage implements ICommonCalendarPage
 {
@@ -75,22 +75,24 @@ class PersonalCalendarUrl
         $resourceId = ServiceLocator::GetServer()->GetQuerystring(QueryStringKeys::RESOURCE_ID);
         $scheduleId = ServiceLocator::GetServer()->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
 
-        $format = Pages::MY_CALENDAR . '?'
-                . QueryStringKeys::DAY . '=%d&'
-                . QueryStringKeys::MONTH . '=%d&'
-                . QueryStringKeys::YEAR
-                . '=%d&'
-                . QueryStringKeys::CALENDAR_TYPE . '=%s&'
-                . QueryStringKeys::RESOURCE_ID . '=%s&'
-                . QueryStringKeys::SCHEDULE_ID . '=%s';
+        $format = Pages::MY_CALENDAR.'?'
+                .QueryStringKeys::DAY.'=%d&'
+                .QueryStringKeys::MONTH.'=%d&'
+                .QueryStringKeys::YEAR
+                .'=%d&'
+                .QueryStringKeys::CALENDAR_TYPE.'=%s&'
+                .QueryStringKeys::RESOURCE_ID.'=%s&'
+                .QueryStringKeys::SCHEDULE_ID.'=%s';
 
         $this->url = sprintf($format, $day, $month, $year, $type, $resourceId, $scheduleId);
     }
 
     /**
      * @static
+     *
      * @param $date Date
      * @param $type string
+     *
      * @return PersonalCalendarUrl
      */
     public static function Create($date, $type)

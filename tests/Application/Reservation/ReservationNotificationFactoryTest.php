@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/Notification/namespace.php';
 
 class ReservationNotificationFactoryTest extends TestBase
 {
@@ -64,7 +64,6 @@ class ReservationNotificationFactoryTest extends TestBase
 
         $this->assertEquals($this->service, $actual);
     }
-
 
     public function testLoadsApproveRulesFromPlugins()
     {

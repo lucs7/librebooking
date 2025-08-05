@@ -1,12 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class FakeRestServer implements IRestServer
 {
-    /**
-     * @var mixed
-     */
     public $_Request;
 
     /**
@@ -37,6 +34,7 @@ class FakeRestServer implements IRestServer
     {
         $this->SetSession(new FakeWebServiceUserSession(123));
     }
+
     public function GetRequest()
     {
         return $this->_Request;
@@ -53,6 +51,7 @@ class FakeRestServer implements IRestServer
         if (isset($this->_ServiceUrls[$serviceName])) {
             return $this->_ServiceUrls[$serviceName];
         }
+
         return null;
     }
 
@@ -84,7 +83,7 @@ class FakeRestServer implements IRestServer
     }
 
     /**
-     * @return null|WebServiceUserSession
+     * @return WebServiceUserSession|null
      */
     public function GetSession()
     {
@@ -101,6 +100,7 @@ class FakeRestServer implements IRestServer
         if (array_key_exists($queryStringKey, $this->queryStringKeys)) {
             return $this->queryStringKeys[$queryStringKey];
         }
+
         return null;
     }
 }

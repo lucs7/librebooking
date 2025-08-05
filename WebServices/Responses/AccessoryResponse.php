@@ -21,8 +21,8 @@ class AccessoryResponse extends RestResponse
     }
 
     /**
-     * @param IRestServer $server
      * @param ResourceAccessory[] $resources
+     *
      * @return AssociatedResourceResponse[]
      */
     private function GetResources(IRestServer $server, $resources)

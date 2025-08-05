@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationCreditsPage.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Pages/Ajax/ReservationCreditsPage.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 class ReservationCreditsPresenter
 {
@@ -32,7 +32,7 @@ class ReservationCreditsPresenter
         IReservationRepository $reservationRepository,
         IScheduleRepository $scheduleRepository,
         IResourceRepository $resourceRepository,
-        IPaymentRepository $paymentRepository
+        IPaymentRepository $paymentRepository,
     ) {
         $this->page = $page;
         $this->reservationRepository = $reservationRepository;
@@ -45,6 +45,7 @@ class ReservationCreditsPresenter
     {
         if (!Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ENABLED, new BooleanConverter())) {
             $this->page->SetCreditRequired(0, null);
+
             return;
         }
 
@@ -57,7 +58,7 @@ class ReservationCreditsPresenter
         if (Configuration::Instance()->GetSectionKey(ConfigSection::CREDITS, ConfigKeys::CREDITS_ALLOW_PURCHASE, new BooleanConverter())) {
             $creditCost = $this->paymentRepository->GetCreditCosts();
             // Only give an estimation of costs if there is only one cost configured
-            if (count($creditCost) == 1) {
+            if (1 == count($creditCost)) {
                 $cost = $creditCost[0]->GetFormattedTotal($creditsRequired);
             }
         }
@@ -126,7 +127,6 @@ class ReservationCreditsPresenter
     }
 
     /**
-     * @param UserSession $userSession
      * @return DateRange
      */
     private function GetReservationDuration(UserSession $userSession)
@@ -137,7 +137,8 @@ class ReservationCreditsPresenter
         $endTime = $this->page->GetEndTime();
 
         $timezone = $userSession->Timezone;
-        return DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $timezone);
+
+        return DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $timezone);
     }
 
     /**
@@ -149,6 +150,7 @@ class ReservationCreditsPresenter
         if (empty($resourceIds)) {
             $resourceIds = [];
         }
+
         return $resourceIds;
     }
 }

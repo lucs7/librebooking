@@ -2,9 +2,9 @@
 
 class MySqlCommandAdapter
 {
-    private $_values = null;
-    private $_query = null;
-    private $_db = null;
+    private $_values;
+    private $_query;
+    private $_db;
 
     public function __construct(ISqlCommand &$command, $db)
     {
@@ -29,7 +29,7 @@ class MySqlCommandAdapter
     {
         $query = $command->GetQuery();
 
-        for ($p = 0; $p < $command->Parameters->Count(); $p++) {
+        for ($p = 0; $p < $command->Parameters->Count(); ++$p) {
             $curParam = $command->Parameters->Items($p);
 
             if (is_null($curParam->Value)) {
@@ -49,6 +49,6 @@ class MySqlCommandAdapter
             }
         }
 
-        $this->_query = $query . ';';
+        $this->_query = $query.';';
     }
 }

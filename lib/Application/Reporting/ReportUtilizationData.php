@@ -42,10 +42,10 @@ class ReportUtilizationData
     private $timezone;
 
     /**
-     * @param array $data
+     * @param array               $data
      * @param IScheduleRepository $scheduleRepository
-     * @param Report_Range $range
-     * @param string $timezone
+     * @param Report_Range        $range
+     * @param string              $timezone
      */
     public function __construct($data, $scheduleRepository, $range, $timezone)
     {
@@ -80,7 +80,7 @@ class ReportUtilizationData
                 $latest = $end;
             }
 
-            if ($type == 1) {
+            if (1 == $type) {
                 $this->AddReservation($start, $end, $resourceId, $scheduleId);
             } else {
                 $this->AddBlackout($start, $end, $resourceId, $scheduleId);
@@ -102,7 +102,7 @@ class ReportUtilizationData
                 $rows[$rowIndex][ColumnNames::UTILIZATION] = $this->GetUtilization($date, $rid, $row[ColumnNames::SCHEDULE_ID]);
                 $rows[$rowIndex][ColumnNames::DATE] = $date;
                 $rows[$rowIndex][ColumnNames::SCHEDULE_ID] = $row[ColumnNames::SCHEDULE_ID];
-                $rowIndex++;
+                ++$rowIndex;
             }
         }
 
@@ -111,6 +111,7 @@ class ReportUtilizationData
 
     /**
      * @param int $scheduleId
+     *
      * @return IScheduleLayout
      */
     private function GetLayout($scheduleId)
@@ -123,13 +124,13 @@ class ReportUtilizationData
     }
 
     /**
-     * @param Date $date
+     * @param Date            $date
      * @param IScheduleLayout $layout
-     * @param int $scheduleId
+     * @param int             $scheduleId
      */
     private function CacheTotalAvailability($date, $layout, $scheduleId)
     {
-        $key = $date->Weekday() . $scheduleId;
+        $key = $date->Weekday().$scheduleId;
         if (array_key_exists($key, $this->weekdayAvailability)) {
             return;
         }
@@ -140,7 +141,7 @@ class ReportUtilizationData
 
         foreach ($periods as $period) {
             if ($period->IsReservable()) {
-                if ($first == null) {
+                if (null == $first) {
                     $first = $period;
                 }
                 $last = $period;
@@ -148,10 +149,10 @@ class ReportUtilizationData
             }
         }
 
-        if ($first == null) {
+        if (null == $first) {
             $first = $periods[0];
         }
-        if ($last == null) {
+        if (null == $last) {
             $last = $periods[count($periods) - 1];
         }
 
@@ -159,13 +160,13 @@ class ReportUtilizationData
     }
 
     /**
-     * @param Date $date
+     * @param Date            $date
      * @param IScheduleLayout $layout
-     * @param int $scheduleId
+     * @param int             $scheduleId
      */
     private function CacheCustomAvailability($date, $layout, $scheduleId)
     {
-        $key = $date->Timestamp() . $scheduleId;
+        $key = $date->Timestamp().$scheduleId;
 
         if (array_key_exists($key, $this->customAvailability)) {
             return;
@@ -185,7 +186,8 @@ class ReportUtilizationData
 
     /**
      * @param Date $date
-     * @param int $scheduleId
+     * @param int  $scheduleId
+     *
      * @return ReportDailyAvailability
      */
     private function GetTotalAvailability($date, $scheduleId)
@@ -193,19 +195,18 @@ class ReportUtilizationData
         $layout = $this->GetLayout($scheduleId);
         if ($layout->UsesCustomLayout()) {
             $this->CacheCustomAvailability($date, $layout, $scheduleId);
-            return $this->customAvailability[$date->Timestamp() . $scheduleId];
+
+            return $this->customAvailability[$date->Timestamp().$scheduleId];
         }
 
         $this->CacheTotalAvailability($date, $layout, $scheduleId);
 
-        $key = $date->Weekday() . $scheduleId;
+        $key = $date->Weekday().$scheduleId;
 
         return $this->weekdayAvailability[$key];
     }
 
     /**
-     * @param Date $start
-     * @param Date $end
      * @param int $resourceId
      * @param int $scheduleId
      */
@@ -215,8 +216,6 @@ class ReportUtilizationData
     }
 
     /**
-     * @param Date $start
-     * @param Date $end
      * @param int $resourceId
      * @param int $scheduleId
      */
@@ -226,10 +225,8 @@ class ReportUtilizationData
     }
 
     /**
-     * @param Date $start
-     * @param Date $end
-     * @param int $resourceId
-     * @param int $scheduleId
+     * @param int  $resourceId
+     * @param int  $scheduleId
      * @param bool $add
      */
     private function AddItem(Date $start, Date $end, $resourceId, $scheduleId, $add)
@@ -275,9 +272,9 @@ class ReportUtilizationData
 
     private function AddTotal(Date $date, $resourceId, $total)
     {
-//        echo sprintf("%s reserved on %s for %s\n", $total / 60 / 60, $date->Format('Y-m-d'), $resourceId);
+        //        echo sprintf("%s reserved on %s for %s\n", $total / 60 / 60, $date->Format('Y-m-d'), $resourceId);
 
-        $key = $resourceId . $date->GetDate()->Timestamp();
+        $key = $resourceId.$date->GetDate()->Timestamp();
         if (!array_key_exists($key, $this->totals)) {
             $this->totals[$key] = $total;
         } else {
@@ -287,13 +284,13 @@ class ReportUtilizationData
 
     private function SubtractAvailable(Date $date, $resourceId, $total)
     {
-        $key = $resourceId . $date->GetDate()->Timestamp();
+        $key = $resourceId.$date->GetDate()->Timestamp();
         $this->unavailable[$key] = $total;
     }
 
     private function GetUnavailable(Date $date, $resourceId)
     {
-        $key = $resourceId . $date->GetDate()->Timestamp();
+        $key = $resourceId.$date->GetDate()->Timestamp();
         if (array_key_exists($key, $this->unavailable)) {
             return $this->unavailable[$key];
         }
@@ -303,17 +300,18 @@ class ReportUtilizationData
 
     private function GetTotal(Date $date, $resourceId)
     {
-        $key = $resourceId . $date->GetDate()->Timestamp();
+        $key = $resourceId.$date->GetDate()->Timestamp();
         if (!array_key_exists($key, $this->totals)) {
             return 0;
         }
+
         return max(0, $this->totals[$key]);
     }
 
     /**
-     * @param Date $date
      * @param int $resourceId
      * @param int $scheduleId
+     *
      * @return float
      */
     private function GetUtilization(Date $date, $resourceId, $scheduleId)
@@ -323,10 +321,11 @@ class ReportUtilizationData
         $unavailable = $this->GetUnavailable($date, $resourceId);
 
         $availableSeconds = $available->TotalSeconds() - $unavailable;
-        if ($availableSeconds == 0) {
+        if (0 == $availableSeconds) {
             return 0;
         }
-        return 100 * (round($total / $availableSeconds, 2));
+
+        return 100 * round($total / $availableSeconds, 2);
     }
 }
 

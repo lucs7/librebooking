@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/ResourceRepository.php');
+require_once ROOT_DIR.'Domain/Access/ResourceRepository.php';
 
 class ResourceAdminResourceRepository extends ResourceRepository
 {
@@ -48,7 +48,7 @@ class ResourceAdminResourceRepository extends ResourceRepository
                 }
             }
 
-            if ($filter == null) {
+            if (null == $filter) {
                 $filter = new SqlFilterNull();
             }
 
@@ -74,12 +74,12 @@ class ResourceAdminResourceRepository extends ResourceRepository
 
     public function GetScheduleResources($scheduleId)
     {
-        $resources =  parent::GetScheduleResources($scheduleId);
+        $resources = parent::GetScheduleResources($scheduleId);
+
         return $this->GetFilteredResources($resources);
     }
 
     /**
-     * @param $resources
      * @return array|BookableResource[]
      */
     private function GetFilteredResources($resources)

@@ -14,7 +14,7 @@ class FileExtensionValidator extends ValidatorBase implements IValidator
 
     /**
      * @param $validExtensions string|string[]
-     * @param $file UploadedFile
+     * @param $file            UploadedFile
      */
     public function __construct($validExtensions, $file)
     {
@@ -23,7 +23,7 @@ class FileExtensionValidator extends ValidatorBase implements IValidator
         }
         $this->validExtensions = $validExtensions;
 
-        if ($file == null || !is_a($file, 'UploadedFile')) {
+        if (null == $file || !is_a($file, 'UploadedFile')) {
             $this->fileExtension = '';
         } else {
             $this->fileExtension = $file->Extension();

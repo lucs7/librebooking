@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/Request/MultiRequestInterface.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -33,11 +35,13 @@
  * or in parallel.
  *
  * @class    CAS_Request_MultiRequestInterface
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 interface CAS_Request_MultiRequestInterface
 {
@@ -53,10 +57,11 @@ interface CAS_Request_MultiRequestInterface
      * @param CAS_Request_RequestInterface $request request interface
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been
-     * sent.
-     * @throws CAS_InvalidArgumentException If passed a Request of the wrong
-     * implmentation.
+     *
+     * @throws CAS_OutOfSequenceException   if called after the Request has been
+     *                                      sent
+     * @throws CAS_InvalidArgumentException if passed a Request of the wrong
+     *                                      implmentation
      */
     public function addRequest(CAS_Request_RequestInterface $request);
 
@@ -75,8 +80,9 @@ interface CAS_Request_MultiRequestInterface
      * Perform the request. After sending, all requests will have their
      * responses poulated.
      *
-     * @return bool TRUE on success, FALSE on failure.
-     * @throws CAS_OutOfSequenceException If called multiple times.
+     * @return bool TRUE on success, FALSE on failure
+     *
+     * @throws CAS_OutOfSequenceException if called multiple times
      */
     public function send();
 }

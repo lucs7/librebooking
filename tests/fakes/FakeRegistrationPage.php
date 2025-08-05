@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/RegistrationPage.php');
+require_once ROOT_DIR.'Pages/RegistrationPage.php';
 
 class FakeRegistrationPage extends FakePageBase implements IRegistrationPage
 {
@@ -233,6 +233,7 @@ class FakeRegistrationPage extends FakePageBase implements IRegistrationPage
     {
         return $this->_Acknowledged;
     }
+
     public function SetTerms($terms)
     {
         $this->_Terms = $terms;

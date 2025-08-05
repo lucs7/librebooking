@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/ProxyChain/Interface.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -32,18 +34,20 @@
  * the current application.
  *
  * @class    CAS_ProxyChain_Interface
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 interface CAS_ProxyChain_Interface
 {
     /**
      * Match a list of proxies.
      *
-     * @param array $list The list of proxies in front of this service.
+     * @param array $list the list of proxies in front of this service
      *
      * @return bool
      */

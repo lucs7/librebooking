@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'Pages/Pages.php');
-require_once(ROOT_DIR . 'lib/Server/QueryStringKeys.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'Pages/Pages.php';
+require_once ROOT_DIR.'lib/Server/QueryStringKeys.php';
 
 class AttachmentResponse
 {
@@ -17,7 +17,7 @@ class AttachmentResponse
         $qsAttachment = QueryStringKeys::ATTACHMENT_FILE_ID;
         $qsRefNum = QueryStringKeys::REFERENCE_NUMBER;
 
-        $this->url = $server->GetUrl(). "/attachments/$page?$qsAttachment=$fileId&$qsRefNum=$referenceNumber";
+        $this->url = $server->GetUrl()."/attachments/$page?$qsAttachment=$fileId&$qsRefNum=$referenceNumber";
     }
 
     public static function Example()

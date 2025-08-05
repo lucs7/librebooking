@@ -1,19 +1,20 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/pear/Config.php');
-require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');
+require_once ROOT_DIR.'lib/external/pear/Config.php';
+require_once ROOT_DIR.'lib/Common/Helpers/namespace.php';
 
 interface IConfiguration extends IConfigurationFile
 {
     /**
      * @param string $configFile
      * @param string $configId
-     * @param bool $overwrite
+     * @param bool   $overwrite
      */
     public function Register($configFile, $configId, $overwrite = false);
 
     /**
      * @param string $configId
+     *
      * @return Configuration
      */
     public function File($configId);
@@ -22,16 +23,18 @@ interface IConfiguration extends IConfigurationFile
 interface IConfigurationFile
 {
     /**
-     * @param string $section
-     * @param string $name
-     * @param null|IConvert $converter
+     * @param string        $section
+     * @param string        $name
+     * @param IConvert|null $converter
+     *
      * @return mixed|string
      */
     public function GetSectionKey($section, $name, $converter = null);
 
     /**
-     * @param string $name
-     * @param null|IConvert $converter
+     * @param string        $name
+     * @param IConvert|null $converter
+     *
      * @return mixed|string
      */
     public function GetKey($name, $converter = null);
@@ -47,7 +50,6 @@ interface IConfigurationFile
     public function GetDefaultTimezone();
 
     /**
-     * @param $emailAddress
      * @return bool
      */
     public function IsAdminEmail($emailAddress);
@@ -75,7 +77,7 @@ class Configuration implements IConfiguration
     /**
      * @var Configuration
      */
-    private static $_instance = null;
+    private static $_instance;
 
     public const SETTINGS = 'settings';
     public const DEFAULT_CONFIG_ID = 'librebooking';
@@ -92,10 +94,10 @@ class Configuration implements IConfiguration
      */
     public static function Instance()
     {
-        if (self::$_instance == null) {
+        if (null == self::$_instance) {
             self::$_instance = new Configuration();
             self::$_instance->Register(
-                dirname(__FILE__) . '/../../' . self::DEFAULT_CONFIG_FILE_PATH,
+                dirname(__FILE__).'/../../'.self::DEFAULT_CONFIG_FILE_PATH,
                 self::DEFAULT_CONFIG_ID
             );
         }
@@ -115,7 +117,7 @@ class Configuration implements IConfiguration
             throw new Exception("Missing config file: $configFile");
         }
 
-        //touch($configFile);
+        // touch($configFile);
 
         $config = new Config();
         $container = $config->parseConfig($configFile, 'PHPArray');
@@ -151,7 +153,7 @@ class Configuration implements IConfiguration
             }
         }
 
-        $this->_configs[$configId] = new ConfigurationFile($container->getItem("section", self::SETTINGS)->toArray());
+        $this->_configs[$configId] = new ConfigurationFile($container->getItem('section', self::SETTINGS)->toArray());
     }
 
     public function GetDefaultTimezone()
@@ -199,6 +201,7 @@ class ConfigurationFile implements IConfigurationFile
         if (array_key_exists($keyName, $this->_values)) {
             return $this->Convert($this->_values[$keyName], $converter);
         }
+
         return null;
     }
 
@@ -207,6 +210,7 @@ class ConfigurationFile implements IConfigurationFile
         if (array_key_exists($section, $this->_values) && array_key_exists($keyName, $this->_values[$section])) {
             return $this->Convert($this->_values[$section][$keyName], $converter);
         }
+
         return null;
     }
 
@@ -233,9 +237,8 @@ class ConfigurationFile implements IConfigurationFile
             return $converter->Convert($value);
         }
 
-        return $value != null ? trim($value) : $value;
+        return null != $value ? trim($value) : $value;
     }
-
 
     public function GetDefaultTimezone()
     {
@@ -250,6 +253,7 @@ class ConfigurationFile implements IConfigurationFile
     public function GetAllAdminEmails()
     {
         $adminEmail = Configuration::Instance()->GetKey(ConfigKeys::ADMIN_EMAIL);
+
         return array_map('trim', preg_split('/[\s,;]+/', $adminEmail));
     }
 
@@ -262,6 +266,7 @@ class ConfigurationFile implements IConfigurationFile
                 return true;
             }
         }
+
         return false;
     }
 
@@ -271,6 +276,7 @@ class ConfigurationFile implements IConfigurationFile
     public function GetAdminEmail()
     {
         $adminEmails = $this->GetAllAdminEmails();
+
         return $adminEmails[0];
     }
 
@@ -281,10 +287,10 @@ class ConfigurationFile implements IConfigurationFile
             return;
         }
 
-        $configFile = ROOT_DIR . 'config/config.php';
+        $configFile = ROOT_DIR.'config/config.php';
 
         if (file_exists($configFile)) {
-            $newKey = '$conf[\'settings\'][\'ics\'][\'subscription.key\'] = \'' . BookedStringHelper::Random(20) . '\';';
+            $newKey = '$conf[\'settings\'][\'ics\'][\'subscription.key\'] = \''.BookedStringHelper::Random(20).'\';';
             $str = file_get_contents($configFile);
             $str = str_replace('$conf[\'settings\'][\'ics\'][\'subscription.key\'] = \'\';', $newKey, $str);
             file_put_contents($configFile, $str);

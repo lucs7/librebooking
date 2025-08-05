@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/Exception.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -45,12 +47,13 @@
  * an InvalidArgumentException or as a CAS_Exception.
  *
  * @class    CAS_Exception
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
  *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 interface CAS_Exception
 {

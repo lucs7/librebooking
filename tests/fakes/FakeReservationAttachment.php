@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/ReservationAttachment.php');
+require_once ROOT_DIR.'Domain/ReservationAttachment.php';
 
 class FakeReservationAttachment extends ReservationAttachment
 {

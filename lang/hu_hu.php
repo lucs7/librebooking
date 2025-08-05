@@ -1,6 +1,6 @@
 <?php
 
-require_once('en_us.php');
+require_once 'en_us.php';
 
 class hu_hu extends en_us
 {
@@ -415,7 +415,7 @@ class hu_hu extends en_us
         $strings['ReservedResources'] = 'Foglalt elemek';
         $strings['ReservedAccessories'] = 'Foglalt kiegészítők';
         $strings['ResourceUsageTimeBooked'] = 'Elem kihasználtság - foglalás idő szerint';
-        $strings['ResourceUsageReservationCount'] = 'Elem kihasználtság - foglalások száma'	;
+        $strings['ResourceUsageReservationCount'] = 'Elem kihasználtság - foglalások száma';
         $strings['Top20UsersTimeBooked'] = 'Top 20 felhasználó - foglalási idő szerint';
         $strings['Top20UsersReservationCount'] = 'Top 20 felhasználó - fogalások száma alapján';
         $strings['ConfigurationUpdated'] = 'A konfigurációs fájl mentve';
@@ -973,8 +973,8 @@ class hu_hu extends en_us
         $strings['ReservationParticipantJoin'] = '%s Csatlakozott foglalására for %s on %s';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Nincsenek korábbi foglalásai';
         $strings['PastReservations'] = 'Korábbi foglalások';
         $strings['AllNoPastReservations'] = 'Az elmúlt %s napban nincsenek korábbi foglalásai';
@@ -982,35 +982,34 @@ class hu_hu extends en_us
         $strings['Yesterday'] = 'Tegnap';
         $strings['EarlierThisWeek'] = 'Korábban ezen a héten';
         $strings['PreviousWeek'] = 'Előző hét';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'A csoportodnak nincs következő foglalása';
         $strings['GroupUpcomingReservations'] = 'Csoportom(aim) következő foglalásai';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Hiba történt a bejelentkezés során a Facebookkal. Kérjük, próbálja újra.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Nincsenek függő jóváhagyásra váró foglalásai';
         $strings['PendingApprovalReservations'] = 'Jóváhagyásra váró foglalások';
         $strings['LaterThisMonth'] = 'Később ebben a hónapban';
         $strings['LaterThisYear'] = 'Később idén';
         $strings['Remaining'] = 'Megmaradt';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nincsenek hiányzó kijelentkezési foglalások';
-        $strings['MissingCheckOutReservations'] = 'Hiányzó kijelentkezési foglalások';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Hiányzó kijelentkezési foglalások';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'A foglalás részleteit nem lehet látni, mert nincs jogosultságod egyik erőforráshoz sem ebben a foglalásban';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

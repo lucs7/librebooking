@@ -25,11 +25,11 @@ class ReservationWaitlistRequest
     private $resourceId;
 
     /**
-     * @param int $id
-     * @param int $userId
+     * @param int  $id
+     * @param int  $userId
      * @param Date $startDate
      * @param Date $endDate
-     * @param int $resourceId
+     * @param int  $resourceId
      */
     public function __construct($id, $userId, $startDate, $endDate, $resourceId)
     {
@@ -42,6 +42,7 @@ class ReservationWaitlistRequest
 
     /**
      * @param array $row
+     *
      * @return ReservationWaitlistRequest
      */
     public static function FromRow($row)
@@ -96,10 +97,11 @@ class ReservationWaitlistRequest
     }
 
     /**
-     * @param int $userId
+     * @param int  $userId
      * @param Date $startDate
      * @param Date $endDate
-     * @param int $resourceId
+     * @param int  $resourceId
+     *
      * @return ReservationWaitlistRequest
      */
     public static function Create($userId, $startDate, $endDate, $resourceId)

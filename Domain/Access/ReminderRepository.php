@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Reminder.php');
-require_once(ROOT_DIR . 'Domain/ReminderNotice.php');
+require_once ROOT_DIR.'Domain/Reminder.php';
+require_once ROOT_DIR.'Domain/ReminderNotice.php';
 
 class ReminderRepository implements IReminderRepository
 {
@@ -17,12 +17,13 @@ class ReminderRepository implements IReminderRepository
             $reminders[] = Reminder::FromRow($row);
         }
         $reader->Free();
+
         return $reminders;
     }
 
-
     /**
      * @param string $user_id
+     *
      * @return Reminder[]
      */
     public function GetByUser($user_id)
@@ -35,11 +36,13 @@ class ReminderRepository implements IReminderRepository
         }
 
         $reader->Free();
+
         return $reminders;
     }
 
     /**
      * @param string $refnumber
+     *
      * @return Reminder[]
      */
     public function GetByRefNumber($refnumber)
@@ -52,6 +55,7 @@ class ReminderRepository implements IReminderRepository
         }
 
         $reader->Free();
+
         return $reminders;
     }
 
@@ -63,25 +67,19 @@ class ReminderRepository implements IReminderRepository
         ServiceLocator::GetDatabase()->Query(new DeleteReminderCommand($reminder_id));
     }
 
-    /**
-     * @param $user_id
-     */
     public function DeleteReminderByUser($user_id)
     {
         ServiceLocator::GetDatabase()->Query(new DeleteReminderByUserCommand($user_id));
     }
 
-    /**
-     * @param $user_id
-     */
     public function DeleteReminderByRefNumber($refnumber)
     {
         ServiceLocator::GetDatabase()->Query(new DeleteReminderByRefNumberCommand($refnumber));
     }
 
     /**
-     * @param Date $now
      * @param ReservationReminderType|int $reminderType
+     *
      * @return ReminderNotice[]|array
      */
     public function GetReminderNotices(Date $now, $reminderType)
@@ -94,6 +92,7 @@ class ReminderRepository implements IReminderRepository
         }
 
         $reader->Free();
+
         return $notices;
     }
 }
@@ -102,40 +101,43 @@ interface IReminderRepository
 {
     /**
      * @abstract
+     *
      * @return Reminder[]|array
      */
     public function GetAll();
 
-
     /**
      * @abstract
+     *
      * @param string $user_id
+     *
      * @return Reminder[]|array
      */
     public function GetByUser($user_id);
 
     /**
      * @abstract
+     *
      * @param string $refnumber
+     *
      * @return Reminder[]|array
      */
     public function GetByRefNumber($refnumber);
 
     /**
      * @abstract
+     *
      * @param int $reminder_id
      */
     public function DeleteReminder($reminder_id);
 
     /**
      * @abstract
-     * @param $user_id
      */
     public function DeleteReminderByUser($user_id);
 
     /**
      * @abstract
-     * @param $refnumber
      */
     public function DeleteReminderByRefNumber($refnumber);
 }

@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reporting/ChartColumnDefinition.php');
-require_once(ROOT_DIR . 'lib/Application/Reporting/ReportColumn.php');
-require_once(ROOT_DIR . 'lib/Common/Helpers/String.php');
+require_once ROOT_DIR.'lib/Application/Reporting/ChartColumnDefinition.php';
+require_once ROOT_DIR.'lib/Application/Reporting/ReportColumn.php';
+require_once ROOT_DIR.'lib/Common/Helpers/String.php';
 
 interface IReportDefinition
 {
@@ -13,6 +13,7 @@ interface IReportDefinition
 
     /**
      * @param array $row
+     *
      * @return ReportCell[]|array
      */
     public function GetRow($row);
@@ -132,7 +133,7 @@ class ReportDefinition implements IReportDefinition
 
         $formattedRow = [];
         foreach ($this->columns as $key => $column) {
-            if ($key == ColumnNames::TOTAL || $key == ColumnNames::TOTAL_TIME) {
+            if (ColumnNames::TOTAL == $key || ColumnNames::TOTAL_TIME == $key) {
                 $this->sum += $row[$key];
                 $this->sumColumn = $column;
             }
@@ -157,15 +158,14 @@ class ReportDefinition implements IReportDefinition
 
     /**
      * @param CustomAttributeCategory|string $category
-     * @param CustomAttributes|null $attributes
-     * @param array $formattedRow
-     * @param string $key
-     * @param ReportColumn $column
+     * @param CustomAttributes|null          $attributes
+     * @param array                          $formattedRow
+     * @param string                         $key
      */
     private function AddCustomAttributes($category, $attributes, &$formattedRow, $key, ReportColumn $column)
     {
-        $prefix = $category . 'attribute';
-        if ($attributes != null && BookedStringHelper::StartsWith($key, $prefix)) {
+        $prefix = $category.'attribute';
+        if (null != $attributes && BookedStringHelper::StartsWith($key, $prefix)) {
             $id = intval(str_replace($prefix, '', $key));
             $attribute = $attributes->Get($id);
             $formattedRow[] = new ReportAttributeCell($column->GetData($attribute));
@@ -177,6 +177,7 @@ class ReportDefinition implements IReportDefinition
         if ($this->sum > 0) {
             return $this->sumColumn->GetData($this->sum);
         }
+
         return '';
     }
 

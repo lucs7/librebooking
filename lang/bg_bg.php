@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class bg_bg extends en_gb
 {
@@ -493,8 +493,8 @@ class bg_bg extends en_gb
         $strings['ReportSubject'] = 'Вашият заявен отчет (%s)';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Нямате предходни резервации';
         $strings['PastReservations'] = 'Предходни резервации';
         $strings['AllNoPastReservations'] = 'Няма предходни резервации в последните %s дни';
@@ -502,37 +502,34 @@ class bg_bg extends en_gb
         $strings['Yesterday'] = 'Вчера';
         $strings['EarlierThisWeek'] = 'По-рано този седмица';
         $strings['PreviousWeek'] = 'Предходна седмица';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Вашата група няма предстоящи резервации';
         $strings['GroupUpcomingReservations'] = 'Бъдещите резервации на моята група(и)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Възникна грешка при влизане с Facebook. Моля, опитайте отново.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Нямате резервации, изчакващи одобрение';
         $strings['PendingApprovalReservations'] = 'Резервации в очакване на одобрение';
         $strings['LaterThisMonth'] = 'По-късно този месец';
         $strings['LaterThisYear'] = 'По-късно тази година';
         $strings['Remaining'] = 'Оставащи';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Няма липсващи резервации за напускане';
         $strings['MissingCheckOutReservations'] = 'Липсващи резервации за напускане';
-        //End Missing Check In/Out Reservations in Dashboard
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Не можете да видите подробности за резервацията, защото нямате права за нито един от ресурсите в тази резервация';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

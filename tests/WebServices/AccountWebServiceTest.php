@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/AccountWebService.php');
+require_once ROOT_DIR.'WebServices/AccountWebService.php';
 
 class AccountWebServiceTest extends TestBase
 {
@@ -142,18 +142,21 @@ class FakeAccountController implements IAccountController
     public function Create(CreateAccountRequest $request)
     {
         $this->_LastRequest = $request;
+
         return $this->_Result;
     }
 
     public function Update(UpdateAccountRequest $request, WebServiceUserSession $session)
     {
         $this->_LastRequest = $request;
+
         return $this->_Result;
     }
 
     public function UpdatePassword(UpdateAccountPasswordRequest $request, WebServiceUserSession $session)
     {
         $this->_LastRequest = $request;
+
         return $this->_Result;
     }
 

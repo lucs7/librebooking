@@ -1,6 +1,6 @@
 <?php
 
-require_once('en_gb.php');
+require_once 'en_gb.php';
 
 class ee_ee extends en_gb
 {
@@ -186,7 +186,7 @@ class ee_ee extends en_gb
         $strings['ReservationDescription'] = 'Broneeringu kirjeldus';
         $strings['ResourceList'] = 'Broneeritavad väljakud';
         $strings['Accessories'] = 'Lisavarustus';
-        ;
+
         $strings['InvitationList'] = 'Kutsutud inimesed';
         $strings['AccessoryName'] = 'Lisavarustuse nimi';
         $strings['QuantityAvailable'] = 'Kogus saadaval';
@@ -758,8 +758,8 @@ class ee_ee extends en_gb
         $strings['InviteeAddedSubjectWithResource'] = '%s Invited You to a Reservation for %s';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Teil pole varasemaid broneeringuid';
         $strings['PastReservations'] = 'Varasemad broneeringud';
         $strings['AllNoPastReservations'] = 'Viimase %s päeva jooksul pole varasemaid broneeringuid';
@@ -767,34 +767,34 @@ class ee_ee extends en_gb
         $strings['Yesterday'] = 'Eile';
         $strings['EarlierThisWeek'] = 'Varem sel nädalal';
         $strings['PreviousWeek'] = 'Eelmine nädal';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Teie grupil pole tulevasi broneeringuid';
         $strings['GroupUpcomingReservations'] = 'Minu grupi(t)e tulevased broneeringud';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Facebooki sisselogimisel ilmnes viga. Palun proovi uuesti.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Teil pole ühtegi ootel olevat broneeringut';
         $strings['PendingApprovalReservations'] = 'Ootel heakskiitmiseks määratud broneeringud';
         $strings['LaterThisMonth'] = 'Hiljem sel kuul';
         $strings['LaterThisYear'] = 'Hiljem sel aastal';
         $strings['Remaining'] = 'Jäänud';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Puuduvad väljaregistreerimise broneeringud puuduvad';
-        $strings['MissingCheckOutReservations'] = 'Puuduvad väljaregistreerimise broneeringud';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Puuduvad väljaregistreerimise broneeringud';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Üksikasju ei saa näha, kuna teil pole selles broneeringus ühegi ressursi jaoks luba';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

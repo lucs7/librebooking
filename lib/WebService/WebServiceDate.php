@@ -4,7 +4,7 @@ class WebServiceDate
 {
     /**
      * @param string $dateString
-     * @param UserSession $session
+     *
      * @return Date
      */
     public static function GetDate($dateString, UserSession $session)

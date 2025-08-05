@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'plugins/Authentication/ActiveDirectory/adLDAP.php');
+require_once ROOT_DIR.'plugins/Authentication/ActiveDirectory/adLDAP.php';
 
 class AdLdapWrapper implements IActiveDirectory
 {
@@ -34,7 +34,7 @@ class AdLdapWrapper implements IActiveDirectory
                 $host = $hosts[$attempts];
                 Log::Debug('ActiveDirectory - Trying to connect to host %s', $host);
                 $options['domain_controllers'] = [$host];
-                $attempts++;
+                ++$attempts;
                 $this->ldap = new adLdap($options);
                 $connected = true;
 
@@ -49,7 +49,7 @@ class AdLdapWrapper implements IActiveDirectory
                 }
             } catch (Exception $ex) {
                 Log::Error($ex);
-                throw($ex);
+                throw $ex;
             }
         }
 
@@ -108,6 +108,7 @@ class AdLdapWrapper implements IActiveDirectory
             if ($this->options->SyncGroups()) {
                 $groups = $this->ldap->user()->groups($username);
             }
+
             return new ActiveDirectoryUser($entries, $this->options->AttributeMapping(), $groups);
         } else {
             Log::Debug(

@@ -1,20 +1,20 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'Presenters/Authentication/LoginRedirector.php');
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'Presenters/Authentication/LoginRedirector.php';
 
 class LoginPresenter
 {
     /**
      * @var ILoginPage
      */
-    private $_page = null;
+    private $_page;
 
     /**
      * @var IWebAuthentication
      */
-    private $authentication = null;
+    private $authentication;
 
     /**
      * @var ICaptchaService
@@ -27,9 +27,8 @@ class LoginPresenter
     private $announcementRepository;
 
     /**
-     * @param ILoginPage $page
-     * @param IWebAuthentication $authentication
-     * @param ICaptchaService $captchaService
+     * @param IWebAuthentication      $authentication
+     * @param ICaptchaService         $captchaService
      * @param IAnnouncementRepository $announcementRepository
      */
     public function __construct(ILoginPage &$page, $authentication = null, $captchaService = null, $announcementRepository = null)
@@ -82,6 +81,7 @@ class LoginPresenter
     {
         if ($this->authentication->IsLoggedIn()) {
             $this->_Redirect();
+
             return;
         }
 
@@ -89,6 +89,7 @@ class LoginPresenter
 
         if ($this->authentication->AreCredentialsKnown()) {
             $this->Login();
+
             return;
         }
 
@@ -98,6 +99,7 @@ class LoginPresenter
         if ($this->IsCookieLogin($loginCookie)) {
             if ($this->authentication->CookieLogin($loginCookie, new WebLoginContext(new LoginData(true)))) {
                 $this->_Redirect();
+
                 return;
             }
         }
@@ -111,9 +113,9 @@ class LoginPresenter
         $hideLogin = Configuration::Instance()
             ->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_HIDE_BOOKED_LOGIN_PROMPT, new BooleanConverter());
 
-        $this->_page->ShowForgotPasswordPrompt(!Configuration::Instance()->GetKey(ConfigKeys::DISABLE_PASSWORD_RESET, new BooleanConverter()) &&
-            $this->authentication->ShowForgotPasswordPrompt() &&
-            !$hideLogin);
+        $this->_page->ShowForgotPasswordPrompt(!Configuration::Instance()->GetKey(ConfigKeys::DISABLE_PASSWORD_RESET, new BooleanConverter())
+            && $this->authentication->ShowForgotPasswordPrompt()
+            && !$hideLogin);
         $this->_page->ShowPasswordPrompt($this->authentication->ShowPasswordPrompt() && !$hideLogin);
         $this->_page->ShowPersistLoginPrompt($this->authentication->ShowPersistLoginPrompt());
 
@@ -230,7 +232,7 @@ class LoginPresenter
 
     /**
      * Checks in the config files if google authentication is active creating a new client if true and setting it's config keys.
-     * Returns the created google url for the authentication
+     * Returns the created google url for the authentication.
      */
     public function GetGoogleUrl()
     {
@@ -239,9 +241,9 @@ class LoginPresenter
             $client->setClientId(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::GOOGLE_CLIENT_ID));
             $client->setClientSecret(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::GOOGLE_CLIENT_SECRET));
             $client->setRedirectUri(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::GOOGLE_REDIRECT_URI));
-            $client->addScope("email");
-            $client->addScope("profile");
-            $client->setPrompt("select_account");
+            $client->addScope('email');
+            $client->addScope('profile');
+            $client->setPrompt('select_account');
             $GoogleUrl = $client->createAuthUrl();
 
             return $GoogleUrl;
@@ -250,19 +252,19 @@ class LoginPresenter
 
     /**
      * Checks in the config files if microsoft authentication is active creating the url if true with the respective keys
-     * Returns the created microsoft url for the authentication
+     * Returns the created microsoft url for the authentication.
      */
     public function GetMicrosoftUrl()
     {
         if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_MICROSOFT, new BooleanConverter())) {
             $MicrosoftUrl = 'https://login.microsoftonline.com/'
-                . urlencode(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_TENANT_ID))
-                . '/oauth2/v2.0/authorize?'
-                . 'client_id=' . urlencode(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_CLIENT_ID))
-                . '&redirect_uri=' . urlencode(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_REDIRECT_URI))
-                . '&scope=user.read'
-                . '&response_type=code'
-                . '&prompt=select_account';
+                .urlencode(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_TENANT_ID))
+                .'/oauth2/v2.0/authorize?'
+                .'client_id='.urlencode(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_CLIENT_ID))
+                .'&redirect_uri='.urlencode(Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::MICROSOFT_REDIRECT_URI))
+                .'&scope=user.read'
+                .'&response_type=code'
+                .'&prompt=select_account';
 
             return $MicrosoftUrl;
         }
@@ -270,23 +272,23 @@ class LoginPresenter
 
     /**
      * Checks in the config files if facebook authentication is active creating the url if true with the respective keys
-     * Returns the created facebook url for the authentication
+     * Returns the created facebook url for the authentication.
      */
     public function GetFacebookUrl()
     {
         if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_FACEBOOK, new BooleanConverter())) {
             $facebook_Client = new Facebook\Facebook([
-                'app_id'                => Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::FACEBOOK_CLIENT_ID),
-                'app_secret'            => Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::FACEBOOK_CLIENT_SECRET),
-                'default_graph_version' => 'v2.5'
+                'app_id' => Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::FACEBOOK_CLIENT_ID),
+                'app_secret' => Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::FACEBOOK_CLIENT_SECRET),
+                'default_graph_version' => 'v2.5',
             ]);
 
             $helper = $facebook_Client->getRedirectLoginHelper();
 
             $permissions = ['email', 'public_profile']; // Add other permissions as needed
 
-            //The FacebookRedirectLoginHelper makes use of sessions to store a CSRF value.
-            //You need to make sure you have sessions enabled before invoking the getLoginUrl() method.
+            // The FacebookRedirectLoginHelper makes use of sessions to store a CSRF value.
+            // You need to make sure you have sessions enabled before invoking the getLoginUrl() method.
             if (!session_id()) {
                 session_start();
             }
@@ -303,19 +305,19 @@ class LoginPresenter
     {
         if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_KEYCLOAK, new BooleanConverter())) {
             // Retrieve Keycloak configuration values
-            $baseUrl     = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_URL);
-            $realm       = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_REALM);
-            $clientId    = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_CLIENT_ID);
-            $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_REDIRECT_URI);
+            $baseUrl = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_URL);
+            $realm = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_REALM);
+            $clientId = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_CLIENT_ID);
+            $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/').Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::KEYCLOAK_REDIRECT_URI);
 
             // Construct the Keycloak authentication URL
             $keycloakUrl = rtrim($baseUrl, '/')
-                . '/realms/' . urlencode($realm)
-                . '/protocol/openid-connect/auth?'
-                . 'client_id=' . urlencode($clientId)
-                . '&redirect_uri=' . urlencode($redirectUri)
-                . '&response_type=code'
-                . '&scope=' . urlencode('openid email profile');
+                .'/realms/'.urlencode($realm)
+                .'/protocol/openid-connect/auth?'
+                .'client_id='.urlencode($clientId)
+                .'&redirect_uri='.urlencode($redirectUri)
+                .'&response_type=code'
+                .'&scope='.urlencode('openid email profile');
 
             return $keycloakUrl;
         }
@@ -325,16 +327,16 @@ class LoginPresenter
     {
         if (Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::AUTHENTICATION_ALLOW_OAUTH2, new BooleanConverter())) {
             // Retrieve Oauth2 configuration values
-            $baseUrl     = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_URL_AUTHORIZE);
-            $clientId    = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_CLIENT_ID);
-            $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/') . Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_REDIRECT_URI);
+            $baseUrl = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_URL_AUTHORIZE);
+            $clientId = Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_CLIENT_ID);
+            $redirectUri = rtrim(Configuration::Instance()->GetScriptUrl(), 'Web/').Configuration::Instance()->GetSectionKey(ConfigSection::AUTHENTICATION, ConfigKeys::OAUTH2_REDIRECT_URI);
 
             // Construct the Oauth2 authentication URL
             $Oauth2Url = $baseUrl
-                . '?client_id=' . urlencode($clientId)
-                . '&redirect_uri=' . urlencode($redirectUri)
-                . '&response_type=code'
-                . '&scope=' . urlencode('openid email profile');
+                .'?client_id='.urlencode($clientId)
+                .'&redirect_uri='.urlencode($redirectUri)
+                .'&response_type=code'
+                .'&scope='.urlencode('openid email profile');
 
             return $Oauth2Url;
         }

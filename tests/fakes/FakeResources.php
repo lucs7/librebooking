@@ -3,9 +3,9 @@
 class FakeResources extends Resources
 {
     private $_dateFormats = [ResourceKeys::DATE_GENERAL => 'm/d/y',
-            ResourceKeys::DATETIME_GENERAL => 'm/d/y h:i:s',
-            ResourceKeys::DATETIME_SYSTEM => 'Y-m-d H:i:s',
-            ResourceKeys::DATETIME_SHORT => 'Y-m-d'];
+        ResourceKeys::DATETIME_GENERAL => 'm/d/y h:i:s',
+        ResourceKeys::DATETIME_SYSTEM => 'Y-m-d H:i:s',
+        ResourceKeys::DATETIME_SHORT => 'Y-m-d'];
 
     public $_SetCurrentLanguageResult = true;
 
@@ -21,7 +21,7 @@ class FakeResources extends Resources
 
         $argstring = implode(',', $args);
 
-        return $key . $argstring;
+        return $key.$argstring;
     }
 
     public function GetDateFormat($key)
@@ -29,6 +29,7 @@ class FakeResources extends Resources
         if (array_key_exists($key, $this->_dateFormats)) {
             return $this->_dateFormats[$key];
         }
+
         return $key;
     }
 

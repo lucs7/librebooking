@@ -38,15 +38,15 @@ class CustomAttributeValidationRule implements IReservationValidationRule
                 $secondaryCategory = $invalidAttribute->Attribute->SecondaryCategory();
                 $secondaryEntityIds = $invalidAttribute->Attribute->SecondaryEntityIds();
 
-                if ($secondaryCategory == CustomAttributeCategory::USER && !in_array($reservationSeries->UserId(), $secondaryEntityIds)) {
+                if (CustomAttributeCategory::USER == $secondaryCategory && !in_array($reservationSeries->UserId(), $secondaryEntityIds)) {
                     // the attribute applies to a different user
                     continue;
                 }
-                if ($secondaryCategory == CustomAttributeCategory::RESOURCE && count(array_intersect($secondaryEntityIds, $reservationSeries->AllResourceIds())) == 0) {
+                if (CustomAttributeCategory::RESOURCE == $secondaryCategory && 0 == count(array_intersect($secondaryEntityIds, $reservationSeries->AllResourceIds()))) {
                     // the attribute is not for a resource that is being booked
                     continue;
                 }
-                if ($secondaryCategory == CustomAttributeCategory::RESOURCE_TYPE) {
+                if (CustomAttributeCategory::RESOURCE_TYPE == $secondaryCategory) {
                     $appliesToResourceType = false;
                     foreach ($reservationSeries->AllResources() as $resource) {
                         if ($appliesToResourceType) {
@@ -72,6 +72,6 @@ class CustomAttributeValidationRule implements IReservationValidationRule
             $errorMessage->PrependLine($resources->GetString('CustomAttributeErrors'));
         }
 
-        return new ReservationRuleResult($errorMessage->Count() == 0, $errorMessage->ToString());
+        return new ReservationRuleResult(0 == $errorMessage->Count(), $errorMessage->ToString());
     }
 }

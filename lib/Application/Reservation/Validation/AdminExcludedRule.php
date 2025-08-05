@@ -39,6 +39,7 @@ class AdminExcludedRule implements IReservationValidationRule
 
                 if ($user->IsAdminFor($reservationUser)) {
                     Log::Debug('User is admin for reservation user. Skipping check. UserId=%s', $this->userSession->UserId);
+
                     return new ReservationRuleResult(true);
                 }
             }
@@ -56,6 +57,7 @@ class AdminExcludedRule implements IReservationValidationRule
 
                 if ($isResourceAdmin) {
                     Log::Debug('User is admin for all resources. Skipping check. UserId=%s', $this->userSession->UserId);
+
                     return new ReservationRuleResult(true);
                 }
             }

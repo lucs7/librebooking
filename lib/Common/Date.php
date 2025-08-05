@@ -1,10 +1,10 @@
 <?php
 
-//$serverTimezone = ini_get('date.timezone');
-//if (empty($serverTimezone))
-//{
+// $serverTimezone = ini_get('date.timezone');
+// if (empty($serverTimezone))
+// {
 //	Log::Debug('The server timezone is not set properly in your php.ini file. It is highly recommended that this value is set.');
-//}
+// }
 
 class Date
 {
@@ -17,15 +17,15 @@ class Date
     private $timestring;
     private $timestamp;
 
-    public const SHORT_FORMAT = "Y-m-d H:i:s";
+    public const SHORT_FORMAT = 'Y-m-d H:i:s';
 
     // Only used for testing
-    private static $_Now = null;
+    private static $_Now;
 
     /**
      * Creates a Date with the provided timestamp and timezone
      * Defaults to current time
-     * Defaults to server.timezone configuration setting
+     * Defaults to server.timezone configuration setting.
      *
      * @param string $timestring
      * @param string $timezone
@@ -49,7 +49,8 @@ class Date
     }
 
     /**
-     * Creates a new Date object with the given year, month, day, and optional $hour, $minute, $secord and $timezone
+     * Creates a new Date object with the given year, month, day, and optional $hour, $minute, $secord and $timezone.
+     *
      * @return Date
      */
     public static function Create($year, $month, $day, $hour = 0, $minute = 0, $second = 0, $timezone = null)
@@ -72,9 +73,11 @@ class Date
     }
 
     /**
-     * Creates a new Date object from the given string and $timezone
-     * @param string $dateString
+     * Creates a new Date object from the given string and $timezone.
+     *
+     * @param string      $dateString
      * @param string|null $timezone
+     *
      * @return Date
      */
     public static function Parse($dateString, $timezone = null)
@@ -82,11 +85,13 @@ class Date
         if (empty($dateString)) {
             return NullDate::Instance();
         }
+
         return new Date($dateString, $timezone);
     }
 
     /**
      * @param string $dateString
+     *
      * @return Date
      */
     public static function ParseExact($dateString)
@@ -131,7 +136,7 @@ class Date
     }
 
     /**
-     * Returns a Date object representing the current date/time in the server's timezone
+     * Returns a Date object representing the current date/time in the server's timezone.
      *
      * @return Date
      */
@@ -145,9 +150,10 @@ class Date
     }
 
     /**
-     * Formats the Date with the provided format
+     * Formats the Date with the provided format.
      *
      * @param string $format
+     *
      * @return string
      */
     public function Format($format)
@@ -156,9 +162,10 @@ class Date
     }
 
     /**
-     * Returns the Date adjusted into the provided timezone
+     * Returns the Date adjusted into the provided timezone.
      *
      * @param string $timezone
+     *
      * @return Date
      */
     public function ToTimezone($timezone)
@@ -184,7 +191,7 @@ class Date
     }
 
     /**
-     * Returns the Date adjusted into UTC
+     * Returns the Date adjusted into UTC.
      *
      * @return Date
      */
@@ -207,7 +214,7 @@ class Date
     }
 
     /**
-     * Formats the Date into a format that is accepted by the database
+     * Formats the Date into a format that is accepted by the database.
      *
      * @return string
      */
@@ -218,6 +225,7 @@ class Date
 
     /**
      * @param string $databaseValue
+     *
      * @return Date
      */
     public static function FromDatabase($databaseValue)
@@ -225,11 +233,12 @@ class Date
         if (empty($databaseValue)) {
             return NullDate::Instance();
         }
+
         return Date::Parse($databaseValue, 'UTC');
     }
 
     /**
-     * Returns the current Date as a timestamp
+     * Returns the current Date as a timestamp.
      *
      * @return int
      */
@@ -239,7 +248,7 @@ class Date
     }
 
     /**
-     * Returns the Time part of the Date
+     * Returns the Time part of the Date.
      *
      * @return Time
      */
@@ -249,7 +258,7 @@ class Date
     }
 
     /**
-     * Returns the Date only part of the date.  Hours, Minutes and Seconds will be 0
+     * Returns the Date only part of the date.  Hours, Minutes and Seconds will be 0.
      *
      * @return Date
      */
@@ -263,8 +272,8 @@ class Date
      * Returns:
      * -1 if this date is less than the passed in date
      * 0 if the dates are equal
-     * 1 if this date is greater than the passed in date
-     * @param Date $date
+     * 1 if this date is greater than the passed in date.
+     *
      * @return int comparison result
      */
     public function Compare(Date $date)
@@ -290,8 +299,8 @@ class Date
      * Returns:
      * -1 if this time is less than the passed in time
      * 0 if the times are equal
-     * 1 if this times is greater than the passed in times
-     * @param Date $date
+     * 1 if this times is greater than the passed in times.
+     *
      * @return int comparison result
      */
     public function CompareTime(Date $date)
@@ -305,10 +314,10 @@ class Date
         $minuteCompare = ($this->Minute() - $date2->Minute());
         $secondCompare = ($this->Second() - $date2->Second());
 
-        if ($hourCompare < 0 || ($hourCompare == 0 && $minuteCompare < 0) || ($hourCompare == 0 && $minuteCompare == 0 && $secondCompare < 0)) {
+        if ($hourCompare < 0 || (0 == $hourCompare && $minuteCompare < 0) || (0 == $hourCompare && 0 == $minuteCompare && $secondCompare < 0)) {
             return -1;
         } else {
-            if ($hourCompare > 0 || ($hourCompare == 0 && $minuteCompare > 0) || ($hourCompare == 0 && $minuteCompare == 0 && $secondCompare > 0)) {
+            if ($hourCompare > 0 || (0 == $hourCompare && $minuteCompare > 0) || (0 == $hourCompare && 0 == $minuteCompare && $secondCompare > 0)) {
                 return 1;
             }
         }
@@ -321,8 +330,8 @@ class Date
      * Returns:
      * -1 if this time is less than the passed in time
      * 0 if the times are equal
-     * 1 if this times is greater than the passed in times
-     * @param Time $time
+     * 1 if this times is greater than the passed in times.
+     *
      * @return int comparison result
      */
     public function CompareTimes(Time $time)
@@ -331,17 +340,18 @@ class Date
     }
 
     /**
-     * Compares the time component of this date to the one passed in
-     * @param Time $time
+     * Compares the time component of this date to the one passed in.
+     *
      * @return bool if the current object is greater than the one passed in
      */
-    public function TimeLessThan(Time $time){
+    public function TimeLessThan(Time $time)
+    {
         return $this->GetTime()->Compare($time) < 0;
     }
 
     /**
-     * Compares this date to the one passed in
-     * @param Date $end
+     * Compares this date to the one passed in.
+     *
      * @return bool if the current object is greater than the one passed in
      */
     public function GreaterThan(Date $end)
@@ -350,8 +360,8 @@ class Date
     }
 
     /**
-     * Compares this date to the one passed in
-     * @param Date $end
+     * Compares this date to the one passed in.
+     *
      * @return bool if the current object is greater than the one passed in
      */
     public function GreaterThanOrEqual(Date $end)
@@ -360,8 +370,8 @@ class Date
     }
 
     /**
-     * Compares this date to the one passed in
-     * @param Date $end
+     * Compares this date to the one passed in.
+     *
      * @return bool if the current object is less than the one passed in
      */
     public function LessThan(Date $end)
@@ -370,8 +380,8 @@ class Date
     }
 
     /**
-     * Compares this date to the one passed in
-     * @param Date $end
+     * Compares this date to the one passed in.
+     *
      * @return bool if the current object is less than the one passed in
      */
     public function LessThanOrEqual(Date $end)
@@ -380,18 +390,16 @@ class Date
     }
 
     /**
-     * Compare the 2 dates
+     * Compare the 2 dates.
      *
-     * @param Date $date
      * @return bool
      */
     public function Equals(Date $date)
     {
-        return $this->Compare($date) == 0;
+        return 0 == $this->Compare($date);
     }
 
     /**
-     * @param Date $date
      * @return bool
      */
     public function DateEquals(Date $date)
@@ -401,7 +409,7 @@ class Date
             $date2 = $date->ToTimezone($this->timezone);
         }
 
-        return ($this->Day() == $date2->Day() && $this->Month() == $date2->Month() && $this->Year() == $date2->Year());
+        return $this->Day() == $date2->Day() && $this->Month() == $date2->Month() && $this->Year() == $date2->Year();
     }
 
     public function DateCompare(Date $date)
@@ -411,8 +419,8 @@ class Date
             $date2 = $date->ToTimezone($this->timezone);
         }
 
-        $d1 = (int)$this->Format('Ymd');
-        $d2 = (int)$date2->Format('Ymd');
+        $d1 = (int) $this->Format('Ymd');
+        $d2 = (int) $date2->Format('Ymd');
 
         if ($d1 > $d2) {
             return 1;
@@ -420,6 +428,7 @@ class Date
         if ($d1 < $d2) {
             return -1;
         }
+
         return 0;
     }
 
@@ -428,7 +437,7 @@ class Date
      */
     public function IsMidnight()
     {
-        return $this->Hour() == 0 && $this->Minute() == 0 && $this->Second() == 0;
+        return 0 == $this->Hour() && 0 == $this->Minute() && 0 == $this->Second();
     }
 
     /**
@@ -437,7 +446,8 @@ class Date
     public function IsWeekday()
     {
         $weekday = $this->Weekday();
-        return $weekday != 0 && $weekday != 6;
+
+        return 0 != $weekday && 6 != $weekday;
     }
 
     /**
@@ -450,81 +460,91 @@ class Date
 
     private function getOperator(int $number): string
     {
-        return $number < 0 ? " -" : " +";
+        return $number < 0 ? ' -' : ' +';
     }
+
     /**
      * @param int $days
+     *
      * @return Date
      */
     public function AddDays($days)
     {
         // can also use DateTime->modify()
-        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($days) . abs($days) . " days", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT).$this->getOperator($days).abs($days).' days', $this->timezone);
     }
 
     /**
      * @param int $months
+     *
      * @return Date
      */
     public function AddMonths($months)
     {
-        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($months) . abs($months) . " months", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT).$this->getOperator($months).abs($months).' months', $this->timezone);
     }
 
     /**
      * @param int $years
+     *
      * @return Date
      */
     public function AddYears($years)
     {
-        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($years) . abs($years) . " years", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT).$this->getOperator($years).abs($years).' years', $this->timezone);
     }
 
     /**
      * @param int $minutes
+     *
      * @return Date
      */
     public function AddMinutes($minutes)
     {
         $ts = $this->ToUtc()->Timestamp() + ($minutes * 60);
         $utcDate = new Date(gmdate(self::SHORT_FORMAT, $ts), 'UTC');
+
         return $utcDate->ToTimezone($this->timezone);
-        //return new Date($this->Format(self::SHORT_FORMAT) . " +" . $minutes . " minutes", $this->timezone);
+        // return new Date($this->Format(self::SHORT_FORMAT) . " +" . $minutes . " minutes", $this->timezone);
     }
 
     /**
      * @param int $minutes
+     *
      * @return Date
      */
     public function SubtractMinutes($minutes)
     {
         $ts = $this->ToUtc()->Timestamp() - ($minutes * 60);
         $utcDate = new Date(gmdate(self::SHORT_FORMAT, $ts), 'UTC');
+
         return $utcDate->ToTimezone($this->timezone);
-        //return new Date($this->Format(self::SHORT_FORMAT) . " +" . $minutes . " minutes", $this->timezone);
+        // return new Date($this->Format(self::SHORT_FORMAT) . " +" . $minutes . " minutes", $this->timezone);
     }
 
     /**
      * @param int $hours
+     *
      * @return Date
      */
     public function AddHours($hours)
     {
-        return new Date($this->Format(self::SHORT_FORMAT) . $this->getOperator($hours) . abs($hours) . " hours", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT).$this->getOperator($hours).abs($hours).' hours', $this->timezone);
     }
 
     /**
      * @param int $minutes
+     *
      * @return Date
      */
     public function RemoveMinutes($minutes)
     {
-        return new Date($this->Format(self::SHORT_FORMAT) . " -" . $minutes . " minutes", $this->timezone);
+        return new Date($this->Format(self::SHORT_FORMAT).' -'.$minutes.' minutes', $this->timezone);
     }
 
     /**
-     * @param Time $time
      * @param bool $isEndTime
+     *
      * @return Date
      */
     public function SetTime(Time $time, $isEndTime = false)
@@ -540,7 +560,7 @@ class Date
         );
 
         if ($isEndTime) {
-            if ($time->Hour() == 0 && $time->Minute() == 0 && $time->Second() == 0) {
+            if (0 == $time->Hour() && 0 == $time->Minute() && 0 == $time->Second()) {
                 return $date->AddDays(1);
             }
         }
@@ -550,7 +570,8 @@ class Date
 
     /**
      * @param string $time
-     * @param bool $isEndTime
+     * @param bool   $isEndTime
+     *
      * @return Date
      */
     public function SetTimeString($time, $isEndTime = false)
@@ -559,7 +580,6 @@ class Date
     }
 
     /**
-     * @param Date $date
      * @return DateDiff
      */
     public function GetDifference(Date $date)
@@ -568,7 +588,6 @@ class Date
     }
 
     /**
-     * @param DateDiff $difference
      * @return Date
      */
     public function ApplyDifference(DateDiff $difference)
@@ -668,8 +687,7 @@ class Date
     }
 
     /**
-     * Only used for unit testing
-     * @param Date $date
+     * Only used for unit testing.
      */
     public static function _SetNow(Date $date)
     {
@@ -681,7 +699,7 @@ class Date
     }
 
     /**
-     * Only used for unit testing
+     * Only used for unit testing.
      */
     public static function _ResetNow()
     {
@@ -690,7 +708,7 @@ class Date
 
     public function ToString()
     {
-        return $this->Format('Y-m-d H:i:s') . ' ' . $this->timezone;
+        return $this->Format('Y-m-d H:i:s').' '.$this->timezone;
     }
 
     public function __toString()
@@ -700,6 +718,7 @@ class Date
 
     /**
      * @static
+     *
      * @return Date
      */
     public static function Min()
@@ -709,6 +728,7 @@ class Date
 
     /**
      * @static
+     *
      * @return Date
      */
     public static function Max()
@@ -722,11 +742,11 @@ class Date
     public function ToTheMinute()
     {
         $time = $this->GetTime();
+
         return $this->SetTime(new Time($time->Hour(), $time->Minute(), 0, $this->Timezone()));
     }
 
     /**
-     * @param TimeInterval $interval
      * @return Date
      */
     public function SubtractInterval(TimeInterval $interval)
@@ -735,7 +755,6 @@ class Date
     }
 
     /**
-     * @param TimeInterval $interval
      * @return Date
      */
     public function AddInterval(TimeInterval $interval)
@@ -743,37 +762,34 @@ class Date
         return $this->ApplyDifference($interval->Diff());
     }
 
-
     /**
-     * Implements bubble sort algorithm to sort dates from array
+     * Implements bubble sort algorithm to sort dates from array.
      */
-    public static function BubbleSort($array, $sortBy = 'StartDate') {
-        for ($i = 0; $i < count($array); $i++){
+    public static function BubbleSort($array, $sortBy = 'StartDate')
+    {
+        for ($i = 0; $i < count($array); ++$i) {
             $swapped = false;
-            for ($j = 0; $j < count($array) - $i - 1; $j++)
-            {
-
-                if ($array[$j]->$sortBy->DateCompare($array[$j+1]->$sortBy) == 1) {
+            for ($j = 0; $j < count($array) - $i - 1; ++$j) {
+                if (1 == $array[$j]->$sortBy->DateCompare($array[$j + 1]->$sortBy)) {
                     $t = $array[$j];
-                    $array[$j] = $array[$j+1];
-                    $array[$j+1] = $t;
-                    $swapped = True;
-                }
-
-                else if($array[$j]->$sortBy->DateCompare($array[$j+1]->$sortBy) == 0){
-                    if ($array[$j]->$sortBy->CompareTime($array[$j+1]->$sortBy) == 1) {
+                    $array[$j] = $array[$j + 1];
+                    $array[$j + 1] = $t;
+                    $swapped = true;
+                } elseif (0 == $array[$j]->$sortBy->DateCompare($array[$j + 1]->$sortBy)) {
+                    if (1 == $array[$j]->$sortBy->CompareTime($array[$j + 1]->$sortBy)) {
                         $t = $array[$j];
-                        $array[$j] = $array[$j+1];
-                        $array[$j+1] = $t;
-                        $swapped = True;
+                        $array[$j] = $array[$j + 1];
+                        $array[$j + 1] = $t;
+                        $swapped = true;
                     }
                 }
             }
 
-            if ($swapped == false){
+            if (false == $swapped) {
                 break;
             }
         }
+
         return $array;
     }
 }
@@ -787,12 +803,12 @@ class NullDate extends Date
 
     public function __construct()
     {
-        //parent::__construct();
+        // parent::__construct();
     }
 
     public static function Instance()
     {
-        if (self::$ndate == null) {
+        if (null == self::$ndate) {
             self::$ndate = new NullDate();
         }
 
@@ -871,25 +887,27 @@ class DateDiff
     public function Days()
     {
         $days = intval($this->seconds / 86400);
+
         return $days;
     }
 
     public function Hours()
     {
         $hours = intval($this->seconds / 3600) - intval($this->Days() * 24);
+
         return $hours;
     }
 
     public function Minutes()
     {
         $minutes = intval($this->seconds / 60) % 60;
+
         return $minutes;
     }
 
     /**
      * @static
-     * @param Date $date1
-     * @param Date $date2
+     *
      * @return DateDiff
      */
     public static function BetweenDates(Date $date1, Date $date2)
@@ -908,13 +926,15 @@ class DateDiff
 
     /**
      * @static
+     *
      * @param string $timeString in #d#h#m, for example 2d22h13m for 2 days 22 hours 13 minutes
+     *
      * @return DateDiff
      */
     public static function FromTimeString($timeString)
     {
-        $hasDayHourMinute = strpos($timeString, 'd') !== false || strpos($timeString, 'h') !== false || strpos($timeString, 'm') !== false;
-        $hasTime = (strpos($timeString, ':') !== false);
+        $hasDayHourMinute = false !== strpos($timeString, 'd') || false !== strpos($timeString, 'h') || false !== strpos($timeString, 'm');
+        $hasTime = (false !== strpos($timeString, ':'));
         if (!$hasDayHourMinute && !$hasTime) {
             throw new Exception('Time format must contain at least a day, hour or minute. For example: 12d1h22m or be a valid time HH:mm');
         }
@@ -922,7 +942,7 @@ class DateDiff
         if ($hasTime) {
             $parts = explode(':', $timeString);
 
-            if (count($parts) == 3) {
+            if (3 == count($parts)) {
                 $day = $parts[0];
                 $hour = $parts[1];
                 $minute = $parts[2];
@@ -931,6 +951,7 @@ class DateDiff
                 $hour = $parts[0];
                 $minute = $parts[1];
             }
+
             return self::Create($day, $hour, $minute);
         } else {
             $matches = [];
@@ -943,20 +964,20 @@ class DateDiff
             $num_set = 0;
 
             if (isset($matches[1])) {
-                $num_set++;
+                ++$num_set;
                 $day = intval(substr($matches[1], 0, -1));
             }
             if (isset($matches[2])) {
-                $num_set++;
+                ++$num_set;
                 $hour = intval(substr($matches[2], 0, -1));
             }
             if (isset($matches[3])) {
-                $num_set++;
+                ++$num_set;
                 $minute = intval(substr($matches[3], 0, -1));
             }
 
-            if ($num_set == 0) {
-                /**
+            if (0 == $num_set) {
+                /*
                  * We didn't actually match anything, throw an exception
                  * instead of silently returning 0
                  */
@@ -970,9 +991,11 @@ class DateDiff
 
     /**
      * @static
+     *
      * @param int $days
      * @param int $hours
      * @param int $minutes
+     *
      * @return DateDiff
      */
     public static function Create($days, $hours, $minutes)
@@ -982,6 +1005,7 @@ class DateDiff
 
     /**
      * @static
+     *
      * @return DateDiff
      */
     public static function null()
@@ -994,11 +1018,10 @@ class DateDiff
      */
     public function IsNull()
     {
-        return $this->seconds == 0;
+        return 0 == $this->seconds;
     }
 
     /**
-     * @param DateDiff $diff
      * @return DateDiff
      */
     public function Add(DateDiff $diff)
@@ -1007,7 +1030,6 @@ class DateDiff
     }
 
     /**
-     * @param DateDiff $diff
      * @return DateDiff
      */
     public function Subtract(DateDiff $diff)
@@ -1016,7 +1038,6 @@ class DateDiff
     }
 
     /**
-     * @param DateDiff $diff
      * @return bool
      */
     public function GreaterThan(DateDiff $diff)
@@ -1025,7 +1046,6 @@ class DateDiff
     }
 
     /**
-     * @param DateDiff $diff
      * @return bool
      */
     public function GreaterThanOrEqual(DateDiff $diff)
@@ -1043,14 +1063,16 @@ class DateDiff
 
     /**
      * @param false $short
+     *
      * @return string
      */
     public function ToString($short = false)
     {
         if ($short) {
             if ($this->TotalSeconds() > 0) {
-                return $this->Days() . 'd' . $this->Hours() . 'h' . $this->Minutes() . 'm';
+                return $this->Days().'d'.$this->Hours().'h'.$this->Minutes().'m';
             }
+
             return '';
         }
 
@@ -1065,24 +1087,24 @@ class DateDiff
         $str = '';
 
         if ($this->Days() > 0) {
-            $str .= $this->Days() . ' ' . Resources::GetInstance()->GetString('days') . ' ';
+            $str .= $this->Days().' '.Resources::GetInstance()->GetString('days').' ';
         }
         if ($this->Hours() > 0) {
-            $str .= $this->Hours() . ' ' . Resources::GetInstance()->GetString('hours') . ' ';
+            $str .= $this->Hours().' '.Resources::GetInstance()->GetString('hours').' ';
         }
         if ($this->Minutes() > 0) {
-            $str .= $this->Minutes() . ' ' . Resources::GetInstance()->GetString('minutes') . ' ';
+            $str .= $this->Minutes().' '.Resources::GetInstance()->GetString('minutes').' ';
         }
 
         return trim($str);
     }
 
-
     /**
-     * Gets the number of remaining days in the present month
+     * Gets the number of remaining days in the present month.
      */
-    public static function getMonthRemainingDays($timezone){
-        date_default_timezone_set($timezone);           //NECESSARY??
+    public static function getMonthRemainingDays($timezone)
+    {
+        date_default_timezone_set($timezone);           // NECESSARY??
         $currentDate = new DateTime();
         $endOfMonth = new DateTime($currentDate->format('Y-m-t 23:59:59'));
         $interval = $currentDate->diff($endOfMonth);
@@ -1092,10 +1114,11 @@ class DateDiff
     }
 
     /**
-     * Gets the number of remaining days in the present year
+     * Gets the number of remaining days in the present year.
      */
-    public static function getYearRemainingDays($timezone){
-        date_default_timezone_set($timezone);           //NECESSARY??
+    public static function getYearRemainingDays($timezone)
+    {
+        date_default_timezone_set($timezone);           // NECESSARY??
         $currentDate = new DateTime();
         $endOfYear = new DateTime($currentDate->format('Y-12-31 23:59:59'));
         $interval = $currentDate->diff($endOfYear);

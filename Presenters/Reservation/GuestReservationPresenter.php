@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Reservation/GuestReservationPage.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/GuestAccountCreationEmail.php');
+require_once ROOT_DIR.'Pages/Reservation/GuestReservationPage.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationPresenter.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'lib/Email/Messages/GuestAccountCreationEmail.php';
 
 class GuestReservationPresenter extends ReservationPresenter
 {
@@ -27,7 +27,7 @@ class GuestReservationPresenter extends ReservationPresenter
         IRegistration $registration,
         IWebAuthentication $authentication,
         IReservationInitializerFactory $initializationFactory,
-        INewReservationPreconditionService $preconditionService
+        INewReservationPreconditionService $preconditionService,
     ) {
         $this->page = $page;
         $this->registration = $registration;

@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/PasswordPage.php');
-require_once(ROOT_DIR . 'Presenters/PasswordPresenter.php');
+require_once ROOT_DIR.'Pages/PasswordPage.php';
+require_once ROOT_DIR.'Presenters/PasswordPresenter.php';
 
 class PasswordPresenterTest extends TestBase
 {
@@ -10,7 +10,7 @@ class PasswordPresenterTest extends TestBase
         $page = $this->createMock('IPasswordPage');
         $userRepo = $this->createMock('IUserRepository');
         $encryption = $this->createMock('PasswordEncryption');
-        $user =  $this->createMock('User');
+        $user = $this->createMock('User');
 
         $newPassword = 'new password';
         $encryptedValue = 'enc';
@@ -62,7 +62,7 @@ class PasswordPresenterTest extends TestBase
         $passwordEncryption = new PasswordEncryption();
         $salt = $passwordEncryption->Salt();
 
-        $current = "some password";
+        $current = 'some password';
         $user = new User();
 
         $encrypted = $passwordEncryption->Encrypt($current, $salt);

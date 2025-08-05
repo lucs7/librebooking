@@ -7,9 +7,6 @@ class AttributeFormElement
      */
     public $Id;
 
-    /**
-     * @var mixed
-     */
     public $Value;
 
     public function __construct($id, $value)
@@ -23,7 +20,9 @@ class AttributeFormParser
 {
     /**
      * @static
+     *
      * @param $attributes string|string[]|null The result of $this->GetForm(FormKeys::ATTRIBUTE_PREFIX)
+     *
      * @return array|AttributeFormElement[]
      */
     public static function GetAttributes($attributes)

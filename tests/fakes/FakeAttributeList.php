@@ -24,6 +24,7 @@ class FakeAttributeList implements IEntityAttributeList
 
     /**
      * @param null $entityId
+     *
      * @return array|CustomAttribute[]
      */
     public function GetDefinitions($entityId = null)
@@ -34,6 +35,7 @@ class FakeAttributeList implements IEntityAttributeList
 
     /**
      * @param $entityId int|null
+     *
      * @return array|Attribute[]
      */
     public function GetAttributes($entityId = null)
@@ -41,6 +43,7 @@ class FakeAttributeList implements IEntityAttributeList
         if (array_key_exists($entityId, $this->_entityAttributes)) {
             return $this->_entityAttributes[$entityId];
         }
+
         return $this->_attributes;
     }
 

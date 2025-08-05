@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
-require_once(ROOT_DIR . 'lib/WebService/IRestServer.php');
+require_once ROOT_DIR.'lib/external/Slim/Slim.php';
+require_once ROOT_DIR.'lib/WebService/IRestServer.php';
 
 class SlimServer implements IRestServer
 {
@@ -40,12 +40,12 @@ class SlimServer implements IRestServer
 
     public function GetUrl()
     {
-        return $this->slim->environment()->offsetGet('slim.url_scheme') . '://' . $this->slim->environment()->offsetGet('HOST');
+        return $this->slim->environment()->offsetGet('slim.url_scheme').'://'.$this->slim->environment()->offsetGet('HOST');
     }
 
     public function GetFullServiceUrl($serviceName, $params = [])
     {
-        return $this->GetUrl() . $this->GetServiceUrl($serviceName, $params);
+        return $this->GetUrl().$this->GetServiceUrl($serviceName, $params);
     }
 
     public function GetHeader($headerName)
@@ -65,6 +65,7 @@ class SlimServer implements IRestServer
 
     /**
      * @param string $queryStringKey
+     *
      * @return string|null
      */
     public function GetQueryString($queryStringKey)

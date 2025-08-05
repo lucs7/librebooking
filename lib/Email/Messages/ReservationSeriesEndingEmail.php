@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
+require_once ROOT_DIR.'lib/Email/Messages/ReservationEmailMessage.php';
 
 class ReservationSeriesEndingEmail extends EmailMessage
 {
@@ -53,7 +53,7 @@ class ReservationSeriesEndingEmail extends EmailMessage
         $this->Set('Description', $this->reservationSeries->Description());
         $this->Set('StartDate', $this->currentInstance->StartDate()->ToTimezone($this->timezone));
         $this->Set('EndDate', $this->currentInstance->EndDate()->ToTimezone($this->timezone));
-        $this->Set('ReservationUrl', sprintf("%s?%s=%s", Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $this->currentInstance->ReferenceNumber()));
+        $this->Set('ReservationUrl', sprintf('%s?%s=%s', Pages::RESERVATION, QueryStringKeys::REFERENCE_NUMBER, $this->currentInstance->ReferenceNumber()));
 
         return $this->FetchTemplate('ReservationSeriesEnding.tpl');
     }

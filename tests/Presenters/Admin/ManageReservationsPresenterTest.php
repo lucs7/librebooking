@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManageReservationsPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/ManageReservationsPresenter.php';
 
 class ManageReservationsPresenterTest extends TestBase
 {
@@ -323,10 +323,10 @@ class ManageReservationsPresenterTest extends TestBase
         $this->resourceRepository->expects($this->exactly(2))
             ->method('LoadById')
             ->willReturnMap(
-            [
-                [1, $resource1],
-                [2, $resource2]
-            ]);
+                [
+                    [1, $resource1],
+                    [2, $resource2],
+                ]);
 
         $this->resourceRepository->expects($this->exactly(2))
             ->method('Update')
@@ -392,12 +392,12 @@ class ManageReservationsPresenterTest extends TestBase
         $this->fakeUser->IsAdmin = true;
 
         $importFile = new FakeUploadedFile();
-        $importFile->Contents = "email,resource names,title,description,begin,end,att1,att2\n" .
-            "u@e.com,\"r1,r2\",title,description,1/2/17 8:30 am,1/2/17 9:30 am,a1value,a2value\n" .
-            "u2@e.com,r2,title2,description2,1/4/17 8:30 pm,1/4/17 22:00,,\n" .
-            "madeupuser,r2,title2,description2,1/4/17 8:30 pm,1/4/17 22:00,,\n" .
-            "u@e.com,makeupresource,title2,description2,1/4/17 8:30 pm,1/4/17 22:00,,\n" .
-            "u@e.com,r2,title2,description2,unparseabledate,1/4/17 22:00,,";
+        $importFile->Contents = "email,resource names,title,description,begin,end,att1,att2\n".
+            "u@e.com,\"r1,r2\",title,description,1/2/17 8:30 am,1/2/17 9:30 am,a1value,a2value\n".
+            "u2@e.com,r2,title2,description2,1/4/17 8:30 pm,1/4/17 22:00,,\n".
+            "madeupuser,r2,title2,description2,1/4/17 8:30 pm,1/4/17 22:00,,\n".
+            "u@e.com,makeupresource,title2,description2,1/4/17 8:30 pm,1/4/17 22:00,,\n".
+            'u@e.com,r2,title2,description2,unparseabledate,1/4/17 22:00,,';
 
         $attributes = [new TestCustomAttribute(1, 'att1'), new TestCustomAttribute(2, 'att2'), new TestCustomAttribute(3, 'att3')];
 
@@ -432,12 +432,10 @@ class ManageReservationsPresenterTest extends TestBase
         $matcher = $this->exactly(2);
         $this->reservationsService->expects($matcher)
             ->method('UnsafeAdd')
-            ->willReturnCallback(function ($res) use ($matcher, $res1, $res2)
-            {
-                match ($matcher->numberOfInvocations())
-                {
+            ->willReturnCallback(function ($res) use ($matcher, $res1, $res2) {
+                match ($matcher->numberOfInvocations()) {
                     1 => $this->assertEquals($res, $res1),
-                    2 => $this->assertEquals($res, $res2)
+                    2 => $this->assertEquals($res, $res2),
                 };
             });
 
@@ -459,13 +457,11 @@ class ManageReservationsPresenterTest extends TestBase
         $matcher = $this->exactly(2);
         $this->reservationsService->expects($matcher)
             ->method('UnsafeDelete')
-            ->willReturnCallback(function(int $id, UserSession $session) use ($matcher)
-            {
+            ->willReturnCallback(function (int $id, UserSession $session) use ($matcher) {
                 $this->assertEquals($this->fakeUser, $session);
-                match ($matcher->numberOfInvocations())
-                {
+                match ($matcher->numberOfInvocations()) {
                     1 => $this->assertEquals(1, $id),
-                    2 => $this->assertEquals(2, $id)
+                    2 => $this->assertEquals(2, $id),
                 };
             });
 
@@ -473,16 +469,17 @@ class ManageReservationsPresenterTest extends TestBase
     }
 
     /**
-     * @param Date $startDate
-     * @param Date $endDate
-     * @param string $referenceNumber
-     * @param int $scheduleId
-     * @param int $resourceId
-     * @param int $userId
-     * @param int $statusId
-     * @param null $resourceStatusId
-     * @param null $resourceStatusReasonId
+     * @param Date        $startDate
+     * @param Date        $endDate
+     * @param string      $referenceNumber
+     * @param int         $scheduleId
+     * @param int         $resourceId
+     * @param int         $userId
+     * @param int         $statusId
+     * @param null        $resourceStatusId
+     * @param null        $resourceStatusReasonId
      * @param Attribute[] $attributes
+     *
      * @return ReservationFilter
      */
     private function GetExpectedFilter(
@@ -495,7 +492,7 @@ class ManageReservationsPresenterTest extends TestBase
         $statusId = null,
         $resourceStatusId = null,
         $resourceStatusReasonId = null,
-        $attributes = null
+        $attributes = null,
     ) {
         return new ReservationFilter($startDate, $endDate, $referenceNumber, $scheduleId, $resourceId, $userId, $statusId, $resourceStatusId, $resourceStatusReasonId, $attributes);
     }
@@ -503,7 +500,7 @@ class ManageReservationsPresenterTest extends TestBase
     private function getReservations()
     {
         $reservations = [];
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; ++$i) {
             $r1 = new ReservationItemView();
             $r1->SeriesId = $i;
             $reservations[] = $r1;

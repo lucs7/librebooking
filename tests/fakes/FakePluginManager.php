@@ -6,27 +6,28 @@ class FakePluginManager extends PluginManager implements IPostRegistration
     {
     }
 
-    public $preResPlugin = null;
-    public $postResPlugin = null;
-    public $postRegistrationPlugin = null;
+    public $preResPlugin;
+    public $postResPlugin;
+    public $postRegistrationPlugin;
     public $_LoadedRegistration = false;
-    public $_RegistrationUser = null;
+    public $_RegistrationUser;
     public $_RegistrationPage;
 
     public function LoadPreReservation()
     {
-        return ($this->preResPlugin == null) ? $this : $this->preResPlugin;
+        return (null == $this->preResPlugin) ? $this : $this->preResPlugin;
     }
 
     public function LoadPostReservation()
     {
-        return ($this->postResPlugin == null) ? $this : $this->postResPlugin;
+        return (null == $this->postResPlugin) ? $this : $this->postResPlugin;
     }
 
     public function LoadPostRegistration()
     {
         $this->_LoadedRegistration = true;
-        return ($this->postRegistrationPlugin == null) ? $this : $this->postRegistrationPlugin;
+
+        return (null == $this->postRegistrationPlugin) ? $this : $this->postRegistrationPlugin;
     }
 
     public function HandleSelfRegistration(User $user, IRegistrationPage $page, ILoginContext $loginContext)
@@ -34,7 +35,6 @@ class FakePluginManager extends PluginManager implements IPostRegistration
         $this->_RegistrationUser = $user;
         $this->_RegistrationPage = $page;
     }
-
 
     public function CreatePreUpdateService()
     {

@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageSchedulesPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/ScheduleRepository.php');
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageSchedulesPresenter.php';
+require_once ROOT_DIR.'Domain/Access/ScheduleRepository.php';
 
 interface IUpdateSchedulePage
 {
@@ -96,9 +96,9 @@ interface IUpdateSchedulePage
 interface IManageSchedulesPage extends IUpdateSchedulePage, IActionPage, IPageable
 {
     /**
-     * @param Schedule[] $schedules
+     * @param Schedule[]              $schedules
      * @param array|IScheduleLayout[] $layouts
-     * @param Schedule[] $sourceSchedules
+     * @param Schedule[]              $sourceSchedules
      */
     public function BindSchedules($schedules, $layouts, $sourceSchedules);
 
@@ -193,7 +193,7 @@ interface IManageSchedulesPage extends IUpdateSchedulePage, IActionPage, IPageab
 
     /**
      * @param Schedule $schedule
-     * @param string $timezone
+     * @param string   $timezone
      */
     public function DisplayAvailability($schedule, $timezone);
 
@@ -263,7 +263,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
     {
         parent::__construct('ManageSchedules', 1);
 
-        /**
+        /*
          * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
          */
         $this->pageablePage = new PageablePage($this);
@@ -361,8 +361,9 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
     {
         $slots = [];
         foreach (DayOfWeek::Days() as $day) {
-            $slots[$day] = $this->server->GetForm(FormKeys::SLOTS_RESERVABLE . "_$day");
+            $slots[$day] = $this->server->GetForm(FormKeys::SLOTS_RESERVABLE."_$day");
         }
+
         return $slots;
     }
 
@@ -370,8 +371,9 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
     {
         $slots = [];
         foreach (DayOfWeek::Days() as $day) {
-            $slots[$day] = $this->server->GetForm(FormKeys::SLOTS_BLOCKED . "_$day");
+            $slots[$day] = $this->server->GetForm(FormKeys::SLOTS_BLOCKED."_$day");
         }
+
         return $slots;
     }
 
@@ -433,6 +435,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
 
     /**
      * @return int
+     *
      * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
      */
     public function GetPageSize()
@@ -444,11 +447,10 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
             return 10;
         }
         return $pageSize;*/
-        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
+        throw new LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     /**
-     * @param PageInfo $pageInfo
      * @return void
      */
     public function BindPageInfo(PageInfo $pageInfo)
@@ -506,18 +508,21 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
     public function GetPeakAllDay()
     {
         $allDay = $this->GetForm(FormKeys::PEAK_ALL_DAY);
+
         return !empty($allDay);
     }
 
     public function GetPeakEveryDay()
     {
         $everyDay = $this->GetForm(FormKeys::PEAK_EVERY_DAY);
+
         return !empty($everyDay);
     }
 
     public function GetPeakAllYear()
     {
         $allYear = $this->GetForm(FormKeys::PEAK_ALL_YEAR);
+
         return !empty($allYear);
     }
 
@@ -554,7 +559,8 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
     public function GetDeletePeakTimes()
     {
         $delete = $this->GetForm(FormKeys::PEAK_DELETE);
-        return $delete == '1';
+
+        return '1' == $delete;
     }
 
     public function BindResources($resources)

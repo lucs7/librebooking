@@ -5,7 +5,7 @@ class AccessoryAggregation
     private $knownAccessoryIds = [];
 
     /**
-     * @var \DateRange
+     * @var DateRange
      */
     private $duration;
 
@@ -18,7 +18,7 @@ class AccessoryAggregation
 
     /**
      * @param array|AccessoryToCheck[] $accessories
-     * @param DateRange $duration
+     * @param DateRange                $duration
      */
     public function __construct($accessories, $duration)
     {
@@ -29,9 +29,6 @@ class AccessoryAggregation
         $this->duration = $duration;
     }
 
-    /**
-     * @param AccessoryReservation $accessoryReservation
-     */
     public function Add(AccessoryReservation $accessoryReservation)
     {
         if ($accessoryReservation->GetStartDate()->GreaterThanOrEqual($this->duration->GetEnd()) || $accessoryReservation->GetEndDate()->LessThanOrEqual($this->duration->GetBegin())) {
@@ -40,7 +37,7 @@ class AccessoryAggregation
 
         $accessoryId = $accessoryReservation->GetAccessoryId();
 
-        $key = $accessoryReservation->GetReferenceNumber() . $accessoryId;
+        $key = $accessoryReservation->GetReferenceNumber().$accessoryId;
 
         if (array_key_exists($key, $this->addedReservations)) {
             return;
@@ -57,6 +54,7 @@ class AccessoryAggregation
 
     /**
      * @param int $accessoryId
+     *
      * @return int
      */
     public function GetQuantity($accessoryId)
@@ -64,6 +62,7 @@ class AccessoryAggregation
         if (array_key_exists($accessoryId, $this->accessoryQuantity)) {
             return $this->accessoryQuantity[$accessoryId];
         }
+
         return 0;
     }
 }

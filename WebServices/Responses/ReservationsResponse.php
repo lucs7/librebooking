@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Responses/ReservationItemResponse.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'WebServices/Responses/ReservationItemResponse.php';
 
 class ReservationsResponse extends RestResponse
 {
@@ -13,11 +13,7 @@ class ReservationsResponse extends RestResponse
     public $endDateTime;
 
     /**
-     * @param IRestServer $server
      * @param array|ReservationItemView[] $reservations
-     * @param IPrivacyFilter $privacyFilter
-     * @param Date $minDate
-     * @param Date $maxDate
      */
     public function __construct(IRestServer $server, $reservations, IPrivacyFilter $privacyFilter, Date $minDate, Date $maxDate)
     {

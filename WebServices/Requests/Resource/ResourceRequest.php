@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/JsonRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/CustomAttributes/AttributeValueRequest.php');
+require_once ROOT_DIR.'lib/WebService/JsonRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/CustomAttributes/AttributeValueRequest.php';
 
 class ResourceRequest extends JsonRequest
 {
@@ -104,13 +104,12 @@ class ResourceRequest extends JsonRequest
     public $maxConcurrentReservations;
 
     public string $bufferTime;
-    public array|null $groupIds = null;
-    public string|null $icsUrl = null;
+    public ?array $groupIds = null;
+    public ?string $icsUrl = null;
     public string $minNoticeAdd;
     public string $minNoticeDelete;
     public string $minNoticeUpdate;
-    public int|null $typeId = null;
-
+    public ?int $typeId = null;
 
     /**
      * @return ExampleResourceRequest
@@ -128,6 +127,7 @@ class ResourceRequest extends JsonRequest
         if (!empty($this->customAttributes)) {
             return $this->customAttributes;
         }
+
         return [];
     }
 }

@@ -38,7 +38,7 @@ class ScheduleResponse extends RestResponse
         }
 
         $layoutDate = Date::Now()->ToTimezone($server->GetSession()->Timezone);
-        for ($day = 0; $day < 7; $day++) {
+        for ($day = 0; $day < 7; ++$day) {
             $periods = $layout->GetLayout($layoutDate);
             foreach ($periods as $period) {
                 $this->periods[$layoutDate->Weekday()][] = new SchedulePeriodResponse($period);

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationCreatedEmailAdmin.php');
+require_once ROOT_DIR.'lib/Email/Messages/ReservationCreatedEmailAdmin.php';
 
 class ReservationDeletedEmailAdmin extends ReservationCreatedEmailAdmin
 {

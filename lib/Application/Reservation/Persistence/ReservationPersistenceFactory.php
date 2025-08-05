@@ -15,6 +15,7 @@ class ReservationPersistenceFactory implements IReservationPersistenceFactory
 
     /**
      * @param string $reservationAction
+     *
      * @return IReservationPersistenceService
      */
     public function Create($reservationAction)

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageQuotasPage.php');
+require_once ROOT_DIR.'Pages/Admin/ManageQuotasPage.php';
 
 class ManageQuotasPresenterTest extends TestBase
 {

@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/SearchAvailabilityPresenter.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Presenters/SearchAvailabilityPresenter.php';
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Pages/ActionPage.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 interface ISearchAvailabilityPage extends IActionPage, IRepeatOptionsComposite
 {
@@ -204,12 +204,12 @@ class SearchAvailabilityPage extends ActionPage implements ISearchAvailabilityPa
 
     public function GetResourceAttributeValues()
     {
-        return AttributeFormParser::GetAttributes($this->GetForm('r' . FormKeys::ATTRIBUTE_PREFIX));
+        return AttributeFormParser::GetAttributes($this->GetForm('r'.FormKeys::ATTRIBUTE_PREFIX));
     }
 
     public function GetResourceTypeAttributeValues()
     {
-        return AttributeFormParser::GetAttributes($this->GetForm('rt' . FormKeys::ATTRIBUTE_PREFIX));
+        return AttributeFormParser::GetAttributes($this->GetForm('rt'.FormKeys::ATTRIBUTE_PREFIX));
     }
 
     public function SetResourceAttributes($attributes)

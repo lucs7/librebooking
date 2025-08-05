@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class FakeReservationRepository implements IReservationRepository
 {
@@ -138,28 +138,28 @@ class FakeReservationRepository implements IReservationRepository
         return [
             $row1,
             $row2,
-            $row3
+            $row3,
         ];
     }
 
     /**
-     * Insert a new reservation
+     * Insert a new reservation.
      *
-     * @param ReservationSeries $reservation
      * @return void
      */
     public function Add(ReservationSeries $reservation)
     {
-        if ($this->_FirstAddedReservation == null) {
+        if (null == $this->_FirstAddedReservation) {
             $this->_FirstAddedReservation = $reservation;
         }
         $this->_LastAddedReservation = $reservation;
     }
 
     /**
-     * Return an existing reservation series
+     * Return an existing reservation series.
      *
      * @param int $reservationInstanceId
+     *
      * @return ExistingReservationSeries or null if no reservation found
      */
     public function LoadById($reservationInstanceId)
@@ -168,9 +168,10 @@ class FakeReservationRepository implements IReservationRepository
     }
 
     /**
-     * Return an existing reservation series
+     * Return an existing reservation series.
      *
      * @param string $referenceNumber
+     *
      * @return ExistingReservationSeries or null if no reservation found
      */
     public function LoadByReferenceNumber($referenceNumber)
@@ -179,9 +180,8 @@ class FakeReservationRepository implements IReservationRepository
     }
 
     /**
-     * Update an existing reservation
+     * Update an existing reservation.
      *
-     * @param ExistingReservationSeries $existingReservationSeries
      * @return void
      */
     public function Update(ExistingReservationSeries $existingReservationSeries)
@@ -190,9 +190,8 @@ class FakeReservationRepository implements IReservationRepository
     }
 
     /**
-     * Delete all or part of an existing reservation
+     * Delete all or part of an existing reservation.
      *
-     * @param ExistingReservationSeries $existingReservationSeries
      * @return void
      */
     public function Delete(ExistingReservationSeries $existingReservationSeries)
@@ -202,6 +201,7 @@ class FakeReservationRepository implements IReservationRepository
 
     /**
      * @param $attachmentFileId int
+     *
      * @return ReservationAttachment
      */
     public function LoadReservationAttachment($attachmentFileId)
@@ -212,6 +212,7 @@ class FakeReservationRepository implements IReservationRepository
 
     /**
      * @param $attachmentFile ReservationAttachment
+     *
      * @return int
      */
     public function AddReservationAttachment(ReservationAttachment $attachmentFile)
@@ -231,6 +232,7 @@ class FakeReservationRepository implements IReservationRepository
 
     /**
      * @param int $ruleId
+     *
      * @return ReservationColorRule
      */
     public function GetReservationColorRule($ruleId)
@@ -240,7 +242,6 @@ class FakeReservationRepository implements IReservationRepository
     }
 
     /**
-     * @param ReservationColorRule $colorRule
      * @return int
      */
     public function AddReservationColorRule(ReservationColorRule $colorRule)
@@ -249,9 +250,6 @@ class FakeReservationRepository implements IReservationRepository
         return null;
     }
 
-    /**
-     * @param ReservationColorRule $colorRule
-     */
     public function DeleteReservationColorRule(ReservationColorRule $colorRule)
     {
         // TODO: Implement DeleteReservationColorRule() method.

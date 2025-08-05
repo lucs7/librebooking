@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'plugins/Authentication/Ldap/LDAP2.php');
+require_once ROOT_DIR.'plugins/Authentication/Ldap/LDAP2.php';
 
 class Ldap2Wrapper
 {
@@ -35,34 +35,36 @@ class Ldap2Wrapper
         $this->ldap = Net_LDAP2::connect($this->options->Ldap2Config());
         $p = new Pear();
         if ($p->isError($this->ldap)) {
-            $message = 'Could not connect to LDAP server. Check your settings in Ldap.config.php : ' . $this->ldap->getMessage();
+            $message = 'Could not connect to LDAP server. Check your settings in Ldap.config.php : '.$this->ldap->getMessage();
             Log::Error($message);
             throw new Exception($message);
         }
 
         $this->ldap->setOption(LDAP_OPT_REFERRALS, 0);
         $this->ldap->setOption(LDAP_OPT_PROTOCOL_VERSION, 3);
+
         return true;
     }
 
     /**
      * @param $username string
      * @param $password string
-     * @param $filter string
+     * @param $filter   string
+     *
      * @return bool
      */
     public function Authenticate($username, $password, $filter)
     {
         $populated = $this->PopulateUser($username, $filter, $password);
 
-        if ($this->user == null) {
+        if (null == $this->user) {
             return false;
         }
 
         Log::Debug('Trying to authenticate user %s against ldap with dn %s', $username, $this->user->GetDn());
 
         $result = $this->ldap->bind($this->user->GetDn(), $password);
-        if ($result === true) {
+        if (true === $result) {
             Log::Debug('Authentication was successful');
 
             if (!$populated) {
@@ -70,21 +72,24 @@ class Ldap2Wrapper
                 // and another one that has to be run after that the user authenticated with his own dn
                 return $this->PopulateUser($username, $filter, $password);
             }
+
             return $populated;
         }
 
         $l = new Net_LDAP2();
         if ($l->isError($result)) {
-            $message = 'Could not authenticate user against ldap %s: ' . $result->getMessage();
+            $message = 'Could not authenticate user against ldap %s: '.$result->getMessage();
             Log::Error($message, $username);
         }
+
         return false;
     }
 
     /**
-     * @param $username string
+     * @param $username     string
      * @param $configFilter string
-     * @param $password string
+     * @param $password     string
+     *
      * @return bool
      */
     private function PopulateUser($username, $configFilter, $password)
@@ -99,7 +104,7 @@ class Ldap2Wrapper
         if ($configFilter) {
             $configFilter = Net_LDAP2_Filter::parse($configFilter);
             if ($l->isError($configFilter)) {
-                $message = 'Could not parse search filter %s: ' . $configFilter->getMessage();
+                $message = 'Could not parse search filter %s: '.$configFilter->getMessage();
                 Log::Error($message, $username);
             }
             $filter = Net_LDAP2_Filter::combine('and', [$filter, $configFilter]);
@@ -119,17 +124,18 @@ class Ldap2Wrapper
         $searchResult = $this->ldap->search(null, $filter, $options);
 
         if ($l->isError($searchResult)) {
-            $message = 'Could not search ldap for user %s: ' . $searchResult->getMessage();
+            $message = 'Could not search ldap for user %s: '.$searchResult->getMessage();
             Log::Error($message, $username);
         }
 
         $currentResult = $searchResult->current();
 
-        if ($searchResult->count() == 1 && $currentResult !== false) {
+        if (1 == $searchResult->count() && false !== $currentResult) {
             $result = $this->ldap->bind($currentResult->dn(), $password);
 
             if (!$result) {
                 Log::Error('Could not load user %s', $username);
+
                 return false;
             }
 
@@ -148,24 +154,29 @@ class Ldap2Wrapper
                 if (in_array(strtolower(trim($requiredGroup)), $userGroups)) {
                     Log::Debug('Matched Required Group %s', $requiredGroup);
                     $this->user = new LdapUser($currentResult, $this->options->AttributeMapping(), $userGroups);
+
                     return !empty($this->user->GetEmail());
                 } else {
                     Log::Error('Not in required group %s', $requiredGroup);
+
                     return false;
                 }
             } else {
-                /** @var Net_LDAP2_Entry $entry */
+                /* @var Net_LDAP2_Entry $entry */
                 $this->user = new LdapUser($currentResult, $this->options->AttributeMapping(), $userGroups);
+
                 return !empty($this->user->GetEmail());
             }
         } else {
             Log::Error('Could not find user %s', $username);
+
             return false;
         }
     }
 
     /**
      * @param $username string
+     *
      * @return LdapUser|null
      */
     public function GetLdapUser($username)

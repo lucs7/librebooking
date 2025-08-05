@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reports/ReportActions.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Application/Reporting/namespace.php');
+require_once ROOT_DIR.'Presenters/Reports/ReportActions.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Application/Reporting/namespace.php';
 
 class GenerateReportPresenter extends ActionPresenter
 {
@@ -37,15 +37,6 @@ class GenerateReportPresenter extends ActionPresenter
      */
     private $userRepository;
 
-    /**
-     * @param IGenerateReportPage $page
-     * @param UserSession $user
-     * @param IReportingService $reportingService
-     * @param IResourceRepository $resourceRepo
-     * @param IScheduleRepository $scheduleRepo
-     * @param IGroupViewRepository $groupRepo
-     * @param IUserRepository $userRepository
-     */
     public function __construct(
         IGenerateReportPage $page,
         UserSession $user,
@@ -53,7 +44,7 @@ class GenerateReportPresenter extends ActionPresenter
         IResourceRepository $resourceRepo,
         IScheduleRepository $scheduleRepo,
         IGroupViewRepository $groupRepo,
-        IUserRepository $userRepository
+        IUserRepository $userRepository,
     ) {
         parent::__construct($page);
         $this->page = $page;

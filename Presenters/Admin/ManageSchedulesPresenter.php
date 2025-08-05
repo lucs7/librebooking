@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'config/timezones.php');
-require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'config/timezones.php';
+require_once ROOT_DIR.'lib/Common/Validators/namespace.php';
 
 class ManageSchedules
 {
@@ -60,6 +60,7 @@ class ManageScheduleService
         if (is_null($this->_all)) {
             $this->_all = $this->scheduleRepository->GetAll();
         }
+
         return $this->_all;
     }
 
@@ -73,6 +74,7 @@ class ManageScheduleService
 
     /**
      * @param Schedule $schedule
+     *
      * @return IScheduleLayout
      */
     public function GetLayout($schedule)
@@ -82,9 +84,9 @@ class ManageScheduleService
 
     /**
      * @param string $name
-     * @param int $daysVisible
-     * @param int $startDay
-     * @param int $copyLayoutFromScheduleId
+     * @param int    $daysVisible
+     * @param int    $startDay
+     * @param int    $copyLayoutFromScheduleId
      */
     public function Add($name, $daysVisible, $startDay, $copyLayoutFromScheduleId)
     {
@@ -93,7 +95,7 @@ class ManageScheduleService
     }
 
     /**
-     * @param int $scheduleId
+     * @param int    $scheduleId
      * @param string $name
      */
     public function Rename($scheduleId, $name)
@@ -104,7 +106,7 @@ class ManageScheduleService
     }
 
     /**
-     * @param int $scheduleId
+     * @param int      $scheduleId
      * @param int|null $startDay
      * @param int|null $daysVisible
      */
@@ -124,7 +126,7 @@ class ManageScheduleService
     }
 
     /**
-     * @param int $scheduleId
+     * @param int    $scheduleId
      * @param string $timezone
      * @param string $reservableSlots
      * @param string $blockedSlots
@@ -136,8 +138,8 @@ class ManageScheduleService
     }
 
     /**
-     * @param int $scheduleId
-     * @param string $timezone
+     * @param int      $scheduleId
+     * @param string   $timezone
      * @param string[] $reservableSlots
      * @param string[] $blockedSlots
      */
@@ -209,6 +211,7 @@ class ManageScheduleService
     /**
      * @param int $pageNumber
      * @param int $pageSize
+     *
      * @return PageableData|BookableResource[]
      */
     public function GetList($pageNumber, $pageSize)
@@ -218,7 +221,7 @@ class ManageScheduleService
 
     /**
      * @param int $scheduleId
-     * @param PeakTimes $peakTimes
+     *
      * @return IScheduleLayout
      */
     public function ChangePeakTimes($scheduleId, PeakTimes $peakTimes)
@@ -257,6 +260,7 @@ class ManageScheduleService
 
     /**
      * @param int $scheduleId
+     *
      * @return Schedule
      */
     public function DeleteAvailability($scheduleId)
@@ -269,9 +273,10 @@ class ManageScheduleService
     }
 
     /**
-     * @param int $scheduleId
+     * @param int  $scheduleId
      * @param Date $start
      * @param Date $end
+     *
      * @return Schedule
      */
     public function UpdateAvailability($scheduleId, $start, $end)
@@ -290,11 +295,11 @@ class ManageScheduleService
      */
     public function SwitchLayoutType($scheduleId, $layoutType)
     {
-        Log::Debug("Switching layout type. ScheduleId %s", $scheduleId);
+        Log::Debug('Switching layout type. ScheduleId %s', $scheduleId);
 
         $schedule = $this->scheduleRepository->LoadById($scheduleId);
         $targetTimezone = $schedule->GetTimezone();
-        if ($layoutType == ScheduleLayout::Standard) {
+        if (ScheduleLayout::Standard == $layoutType) {
             $layout = new ScheduleLayout($targetTimezone);
             $layout->AppendPeriod(Time::Parse('00:00', $targetTimezone), Time::Parse('00:00', $targetTimezone));
             $this->scheduleRepository->AddScheduleLayout($scheduleId, $layout);
@@ -309,45 +314,45 @@ class ManageScheduleService
     }
 
     /**
-     * @param int $scheduleId
+     * @param int  $scheduleId
      * @param Date $start
      * @param Date $end
      */
     public function AddCustomLayoutPeriod($scheduleId, $start, $end)
     {
-        Log::Debug("Adding custom layout period. ScheduleId %s", $scheduleId);
+        Log::Debug('Adding custom layout period. ScheduleId %s', $scheduleId);
 
         $overlappingPeriod = $this->CustomLayoutPeriodOverlaps($scheduleId, $start, $end);
-        if ($overlappingPeriod == null) {
+        if (null == $overlappingPeriod) {
             $this->scheduleRepository->AddCustomLayoutPeriod($scheduleId, $start, $end);
         }
     }
 
     /**
-     * @param int $scheduleId
+     * @param int  $scheduleId
      * @param Date $start
      * @param Date $end
      * @param Date $originalStart
      */
     public function UpdateCustomLayoutPeriod($scheduleId, $start, $end, $originalStart)
     {
-        Log::Debug("Updating custom layout period. ScheduleId %s", $scheduleId);
-//        $overlappingPeriod = $this->CustomLayoutPeriodOverlaps($scheduleId, $start, $end);
-//        if ($overlappingPeriod != null) {
-//
-//            if ($overlappingPeriod->BeginDate()->Equals($originalStart))
-//            {
+        Log::Debug('Updating custom layout period. ScheduleId %s', $scheduleId);
+        //        $overlappingPeriod = $this->CustomLayoutPeriodOverlaps($scheduleId, $start, $end);
+        //        if ($overlappingPeriod != null) {
+        //
+        //            if ($overlappingPeriod->BeginDate()->Equals($originalStart))
+        //            {
         $this->scheduleRepository->DeleteCustomLayoutPeriod($scheduleId, $originalStart);
         $this->scheduleRepository->AddCustomLayoutPeriod($scheduleId, $start, $end);
-//            }
-//        }
-//        else {
-//            $this->scheduleRepository->AddCustomLayoutPeriod($scheduleId, $start, $end);
-//        }
+        //            }
+        //        }
+        //        else {
+        //            $this->scheduleRepository->AddCustomLayoutPeriod($scheduleId, $start, $end);
+        //        }
     }
 
     /**
-     * @param int $scheduleId
+     * @param int  $scheduleId
      * @param Date $start
      * @param Date $end
      */
@@ -358,8 +363,7 @@ class ManageScheduleService
 
     /**
      * @param int $scheduleId
-     * @param Date $start
-     * @param Date $end
+     *
      * @return SchedulePeriod|null
      */
     private function CustomLayoutPeriodOverlaps($scheduleId, Date $start, Date $end)
@@ -371,6 +375,7 @@ class ManageScheduleService
                 $overlaps = $period;
             }
         }
+
         return $overlaps;
     }
 
@@ -416,7 +421,7 @@ class ManageSchedulesPresenter extends ActionPresenter
     public function __construct(
         IManageSchedulesPage $page,
         ManageScheduleService $manageSchedulesService,
-        IGroupViewRepository $groupViewRepository
+        IGroupViewRepository $groupViewRepository,
     ) {
         parent::__construct($page);
         $this->page = $page;
@@ -632,7 +637,7 @@ class ManageSchedulesPresenter extends ActionPresenter
 
     public function ProcessDataRequest($dataRequest)
     {
-        if ($dataRequest == 'events') {
+        if ('events' == $dataRequest) {
             $timezone = ServiceLocator::GetServer()->GetUserSession()->Timezone;
             $start = Date::Parse($this->page->GetCustomLayoutStartRange(), $timezone);
             $end = Date::Parse($this->page->GetCustomLayoutEndRange(), $timezone);
@@ -644,11 +649,11 @@ class ManageSchedulesPresenter extends ActionPresenter
             $dateFormat = Resources::GetInstance()->GetDateFormat('fullcalendar');
             foreach ($periods as $period) {
                 $events[] = [
-                        'id' => $period->BeginDate()->Format(Date::SHORT_FORMAT),
-                        'start' => $period->BeginDate()->Format($dateFormat),
-                        'end' => $period->EndDate()->Format($dateFormat),
-                        'allDay' => false,
-                        'startEditable' => true,
+                    'id' => $period->BeginDate()->Format(Date::SHORT_FORMAT),
+                    'start' => $period->BeginDate()->Format($dateFormat),
+                    'end' => $period->EndDate()->Format($dateFormat),
+                    'allDay' => false,
+                    'startEditable' => true,
                 ];
             }
 
@@ -724,7 +729,7 @@ class ManageSchedulesPresenter extends ActionPresenter
 
     protected function LoadValidators($action)
     {
-        if ($action == ManageSchedules::ActionChangeLayout) {
+        if (ManageSchedules::ActionChangeLayout == $action) {
             $validateSingle = $this->page->GetUsingSingleLayout();
             if ($validateSingle) {
                 $reservableSlots = $this->page->GetReservableSlots();

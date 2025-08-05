@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/ScheduleRepository.php');
+require_once ROOT_DIR.'Domain/Access/ScheduleRepository.php';
 
 class ScheduleAdminScheduleRepository extends ScheduleRepository
 {
@@ -58,6 +58,7 @@ class ScheduleAdminScheduleRepository extends ScheduleRepository
 
     /**
      * @param Schedule[] $schedules
+     *
      * @return Schedule[]
      */
     private function Filter($schedules)

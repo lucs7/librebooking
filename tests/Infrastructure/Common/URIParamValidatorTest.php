@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 class URIParamValidatorTest extends TestBase
 {

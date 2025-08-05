@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
-require_once(ROOT_DIR . 'lib/Email/Messages/ReservationDeletedEmail.php');
-require_once(ROOT_DIR . 'Domain/Values/InvitationAction.php');
+require_once ROOT_DIR.'lib/Email/Messages/ReservationEmailMessage.php';
+require_once ROOT_DIR.'lib/Email/Messages/ReservationDeletedEmail.php';
+require_once ROOT_DIR.'Domain/Values/InvitationAction.php';
 
 class InviteeAddedEmail extends ReservationEmailMessage
 {
@@ -16,7 +16,7 @@ class InviteeAddedEmail extends ReservationEmailMessage
         User $invitee,
         ReservationSeries $reservationSeries,
         IAttributeRepository $attributeRepository,
-        IUserRepository $userRepository
+        IUserRepository $userRepository,
     ) {
         parent::__construct($reservationOwner, $reservationSeries, $invitee->Language(), $attributeRepository, $userRepository);
 
@@ -59,14 +59,12 @@ class InviteeAddedEmail extends ReservationEmailMessage
     }
 
     /**
-     * @param Reservation $currentInstance
      * @param string $action
-     * @return string
      */
     protected function GetAcceptUrl(Reservation $currentInstance, $action): string
     {
         return sprintf(
-            "%s?%s=%s&%s=%s",
+            '%s?%s=%s&%s=%s',
             Pages::INVITATION_RESPONSES,
             QueryStringKeys::REFERENCE_NUMBER,
             $currentInstance->ReferenceNumber(),
@@ -101,7 +99,7 @@ class InviteeRemovedEmail extends ReservationDeletedEmail
         User $invitee,
         ReservationSeries $reservationSeries,
         IAttributeRepository $attributeRepository,
-        IUserRepository $userRepository
+        IUserRepository $userRepository,
     ) {
         parent::__construct($reservationOwner, $reservationSeries, $invitee->Language(), $attributeRepository, $userRepository);
 

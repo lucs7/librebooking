@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageGroupsPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageGroupsPresenter.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 interface IManageGroupsPage extends IActionPage
 {
@@ -17,9 +17,6 @@ interface IManageGroupsPage extends IActionPage
      */
     public function BindGroups($groups);
 
-    /**
-     * @param PageInfo $pageInfo
-     */
     public function BindPageInfo(PageInfo $pageInfo);
 
     /**
@@ -108,8 +105,8 @@ interface IManageGroupsPage extends IActionPage
     public function GetScheduleAdminIds();
 
     /**
-     * @param GroupItemView[] $groups
-     * @param UserItemView[] $users
+     * @param GroupItemView[]           $groups
+     * @param UserItemView[]            $users
      * @param GroupResourcePermission[] $permissionsWrite
      * @param GroupResourcePermission[] $permissionsRead
      */
@@ -143,6 +140,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
 
     /**
      * @var PageablePage
+     *
      * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
      */
     private $pageable;
@@ -158,7 +156,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
             new UserRepository()
         );
 
-        /**
+        /*
          * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
          */
         $this->pageable = new PageablePage($this);
@@ -167,7 +165,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
     public function ProcessPageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Set('chooseText', Resources::GetInstance()->GetString('Choose') . '...');
+        $this->Set('chooseText', Resources::GetInstance()->GetString('Choose').'...');
         $this->Set('CanChangeRoles', $this->CanChangeRoles);
         $this->Display('Admin/Groups/manage_groups.tpl');
     }
@@ -188,8 +186,8 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
     public function GetPageSize()
     {
         /* replaced by dataTable */
-        //return $this->pageable->GetPageSize();
-        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
+        // return $this->pageable->GetPageSize();
+        throw new LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     public function BindGroups($groups)
@@ -208,6 +206,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         if (!empty($groupId)) {
             return $groupId;
         }
+
         return $this->GetQuerystring(QueryStringKeys::GROUP_ID);
     }
 

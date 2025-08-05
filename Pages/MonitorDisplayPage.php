@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/MonitorDisplayPresenter.php');
+require_once ROOT_DIR.'Presenters/MonitorDisplayPresenter.php';
 
 interface IMonitorDisplayPage extends IPage, IActionPage
 {
@@ -40,10 +40,8 @@ interface IMonitorDisplayPage extends IPage, IActionPage
     public function RebindResources($resources);
 
     /**
-     * @param DateRange $range
-     * @param IDailyLayout $layout
      * @param ResourceDto[] $resources
-     * @param int $format
+     * @param int           $format
      */
     public function RebindSchedule(DateRange $range, IDailyLayout $layout, $resources, $format);
 }

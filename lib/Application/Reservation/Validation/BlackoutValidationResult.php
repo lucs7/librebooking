@@ -13,7 +13,7 @@ class BlackoutValidationResult implements IBlackoutValidationResult
     private $conflictingReservations;
 
     /**
-     * @param array|BlackoutItemView[] $conflictingBlackouts
+     * @param array|BlackoutItemView[]    $conflictingBlackouts
      * @param array|ReservationItemView[] $conflictingReservations
      */
     public function __construct($conflictingBlackouts, $conflictingReservations)

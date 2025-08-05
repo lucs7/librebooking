@@ -2,32 +2,35 @@
 
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 /**
-* File containing the Net_LDAP2_Schema interface class.
-*
-* PHP version 5
-*
-* @category  Net
-* @package   Net_LDAP2
-* @author    Jan Wagner <wagner@netsols.de>
-* @author    Benedikt Hallinger <beni@php.net>
-* @copyright 2009 Jan Wagner, Benedikt Hallinger
-* @license   http://www.gnu.org/licenses/lgpl-3.0.txt LGPLv3
-* @version   SVN: $Id$
-* @link      http://pear.php.net/package/Net_LDAP2/
-* @todo see the comment at the end of the file
-*/
+ * File containing the Net_LDAP2_Schema interface class.
+ *
+ * PHP version 5
+ *
+ * @category  Net
+ *
+ * @author    Jan Wagner <wagner@netsols.de>
+ * @author    Benedikt Hallinger <beni@php.net>
+ * @copyright 2009 Jan Wagner, Benedikt Hallinger
+ * @license   http://www.gnu.org/licenses/lgpl-3.0.txt LGPLv3
+ *
+ * @version   SVN: $Id$
+ *
+ * @see      http://pear.php.net/package/Net_LDAP2/
+ *
+ * @todo see the comment at the end of the file
+ */
 
 /**
-* Includes
-*/
+ * Includes.
+ */
 require_once 'PEAR.php';
 
-/**
-* Syntax definitions
-*
-* Please don't forget to add binary attributes to isBinary() below
-* to support proper value fetching from Net_LDAP2_Entry
-*/
+/*
+ * Syntax definitions
+ *
+ * Please don't forget to add binary attributes to isBinary() below
+ * to support proper value fetching from Net_LDAP2_Entry
+ */
 define('NET_LDAP2_SYNTAX_BOOLEAN', '1.3.6.1.4.1.1466.115.121.1.7');
 define('NET_LDAP2_SYNTAX_DIRECTORY_STRING', '1.3.6.1.4.1.1466.115.121.1.15');
 define('NET_LDAP2_SYNTAX_DISTINGUISHED_NAME', '1.3.6.1.4.1.1466.115.121.1.12');
@@ -38,96 +41,89 @@ define('NET_LDAP2_SYNTAX_OID', '1.3.6.1.4.1.1466.115.121.1.38');
 define('NET_LDAP2_SYNTAX_OCTET_STRING', '1.3.6.1.4.1.1466.115.121.1.40');
 
 /**
-* Load an LDAP Schema and provide information
-*
-* This class takes a Subschema entry, parses this information
-* and makes it available in an array. Most of the code has been
-* inspired by perl-ldap( http://perl-ldap.sourceforge.net).
-* You will find portions of their implementation in here.
-*
-* @category Net
-* @package  Net_LDAP2
-* @author   Jan Wagner <wagner@netsols.de>
-* @author   Benedikt Hallinger <beni@php.net>
-* @license  http://www.gnu.org/copyleft/lesser.html LGPL
-* @link     http://pear.php.net/package/Net_LDAP22/
-*/
+ * Load an LDAP Schema and provide information.
+ *
+ * This class takes a Subschema entry, parses this information
+ * and makes it available in an array. Most of the code has been
+ * inspired by perl-ldap( http://perl-ldap.sourceforge.net).
+ * You will find portions of their implementation in here.
+ *
+ * @category Net
+ *
+ * @author   Jan Wagner <wagner@netsols.de>
+ * @author   Benedikt Hallinger <beni@php.net>
+ * @license  http://www.gnu.org/copyleft/lesser.html LGPL
+ *
+ * @see     http://pear.php.net/package/Net_LDAP22/
+ */
 class Net_LDAP2_Schema extends PEAR
 {
     /**
-    * Map of entry types to ldap attributes of subschema entry
-    *
-    * @access public
-    * @var array
-    */
+     * Map of entry types to ldap attributes of subschema entry.
+     *
+     * @var array
+     */
     public $types = [
-            'attribute'        => 'attributeTypes',
-            'ditcontentrule'   => 'dITContentRules',
-            'ditstructurerule' => 'dITStructureRules',
-            'matchingrule'     => 'matchingRules',
-            'matchingruleuse'  => 'matchingRuleUse',
-            'nameform'         => 'nameForms',
-            'objectclass'      => 'objectClasses',
-            'syntax'           => 'ldapSyntaxes'
-        ];
+        'attribute' => 'attributeTypes',
+        'ditcontentrule' => 'dITContentRules',
+        'ditstructurerule' => 'dITStructureRules',
+        'matchingrule' => 'matchingRules',
+        'matchingruleuse' => 'matchingRuleUse',
+        'nameform' => 'nameForms',
+        'objectclass' => 'objectClasses',
+        'syntax' => 'ldapSyntaxes',
+    ];
 
     /**
-    * Array of entries belonging to this type
-    *
-    * @access protected
-    * @var array
-    */
-    protected $_attributeTypes    = [];
-    protected $_matchingRules     = [];
-    protected $_matchingRuleUse   = [];
-    protected $_ldapSyntaxes      = [];
-    protected $_objectClasses     = [];
-    protected $_dITContentRules   = [];
+     * Array of entries belonging to this type.
+     *
+     * @var array
+     */
+    protected $_attributeTypes = [];
+    protected $_matchingRules = [];
+    protected $_matchingRuleUse = [];
+    protected $_ldapSyntaxes = [];
+    protected $_objectClasses = [];
+    protected $_dITContentRules = [];
     protected $_dITStructureRules = [];
-    protected $_nameForms         = [];
-
+    protected $_nameForms = [];
 
     /**
-    * hash of all fetched oids
-    *
-    * @access protected
-    * @var array
-    */
+     * hash of all fetched oids.
+     *
+     * @var array
+     */
     protected $_oids = [];
 
     /**
-    * Tells if the schema is initialized
-    *
-    * @access protected
-    * @var boolean
-    * @see parse(), get()
-    */
+     * Tells if the schema is initialized.
+     *
+     * @var bool
+     *
+     * @see parse(), get()
+     */
     protected $_initialized = false;
 
-
     /**
-    * Constructor of the class
-    *
-    * @access protected
-    */
+     * Constructor of the class.
+     */
     public function __construct()
     {
         parent::__construct('Net_LDAP2_Error'); // default error class
     }
 
     /**
-    * Fetch the Schema from an LDAP connection
-    *
-    * @param Net_LDAP2 $ldap LDAP connection
-    * @param string    $dn   (optional) Subschema entry dn
-    *
-    * @access public
-    * @return Net_LDAP2_Schema|NET_LDAP2_Error
-    */
+     * Fetch the Schema from an LDAP connection.
+     *
+     * @param Net_LDAP2 $ldap LDAP connection
+     * @param string    $dn   (optional) Subschema entry dn
+     *
+     * @return Net_LDAP2_Schema|NET_LDAP2_Error
+     */
     public static function fetch($ldap, $dn = null)
     {
         if (!$ldap instanceof Net_LDAP2) {
-            return PEAR::raiseError("Unable to fetch Schema: Parameter \$ldap must be a Net_LDAP2 object!");
+            return PEAR::raiseError('Unable to fetch Schema: Parameter $ldap must be a Net_LDAP2 object!');
         }
 
         $schema_o = new Net_LDAP2_Schema();
@@ -169,7 +165,7 @@ class Net_LDAP2_Schema extends PEAR
             $dn,
             '(objectClass=*)',
             ['attributes' => array_values($schema_o->types),
-                                        'scope' => 'base']
+                'scope' => 'base']
         );
         if (Net_LDAP2::isError($result)) {
             return PEAR::raiseError('Could not fetch Subschema entry: '.$result->getMessage());
@@ -185,46 +181,46 @@ class Net_LDAP2_Schema extends PEAR
         }
 
         $schema_o->parse($entry);
+
         return $schema_o;
     }
 
     /**
-    * Return a hash of entries for the given type
-    *
-    * Returns a hash of entry for the givene type. Types may be:
-    * objectclasses, attributes, ditcontentrules, ditstructurerules, matchingrules,
-    * matchingruleuses, nameforms, syntaxes
-    *
-    * @param string $type Type to fetch
-    *
-    * @access public
-    * @return array|Net_LDAP2_Error Array or Net_LDAP2_Error
-    */
+     * Return a hash of entries for the given type.
+     *
+     * Returns a hash of entry for the givene type. Types may be:
+     * objectclasses, attributes, ditcontentrules, ditstructurerules, matchingrules,
+     * matchingruleuses, nameforms, syntaxes
+     *
+     * @param string $type Type to fetch
+     *
+     * @return array|Net_LDAP2_Error Array or Net_LDAP2_Error
+     */
     public function &getAll($type)
     {
-        $map = ['objectclasses'     => &$this->_objectClasses,
-                     'attributes'        => &$this->_attributeTypes,
-                     'ditcontentrules'   => &$this->_dITContentRules,
-                     'ditstructurerules' => &$this->_dITStructureRules,
-                     'matchingrules'     => &$this->_matchingRules,
-                     'matchingruleuses'  => &$this->_matchingRuleUse,
-                     'nameforms'         => &$this->_nameForms,
-                     'syntaxes'          => &$this->_ldapSyntaxes ];
+        $map = ['objectclasses' => &$this->_objectClasses,
+            'attributes' => &$this->_attributeTypes,
+            'ditcontentrules' => &$this->_dITContentRules,
+            'ditstructurerules' => &$this->_dITStructureRules,
+            'matchingrules' => &$this->_matchingRules,
+            'matchingruleuses' => &$this->_matchingRuleUse,
+            'nameforms' => &$this->_nameForms,
+            'syntaxes' => &$this->_ldapSyntaxes];
 
         $key = strtolower($type);
         $ret = ((key_exists($key, $map)) ? $map[$key] : PEAR::raiseError("Unknown type $type"));
+
         return $ret;
     }
 
     /**
-    * Return a specific entry
-    *
-    * @param string $type Type of name
-    * @param string $name Name or OID to fetch
-    *
-    * @access public
-    * @return mixed Entry or Net_LDAP2_Error
-    */
+     * Return a specific entry.
+     *
+     * @param string $type Type of name
+     * @param string $name Name or OID to fetch
+     *
+     * @return mixed Entry or Net_LDAP2_Error
+     */
     public function &get($type, $name)
     {
         if ($this->_initialized) {
@@ -233,8 +229,8 @@ class Net_LDAP2_Schema extends PEAR
                 return PEAR::raiseError("No such type $type");
             }
 
-            $name     = strtolower($name);
-            $type_var = &$this->{'_' . $this->types[$type]};
+            $name = strtolower($name);
+            $type_var = &$this->{'_'.$this->types[$type]};
 
             if (key_exists($name, $type_var)) {
                 return $type_var[$name];
@@ -245,54 +241,51 @@ class Net_LDAP2_Schema extends PEAR
             }
         } else {
             $return = null;
+
             return $return;
         }
     }
 
-
     /**
-    * Fetches attributes that MAY be present in the given objectclass
-    *
-    * @param string $oc Name or OID of objectclass
-    *
-    * @access public
-    * @return array|Net_LDAP2_Error Array with attributes or Net_LDAP2_Error
-    */
+     * Fetches attributes that MAY be present in the given objectclass.
+     *
+     * @param string $oc Name or OID of objectclass
+     *
+     * @return array|Net_LDAP2_Error Array with attributes or Net_LDAP2_Error
+     */
     public function may($oc)
     {
         return $this->_getAttr($oc, 'may');
     }
 
     /**
-    * Fetches attributes that MUST be present in the given objectclass
-    *
-    * @param string $oc Name or OID of objectclass
-    *
-    * @access public
-    * @return array|Net_LDAP2_Error Array with attributes or Net_LDAP2_Error
-    */
+     * Fetches attributes that MUST be present in the given objectclass.
+     *
+     * @param string $oc Name or OID of objectclass
+     *
+     * @return array|Net_LDAP2_Error Array with attributes or Net_LDAP2_Error
+     */
     public function must($oc)
     {
         return $this->_getAttr($oc, 'must');
     }
 
     /**
-    * Fetches the given attribute from the given objectclass
-    *
-    * @param string $oc   Name or OID of objectclass
-    * @param string $attr Name of attribute to fetch
-    *
-    * @access protected
-    * @return array|Net_LDAP2_Error The attribute or Net_LDAP2_Error
-    */
+     * Fetches the given attribute from the given objectclass.
+     *
+     * @param string $oc   Name or OID of objectclass
+     * @param string $attr Name of attribute to fetch
+     *
+     * @return array|Net_LDAP2_Error The attribute or Net_LDAP2_Error
+     */
     protected function _getAttr($oc, $attr)
     {
         $oc = strtolower($oc);
         if (key_exists($oc, $this->_objectClasses) && key_exists($attr, $this->_objectClasses[$oc])) {
             return $this->_objectClasses[$oc][$attr];
-        } elseif (key_exists($oc, $this->_oids) &&
-                $this->_oids[$oc]['type'] == 'objectclass' &&
-                key_exists($attr, $this->_oids[$oc])) {
+        } elseif (key_exists($oc, $this->_oids)
+                && 'objectclass' == $this->_oids[$oc]['type']
+                && key_exists($attr, $this->_oids[$oc])) {
             return $this->_oids[$oc][$attr];
         } else {
             return PEAR::raiseError("Could not find $attr attributes for $oc ");
@@ -300,35 +293,34 @@ class Net_LDAP2_Schema extends PEAR
     }
 
     /**
-    * Returns the name(s) of the immediate superclass(es)
-    *
-    * @param string $oc Name or OID of objectclass
-    *
-    * @access public
-    * @return array|Net_LDAP2_Error  Array of names or Net_LDAP2_Error
-    */
+     * Returns the name(s) of the immediate superclass(es).
+     *
+     * @param string $oc Name or OID of objectclass
+     *
+     * @return array|Net_LDAP2_Error Array of names or Net_LDAP2_Error
+     */
     public function superclass($oc)
     {
         $o = $this->get('objectclass', $oc);
         if (Net_LDAP2::isError($o)) {
             return $o;
         }
-        return (key_exists('sup', $o) ? $o['sup'] : []);
+
+        return key_exists('sup', $o) ? $o['sup'] : [];
     }
 
     /**
-    * Parses the schema of the given Subschema entry
-    *
-    * @param Net_LDAP2_Entry &$entry Subschema entry
-    *
-    * @access public
-    * @return void
-    */
+     * Parses the schema of the given Subschema entry.
+     *
+     * @param Net_LDAP2_Entry &$entry Subschema entry
+     *
+     * @return void
+     */
     public function parse(&$entry)
     {
         foreach ($this->types as $type => $attr) {
             // initialize map type to entry
-            $type_var          = '_' . $attr;
+            $type_var = '_'.$attr;
             $this->{$type_var} = [];
 
             // get values for this type
@@ -361,23 +353,22 @@ class Net_LDAP2_Schema extends PEAR
     }
 
     /**
-    * Parses an attribute value into a schema entry
-    *
-    * @param string $value Attribute value
-    *
-    * @access protected
-    * @return array|false Schema entry array or false
-    */
+     * Parses an attribute value into a schema entry.
+     *
+     * @param string $value Attribute value
+     *
+     * @return array|false Schema entry array or false
+     */
     protected function &_parse_entry($value)
     {
         // tokens that have no value associated
         $noValue = ['single-value',
-                         'obsolete',
-                         'collective',
-                         'no-user-modification',
-                         'abstract',
-                         'structural',
-                         'auxiliary'];
+            'obsolete',
+            'collective',
+            'no-user-modification',
+            'abstract',
+            'structural',
+            'auxiliary'];
 
         // tokens that can have multiple values
         $multiValue = ['must', 'may', 'sup'];
@@ -387,10 +378,10 @@ class Net_LDAP2_Schema extends PEAR
         $tokens = $this->_tokenize($value); // get an array of tokens
 
         // remove surrounding brackets
-        if ($tokens[0] == '(') {
+        if ('(' == $tokens[0]) {
             array_shift($tokens);
         }
-        if ($tokens[count($tokens) - 1] == ')') {
+        if (')' == $tokens[count($tokens) - 1]) {
             array_pop($tokens);
         } // -1 doesnt work on arrays :-(
 
@@ -408,10 +399,10 @@ class Net_LDAP2_Schema extends PEAR
                     // until the end of the list is reached ')'
                     $schema_entry[$token] = [];
                     while ($tmp = array_shift($tokens)) {
-                        if ($tmp == ')') {
+                        if (')' == $tmp) {
                             break;
                         }
-                        if ($tmp != '$') {
+                        if ('$' != $tmp) {
                             array_push($schema_entry[$token], $tmp);
                         }
                     }
@@ -434,30 +425,30 @@ class Net_LDAP2_Schema extends PEAR
         }
         // make one name the default and put the other ones into aliases
         if (is_array($schema_entry['name'])) {
-            $aliases                 = $schema_entry['name'];
-            $schema_entry['name']    = array_shift($aliases);
+            $aliases = $schema_entry['name'];
+            $schema_entry['name'] = array_shift($aliases);
             $schema_entry['aliases'] = $aliases;
         }
+
         return $schema_entry;
     }
 
     /**
-    * Tokenizes the given value into an array of tokens
-    *
-    * @param string $value String to parse
-    *
-    * @access protected
-    * @return array Array of tokens
-    */
+     * Tokenizes the given value into an array of tokens.
+     *
+     * @param string $value String to parse
+     *
+     * @return array Array of tokens
+     */
     protected function _tokenize($value)
     {
-        $tokens  = [];       // array of tokens
+        $tokens = [];       // array of tokens
         $matches = [];       // matches[0] full pattern match, [1,2,3] subpatterns
 
         // this one is taken from perl-ldap, modified for php
         $pattern = "/\s* (?:([()]) | ([^'\s()]+) | '((?:[^']+|'[^\s)])*)') \s*/x";
 
-        /**
+        /*
          * This one matches one big pattern wherin only one of the three subpatterns matched
          * We are interested in the subpatterns that matched. If it matched its value will be
          * non-empty and so it is a token. Tokens may be round brackets, a string, or a string
@@ -465,28 +456,28 @@ class Net_LDAP2_Schema extends PEAR
          */
         preg_match_all($pattern, $value, $matches);
 
-        for ($i = 0; $i < count($matches[0]); $i++) {     // number of tokens (full pattern match)
-            for ($j = 1; $j < 4; $j++) {                  // each subpattern
+        for ($i = 0; $i < count($matches[0]); ++$i) {     // number of tokens (full pattern match)
+            for ($j = 1; $j < 4; ++$j) {                  // each subpattern
                 if (null != trim($matches[$j][$i])) {     // pattern match in this subpattern
                     $tokens[$i] = trim($matches[$j][$i]); // this is the token
                 }
             }
         }
+
         return $tokens;
     }
 
     /**
-    * Returns wether a attribute syntax is binary or not
-    *
-    * This method gets used by Net_LDAP2_Entry to decide which
-    * PHP function needs to be used to fetch the value in the
-    * proper format (e.g. binary or string)
-    *
-    * @param string $attribute The name of the attribute (eg.: 'sn')
-    *
-    * @access public
-    * @return boolean
-    */
+     * Returns wether a attribute syntax is binary or not.
+     *
+     * This method gets used by Net_LDAP2_Entry to decide which
+     * PHP function needs to be used to fetch the value in the
+     * proper format (e.g. binary or string)
+     *
+     * @param string $attribute The name of the attribute (eg.: 'sn')
+     *
+     * @return bool
+     */
     public function isBinary($attribute)
     {
         $return = false; // default to false
@@ -495,9 +486,9 @@ class Net_LDAP2_Schema extends PEAR
         // containing binary values
         // The Syntax Definitons go into constants at the top of this page
         $syntax_binary = [
-                           NET_LDAP2_SYNTAX_OCTET_STRING,
-                           NET_LDAP2_SYNTAX_JPEG
-                         ];
+            NET_LDAP2_SYNTAX_OCTET_STRING,
+            NET_LDAP2_SYNTAX_JPEG,
+        ];
 
         // Check Syntax
         $attr_s = $this->get('attribute', $attribute);
@@ -524,13 +515,13 @@ class Net_LDAP2_Schema extends PEAR
     }
 
     /**
-    * See if an schema element exists
-    *
-    * @param string $type Type of name, see get()
-    * @param string $name Name or OID
-    *
-    * @return boolean
-    */
+     * See if an schema element exists.
+     *
+     * @param string $type Type of name, see get()
+     * @param string $name Name or OID
+     *
+     * @return bool
+     */
     public function exists($type, $name)
     {
         $entry = $this->get($type, $name);
@@ -542,40 +533,41 @@ class Net_LDAP2_Schema extends PEAR
     }
 
     /**
-    * See if an attribute is defined in the schema
-    *
-    * @param string $attribute Name or OID of the attribute
-    * @return boolean
-    */
+     * See if an attribute is defined in the schema.
+     *
+     * @param string $attribute Name or OID of the attribute
+     *
+     * @return bool
+     */
     public function attributeExists($attribute)
     {
         return $this->exists('attribute', $attribute);
     }
 
     /**
-    * See if an objectClass is defined in the schema
-    *
-    * @param string $ocl Name or OID of the objectClass
-    * @return boolean
-    */
+     * See if an objectClass is defined in the schema.
+     *
+     * @param string $ocl Name or OID of the objectClass
+     *
+     * @return bool
+     */
     public function objectClassExists($ocl)
     {
         return $this->exists('objectclass', $ocl);
     }
 
-
     /**
-    * See to which ObjectClasses an attribute is assigned
-    *
-    * The objectclasses are sorted into the keys 'may' and 'must'.
-    *
-    * @param string $attribute Name or OID of the attribute
-    *
-    * @return array|Net_LDAP2_Error Associative array with OCL names or Error
-    */
+     * See to which ObjectClasses an attribute is assigned.
+     *
+     * The objectclasses are sorted into the keys 'may' and 'must'.
+     *
+     * @param string $attribute Name or OID of the attribute
+     *
+     * @return array|Net_LDAP2_Error Associative array with OCL names or Error
+     */
     public function getAssignedOCLs($attribute)
     {
-        $may  = [];
+        $may = [];
         $must = [];
 
         // Test if the attribute type is defined in the schema,
@@ -587,13 +579,12 @@ class Net_LDAP2_Schema extends PEAR
             $attribute = $attr_entry['name'];
         }
 
-
         // We need to get all defined OCLs for this.
         $ocls = $this->getAll('objectclasses');
         foreach ($ocls as $ocl => $ocl_data) {
             // Fetch the may and must attrs and see if our searched attr is contained.
             // If so, record it in the corresponding array.
-            $ocl_may_attrs  = $this->may($ocl);
+            $ocl_may_attrs = $this->may($ocl);
             $ocl_must_attrs = $this->must($ocl);
             if (is_array($ocl_may_attrs) && in_array($attribute, $ocl_may_attrs)) {
                 array_push($may, $ocl_data['name']);
@@ -607,18 +598,18 @@ class Net_LDAP2_Schema extends PEAR
     }
 
     /**
-    * See if an attribute is available in a set of objectClasses
-    *
-    * @param string $attribute Attribute name or OID
-    * @param array $ocls       Names of OCLs to check for
-    *
-    * @return boolean TRUE, if the attribute is defined for at least one of the OCLs
-    */
+     * See if an attribute is available in a set of objectClasses.
+     *
+     * @param string $attribute Attribute name or OID
+     * @param array  $ocls      Names of OCLs to check for
+     *
+     * @return bool TRUE, if the attribute is defined for at least one of the OCLs
+     */
     public function checkAttribute($attribute, $ocls)
     {
         foreach ($ocls as $ocl) {
             $ocl_entry = $this->get('objectclass', $ocl);
-            $ocl_may_attrs  = $this->may($ocl);
+            $ocl_may_attrs = $this->may($ocl);
             $ocl_must_attrs = $this->must($ocl);
             if (is_array($ocl_may_attrs) && in_array($attribute, $ocl_may_attrs)) {
                 return true;
@@ -627,6 +618,7 @@ class Net_LDAP2_Schema extends PEAR
                 return true;
             }
         }
+
         return false; // no ocl for the ocls found.
     }
 }

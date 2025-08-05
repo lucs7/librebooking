@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/AnnouncementRepository.php');
+require_once ROOT_DIR.'Domain/Access/AnnouncementRepository.php';
 
 class AnnouncementRepositoryTest extends TestBase
 {
@@ -75,7 +75,7 @@ class AnnouncementRepositoryTest extends TestBase
         $announcements = $this->repository->GetAll();
 
         $expectedAnnouncements = [
-            new Announcement(1, $text1, Date::FromDatabase($start1), Date::FromDatabase($end1), $priority1, [1,2,3], [9,10,11], $displayPage),
+            new Announcement(1, $text1, Date::FromDatabase($start1), Date::FromDatabase($end1), $priority1, [1, 2, 3], [9, 10, 11], $displayPage),
             new Announcement(2, $text2, Date::FromDatabase($start2), Date::FromDatabase($end2), $priority2, [], [], $displayPage),
         ];
 
@@ -91,8 +91,8 @@ class AnnouncementRepositoryTest extends TestBase
         $start = Date::Parse('2011-01-01', 'America/Chicago');
         $end = NullDate::Instance();
         $priority = 1;
-        $groups = [1,2,3];
-        $resources = [9,10,11];
+        $groups = [1, 2, 3];
+        $resources = [9, 10, 11];
         $displayPage = 1;
 
         $announcement = Announcement::Create($text, $start, $end, $priority, $groups, $resources, $displayPage);
@@ -130,7 +130,7 @@ class AnnouncementRepositoryTest extends TestBase
         $id = 1232;
         $actual = $this->repository->LoadById($id);
 
-        $expected = new Announcement(1, $text1, Date::FromDatabase($start1), Date::FromDatabase($end1), $priority1, [1,2,3], [9, 10, 11], $displayPage);
+        $expected = new Announcement(1, $text1, Date::FromDatabase($start1), Date::FromDatabase($end1), $priority1, [1, 2, 3], [9, 10, 11], $displayPage);
         $this->assertEquals(new GetAnnouncementByIdCommand($id), $this->db->_LastCommand);
         $this->assertEquals($actual, $expected);
     }
@@ -162,7 +162,7 @@ class AnnouncementRepositoryTest extends TestBase
     public function testAppliesToUserIfResourceAllowed()
     {
         $displayPage = 1;
-        $announcement = Announcement::Create('a', Date::Now(), Date::Now(), 1, [], [1,2,3], $displayPage);
+        $announcement = Announcement::Create('a', Date::Now(), Date::Now(), 1, [], [1, 2, 3], $displayPage);
         $this->permissionService->ReturnValues = [true, true, true];
         $this->assertTrue($announcement->AppliesToUser($this->fakeUser, $this->permissionService));
     }
@@ -170,7 +170,7 @@ class AnnouncementRepositoryTest extends TestBase
     public function testAppliesToUserIfInGroup()
     {
         $displayPage = 1;
-        $announcement = Announcement::Create('a', Date::Now(), Date::Now(), 1, [1,2,3], [], $displayPage);
+        $announcement = Announcement::Create('a', Date::Now(), Date::Now(), 1, [1, 2, 3], [], $displayPage);
         $this->fakeUser->Groups = [2];
         $this->assertTrue($announcement->AppliesToUser($this->fakeUser, $this->permissionService));
     }

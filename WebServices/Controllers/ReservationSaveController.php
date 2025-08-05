@@ -1,58 +1,63 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationSavePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationUpdatePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationDeletePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationApprovalPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationCheckinPage.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenterFactory.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
+require_once ROOT_DIR.'Pages/Ajax/ReservationSavePage.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationUpdatePage.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationDeletePage.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationApprovalPage.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationCheckinPage.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationPresenterFactory.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
-require_once(ROOT_DIR . 'WebServices/Requests/ReservationRequest.php');
+require_once ROOT_DIR.'WebServices/Requests/ReservationRequest.php';
 
 interface IReservationSaveController
 {
     /**
      * @param ReservationRequest $request
-     * @param WebServiceUserSession $session
+     *
      * @return ReservationControllerResult
      */
     public function Create($request, WebServiceUserSession $session);
 
     /**
-     * @param ReservationRequest $request
+     * @param ReservationRequest    $request
      * @param WebServiceUserSession $session
-     * @param string $referenceNumber
-     * @param string $updateScope
+     * @param string                $referenceNumber
+     * @param string                $updateScope
+     *
      * @return ReservationControllerResult
      */
     public function Update($request, $session, $referenceNumber, $updateScope);
 
     /**
      * @param WebServiceUserSession $session
-     * @param string $referenceNumber
+     * @param string                $referenceNumber
+     *
      * @return ReservationControllerResult
      */
     public function Approve($session, $referenceNumber);
 
     /**
      * @param WebServiceUserSession $session
-     * @param string $referenceNumber
-     * @param string $updateScope
+     * @param string                $referenceNumber
+     * @param string                $updateScope
+     *
      * @return ReservationControllerResult
      */
     public function Delete($session, $referenceNumber, $updateScope);
 
     /**
      * @param WebServiceUserSession $session
-     * @param string $referenceNumber
+     * @param string                $referenceNumber
+     *
      * @return ReservationControllerResult
      */
     public function Checkin($session, $referenceNumber);
 
     /**
      * @param WebServiceUserSession $session
-     * @param string $referenceNumber
+     * @param string                $referenceNumber
+     *
      * @return ReservationControllerResult
      */
     public function Checkout($session, $referenceNumber);
@@ -114,7 +119,8 @@ class ReservationSaveController implements IReservationSaveController
 
     /**
      * @param WebServiceUserSession $session
-     * @param string $referenceNumber
+     * @param string                $referenceNumber
+     *
      * @return ReservationControllerResult
      */
     public function Approve($session, $referenceNumber)
@@ -122,12 +128,14 @@ class ReservationSaveController implements IReservationSaveController
         $facade = new ReservationApprovalRequestResponseFacade($referenceNumber);
         $presenter = $this->factory->Approve($facade, $session);
         $presenter->PageLoad();
+
         return new ReservationControllerResult($referenceNumber, $facade->Errors());
     }
 
     /**
      * @param WebServiceUserSession $session
-     * @param string $referenceNumber
+     * @param string                $referenceNumber
+     *
      * @return ReservationControllerResult
      */
     public function Checkin($session, $referenceNumber)
@@ -135,12 +143,14 @@ class ReservationSaveController implements IReservationSaveController
         $facade = new ReservationCheckinRequestResponseFacade($referenceNumber, ReservationAction::Checkin);
         $presenter = $this->factory->Checkin($facade, $session);
         $presenter->PageLoad();
+
         return new ReservationControllerResult($referenceNumber, $facade->Errors());
     }
 
     /**
      * @param WebServiceUserSession $session
-     * @param string $referenceNumber
+     * @param string                $referenceNumber
+     *
      * @return ReservationControllerResult
      */
     public function Checkout($session, $referenceNumber)
@@ -148,6 +158,7 @@ class ReservationSaveController implements IReservationSaveController
         $facade = new ReservationCheckinRequestResponseFacade($referenceNumber, ReservationAction::Checkout);
         $presenter = $this->factory->Checkin($facade, $session);
         $presenter->PageLoad();
+
         return new ReservationControllerResult($referenceNumber, $facade->Errors());
     }
 
@@ -173,6 +184,7 @@ class ReservationSaveController implements IReservationSaveController
 
     /**
      * @param ReservationRequestResponseFacade $request
+     *
      * @return array|string[]
      */
     private function ValidateRequest($request)
@@ -202,11 +214,11 @@ class ReservationSaveController implements IReservationSaveController
                 $errors[] = 'Invalid repeat type';
             }
 
-            if ($repeatType == RepeatType::Monthly && !RepeatMonthlyType::IsDefined($request->GetRepeatMonthlyType())) {
+            if (RepeatType::Monthly == $repeatType && !RepeatMonthlyType::IsDefined($request->GetRepeatMonthlyType())) {
                 $errors[] = 'Missing or invalid repeatMonthlyType';
             }
 
-            if (!empty($repeatType) && $repeatType != RepeatType::None) {
+            if (!empty($repeatType) && RepeatType::None != $repeatType) {
                 $repeatInterval = $request->GetRepeatInterval();
                 if (empty($repeatInterval)) {
                     $errors[] = 'Missing or invalid repeatInterval';
@@ -228,7 +240,7 @@ class ReservationSaveController implements IReservationSaveController
                 }
             }
         } catch (Exception $ex) {
-            $errors[] = 'Could not process request.' . $ex;
+            $errors[] = 'Could not process request.'.$ex;
         }
 
         return $errors;
@@ -236,6 +248,7 @@ class ReservationSaveController implements IReservationSaveController
 
     /**
      * @param ReservationUpdateRequestResponseFacade $request
+     *
      * @return array|string[]
      */
     private function ValidateUpdateRequest($request)
@@ -249,6 +262,7 @@ class ReservationSaveController implements IReservationSaveController
     /**
      * @param string $referenceNumber
      * @param string $updateScope
+     *
      * @return array|string[]
      */
     private function ValidateDeleteRequest($referenceNumber, $updateScope)
@@ -259,6 +273,7 @@ class ReservationSaveController implements IReservationSaveController
     /**
      * @param string $referenceNumber
      * @param string $updateScope
+     *
      * @return array|string[]
      */
     private function ValidateParams($referenceNumber, $updateScope)
@@ -280,9 +295,9 @@ class ReservationSaveController implements IReservationSaveController
 class ReservationControllerResult
 {
     /**
-     * @param string $createdReferenceNumber
+     * @param string           $createdReferenceNumber
      * @param mixed[]|string[] $errors
-     * @param bool $requiresApproval
+     * @param bool             $requiresApproval
      */
     public function __construct(
         private $createdReferenceNumber = null,
@@ -290,9 +305,8 @@ class ReservationControllerResult
          * @var array|string[]
          */
         private $errors = [],
-        private $requiresApproval = false
-    )
-    {
+        private $requiresApproval = false,
+    ) {
     }
 
     /**
@@ -308,7 +322,7 @@ class ReservationControllerResult
      */
     public function WasSuccessful()
     {
-        return !empty($this->createdReferenceNumber) && count($this->errors) == 0;
+        return !empty($this->createdReferenceNumber) && 0 == count($this->errors);
     }
 
     /**
@@ -390,7 +404,6 @@ class ReservationRequestResponseFacade implements IReservationSavePage
 
     /**
      * @param ReservationRequest $request
-     * @param WebServiceUserSession $session
      */
     public function __construct(private $request, WebServiceUserSession $session)
     {
@@ -438,6 +451,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->recurrenceRule->interval)) {
             return intval($this->recurrenceRule->interval);
         }
+
         return null;
     }
 
@@ -451,6 +465,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
                 }
             }
         }
+
         return $days;
     }
 
@@ -459,12 +474,14 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->recurrenceRule->monthlyType)) {
             return $this->recurrenceRule->monthlyType;
         }
+
         return null;
     }
 
     /**
      * @param string $dateString
      * @param string $format
+     *
      * @return string|null
      */
     private function GetDate($dateString, $format = Date::SHORT_FORMAT)
@@ -475,6 +492,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
                 $this->session
             )->ToTimezone($this->session->Timezone)->Format($format);
         }
+
         return null;
     }
 
@@ -493,6 +511,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->request->userId)) {
             return intval($this->request->userId);
         }
+
         return $this->session->UserId;
     }
 
@@ -501,6 +520,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->request->resourceId)) {
             return intval($this->request->resourceId);
         }
+
         return null;
     }
 
@@ -539,6 +559,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->request->resources) && is_array($this->request->resources)) {
             return $this->getIntArray($this->request->resources);
         }
+
         return [];
     }
 
@@ -547,6 +568,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->request->participants) && is_array($this->request->participants)) {
             return $this->getIntArray($this->request->participants);
         }
+
         return [];
     }
 
@@ -555,6 +577,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->request->invitees) && is_array($this->request->invitees)) {
             return $this->getIntArray($this->request->invitees);
         }
+
         return [];
     }
 
@@ -563,6 +586,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->request->participatingGuests) && is_array($this->request->participatingGuests)) {
             return $this->request->participatingGuests;
         }
+
         return [];
     }
 
@@ -571,6 +595,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         if (!empty($this->request->invitedGuests) && is_array($this->request->invitedGuests)) {
             return $this->request->invitedGuests;
         }
+
         return [];
     }
 
@@ -584,7 +609,6 @@ class ReservationRequestResponseFacade implements IReservationSavePage
         $this->_createdRequiresApproval = $requiresApproval;
     }
 
-
     public function GetAccessories()
     {
         $accessories = [];
@@ -593,6 +617,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
                 $accessories[] = AccessoryFormElement::Create($accessory->accessoryId, $accessory->quantityRequested);
             }
         }
+
         return $accessories;
     }
 
@@ -604,6 +629,7 @@ class ReservationRequestResponseFacade implements IReservationSavePage
                 $attributes[] = new AttributeFormElement($attribute->attributeId, $attribute->attributeValue);
             }
         }
+
         return $attributes;
     }
 
@@ -734,16 +760,15 @@ class ReservationRequestResponseFacade implements IReservationSavePage
      */
     public function GetTermsOfServiceAcknowledgement()
     {
-        return $this->request->termsAccepted == true;
+        return true == $this->request->termsAccepted;
     }
 }
 
 class ReservationUpdateRequestResponseFacade extends ReservationRequestResponseFacade implements IReservationUpdatePage
 {
     /**
-     * @param ReservationRequest $request
-     * @param WebServiceUserSession $session
-     * @param string $referenceNumber
+     * @param ReservationRequest       $request
+     * @param string                   $referenceNumber
      * @param SeriesUpdateScope|string $updateScope
      */
     public function __construct($request, WebServiceUserSession $session, private $referenceNumber, private $updateScope)
@@ -767,6 +792,7 @@ class ReservationUpdateRequestResponseFacade extends ReservationRequestResponseF
         if (empty($this->updateScope)) {
             return SeriesUpdateScope::FullSeries;
         }
+
         return $this->updateScope;
     }
 
@@ -824,6 +850,7 @@ class ReservationDeleteRequestResponseFacade implements IReservationDeletePage
         if (empty($this->updateScope)) {
             return SeriesUpdateScope::FullSeries;
         }
+
         return $this->updateScope;
     }
 

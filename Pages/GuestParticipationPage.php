@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Presenters/GuestParticipationPresenter.php');
+require_once ROOT_DIR.'Pages/Page.php';
+require_once ROOT_DIR.'Presenters/GuestParticipationPresenter.php';
 
 interface IGuestParticipationPage
 {
@@ -22,6 +22,7 @@ interface IGuestParticipationPage
 
     /**
      * @param $results serializable json
+     *
      * @return void
      */
     public function DisplayResult($results);
@@ -38,12 +39,12 @@ interface IGuestParticipationPage
 
     /**
      * @param array|ReservationItemView[] $reservations
+     *
      * @return void
      */
     public function BindReservations($reservations);
 
     /**
-     * @param $timezone
      * @return void
      */
     public function SetTimezone($timezone);
@@ -64,7 +65,7 @@ interface IGuestParticipationPage
     public function SetDeclined($declined = true);
 
     /**
-     * @param bool $capacityReached
+     * @param bool   $capacityReached
      * @param string $maxCapacityMessage
      */
     public function SetMaxCapacityReached($capacityReached = true, $maxCapacityMessage = null);
@@ -78,7 +79,7 @@ interface IGuestParticipationPage
 class GuestParticipationPage extends Page implements IGuestParticipationPage
 {
     /**
-     * @var \GuestParticipationPresenter
+     * @var GuestParticipationPresenter
      */
     private $presenter;
 
@@ -154,7 +155,7 @@ class GuestParticipationPage extends Page implements IGuestParticipationPage
     }
 
     /**
-     * @param bool $capacityReached
+     * @param bool   $capacityReached
      * @param string $maxCapacityMessage
      */
     public function SetMaxCapacityReached($capacityReached = true, $maxCapacityMessage = null)

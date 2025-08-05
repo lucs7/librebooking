@@ -1,40 +1,40 @@
 <?php
 
-//require_once "phing/Task.php";
+// require_once "phing/Task.php";
 
-//require __DIR__ . '../vendor/autoload.php';
+// require __DIR__ . '../vendor/autoload.php';
 
 class UpgradeDbTask // extends Task
 {
-    private $username = null;
+    private $username;
 
     public function setUsername($username)
     {
         $this->username = $username;
     }
 
-    private $mysqlPassword = null;
+    private $mysqlPassword;
 
     public function setPassword($password)
     {
         $this->mysqlPassword = $password;
     }
 
-    private $host = null;
+    private $host;
 
     public function setHost($host)
     {
         $this->host = $host;
     }
 
-    private $database = null;
+    private $database;
 
     public function setDatabase($database)
     {
         $this->database = $database;
     }
 
-    private $schemaDir = null;
+    private $schemaDir;
 
     public function setSchemadir($schemadir)
     {
@@ -60,7 +60,7 @@ class UpgradeDbTask // extends Task
         usort($upgrades, [$this, 'SortDirectories']);
 
         foreach ($upgrades as $upgrade) {
-            if ($upgrade === '.' || $upgrade === '..' || str_starts_with($upgrade, '.')) {
+            if ('.' === $upgrade || '..' === $upgrade || str_starts_with($upgrade, '.')) {
                 continue;
             }
 
@@ -75,19 +75,19 @@ class UpgradeDbTask // extends Task
             return;
         }
 
-        print("Upgrading database to version $upgrade\n");
+        echo "Upgrading database to version $upgrade\n";
 
         $this->ExecuteFile($fullUpgradeDir, 'schema.sql');
         $this->ExecuteFile($fullUpgradeDir, 'data.sql');
 
-        print("Finished upgrading database to version $upgrade\n");
+        echo "Finished upgrading database to version $upgrade\n";
     }
 
     private function ExecuteFile($fullUpgradeDir, $fileName)
     {
         $dblink = mysqli_connect($this->host, $this->username, $this->mysqlPassword, $this->database);
         if (!$dblink) {
-            die('Could not connect: ' . mysqli_error($dblink));
+            exit('Could not connect: '.mysqli_error($dblink));
         }
 
         mysqli_select_db($dblink, $this->database);
@@ -95,7 +95,7 @@ class UpgradeDbTask // extends Task
         mysqli_query($dblink, 'SET foreign_key_checks = 0;');
 
         $path = "$fullUpgradeDir/$fileName";
-        print("Executing $path\n");
+        echo "Executing $path\n";
 
         $sqlArray = explode(';', (string) $this->GetFullSql($path));
         foreach ($sqlArray as $stmt) {
@@ -106,7 +106,7 @@ class UpgradeDbTask // extends Task
                     $sqlErrorText = mysqli_error($dblink);
                     $sqlStmt = $stmt;
 
-                    print("Failed on statement \"$sqlStmt\". ErrorCode: $sqlErrorCode, ErrorText: $sqlErrorText\n");
+                    echo "Failed on statement \"$sqlStmt\". ErrorCode: $sqlErrorCode, ErrorText: $sqlErrorText\n";
                     break;
                 }
             }
@@ -117,9 +117,10 @@ class UpgradeDbTask // extends Task
 
     private function GetFullSql($file)
     {
-        $f = fopen($file, "r");
+        $f = fopen($file, 'r');
         $sql = fread($f, filesize($file));
         fclose($f);
+
         return $sql;
     }
 
@@ -127,6 +128,7 @@ class UpgradeDbTask // extends Task
     {
         $d1 = floatval($dir1);
         $d2 = floatval($dir2);
+
         return $d1 <=> $d2;
     }
 }

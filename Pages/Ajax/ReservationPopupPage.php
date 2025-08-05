@@ -1,10 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/Schedule/SchedulePresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/Schedule/SchedulePresenter.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
 
 interface IReservationPopupPage
 {
@@ -15,7 +14,7 @@ interface IReservationPopupPage
 
     /**
      * @param $first string
-     * @param $last string
+     * @param $last  string
      */
     public function SetName($first, $last);
 
@@ -46,24 +45,25 @@ interface IReservationPopupPage
 
     /**
      * @param $startDate Date
-     * @param $endDate Date
+     * @param $endDate   Date
      */
     public function SetDates($startDate, $endDate);
 
     /**
      * @param $accessories ReservationAccessory[]
-     * @return mixed
      */
     public function SetAccessories($accessories);
 
     /**
      * @param bool $hideReservationDetails
+     *
      * @return void
      */
     public function SetHideDetails($hideReservationDetails);
 
     /**
      * @param bool $hideUserInfo
+     *
      * @return void
      */
     public function SetHideUser($hideUserInfo);
@@ -93,19 +93,10 @@ interface IReservationPopupPage
      */
     public function SetDuration($duration);
 
-    /**
-     * @param $viewableResourceReservations
-     */
     public function BindViewableResourceReservations($resourceIds);
 
-     /**
-     * @param $amIParticipating
-     */
     public function SetCurrentUserParticipating($amIParticipating);
 
-    /**
-     * @param $amIInvited
-     */
     public function SetCurrentUserInvited($amIInvited);
 }
 
@@ -132,7 +123,7 @@ class PopupFormatter
         $label = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION_LABELS, ConfigKeys::RESERVATION_LABELS_RESERVATION_POPUP);
 
         if (empty($label)) {
-            $label = "{pending} {name} {email} {dates} {duration} {title} {resources} {participants} {accessories} {description} {attributes}";
+            $label = '{pending} {name} {email} {dates} {duration} {title} {resources} {participants} {accessories} {description} {attributes}';
         }
         $label = str_replace('{name}', $this->GetValue('name'), $label);
         $label = str_replace('{email}', $this->GetValue('email'), $label);
@@ -146,7 +137,7 @@ class PopupFormatter
         $label = str_replace('{pending}', $this->GetValue('pending'), $label);
         $label = str_replace('{duration}', $this->GetValue('duration'), $label);
 
-        if (strpos($label, '{attributes}') !== false) {
+        if (false !== strpos($label, '{attributes}')) {
             $label = str_replace('{attributes}', $this->GetValue('attributes'), $label);
         } else {
             $matches = [];
@@ -154,9 +145,9 @@ class PopupFormatter
 
             $matches = $matches[0];
             if (count($matches) > 0) {
-                for ($m = 0; $m < count($matches); $m++) {
+                for ($m = 0; $m < count($matches); ++$m) {
                     $id = filter_var($matches[$m], FILTER_SANITIZE_NUMBER_INT);
-                    $value = $this->GetValue('att' . $id);
+                    $value = $this->GetValue('att'.$id);
                     $label = str_replace($matches[$m], $value, $label);
                 }
             }
@@ -192,8 +183,8 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
             ConfigSection::PRIVACY,
             ConfigKeys::PRIVACY_VIEW_RESERVATIONS,
             new BooleanConverter()
-        ) ||
-                parent::IsAuthenticated();
+        )
+                || parent::IsAuthenticated();
     }
 
     public function PageLoad()
@@ -226,7 +217,8 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
         $this->Set('fullName', new FullName($first, $last));
     }
 
-    public function SetId($OwnerId){
+    public function SetId($OwnerId)
+    {
         $this->Set('OwnerId', $OwnerId);
     }
 
@@ -298,7 +290,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
 
     public function BindViewableResourceReservations($resourceIds)
     {
-        $this->Set('CanViewResourceReservations',$resourceIds);
+        $this->Set('CanViewResourceReservations', $resourceIds);
     }
 
     public function SetCurrentUserParticipating($amIParticipating)
@@ -310,9 +302,7 @@ class ReservationPopupPage extends Page implements IReservationPopupPage
     {
         $this->Set('IAmInvited', $amIInvited);
     }
-
 }
-
 
 class ReservationPopupPresenter
 {
@@ -346,7 +336,7 @@ class ReservationPopupPresenter
         IReservationViewRepository $reservationRepository,
         IReservationAuthorization $reservationAuthorization,
         IAttributeService $attributeService,
-        IUserRepository $userRepository
+        IUserRepository $userRepository,
     ) {
         $this->_page = $page;
         $this->_reservationRepository = $reservationRepository;
@@ -426,7 +416,7 @@ class ReservationPopupPresenter
 
     /**
      * Gets the resources the user has permissions (full access and view only permissions)
-     * This is used to block a user from seeing reservation details if he has no permissions to it's resources
+     * This is used to block a user from seeing reservation details if he has no permissions to it's resources.
      */
     private function UserResourcePermissions($userId)
     {
@@ -435,13 +425,13 @@ class ReservationPopupPresenter
 
         $resourceIds = $resourceRepo->GetUserResourcePermissions($userId);
 
-        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId,$resourceIds);
+        $resourceIds = $resourceRepo->GetUserGroupResourcePermissions($userId, $resourceIds);
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin){    
+        if (ServiceLocator::GetServer()->GetUserSession()->IsResourceAdmin) {
             $resourceIds = $resourceRepo->GetResourceAdminResourceIds($userId, $resourceIds);
         }
 
-        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin){
+        if (ServiceLocator::GetServer()->GetUserSession()->IsScheduleAdmin) {
             $resourceIds = $resourceRepo->GetScheduleAdminResourceIds($userId, $resourceIds);
         }
 
@@ -455,6 +445,7 @@ class ReservationPopupPresenter
                 return true;
             }
         }
+
         return false;
     }
 
@@ -465,6 +456,7 @@ class ReservationPopupPresenter
                 return true;
             }
         }
+
         return false;
     }
 }

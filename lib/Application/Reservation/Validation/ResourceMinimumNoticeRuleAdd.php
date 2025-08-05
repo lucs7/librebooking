@@ -15,8 +15,9 @@ class ResourceMinimumNoticeRuleAdd implements IReservationValidationRule
     /**
      * @see IReservationValidationRule::Validate()
      *
-     * @param ReservationSeries $reservationSeries
-     * @param null|ReservationRetryParameter[] $retryParameters
+     * @param ReservationSeries                $reservationSeries
+     * @param ReservationRetryParameter[]|null $retryParameters
+     *
      * @return ReservationRuleResult
      */
     public function Validate($reservationSeries, $retryParameters)
@@ -43,6 +44,7 @@ class ResourceMinimumNoticeRuleAdd implements IReservationValidationRule
 
     /**
      * @param ReservationSeries $reservationSeries
+     *
      * @return Reservation[]
      */
     protected function GetInstances($reservationSeries)
@@ -52,6 +54,7 @@ class ResourceMinimumNoticeRuleAdd implements IReservationValidationRule
 
     /**
      * @param BookableResource $resource
+     *
      * @return bool
      */
     protected function EnforceMinimumNotice($resource)
@@ -61,6 +64,7 @@ class ResourceMinimumNoticeRuleAdd implements IReservationValidationRule
 
     /**
      * @param BookableResource $resource
+     *
      * @return TimeInterval
      */
     protected function GetMinimumNotice($resource)
@@ -78,7 +82,8 @@ class ResourceMinimumNoticeRuleAdd implements IReservationValidationRule
 
     /**
      * @param Reservation $instance
-     * @param Date $minStartDate
+     * @param Date        $minStartDate
+     *
      * @return bool
      */
     protected function ViolatesMinStartRule($instance, $minStartDate)

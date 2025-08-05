@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Integrate/SlackPage.php');
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
+require_once ROOT_DIR.'Pages/Integrate/SlackPage.php';
+require_once ROOT_DIR.'lib/Server/namespace.php';
 
 class SlackPresenter
 {
@@ -30,6 +30,7 @@ class SlackPresenter
         if (!$this->ValidateToken($token)) {
             Log::Debug('Invalid Slack token. Provided token: %s', $token);
             $this->page->BindError();
+
             return;
         }
 
@@ -42,7 +43,7 @@ class SlackPresenter
         $url = new Url(Configuration::Instance()->GetScriptUrl());
         $url->Add(Pages::RESERVATION);
 
-        if ($resource->GetId() != null) {
+        if (null != $resource->GetId()) {
             $url->AddQueryString(QueryStringKeys::RESOURCE_ID, $resource->GetId());
         }
 
@@ -69,7 +70,7 @@ class SlackResponse
      * @var SlackAttachment[]
      */
     public $attachments = [];
-    /**
+    /*
      * {
      * "text": "Book now",
      * "attachments": [
@@ -102,7 +103,7 @@ class SlackAttachment
 
     public function __construct($buttonText, $buttonUrl)
     {
-        $this->fallback = $buttonText . ' ' . $buttonUrl;
+        $this->fallback = $buttonText.' '.$buttonUrl;
         $this->actions[] = new SlackAction($buttonText, $buttonUrl);
     }
 }

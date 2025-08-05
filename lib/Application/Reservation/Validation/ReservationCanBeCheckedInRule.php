@@ -13,8 +13,9 @@ class ReservationCanBeCheckedInRule implements IReservationValidationRule
     }
 
     /**
-     * @param ExistingReservationSeries $reservationSeries
-     * @param null|ReservationRetryParameter[] $retryParameters
+     * @param ExistingReservationSeries        $reservationSeries
+     * @param ReservationRetryParameter[]|null $retryParameters
+     *
      * @return ReservationRuleResult
      */
     public function Validate($reservationSeries, $retryParameters)

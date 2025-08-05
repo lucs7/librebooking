@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reporting/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reporting/namespace.php';
 
 class FakeReport implements IReport
 {
@@ -13,6 +13,7 @@ class FakeReport implements IReport
         $this->_ReportColumns = new FakeReportColumns();
         $this->_ReportData = new FakeReportData();
     }
+
     /**
      * @return IReportColumns
      */
@@ -42,6 +43,7 @@ class FakeReportColumns implements IReportColumns
 {
     /**
      * @param $columnName string
+     *
      * @return bool
      */
     public function Exists($columnName)

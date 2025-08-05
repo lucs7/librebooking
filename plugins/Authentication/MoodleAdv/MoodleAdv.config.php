@@ -1,6 +1,6 @@
 <?php
 
-//Moodle db details
+// Moodle db details
 $conf['settings']['moodleadv.dbhost'] = 'localhost';
 $conf['settings']['moodleadv.dbname'] = 'moodledatabasename';
 $conf['settings']['moodleadv.dbuser'] = 'username';

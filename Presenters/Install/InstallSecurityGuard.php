@@ -6,7 +6,8 @@ class InstallSecurityGuard
 
     /**
      * true if password exists
-     * false if password is missing
+     * false if password is missing.
+     *
      * @return bool
      */
     public function CheckForInstallPasswordInConfig()
@@ -22,8 +23,10 @@ class InstallSecurityGuard
 
     /**
      * true if password is correct
-     * false if password is incorrect
+     * false if password is incorrect.
+     *
      * @param string $installPassword
+     *
      * @return bool
      */
     public function ValidatePassword($installPassword)
@@ -39,9 +42,8 @@ class InstallSecurityGuard
         return $validated;
     }
 
-
     public function IsAuthenticated()
     {
-        return ServiceLocator::GetServer()->GetSession(SessionKeys::INSTALLATION) == self::VALIDATED_INSTALL;
+        return self::VALIDATED_INSTALL == ServiceLocator::GetServer()->GetSession(SessionKeys::INSTALLATION);
     }
 }

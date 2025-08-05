@@ -13,10 +13,7 @@ class ResourceAdminManageReservationsService extends ManageReservationsService i
     private $userRepository;
 
     /**
-     * @param IReservationViewRepository $reservationViewRepository
-     * @param IUserRepository $userRepository
-     * @param IReservationAuthorization $authorization
-     * @param IReservationHandler|null $reservationHandler
+     * @param IReservationHandler|null                  $reservationHandler
      * @param IUpdateReservationPersistenceService|null $persistenceService
      */
     public function __construct(
@@ -24,7 +21,7 @@ class ResourceAdminManageReservationsService extends ManageReservationsService i
         IUserRepository $userRepository,
         IReservationAuthorization $authorization,
         $reservationHandler = null,
-        $persistenceService = null
+        $persistenceService = null,
     ) {
         parent::__construct($reservationViewRepository, $authorization, $reservationHandler, $persistenceService);
 
@@ -33,12 +30,13 @@ class ResourceAdminManageReservationsService extends ManageReservationsService i
     }
 
     /**
-     * @param $pageNumber int
-     * @param $pageSize int
-     * @param null|string $sortField
-     * @param null|string $sortDirection
-     * @param $filter ReservationFilter
-     * @param $user UserSession
+     * @param             $pageNumber    int
+     * @param             $pageSize      int
+     * @param string|null $sortField
+     * @param string|null $sortDirection
+     * @param             $filter        ReservationFilter
+     * @param             $user          UserSession
+     *
      * @return PageableData|ReservationItemView[]
      */
     public function LoadFiltered($pageNumber, $pageSize, $sortField, $sortDirection, $filter, $user)
@@ -50,6 +48,7 @@ class ResourceAdminManageReservationsService extends ManageReservationsService i
         }
 
         $filter->_And(new SqlFilterIn(new SqlFilterColumn(TableNames::RESOURCES, ColumnNames::RESOURCE_ADMIN_GROUP_ID), $groupIds));
+
         return $this->reservationViewRepository->GetList($pageNumber, $pageSize, $sortField, $sortDirection, $filter->GetFilter());
     }
 }

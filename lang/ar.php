@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_us.php');
+require_once 'Language.php';
+require_once 'en_us.php';
 
 class ar extends en_us
 {
@@ -1000,8 +1000,8 @@ class ar extends en_us
         $strings['ReservationParticipantJoin'] = '%s Has Joined Your Reservation for %s on %s';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'ليس لديك حجوزات سابقة';
         $strings['PastReservations'] = 'الحجوزات السابقة';
         $strings['AllNoPastReservations'] = 'لا توجد حجوزات سابقة في الـ %s الأيام السابقة';
@@ -1009,35 +1009,34 @@ class ar extends en_us
         $strings['Yesterday'] = 'أمس';
         $strings['EarlierThisWeek'] = 'في وقت سابق من هذا الأسبوع';
         $strings['PreviousWeek'] = 'الأسبوع السابق';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'ليس لديكم مجموعة قادمة للحجز';
         $strings['GroupUpcomingReservations'] = 'الحجوزات القادمة لمجموعتي';
-        //End Group Upcoming Reservations 
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'حدث خطأ أثناء تسجيل الدخول باستخدام فيسبوك. يرجى المحاولة مرة أخرى.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'ليس لديك حجوزات في انتظار الموافقة';
         $strings['PendingApprovalReservations'] = 'الحجوزات قيد الموافقة';
         $strings['LaterThisMonth'] = 'في وقت لاحق هذا الشهر';
         $strings['LaterThisYear'] = 'في وقت لاحق هذا العام';
         $strings['Remaining'] = 'المتبقي';
-        //End Pending Approval Reservations in Dashboard
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'لا توجد حجوزات للتسجيل الخروج المفقودة';
-        $strings['MissingCheckOutReservations'] = 'الحجوزات المفقودة للتسجيل الخروج';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'الحجوزات المفقودة للتسجيل الخروج';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'لا يمكن رؤية تفاصيل الحجز لأن ليس لديك أذونات لأي من الموارد في هذا الحجز';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

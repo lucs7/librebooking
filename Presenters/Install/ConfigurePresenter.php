@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Install/InstallSecurityGuard.php');
-require_once(ROOT_DIR . 'lib/Config/Configurator.php');
+require_once ROOT_DIR.'Presenters/Install/InstallSecurityGuard.php';
+require_once ROOT_DIR.'lib/Config/Configurator.php';
 
 class ConfigurePresenter
 {
@@ -44,6 +44,7 @@ class ConfigurePresenter
 
         if (empty($installPassword)) {
             $this->page->SetShowPasswordPrompt(true);
+
             return;
         }
 
@@ -51,6 +52,7 @@ class ConfigurePresenter
         if (!$validated) {
             $this->page->SetShowPasswordPrompt(true);
             $this->page->SetShowInvalidPassword(true);
+
             return;
         }
 
@@ -71,8 +73,8 @@ class ConfigurePresenter
         $user = ServiceLocator::GetServer()->GetUserSession();
         Log::Debug('Editing configuration file. Email=%s, UserId=%s', $user->Email, $user->UserId);
 
-        $configFile = ROOT_DIR . 'config/config.php';
-        $configDistFile = ROOT_DIR . 'config/config.dist.php';
+        $configFile = ROOT_DIR.'config/config.php';
+        $configDistFile = ROOT_DIR.'config/config.dist.php';
 
         $configurator = new Configurator();
 

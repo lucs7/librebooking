@@ -1,17 +1,19 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/Persistence/IReservationPersistenceService.php');
+require_once ROOT_DIR.'lib/Application/Reservation/Persistence/IReservationPersistenceService.php';
 
 interface IUpdateReservationPersistenceService extends IReservationPersistenceService
 {
     /**
      * @param int $reservationInstanceId
+     *
      * @return ExistingReservationSeries
      */
     public function LoadByInstanceId($reservationInstanceId);
 
     /**
      * @param string $referenceNumber
+     *
      * @return ExistingReservationSeries
      */
     public function LoadByReferenceNumber($referenceNumber);

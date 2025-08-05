@@ -6,9 +6,9 @@ class MySqlConnection implements IDbConnection
     private $_dbPassword = '';
     private $_hostSpec = '';
     private $_dbName = '';
-    private $_port = null;
+    private $_port;
 
-    private $_db = null;
+    private $_db;
     private $_connected = false;
 
     /**
@@ -44,7 +44,7 @@ class MySqlConnection implements IDbConnection
 
         if (!$this->_db || !$selected) {
             Log::Error("Error connecting to database\nCheck your database settings in the config file\n%s", @mysqli_error($this->_db));
-            throw new Exception("Error connecting to database\nError: " . @mysqli_error($this->_db));
+            throw new Exception("Error connecting to database\nError: ".@mysqli_error($this->_db));
         }
 
         $this->_connected = true;
@@ -62,7 +62,7 @@ class MySqlConnection implements IDbConnection
         $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
 
         if (Log::DebugEnabled()) {
-            Log::Sql('MySql Query: ' . str_replace('%', '%%', $mysqlCommand->GetQuery()));
+            Log::Sql('MySql Query: '.str_replace('%', '%%', $mysqlCommand->GetQuery()));
         }
 
         if ($sqlCommand->ContainsGroupConcat()) {
@@ -88,18 +88,18 @@ class MySqlConnection implements IDbConnection
         $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
 
         if (Log::DebugEnabled()) {
-            Log::Sql('MySql Execute: ' . str_replace('%', '%%', $mysqlCommand->GetQuery()));
+            Log::Sql('MySql Execute: '.str_replace('%', '%%', $mysqlCommand->GetQuery()));
         }
 
         mysqli_query($this->_db, "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
 
         if ($sqlCommand->IsMultiQuery()) {
             $result = mysqli_multi_query($this->_db, $mysqlCommand->GetQuery());
-            do
-            {
-                if ($r = mysqli_store_result($this->_db))
+            do {
+                if ($r = mysqli_store_result($this->_db)) {
                     mysqli_free_result($r);
-            } while(mysqli_next_result($this->_db));
+                }
+            } while (mysqli_next_result($this->_db));
         } else {
             $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
         }
@@ -114,10 +114,11 @@ class MySqlConnection implements IDbConnection
     private function _handleError($result)
     {
         if (!$result) {
-            Log::Error("Error executing MySQL query %s", mysqli_error($this->_db));
+            Log::Error('Error executing MySQL query %s', mysqli_error($this->_db));
 
-            throw new Exception('There was an error executing your query\n' .  mysqli_error($this->_db));
+            throw new Exception('There was an error executing your query\n'.mysqli_error($this->_db));
         }
+
         return false;
     }
 }
@@ -125,7 +126,7 @@ class MySqlConnection implements IDbConnection
 class MySqlLimitCommand extends SqlCommand
 {
     /**
-     * @var \ISqlCommand
+     * @var ISqlCommand
      */
     private $baseCommand;
 
@@ -145,7 +146,7 @@ class MySqlLimitCommand extends SqlCommand
 
     public function GetQuery()
     {
-        return $this->baseCommand->GetQuery() . sprintf(" LIMIT %s OFFSET %s", $this->limit, $this->offset);
+        return $this->baseCommand->GetQuery().sprintf(' LIMIT %s OFFSET %s', $this->limit, $this->offset);
     }
 
     public function ContainsGroupConcat()

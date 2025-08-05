@@ -1,13 +1,12 @@
 <?php
 
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-  require_once ROOT_DIR . 'vendor/autoload.php';
+if (file_exists(ROOT_DIR.'vendor/autoload.php')) {
+    require_once ROOT_DIR.'vendor/autoload.php';
 }
 
-use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Monolog\Processor\WebProcessor;
-
 
 class Log
 {
@@ -36,7 +35,7 @@ class Log
         $log_folder = null;
         $log_sql = false;
 
-        if ($log_level != 'none') {
+        if ('none' != $log_level) {
             $log_folder = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_FOLDER);
             $log_sql = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_SQL, new BooleanConverter());
             switch ($log_level) {
@@ -68,12 +67,11 @@ class Log
 
     /**
      * @param string $message
-     * @param mixed $args
      */
     public static function Debug($message, $args = [])
     {
         $log_level = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_LEVEL);
-        if ($log_level == 'none') {
+        if ('none' == $log_level) {
             return;
         }
 
@@ -89,7 +87,7 @@ class Log
             $log = vsprintf(array_shift($args), array_values($args));
             $log .= sprintf(' [File=%s,Line=%s]', $debugInfo['file'], $debugInfo['line']);
 
-            $log = '[User=' . ServiceLocator::GetServer()->GetUserSession() . '] ' . $log;
+            $log = '[User='.ServiceLocator::GetServer()->GetUserSession().'] '.$log;
 
             self::GetInstance()->logger->debug($log);
         } catch (Exception $ex) {
@@ -99,12 +97,11 @@ class Log
 
     /**
      * @param string $message
-     * @param mixed $args
      */
     public static function Error($message, $args = [])
     {
         $log_level = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_LEVEL);
-        if ($log_level == 'none') {
+        if ('none' == $log_level) {
             return;
         }
 
@@ -120,7 +117,7 @@ class Log
             $log = vsprintf(array_shift($args), array_values($args));
             $log .= sprintf(' [File=%s,Line=%s]', $debugInfo['file'], $debugInfo['line']);
 
-            $log = '[User=' . ServiceLocator::GetServer()->GetUserSession() . '] ' . $log;
+            $log = '[User='.ServiceLocator::GetServer()->GetUserSession().'] '.$log;
 
             self::GetInstance()->logger->error($log);
         } catch (Exception $ex) {
@@ -129,8 +126,9 @@ class Log
 
     /**
      * @static
+     *
      * @param string $message
-     * @param mixed $args
+     *
      * @return void
      */
     public static function Sql($message, $args = [])
@@ -141,15 +139,16 @@ class Log
             }
             $args = func_get_args();
             $log = vsprintf(array_shift($args), array_values($args));
-            $log = '[User=' . ServiceLocator::GetServer()->GetUserSession() . '] ' . $log;
+            $log = '[User='.ServiceLocator::GetServer()->GetUserSession().'] '.$log;
             self::GetInstance()->sqlLogger->error($log);
         } catch (Exception $ex) {
         }
     }
+
     public static function DebugEnabled()
     {
         $log_level = Configuration::Instance()->GetSectionKey(ConfigSection::LOGGING, ConfigKeys::LOGGING_LEVEL);
-        return $log_level != 'none';
+
+        return 'none' != $log_level;
     }
 }
-

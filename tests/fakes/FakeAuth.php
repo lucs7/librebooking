@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class FakeAuth implements IAuthentication
 {
@@ -45,6 +45,7 @@ class FakeAuth implements IAuthentication
         $this->_LoginCalled = true;
         $this->_LastLogin = $username;
         $this->_LastLoginContext = $context;
+
         return $this->_Session;
     }
 

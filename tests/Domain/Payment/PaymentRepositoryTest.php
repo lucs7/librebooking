@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/PaymentRepository.php');
+require_once ROOT_DIR.'Domain/Access/PaymentRepository.php';
 
 class PaymentRepositoryTest extends TestBase
 {

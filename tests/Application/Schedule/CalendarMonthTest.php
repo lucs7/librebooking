@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class CalendarMonthTest extends TestBase
 {
@@ -14,7 +14,7 @@ class CalendarMonthTest extends TestBase
         $startsBeforeMonth->UserLevelId = ReservationUserLevel::OWNER;
 
         $endsAfterMonth = new ReservationItemView();
-        ;
+
         $endsAfterMonth->StartDate = Date::Parse('2011-12-25', 'UTC');
         $endsAfterMonth->EndDate = Date::Parse('2012-01-25', 'UTC');
         $endsAfterMonth->ResourceName = 'Something Fun';

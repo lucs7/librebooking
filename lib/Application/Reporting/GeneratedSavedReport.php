@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/SavedReport.php');
+require_once ROOT_DIR.'Domain/SavedReport.php';
 
 interface IGeneratedSavedReport extends IReport, ISavedReport
 {

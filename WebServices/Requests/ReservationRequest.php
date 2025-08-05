@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Requests/ReservationAccessoryRequest.php');
-require_once(ROOT_DIR . 'WebServices/Requests/CustomAttributes/AttributeValueRequest.php');
-require_once(ROOT_DIR . 'WebServices/Responses/RecurrenceRequestResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/ReminderRequestResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Reservation/ReservationRetryParameterRequestResponse.php');
+require_once ROOT_DIR.'WebServices/Requests/ReservationAccessoryRequest.php';
+require_once ROOT_DIR.'WebServices/Requests/CustomAttributes/AttributeValueRequest.php';
+require_once ROOT_DIR.'WebServices/Responses/RecurrenceRequestResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/ReminderRequestResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Reservation/ReservationRetryParameterRequestResponse.php';
 
 class ReservationRequest
 {

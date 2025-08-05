@@ -1,27 +1,30 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManageAttributesPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/ManageAttributesPresenter.php';
 
 interface IAttributeSaveController
 {
     /**
      * @param CustomAttributeRequest $request
-     * @param WebServiceUserSession $session
+     * @param WebServiceUserSession  $session
+     *
      * @return AttributeControllerResult
      */
     public function Create($request, $session);
 
     /**
-     * @param int $attributeId
+     * @param int                    $attributeId
      * @param CustomAttributeRequest $request
-     * @param WebServiceUserSession $session
+     * @param WebServiceUserSession  $session
+     *
      * @return AttributeControllerResult
      */
     public function Update($attributeId, $request, $session);
 
     /**
-     * @param int $attributeId
+     * @param int                   $attributeId
      * @param WebServiceUserSession $session
+     *
      * @return AttributeControllerResult
      */
     public function Delete($attributeId, $session);
@@ -72,7 +75,8 @@ class AttributeSaveController implements IAttributeSaveController
 
     /**
      * @param CustomAttributeRequest $request
-     * @param WebServiceUserSession $session
+     * @param WebServiceUserSession  $session
+     *
      * @return AttributeControllerResult
      */
     public function Create($request, $session)
@@ -86,8 +90,8 @@ class AttributeSaveController implements IAttributeSaveController
             $request->label,
             $request->type,
             $request->categoryId,
-            $request->regex . '',
-            (int)$request->required,
+            $request->regex.'',
+            (int) $request->required,
             $this->GetPossibleValues($request),
             $request->sortOrder,
             $request->appliesToIds,
@@ -104,9 +108,10 @@ class AttributeSaveController implements IAttributeSaveController
     }
 
     /**
-     * @param int $attributeId
+     * @param int                    $attributeId
      * @param CustomAttributeRequest $request
-     * @param WebServiceUserSession $session
+     * @param WebServiceUserSession  $session
+     *
      * @return AttributeControllerResult
      */
     public function Update($attributeId, $request, $session)
@@ -141,8 +146,9 @@ class AttributeSaveController implements IAttributeSaveController
     }
 
     /**
-     * @param int $attributeId
+     * @param int                   $attributeId
      * @param WebServiceUserSession $session
+     *
      * @return AttributeControllerResult
      */
     public function Delete($attributeId, $session)
@@ -159,6 +165,7 @@ class AttributeSaveController implements IAttributeSaveController
 
     /**
      * @param CustomAttributeRequest $request
+     *
      * @return array|string[]
      */
     private function ValidateRequest($request)
@@ -169,10 +176,10 @@ class AttributeSaveController implements IAttributeSaveController
             $errors[] = 'label is required';
         }
 
-        if ($request->type != CustomAttributeTypes::CHECKBOX &&
-                $request->type != CustomAttributeTypes::MULTI_LINE_TEXTBOX &&
-                $request->type != CustomAttributeTypes::SELECT_LIST &&
-                $request->type != CustomAttributeTypes::SINGLE_LINE_TEXTBOX
+        if (CustomAttributeTypes::CHECKBOX != $request->type
+                && CustomAttributeTypes::MULTI_LINE_TEXTBOX != $request->type
+                && CustomAttributeTypes::SELECT_LIST != $request->type
+                && CustomAttributeTypes::SINGLE_LINE_TEXTBOX != $request->type
         ) {
             $errors[] = sprintf(
                 'type is invalid. Allowed values for type: %s (checkbox), %s (multi line), %s (select list), %s (single line)',
@@ -183,10 +190,10 @@ class AttributeSaveController implements IAttributeSaveController
             );
         }
 
-        if ($request->categoryId != CustomAttributeCategory::RESERVATION &&
-                $request->categoryId != CustomAttributeCategory::RESOURCE &&
-                $request->categoryId != CustomAttributeCategory::RESOURCE_TYPE &&
-                $request->categoryId != CustomAttributeCategory::USER
+        if (CustomAttributeCategory::RESERVATION != $request->categoryId
+                && CustomAttributeCategory::RESOURCE != $request->categoryId
+                && CustomAttributeCategory::RESOURCE_TYPE != $request->categoryId
+                && CustomAttributeCategory::USER != $request->categoryId
         ) {
             $errors[] = sprintf(
                 'categoryId is invalid. Allowed values for category: %s (reservation), %s (resource), %s (resource type), %s (user)',
@@ -197,15 +204,15 @@ class AttributeSaveController implements IAttributeSaveController
             );
         }
 
-        if ($request->type == CustomAttributeTypes::SELECT_LIST && empty($request->possibleValues)) {
+        if (CustomAttributeTypes::SELECT_LIST == $request->type && empty($request->possibleValues)) {
             $errors[] = 'possibleValues is required when the type is a select list';
         }
 
-        if ($request->type != CustomAttributeTypes::SELECT_LIST && !empty($request->possibleValues)) {
+        if (CustomAttributeTypes::SELECT_LIST != $request->type && !empty($request->possibleValues)) {
             $errors[] = 'possibleValues is only valid when the type is a select list';
         }
 
-        if ($request->categoryId == CustomAttributeCategory::RESERVATION && !empty($request->appliesToIds)) {
+        if (CustomAttributeCategory::RESERVATION == $request->categoryId && !empty($request->appliesToIds)) {
             $errors[] = 'appliesToId is not valid when the type is reservation';
         }
 
@@ -214,6 +221,7 @@ class AttributeSaveController implements IAttributeSaveController
 
     /**
      * @param CustomAttributeRequest $request
+     *
      * @return string
      */
     private function GetPossibleValues($request)
@@ -223,7 +231,7 @@ class AttributeSaveController implements IAttributeSaveController
         }
 
         if (!is_array($request->possibleValues)) {
-            return $request->possibleValues . '';
+            return $request->possibleValues.'';
         }
 
         return implode(',', $request->possibleValues);

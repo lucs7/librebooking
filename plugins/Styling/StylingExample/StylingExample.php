@@ -14,7 +14,7 @@ class StylingExample implements IStylingFactory
 
     public function AdditionalCSS(UserSession $userSession)
     {
-        return realpath(__DIR__ . DIRECTORY_SEPARATOR . 'StylingExample.css');
+        return realpath(__DIR__.DIRECTORY_SEPARATOR.'StylingExample.css');
     }
 
     public function GetReservationAdditonalCSSClasses(IReservedItemView $item)

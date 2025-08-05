@@ -11,9 +11,9 @@ class ReservationReminder
         $this->value = is_numeric($value) ? $value : 0;
         $this->interval = $interval;
 
-        if ($interval == ReservationReminderInterval::Days) {
+        if (ReservationReminderInterval::Days == $interval) {
             $this->minutesPrior = $this->value * 60 * 24;
-        } elseif ($interval == ReservationReminderInterval::Hours) {
+        } elseif (ReservationReminderInterval::Hours == $interval) {
             $this->minutesPrior = $this->value * 60;
         } else {
             $this->interval = ReservationReminderInterval::Minutes;
@@ -38,13 +38,14 @@ class ReservationReminder
 
     /**
      * @param int $minutes
+     *
      * @return ReservationReminder
      */
     public static function FromMinutes($minutes)
     {
-        if ($minutes % 1440 == 0) {
+        if (0 == $minutes % 1440) {
             return new ReservationReminder($minutes / 1440, ReservationReminderInterval::Days);
-        } elseif ($minutes % 60 == 0) {
+        } elseif (0 == $minutes % 60) {
             return new ReservationReminder($minutes / 60, ReservationReminderInterval::Hours);
         } else {
             return new ReservationReminder($minutes, ReservationReminderInterval::Minutes);

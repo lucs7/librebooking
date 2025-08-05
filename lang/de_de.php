@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class de_de extends en_gb
 {
@@ -475,7 +475,7 @@ class de_de extends en_gb
         $strings['AllResourceTypes'] = 'Alle Ressourcentypen';
         $strings['AllResourceStatuses'] = 'Alle Ressourcen-Statusangaben';
         $strings['AllowParticipantsToJoin'] = 'Erlaube Teilnehmern, beizutreten';
-//        $strings['JoinThisReservation'] = 'Dieser Reservierung hinzufügen';
+        //        $strings['JoinThisReservation'] = 'Dieser Reservierung hinzufügen';
         $strings['Join'] = 'Beitreten';
         $strings['YouAreAParticipant'] = 'Sie sind Teilnehmer dieser Reservierung';
         $strings['YouAreInvited'] = 'Sie sind zu dieser Reservierung eingeladen';
@@ -969,8 +969,8 @@ class de_de extends en_gb
         $strings['MissedCheckinEmailSubject'] = 'Anmeldung verpasst für %s';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Sie haben keine vergangenen Reservierungen';
         $strings['PastReservations'] = 'Vergangene Reservierungen';
         $strings['AllNoPastReservations'] = 'Es gibt keine vergangenen Reservierungen in den letzten %s Tagen';
@@ -978,34 +978,34 @@ class de_de extends en_gb
         $strings['Yesterday'] = 'Gestern';
         $strings['EarlierThisWeek'] = 'Früher in dieser Woche';
         $strings['PreviousWeek'] = 'Vorherige Woche';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Ihre Gruppe hat keine kommenden Reservierungen';
         $strings['GroupUpcomingReservations'] = 'Kommende Reservierungen meiner Gruppe(n)';
-        //End Group Upcoming Reservations
-        
-        //Facebook Login SDK Error
-        $strings['FacebookLoginErrorMessage'] = 'Bei der Anmeldung mit Facebook ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.';
-        //End Facebook Login SDK Error
+        // End Group Upcoming Reservations
 
-        //Pending Approval Reservations in Dashboard
+        // Facebook Login SDK Error
+        $strings['FacebookLoginErrorMessage'] = 'Bei der Anmeldung mit Facebook ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.';
+        // End Facebook Login SDK Error
+
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Sie haben keine Reservierungen, die auf Genehmigung warten';
         $strings['PendingApprovalReservations'] = 'Reservierungen zur Genehmigung ausstehend';
         $strings['LaterThisMonth'] = 'Später in diesem Monat';
         $strings['LaterThisYear'] = 'Später in diesem Jahr';
-        $strings['Remaining'] = 'Verbleibend';  
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Verbleibend';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Es gibt keine fehlenden Auscheck-Reservierungen';
-        $strings['MissingCheckOutReservations'] = 'Fehlende Auscheck-Reservierungen';       
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Fehlende Auscheck-Reservierungen';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Detailansicht gesperrt: Berechtigung für eine der verbundenen Ressourcen erforderlich';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

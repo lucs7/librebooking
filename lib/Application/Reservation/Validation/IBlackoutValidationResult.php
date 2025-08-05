@@ -9,18 +9,21 @@ interface IBlackoutValidationResult
 
     /**
      * @abstract
+     *
      * @return string
      */
     public function Message();
 
     /**
      * @abstract
+     *
      * @return array|ReservationItemView[]
      */
     public function ConflictingReservations();
 
     /**
      * @abstract
+     *
      * @return array|BlackoutItemView[]
      */
     public function ConflictingBlackouts();

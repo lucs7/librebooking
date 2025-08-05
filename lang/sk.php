@@ -1,9 +1,10 @@
 <?php
+
 /**
-Translation: 2014 Slovak Language: Branislav Ďorď <branislav.dord@eurogalaxy.sk>
+ * Translation: 2014 Slovak Language: Branislav Ďorď <branislav.dord@eurogalaxy.sk>.
  */
 
-require_once('en_gb.php');
+require_once 'en_gb.php';
 
 class sk extends en_gb
 {
@@ -85,7 +86,7 @@ class sk extends en_gb
         $strings['year'] = 'rok';
         $strings['repeatDayOfMonth'] = 'dni mesiaca';
         $strings['repeatDayOfWeek'] = 'dni týždňa';
-        $strings['RepeatUntilPrompt'] =	'až do';
+        $strings['RepeatUntilPrompt'] = 'až do';
         $strings['RepeatEveryPrompt'] = 'každý';
         $strings['RepeatDaysPrompt'] = 'Opakovať v dni';
         $strings['CreateReservationHeading'] = 'Vytváranie rezervácie';
@@ -590,7 +591,6 @@ class sk extends en_gb
         $strings['ManageResourceStatus'] = 'Stavy kalendárov';
         // End Page Titles
 
-
         // Day representations
         $strings['DaySundaySingle'] = 'Ne';
         $strings['DayMondaySingle'] = 'Po';
@@ -629,8 +629,8 @@ class sk extends en_gb
         $strings['UserAdded'] = 'Nový užívateľ bol pridaný';
         // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Nemáte žiadne predchádzajúce rezervácie';
         $strings['PastReservations'] = 'Predchádzajúce rezervácie';
         $strings['AllNoPastReservations'] = 'Žiadne predchádzajúce rezervácie v posledných %s dňoch';
@@ -638,35 +638,34 @@ class sk extends en_gb
         $strings['Yesterday'] = 'Včera';
         $strings['EarlierThisWeek'] = 'Skôr tento týždeň';
         $strings['PreviousWeek'] = 'Predchádzajúci týždeň';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Vaša skupina nemá žiadne nadchádzajúce rezervácie';
         $strings['GroupUpcomingReservations'] = 'Nadchádzajúce rezervácie mojej skupiny(y)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'Pri prihlásení cez Facebook sa vyskytla chyba. Skúste to prosím znovu.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Nemáte žiadne rezervácie čakajúce na schválenie';
         $strings['PendingApprovalReservations'] = 'Rezervácie čakajúce na schválenie';
         $strings['LaterThisMonth'] = 'Neskôr tento mesiac';
         $strings['LaterThisYear'] = 'Neskôr tento rok';
-        $strings['Remaining'] = 'Zostáva';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Zostáva';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Žiadne chýbajúce rezervácie na odchod';
-        $strings['MissingCheckOutReservations'] = 'Chýbajúce rezervácie na odchod';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Chýbajúce rezervácie na odchod';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Nie je možné zobraziť podrobnosti o rezervácii, pretože nemáte oprávnenie k žiadnym zdrojom v tejto rezervácii';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
 

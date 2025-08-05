@@ -6,8 +6,9 @@ class ResourceMaximumDurationRule implements IReservationValidationRule
      * @see IReservationValidationRule::Validate()
      *
      * @param ReservationSeries $reservationSeries
-     * @param $retryParameters
+     *
      * @return ReservationRuleResult
+     *
      * @throws Exception
      */
     public function Validate($reservationSeries, $retryParameters)
@@ -24,7 +25,7 @@ class ResourceMaximumDurationRule implements IReservationValidationRule
 
                 $maxEnd = $start->ApplyDifference($maxDuration);
                 if ($end->GreaterThan($maxEnd)) {
-                    return new ReservationRuleResult(false, $r->GetString("MaxDurationError", $maxDuration));
+                    return new ReservationRuleResult(false, $r->GetString('MaxDurationError', $maxDuration));
                 }
             }
         }

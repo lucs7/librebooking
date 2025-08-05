@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationCheckinPage.php');
+require_once ROOT_DIR.'Pages/Ajax/ReservationCheckinPage.php';
 
 class FakeReservationCheckinPage implements IReservationCheckinPage
 {

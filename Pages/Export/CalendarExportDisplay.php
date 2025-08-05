@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+require_once ROOT_DIR.'Pages/Page.php';
 
 class CalendarExportDisplay extends Page
 {
@@ -11,6 +11,7 @@ class CalendarExportDisplay extends Page
 
     /**
      * @param $reservations iCalendarReservationView[]
+     *
      * @return string
      */
     public function Render($reservations)
@@ -23,7 +24,7 @@ class CalendarExportDisplay extends Page
         /**
          * ScriptUrl is used to generate iCal UID's. As a workaround to this bug
          * https://bugzilla.mozilla.org/show_bug.cgi?id=465853
-         * we need to avoid using any slashes "/"
+         * we need to avoid using any slashes "/".
          */
         $url = $config->GetScriptUrl();
         $this->Set('UID', parse_url($url, PHP_URL_HOST));

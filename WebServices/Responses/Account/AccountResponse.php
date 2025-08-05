@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class AccountResponse extends RestResponse
 {
@@ -35,7 +35,7 @@ class AccountResponse extends RestResponse
         $i = 0;
         foreach ($attributeValues as $av) {
             $this->customAttributes[] = new CustomAttributeResponse($server, $av->Id(), $av->Label(), $av->Value());
-            $i++;
+            ++$i;
         }
 
         if ($user->GetIsCalendarSubscriptionAllowed()) {

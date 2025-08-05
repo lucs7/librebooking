@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/DashboardPresenter.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/DashboardPresenter.php';
 
 class DashboardPage extends SecurePage implements IDashboardPage
 {

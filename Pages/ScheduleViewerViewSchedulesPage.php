@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Presenters/ViewSchedulesPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageSchedulesPresenter.php'); //ManageScheduleService
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Presenters/ViewSchedulesPresenter.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageSchedulesPresenter.php'; // ManageScheduleService
 
 class ScheduleViewerViewSchedulesPage extends Page implements IPageable
 {
@@ -17,10 +17,10 @@ class ScheduleViewerViewSchedulesPage extends Page implements IPageable
     {
         parent::__construct('CheckSchedules');
         $resourceRepository = new ResourceRepository();
-        
+
         $this->presenter = new ViewSchedulesPresenter(
-            $this, 
-            $resourceRepository, 
+            $this,
+            $resourceRepository,
             new ManageScheduleService(new ScheduleRepository(), $resourceRepository),
             new GroupRepository());
 
@@ -36,10 +36,10 @@ class ScheduleViewerViewSchedulesPage extends Page implements IPageable
         $this->Set('Today', Resources::GetInstance()->GetString('Today'));
         $this->Set('Months', Resources::GetInstance()->GetMonths('full'));
         $this->Set('StyleNames', [
-                ScheduleStyle::Standard => $resources->GetString('Standard'),
-                ScheduleStyle::Wide => $resources->GetString('Wide'),
-                ScheduleStyle::Tall => $resources->GetString('Tall'),
-                ScheduleStyle::CondensedWeek => $resources->GetString('Week'),
+            ScheduleStyle::Standard => $resources->GetString('Standard'),
+            ScheduleStyle::Wide => $resources->GetString('Wide'),
+            ScheduleStyle::Tall => $resources->GetString('Tall'),
+            ScheduleStyle::CondensedWeek => $resources->GetString('Week'),
         ]);
 
         $this->Display(ROOT_DIR.'tpl/Admin/Schedules/view_schedules.tpl');
@@ -56,7 +56,6 @@ class ScheduleViewerViewSchedulesPage extends Page implements IPageable
     {
         $this->Set('Resources', $resources);
     }
-
 
     /**
      * @param GroupItemView[] $groups
@@ -89,11 +88,11 @@ class ScheduleViewerViewSchedulesPage extends Page implements IPageable
         if ($pageSize > 10) {
             return 10;
         }
+
         return $pageSize;
     }
 
     /**
-     * @param PageInfo $pageInfo
      * @return void
      */
     public function BindPageInfo(PageInfo $pageInfo)

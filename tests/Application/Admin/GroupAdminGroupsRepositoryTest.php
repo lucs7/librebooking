@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
+require_once ROOT_DIR.'lib/Application/Admin/namespace.php';
 
 class GroupAdminGroupsRepositoryTest extends TestBase
 {
@@ -24,7 +24,7 @@ class GroupAdminGroupsRepositoryTest extends TestBase
         $groupRows->With(1, '1');
         $rows = $groupRows->Rows();
 
-        $this->db->SetRow(0, [ [ColumnNames::TOTAL => 4] ]);
+        $this->db->SetRow(0, [[ColumnNames::TOTAL => 4]]);
         $this->db->SetRow(1, $rows);
 
         $filter = null;

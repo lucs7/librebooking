@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageConfigurationPage.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
-require_once(ROOT_DIR . 'lib/Database/namespace.php');
-require_once(ROOT_DIR . 'lib/Database/Commands/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/ManageConfigurationPage.php';
+require_once ROOT_DIR.'Presenters/ActionPresenter.php';
+require_once ROOT_DIR.'lib/Database/namespace.php';
+require_once ROOT_DIR.'lib/Database/Commands/namespace.php';
 
 class ConfigActions
 {
@@ -38,7 +38,7 @@ class ManageConfigurationPresenter extends ActionPresenter
     private $deletedSectionSettings = [
         ConfigSection::AUTHENTICATION => ['allow.social.login'],
         ConfigSection::ICS => ['require.login', 'import', 'import.key'],
-        ConfigSection::RESERVATION => ['maximum.resources']
+        ConfigSection::RESERVATION => ['maximum.resources'],
     ];
 
     /**
@@ -51,8 +51,8 @@ class ManageConfigurationPresenter extends ActionPresenter
         parent::__construct($page);
         $this->page = $page;
         $this->configSettings = $settings;
-        $this->configFilePath = ROOT_DIR . 'config/config.php';
-        $this->configFilePathDist = ROOT_DIR . 'config/config.dist.php';
+        $this->configFilePath = ROOT_DIR.'config/config.php';
+        $this->configFilePathDist = ROOT_DIR.'config/config.dist.php';
 
         $this->AddAction(ConfigActions::Update, 'Update');
         $this->AddAction(ConfigActions::SetHomepage, 'SetHomepage');
@@ -69,6 +69,7 @@ class ManageConfigurationPresenter extends ActionPresenter
 
         if (!$shouldShowConfig) {
             Log::Debug('Show configuration UI is turned off. Not displaying the config values');
+
             return;
         }
 
@@ -84,6 +85,7 @@ class ManageConfigurationPresenter extends ActionPresenter
 
         if (!$isFileWritable) {
             Log::Debug('Config file is not writable');
+
             return;
         }
 
@@ -132,15 +134,15 @@ class ManageConfigurationPresenter extends ActionPresenter
     private function PopulatePlugins()
     {
         $plugins = [];
-        $dit = new RecursiveDirectoryIterator(ROOT_DIR . 'plugins');
+        $dit = new RecursiveDirectoryIterator(ROOT_DIR.'plugins');
 
         /** @var SplFileInfo $path */
         foreach ($dit as $path) {
-            if ($path->isDir() && basename($path->getPathname()) != '.' && basename($path->getPathname()) != '..') {
+            if ($path->isDir() && '.' != basename($path->getPathname()) && '..' != basename($path->getPathname())) {
                 $plugins[basename($path->getPathname())] = [];
                 /** @var SplFileInfo $plugin */
                 foreach (new RecursiveDirectoryIterator($path) as $plugin) {
-                    if ($plugin->isDir() && basename($plugin->getPathname()) != '.' && basename($plugin->getPathname()) != '..') {
+                    if ($plugin->isDir() && '.' != basename($plugin->getPathname()) && '..' != basename($plugin->getPathname())) {
                         $pluginCategory = basename($path->getPathname());
                         if (!isset($plugins[$pluginCategory]) || empty($plugins[$pluginCategory])) {
                             $plugins[$pluginCategory][] = '';
@@ -171,6 +173,7 @@ class ManageConfigurationPresenter extends ActionPresenter
 
         if (!$shouldShowConfig) {
             Log::Debug('Show configuration UI is turned off. No updates are allowed');
+
             return;
         }
 
@@ -201,13 +204,13 @@ class ManageConfigurationPresenter extends ActionPresenter
         foreach ($this->deletedSectionSettings as $section => $setting) {
             if (array_key_exists($section, $mergedSettings) && in_array($setting, $mergedSettings[$section])) {
                 unset($mergedSettings[$section][$setting]);
-                if (count($mergedSettings[$section]) == 0) {
+                if (0 == count($mergedSettings[$section])) {
                     unset($mergedSettings[$section]);
                 }
             }
         }
 
-        Log::Debug("Saving %s settings", count($configSettings));
+        Log::Debug('Saving %s settings', count($configSettings));
 
         $this->configSettings->WriteSettings($this->configFilePath, $mergedSettings);
 
@@ -226,7 +229,7 @@ class ManageConfigurationPresenter extends ActionPresenter
 
     private function ShouldBeSkipped($key, $section = null)
     {
-        if ($section == ConfigSection::DATABASE) {
+        if (ConfigSection::DATABASE == $section) {
             return true;
         }
         if (in_array($key, $this->deletedSettings)) {
@@ -238,7 +241,7 @@ class ManageConfigurationPresenter extends ActionPresenter
 
         switch ($key) {
             case ConfigKeys::INSTALLATION_PASSWORD:
-            case ConfigKeys::PAGES_ENABLE_CONFIGURATION && $section == ConfigSection::PAGES:
+            case ConfigKeys::PAGES_ENABLE_CONFIGURATION && ConfigSection::PAGES == $section:
                 return true;
             default:
                 return false;
@@ -249,14 +252,14 @@ class ManageConfigurationPresenter extends ActionPresenter
     {
         $files = [new ConfigFileOption('config.php', '')];
 
-        $pluginBaseDir = ROOT_DIR . 'plugins/';
+        $pluginBaseDir = ROOT_DIR.'plugins/';
         if ($h = opendir($pluginBaseDir)) {
             while (false !== ($entry = readdir($h))) {
-                $pluginDir = $pluginBaseDir . $entry;
-                if (is_dir($pluginDir) && $entry != "." && $entry != "..") {
+                $pluginDir = $pluginBaseDir.$entry;
+                if (is_dir($pluginDir) && '.' != $entry && '..' != $entry) {
                     $plugins = scandir($pluginDir);
                     foreach ($plugins as $plugin) {
-                        if (is_dir("$pluginDir/$plugin") && $plugin != "." && $plugin != ".." && strpos($plugin, 'Example') === false) {
+                        if (is_dir("$pluginDir/$plugin") && '.' != $plugin && '..' != $plugin && false === strpos($plugin, 'Example')) {
                             $configFiles = array_merge(glob("$pluginDir/$plugin/*.config.php"), glob("$pluginDir/$plugin/*.config.dist.php"));
                             if (count($configFiles) > 0) {
                                 $files[] = new ConfigFileOption("$entry-$plugin", "$entry/$plugin");
@@ -281,11 +284,11 @@ class ManageConfigurationPresenter extends ActionPresenter
                 if ($file->Location == $requestedConfigFile) {
                     $this->page->SetSelectedConfigFile($requestedConfigFile);
 
-                    $rootDir = ROOT_DIR . 'plugins/' . $requestedConfigFile;
+                    $rootDir = ROOT_DIR.'plugins/'.$requestedConfigFile;
 
                     $distFile = glob("$rootDir/*config.dist.php");
                     $configFile = glob("$rootDir/*config.php");
-                    if (count($distFile) == 1 && count($configFile) == 0) {
+                    if (1 == count($distFile) && 0 == count($configFile)) {
                         copy($distFile[0], str_replace('.dist', '', $distFile[0]));
                     }
                     $configFile = glob("$rootDir/*config.php");
@@ -317,10 +320,10 @@ class ManageConfigurationPresenter extends ActionPresenter
             $parts = explode('/Web', $currentUrl);
             $port = $server->GetHeader('SERVER_PORT');
             $suggestedUrl = ($server->GetIsHttps() ? 'https://' : 'http://')
-                . $server->GetHeader('SERVER_NAME')
-                . ($port == '80' ? '' : $port)
-                . $parts[0]
-                . '/Web';
+                .$server->GetHeader('SERVER_NAME')
+                .('80' == $port ? '' : $port)
+                .$parts[0]
+                .'/Web';
             $this->page->ShowScriptUrlWarning($scriptUrl, $suggestedUrl);
         }
     }
@@ -330,6 +333,7 @@ class ConfigFileOption
 {
     public $Name;
     public $Location;
+
     public function __construct($name, $location)
     {
         $this->Name = $name;
@@ -351,20 +355,20 @@ class ConfigSetting
         $section = trim($section ?? '');
         $value = trim($value ?? '');
 
-        $this->Name = $this->encode($key) . '|' . $this->encode($section);
+        $this->Name = $this->encode($key).'|'.$this->encode($section);
         $this->Key = $key;
         $this->Section = $section;
-        $this->Value = $value . '';
+        $this->Value = $value.'';
 
-        $type = strtolower($value) == 'true' || strtolower($value) == 'false' ? ConfigSettingType::Boolean : ConfigSettingType::String;
+        $type = 'true' == strtolower($value) || 'false' == strtolower($value) ? ConfigSettingType::Boolean : ConfigSettingType::String;
 
-        if ($key == ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS && $section == ConfigSection::PRIVACY) {
+        if (ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS == $key && ConfigSection::PRIVACY == $section) {
             $type = ConfigSettingType::String;
         }
 
         $this->Type = $type;
 
-        if ($type == ConfigSettingType::Boolean) {
+        if (ConfigSettingType::Boolean == $type) {
             $this->Value = strtolower($this->Value);
         }
     }
@@ -373,6 +377,7 @@ class ConfigSetting
     {
         $k = self::decode($key);
         $keyAndSection = explode('|', $k);
+
         return new ConfigSetting($keyAndSection[0], $keyAndSection[1], $value);
     }
 

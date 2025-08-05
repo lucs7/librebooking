@@ -1,25 +1,25 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'lib/Config/namespace.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Common/Validators/namespace.php';
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class PasswordPresenter
 {
     /**
-     * @var \IPasswordPage
+     * @var IPasswordPage
      */
     private $page;
 
     /**
-     * @var \IUserRepository
+     * @var IUserRepository
      */
     private $userRepository;
 
     /**
-     * @var \PasswordEncryption
+     * @var PasswordEncryption
      */
     private $passwordEncryption;
 

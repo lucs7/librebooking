@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
 
 class AccountCreationForUserEmail extends EmailMessage
 {
@@ -10,7 +10,7 @@ class AccountCreationForUserEmail extends EmailMessage
     private $user;
 
     /**
-     * @var null|UserSession
+     * @var UserSession|null
      */
     private $userSession;
 
@@ -57,7 +57,7 @@ class AccountCreationForUserEmail extends EmailMessage
         $this->Set('AppTitle', Configuration::Instance()->GetKey(ConfigKeys::APP_TITLE));
         $this->Set('ScriptUrl', Configuration::Instance()->GetScriptUrl());
         $this->Set('CreatedBy', '');
-        if ($this->userSession != null && $this->userSession->UserId != $this->user->Id()) {
+        if (null != $this->userSession && $this->userSession->UserId != $this->user->Id()) {
             $this->Set('CreatedBy', new FullName($this->userSession->FirstName, $this->userSession->LastName));
         }
 

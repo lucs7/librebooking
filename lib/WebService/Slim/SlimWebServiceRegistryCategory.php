@@ -40,25 +40,31 @@ class SlimWebServiceRegistryCategory
         return $this->deletes;
     }
 
-    public function GetRoGroupId(): int|string|null {
+    public function GetRoGroupId(): int|string|null
+    {
         return $this->roGroupId;
     }
 
-    public function GetRwGroupId(): int|string|null {
+    public function GetRwGroupId(): int|string|null
+    {
         return $this->rwGroupId;
     }
 
-    public function UserAllowedRoAccess(int|string $userId): bool {
+    public function UserAllowedRoAccess(int|string $userId): bool
+    {
         if (is_null($this->roGroupId)) {
             return true;
         }
+
         return UserGroupHelper::isUserInGroup(groupId: $this->roGroupId, userId: $userId);
     }
 
-    public function UserAllowedRwAccess(int|string $userId): bool {
+    public function UserAllowedRwAccess(int|string $userId): bool
+    {
         if (is_null($this->rwGroupId)) {
             return true;
         }
+
         return UserGroupHelper::isUserInGroup(groupId: $this->rwGroupId, userId: $userId);
     }
 
@@ -107,9 +113,6 @@ class SlimWebServiceRegistryCategory
         $this->deletes[] = new SlimAdminServiceRegistration($this->name, $route, $callback, $routeName);
     }
 
-    /**
-     * @return mixed
-     */
     public function Name()
     {
         return $this->name;

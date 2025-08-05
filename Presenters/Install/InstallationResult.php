@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Display successful/failure message after attempting the auto installation
+ * Display successful/failure message after attempting the auto installation.
  */
 class InstallationResult
 {
@@ -20,13 +20,13 @@ class InstallationResult
     public function SetConnectionError()
     {
         $this->connectionError = true;
-        $this->sqlErrorText = "Error connecting to mysql database.  Check your configured host and entered username and password.";
+        $this->sqlErrorText = 'Error connecting to mysql database.  Check your configured host and entered username and password.';
     }
 
     public function SetAuthenticationError()
     {
         $this->authError = true;
-        $this->sqlErrorText = "Error selecting to mysql database.  Check entered username and password.";
+        $this->sqlErrorText = 'Error selecting to mysql database.  Check entered username and password.';
     }
 
     public function SetResult($sqlErrorCode, $sqlErrorText, $sqlStmt)
@@ -38,7 +38,7 @@ class InstallationResult
 
     public function WasSuccessful()
     {
-        return !$this->connectionError && !$this->authError && $this->sqlErrorCode == 0;
+        return !$this->connectionError && !$this->authError && 0 == $this->sqlErrorCode;
     }
 }
 
@@ -51,6 +51,5 @@ class InstallationResultSkipped extends InstallationResult
 
     public function WasSuccessful()
     {
-        true;
     }
 }

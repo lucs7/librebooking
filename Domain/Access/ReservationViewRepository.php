@@ -1,36 +1,36 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/ReservationUserLevel.php');
-require_once(ROOT_DIR . 'Domain/Values/ReservationStatus.php');
-require_once(ROOT_DIR . 'Domain/Values/CustomAttributes.php');
-require_once(ROOT_DIR . 'Domain/Values/UserPreferences.php');
-require_once(ROOT_DIR . 'Domain/RepeatOptions.php');
-require_once(ROOT_DIR . 'Domain/ReservationReminderView.php');
-require_once(ROOT_DIR . 'Domain/ReservationResourceView.php');
-require_once(ROOT_DIR . 'Domain/ReservationUserView.php');
-require_once(ROOT_DIR . 'Domain/ReservationView.php');
-require_once(ROOT_DIR . 'Domain/ReservationAttachmentView.php');
-require_once(ROOT_DIR . 'Domain/AccessoryReservation.php');
-require_once(ROOT_DIR . 'Domain/ReservationItemView.php');
-require_once(ROOT_DIR . 'Domain/ReservationAccessoryView.php');
+require_once ROOT_DIR.'Domain/Values/ReservationUserLevel.php';
+require_once ROOT_DIR.'Domain/Values/ReservationStatus.php';
+require_once ROOT_DIR.'Domain/Values/CustomAttributes.php';
+require_once ROOT_DIR.'Domain/Values/UserPreferences.php';
+require_once ROOT_DIR.'Domain/RepeatOptions.php';
+require_once ROOT_DIR.'Domain/ReservationReminderView.php';
+require_once ROOT_DIR.'Domain/ReservationResourceView.php';
+require_once ROOT_DIR.'Domain/ReservationUserView.php';
+require_once ROOT_DIR.'Domain/ReservationView.php';
+require_once ROOT_DIR.'Domain/ReservationAttachmentView.php';
+require_once ROOT_DIR.'Domain/AccessoryReservation.php';
+require_once ROOT_DIR.'Domain/ReservationItemView.php';
+require_once ROOT_DIR.'Domain/ReservationAccessoryView.php';
 
 interface IReservationViewRepository
 {
     /**
      * @param string $referenceNumber
+     *
      * @return ReservationView
      */
     public function GetReservationForEditing($referenceNumber);
 
     /**
-     * @param Date $startDate
-     * @param Date $endDate
-     * @param int|null|int[] $userIds
+     * @param int|int[]|null                $userIds
      * @param int|ReservationUserLevel|null $userLevel
-     * @param int|int[]|null $scheduleIds
-     * @param int|int[]|null $resourceIds
-     * @param int|int[]|null $participantIds
-     * @param bool $consolidateByReferenceNumber
+     * @param int|int[]|null                $scheduleIds
+     * @param int|int[]|null                $resourceIds
+     * @param int|int[]|null                $participantIds
+     * @param bool                          $consolidateByReferenceNumber
+     *
      * @return ReservationItemView[]
      */
     public function GetReservations(
@@ -41,17 +41,17 @@ interface IReservationViewRepository
         $scheduleIds = ReservationViewRepository::ALL_SCHEDULES,
         $resourceIds = ReservationViewRepository::ALL_RESOURCES,
         $consolidateByReferenceNumber = false,
-        $participantIds = ReservationViewRepository::ALL_USERS
+        $participantIds = ReservationViewRepository::ALL_USERS,
     );
 
     /**
-     * @param Date $startDate
-     * @param int|null|int[] $userIds
+     * @param int|int[]|null                $userIds
      * @param int|ReservationUserLevel|null $userLevel
-     * @param int|int[]|null $scheduleIds
-     * @param int|int[]|null $resourceIds
-     * @param int|int[]|null $participantIds
-     * @param bool $consolidateByReferenceNumber
+     * @param int|int[]|null                $scheduleIds
+     * @param int|int[]|null                $resourceIds
+     * @param int|int[]|null                $participantIds
+     * @param bool                          $consolidateByReferenceNumber
+     *
      * @return ReservationItemView[]
      */
     public function GetReservationsPendingApproval(
@@ -61,18 +61,17 @@ interface IReservationViewRepository
         $scheduleIds = ReservationViewRepository::ALL_SCHEDULES,
         $resourceIds = ReservationViewRepository::ALL_RESOURCES,
         $consolidateByReferenceNumber = false,
-        $participantIds = ReservationViewRepository::ALL_USERS
+        $participantIds = ReservationViewRepository::ALL_USERS,
     );
 
     /**
-     * @param Date|null $startDate
-     * @param Date $endDate
-     * @param int|null|int[] $userIds
+     * @param int|int[]|null                $userIds
      * @param int|ReservationUserLevel|null $userLevel
-     * @param int|int[]|null $scheduleIds
-     * @param int|int[]|null $resourceIds
-     * @param int|int[]|null $participantIds
-     * @param bool $consolidateByReferenceNumber
+     * @param int|int[]|null                $scheduleIds
+     * @param int|int[]|null                $resourceIds
+     * @param int|int[]|null                $participantIds
+     * @param bool                          $consolidateByReferenceNumber
+     *
      * @return ReservationItemView[]
      */
     public function GetReservationsMissingCheckInCheckOut(
@@ -83,47 +82,47 @@ interface IReservationViewRepository
         $scheduleIds = ReservationViewRepository::ALL_SCHEDULES,
         $resourceIds = ReservationViewRepository::ALL_RESOURCES,
         $consolidateByReferenceNumber = false,
-        $participantIds = ReservationViewRepository::ALL_USERS
+        $participantIds = ReservationViewRepository::ALL_USERS,
     );
 
     /**
-     * @param Date $startDate
-     * @param Date $endDate
      * @param string $accessoryName
+     *
      * @return ReservationItemView[]
      */
     public function GetAccessoryReservationList(Date $startDate, Date $endDate, $accessoryName);
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param string $sortField
-     * @param string $sortDirection
+     * @param int        $pageNumber
+     * @param int        $pageSize
+     * @param string     $sortField
+     * @param string     $sortDirection
      * @param ISqlFilter $filter
+     *
      * @return PageableData|ReservationItemView[]
      */
     public function GetList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null);
 
     /**
-     * @param DateRange $dateRange
-     * @param int|null $scheduleId
+     * @param int|null       $scheduleId
      * @param int|int[]|null $resourceIds
+     *
      * @return BlackoutItemView[]
      */
     public function GetBlackoutsWithin(DateRange $dateRange, $scheduleId = ReservationViewRepository::ALL_SCHEDULES, $resourceIds = ReservationViewRepository::ALL_RESOURCES);
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param null|string $sortField
-     * @param null|string $sortDirection
-     * @param null|ISqlFilter $filter
+     * @param int             $pageNumber
+     * @param int             $pageSize
+     * @param string|null     $sortField
+     * @param string|null     $sortDirection
+     * @param ISqlFilter|null $filter
+     *
      * @return PageableData|BlackoutItemView[]
      */
     public function GetBlackoutList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null);
 
     /**
-     * @param DateRange $dateRange
      * @return array|AccessoryReservation[]
      */
     public function GetAccessoriesWithin(DateRange $dateRange);
@@ -173,13 +172,13 @@ class ReservationViewRepository implements IReservationViewRepository
             $reservationView->RepeatWeekdays = $repeatConfig->Weekdays;
             $reservationView->RepeatMonthlyType = $repeatConfig->MonthlyType;
             $reservationView->RepeatTerminationDate = $repeatConfig->TerminationDate;
-            $reservationView->AllowParticipation = (bool)$row[ColumnNames::RESERVATION_ALLOW_PARTICIPATION];
+            $reservationView->AllowParticipation = (bool) $row[ColumnNames::RESERVATION_ALLOW_PARTICIPATION];
             $reservationView->CheckinDate = Date::FromDatabase($row[ColumnNames::CHECKIN_DATE]);
             $reservationView->CheckoutDate = Date::FromDatabase($row[ColumnNames::CHECKOUT_DATE]);
             $reservationView->OriginalEndDate = Date::FromDatabase($row[ColumnNames::PREVIOUS_END_DATE]);
             $reservationView->CreditsConsumed = $row[ColumnNames::CREDIT_COUNT];
             $reservationView->TermsAcceptanceDate = Date::FromDatabase($row[ColumnNames::RESERVATION_TERMS_ACCEPTANCE_DATE]);
-            $reservationView->HasAcceptedTerms = $reservationView->TermsAcceptanceDate->ToString() != '';
+            $reservationView->HasAcceptedTerms = '' != $reservationView->TermsAcceptanceDate->ToString();
 
             $this->SetResources($reservationView);
             $this->SetParticipants($reservationView);
@@ -192,6 +191,7 @@ class ReservationViewRepository implements IReservationViewRepository
         }
 
         $reader->Free();
+
         return $reservationView;
     }
 
@@ -203,7 +203,7 @@ class ReservationViewRepository implements IReservationViewRepository
         $scheduleIds = self::ALL_SCHEDULES,
         $resourceIds = self::ALL_RESOURCES,
         $consolidateByReferenceNumber = false,
-        $participantIds = self::ALL_USERS
+        $participantIds = self::ALL_USERS,
     ) {
         if (empty($userIds)) {
             $userIds = self::ALL_USERS;
@@ -220,29 +220,29 @@ class ReservationViewRepository implements IReservationViewRepository
         if (empty($participantIds)) {
             $participantIds = self::ALL_USERS;
         }
-        if ($resourceIds == self::ALL_RESOURCES) {
+        if (self::ALL_RESOURCES == $resourceIds) {
             $resourceIds = null;
         }
-        if ($scheduleIds == self::ALL_SCHEDULES) {
+        if (self::ALL_SCHEDULES == $scheduleIds) {
             $scheduleIds = null;
         }
-        if ($userIds == self::ALL_USERS) {
+        if (self::ALL_USERS == $userIds) {
             $userIds = null;
         }
-        if ($participantIds == self::ALL_USERS) {
+        if (self::ALL_USERS == $participantIds) {
             $participantIds = null;
         }
 
-        if (!empty($resourceIds) && $resourceIds != ReservationViewRepository::ALL_RESOURCES && !is_array($resourceIds)) {
+        if (!empty($resourceIds) && ReservationViewRepository::ALL_RESOURCES != $resourceIds && !is_array($resourceIds)) {
             $resourceIds = [$resourceIds];
         }
-        if (!empty($scheduleIds) && $scheduleIds != ReservationViewRepository::ALL_SCHEDULES && !is_array($scheduleIds)) {
+        if (!empty($scheduleIds) && ReservationViewRepository::ALL_SCHEDULES != $scheduleIds && !is_array($scheduleIds)) {
             $scheduleIds = [$scheduleIds];
         }
-        if (!empty($userIds) && $userIds != ReservationViewRepository::ALL_USERS && !is_array($userIds)) {
+        if (!empty($userIds) && ReservationViewRepository::ALL_USERS != $userIds && !is_array($userIds)) {
             $userIds = [$userIds];
         }
-        if (!empty($participantIds) && $participantIds != ReservationViewRepository::ALL_USERS && !is_array($participantIds)) {
+        if (!empty($participantIds) && ReservationViewRepository::ALL_USERS != $participantIds && !is_array($participantIds)) {
             $participantIds = [$participantIds];
         }
 
@@ -278,6 +278,7 @@ class ReservationViewRepository implements IReservationViewRepository
         if ($consolidateByReferenceNumber) {
             return array_values($reservations);
         }
+
         return $reservations;
     }
 
@@ -288,7 +289,7 @@ class ReservationViewRepository implements IReservationViewRepository
         $scheduleIds = self::ALL_SCHEDULES,
         $resourceIds = self::ALL_RESOURCES,
         $consolidateByReferenceNumber = false,
-        $participantIds = self::ALL_USERS
+        $participantIds = self::ALL_USERS,
     ) {
         if (empty($userIds)) {
             $userIds = self::ALL_USERS;
@@ -305,29 +306,29 @@ class ReservationViewRepository implements IReservationViewRepository
         if (empty($participantIds)) {
             $participantIds = self::ALL_USERS;
         }
-        if ($resourceIds == self::ALL_RESOURCES) {
+        if (self::ALL_RESOURCES == $resourceIds) {
             $resourceIds = null;
         }
-        if ($scheduleIds == self::ALL_SCHEDULES) {
+        if (self::ALL_SCHEDULES == $scheduleIds) {
             $scheduleIds = null;
         }
-        if ($userIds == self::ALL_USERS) {
+        if (self::ALL_USERS == $userIds) {
             $userIds = null;
         }
-        if ($participantIds == self::ALL_USERS) {
+        if (self::ALL_USERS == $participantIds) {
             $participantIds = null;
         }
 
-        if (!empty($resourceIds) && $resourceIds != ReservationViewRepository::ALL_RESOURCES && !is_array($resourceIds)) {
+        if (!empty($resourceIds) && ReservationViewRepository::ALL_RESOURCES != $resourceIds && !is_array($resourceIds)) {
             $resourceIds = [$resourceIds];
         }
-        if (!empty($scheduleIds) && $scheduleIds != ReservationViewRepository::ALL_SCHEDULES && !is_array($scheduleIds)) {
+        if (!empty($scheduleIds) && ReservationViewRepository::ALL_SCHEDULES != $scheduleIds && !is_array($scheduleIds)) {
             $scheduleIds = [$scheduleIds];
         }
-        if (!empty($userIds) && $userIds != ReservationViewRepository::ALL_USERS && !is_array($userIds)) {
+        if (!empty($userIds) && ReservationViewRepository::ALL_USERS != $userIds && !is_array($userIds)) {
             $userIds = [$userIds];
         }
-        if (!empty($participantIds) && $participantIds != ReservationViewRepository::ALL_USERS && !is_array($participantIds)) {
+        if (!empty($participantIds) && ReservationViewRepository::ALL_USERS != $participantIds && !is_array($participantIds)) {
             $participantIds = [$participantIds];
         }
 
@@ -363,6 +364,7 @@ class ReservationViewRepository implements IReservationViewRepository
         if ($consolidateByReferenceNumber) {
             return array_values($reservations);
         }
+
         return $reservations;
     }
 
@@ -374,7 +376,7 @@ class ReservationViewRepository implements IReservationViewRepository
         $scheduleIds = self::ALL_SCHEDULES,
         $resourceIds = self::ALL_RESOURCES,
         $consolidateByReferenceNumber = false,
-        $participantIds = self::ALL_USERS
+        $participantIds = self::ALL_USERS,
     ) {
         if (empty($userIds)) {
             $userIds = self::ALL_USERS;
@@ -391,29 +393,29 @@ class ReservationViewRepository implements IReservationViewRepository
         if (empty($participantIds)) {
             $participantIds = self::ALL_USERS;
         }
-        if ($resourceIds == self::ALL_RESOURCES) {
+        if (self::ALL_RESOURCES == $resourceIds) {
             $resourceIds = null;
         }
-        if ($scheduleIds == self::ALL_SCHEDULES) {
+        if (self::ALL_SCHEDULES == $scheduleIds) {
             $scheduleIds = null;
         }
-        if ($userIds == self::ALL_USERS) {
+        if (self::ALL_USERS == $userIds) {
             $userIds = null;
         }
-        if ($participantIds == self::ALL_USERS) {
+        if (self::ALL_USERS == $participantIds) {
             $participantIds = null;
         }
 
-        if (!empty($resourceIds) && $resourceIds != ReservationViewRepository::ALL_RESOURCES && !is_array($resourceIds)) {
+        if (!empty($resourceIds) && ReservationViewRepository::ALL_RESOURCES != $resourceIds && !is_array($resourceIds)) {
             $resourceIds = [$resourceIds];
         }
-        if (!empty($scheduleIds) && $scheduleIds != ReservationViewRepository::ALL_SCHEDULES && !is_array($scheduleIds)) {
+        if (!empty($scheduleIds) && ReservationViewRepository::ALL_SCHEDULES != $scheduleIds && !is_array($scheduleIds)) {
             $scheduleIds = [$scheduleIds];
         }
-        if (!empty($userIds) && $userIds != ReservationViewRepository::ALL_USERS && !is_array($userIds)) {
+        if (!empty($userIds) && ReservationViewRepository::ALL_USERS != $userIds && !is_array($userIds)) {
             $userIds = [$userIds];
         }
-        if (!empty($participantIds) && $participantIds != ReservationViewRepository::ALL_USERS && !is_array($participantIds)) {
+        if (!empty($participantIds) && ReservationViewRepository::ALL_USERS != $participantIds && !is_array($participantIds)) {
             $participantIds = [$participantIds];
         }
 
@@ -449,6 +451,7 @@ class ReservationViewRepository implements IReservationViewRepository
         if ($consolidateByReferenceNumber) {
             return array_values($reservations);
         }
+
         return $reservations;
     }
 
@@ -473,11 +476,12 @@ class ReservationViewRepository implements IReservationViewRepository
     {
         $command = new GetFullReservationListCommand();
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['ReservationItemView', 'Populate'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize, $sortField, $sortDirection);
     }
 
@@ -488,7 +492,7 @@ class ReservationViewRepository implements IReservationViewRepository
         $reader = ServiceLocator::GetDatabase()->Query($getResources);
 
         while ($row = $reader->GetRow()) {
-            if ($row[ColumnNames::RESOURCE_LEVEL_ID] == ResourceLevel::Additional) {
+            if (ResourceLevel::Additional == $row[ColumnNames::RESOURCE_LEVEL_ID]) {
                 $reservationView->AdditionalResourceIds[] = $row[ColumnNames::RESOURCE_ID];
             }
             $rrv = new ReservationResourceView(
@@ -525,11 +529,11 @@ class ReservationViewRepository implements IReservationViewRepository
                 $levelId
             );
 
-            if ($levelId == ReservationUserLevel::PARTICIPANT) {
+            if (ReservationUserLevel::PARTICIPANT == $levelId) {
                 $reservationView->Participants[] = $reservationUserView;
             }
 
-            if ($levelId == ReservationUserLevel::INVITEE) {
+            if (ReservationUserLevel::INVITEE == $levelId) {
                 $reservationView->Invitees[] = $reservationUserView;
             }
         }
@@ -597,7 +601,7 @@ class ReservationViewRepository implements IReservationViewRepository
         $getReminders = new GetReservationReminders($reservationView->SeriesId);
         $reader = ServiceLocator::GetDatabase()->Query($getReminders);
         while ($row = $reader->GetRow()) {
-            if ($row[ColumnNames::REMINDER_TYPE] == ReservationReminderType::Start) {
+            if (ReservationReminderType::Start == $row[ColumnNames::REMINDER_TYPE]) {
                 $reservationView->StartReminder = new ReservationReminderView($row[ColumnNames::REMINDER_MINUTES_PRIOR]);
             } else {
                 $reservationView->EndReminder = new ReservationReminderView($row[ColumnNames::REMINDER_MINUTES_PRIOR]);
@@ -617,11 +621,11 @@ class ReservationViewRepository implements IReservationViewRepository
             $levelId = $row[ColumnNames::RESERVATION_USER_LEVEL];
             $email = $row[ColumnNames::EMAIL];
 
-            if ($levelId == ReservationUserLevel::PARTICIPANT) {
+            if (ReservationUserLevel::PARTICIPANT == $levelId) {
                 $reservationView->ParticipatingGuests[] = $email;
             }
 
-            if ($levelId == ReservationUserLevel::INVITEE) {
+            if (ReservationUserLevel::INVITEE == $levelId) {
                 $reservationView->InvitedGuests[] = $email;
             }
         }
@@ -631,7 +635,7 @@ class ReservationViewRepository implements IReservationViewRepository
 
     private function SetCustomRepeatDates(ReservationView $reservationView)
     {
-        if ($reservationView->RepeatType == RepeatType::Custom) {
+        if (RepeatType::Custom == $reservationView->RepeatType) {
             $getRepeatDates = new GetReservationRepeatDatesCommand($reservationView->SeriesId);
             $reader = ServiceLocator::GetDatabase()->Query($getRepeatDates);
             while ($row = $reader->GetRow()) {
@@ -671,10 +675,10 @@ class ReservationViewRepository implements IReservationViewRepository
         if (empty($resourceIds)) {
             $resourceIds = self::ALL_RESOURCES;
         }
-        if ($resourceIds == self::ALL_RESOURCES) {
+        if (self::ALL_RESOURCES == $resourceIds) {
             $resourceIds = null;
         }
-        if (!empty($resourceIds) && $resourceIds != ReservationViewRepository::ALL_RESOURCES && !is_array($resourceIds)) {
+        if (!empty($resourceIds) && ReservationViewRepository::ALL_RESOURCES != $resourceIds && !is_array($resourceIds)) {
             $resourceIds = [$resourceIds];
         }
 
@@ -696,11 +700,12 @@ class ReservationViewRepository implements IReservationViewRepository
     {
         $command = new GetBlackoutListFullCommand();
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['BlackoutItemView', 'Populate'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize, $sortField, $sortDirection);
     }
 }

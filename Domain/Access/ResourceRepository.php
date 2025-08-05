@@ -1,12 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/BookableResource.php');
-require_once(ROOT_DIR . 'Domain/ResourceGroup.php');
-require_once(ROOT_DIR . 'Domain/ResourceType.php');
-require_once(ROOT_DIR . 'Domain/Access/IResourceRepository.php');
-require_once(ROOT_DIR . 'Domain/Values/ResourceStatus.php');
-require_once(ROOT_DIR . 'Domain/Values/AccountStatus.php');
-require_once(ROOT_DIR . 'Domain/Values/AccountStatus.php');
+require_once ROOT_DIR.'Domain/BookableResource.php';
+require_once ROOT_DIR.'Domain/ResourceGroup.php';
+require_once ROOT_DIR.'Domain/ResourceType.php';
+require_once ROOT_DIR.'Domain/Access/IResourceRepository.php';
+require_once ROOT_DIR.'Domain/Values/ResourceStatus.php';
+require_once ROOT_DIR.'Domain/Values/AccountStatus.php';
+require_once ROOT_DIR.'Domain/Values/AccountStatus.php';
 
 class ResourceRepository implements IResourceRepository
 {
@@ -24,11 +24,12 @@ class ResourceRepository implements IResourceRepository
 
     /**
      * @param int $scheduleId
+     *
      * @return array|BookableResource[]
      */
     public function GetScheduleResources($scheduleId)
     {
-        if ($scheduleId == -1) {
+        if (-1 == $scheduleId) {
             $filter = new SqlFilterNull();
         } else {
             $filter = new SqlFilterEquals(new SqlFilterColumn('r', ColumnNames::SCHEDULE_ID), $scheduleId);
@@ -50,7 +51,7 @@ class ResourceRepository implements IResourceRepository
     }
 
     /**
-     * Gets all the resources
+     * Gets all the resources.
      */
     public function GetResourceList()
     {
@@ -67,9 +68,10 @@ class ResourceRepository implements IResourceRepository
     }
 
     /**
-     * Gets the resource IDs for all the resources
+     * Gets the resource IDs for all the resources.
      */
-    public function GetResourceIdList(): array {
+    public function GetResourceIdList(): array
+    {
         $resourceIds = [];
         $reader = ServiceLocator::GetDatabase()->Query(new GetAllResourcesCommand());
         while ($row = $reader->GetRow()) {
@@ -80,6 +82,7 @@ class ResourceRepository implements IResourceRepository
             }
         }
         $reader->Free();
+
         return $resourceIds;
     }
 
@@ -93,17 +96,18 @@ class ResourceRepository implements IResourceRepository
         if (is_null($userSession)) {
             return [];
         }
-        if ($userSession->IsAdmin){
+        if ($userSession->IsAdmin) {
             return $this->GetResourceList();
         }
         $resourceIds = $this->GetUserResourceIdList();
         $resources = [];
-        foreach($resourceIds as $resourceId){
+        foreach ($resourceIds as $resourceId) {
             $resource = $this->LoadById($resourceId);
-            if($resource->GetStatusId() != ResourceStatus::HIDDEN){
+            if (ResourceStatus::HIDDEN != $resource->GetStatusId()) {
                 $resources[$resourceId] = $resource;
             }
         }
+
         return $resources;
     }
 
@@ -111,25 +115,26 @@ class ResourceRepository implements IResourceRepository
      * Gets the resource IDs that the logged in user has permissions (full access and view only permissions)
      * This is used to block a user from seeing a resource if they don't have permissions to it.
      */
-    public function GetUserResourceIdList() {
+    public function GetUserResourceIdList()
+    {
         $userSession = ServiceLocator::GetUserSession();
         if (is_null($userSession)) {
             return [];
         }
-        if ($userSession->IsAdmin){
+        if ($userSession->IsAdmin) {
             return $this->GetResourceIdList();
         }
         $resourceIds = $this->GetUserResourcePermissions(userId: $userSession->UserId);
         $resourceIds = $this->GetUserGroupResourcePermissions(userId: $userSession->UserId, resourceIds: $resourceIds);
 
-
-        if ($userSession->IsResourceAdmin){
+        if ($userSession->IsResourceAdmin) {
             $resourceIds = $this->GetResourceAdminResourceIds(userId: $userSession->UserId, resourceIds: $resourceIds);
         }
 
-        if ($userSession->IsScheduleAdmin){
+        if ($userSession->IsScheduleAdmin) {
             $resourceIds = $this->GetScheduleAdminResourceIds(userId: $userSession->UserId, resourceIds: $resourceIds);
         }
+
         return $resourceIds;
     }
 
@@ -155,11 +160,12 @@ class ResourceRepository implements IResourceRepository
     {
         $command = new GetAllResourcesCommand();
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['BookableResource', 'Create'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize);
     }
 
@@ -167,16 +173,18 @@ class ResourceRepository implements IResourceRepository
     {
         $command = new GetUserResourcesCommand($resourceIds);
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['BookableResource', 'Create'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize);
     }
 
     /**
      * @param int $resourceId
+     *
      * @return BookableResource
      */
     public function LoadById($resourceId)
@@ -197,6 +205,7 @@ class ResourceRepository implements IResourceRepository
 
     /**
      * @param string $publicId
+     *
      * @return BookableResource
      */
     public function LoadByPublicId($publicId)
@@ -211,6 +220,7 @@ class ResourceRepository implements IResourceRepository
 
     /**
      * @param $command SqlCommand
+     *
      * @return BookableResource
      */
     private function LoadResource($command)
@@ -264,6 +274,7 @@ class ResourceRepository implements IResourceRepository
         }
 
         $resource->SetResourceId($resourceId);
+
         return $resourceId;
     }
 
@@ -340,7 +351,7 @@ class ResourceRepository implements IResourceRepository
 
     public function Delete(BookableResource $resource)
     {
-        Log::Debug("Deleting resource %s (%s)", $resource->GetResourceId(), $resource->GetName());
+        Log::Debug('Deleting resource %s (%s)', $resource->GetResourceId(), $resource->GetName());
 
         $resourceId = $resource->GetResourceId();
 
@@ -417,7 +428,7 @@ class ResourceRepository implements IResourceRepository
         }
 
         while ($row = $resources->GetRow()) {
-            if ($row[ColumnNames::RESOURCE_STATUS_ID] == ResourceStatus::HIDDEN) {
+            if (ResourceStatus::HIDDEN == $row[ColumnNames::RESOURCE_STATUS_ID]) {
                 continue;
             }
             $resourceId = $row[ColumnNames::RESOURCE_ID];
@@ -447,9 +458,10 @@ class ResourceRepository implements IResourceRepository
     }
 
     /**
-     * Gets the resource ids that the user has permissions to
+     * Gets the resource ids that the user has permissions to.
      */
-    public function GetUserResourcePermissions($userId, $resourceIds = []){
+    public function GetUserResourcePermissions($userId, $resourceIds = [])
+    {
         $command = new GetUserPermissionsCommand($userId);
         $reader = ServiceLocator::GetDatabase()->Query($command);
 
@@ -467,9 +479,10 @@ class ResourceRepository implements IResourceRepository
     }
 
     /**
-     * Gets the resource ids that the user groups have permissions to
+     * Gets the resource ids that the user groups have permissions to.
      */
-    public function GetUserGroupResourcePermissions($userId, $resourceIds = []){
+    public function GetUserGroupResourcePermissions($userId, $resourceIds = [])
+    {
         $command = new SelectUserGroupPermissions($userId);
         $reader = ServiceLocator::GetDatabase()->Query($command);
 
@@ -486,14 +499,15 @@ class ResourceRepository implements IResourceRepository
     }
 
     /**
-     * Gets the resource ids that are under the responsability of the given resource user groups
+     * Gets the resource ids that are under the responsability of the given resource user groups.
      */
-    public function GetResourceAdminResourceIds($userId, $resourceIds = []){
+    public function GetResourceAdminResourceIds($userId, $resourceIds = [])
+    {
         $userSession = ServiceLocator::GetUserSession();
         if (is_null($userSession)) {
             return $resourceIds;
         }
-        if ($userSession->IsResourceAdmin){
+        if ($userSession->IsResourceAdmin) {
             $command = new GetResourceAdminResourcesCommand($userId);
             $reader = ServiceLocator::GetDatabase()->Query($command);
 
@@ -506,18 +520,20 @@ class ResourceRepository implements IResourceRepository
             }
             $reader->Free();
         }
+
         return $resourceIds;
     }
 
     /**
-     * Gets the resource ids that are under the responsability of the given schedule user groups
+     * Gets the resource ids that are under the responsability of the given schedule user groups.
      */
-    public function GetScheduleAdminResourceIds($userId, $resourceIds = []){
+    public function GetScheduleAdminResourceIds($userId, $resourceIds = [])
+    {
         $userSession = ServiceLocator::GetUserSession();
         if (is_null($userSession)) {
             return $resourceIds;
         }
-        if ($userSession->IsScheduleAdmin){
+        if ($userSession->IsScheduleAdmin) {
             $command = new GetScheduleAdminResourcesCommand($userId);
             $reader = ServiceLocator::GetDatabase()->Query($command);
 
@@ -535,9 +551,10 @@ class ResourceRepository implements IResourceRepository
     }
 
     /**
-     * @param $groups ResourceGroup[]
-     * @param $assignments ResourceGroupAssignment[]
+     * @param $groups         ResourceGroup[]
+     * @param $assignments    ResourceGroupAssignment[]
      * @param $resourceFilter IResourceFilter|null
+     *
      * @return ResourceGroupTree
      */
     private function BuildResourceGroupTree($groups, $assignments, $resourceFilter)
@@ -549,7 +566,7 @@ class ResourceRepository implements IResourceRepository
         }
 
         foreach ($assignments as $assignment) {
-            if ($resourceFilter == null || $resourceFilter->ShouldInclude($assignment)) {
+            if (null == $resourceFilter || $resourceFilter->ShouldInclude($assignment)) {
                 $tree->AddAssignment($assignment);
             }
         }
@@ -654,6 +671,7 @@ class ResourceRepository implements IResourceRepository
         }
 
         $reader->Free();
+
         return $resourceType;
     }
 
@@ -713,7 +731,6 @@ class ResourceRepository implements IResourceRepository
         ));
     }
 
-
     public function UpdateStatusReason($reasonId, $reasonDescription)
     {
         ServiceLocator::GetDatabase()->Execute(new UpdateResourceStatusReasonCommand($reasonId, $reasonDescription));
@@ -729,15 +746,16 @@ class ResourceRepository implements IResourceRepository
         $pageNumber = null,
         $pageSize = null,
         $filter = null,
-        $accountStatus = AccountStatus::ACTIVE
+        $accountStatus = AccountStatus::ACTIVE,
     ) {
         $command = new GetResourceUserPermissionCommand($resourceId, $accountStatus);
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['UserPermissionItemView', 'Create'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize);
     }
 
@@ -745,11 +763,12 @@ class ResourceRepository implements IResourceRepository
     {
         $command = new GetResourceGroupPermissionCommand($resourceId);
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['GroupPermissionItemView', 'Create'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize);
     }
 
@@ -758,22 +777,23 @@ class ResourceRepository implements IResourceRepository
         $pageNumber = null,
         $pageSize = null,
         $filter = null,
-        $accountStatus = AccountStatus::ACTIVE
+        $accountStatus = AccountStatus::ACTIVE,
     ) {
         $command = new GetResourceUserGroupPermissionCommand($resourceId, $accountStatus);
 
-        if ($filter != null) {
+        if (null != $filter) {
             $command = new FilterCommand($command, $filter);
         }
 
         $builder = ['UserPermissionItemView', 'Create'];
+
         return PageableDataStore::GetList($command, $builder, $pageNumber, $pageSize);
     }
 
     public function ChangeResourceGroupPermission($resourceId, $groupId, $type)
     {
         ServiceLocator::GetDatabase()->Execute(new DeleteGroupResourcePermission($groupId, $resourceId));
-        if ($type != ResourcePermissionType::None) {
+        if (ResourcePermissionType::None != $type) {
             ServiceLocator::GetDatabase()->Execute(new AddGroupResourcePermission($groupId, $resourceId, $type));
         }
     }
@@ -781,7 +801,7 @@ class ResourceRepository implements IResourceRepository
     public function ChangeResourceUserPermission($resourceId, $userId, $type)
     {
         ServiceLocator::GetDatabase()->Execute(new DeleteUserResourcePermission($userId, $resourceId));
-        if ($type != ResourcePermissionType::None) {
+        if (ResourcePermissionType::None != $type) {
             ServiceLocator::GetDatabase()->Execute(new AddUserResourcePermission($userId, $resourceId, $type));
         }
     }
@@ -824,17 +844,17 @@ class AccessoryDto
     public $AssociatedResources;
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $name
-     * @param int $quantityAvailable
-     * @param int $associatedResourceCount
+     * @param int    $quantityAvailable
+     * @param int    $associatedResourceCount
      */
     public function __construct($id, $name, $quantityAvailable, $associatedResourceCount)
     {
         $this->Id = $id;
         $this->Name = $name;
         $this->QuantityAvailable = $quantityAvailable;
-        $this->AssociatedResources = (int)$associatedResourceCount;
+        $this->AssociatedResources = (int) $associatedResourceCount;
     }
 
     public static function Create($row)
@@ -852,6 +872,7 @@ interface IResourceFilter
 {
     /**
      * @param IResource $resource
+     *
      * @return bool
      */
     public function ShouldInclude($resource);
@@ -860,22 +881,22 @@ interface IResourceFilter
 class ResourceDto implements IBookableResource
 {
     /**
-     * @param int $id
-     * @param string $name
-     * @param bool $canAccess
-     * @param bool $canBook
-     * @param int $scheduleId
+     * @param int          $id
+     * @param string       $name
+     * @param bool         $canAccess
+     * @param bool         $canBook
+     * @param int          $scheduleId
      * @param TimeInterval $minLength
-     * @param int|null $resourceTypeId
-     * @param int|null $adminGroupId
-     * @param int|null $scheduleAdminGroupId
-     * @param int|null $statusId
-     * @param bool $requiresApproval
-     * @param bool $isCheckInEnabled
-     * @param bool $isAutoReleased
-     * @param int|null $autoReleaseMinutes
-     * @param string|null $color
-     * @param int|null $maxConcurrentReservations
+     * @param int|null     $resourceTypeId
+     * @param int|null     $adminGroupId
+     * @param int|null     $scheduleAdminGroupId
+     * @param int|null     $statusId
+     * @param bool         $requiresApproval
+     * @param bool         $isCheckInEnabled
+     * @param bool         $isAutoReleased
+     * @param int|null     $autoReleaseMinutes
+     * @param string|null  $color
+     * @param int|null     $maxConcurrentReservations
      */
     public function __construct(
         $id,
@@ -893,7 +914,7 @@ class ResourceDto implements IBookableResource
         $isAutoReleased,
         $autoReleaseMinutes,
         $color,
-        $maxConcurrentReservations
+        $maxConcurrentReservations,
     ) {
         $this->Id = $id;
         $this->Name = $name;
@@ -939,12 +960,12 @@ class ResourceDto implements IBookableResource
     public $CanBook;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     public $ScheduleId;
 
     /**
-     * @var null|TimeInterval
+     * @var TimeInterval|null
      */
     public $MinimumLength;
 
@@ -1001,7 +1022,8 @@ class ResourceDto implements IBookableResource
     public $MaxConcurrentReservations;
 
     /**
-     * alias of GetId()
+     * alias of GetId().
+     *
      * @return int
      */
     public function GetResourceId()
@@ -1034,7 +1056,7 @@ class ResourceDto implements IBookableResource
     }
 
     /**
-     * @return null|TimeInterval
+     * @return TimeInterval|null
      */
     public function GetMinimumLength()
     {
@@ -1106,7 +1128,7 @@ class ResourceDto implements IBookableResource
     }
 
     /**
-     * @return null|int
+     * @return int|null
      */
     public function GetAutoReleaseMinutes()
     {
@@ -1114,7 +1136,7 @@ class ResourceDto implements IBookableResource
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetColor()
     {
@@ -1122,7 +1144,7 @@ class ResourceDto implements IBookableResource
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetTextColor()
     {
@@ -1134,7 +1156,7 @@ class ResourceDto implements IBookableResource
      */
     public function HasColor()
     {
-        return $this->Color != '' && $this->Color != null;
+        return '' != $this->Color && null != $this->Color;
     }
 
     /**

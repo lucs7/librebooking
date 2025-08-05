@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationWaitlistPresenter.php');
+require_once ROOT_DIR.'Presenters/Reservation/ReservationWaitlistPresenter.php';
 
 class ReservationWaitlistPresenterTest extends TestBase
 {
@@ -29,8 +29,8 @@ class ReservationWaitlistPresenterTest extends TestBase
 
     public function testAddsWaitlistRequest()
     {
-        $startDate = Date::Parse($this->page->_StartDate . ' ' . $this->page->_StartTime, $this->fakeUser->Timezone);
-        $endDate = Date::Parse($this->page->_EndDate . ' ' . $this->page->_EndTime, $this->fakeUser->Timezone);
+        $startDate = Date::Parse($this->page->_StartDate.' '.$this->page->_StartTime, $this->fakeUser->Timezone);
+        $endDate = Date::Parse($this->page->_EndDate.' '.$this->page->_EndTime, $this->fakeUser->Timezone);
         $resourceId = $this->page->_ResourceId;
 
         $expectedWaitlistRequest = ReservationWaitlistRequest::Create($this->page->_UserId, $startDate, $endDate, $resourceId);

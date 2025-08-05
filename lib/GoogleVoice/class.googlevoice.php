@@ -1,4 +1,5 @@
 <?php
+
 /*
 Version     0.2
 License     This code is released under the MIT Open Source License. Feel free to do whatever you want with it.
@@ -29,15 +30,16 @@ class GoogleVoice
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20");
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20');
         curl_setopt($ch, CURLOPT_REFERER, $this->lastURL);
-        curl_setopt($ch, CURLOPT_POST, "application/x-www-form-urlencoded");
+        curl_setopt($ch, CURLOPT_POST, 'application/x-www-form-urlencoded');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $login_param);
         $html = curl_exec($ch);
         $this->lastURL = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
         $this->login_auth = $this->match('/Auth=([A-z0-9_-]+)/', $html, 1);
+
         return $this->login_auth;
     }
 
@@ -48,24 +50,25 @@ class GoogleVoice
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $headers = ["Authorization: GoogleLogin auth=".$this->login_auth, 'User-Agent: Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20'];
+        $headers = ['Authorization: GoogleLogin auth='.$this->login_auth, 'User-Agent: Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20'];
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         $html = curl_exec($ch);
         $this->lastURL = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
         $_rnr_se = $this->match('!<input.*?name="_rnr_se".*?value="(.*?)"!ms', $html, 1);
+
         return $_rnr_se;
     }
 
     public function sms($to_phonenumber, $smstxt)
     {
         $_rnr_se = $this->get_rnr_se();
-        $sms_param = "id=&c=&number=".urlencode($to_phonenumber)."&smstext=".urlencode($smstxt)."&_rnr_se=".urlencode($_rnr_se);
+        $sms_param = 'id=&c=&number='.urlencode($to_phonenumber).'&smstext='.urlencode($smstxt).'&_rnr_se='.urlencode($_rnr_se);
         $ch = curl_init($this->smsURL);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $headers = ["Authorization: GoogleLogin auth=".$this->login_auth, 'User-Agent: Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20'];
+        $headers = ['Authorization: GoogleLogin auth='.$this->login_auth, 'User-Agent: Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11 Safari/525.20'];
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_REFERER, $this->lastURL);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -73,11 +76,12 @@ class GoogleVoice
         $this->status = curl_exec($ch);
         $this->lastURL = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
+
         return $this->status;
     }
 
     private function match($regex, $str, $out_ary = 0)
     {
-        return preg_match($regex, $str, $match) == 1 ? $match[$out_ary] : false;
+        return 1 == preg_match($regex, $str, $match) ? $match[$out_ary] : false;
     }
 }

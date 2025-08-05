@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . '/lib/Config/namespace.php');
+require_once ROOT_DIR.'/lib/Config/namespace.php';
 
 class ActiveDirectoryOptions
 {
@@ -8,10 +8,10 @@ class ActiveDirectoryOptions
 
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/ActiveDirectory.config.php');
+        require_once dirname(__FILE__).'/ActiveDirectory.config.php';
 
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/ActiveDirectory.config.php',
+            dirname(__FILE__).'/ActiveDirectory.config.php',
             ActiveDirectoryConfig::CONFIG_ID
         );
     }
@@ -69,7 +69,7 @@ class ActiveDirectoryOptions
     {
         $hosts = explode(',', $this->GetConfig(ActiveDirectoryConfig::DOMAIN_CONTROLLERS));
 
-        for ($i = 0; $i < count($hosts); $i++) {
+        for ($i = 0; $i < count($hosts); ++$i) {
             $hosts[$i] = trim($hosts[$i]);
         }
 
@@ -79,17 +79,18 @@ class ActiveDirectoryOptions
     public function Attributes()
     {
         $attributes = $this->AttributeMapping();
+
         return array_values($attributes);
     }
 
     public function AttributeMapping()
     {
         $attributes = ['sn' => 'sn',
-                            'givenname' => 'givenname',
-                            'mail' => 'mail',
-                            'telephonenumber' => 'telephonenumber',
-                            'physicaldeliveryofficename' => 'physicaldeliveryofficename',
-                            'title' => 'title'];
+            'givenname' => 'givenname',
+            'mail' => 'mail',
+            'telephonenumber' => 'telephonenumber',
+            'physicaldeliveryofficename' => 'physicaldeliveryofficename',
+            'title' => 'title'];
         $configValue = $this->GetConfig(ActiveDirectoryConfig::ATTRIBUTE_MAPPING);
 
         if (!empty($configValue)) {
@@ -109,6 +110,7 @@ class ActiveDirectoryOptions
     public function HasRequiredGroups()
     {
         $groupList = $this->GetConfig(ActiveDirectoryConfig::REQUIRED_GROUPS);
+
         return !empty($groupList);
     }
 
@@ -118,6 +120,7 @@ class ActiveDirectoryOptions
     public function RequiredGroups()
     {
         $groupList = $this->GetConfig(ActiveDirectoryConfig::REQUIRED_GROUPS);
+
         return explode(',', strtolower($groupList));
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 class LoginCookie extends Cookie
 {
@@ -19,7 +19,7 @@ class LoginCookie extends Cookie
     {
         $cookieParts = explode('|', $cookieValue);
 
-        if (count($cookieParts) == 2) {
+        if (2 == count($cookieParts)) {
             return new LoginCookie($cookieParts[0], $cookieParts[1]);
         }
 

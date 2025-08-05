@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
+require_once ROOT_DIR.'lib/Common/Validators/namespace.php';
 
 class AttributeValidator extends ValidatorBase
 {
@@ -40,10 +40,9 @@ class AttributeValidator extends ValidatorBase
     private $isAdmin;
 
     /**
-     * @param IAttributeService $service
-     * @param $category int|CustomAttributeCategory
-     * @param $attributes AttributeValue|array|AttributeValue[]
-     * @param $entityId int
+     * @param      $category    int|CustomAttributeCategory
+     * @param      $attributes  AttributeValue|array|AttributeValue[]
+     * @param      $entityId    int
      * @param bool $ignoreEmpty
      * @param bool $isAdmin
      */
@@ -64,6 +63,7 @@ class AttributeValidator extends ValidatorBase
     {
         if (empty($this->attributes)) {
             $this->isValid = true;
+
             return;
         }
 

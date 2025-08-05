@@ -20,8 +20,9 @@ class SchedulePeriodRule implements IReservationValidationRule
 
     /**
      * @param ReservationSeries $reservationSeries
-     * @param $retryParameters
+     *
      * @return ReservationRuleResult
+     *
      * @throws Exception
      */
     public function Validate($reservationSeries, $retryParameters)
@@ -38,16 +39,16 @@ class SchedulePeriodRule implements IReservationValidationRule
         $endPeriod = $layout->GetPeriod($endDate);
 
         $errors = new StringBuilder();
-        if ($startPeriod == null || !$startPeriod->IsReservable() || !$startPeriod->BeginDate()->Equals($startDate)) {
+        if (null == $startPeriod || !$startPeriod->IsReservable() || !$startPeriod->BeginDate()->Equals($startDate)) {
             $errors->AppendLine(Resources::GetInstance()->GetString('InvalidStartSlot'));
         }
 
-        if ($endPeriod == null || !$endPeriod->BeginDate()->Equals($endDate)) {
+        if (null == $endPeriod || !$endPeriod->BeginDate()->Equals($endDate)) {
             $errors->AppendLine(Resources::GetInstance()->GetString('InvalidEndSlot'));
         }
 
         $errorMessage = $errors->ToString();
 
-        return new ReservationRuleResult(strlen($errorMessage) == 0, $errorMessage);
+        return new ReservationRuleResult(0 == strlen($errorMessage), $errorMessage);
     }
 }

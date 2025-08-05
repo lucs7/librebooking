@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/ReminderRepository.php');
+require_once ROOT_DIR.'Domain/Access/ReminderRepository.php';
 
 class ReminderRepositoryTest extends TestBase
 {

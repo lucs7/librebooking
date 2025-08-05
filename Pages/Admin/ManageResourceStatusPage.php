@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 interface IManageResourceStatusPage extends IActionPage
 {
@@ -47,6 +47,7 @@ class ManageResourceStatusPage extends ActionPage implements IManageResourceStat
 
     /**
      * @param $dataRequest string
+     *
      * @return void
      */
     public function ProcessDataRequest($dataRequest)

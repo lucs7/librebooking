@@ -1,44 +1,44 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 interface IWebAuthentication extends IAuthenticationPromptOptions
 {
     /**
      * @param string $username
      * @param string $password
+     *
      * @return bool If user is valid
      */
     public function Validate($username, $password);
 
     /**
-     * @param string $username
+     * @param string        $username
      * @param ILoginContext $loginContext
+     *
      * @return void
      */
     public function Login($username, $loginContext);
 
     /**
-     * @param UserSession $user
      * @return void
      */
     public function Logout(UserSession $user);
 
     /**
-     * @param UserSession $user
      * @return void
      */
     public function postLogout(UserSession $user);
 
     /**
-     * @param string $cookieValue authentication cookie value
+     * @param string        $cookieValue  authentication cookie value
      * @param ILoginContext $loginContext
+     *
      * @return bool If the login was successful
      */
     public function CookieLogin($cookieValue, $loginContext);
 
     /**
-     * @param ILoginPage $loginPage
      * @return void
      */
     public function HandleLoginFailure(ILoginPage $loginPage);
@@ -48,9 +48,6 @@ interface IWebAuthentication extends IAuthenticationPromptOptions
      */
     public function AreCredentialsKnown();
 
-    /**
-     * @return mixed
-     */
     public function IsLoggedIn();
 
     /**
@@ -70,14 +67,13 @@ class WebAuthentication implements IWebAuthentication
     private $server;
 
     /**
-     * @param IAuthentication $authentication
      * @param Server $server
      */
     public function __construct(IAuthentication $authentication, $server = null)
     {
         $this->authentication = $authentication;
         $this->server = $server;
-        if ($this->server == null) {
+        if (null == $this->server) {
             $this->server = ServiceLocator::GetServer();
         }
     }
@@ -85,6 +81,7 @@ class WebAuthentication implements IWebAuthentication
     /**
      * @param string $username
      * @param string $password
+     *
      * @return bool If user is valid
      */
     public function Validate($username, $password)
@@ -97,8 +94,9 @@ class WebAuthentication implements IWebAuthentication
     }
 
     /**
-     * @param string $username
+     * @param string        $username
      * @param ILoginContext $loginContext
+     *
      * @return void
      */
     public function Login($username, $loginContext)
@@ -112,7 +110,6 @@ class WebAuthentication implements IWebAuthentication
     }
 
     /**
-     * @param UserSession $userSession
      * @return void
      */
     public function Logout(UserSession $userSession)
@@ -125,7 +122,6 @@ class WebAuthentication implements IWebAuthentication
     }
 
     /**
-     * @param UserSession $userSession
      * @return void
      */
     public function postLogout(UserSession $userSession)
@@ -159,7 +155,7 @@ class WebAuthentication implements IWebAuthentication
     }
 
     /**
-     * @param int $userid
+     * @param int    $userid
      * @param string $lastLogin
      */
     private function SetLoginCookie($userid, $lastLogin)

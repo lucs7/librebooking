@@ -1,14 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . '/lib/Config/namespace.php');
+require_once ROOT_DIR.'/lib/Config/namespace.php';
 
 class CASOptions
 {
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/CASConfig.php');
+        require_once dirname(__FILE__).'/CASConfig.php';
 
-        Configuration::Instance()->Register(dirname(__FILE__) . '/CAS.config.php', CASConfig::CONFIG_ID);
+        Configuration::Instance()->Register(dirname(__FILE__).'/CAS.config.php', CASConfig::CONFIG_ID);
     }
 
     private function GetConfig($keyName, $converter = null)
@@ -24,6 +24,7 @@ class CASOptions
     public function HasCertificate()
     {
         $cert = $this->Certificate();
+
         return !empty($cert);
     }
 
@@ -65,6 +66,7 @@ class CASOptions
     public function CasHandlesLogouts()
     {
         $servers = $this->LogoutServers();
+
         return !empty($servers);
     }
 
@@ -78,7 +80,7 @@ class CASOptions
 
         $servers = explode(',', $servers);
 
-        for ($i = 0; $i < count($servers); $i++) {
+        for ($i = 0; $i < count($servers); ++$i) {
             $servers[$i] = trim($servers[$i]);
         }
 
@@ -89,6 +91,7 @@ class CASOptions
     {
         return $this->GetConfig(CASConfig::EMAIL_SUFFIX);
     }
+
     public function AttributeMapping()
     {
         $attributes = [

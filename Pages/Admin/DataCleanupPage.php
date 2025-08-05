@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
 
 class DataCleanupPage extends AdminPage
 {
@@ -13,11 +13,13 @@ class DataCleanupPage extends AdminPage
     {
         if ($this->RequestingData()) {
             $this->ProcessDataRequest();
+
             return;
         }
 
         if ($this->TakingAction()) {
             $this->ProcessAction();
+
             return;
         }
 
@@ -64,25 +66,25 @@ class DataCleanupPage extends AdminPage
 
         $date = $this->GetDate();
 
-        if ($action == 'deleteReservations') {
+        if ('deleteReservations' == $action) {
             $command = new AdHocCommand('update reservation_series inner join reservation_instances on reservation_instances.series_id = reservation_series.series_id set status_id = 2 where start_date < @startDate');
             $command->AddParameter(new Parameter(ParameterNames::START_DATE, $date));
 
             ServiceLocator::GetDatabase()->Execute($command);
         }
-        if ($action == 'purge') {
+        if ('purge' == $action) {
             $command = new AdHocCommand('delete from reservation_series where status_id = 2');
             $command->AddParameter(new Parameter(ParameterNames::START_DATE, $date));
 
             ServiceLocator::GetDatabase()->Execute($command);
         }
-        if ($action == 'deleteBlackouts') {
+        if ('deleteBlackouts' == $action) {
             $command = new AdHocCommand('delete from blackout_instances where start_date < @startDate');
             $command->AddParameter(new Parameter(ParameterNames::START_DATE, $date));
 
             ServiceLocator::GetDatabase()->Execute($command);
         }
-        if ($action == 'deleteUsers') {
+        if ('deleteUsers' == $action) {
             $command = new AdHocCommand('delete from users where lastlogin is null or lastlogin < @startDate');
             $command->AddParameter(new Parameter(ParameterNames::START_DATE, $date));
 
@@ -96,7 +98,7 @@ class DataCleanupPage extends AdminPage
         Log::Debug('Processing data request %s', $dr);
 
         $date = $this->GetDate();
-        if ($dr == 'getReservationCount') {
+        if ('getReservationCount' == $dr) {
             $command = new AdHocCommand('select count(1) as count from reservation_instances ri inner join reservation_series rs on ri.series_id = rs.series_id where rs.status_id <> 2 and ri.start_date < @startDate');
             $command->AddParameter(new Parameter(ParameterNames::START_DATE, $date));
 
@@ -106,7 +108,7 @@ class DataCleanupPage extends AdminPage
             }
             $reservationsReader->Free();
         }
-        if ($dr == 'getBlackoutCount') {
+        if ('getBlackoutCount' == $dr) {
             $command = new AdHocCommand('select count(1) as count from blackout_instances bi inner join blackout_series bs on bi.blackout_series_id = bs.blackout_series_id where bi.start_date < @startDate');
             $command->AddParameter(new Parameter(ParameterNames::START_DATE, $date));
 
@@ -116,7 +118,7 @@ class DataCleanupPage extends AdminPage
             }
             $reservationsReader->Free();
         }
-        if ($dr == 'getUserCount') {
+        if ('getUserCount' == $dr) {
             $command = new AdHocCommand('select count(1) as count from users where lastlogin is null or lastlogin < @startDate');
             $command->AddParameter(new Parameter(ParameterNames::START_DATE, $date));
 
@@ -139,6 +141,7 @@ class DataCleanupPage extends AdminPage
         $parsedDate = !empty($queryDate) ? $queryDate : $postDate;
 
         $date = Date::Parse($parsedDate, ServiceLocator::GetServer()->GetUserSession()->Timezone)->ToDatabase();
+
         return $date;
     }
 }

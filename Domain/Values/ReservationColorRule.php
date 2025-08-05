@@ -11,9 +11,10 @@ class ReservationColorRule
     public $Color = 'a32ca3';
 
     /**
-     * @param int $attributeId
+     * @param int    $attributeId
      * @param string $requiredValue
      * @param string $color
+     *
      * @return ReservationColorRule
      */
     public static function Create($attributeId, $requiredValue, $color)
@@ -29,6 +30,7 @@ class ReservationColorRule
 
     /**
      * @param array $row
+     *
      * @return ReservationColorRule
      */
     public static function FromRow($row)

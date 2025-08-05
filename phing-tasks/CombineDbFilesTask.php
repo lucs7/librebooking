@@ -1,24 +1,24 @@
 <?php
 
-//require_once "phing/Task.php";
+// require_once "phing/Task.php";
 
 class CombineDbFilesTask
 {
-    private $schemaDir = null;
+    private $schemaDir;
 
     public function setSchemadir($schemadir)
     {
         $this->schemaDir = $schemadir;
     }
 
-    private $schemaFile = null;
+    private $schemaFile;
 
     public function setSchemafile($schemaFile)
     {
         $this->schemaFile = $schemaFile;
     }
 
-    private $dataFile = null;
+    private $dataFile;
 
     public function setDatafile($dataFile)
     {
@@ -40,14 +40,14 @@ class CombineDbFilesTask
     {
         $upgradeDir = "{$this->schemaDir}/upgrades";
 
-        print("Searching $upgradeDir for upgrade directories\n");
+        echo "Searching $upgradeDir for upgrade directories\n";
 
         $upgrades = scandir($upgradeDir);
 
         usort($upgrades, [$this, 'SortDirectories']);
 
         foreach ($upgrades as $upgrade) {
-            if ($upgrade === '.' || $upgrade === '..' || str_starts_with($upgrade, '.')) {
+            if ('.' === $upgrade || '..' === $upgrade || str_starts_with($upgrade, '.')) {
                 continue;
             }
 
@@ -62,12 +62,12 @@ class CombineDbFilesTask
             return;
         }
 
-        print("Combining database files for version $versionNumber\n");
+        echo "Combining database files for version $versionNumber\n";
 
         $this->CombineMainFiles($fullUpgradeDir, $versionNumber);
         $this->CombineUpgradeFiles($fullUpgradeDir, $versionNumber);
 
-        print("Finished combining database files for version $versionNumber\n");
+        echo "Finished combining database files for version $versionNumber\n";
     }
 
     private function CombineMainFiles($upgradeDir, $versionNumber)
@@ -75,7 +75,7 @@ class CombineDbFilesTask
         $versionInfo = "\r\n\r\n-- UPGRADE TO VERSION $versionNumber\r\n\r\n";
 
         // schema
-        $schemaHandle = fopen($this->schemaFile, "a");
+        $schemaHandle = fopen($this->schemaFile, 'a');
         $upgradeSchema = $this->GetSchemaFileContents($upgradeDir);
         $newContents = "$versionInfo\r\n\r\n$upgradeSchema";
 
@@ -83,7 +83,7 @@ class CombineDbFilesTask
         fclose($schemaHandle);
 
         // data
-        $dataHandle = fopen($this->dataFile, "a");
+        $dataHandle = fopen($this->dataFile, 'a');
         $upgradeData = $this->GetDataFileContents($upgradeDir);
         $newContents = "$versionInfo\r\n\r\n$upgradeData";
 
@@ -93,7 +93,7 @@ class CombineDbFilesTask
 
     private function CombineUpgradeFiles($upgradeDir, $versionNumber)
     {
-        $upgradeHandle = fopen("$upgradeDir/upgrade.sql", "w+");
+        $upgradeHandle = fopen("$upgradeDir/upgrade.sql", 'w+');
 
         $upgradeSchema = $this->GetSchemaFileContents($upgradeDir);
         $upgradeData = $this->GetDataFileContents($upgradeDir);
@@ -104,9 +104,10 @@ class CombineDbFilesTask
 
     private function GetFullSql($file)
     {
-        $f = fopen($file, "r");
+        $f = fopen($file, 'r');
         $sql = fread($f, filesize($file));
         fclose($f);
+
         return $sql;
     }
 
@@ -124,6 +125,7 @@ class CombineDbFilesTask
     {
         $d1 = floatval($dir1);
         $d2 = floatval($dir2);
+
         return $d1 <=> $d2;
     }
 }

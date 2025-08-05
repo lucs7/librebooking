@@ -69,89 +69,87 @@ EOT;
             WebServiceHeaders::SESSION_TOKEN,
             WebServiceHeaders::USER_ID
         );
-        echo $head . "\n";
+        echo $head."\n";
 
-        echo $security . "\n";
+        echo $security."\n";
 
-        echo '<ul>' . "\n";
+        echo '<ul>'."\n";
 
         foreach ($registry->Categories() as $category) {
-            echo "<li><a href='#{$category->Name()}'>{$category->Name()}</a></li>" . "\n";
+            echo "<li><a href='#{$category->Name()}'>{$category->Name()}</a></li>\n";
         }
 
-        echo '</ul>' . "\n";
+        echo '</ul>'."\n";
         foreach ($registry->Categories() as $category) {
-            echo "<a name='{$category->Name()}'></a><h2>{$category->Name()}</h2>" . "\n";
-            echo "<a href=''>Return To Top</a>" . "\n";
-            echo '<h3>POST Services</h3>' . "\n";
+            echo "<a name='{$category->Name()}'></a><h2>{$category->Name()}</h2>\n";
+            echo "<a href=''>Return To Top</a>\n";
+            echo '<h3>POST Services</h3>'."\n";
 
             foreach ($category->Posts() as $service) {
-                echo '<div class="service">' . "\n";
+                echo '<div class="service">'."\n";
 
                 $md = $service->Metadata();
                 $request = $md->Request();
                 self::EchoCommon($md, $service, $app);
 
-                echo '<h4>Request</h4>' . "\n";
+                echo '<h4>Request</h4>'."\n";
                 if (is_object($request)) {
-                    echo '<div class="code"><pre>' . json_encode($request, JSON_PRETTY_PRINT) . '</pre></div>' . "\n";
+                    echo '<div class="code"><pre>'.json_encode($request, JSON_PRETTY_PRINT).'</pre></div>'."\n";
                 } elseif (is_null($request)) {
-                    echo 'No request' . "\n";
+                    echo 'No request'."\n";
                 } else {
-                    echo 'Unstructured request of type <i>' . $request . '</i>' . "\n";
+                    echo 'Unstructured request of type <i>'.$request.'</i>'."\n";
                 }
 
-                echo '</div>' . "\n";
+                echo '</div>'."\n";
             }
 
-            echo '<h3>GET Services</h3>' . "\n";
+            echo '<h3>GET Services</h3>'."\n";
 
             foreach ($category->Gets() as $service) {
-                echo '<div class="service">' . "\n";
+                echo '<div class="service">'."\n";
                 $md = $service->Metadata();
                 self::EchoCommon($md, $service, $app);
-                echo '</div>' . "\n";
+                echo '</div>'."\n";
             }
 
-            echo '<h3>DELETE Services</h3>' . "\n";
+            echo '<h3>DELETE Services</h3>'."\n";
 
             foreach ($category->Deletes() as $service) {
-                echo '<div class="service">' . "\n";
+                echo '<div class="service">'."\n";
                 $md = $service->Metadata();
                 self::EchoCommon($md, $service, $app);
-                echo '</div>' . "\n";
+                echo '</div>'."\n";
             }
         }
 
-        echo '</body></html>' . "\n";
+        echo '</body></html>'."\n";
     }
 
     /**
-     * @param SlimServiceMetadata $md
      * @param SlimServiceRegistration $endpoint
-     * @param Slim\Slim $app
      */
     private static function EchoCommon(SlimServiceMetadata $md, $endpoint, Slim\Slim $app)
     {
         $response = $md->Response();
-        echo "<h4>Name</h4>" . $md->Name() . "\n";
-        echo "<h4>Description</h4>" . str_replace("\n", "<br/>", $md->Description()) . "\n";
-        echo '<h4>Route</h4>' . $app->urlFor($endpoint->RouteName()) . "\n";
+        echo '<h4>Name</h4>'.$md->Name()."\n";
+        echo '<h4>Description</h4>'.str_replace("\n", '<br/>', $md->Description())."\n";
+        echo '<h4>Route</h4>'.$app->urlFor($endpoint->RouteName())."\n";
 
         if ($endpoint->IsSecure()) {
-            echo '<h4 class="secure">This service is secure and requires authentication</h4>' . "\n";
+            echo '<h4 class="secure">This service is secure and requires authentication</h4>'."\n";
         }
         if ($endpoint->IsLimitedToAdmin()) {
-            echo '<h4 class="admin">This service is only available to application administrators</h4>' . "\n";
+            echo '<h4 class="admin">This service is only available to application administrators</h4>'."\n";
         }
 
-        echo '<h4>Response</h4>' . "\n";
+        echo '<h4>Response</h4>'."\n";
         if (is_object($response)) {
-            echo '<div class="code"><pre>' . json_encode($response, JSON_PRETTY_PRINT) . '</pre></div>' . "\n";
+            echo '<div class="code"><pre>'.json_encode($response, JSON_PRETTY_PRINT).'</pre></div>'."\n";
         } elseif (is_null($response)) {
-            echo 'No response' . "\n";
+            echo 'No response'."\n";
         } else {
-            echo 'Unstructured response of type <i>' . $response . '</i>' . "\n";
+            echo 'Unstructured response of type <i>'.$response.'</i>'."\n";
         }
     }
 }

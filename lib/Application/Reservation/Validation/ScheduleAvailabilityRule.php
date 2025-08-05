@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/ScheduleRepository.php');
+require_once ROOT_DIR.'Domain/Access/ScheduleRepository.php';
 
 class ScheduleAvailabilityRule implements IReservationValidationRule
 {
@@ -41,8 +41,8 @@ class ScheduleAvailabilityRule implements IReservationValidationRule
 
         $beginAvailability = $schedule->GetAvailabilityBegin();
         $endAvailability = $schedule->GetAvailabilityEnd();
-        $isValid = $first->StartDate()->GreaterThanOrEqual($beginAvailability) &&
-            $last->EndDate()->LessThanOrEqual($endAvailability);
+        $isValid = $first->StartDate()->GreaterThanOrEqual($beginAvailability)
+            && $last->EndDate()->LessThanOrEqual($endAvailability);
 
         $resources = Resources::GetInstance();
         $format = $resources->GetDateFormat(ResourceKeys::DATE_GENERAL);
@@ -59,6 +59,7 @@ class ScheduleAvailabilityRule implements IReservationValidationRule
 
     /**
      * @param array $conflicts
+     *
      * @return string
      */
     protected function GetErrorString($conflicts)

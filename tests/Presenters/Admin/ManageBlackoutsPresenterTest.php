@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Admin/ManageBlackoutsPresenter.php');
+require_once ROOT_DIR.'Presenters/Admin/ManageBlackoutsPresenter.php';
 
 class ManageBlackoutsPresenterTest extends TestBase
 {
@@ -103,7 +103,7 @@ class ManageBlackoutsPresenterTest extends TestBase
         $startTime = '01:30 PM';
         $endTime = '12:15 AM';
         $timezone = $this->fakeUser->Timezone;
-        $dr = DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $timezone);
+        $dr = DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $timezone);
         $title = 'out of service';
         $conflictAction = ReservationConflictResolution::Delete;
         $conflictResolution = ReservationConflictResolution::Create($conflictAction);
@@ -151,7 +151,7 @@ class ManageBlackoutsPresenterTest extends TestBase
         $startTime = '01:30 PM';
         $endTime = '12:15 AM';
         $timezone = $this->fakeUser->Timezone;
-        $dr = DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $timezone);
+        $dr = DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $timezone);
         $title = 'out of service';
         $conflictAction = ReservationConflictResolution::Delete;
         $conflictResolution = ReservationConflictResolution::Create($conflictAction);
@@ -302,7 +302,7 @@ class ManageBlackoutsPresenterTest extends TestBase
         $startTime = '01:30 PM';
         $endTime = '12:15 AM';
         $timezone = $this->fakeUser->Timezone;
-        $dr = DateRange::Create($startDate . ' ' . $startTime, $endDate . ' ' . $endTime, $timezone);
+        $dr = DateRange::Create($startDate.' '.$startTime, $endDate.' '.$endTime, $timezone);
         $title = 'out of service';
         $conflictAction = ReservationConflictResolution::Delete;
         $conflictResolution = ReservationConflictResolution::Create($conflictAction);
@@ -355,8 +355,9 @@ class ManageBlackoutsPresenterTest extends TestBase
     /**
      * @param Date $startDate
      * @param Date $endDate
-     * @param int $scheduleId
-     * @param int $resourceId
+     * @param int  $scheduleId
+     * @param int  $resourceId
+     *
      * @return BlackoutFilter
      */
     private function GetExpectedFilter($startDate = null, $endDate = null, $scheduleId = null, $resourceId = null)

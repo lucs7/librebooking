@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Pages/Reservation/NewReservationPage.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Pages/Reservation/NewReservationPage.php';
 
 class NewReservationPreconditionService implements INewReservationPreconditionService
 {
@@ -16,6 +16,7 @@ class EditReservationPreconditionService
     {
         if (!$reservationView->IsDisplayable()) {
             $page->RedirectToError(ErrorMessages::RESERVATION_NOT_FOUND);
+
             return;
         }
     }

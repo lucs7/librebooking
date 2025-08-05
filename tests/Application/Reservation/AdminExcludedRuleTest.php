@@ -36,7 +36,7 @@ class AdminExcludedRuleTest extends TestBase
 
         $this->userRepository = $this->createMock('IUserRepository');
         $this->baseRule = $this->createMock('IReservationValidationRule');
-        $this->user =  $this->createMock('User');
+        $this->user = $this->createMock('User');
 
         $this->rule = new AdminExcludedRule($this->baseRule, $this->fakeUser, $this->userRepository);
 
@@ -48,7 +48,7 @@ class AdminExcludedRuleTest extends TestBase
         $this->reservationSeries->AddResource($this->resource2);
     }
 
-    public function testIfUserIsApplicationAdmin_ReturnTrue()
+    public function testIfUserIsApplicationAdminReturnTrue()
     {
         $this->fakeUser->IsAdmin = true;
 
@@ -57,7 +57,7 @@ class AdminExcludedRuleTest extends TestBase
         $this->assertTrue($result->IsValid());
     }
 
-    public function testIfUserIsAdminForAllResources_ReturnTrue()
+    public function testIfUserIsAdminForAllResourcesReturnTrue()
     {
         $this->fakeUser->IsAdmin = false;
         $this->fakeUser->IsScheduleAdmin = true;
@@ -76,7 +76,7 @@ class AdminExcludedRuleTest extends TestBase
         $this->assertTrue($result->IsValid());
     }
 
-    public function testIfUserIsNotAdminForAtLeastOneResource_InvokeBaseRule()
+    public function testIfUserIsNotAdminForAtLeastOneResourceInvokeBaseRule()
     {
         $expectedResult = new ReservationValidationResult(false, ['some error']);
         $this->fakeUser->IsAdmin = false;
@@ -107,14 +107,14 @@ class AdminExcludedRuleTest extends TestBase
         $this->fakeUser->IsAdmin = false;
         $this->fakeUser->IsGroupAdmin = true;
 
-        $adminUser =  $this->createMock('User');
-        $reservationUser =  $this->createMock('User');
+        $adminUser = $this->createMock('User');
+        $reservationUser = $this->createMock('User');
 
         $this->userRepository->expects($this->exactly(2))
                             ->method('LoadById')
                             ->willReturnMap([
                                 [$this->fakeUser->UserId, $adminUser],
-                                [$this->reservationSeries->UserId(), $reservationUser]
+                                [$this->reservationSeries->UserId(), $reservationUser],
                             ]);
 
         $adminUser->expects($this->once())

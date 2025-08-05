@@ -3,22 +3,16 @@
 interface IPermissionService
 {
     /**
-     * @param IPermissibleResource $resource
-     * @param UserSession $user
      * @return bool
      */
     public function CanAccessResource(IPermissibleResource $resource, UserSession $user);
 
     /**
-     * @param IPermissibleResource $resource
-     * @param UserSession $user
      * @return bool
      */
     public function CanBookResource(IPermissibleResource $resource, UserSession $user);
 
     /**
-     * @param IPermissibleResource $resource
-     * @param UserSession $user
      * @return bool
      */
     public function CanViewResource(IPermissibleResource $resource, UserSession $user);
@@ -37,18 +31,12 @@ class PermissionService implements IPermissionService
 
     private $_viewOnlyResourceIds;
 
-
-    /**
-     * @param IResourcePermissionStore $store
-     */
     public function __construct(IResourcePermissionStore $store)
     {
         $this->_store = $store;
     }
 
     /**
-     * @param IPermissibleResource $resource
-     * @param UserSession $user
      * @return bool
      */
     public function CanAccessResource(IPermissibleResource $resource, UserSession $user)
@@ -57,7 +45,7 @@ class PermissionService implements IPermissionService
             return true;
         }
 
-        if ($this->_allowedResourceIds == null) {
+        if (null == $this->_allowedResourceIds) {
             $this->_allowedResourceIds = $this->_store->GetAllResources($user->UserId);
         }
 
@@ -65,8 +53,6 @@ class PermissionService implements IPermissionService
     }
 
     /**
-     * @param IPermissibleResource $resource
-     * @param UserSession $user
      * @return bool
      */
     public function CanBookResource(IPermissibleResource $resource, UserSession $user)
@@ -75,7 +61,7 @@ class PermissionService implements IPermissionService
             return true;
         }
 
-        if ($this->_bookableResourceIds == null) {
+        if (null == $this->_bookableResourceIds) {
             $this->_bookableResourceIds = $this->_store->GetBookableResources($user->UserId);
         }
 
@@ -83,8 +69,6 @@ class PermissionService implements IPermissionService
     }
 
     /**
-     * @param IPermissibleResource $resource
-     * @param UserSession $user
      * @return bool
      */
     public function CanViewResource(IPermissibleResource $resource, UserSession $user)
@@ -93,7 +77,7 @@ class PermissionService implements IPermissionService
             return true;
         }
 
-        if ($this->_viewOnlyResourceIds == null) {
+        if (null == $this->_viewOnlyResourceIds) {
             $this->_viewOnlyResourceIds = $this->_store->GetViewOnlyResources($user->UserId);
         }
 

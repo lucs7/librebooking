@@ -1,7 +1,7 @@
 <?php
 
-require_once('Language.php');
-require_once('en_gb.php');
+require_once 'Language.php';
+require_once 'en_gb.php';
 
 class ro_ro extends en_gb
 {
@@ -400,7 +400,7 @@ class ro_ro extends en_gb
 
         // Errors
         $strings['LoginError'] = 'Username o password errate';
-        $strings['ReservationFailed'] = 'Rezervarea dvs. nu poate fi acceptata' ;
+        $strings['ReservationFailed'] = 'Rezervarea dvs. nu poate fi acceptata';
         $strings['MinNoticeError'] = 'Questa prenotazione necessita di preavviso. La prima data che pu&ograve; essere prenotata &egrave %s.';
         $strings['MaxNoticeError'] = 'Questa prenotazione non pu&ograve; essere fatta fino a questo punto nel futuro. L\'ultima data che pu&ograve; essere prenotata &egrave %s.';
         $strings['MinDurationError'] = 'Rezervarea trebuie să fie de cel puțin %s.';
@@ -459,7 +459,6 @@ class ro_ro extends en_gb
         $strings['Responsibilities'] = 'Responsabilitati';
         $strings['GroupReservations'] = 'Rezervari de grup';
         $strings['ResourceReservations'] = 'Rezervari de resurse';
-        //
 
         // Day representations
         $strings['DaySundaySingle'] = 'D';
@@ -488,10 +487,10 @@ class ro_ro extends en_gb
         $strings['InviteeAddedSubject'] = 'Invito a prenotazione';
         $strings['ResetPassword'] = 'Cerere de resetare parola';
         $strings['ForgotPasswordEmailSent'] = 'Un email\' a fost transmis\'in care sunt furnizate instructiuni pentru resetarea parolei';
-        //End Email Subjects
+        // End Email Subjects
 
-        //NEEDS CHECKING
-        //Past Reservations
+        // NEEDS CHECKING
+        // Past Reservations
         $strings['NoPastReservations'] = 'Nu aveți rezervări anterioare';
         $strings['PastReservations'] = 'Rezervări Anterioare';
         $strings['AllNoPastReservations'] = 'Nu există rezervări anterioare în ultimele %s zile';
@@ -499,37 +498,37 @@ class ro_ro extends en_gb
         $strings['Yesterday'] = 'Ieri';
         $strings['EarlierThisWeek'] = 'Mai devreme în această săptămână';
         $strings['PreviousWeek'] = 'Săptămâna trecută';
-        //End Past Reservations
+        // End Past Reservations
 
-        //Group Upcoming Reservations
+        // Group Upcoming Reservations
         $strings['NoGroupUpcomingReservations'] = 'Grupul tău nu are rezervări viitoare';
         $strings['GroupUpcomingReservations'] = 'Viitoarele rezervări ale grupului/meu(ă)';
-        //End Group Upcoming Reservations
+        // End Group Upcoming Reservations
 
-        //Facebook Login SDK Error
+        // Facebook Login SDK Error
         $strings['FacebookLoginErrorMessage'] = 'A apărut o eroare la autentificarea cu Facebook. Vă rugăm să încercați din nou.';
-        //End Facebook Login SDK Error
+        // End Facebook Login SDK Error
 
-        //Pending Approval Reservations in Dashboard
+        // Pending Approval Reservations in Dashboard
         $strings['NoPendingApprovalReservations'] = 'Nu aveți rezervări în așteptare de aprobare';
         $strings['PendingApprovalReservations'] = 'Rezervări în așteptare de aprobare';
         $strings['LaterThisMonth'] = 'Mai târziu în acest lună';
         $strings['LaterThisYear'] = 'Mai târziu în acest an';
-        $strings['Remaining'] = 'Rămase';        
-        //End Pending Approval Reservations in Dashboard
+        $strings['Remaining'] = 'Rămase';
+        // End Pending Approval Reservations in Dashboard
 
-        //Missing Check In/Out Reservations in Dashboard
+        // Missing Check In/Out Reservations in Dashboard
         $strings['NoMissingCheckOutReservations'] = 'Nu există rezervări de ieșire lipsă';
-        $strings['MissingCheckOutReservations'] = 'Rezervări de ieșire lipsă';        
-        //End Missing Check In/Out Reservations in Dashboard
+        $strings['MissingCheckOutReservations'] = 'Rezervări de ieșire lipsă';
+        // End Missing Check In/Out Reservations in Dashboard
 
-        //Schedule Resource Permissions
+        // Schedule Resource Permissions
         $strings['NoResourcePermissions'] = 'Nu puteți vedea detaliile rezervării deoarece nu aveți permisiuni pentru niciunul dintre resursele din această rezervare';
-        //End Schedule Resource Permissions
-        //END NEEDS CHECKING
-
+        // End Schedule Resource Permissions
+        // END NEEDS CHECKING
 
         $this->Strings = $strings;
+
         return $this->Strings;
     }
 
@@ -552,6 +551,7 @@ class ro_ro extends en_gb
         $days['letter'] = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
 
         $this->Days = $days;
+
         return $this->Days;
     }
 
@@ -570,12 +570,14 @@ class ro_ro extends en_gb
         $months['abbr'] = ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
         $this->Months = $months;
+
         return $this->Months;
     }
 
     protected function _LoadLetters()
     {
         $this->Letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         return $this->Letters;
     }
 

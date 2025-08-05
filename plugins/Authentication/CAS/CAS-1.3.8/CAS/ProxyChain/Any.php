@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/ProxyChain/Any.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -38,24 +40,27 @@
  * ON THIS SERVICE.
  *
  * @class    CAS_ProxyChain_Any
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 class CAS_ProxyChain_Any implements CAS_ProxyChain_Interface
 {
     /**
      * Match a list of proxies.
      *
-     * @param array $list The list of proxies in front of this service.
+     * @param array $list the list of proxies in front of this service
      *
      * @return bool
      */
     public function matches(array $list)
     {
-        phpCAS::trace("Using CAS_ProxyChain_Any. No proxy validation is performed.");
+        phpCAS::trace('Using CAS_ProxyChain_Any. No proxy validation is performed.');
+
         return true;
     }
 }

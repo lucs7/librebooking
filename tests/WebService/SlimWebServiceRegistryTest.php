@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/external/Slim/Slim.php');
-require_once(ROOT_DIR . 'lib/WebService/Slim/namespace.php');
+require_once ROOT_DIR.'lib/external/Slim/Slim.php';
+require_once ROOT_DIR.'lib/WebService/Slim/namespace.php';
 
 class TestSlimCall
 {
@@ -57,8 +57,6 @@ class TestSlim extends Slim\Slim
     }
 
     /**
-     * @param $route
-     * @param $callback
      * @return TestSlimResponse
      */
     public function get()
@@ -69,12 +67,11 @@ class TestSlim extends Slim\Slim
 
         $response = new TestSlimResponse();
         $this->gets[] = new TestSlimCall($route, $callback, $response);
+
         return $response;
     }
 
     /**
-     * @param $route
-     * @param $callback
      * @return TestSlimResponse
      */
     public function post()
@@ -85,12 +82,11 @@ class TestSlim extends Slim\Slim
 
         $response = new TestSlimResponse();
         $this->posts[] = new TestSlimCall($route, $callback, $response);
+
         return $response;
     }
 
     /**
-     * @param $route
-     * @param $callback
      * @return TestSlimResponse
      */
     public function delete()
@@ -101,10 +97,10 @@ class TestSlim extends Slim\Slim
 
         $response = new TestSlimResponse();
         $this->deletes[] = new TestSlimCall($route, $callback, $response);
+
         return $response;
     }
 }
-
 
 class SlimWebServiceRegistryTest extends TestBase
 {

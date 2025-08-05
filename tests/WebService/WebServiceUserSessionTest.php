@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/WebService/WebServiceUserSession.php');
+require_once ROOT_DIR.'Domain/Values/WebService/WebServiceUserSession.php';
 
 class WebServiceUserSessionTest extends TestBase
 {

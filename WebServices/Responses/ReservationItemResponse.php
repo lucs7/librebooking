@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class ReservationItemResponse extends RestResponse
 {
@@ -59,8 +59,8 @@ class ReservationItemResponse extends RestResponse
             $this->description = $reservationItemView->Description;
         }
 
-        $this->requiresApproval = (bool)$reservationItemView->RequiresApproval;
-        $this->isRecurring = (bool)$reservationItemView->IsRecurring;
+        $this->requiresApproval = (bool) $reservationItemView->RequiresApproval;
+        $this->isRecurring = (bool) $reservationItemView->IsRecurring;
 
         $this->scheduleId = $reservationItemView->ScheduleId;
         $this->userId = $reservationItemView->UserId;
@@ -71,11 +71,11 @@ class ReservationItemResponse extends RestResponse
         $this->bufferedEndDate = $bufferedDuration->GetEnd()->ToIso();
         $this->resourceStatusId = $reservationItemView->ResourceStatusId;
 
-        if ($reservationItemView->StartReminder != null) {
+        if (null != $reservationItemView->StartReminder) {
             $this->startReminder = $reservationItemView->StartReminder->MinutesPrior();
         }
 
-        if ($reservationItemView->EndReminder != null) {
+        if (null != $reservationItemView->EndReminder) {
             $this->endReminder = $reservationItemView->EndReminder->MinutesPrior();
         }
 

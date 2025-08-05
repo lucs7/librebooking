@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\MockObject\MockObject;
 
-require_once(ROOT_DIR . 'WebServices/UsersWriteWebService.php');
+require_once ROOT_DIR.'WebServices/UsersWriteWebService.php';
 
 class UsersWriteWebServiceTest extends TestBase
 {

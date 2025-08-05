@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Reports/IDisplayableReportPage.php');
-require_once(ROOT_DIR . 'Presenters/Reports/CommonReportsPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Reports/ReportCsvColumnView.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Pages/Reports/IDisplayableReportPage.php';
+require_once ROOT_DIR.'Presenters/Reports/CommonReportsPresenter.php';
+require_once ROOT_DIR.'Presenters/Reports/ReportCsvColumnView.php';
 
 interface ICommonReportsPage extends IDisplayableReportPage, IActionPage
 {
@@ -57,6 +57,7 @@ class CommonReportsPage extends ActionPage implements ICommonReportsPage
 
     /**
      * @param $dataRequest string
+     *
      * @return void
      */
     public function ProcessDataRequest($dataRequest)

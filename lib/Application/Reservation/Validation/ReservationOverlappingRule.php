@@ -14,8 +14,9 @@ class ReservationOverlappingRule implements IReservationValidationRule
 
     /**
      * @param ReservationSeries $reservationSeries
-     * @param $retryParameters
+     *
      * @return ReservationRuleResult
+     *
      * @throws Exception
      */
     public function Validate($reservationSeries, $retryParameters)
@@ -40,7 +41,7 @@ class ReservationOverlappingRule implements IReservationValidationRule
 
             if ($start->DateCompare($end) < 0) {
                 $overlap[] = new DateRange($end, $start);
-                if ($repeat->RepeatType() == RepeatType::Daily || $repeat->RepeatType() == RepeatType::Weekly) {
+                if (RepeatType::Daily == $repeat->RepeatType() || RepeatType::Weekly == $repeat->RepeatType()) {
                     break;
                 }
             }
@@ -63,6 +64,7 @@ class ReservationOverlappingRule implements IReservationValidationRule
 
     /**
      * @param array|DateRange[] $overlaps
+     *
      * @return string
      */
     protected function GetErrorString($overlaps)

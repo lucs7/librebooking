@@ -65,7 +65,7 @@ class BlackoutSeries
     protected $customRepeatDates = [];
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $title
      */
     public function __construct($userId, $title)
@@ -76,9 +76,6 @@ class BlackoutSeries
     }
 
     /**
-     * @param $userId
-     * @param $title
-     * @param DateRange $blackoutDate
      * @return BlackoutSeries
      */
     public static function Create($userId, $title, DateRange $blackoutDate)
@@ -86,16 +83,17 @@ class BlackoutSeries
         $series = new BlackoutSeries($userId, $title);
         $series->AddBlackout(new Blackout($blackoutDate));
         $series->SetCurrentBlackout($blackoutDate);
+
         return $series;
     }
 
     /**
-     * @param int $ownerId
+     * @param int                      $ownerId
      * @param SeriesUpdateScope|string $scope
-     * @param string $title
-     * @param DateRange $blackoutDate
-     * @param IRepeatOptions $repeatOptions
-     * @param int[] $resourceIds
+     * @param string                   $title
+     * @param DateRange                $blackoutDate
+     * @param IRepeatOptions           $repeatOptions
+     * @param int[]                    $resourceIds
      */
     public function Update($ownerId, $scope, $title, $blackoutDate, $repeatOptions, $resourceIds)
     {
@@ -106,7 +104,7 @@ class BlackoutSeries
             $this->AddResourceId($rid);
         }
 
-        if ($scope == SeriesUpdateScope::ThisInstance) {
+        if (SeriesUpdateScope::ThisInstance == $scope) {
             $this->blackouts = [];
             $this->AddBlackout(new Blackout($blackoutDate));
             $this->SetCurrentBlackout($blackoutDate);
@@ -132,7 +130,7 @@ class BlackoutSeries
             $this->SetCurrentBlackout($earliestDate);
         }
 
-        $this->isNew = $scope == SeriesUpdateScope::ThisInstance;
+        $this->isNew = SeriesUpdateScope::ThisInstance == $scope;
     }
 
     private function GetEarliestDate(DateRange $blackoutDate)
@@ -200,7 +198,7 @@ class BlackoutSeries
         $blackout->SetSeries($this);
         $this->blackouts[$this->ToKey($blackout->Date())] = $blackout;
 
-        if ($this->repeatOptions->RepeatType() === RepeatType::Custom) {
+        if (RepeatType::Custom === $this->repeatOptions->RepeatType()) {
             $this->customRepeatDates[] = $blackout->StartDate();
         }
     }
@@ -209,6 +207,7 @@ class BlackoutSeries
     {
         if (count($this->blackouts) <= 1) {
             Log::Debug('Only blackout in the series. Cannot delete. Id %s', $blackout->Id());
+
             return false;
         }
         $key = $this->ToKey($blackout->Date());
@@ -217,6 +216,7 @@ class BlackoutSeries
         $this->currentBlackoutInstanceId = null;
 
         Log::Debug('Deleted blackout Id %s', $blackout->Id());
+
         return true;
     }
 
@@ -225,11 +225,12 @@ class BlackoutSeries
      */
     public function AllBlackouts()
     {
-        if (count($this->blackouts) == 0) {
+        if (0 == count($this->blackouts)) {
             return [];
         }
 
         asort($this->blackouts);
+
         return $this->blackouts;
     }
 
@@ -243,6 +244,7 @@ class BlackoutSeries
 
     /**
      * @param int $resourceId
+     *
      * @return bool
      */
     public function ContainsResource($resourceId)
@@ -250,9 +252,6 @@ class BlackoutSeries
         return in_array($resourceId, $this->resourceIds);
     }
 
-    /**
-     * @param IRepeatOptions $repeatOptions
-     */
     public function Repeats(IRepeatOptions $repeatOptions)
     {
         $this->WithRepeatOptions($repeatOptions);
@@ -316,9 +315,9 @@ class BlackoutSeries
         $this->currentBlackoutInstanceId = $blackoutInstanceId;
     }
 
-
     /**
      * @param string[] $row
+     *
      * @return BlackoutSeries
      */
     public static function FromRow($row)
@@ -352,7 +351,6 @@ class BlackoutSeries
     }
 
     /**
-     * @param DateRange $date
      * @return string
      */
     private function ToKey(DateRange $date)
@@ -381,12 +379,13 @@ class BlackoutSeries
      */
     public function NextBlackout()
     {
-        if ($this->blackoutIteration == 0) {
+        if (0 == $this->blackoutIteration) {
             $this->blackouts = $this->AllBlackouts();
         }
 
         if ($this->blackoutIteration < count($this->blackouts)) {
             $keys = array_keys($this->blackouts);
+
             return $this->blackouts[$keys[$this->blackoutIteration++]];
         }
 
@@ -394,7 +393,7 @@ class BlackoutSeries
     }
 
     /**
-     * testing only
+     * testing only.
      */
     public function _ResetBlackoutIteration()
     {
@@ -451,14 +450,10 @@ class Blackout
         return $this->date->GetEnd();
     }
 
-    /**
-     * @param DateRange $date
-     */
     public function SetDate(DateRange $date)
     {
         $this->date = $date;
     }
-
 
     /**
      * @param int $id
@@ -553,7 +548,6 @@ class BlackoutResource implements IResource
     {
         return $this->id;
     }
-
 
     /**
      * @return int

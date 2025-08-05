@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
-require_once(ROOT_DIR . 'WebServices/Controllers/ResourceSaveController.php');
-require_once(ROOT_DIR . 'WebServices/Requests/Resource/ResourceRequest.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceCreatedResponse.php');
-require_once(ROOT_DIR . 'WebServices/Responses/Resource/ResourceUpdatedResponse.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
+require_once ROOT_DIR.'WebServices/Controllers/ResourceSaveController.php';
+require_once ROOT_DIR.'WebServices/Requests/Resource/ResourceRequest.php';
+require_once ROOT_DIR.'WebServices/Responses/Resource/ResourceCreatedResponse.php';
+require_once ROOT_DIR.'WebServices/Responses/Resource/ResourceUpdatedResponse.php';
 
 class ResourcesWriteWebService
 {
@@ -20,9 +20,13 @@ class ResourcesWriteWebService
 
     /**
      * @name CreateResource
+     *
      * @description Creates a new resource
+     *
      * @request ResourceRequest
+     *
      * @response ResourceCreatedResponse
+     *
      * @return void
      */
     public function Create()
@@ -54,13 +58,15 @@ class ResourcesWriteWebService
         }
     }
 
-
     /**
      * @name UpdateResource
+     *
      * @description Updates an existing resource
+     *
      * @request ResourceRequest
+     *
      * @response ResourceUpdatedResponse
-     * @param $resourceId
+     *
      * @return void
      */
     public function Update($resourceId)
@@ -98,9 +104,13 @@ class ResourcesWriteWebService
 
     /**
      * @name DeleteResource
+     *
      * @description Deletes an existing resource
+     *
      * @response DeletedResponse
+     *
      * @param int $resourceId
+     *
      * @return void
      */
     public function Delete($resourceId)

@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/namespace.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/Notification/namespace.php';
 
 class InvitationEmailNotificationTest extends TestBase
 {
@@ -39,7 +39,7 @@ class InvitationEmailNotificationTest extends TestBase
             ->willReturnMap([
                 [$ownerId, $owner],
                 [$inviteeId1, $invitee1],
-                [$inviteeId2, $invitee2]
+                [$inviteeId2, $invitee2],
             ]);
 
         $notification = new InviteeAddedEmailNotification($userRepo, $attributeRepo);

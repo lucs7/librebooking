@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/ResourceDisplayPresenter.php');
-require_once(ROOT_DIR . 'Pages/ResourceDisplayPage.php');
+require_once ROOT_DIR.'Presenters/ResourceDisplayPresenter.php';
+require_once ROOT_DIR.'Pages/ResourceDisplayPage.php';
 
 class ResourceDisplayPresenterTest extends TestBase
 {
@@ -155,7 +155,7 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->reservationService->_ReservationListing->_Reservations = [
             $pastItem,
             $currentItem,
-            $nextItem
+            $nextItem,
         ];
 
         $this->presenter->DisplayResource(1, null);
@@ -170,11 +170,11 @@ class ResourceDisplayPresenterTest extends TestBase
 
         $this->setupStandardExpectations(true, 5);
 
-        $next = new TestReservationItemView(2, $now->AddMinutes(5), $now->AddMinutes(90), 1, "refnum");
+        $next = new TestReservationItemView(2, $now->AddMinutes(5), $now->AddMinutes(90), 1, 'refnum');
         $next->_RequiresCheckin = true;
 
-        $r1 = new TestReservationItemView(1, $now->AddMinutes(-90), $now->AddMinutes(-30), 1, "refnum1");
-        $r2 = new TestReservationItemView(3, $now->AddMinutes(90), $now->AddMinutes(120), 1, "refnum2");
+        $r1 = new TestReservationItemView(1, $now->AddMinutes(-90), $now->AddMinutes(-30), 1, 'refnum1');
+        $r2 = new TestReservationItemView(3, $now->AddMinutes(90), $now->AddMinutes(120), 1, 'refnum2');
 
         $this->reservationService->_ReservationListing->_Reservations = [
             new ReservationListItem($r1),
@@ -185,7 +185,7 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->presenter->DisplayResource(1, null);
 
         $this->assertEquals(true, $this->page->_RequiresCheckIn);
-        $this->assertEquals("refnum", $this->page->_CheckinReferenceNumber);
+        $this->assertEquals('refnum', $this->page->_CheckinReferenceNumber);
     }
 
     public function testDisplaysAvailable()
@@ -200,7 +200,7 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->reservationService->_ReservationListing->_Reservations = [
             $pastItem,
             $currentItem,
-            $nextItem
+            $nextItem,
         ];
 
         $this->presenter->DisplayResource(1, null);
@@ -221,7 +221,7 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->reservationService->_ReservationListing->_Reservations = [
             $pastItem,
             $currentItem,
-            $nextItem
+            $nextItem,
         ];
 
         $this->presenter->DisplayResource(1, null);
@@ -240,7 +240,7 @@ class ResourceDisplayPresenterTest extends TestBase
         $this->assertTrue($this->page->_DisplayNotEnabledMessage);
     }
 
-    public function testWhenTheLastSlotIsAlreadyPast_GoToTomorrow()
+    public function testWhenTheLastSlotIsAlreadyPastGoToTomorrow()
     {
         Date::_SetNow(new Date('2016-03-07 18:28', 'UTC'));
         $now = Date::Now();

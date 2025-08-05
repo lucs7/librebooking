@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
 
 class ResourceStatusChangeEmail extends EmailMessage
 {
@@ -13,7 +13,6 @@ class ResourceStatusChangeEmail extends EmailMessage
 
     /**
      * @param string $to
-     * @param BookableResource $resource
      * @param string $message
      * @param string $language
      */
@@ -39,6 +38,7 @@ class ResourceStatusChangeEmail extends EmailMessage
     {
         $this->Set('ResourceName', $this->resource->GetName());
         $this->Set('Message', $this->message);
+
         return $this->FetchTemplate('ResourceStatusChanged.tpl');
     }
 }

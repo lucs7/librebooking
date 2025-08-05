@@ -1,7 +1,7 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'Pages/Ajax/ReservationMovePage.php');
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'Pages/Ajax/ReservationMovePage.php';
 
 class ReservationMovePresenter
 {
@@ -35,7 +35,7 @@ class ReservationMovePresenter
         IUpdateReservationPersistenceService $persistenceService,
         IReservationHandler $handler,
         IResourceRepository $resourceRepository,
-        UserSession $userSession
+        UserSession $userSession,
     ) {
         $this->page = $page;
         $this->persistenceService = $persistenceService;

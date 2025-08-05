@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Integrate/SlackPresenter.php');
+require_once ROOT_DIR.'Presenters/Integrate/SlackPresenter.php';
 
 class SlackPresenterTest extends TestBase
 {
@@ -31,7 +31,7 @@ class SlackPresenterTest extends TestBase
         $this->fakeConfig->SetSectionKey(ConfigSection::SLACK, ConfigKeys::SLACK_TOKEN, 'token');
     }
 
-    public function testWhenResourceNameIsProvided_AndFound_ReturnLinkToResource()
+    public function testWhenResourceNameIsProvidedAndFoundReturnLinkToResource()
     {
         $resourceName = 'resourcename';
 
@@ -51,7 +51,7 @@ class SlackPresenterTest extends TestBase
         $this->assertEquals($expectedResponse, $this->page->_BoundResponse);
     }
 
-    public function testWhenResourceNameIsProvided_AndNotFound_ReturnMessageAndBasicLink()
+    public function testWhenResourceNameIsProvidedAndNotFoundReturnMessageAndBasicLink()
     {
         $resourceName = 'resourcename';
 
@@ -70,7 +70,7 @@ class SlackPresenterTest extends TestBase
         $this->assertEquals($expectedResponse, $this->page->_BoundResponse);
     }
 
-    public function testWhenNoResourceNameIsProvided_ReturnBasicLink()
+    public function testWhenNoResourceNameIsProvidedReturnBasicLink()
     {
         $resourceName = '';
 
@@ -87,7 +87,7 @@ class SlackPresenterTest extends TestBase
         $this->assertEquals($expectedResponse, $this->page->_BoundResponse);
     }
 
-    public function testWhenTokenDoesNotMatch_BlowUp()
+    public function testWhenTokenDoesNotMatchBlowUp()
     {
         $resourceName = '';
 

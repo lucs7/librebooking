@@ -1,11 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/Persistence/IReservationPersistenceService.php');
+require_once ROOT_DIR.'lib/Application/Reservation/Persistence/IReservationPersistenceService.php';
 
 interface IDeleteReservationPersistenceService extends IReservationPersistenceService
 {
     /**
      * @param string $referenceNumber
+     *
      * @return ExistingReservationSeries
      */
     public function LoadByReferenceNumber($referenceNumber);

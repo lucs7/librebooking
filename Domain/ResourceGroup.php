@@ -3,7 +3,7 @@
 class ResourceGroupTree
 {
     /**
-     * @var ResourceGroup[] $references
+     * @var ResourceGroup[]
      */
     protected $references = [];
 
@@ -77,6 +77,7 @@ class ResourceGroupTree
 
     /**
      * @param bool $includeDefaultGroup
+     *
      * @return array|ResourceGroup[]
      */
     public function GetGroups($includeDefaultGroup = true)
@@ -90,6 +91,7 @@ class ResourceGroupTree
 
     /**
      * @param bool $includeDefaultGroup
+     *
      * @return array|ResourceGroup[]
      */
     public function GetGroupList($includeDefaultGroup = true)
@@ -102,8 +104,9 @@ class ResourceGroupTree
     }
 
     /**
-     * @param int $groupId
+     * @param int   $groupId
      * @param int[] $resourceIds
+     *
      * @return int[]
      */
     public function GetResourceIds($groupId, &$resourceIds = [])
@@ -115,7 +118,7 @@ class ResourceGroupTree
         }
 
         foreach ($group->children as $child) {
-            if ($child->type == ResourceGroup::RESOURCE_TYPE) {
+            if (ResourceGroup::RESOURCE_TYPE == $child->type) {
                 $resourceIds[] = $child->resource_id;
             } else {
                 $this->GetResourceIds($child->id, $resourceIds);
@@ -127,6 +130,7 @@ class ResourceGroupTree
 
     /**
      * @param int $groupId
+     *
      * @return ResourceGroup
      */
     public function GetGroup($groupId)
@@ -185,7 +189,8 @@ class ResourceGroup
 
     /**
      * @param string $groupName
-     * @param int $parentId
+     * @param int    $parentId
+     *
      * @return ResourceGroup
      */
     public static function Create($groupName, $parentId = null)
@@ -263,7 +268,7 @@ class ResourceGroupAssignment implements IBookableResource
         $minLength,
         $resourceTypeId,
         $color,
-        $maxConcurrentReservations
+        $maxConcurrentReservations,
     ) {
         $this->group_id = $group_id;
         $this->resource_name = $resource_name;

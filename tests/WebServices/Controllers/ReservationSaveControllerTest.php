@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Controllers/ReservationSaveController.php');
+require_once ROOT_DIR.'WebServices/Controllers/ReservationSaveController.php';
 
 class ReservationSaveControllerTest extends TestBase
 {
@@ -78,7 +78,6 @@ class ReservationSaveControllerTest extends TestBase
         $presenter->expects($this->once())
                   ->method('HandleReservation')
                   ->with($this->equalTo($series));
-
 
         $result = $this->controller->Update($request, $session, $referenceNumber, $updateScope);
 

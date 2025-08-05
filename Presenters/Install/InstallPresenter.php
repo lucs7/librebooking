@@ -1,9 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Install/Installer.php');
-require_once(ROOT_DIR . 'Presenters/Install/MySqlScript.php');
-require_once(ROOT_DIR . 'Presenters/Install/InstallationResult.php');
-require_once(ROOT_DIR . 'Presenters/Install/InstallSecurityGuard.php');
+require_once ROOT_DIR.'Presenters/Install/Installer.php';
+require_once ROOT_DIR.'Presenters/Install/MySqlScript.php';
+require_once ROOT_DIR.'Presenters/Install/InstallationResult.php';
+require_once ROOT_DIR.'Presenters/Install/InstallSecurityGuard.php';
 
 class InstallPresenter
 {
@@ -29,11 +29,13 @@ class InstallPresenter
 
         if ($this->page->RunningInstall()) {
             $this->RunInstall();
+
             return;
         }
 
         if ($this->page->RunningUpgrade()) {
             $this->RunUpgrade();
+
             return;
         }
 
@@ -64,6 +66,7 @@ class InstallPresenter
 
         if (empty($installPassword)) {
             $this->page->SetShowPasswordPrompt(true);
+
             return;
         }
 
@@ -71,6 +74,7 @@ class InstallPresenter
         if (!$validated) {
             $this->page->SetShowPasswordPrompt(true);
             $this->page->SetShowInvalidPassword(true);
+
             return;
         }
 
@@ -82,12 +86,12 @@ class InstallPresenter
     {
         if ($this->securityGuard->IsAuthenticated()) {
             $this->page->SetShowDatabasePrompt(true);
+
             return;
         }
 
         $this->page->SetShowDatabasePrompt(false);
     }
-
 
     private function Validate($installPassword)
     {
@@ -120,6 +124,7 @@ class InstallPresenter
 
         if (!$currentVersion) {
             $this->page->ShowInstallOptions(true);
+
             return;
         }
 
@@ -143,15 +148,15 @@ class InstallPresenter
         $server = ServiceLocator::GetServer();
         $currentUrl = $server->GetUrl();
 
-        $maybeWrong = !BookedStringHelper::Contains($scriptUrl, '/Web') && BookedStringHelper::Contains($currentUrl, '/Web') ;
+        $maybeWrong = !BookedStringHelper::Contains($scriptUrl, '/Web') && BookedStringHelper::Contains($currentUrl, '/Web');
         if ($maybeWrong) {
             $parts = explode('/Web', $currentUrl);
             $port = $server->GetHeader('SERVER_PORT');
             $suggestedUrl = ($server->GetIsHttps() ? 'https://' : 'http://')
-                . $server->GetHeader('SERVER_NAME')
-                . ($port == '80' ? '' : $port)
-                . $parts[0]
-                . '/Web';
+                .$server->GetHeader('SERVER_NAME')
+                .('80' == $port ? '' : $port)
+                .$parts[0]
+                .'/Web';
             $this->page->ShowScriptUrlWarning($scriptUrl, $suggestedUrl);
         }
     }

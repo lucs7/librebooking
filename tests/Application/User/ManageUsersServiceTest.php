@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/User/ManageUsersService.php');
+require_once ROOT_DIR.'lib/Application/User/ManageUsersService.php';
 
 class ManageUsersServiceTest extends TestBase
 {
@@ -165,11 +165,11 @@ class ManageUsersServiceTest extends TestBase
         $position = 'position';
 
         $extraAttributes = [
-                UserAttribute::Organization => $organization,
-                UserAttribute::Phone => $phone,
-                UserAttribute::Position => $position];
+            UserAttribute::Organization => $organization,
+            UserAttribute::Phone => $phone,
+            UserAttribute::Position => $position];
 
-        $customAttributes = [new AttributeValue(1, "value")];
+        $customAttributes = [new AttributeValue(1, 'value')];
 
         $this->userRepo->_User = $user;
 
@@ -185,7 +185,7 @@ class ManageUsersServiceTest extends TestBase
         $this->assertEquals($phone, $user->GetAttribute(UserAttribute::Phone));
         $this->assertEquals($organization, $user->GetAttribute(UserAttribute::Organization));
         $this->assertEquals($position, $user->GetAttribute(UserAttribute::Position));
-        $this->assertEquals("value", $user->GetAttributeValue(1));
+        $this->assertEquals('value', $user->GetAttributeValue(1));
         $this->assertEquals($user, $this->userRepo->_UpdatedUser);
     }
 
@@ -208,7 +208,7 @@ class ManageUsersServiceTest extends TestBase
                         ->willReturnMap([
                             [2, $group2],
                             [3, $group3],
-                            [4, $group4]
+                            [4, $group4],
                         ]);
 
         $this->service->ChangeGroups($user, $groupids);

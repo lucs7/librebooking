@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/ResourceAvailability.php');
+require_once ROOT_DIR.'lib/Application/Reservation/ResourceAvailability.php';
 
 class FakeResourceAvailabilityStrategy implements IResourceAvailabilityStrategy
 {
@@ -18,15 +18,15 @@ class FakeResourceAvailabilityStrategy implements IResourceAvailabilityStrategy
     public $_End;
 
     /**
-     * @param Date $startDate
-     * @param Date $endDate
      * @param int[] $resourceIds
+     *
      * @return array|IReservedItemView[]
      */
     public function GetItemsBetween(Date $startDate, Date $endDate, $resourceIds)
     {
         $this->_Start = $startDate;
         $this->_End = $endDate;
+
         return $this->_ReservedItems;
     }
 }

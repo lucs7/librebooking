@@ -13,8 +13,8 @@ class ActiveDirectoryUser
 
     /**
      * @param adLDAPUserCollection $entry
-     * @param string[]|array $mapping
-     * @param string $groups
+     * @param string[]|array       $mapping
+     * @param string               $groups
      */
     public function __construct($entry, $mapping, $groups = null)
     {
@@ -28,7 +28,7 @@ class ActiveDirectoryUser
         $this->title = $this->Get($entry, 'title');
 
         $this->groups = null;
-        if ($groups != null) {
+        if (null != $groups) {
             if (is_array($groups)) {
                 $this->groups = $groups;
             } else {

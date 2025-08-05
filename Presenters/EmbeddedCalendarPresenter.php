@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Export/EmbeddedCalendarPage.php');
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once ROOT_DIR.'Pages/Export/EmbeddedCalendarPage.php';
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
 
 class EmbeddedCalendarPresenter
 {
@@ -27,7 +27,7 @@ class EmbeddedCalendarPresenter
         IEmbeddedCalendarPage $page,
         IReservationViewRepository $reservationViewRepository,
         IResourceRepository $resourceRepository,
-        IScheduleRepository $scheduleRepository
+        IScheduleRepository $scheduleRepository,
     ) {
         $this->page = $page;
         $this->reservationViewRepository = $reservationViewRepository;
@@ -42,8 +42,8 @@ class EmbeddedCalendarPresenter
             $resource = $this->GetResource($this->page->GetResourceId());
             $timezone = $this->GetTimezone($schedule);
 
-            $scheduleId = $schedule != null ? $schedule->GetId() : null;
-            $resourceId = $resource != null ? $resource->GetId() : null;
+            $scheduleId = null != $schedule ? $schedule->GetId() : null;
+            $resourceId = null != $resource ? $resource->GetId() : null;
 
             $allSchedules = $this->scheduleRepository->GetPublicScheduleIds();
             $allResources = $this->resourceRepository->GetPublicResourceIds();
@@ -64,6 +64,7 @@ class EmbeddedCalendarPresenter
 
     /**
      * @param int $schedulePublicId
+     *
      * @return Schedule|null
      */
     private function GetSchedule($schedulePublicId)
@@ -74,11 +75,13 @@ class EmbeddedCalendarPresenter
                 return $schedule;
             }
         }
+
         return null;
     }
 
     /**
      * @param int $resourcePublicId
+     *
      * @return BookableResource|null
      */
     private function GetResource($resourcePublicId)
@@ -89,16 +92,18 @@ class EmbeddedCalendarPresenter
                 return $resource;
             }
         }
+
         return null;
     }
 
     /**
      * @param Schedule|null $schedule
+     *
      * @return string
      */
     private function GetTimezone($schedule)
     {
-        if ($schedule != null) {
+        if (null != $schedule) {
             return $schedule->GetTimezone();
         }
 
@@ -106,13 +111,14 @@ class EmbeddedCalendarPresenter
     }
 
     /**
-     * @param int $scheduleId
-     * @param int $resourceId
-     * @param array $allSchedules
-     * @param array $allResources
-     * @param Date $startDate
-     * @param Date $endDate
+     * @param int    $scheduleId
+     * @param int    $resourceId
+     * @param array  $allSchedules
+     * @param array  $allResources
+     * @param Date   $startDate
+     * @param Date   $endDate
      * @param string $timezone
+     *
      * @return ReservationListing
      */
     private function GetReservations($scheduleId, $resourceId, $allSchedules, $allResources, $startDate, $endDate, $timezone)
@@ -143,9 +149,9 @@ class EmbeddedCalendarPresenter
     {
         $displayType = $this->GetDisplayType();
 
-        if ($displayType == 'week') {
+        if ('week' == $displayType) {
             $this->page->DisplayWeek();
-        } elseif ($displayType == 'month') {
+        } elseif ('month' == $displayType) {
             $this->page->DisplayMonth();
         } else {
             $this->page->DisplayAgenda();
@@ -154,11 +160,12 @@ class EmbeddedCalendarPresenter
 
     /**
      * @param Schedule|null $schedule
+     *
      * @return int
      */
     private function GetFirstDayOfWeek($schedule)
     {
-        if ($schedule == null || $schedule->GetWeekdayStart() == Schedule::Today) {
+        if (null == $schedule || Schedule::Today == $schedule->GetWeekdayStart()) {
             return 0;
         }
 
@@ -167,12 +174,13 @@ class EmbeddedCalendarPresenter
 
     /**
      * @param Schedule|null $schedule
+     *
      * @return Date
      */
     private function GetStartDate($schedule)
     {
         $displayType = $this->page->GetDisplayType();
-        if ($displayType == 'week') {
+        if ('week' == $displayType) {
             $startDay = $this->GetFirstDayOfWeek($schedule);
             $now = Date::Now()->ToTimezone($this->GetTimezone($schedule))->GetDate();
 
@@ -184,7 +192,7 @@ class EmbeddedCalendarPresenter
 
             return $now->AddDays($adjustedDays);
         }
-        if ($displayType == 'month') {
+        if ('month' == $displayType) {
             $startDay = $this->GetFirstDayOfWeek($schedule);
             $timezone = $this->GetTimezone($schedule);
             $now = Date::Now()->ToTimezone($timezone);
@@ -206,18 +214,20 @@ class EmbeddedCalendarPresenter
 
     /**
      * @param Schedule|null $schedule
+     *
      * @return Date
      */
     private function GetEndDate($schedule)
     {
         $displayType = $this->page->GetDisplayType();
-        if ($displayType == 'week') {
+        if ('week' == $displayType) {
             return $this->GetStartDate($schedule)->AddDays(7);
         }
-        if ($displayType == 'month') {
+        if ('month' == $displayType) {
             $timezone = $this->GetTimezone($schedule);
             $now = Date::Now()->ToTimezone($timezone);
             $nextMonth = $now->AddMonths(1);
+
             return Date::Create($nextMonth->Year(), $nextMonth->Month(), 1, 0, 0, 0, $timezone)->AddDays(-1);
         }
 
@@ -231,12 +241,13 @@ class EmbeddedCalendarPresenter
     {
         $displayType = $this->page->GetDisplayType();
 
-        if ($displayType == 'week') {
+        if ('week' == $displayType) {
             return 'week';
         }
-        if ($displayType == 'month') {
+        if ('month' == $displayType) {
             return 'month';
         }
+
         return 'agenda';
     }
 }
@@ -288,16 +299,14 @@ class EmbeddedCalendarTitleFormatter
             $title = '';
         }
         $format = str_replace('date', $dateText, $format);
-        $format = str_replace('title', !empty($title) ? '<br/>' . $title : '', $format);
-        $format = str_replace('user', !empty($userName) ? '<br/>' . $userName : '', $format);
-        $format = str_replace('resource', !empty($resourceName) ? '<br/>' . $resourceName : '', $format);
+        $format = str_replace('title', !empty($title) ? '<br/>'.$title : '', $format);
+        $format = str_replace('user', !empty($userName) ? '<br/>'.$userName : '', $format);
+        $format = str_replace('resource', !empty($resourceName) ? '<br/>'.$resourceName : '', $format);
 
         return $format;
     }
 
     /**
-     * @param ReservationListItem $reservation
-     * @param Date $boundDate
      * @return string
      */
     private function GetDateText(ReservationListItem $reservation, Date $boundDate)
@@ -305,7 +314,7 @@ class EmbeddedCalendarTitleFormatter
         $resources = Resources::GetInstance();
         $dateText = '';
 
-        if ($this->displayType != 'agenda') {
+        if ('agenda' != $this->displayType) {
             if ($reservation->StartDate()->DateEquals($boundDate)) {
                 $dateText .= $reservation->StartDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_time'));
             } else {
@@ -313,18 +322,19 @@ class EmbeddedCalendarTitleFormatter
             }
 
             if ($reservation->EndDate()->DateEquals($boundDate)) {
-                $dateText .= ' - ' . $reservation->EndDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_time'));
+                $dateText .= ' - '.$reservation->EndDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_time'));
             } else {
-                $dateText .= ' - ' . $reservation->EndDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_datetime'));
+                $dateText .= ' - '.$reservation->EndDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_datetime'));
             }
         } else {
             $dateText = $reservation->StartDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_time'));
             if (!$reservation->StartDate()->DateEquals($reservation->EndDate())) {
-                $dateText .= ' - ' . $reservation->EndDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_datetime'));
+                $dateText .= ' - '.$reservation->EndDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_datetime'));
             } else {
-                $dateText .= ' - ' . $reservation->EndDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_time'));
+                $dateText .= ' - '.$reservation->EndDate()->ToTimezone($this->timezone)->Format($resources->GetDateFormat('embedded_time'));
             }
         }
+
         return $dateText;
     }
 }

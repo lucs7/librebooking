@@ -3,7 +3,6 @@
 class ReservationCanBeCheckedInRuleTest extends TestBase
 {
     /**
-     *
      * @var UserSession
      */
     private $userSession;

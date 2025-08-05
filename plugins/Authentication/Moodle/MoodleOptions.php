@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . '/lib/Config/namespace.php');
+require_once ROOT_DIR.'/lib/Config/namespace.php';
 
 class MoodleOptions
 {
@@ -8,10 +8,10 @@ class MoodleOptions
 
     public function __construct()
     {
-        require_once(dirname(__FILE__) . '/Moodle.config.php');
+        require_once dirname(__FILE__).'/Moodle.config.php';
 
         Configuration::Instance()->Register(
-            dirname(__FILE__) . '/Moodle.config.php',
+            dirname(__FILE__).'/Moodle.config.php',
             self::CONFIG_ID
         );
 
@@ -28,20 +28,19 @@ class MoodleOptions
         $path = $this->GetConfig('moodle.root.directory');
 
         if (!BookedStringHelper::StartsWith($path, '/')) {
-            $path = ROOT_DIR . "/$path";
+            $path = ROOT_DIR."/$path";
         }
         if (BookedStringHelper::EndsWith($path, '/')) {
             return $path;
         }
 
-        return $path . '/';
+        return $path.'/';
     }
 
     public function GetMoodleCookieId()
     {
         return $this->GetConfig('moodle.cookie.id');
     }
-
 
     private function GetConfig($keyName, $converter = null)
     {

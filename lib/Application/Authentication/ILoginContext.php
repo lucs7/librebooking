@@ -4,6 +4,7 @@ interface ILoginContext
 {
     /**
      * @abstract
+     *
      * @return LoginData
      */
     public function GetData();

@@ -21,6 +21,7 @@ class ReservationNotificationFactory implements IReservationNotificationFactory
     {
         if (array_key_exists($reservationAction, $this->creationStrategies)) {
             $createMethod = $this->creationStrategies[$reservationAction];
+
             return $this->$createMethod($userSession);
         }
 
@@ -30,36 +31,42 @@ class ReservationNotificationFactory implements IReservationNotificationFactory
     private function CreateAddService($userSession)
     {
         $factory = PluginManager::Instance()->LoadPostReservation();
+
         return $factory->CreatePostAddService($userSession);
     }
 
     private function CreateApproveService($userSession)
     {
         $factory = PluginManager::Instance()->LoadPostReservation();
+
         return $factory->CreatePostApproveService($userSession);
     }
 
     private function CreateDeleteService($userSession)
     {
         $factory = PluginManager::Instance()->LoadPostReservation();
+
         return $factory->CreatePostDeleteService($userSession);
     }
 
     private function CreateUpdateService($userSession)
     {
         $factory = PluginManager::Instance()->LoadPostReservation();
+
         return $factory->CreatePostUpdateService($userSession);
     }
 
     private function CreateCheckinService($userSession)
     {
         $factory = PluginManager::Instance()->LoadPostReservation();
+
         return $factory->CreatePostCheckinService($userSession);
     }
 
     private function CreateCheckoutService($userSession)
     {
         $factory = PluginManager::Instance()->LoadPostReservation();
+
         return $factory->CreatePostCheckoutService($userSession);
     }
 }

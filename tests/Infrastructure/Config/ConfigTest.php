@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
+require_once ROOT_DIR.'lib/Config/namespace.php';
 
 class ConfigTest extends TestBase
 {
@@ -13,7 +13,7 @@ class ConfigTest extends TestBase
 
     public function testConfigLoadsAllValues()
     {
-        Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_config.php', Configuration::DEFAULT_CONFIG_ID, true);
+        Configuration::Instance()->Register(ROOT_DIR.'tests/data/test_config.php', Configuration::DEFAULT_CONFIG_ID, true);
 
         $this->assertEquals('US/Central', Configuration::Instance()->GetDefaultTimezone());
         $this->assertEquals(true, Configuration::Instance()->GetKey(ConfigKeys::ALLOW_REGISTRATION, new BooleanConverter()));
@@ -24,8 +24,8 @@ class ConfigTest extends TestBase
 
     public function testRegistersMultipleConfigFiles()
     {
-        Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_config.php', Configuration::DEFAULT_CONFIG_ID, true);
-        Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_plugin_config.php', 'LDAP');
+        Configuration::Instance()->Register(ROOT_DIR.'tests/data/test_config.php', Configuration::DEFAULT_CONFIG_ID, true);
+        Configuration::Instance()->Register(ROOT_DIR.'tests/data/test_plugin_config.php', 'LDAP');
 
         $this->assertEquals('US/Central', Configuration::Instance()->GetDefaultTimezone());
         $this->assertEquals('value1', Configuration::Instance()->File('LDAP')->GetKey('key'));

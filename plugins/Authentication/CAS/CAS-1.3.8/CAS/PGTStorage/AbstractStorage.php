@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/PGTStorage/AbstractStorage.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Pascal Aubry <pascal.aubry@univ-rennes1.fr>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -34,19 +36,21 @@
  * storage classes.
  *
  * @class CAS_PGTStorage_AbstractStorage
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Pascal Aubry <pascal.aubry@univ-rennes1.fr>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  *
  * @ingroup internalPGTStorage
  */
-
 abstract class CAS_PGTStorage_AbstractStorage
 {
     /**
      * @addtogroup internalPGTStorage
+     *
      * @{
      */
 
@@ -58,7 +62,7 @@ abstract class CAS_PGTStorage_AbstractStorage
      * The constructor of the class, should be called only by inherited classes.
      *
      * @param CAS_Client $cas_parent the CAS _client instance that creates the
-     * current object.
+     *                               current object
      *
      * @return void
      *
@@ -114,9 +118,10 @@ abstract class CAS_PGTStorage_AbstractStorage
      * PGTStorage::setErrorMessage(), read by PGTStorage::getErrorMessage().
      *
      * @hideinitializer
-     * @deprecated not used.
+     *
+     * @deprecated not used
      */
-    public $_error_message=false;
+    public $_error_message = false;
 
     /**
      * This method sets en error message, which can be read later by
@@ -126,7 +131,7 @@ abstract class CAS_PGTStorage_AbstractStorage
      *
      * @return void
      *
-     * @deprecated not used.
+     * @deprecated not used
      */
     public function setErrorMessage($error_message)
     {
@@ -137,9 +142,9 @@ abstract class CAS_PGTStorage_AbstractStorage
      * This method returns an error message set by PGTStorage::setErrorMessage().
      *
      * @return string an error message when set by PGTStorage::setErrorMessage(), FALSE
-     * otherwise.
+     *                otherwise
      *
-     * @deprecated not used.
+     * @deprecated not used
      */
     public function getErrorMessage()
     {
@@ -193,7 +198,6 @@ abstract class CAS_PGTStorage_AbstractStorage
      * @return void
      *
      * @note Should never be called.
-     *
      */
     public function write($pgt, $pgt_iou)
     {
@@ -215,5 +219,5 @@ abstract class CAS_PGTStorage_AbstractStorage
         phpCAS::error(__CLASS__.'::'.__FUNCTION__.'() should never be called');
     }
 
-    /** @} */
+    /* @} */
 }

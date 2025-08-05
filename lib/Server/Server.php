@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Server/UserSession.php');
+require_once ROOT_DIR.'lib/Server/UserSession.php';
 
 class Server
 {
@@ -11,16 +11,17 @@ class Server
     public function SetCookie(Cookie $cookie)
     {
         setcookie(
-            $cookie->Name, 
-            $cookie->Value, 
+            $cookie->Name,
+            $cookie->Value,
             [
                 'expires' => $cookie->Expiration,
                 'path' => $cookie->Path,
                 'secure' => $cookie->Secure,
                 'httponly' => $cookie->HttpOnly,
-                'samesite' => $cookie->SameSite
+                'samesite' => $cookie->SameSite,
             ]
-        );    }
+        );
+    }
 
     public function DeleteCookie(Cookie $cookie)
     {
@@ -32,6 +33,7 @@ class Server
         if (isset($_COOKIE[$name])) {
             return $_COOKIE[$name];
         }
+
         return null;
     }
 
@@ -68,6 +70,7 @@ class Server
         if (isset($_SESSION[self::sessionId][$name])) {
             return $_SESSION[self::sessionId][$name];
         }
+
         return null;
     }
 
@@ -83,18 +86,20 @@ class Server
      */
     private function IsSessionStarted()
     {
-        if (php_sapi_name() !== 'cli') {
+        if ('cli' !== php_sapi_name()) {
             if (version_compare(phpversion(), '5.4.0', '>=')) {
-                return session_status() === PHP_SESSION_ACTIVE ? true : false;
+                return PHP_SESSION_ACTIVE === session_status() ? true : false;
             } else {
-                return session_id() === '' ? false : true;
+                return '' === session_id() ? false : true;
             }
         }
+
         return false;
     }
 
     /**
      * @param string $name
+     *
      * @return string|null
      */
     public function GetQuerystring($name)
@@ -102,17 +107,19 @@ class Server
         if (isset($_GET[$name])) {
             $value = $_GET[$name];
 
-            if ($value != '' && $value != null && !is_array($value)) {
+            if ('' != $value && null != $value && !is_array($value)) {
                 return htmlspecialchars(trim($value));
             } else {
                 if (is_array($value)) {
                     array_walk($value, [$this, 'specialchars']);
+
                     return $value;
                 }
             }
 
             return '';
         }
+
         return null;
     }
 
@@ -123,6 +130,7 @@ class Server
 
     /**
      * @param string $name
+     *
      * @return string|null
      */
     public function GetForm($name)
@@ -134,6 +142,7 @@ class Server
 
         if (is_array($value)) {
             array_walk($value, [$this, 'specialchars']);
+
             return $value;
         }
 
@@ -142,6 +151,7 @@ class Server
 
     /**
      * @param string $name
+     *
      * @return string|null
      */
     public function GetRawForm($name)
@@ -153,23 +163,27 @@ class Server
 
             return trim($_POST[$name]);
         }
+
         return null;
     }
 
     /**
      * @param string $name
-     * @return null|UploadedFile
+     *
+     * @return UploadedFile|null
      */
     public function GetFile($name)
     {
         if (isset($_FILES[$name])) {
             return new UploadedFile($_FILES[$name]);
         }
+
         return null;
     }
 
     /**
      * @param string $name
+     *
      * @return array|UploadedFile[]
      */
     public function GetFiles($name)
@@ -185,7 +199,7 @@ class Server
                 $file_count = count($files['name']);
                 $file_keys = array_keys($files);
 
-                for ($i = 0; $i < $file_count; $i++) {
+                for ($i = 0; $i < $file_count; ++$i) {
                     foreach ($file_keys as $key) {
                         $file_ary[$i][$key] = $files[$key][$i];
                     }
@@ -196,6 +210,7 @@ class Server
                 $uploadedFiles[] = new UploadedFile($_FILES[$name]);
             }
         }
+
         return $uploadedFiles;
     }
 
@@ -205,7 +220,7 @@ class Server
 
         if (isset($_SERVER['QUERY_STRING'])) {
             $qs = http_build_query($_GET);
-            $url .= '?' . $qs;
+            $url .= '?'.$qs;
         }
 
         return $url;
@@ -221,6 +236,7 @@ class Server
         if (!empty($userSession)) {
             // return (UserSession) $userSession;
             $class = 'UserSession';
+
             return unserialize(
                 preg_replace(
                     '/^O:\d+:"[^"]++"/',
@@ -235,6 +251,7 @@ class Server
 
     /**
      * @param $userSession UserSession
+     *
      * @return void
      */
     public function SetUserSession($userSession)
@@ -259,11 +276,13 @@ class Server
         if (strlen($lang) > 4) {
             return substr(str_replace('-', '_', $lang), 0, 5);
         }
+
         return null;
     }
 
     /**
      * @param string $headerCode
+     *
      * @return string
      */
     public function GetHeader($headerCode)
@@ -285,7 +304,8 @@ class Server
     public function GetIsHttps()
     {
         $isHttps = $this->GetHeader('HTTPS');
-        return $isHttps == 'on';
+
+        return 'on' == $isHttps;
     }
 
     /**
@@ -294,6 +314,6 @@ class Server
     public function GetRequestUri()
     {
         return $this->GetUrl();
-        //return $this->GetHeader('REQUEST_URI');
+        // return $this->GetHeader('REQUEST_URI');
     }
 }

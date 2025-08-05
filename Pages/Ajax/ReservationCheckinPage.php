@@ -1,8 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenterFactory.php');
-require_once(ROOT_DIR . 'Pages/Ajax/IReservationSaveResultsView.php');
+require_once ROOT_DIR.'Pages/SecurePage.php';
+require_once ROOT_DIR.'Presenters/Reservation/ReservationPresenterFactory.php';
+require_once ROOT_DIR.'Pages/Ajax/IReservationSaveResultsView.php';
 
 interface IReservationCheckinPage extends IReservationSaveResultsView
 {
@@ -43,8 +43,8 @@ class ReservationCheckinPage extends Page implements IReservationCheckinPage
             $this->EnforceCSRFCheck();
             $this->_presenter->PageLoad();
 
-            $this->Set('IsCheckingIn', $this->GetAction() == ReservationAction::Checkin);
-            $this->Set('IsCheckingOut', $this->GetAction() != ReservationAction::Checkin);
+            $this->Set('IsCheckingIn', ReservationAction::Checkin == $this->GetAction());
+            $this->Set('IsCheckingOut', ReservationAction::Checkin != $this->GetAction());
             if ($this->_reservationSavedSuccessfully) {
                 $this->Display('Ajax/reservation/checkin_successful.tpl');
             } else {

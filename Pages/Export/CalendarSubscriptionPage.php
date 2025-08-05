@@ -1,12 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/CalendarSubscriptionService.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Pages/Export/ICalendarSubscriptionPage.php');
-require_once(ROOT_DIR . 'Presenters/CalendarSubscriptionPresenter.php');
+require_once ROOT_DIR.'Pages/Export/CalendarExportDisplay.php';
+require_once ROOT_DIR.'lib/Application/Schedule/CalendarSubscriptionService.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'Pages/Export/ICalendarSubscriptionPage.php';
+require_once ROOT_DIR.'Presenters/CalendarSubscriptionPresenter.php';
 
 class CalendarSubscriptionPage extends Page implements ICalendarSubscriptionPage
 {
@@ -49,8 +49,8 @@ class CalendarSubscriptionPage extends Page implements ICalendarSubscriptionPage
     {
         $this->presenter->PageLoad();
 
-        header("Content-Type: text/Calendar");
-        header("Content-Disposition: inline; filename=calendar.ics");
+        header('Content-Type: text/Calendar');
+        header('Content-Disposition: inline; filename=calendar.ics');
 
         $display = new CalendarExportDisplay();
         echo preg_replace('~\R~u', "\r\n", $display->Render($this->reservations));

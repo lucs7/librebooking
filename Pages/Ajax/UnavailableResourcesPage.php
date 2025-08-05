@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/UnavailableResourcesPresenter.php');
+require_once ROOT_DIR.'Presenters/UnavailableResourcesPresenter.php';
 
 interface IAvailableResourcesPage
 {

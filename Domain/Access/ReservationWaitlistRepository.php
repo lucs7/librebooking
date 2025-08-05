@@ -1,11 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/ReservationWaitlistRequest.php');
+require_once ROOT_DIR.'Domain/ReservationWaitlistRequest.php';
 
 interface IReservationWaitlistRepository
 {
     /**
-     * @param ReservationWaitlistRequest $request
      * @return int
      */
     public function Add(ReservationWaitlistRequest $request);
@@ -17,20 +16,17 @@ interface IReservationWaitlistRepository
 
     /**
      * @param int $waitlistId
+     *
      * @return ReservationWaitlistRequest
      */
     public function LoadById($waitlistId);
 
-    /**
-     * @param ReservationWaitlistRequest $request
-     */
     public function Delete(ReservationWaitlistRequest $request);
 }
 
 class ReservationWaitlistRepository implements IReservationWaitlistRepository
 {
     /**
-     * @param ReservationWaitlistRequest $request
      * @return int
      */
     public function Add(ReservationWaitlistRequest $request)
@@ -69,6 +65,7 @@ class ReservationWaitlistRepository implements IReservationWaitlistRepository
 
         if ($row = $reader->GetRow()) {
             $reader->Free();
+
             return ReservationWaitlistRequest::FromRow($row);
         }
 

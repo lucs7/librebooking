@@ -29,13 +29,13 @@ class CalendarMonth implements ICalendarSegment
 
         $daysInMonth = $this->lastDay->AddDays(-1)->Day();
 
-        $weeks = floor(($daysInMonth + $this->firstDay->Weekday()-1) / 7);
+        $weeks = floor(($daysInMonth + $this->firstDay->Weekday() - 1) / 7);
 
-        for ($week = 0; $week <= $weeks; $week++) {
+        for ($week = 0; $week <= $weeks; ++$week) {
             $this->weeks[$week] = new CalendarWeek($timezone);
         }
 
-        for ($dayOffset = 0; $dayOffset < $daysInMonth; $dayOffset++) {
+        for ($dayOffset = 0; $dayOffset < $daysInMonth; ++$dayOffset) {
             $currentDay = $this->firstDay->AddDays($dayOffset);
             $currentWeek = $this->GetWeekNumber($currentDay);
             $calendarDay = new CalendarDay($currentDay);
@@ -61,6 +61,7 @@ class CalendarMonth implements ICalendarSegment
 
     /**
      * @param $reservations array|CalendarReservation[]
+     *
      * @return void
      */
     public function AddReservations($reservations)
@@ -77,30 +78,28 @@ class CalendarMonth implements ICalendarSegment
     }
 
     /**
-     * @param Date $day
      * @return int
      */
     private function GetWeekNumber(Date $day)
     {
         $firstWeekday = $this->firstDay->Weekday();
 
-        $week = floor($day->Day()/7);
+        $week = floor($day->Day() / 7);
 
-        if ($day->Day()%7==0) {
-            $week = ($day->Day()-1)/7;
+        if (0 == $day->Day() % 7) {
+            $week = ($day->Day() - 1) / 7;
 
             if ($day->Day() <= 7) {
-                $week++;
+                ++$week;
             }
         } else {
             if ($day->Weekday() < $firstWeekday) {
-                $week++;
+                ++$week;
             }
         }
 
         return intval($week);
     }
-
 
     /**
      * @return string|CalendarTypes

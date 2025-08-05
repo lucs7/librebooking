@@ -7,11 +7,13 @@ class FakeAccessoryRepository implements IAccessoryRepository
     public function AddAccessory(Accessory $accessory)
     {
         $this->_AllAccessories[] = $accessory;
+
         return $this;
     }
 
     /**
      * @param int $accessoryId
+     *
      * @return Accessory
      */
     public function LoadById($accessoryId)
@@ -29,7 +31,6 @@ class FakeAccessoryRepository implements IAccessoryRepository
     }
 
     /**
-     * @param Accessory $accessory
      * @return int
      */
     public function Add(Accessory $accessory)
@@ -39,7 +40,6 @@ class FakeAccessoryRepository implements IAccessoryRepository
     }
 
     /**
-     * @param Accessory $accessory
      * @return void
      */
     public function Update(Accessory $accessory)
@@ -49,6 +49,7 @@ class FakeAccessoryRepository implements IAccessoryRepository
 
     /**
      * @param int $accessoryId
+     *
      * @return void
      */
     public function Delete($accessoryId)

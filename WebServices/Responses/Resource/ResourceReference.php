@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/namespace.php');
+require_once ROOT_DIR.'lib/WebService/namespace.php';
 
 class ResourceReference extends RestResponse
 {
@@ -26,7 +26,6 @@ class ResourceReference extends RestResponse
     public $statusReasonId;
 
     /**
-     * @param IRestServer $server
      * @param BookableResource $resource
      */
     public function __construct(IRestServer $server, $resource)

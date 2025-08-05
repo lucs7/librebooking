@@ -13,7 +13,7 @@ class CustomAttributeCategory
 {
     public const RESERVATION = 1;
     public const USER = 2;
-    //const GROUP = 3;
+    // const GROUP = 3;
     public const RESOURCE = 4;
     public const RESOURCE_TYPE = 5;
 }
@@ -137,6 +137,7 @@ class CustomAttribute
         if (is_null($this->possibleValues)) {
             return [];
         }
+
         return explode(',', $this->possibleValues);
     }
 
@@ -254,7 +255,7 @@ class CustomAttribute
      */
     public function AdminOnly()
     {
-        return (int)$this->adminOnly;
+        return (int) $this->adminOnly;
     }
 
     /**
@@ -266,7 +267,6 @@ class CustomAttribute
     }
 
     /**
-     * @param $entityId
      * @return bool
      */
     public function AppliesToEntity($entityId)
@@ -274,20 +274,22 @@ class CustomAttribute
         if ($this->UniquePerEntity()) {
             return in_array($entityId, $this->EntityIds());
         }
+
         return true;
     }
 
     /**
-     * @param int $id
-     * @param string $label
-     * @param CustomAttributeTypes|int $type
+     * @param int                         $id
+     * @param string                      $label
+     * @param CustomAttributeTypes|int    $type
      * @param CustomAttributeCategory|int $category
-     * @param string $regex
-     * @param bool $required
-     * @param string $possibleValues
-     * @param int $sortOrder
-     * @param int[] $entityIds
-     * @param bool $adminOnly
+     * @param string                      $regex
+     * @param bool                        $required
+     * @param string                      $possibleValues
+     * @param int                         $sortOrder
+     * @param int[]                       $entityIds
+     * @param bool                        $adminOnly
+     *
      * @return CustomAttribute
      */
     public function __construct(
@@ -300,7 +302,7 @@ class CustomAttribute
         $possibleValues,
         $sortOrder,
         $entityIds = [],
-        $adminOnly = false
+        $adminOnly = false,
     ) {
         $this->id = $id;
         $this->label = $label;
@@ -308,7 +310,7 @@ class CustomAttribute
         $this->category = $category;
         $this->SetRegex($regex);
         $this->required = $required;
-        if ($category != CustomAttributeCategory::RESERVATION) {
+        if (CustomAttributeCategory::RESERVATION != $category) {
             $this->entityIds = is_array($entityIds) ? $entityIds : ($entityIds);
         }
         $this->adminOnly = $adminOnly;
@@ -318,15 +320,17 @@ class CustomAttribute
 
     /**
      * @static
-     * @param string $label
-     * @param CustomAttributeTypes|int $type
+     *
+     * @param string                      $label
+     * @param CustomAttributeTypes|int    $type
      * @param CustomAttributeCategory|int $category
-     * @param string $regex
-     * @param bool $required
-     * @param string $possibleValues
-     * @param int $sortOrder
-     * @param int[] $entityIds
-     * @param bool $adminOnly
+     * @param string                      $regex
+     * @param bool                        $required
+     * @param string                      $possibleValues
+     * @param int                         $sortOrder
+     * @param int[]                       $entityIds
+     * @param bool                        $adminOnly
+     *
      * @return CustomAttribute
      */
     public static function Create(
@@ -338,7 +342,7 @@ class CustomAttribute
         $possibleValues,
         $sortOrder,
         $entityIds = [],
-        $adminOnly = false
+        $adminOnly = false,
     ) {
         return new CustomAttribute(
             null,
@@ -356,7 +360,9 @@ class CustomAttribute
 
     /**
      * @static
+     *
      * @param $row array
+     *
      * @return CustomAttribute
      */
     public static function FromRow($row)
@@ -403,6 +409,7 @@ class CustomAttribute
 
     /**
      * @param $value mixed
+     *
      * @return bool
      */
     public function SatisfiesRequired($value)
@@ -412,11 +419,13 @@ class CustomAttribute
         }
 
         $trimmed = trim($value);
+
         return !(empty($trimmed) && !is_numeric($trimmed));
     }
 
     /**
      * @param $value mixed
+     *
      * @return bool
      */
     public function SatisfiesConstraint($value)
@@ -431,6 +440,7 @@ class CustomAttribute
             }
 
             $list = $this->PossibleValueList();
+
             return in_array($value, $list);
         }
 
@@ -440,11 +450,11 @@ class CustomAttribute
     /**
      * @param string $label
      * @param string $regex
-     * @param bool $required
+     * @param bool   $required
      * @param string $possibleValues
-     * @param int $sortOrder
-     * @param int[] $entityIds
-     * @param bool $adminOnly
+     * @param int    $sortOrder
+     * @param int[]  $entityIds
+     * @param bool   $adminOnly
      */
     public function Update($label, $regex, $required, $possibleValues, $sortOrder, $entityIds, $adminOnly)
     {
@@ -452,7 +462,7 @@ class CustomAttribute
         $this->SetRegex($regex);
         $this->required = $required;
 
-        if ($this->category != CustomAttributeCategory::RESERVATION) {
+        if (CustomAttributeCategory::RESERVATION != $this->category) {
             $entityIds = is_array($entityIds) ? $entityIds : [$entityIds];
             $removed = array_diff($this->entityIds, $entityIds);
             $added = array_diff($entityIds, $this->entityIds);
@@ -498,12 +508,12 @@ class CustomAttribute
 
     /**
      * @param int|CustomAttributeCategory $category
-     * @param string|int[] $entityIds
-     * @param string|null $entityDescriptions
+     * @param string|int[]                $entityIds
+     * @param string|null                 $entityDescriptions
      */
     public function WithSecondaryEntities($category, $entityIds, $entityDescriptions = null)
     {
-        if ($this->category != CustomAttributeCategory::RESERVATION) {
+        if (CustomAttributeCategory::RESERVATION != $this->category) {
             return;
         }
 
@@ -547,10 +557,10 @@ class CustomAttribute
         }
 
         if (!BookedStringHelper::StartsWith($this->regex, '/')) {
-            $this->regex = '/' . $this->regex;
+            $this->regex = '/'.$this->regex;
         }
         if (!BookedStringHelper::EndsWith($this->regex, '/')) {
-            $this->regex = $this->regex . '/';
+            $this->regex = $this->regex.'/';
         }
     }
 }

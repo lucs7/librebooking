@@ -1,15 +1,15 @@
 <?php
 
 // debugging tools / libs
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-    require ROOT_DIR . 'vendor/autoload.php';
+if (file_exists(ROOT_DIR.'vendor/autoload.php')) {
+    require ROOT_DIR.'vendor/autoload.php';
 }
 
-require_once(ROOT_DIR . 'Pages/IPage.php');
-require_once(ROOT_DIR . 'Pages/Pages.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
+require_once ROOT_DIR.'Pages/IPage.php';
+require_once ROOT_DIR.'Pages/Pages.php';
+require_once ROOT_DIR.'lib/Common/namespace.php';
+require_once ROOT_DIR.'lib/Server/namespace.php';
+require_once ROOT_DIR.'lib/Config/namespace.php';
 
 use Detection\MobileDetect;
 
@@ -18,12 +18,12 @@ abstract class Page implements IPage
     /**
      * @var SmartyPage
      */
-    protected $smarty = null;
+    protected $smarty;
 
     /**
      * @var Server
      */
-    protected $server = null;
+    protected $server;
     protected $path;
 
     protected $IsMobile = false;
@@ -50,12 +50,12 @@ abstract class Page implements IPage
         $this->smarty->assign('HtmlTextDirection', $resources->TextDirection);
         $appTitle = Configuration::Instance()->GetKey(ConfigKeys::APP_TITLE);
         $pageTile = $resources->GetString($titleKey);
-        $this->smarty->assign('Title', (empty($appTitle) ? 'LibreBooking' : $appTitle) . (empty($pageTile) ? '' : ' - ' . $pageTile));
-        $this->smarty->assign('AppTitle', (empty($appTitle) ? 'LibreBooking' : $appTitle));
+        $this->smarty->assign('Title', (empty($appTitle) ? 'LibreBooking' : $appTitle).(empty($pageTile) ? '' : ' - '.$pageTile));
+        $this->smarty->assign('AppTitle', empty($appTitle) ? 'LibreBooking' : $appTitle);
         $companyName = Configuration::Instance()->GetKey(ConfigKeys::COMPANY_NAME);
         $companyUrl = Configuration::Instance()->GetKey(ConfigKeys::COMPANY_URL);
-        $this->smarty->assign('CompanyName', (empty($companyName) ? '' : $companyName));
-        $this->smarty->assign('CompanyUrl', (empty($companyUrl) ? '' : $companyUrl));
+        $this->smarty->assign('CompanyName', empty($companyName) ? '' : $companyName);
+        $this->smarty->assign('CompanyUrl', empty($companyUrl) ? '' : $companyUrl);
         $this->smarty->assign('CalendarJSFile', $resources->CalendarLanguageFile);
 
         $this->smarty->assign('LoggedIn', $userSession->IsLoggedIn());
@@ -71,7 +71,7 @@ abstract class Page implements IPage
         $this->smarty->assign('CanViewScheduleAdmin', $userSession->IsScheduleAdmin);
         $this->smarty->assign('CanViewResponsibilities', !$userSession->IsAdmin && ($userSession->IsGroupAdmin || $userSession->IsResourceAdmin || $userSession->IsScheduleAdmin));
         $allowAllUsersToReports = Configuration::Instance()->GetSectionKey(ConfigSection::REPORTS, ConfigKeys::REPORTS_ALLOW_ALL, new BooleanConverter());
-        $this->smarty->assign('CanViewReports', ($allowAllUsersToReports || $userSession->IsAdmin || $userSession->IsGroupAdmin || $userSession->IsResourceAdmin || $userSession->IsScheduleAdmin));
+        $this->smarty->assign('CanViewReports', $allowAllUsersToReports || $userSession->IsAdmin || $userSession->IsGroupAdmin || $userSession->IsResourceAdmin || $userSession->IsScheduleAdmin);
 
         $timeout = Configuration::Instance()->GetKey(ConfigKeys::INACTIVITY_TIMEOUT);
         if (!empty($timeout)) {
@@ -89,21 +89,21 @@ abstract class Page implements IPage
         $this->smarty->assign('checkinAdminOnly', Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_CHECKIN_ADMIN_ONLY, new BooleanConverter()));
         $this->smarty->assign('checkoutAdminOnly', Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_CHECKOUT_ADMIN_ONLY, new BooleanConverter()));
 
-        $this->smarty->assign('cssTheme', (Configuration::Instance()->GetKey(ConfigKeys::CSS_THEME) ?? 'default'));
+        $this->smarty->assign('cssTheme', Configuration::Instance()->GetKey(ConfigKeys::CSS_THEME) ?? 'default');
 
         $this->smarty->assign('LogoUrl', 'librebooking.png');
-        if (file_exists($this->path . 'img/custom-logo.png')) {
+        if (file_exists($this->path.'img/custom-logo.png')) {
             $this->smarty->assign('LogoUrl', 'custom-logo.png');
         }
-        if (file_exists($this->path . 'img/custom-logo.gif')) {
+        if (file_exists($this->path.'img/custom-logo.gif')) {
             $this->smarty->assign('LogoUrl', 'custom-logo.gif');
         }
-        if (file_exists($this->path . 'img/custom-logo.jpg')) {
+        if (file_exists($this->path.'img/custom-logo.jpg')) {
             $this->smarty->assign('LogoUrl', 'custom-logo.jpg');
         }
 
         $this->smarty->assign('CssUrl', 'null-style.css');
-        if (file_exists($this->path . 'css/custom-style.css')) {
+        if (file_exists($this->path.'css/custom-style.css')) {
             $this->smarty->assign('CssUrl', 'custom-style.css');
         }
 
@@ -113,22 +113,22 @@ abstract class Page implements IPage
         }
 
         $this->smarty->assign('FaviconUrl', 'favicon.ico');
-        if (file_exists($this->path . 'custom-favicon.png')) {
+        if (file_exists($this->path.'custom-favicon.png')) {
             $this->smarty->assign('FaviconUrl', 'custom-favicon.png');
         }
-        if (file_exists($this->path . 'custom-favicon.gif')) {
+        if (file_exists($this->path.'custom-favicon.gif')) {
             $this->smarty->assign('FaviconUrl', 'custom-favicon.gif');
         }
-        if (file_exists($this->path . 'custom-favicon.jpg')) {
+        if (file_exists($this->path.'custom-favicon.jpg')) {
             $this->smarty->assign('FaviconUrl', 'custom-favicon.jpg');
         }
-        if (file_exists($this->path . 'custom-favicon.ico')) {
+        if (file_exists($this->path.'custom-favicon.ico')) {
             $this->smarty->assign('FaviconUrl', 'custom-favicon.ico');
         }
 
         $logoUrl = Configuration::Instance()->GetKey(ConfigKeys::HOME_URL);
         if (empty($logoUrl)) {
-            $logoUrl = $this->path . Pages::UrlFromId($userSession->HomepageId);
+            $logoUrl = $this->path.Pages::UrlFromId($userSession->HomepageId);
         }
         $this->smarty->assign('HomeUrl', $logoUrl);
 
@@ -141,9 +141,9 @@ abstract class Page implements IPage
         }
 
         $this->IsDesktop = !$this->IsMobile && !$this->IsTablet;
-        $this->Set('IsMobile', (bool)$this->IsMobile);
-        $this->Set('IsTablet', (bool)$this->IsTablet);
-        $this->Set('IsDesktop', (bool)$this->IsDesktop);
+        $this->Set('IsMobile', (bool) $this->IsMobile);
+        $this->Set('IsTablet', (bool) $this->IsTablet);
+        $this->Set('IsDesktop', (bool) $this->IsDesktop);
         $this->Set('GoogleAnalyticsTrackingId', Configuration::Instance()->GetSectionKey(ConfigSection::GOOGLE_ANALYTICS, ConfigKeys::GOOGLE_ANALYTICS_TRACKING_ID));
         $this->Set('ShowNewVersion', $this->ShouldShowNewVersion());
 
@@ -158,22 +158,22 @@ abstract class Page implements IPage
     public function Redirect($url)
     {
         if (!BookedStringHelper::StartsWith($url, $this->path)) {
-            $url = $this->path . $url;
+            $url = $this->path.$url;
         }
 
         $url = str_replace('&amp;', '&', $url);
         header("Location: $url");
-        die();
+        exit;
     }
 
     public function RedirectResume($url)
     {
         if (!BookedStringHelper::StartsWith($url, $this->path)) {
-            $url = $this->path . $url;
+            $url = $this->path.$url;
         }
 
         header("Location: $url");
-        die();
+        exit;
     }
 
     public function RedirectToError($errorMessageId = ErrorMessages::UNKNOWN_ERROR, $lastPage = '')
@@ -182,18 +182,19 @@ abstract class Page implements IPage
         $this->Set('ErrorMessage', $errorMessageKey);
         $this->Set('TitleKey', 'Error');
         $this->Display('error.tpl');
-        die();
+        exit;
     }
 
     public function GetLastPage($defaultPage = '')
     {
-        $referer = filter_var(getenv("HTTP_REFERER"), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $referer = filter_var(getenv('HTTP_REFERER'), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($referer)) {
             return empty($defaultPage) ? Pages::LOGIN : $defaultPage;
         }
 
         $scriptUrl = Configuration::Instance()->GetScriptUrl();
         $page = str_ireplace($scriptUrl, '', $referer);
+
         return ltrim($page, '/');
     }
 
@@ -203,7 +204,7 @@ abstract class Page implements IPage
     }
 
     /**
-     * Returns whether or not the user has been authenticated
+     * Returns whether or not the user has been authenticated.
      *
      * @return bool
      */
@@ -213,7 +214,7 @@ abstract class Page implements IPage
     }
 
     /**
-     * Returns whether or not the page is currently posting back to itself
+     * Returns whether or not the page is currently posting back to itself.
      *
      * @return bool
      */
@@ -223,7 +224,7 @@ abstract class Page implements IPage
     }
 
     /**
-     * Registers a Validator with the page
+     * Registers a Validator with the page.
      *
      * @param int|string $validatorId
      * @param IValidator $validator
@@ -234,7 +235,7 @@ abstract class Page implements IPage
     }
 
     /**
-     * Whether or not the current page is valid when checked against all registered validators
+     * Whether or not the current page is valid when checked against all registered validators.
      *
      * @return bool
      */
@@ -244,8 +245,9 @@ abstract class Page implements IPage
     }
 
     /**
-     * @param string $var
+     * @param string              $var
      * @param string|object|array $value
+     *
      * @return void
      */
     public function Set($var, $value)
@@ -264,7 +266,7 @@ abstract class Page implements IPage
         if ($this->IsPost() && (empty($token) || $token != $session->CSRFToken)) {
             Log::Error('Possible CSRF attack. Submitted token=%s, Expected token=%s', $token, $session->CSRFToken);
             http_response_code(500);
-            die('Insecure request');
+            exit('Insecure request');
         }
     }
 
@@ -280,6 +282,7 @@ abstract class Page implements IPage
 
     /**
      * @param string $var
+     *
      * @return string
      */
     protected function GetVar($var)
@@ -289,7 +292,8 @@ abstract class Page implements IPage
 
     /**
      * @param string $var
-     * @return null|string
+     *
+     * @return string|null
      */
     protected function GetForm($var)
     {
@@ -298,16 +302,19 @@ abstract class Page implements IPage
 
     /**
      * @param string $var
+     *
      * @return bool
      */
     protected function GetCheckbox($var)
     {
         $val = $this->server->GetForm($var);
+
         return !empty($val);
     }
 
     /**
      * @param string $var
+     *
      * @return null
      */
     protected function GetRawForm($var)
@@ -317,8 +324,9 @@ abstract class Page implements IPage
 
     /**
      * @param string $key
-     * @param bool $forceArray
-     * @return null|string|array
+     * @param bool   $forceArray
+     *
+     * @return string|array|null
      */
     protected function GetQuerystring($key, $forceArray = false)
     {
@@ -339,7 +347,8 @@ abstract class Page implements IPage
 
     /**
      * @param string $key
-     * @return null|UploadedFile
+     *
+     * @return UploadedFile|null
      */
     protected function GetFile($key)
     {
@@ -347,9 +356,9 @@ abstract class Page implements IPage
     }
 
     /**
-     * @param mixed $objectToSerialize
      * @param string|null $error
-     * @param int|null $httpResponseCode
+     * @param int|null    $httpResponseCode
+     *
      * @return void
      */
     protected function SetJson($objectToSerialize, $error = null, $httpResponseCode = 200)
@@ -367,6 +376,7 @@ abstract class Page implements IPage
 
     /**
      * @param string $objectToSerialize
+     *
      * @return void
      */
     protected function SetJsonError($objectToSerialize)
@@ -380,7 +390,8 @@ abstract class Page implements IPage
     }
 
     /**
-     * A template file to be displayed
+     * A template file to be displayed.
+     *
      * @param string $templateName
      */
     protected function Display($templateName)
@@ -394,14 +405,14 @@ abstract class Page implements IPage
 
     protected function DisplayCsv($templateName, $fileName)
     {
-        header("Pragma: public");
-        header("Expires: 0");
-        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-        header("Cache-Control: private", false);
-        header("Content-Type: application/octet-stream");
+        header('Pragma: public');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Cache-Control: private', false);
+        header('Content-Type: application/octet-stream');
         header("Content-Disposition: attachment; filename=$fileName;");
-        header("Content-Transfer-Encoding: binary");
-        echo chr(239) . chr(187) . chr(191);
+        header('Content-Transfer-Encoding: binary');
+        echo chr(239).chr(187).chr(191);
 
         $this->Display($templateName);
     }
@@ -412,10 +423,10 @@ abstract class Page implements IPage
     protected function DisplayLocalized($templateName)
     {
         $languageCode = $this->GetVar('CurrentLanguage');
-        $localizedPath = ROOT_DIR . 'lang/' . $languageCode;
-        $defaultPath = ROOT_DIR . 'lang/en_us/';
+        $localizedPath = ROOT_DIR.'lang/'.$languageCode;
+        $defaultPath = ROOT_DIR.'lang/en_us/';
 
-        if (file_exists($localizedPath . '/' . $templateName)) {
+        if (file_exists($localizedPath.'/'.$templateName)) {
             $this->smarty->AddTemplateDirectory($localizedPath);
         } else {
             $this->smarty->AddTemplateDirectory($defaultPath);
@@ -433,24 +444,24 @@ abstract class Page implements IPage
 
     private function InMaintenanceMode()
     {
-        return is_file(ROOT_DIR . 'maint.txt');
+        return is_file(ROOT_DIR.'maint.txt');
     }
 
     private function SetSecurityHeaders()
     {
         $config = Configuration::Instance();
         if ($config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_HEADERS, new BooleanConverter())) {
-            header('Strict-Transport-Security: ' . $config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_STRICT_TRANSPORT));
-            header('X-Frame-Options: ' . $config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_X_FRAME));
-            header('X-XSS-Protection: ' . $config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_X_XSS));
-            header('X-Content-Type-Options: ' . $config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_X_CONTENT_TYPE));
-            header('Content-Security-Policy: ' . $config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_CONTENT_SECURITY_POLICY));
+            header('Strict-Transport-Security: '.$config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_STRICT_TRANSPORT));
+            header('X-Frame-Options: '.$config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_X_FRAME));
+            header('X-XSS-Protection: '.$config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_X_XSS));
+            header('X-Content-Type-Options: '.$config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_X_CONTENT_TYPE));
+            header('Content-Security-Policy: '.$config->GetSectionKey(ConfigSection::SECURITY, ConfigKeys::SECURITY_CONTENT_SECURITY_POLICY));
         }
     }
 
     protected function IsPost()
     {
-        return $_SERVER['REQUEST_METHOD'] == 'POST';
+        return 'POST' == $_SERVER['REQUEST_METHOD'];
     }
 
     private function ShouldShowNewVersion()

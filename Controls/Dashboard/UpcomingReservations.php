@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Controls/Dashboard/DashboardItem.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/UpcomingReservationsPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/GroupUpcomingReservationsPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/PendingApprovalReservationsPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/ReservationViewRepository.php');
+require_once ROOT_DIR.'Controls/Dashboard/DashboardItem.php';
+require_once ROOT_DIR.'Presenters/Dashboard/UpcomingReservationsPresenter.php';
+require_once ROOT_DIR.'Presenters/Dashboard/GroupUpcomingReservationsPresenter.php';
+require_once ROOT_DIR.'Presenters/Dashboard/PendingApprovalReservationsPresenter.php';
+require_once ROOT_DIR.'Domain/Access/ReservationViewRepository.php';
 
 class UpcomingReservations extends DashboardItem implements IUpcomingReservationsControl
 {
@@ -76,22 +76,30 @@ class UpcomingReservations extends DashboardItem implements IUpcomingReservation
 interface IUpcomingReservationsControl
 {
     public function SetTimezone($timezone);
+
     public function SetTotal($total);
+
     public function SetUserId($userId);
 
     public function SetAllowCheckin($allowCheckin);
+
     public function SetAllowCheckout($allowCheckout);
 
     public function BindToday($reservations);
+
     public function BindTomorrow($reservations);
+
     public function BindThisWeek($reservations);
+
     public function BindNextWeek($reservations);
 }
 
 interface IAditionalUpcomingReservationsFieldsControl extends IUpcomingReservationsControl
 {
     public function BindThisMonth($reservations);
+
     public function BindThisYear($reservations);
+
     public function BindRemaining($reservations);
 }
 

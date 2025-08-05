@@ -1,24 +1,26 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+require_once ROOT_DIR.'Pages/Page.php';
 
 interface IPageable
 {
     /**
      * @abstract
+     *
      * @return int
      */
     public function GetPageNumber();
 
     /**
      * @abstract
+     *
      * @return int
      */
     public function GetPageSize();
 
     /**
      * @abstract
-     * @param PageInfo $pageInfo
+     *
      * @return void
      */
     public function BindPageInfo(PageInfo $pageInfo);
@@ -27,7 +29,7 @@ interface IPageable
 class PageablePage extends Page implements IPageable
 {
     /**
-     * @var \Page
+     * @var Page
      */
     private $page;
 
@@ -53,11 +55,11 @@ class PageablePage extends Page implements IPageable
         if (empty($size)) {
             return Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_PAGE_SIZE);
         }
+
         return $size;
     }
 
     /**
-     * @param PageInfo $pageInfo
      * @return void
      */
     public function BindPageInfo(PageInfo $pageInfo)

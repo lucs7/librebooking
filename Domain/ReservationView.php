@@ -152,9 +152,6 @@ class ReservationView
         $this->OriginalEndDate = new NullDate();
     }
 
-    /**
-     * @param AttributeValue $attribute
-     */
     public function AddAttribute(AttributeValue $attribute)
     {
         $this->Attributes[$attribute->AttributeId] = $attribute;
@@ -162,7 +159,6 @@ class ReservationView
 
     /**
      * @param $attributeId int
-     * @return mixed
      */
     public function GetAttributeValue($attributeId)
     {
@@ -178,7 +174,7 @@ class ReservationView
      */
     public function IsRecurring()
     {
-        return $this->RepeatType != RepeatType::None;
+        return RepeatType::None != $this->RepeatType;
     }
 
     /**
@@ -194,12 +190,9 @@ class ReservationView
      */
     public function RequiresApproval()
     {
-        return $this->StatusId == ReservationStatus::Pending;
+        return ReservationStatus::Pending == $this->StatusId;
     }
 
-    /**
-     * @param ReservationAttachmentView $attachment
-     */
     public function AddAttachment(ReservationAttachmentView $attachment)
     {
         $this->Attachments[] = $attachment;
@@ -220,7 +213,7 @@ class ReservationView
     {
         $checkinMinutes = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_CHECKIN_MINUTES, new IntConverter());
 
-        if ($this->CheckinDate->ToString() == '' && Date::Now()->AddMinutes($checkinMinutes)->GreaterThanOrEqual($this->StartDate)) {
+        if ('' == $this->CheckinDate->ToString() && Date::Now()->AddMinutes($checkinMinutes)->GreaterThanOrEqual($this->StartDate)) {
             return $this->IsCheckinEnabled();
         }
 
@@ -229,9 +222,9 @@ class ReservationView
 
     public function IsCheckoutAvailable()
     {
-        if ($this->StartDate->LessThan(Date::Now()) &&
-            $this->CheckoutDate->ToString() == '' &&
-            $this->CheckinDate->ToString() != '') {
+        if ($this->StartDate->LessThan(Date::Now())
+            && '' == $this->CheckoutDate->ToString()
+            && '' != $this->CheckinDate->ToString()) {
             return $this->IsCheckinEnabled();
         }
 
@@ -243,7 +236,7 @@ class ReservationView
         $autoRelease = 0;
         foreach ($this->Resources as $resource) {
             $min = $resource->GetAutoReleaseMinutes();
-            if (!empty($min) && ($autoRelease == 0 || $min < $autoRelease)) {
+            if (!empty($min) && (0 == $autoRelease || $min < $autoRelease)) {
                 $autoRelease = $min;
             }
         }
@@ -255,7 +248,6 @@ class ReservationView
         return null;
     }
 }
-
 
 class NullReservationView extends ReservationView
 {

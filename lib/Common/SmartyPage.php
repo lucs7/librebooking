@@ -1,14 +1,13 @@
 <?php
 
-
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-    require_once ROOT_DIR . 'vendor/autoload.php';
+if (file_exists(ROOT_DIR.'vendor/autoload.php')) {
+    require_once ROOT_DIR.'vendor/autoload.php';
 }
-require_once(ROOT_DIR . 'lib/Server/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/Validators/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/Converters/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/SmartyControls/namespace.php');
+require_once ROOT_DIR.'lib/Server/namespace.php';
+require_once ROOT_DIR.'lib/Common/Validators/namespace.php';
+require_once ROOT_DIR.'lib/Common/Converters/namespace.php';
+require_once ROOT_DIR.'lib/Common/Helpers/namespace.php';
+require_once ROOT_DIR.'lib/Common/SmartyControls/namespace.php';
 
 use Smarty\Smarty;
 
@@ -22,7 +21,7 @@ class SmartyPage extends Smarty
     /**
      * @var Resources
      */
-    protected $Resources = null;
+    protected $Resources;
 
     /**
      * @var bool
@@ -30,28 +29,26 @@ class SmartyPage extends Smarty
     private $IsValid = true;
 
     /**
-     *
      * @param Resources $resources
-     * @param string $RootPath
+     * @param string    $RootPath
      */
-
     public $plugins_dir;
 
     public function __construct(
         protected ?Resources $resources = null,
-        protected $RootPath = null
+        protected $RootPath = null,
     ) {
         parent::__construct();
 
-        $base = __DIR__ . '/../../';
+        $base = __DIR__.'/../../';
 
         $this->debugging = isset($_GET['debug']);
-        $this->AddTemplateDirectory($base . 'tpl');
-        $this->compile_dir = $base . 'tpl_c';
-        $this->config_dir = $base . 'configs';
-        $this->cache_dir = $base . 'cache';
-        $this->plugins_dir = $base . 'vendor/smarty/smarty/libs/plugins';
-        //$this->error_reporting = E_ALL & ~E_NOTICE;
+        $this->AddTemplateDirectory($base.'tpl');
+        $this->compile_dir = $base.'tpl_c';
+        $this->config_dir = $base.'configs';
+        $this->cache_dir = $base.'cache';
+        $this->plugins_dir = $base.'vendor/smarty/smarty/libs/plugins';
+        // $this->error_reporting = E_ALL & ~E_NOTICE;
         $this->muteUndefinedOrNullWarnings();
 
         $cacheTemplates = Configuration::Instance()->GetKey(ConfigKeys::CACHE_TEMPLATES, new BooleanConverter());
@@ -66,7 +63,7 @@ class SmartyPage extends Smarty
 
         $this->Resources = &$resources;
 
-        $this->AddTemplateDirectory($base . 'lang/' . $this->Resources->CurrentLanguage);
+        $this->AddTemplateDirectory($base.'lang/'.$this->Resources->CurrentLanguage);
 
         $this->RegisterFunctions();
         $this->RegisterClasses();
@@ -80,42 +77,44 @@ class SmartyPage extends Smarty
     /**
      * Fetches template in a specific language. A custom template file might override the default template.
      * In case the template is not available in the target language it will fall back to en_us.
+     *
      * @param string $templateName
-     * @param string $languageCode Will be set to template var CurrentLanguage if null
-     * @param bool $enforceCustomTemplate if true uses custom language from default language
-     * if custom template of the target language is not available.
+     * @param string $languageCode          Will be set to template var CurrentLanguage if null
+     * @param bool   $enforceCustomTemplate if true uses custom language from default language
+     *                                      if custom template of the target language is not available
+     *
      * @return string
      */
     public function FetchLocalized($templateName, bool $enforceCustomTemplate, ?string $languageCode = null)
     {
-        if ($languageCode == null) {
+        if (null == $languageCode) {
             $languageCode = $this->getTemplateVars('CurrentLanguage');
         }
-        $langPath = ROOT_DIR . 'lang/';
-        $localizedPath = $langPath . $languageCode;
+        $langPath = ROOT_DIR.'lang/';
+        $localizedPath = $langPath.$languageCode;
         $customTemplateName = str_replace('.tpl', '-custom.tpl', $templateName);
-        $hasCustomTemplate = file_exists($localizedPath . '/' . $customTemplateName);
+        $hasCustomTemplate = file_exists($localizedPath.'/'.$customTemplateName);
 
         if ($enforceCustomTemplate && !$hasCustomTemplate) {
             $defaultLanguageCode = Configuration::Instance()->GetKey(ConfigKeys::LANGUAGE);
-            $defaultLocalizedPath = $langPath . $defaultLanguageCode;
-            $hasCustomDefaultTemplate = file_exists($defaultLocalizedPath . '/' . $customTemplateName);
+            $defaultLocalizedPath = $langPath.$defaultLanguageCode;
+            $hasCustomDefaultTemplate = file_exists($defaultLocalizedPath.'/'.$customTemplateName);
             if ($languageCode != $defaultLanguageCode && $hasCustomDefaultTemplate) {
                 $hasCustomTemplate = true;
                 $localizedPath = $defaultLocalizedPath;
             }
         }
 
-        if (file_exists($localizedPath . '/' . $templateName) || $hasCustomTemplate) {
+        if (file_exists($localizedPath.'/'.$templateName) || $hasCustomTemplate) {
             $path = $localizedPath;
             $this->AddTemplateDirectory($localizedPath);
         } else {
             // Fallback path
-            $path = ROOT_DIR . 'lang/en_us/';
+            $path = ROOT_DIR.'lang/en_us/';
             $this->AddTemplateDirectory($path);
         }
 
-        if (file_exists($path . '/' . $customTemplateName)) {
+        if (file_exists($path.'/'.$customTemplateName)) {
             $templateName = $customTemplateName;
         }
 
@@ -180,7 +179,6 @@ class SmartyPage extends Smarty
             'SeriesUpdateScope',
             'TermsOfService',
             'UserAttribute',
-
         ];
 
         foreach ($classesToRegister as $className) {
@@ -189,7 +187,7 @@ class SmartyPage extends Smarty
                     $this->registerClass($className, $className);
                 }
             } catch (Exception $ex) {
-                error_log("Error registering $className : " . $ex->getMessage());
+                error_log("Error registering $className : ".$ex->getMessage());
             }
         }
     }
@@ -241,7 +239,7 @@ class SmartyPage extends Smarty
         $this->registerPlugin('modifier', 'array_key_exists', $this->ArrayKeyExists(...));
         $this->registerPlugin('modifier', 'count', $this->Count(...));
 
-        /**
+        /*
          * PageValidators
          */
         $this->Validators = new PageValidators($this);
@@ -252,9 +250,11 @@ class SmartyPage extends Smarty
         try {
             $this->Validate();
             $this->IsValid = $this->Validators->AreAllValid();
+
             return $this->IsValid;
         } catch (Exception $ex) {
             Log::Error('Error during page validation', $ex);
+
             return false;
         }
     }
@@ -270,7 +270,7 @@ class SmartyPage extends Smarty
     public $failedValidators = [];
 
     /**
-     * @param $id int
+     * @param $id        int
      * @param $validator IValidator
      */
     public function AddFailedValidation($id, $validator)
@@ -302,7 +302,7 @@ class SmartyPage extends Smarty
         if (BookedStringHelper::StartsWith($params['href'], '/')) {
             $href = $params['href'];
         } else {
-            $href = $this->RootPath . $params['href'];
+            $href = $this->RootPath.$params['href'];
         }
 
         $knownAttributes = ['key', 'title', 'href'];
@@ -316,6 +316,7 @@ class SmartyPage extends Smarty
         if (!isset($params['args'])) {
             return $this->Resources->GetString($params['key'], '');
         }
+
         return $this->Resources->GetString($params['key'], explode(',', $params['args']));
     }
 
@@ -348,19 +349,20 @@ class SmartyPage extends Smarty
             $days = $this->Resources->GetDays('full');
             $formatted = str_replace($english_days[$date->Weekday()], $days[$date->Weekday()], $formatted);
         }
+
         return $formatted;
     }
 
     public function DisplayControl($params, $smarty)
     {
         $type = $params['type'];
-        require_once(ROOT_DIR . "Controls/$type.php");
+        require_once ROOT_DIR."Controls/$type.php";
 
         /** @var Control $control */
         $control = new $type($this);
 
         foreach ($params as $key => $val) {
-            if ($key != 'type') {
+            if ('type' != $key) {
                 $control->Set($key, $val);
             }
         }
@@ -380,14 +382,15 @@ class SmartyPage extends Smarty
             $actualContent = trim((string) $content);
 
             return empty($actualContent) ? '' :
-                '<div class="' . $class . ' d-flex align-items-center">
+                '<div class="'.$class.' d-flex align-items-center">
                     <i class="bi bi-exclamation-triangle-fill fs-2 me-3"></i>
                     <div class="error-list">
-                        <ul class="list-unstyled">' . $actualContent . '</ul>
+                        <ul class="list-unstyled">'.$actualContent.'</ul>
                     </div>
                     <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>';
         }
+
         return '';
     }
 
@@ -396,7 +399,7 @@ class SmartyPage extends Smarty
         $validator = $this->Validators->Get($params['id']);
         if (!$validator->IsValid()) {
             if (isset($params['key']) && !empty($params['key'])) {
-                return '<li>' . $this->SmartyTranslate(['key' => $params['key']], $smarty) . '</li>';
+                return '<li>'.$this->SmartyTranslate(['key' => $params['key']], $smarty).'</li>';
             }
 
             $messages = $validator->Messages();
@@ -409,6 +412,7 @@ class SmartyPage extends Smarty
                 return $errors;
             }
         }
+
         return '';
     }
 
@@ -418,6 +422,7 @@ class SmartyPage extends Smarty
         if (isset($params['key']) && !empty($params['key'])) {
             $message = $this->SmartyTranslate(['key' => $params['key']], $smarty);
         }
+
         return sprintf('<li class="asyncValidation" id="%s">%s</li>', $params['id'], $message);
     }
 
@@ -430,7 +435,7 @@ class SmartyPage extends Smarty
         $type = null;
 
         if (isset($params['class'])) {
-            $params['class'] = $params['class'] . ' form-control';
+            $params['class'] = $params['class'].' form-control';
         } else {
             $params['class'] = 'form-control';
         }
@@ -452,7 +457,7 @@ class SmartyPage extends Smarty
         } else {
             $type = 'text';
         }
-        if (isset($params['required']) && $params['required'] == true) {
+        if (isset($params['required']) && true == $params['required']) {
             $required = true;
         } else {
             $required = false;
@@ -470,7 +475,7 @@ class SmartyPage extends Smarty
         $knownAttributes = ['value', 'type', 'name', 'placeholderkey', 'required'];
         $attributes = $this->AppendAttributes($params, $knownAttributes);
 
-        if ($type == 'password') {
+        if ('password' == $type) {
             $textbox = new SmartyPasswordbox($params['name'], 'password', $id, $value, $attributes, $required, $smarty);
         } else {
             $textbox = new SmartyTextbox($params['name'], $type, $id, $value, $attributes, $required, $smarty);
@@ -508,6 +513,7 @@ class SmartyPage extends Smarty
     public function SetFocus($params, $smarty)
     {
         $id = isset($params['key']) ? FormKeys::Evaluate($params['key']) : $params['id'];
+
         return "<script type=\"text/javascript\">document.getElementById('$id').focus();</script>";
     }
 
@@ -518,7 +524,8 @@ class SmartyPage extends Smarty
         if (isset($params['multi'])) {
             $append = '[]';
         }
-        return 'name=\'' . FormKeys::Evaluate($params['key']) . $append . '\'';
+
+        return 'name=\''.FormKeys::Evaluate($params['key']).$append.'\'';
     }
 
     public function CreateUrl($url)
@@ -532,44 +539,45 @@ class SmartyPage extends Smarty
                 return $matches[0];
             }
             // removed trailing [.,;:] from URL
-            if (in_array(substr((string) $url, -1), ['.', ',', ';', ':']) === true) {
+            if (true === in_array(substr((string) $url, -1), ['.', ',', ';', ':'])) {
                 $ret = substr((string) $url, -1);
                 $url = substr((string) $url, 0, strlen((string) $url) - 1);
             }
 
             $text = $url;
             if (strlen($text) > 30) {
-                $text = substr($text, 0, 30) . '...';
+                $text = substr($text, 0, 30).'...';
             }
 
-            return $matches[1] . "<a href=\"$url\" target=\"_blank\" rel=\"nofollow\">$text</a>" . $ret;
+            return $matches[1]."<a href=\"$url\" target=\"_blank\" rel=\"nofollow\">$text</a>".$ret;
         };
 
         $make_web_ftp_clickable_cb = function ($matches) {
             $ret = '';
             $dest = $matches[2];
-            $dest = 'http://' . $dest;
+            $dest = 'http://'.$dest;
 
             // removed trailing [,;:] from URL
-            if (in_array(substr($dest, -1), ['.', ',', ';', ':']) === true) {
+            if (true === in_array(substr($dest, -1), ['.', ',', ';', ':'])) {
                 $ret = substr($dest, -1);
                 $dest = substr($dest, 0, strlen($dest) - 1);
             }
 
             $text = $dest;
             if (strlen($text) > 30) {
-                $text = substr($text, 0, 30) . '...';
+                $text = substr($text, 0, 30).'...';
             }
 
-            return $matches[1] . "<a href=\"$dest\" rel=\"nofollow\">$text</a>" . $ret;
+            return $matches[1]."<a href=\"$dest\" rel=\"nofollow\">$text</a>".$ret;
         };
 
         $make_email_clickable_cb = function ($matches) {
-            $email = $matches[2] . '@' . $matches[3];
-            return $matches[1] . "<a href=\"mailto:$email\">$email</a>";
+            $email = $matches[2].'@'.$matches[3];
+
+            return $matches[1]."<a href=\"mailto:$email\">$email</a>";
         };
 
-        $url = ' ' . $url;
+        $url = ' '.$url;
         $url = preg_replace_callback(
             '#([\s>])([\w]+?://[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is',
             $make_url_clickable,
@@ -585,8 +593,9 @@ class SmartyPage extends Smarty
             $make_email_clickable_cb,
             (string) $url
         );
-        $url = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", (string) $url);
+        $url = preg_replace('#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i', '$1$3</a>', (string) $url);
         $url = trim((string) $url);
+
         return $url;
     }
 
@@ -603,50 +612,50 @@ class SmartyPage extends Smarty
         $infoText = $this->Resources->GetString('Info');
         $lengthMenuText = $this->Resources->GetString('LengthMenu');
 
-        if ($tableId == 'report-results') {
+        if ('report-results' == $tableId) {
             $pagination = '"paging": false,
                 "lengthChange": false,
                 "searching": false,
                 "info": false,
                 "ordering": false,';
         } else {
-            $pagination = '"lengthMenu": [ [25, 50, 75, 100, -1], [ 25, 50, 75, 100, "' . $AllText . '"] ],';
+            $pagination = '"lengthMenu": [ [25, 50, 75, 100, -1], [ 25, 50, 75, 100, "'.$AllText.'"] ],';
         }
 
         return sprintf(
             '<script>
-           var table =  $("#' . $tableId . '").DataTable({
+           var table =  $("#'.$tableId.'").DataTable({
                 "searching": false,
                 "dom": \'<"d-flex justify-content-center flex-wrap"B><"d-flex justify-content-between flex-wrap mt-2"fil>rt<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
-                ' . $pagination . '
+                '.$pagination.'
                 "language": {
-                    search: "' . $searchText . '",
-                    info: "' . $infoText . '",
-                    infoEmpty: "' . $NoResultsFoundText . '",
+                    search: "'.$searchText.'",
+                    info: "'.$infoText.'",
+                    infoEmpty: "'.$NoResultsFoundText.'",
                     infoFiltered: "",
-                    lengthMenu: "' . $lengthMenuText . '",
-                    zeroRecords: "' . $NoResultsFoundText . '",
+                    lengthMenu: "'.$lengthMenuText.'",
+                    zeroRecords: "'.$NoResultsFoundText.'",
                 },
                 "buttons": [
                     {
                         extend: "copyHtml5",
-                        text: "<i class=\"bi bi-copy me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $copyText . '</div>",
+                        text: "<i class=\"bi bi-copy me-1\"></i><div class=\"d-none d-sm-inline-block\">'.$copyText.'</div>",
                     },
                     {
                         extend: "excelHtml5",
-                        text: "<i class=\"bi bi-file-earmark-spreadsheet me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $exportText . ' Excel</div>",
+                        text: "<i class=\"bi bi-file-earmark-spreadsheet me-1\"></i><div class=\"d-none d-sm-inline-block\">'.$exportText.' Excel</div>",
                     },
                     {
                         extend: "pdfHtml5",
-                        text: "<i class=\"bi bi-filetype-pdf me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $exportText . ' PDF</div>",
+                        text: "<i class=\"bi bi-filetype-pdf me-1\"></i><div class=\"d-none d-sm-inline-block\">'.$exportText.' PDF</div>",
                     },
                     {
                         extend: "print",
-                        text: "<i class=\"bi bi-printer me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $printText . '</div>",
+                        text: "<i class=\"bi bi-printer me-1\"></i><div class=\"d-none d-sm-inline-block\">'.$printText.'</div>",
                     },
                     {
                         extend: "colvis",
-                        text: "<i class=\"bi bi-list-check me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $showHideText . '</div>",
+                        text: "<i class=\"bi bi-list-check me-1\"></i><div class=\"d-none d-sm-inline-block\">'.$showHideText.'</div>",
                     }
                 ],
                 "initComplete": function(settings, json) {
@@ -667,6 +676,7 @@ class SmartyPage extends Smarty
         '
         );
     }
+
     public function CreateDataTableFilter($params)
     {
         $tableId = $params['tableId'];
@@ -678,16 +688,16 @@ class SmartyPage extends Smarty
 
         return sprintf(
             '<script>
-           var table =  $("#' . $tableId . '").DataTable({
+           var table =  $("#'.$tableId.'").DataTable({
                 "dom": \'<"d-flex justify-content-between my-1"fl><t>t<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
-                "lengthMenu": [ [25, 50, 75, 100, -1], [ 25, 50, 75, 100, "' . $viewAllText . '"] ],
+                "lengthMenu": [ [25, 50, 75, 100, -1], [ 25, 50, 75, 100, "'.$viewAllText.'"] ],
                 language: {
-                    search: "' . $searchText . '",
-                    info: "' . $searchText . '",
-                    infoEmpty: "' . $infoText . '",
+                    search: "'.$searchText.'",
+                    info: "'.$searchText.'",
+                    infoEmpty: "'.$infoText.'",
                     infoFiltered: "",
-                    lengthMenu: "' . $lengthMenuText . '",
-                    zeroRecords: "' . $NoResultsFoundText .
+                    lengthMenu: "'.$lengthMenuText.'",
+                    zeroRecords: "'.$NoResultsFoundText.
                 '"
                 },
                 "drawCallback": function (settings) {
@@ -700,6 +710,7 @@ class SmartyPage extends Smarty
         '
         );
     }
+
     public function ReplaceQueryString($url, $key, $value)
     {
         $newUrl = $url;
@@ -711,8 +722,8 @@ class SmartyPage extends Smarty
                 $newUrl = sprintf('%s&amp;%s=%s', $url, $key, $value); // and has existing query string
             }
         } else {
-            $pattern = '/(\?|&)(' . $key . '=.*)/';
-            $replace = '${1}' . $key . '=' . $value;
+            $pattern = '/(\?|&)('.$key.'=.*)/';
+            $replace = '${1}'.$key.'='.$value;
 
             $newUrl = preg_replace($pattern, $replace, (string) $url);
         }
@@ -733,7 +744,7 @@ class SmartyPage extends Smarty
     {
         $config = Configuration::Instance();
         $ignorePrivacy = false;
-        if (isset($params['ignorePrivacy']) && strtolower($params['ignorePrivacy'] == 'true')) {
+        if (isset($params['ignorePrivacy']) && strtolower('true' == $params['ignorePrivacy'])) {
             $ignorePrivacy = true;
         }
 
@@ -766,7 +777,7 @@ class SmartyPage extends Smarty
         $imageUrl = Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL);
 
         if (!str_contains((string) $imageUrl, 'http://')) {
-            $imageUrl = Configuration::Instance()->GetScriptUrl() . "/$imageUrl";
+            $imageUrl = Configuration::Instance()->GetScriptUrl()."/$imageUrl";
         }
 
         return "$imageUrl/{$params['image']}";
@@ -775,6 +786,7 @@ class SmartyPage extends Smarty
     public function EscapeQuotes($var)
     {
         $str = str_replace('\'', '&#39;', $var);
+
         return str_replace('"', '&quot;', $str);
     }
 
@@ -815,8 +827,8 @@ class SmartyPage extends Smarty
     {
         $attrVal = $params['value'];
         $attribute = $params['attribute'];
-        if ($attribute->Type() == CustomAttributeTypes::CHECKBOX) {
-            if ($attrVal == 1) {
+        if (CustomAttributeTypes::CHECKBOX == $attribute->Type()) {
+            if (1 == $attrVal) {
                 echo Resources::GetInstance()->GetString('Yes');
             } else {
                 echo Resources::GetInstance()->GetString('No');
@@ -828,13 +840,14 @@ class SmartyPage extends Smarty
 
     public function CSRFToken($params, $smarty)
     {
-        echo '<input type="hidden" id="csrf_token" name="' . FormKeys::CSRF_TOKEN . '" value="' .
-            ServiceLocator::GetServer()->GetUserSession()->CSRFToken . '"/>';
+        echo '<input type="hidden" id="csrf_token" name="'.FormKeys::CSRF_TOKEN.'" value="'.
+            ServiceLocator::GetServer()->GetUserSession()->CSRFToken.'"/>';
     }
 
     private function GetButtonAttributes($params)
     {
         $knownAttributes = ['key', 'class'];
+
         return $this->AppendAttributes($params, $knownAttributes);
     }
 
@@ -842,19 +855,19 @@ class SmartyPage extends Smarty
     {
         $key = $params['key'] ?? 'Cancel';
         $class = $params['class'] ?? '';
-        echo '<button type="button" class="btn btn-outline-secondary cancel ' . $class . '" data-bs-dismiss="modal" ' . $this->GetButtonAttributes($params) . '>' .
-            Resources::GetInstance()->GetString($key) . '</button>';
+        echo '<button type="button" class="btn btn-outline-secondary cancel '.$class.'" data-bs-dismiss="modal" '.$this->GetButtonAttributes($params).'>'.
+            Resources::GetInstance()->GetString($key).'</button>';
     }
 
     public function UpdateButton($params, $smarty)
     {
         $key = $params['key'] ?? 'Update';
-        $class = isset($params['class']) ? ' ' . $params['class'] . ' ' : '';
+        $class = isset($params['class']) ? ' '.$params['class'].' ' : '';
         $type = isset($params['submit']) ? 'submit' : 'button';
-        $save = $type == 'submit' ? '' : ' save ';
+        $save = 'submit' == $type ? '' : ' save ';
 
-        echo '<button type="' . $type . '" class="btn btn-primary' . $save . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
-            ->GetString($key) . '</button>';
+        echo '<button type="'.$type.'" class="btn btn-primary'.$save.$class.'" '.$this->GetButtonAttributes($params).'><i class="bi bi-check2-circle"></i> '.Resources::GetInstance()
+            ->GetString($key).'</button>';
     }
 
     public function AddButton($params, $smarty)
@@ -867,8 +880,8 @@ class SmartyPage extends Smarty
             $type = 'submit';
         }
 
-        echo '<button type="' . $type . '" class="btn btn-primary save ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
-            ->GetString($key) . '</button>';
+        echo '<button type="'.$type.'" class="btn btn-primary save '.$class.'" '.$this->GetButtonAttributes($params).'><i class="bi bi-check2-circle"></i> '.Resources::GetInstance()
+            ->GetString($key).'</button>';
     }
 
     public function DeleteButton($params, $smarty)
@@ -880,38 +893,38 @@ class SmartyPage extends Smarty
         if ($submit) {
             $type = 'submit';
         }
-        echo '<button type="' . $type . '" class="btn btn-danger save ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-trash3-fill"></i> ' . Resources::GetInstance()
-            ->GetString($key) . '</button>';
+        echo '<button type="'.$type.'" class="btn btn-danger save '.$class.'" '.$this->GetButtonAttributes($params).'><i class="bi bi-trash3-fill"></i> '.Resources::GetInstance()
+            ->GetString($key).'</button>';
     }
 
     public function ResetButton($params, $smarty)
     {
         $key = $params['key'] ?? 'Reset';
         $class = $params['class'] ?? '';
-        echo '<button type="reset" class="btn btn-outline-secondary ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-arrow-counterclockwise me-1"></i>' . Resources::GetInstance()
-            ->GetString($key) . '</button>';
+        echo '<button type="reset" class="btn btn-outline-secondary '.$class.'" '.$this->GetButtonAttributes($params).'><i class="bi bi-arrow-counterclockwise me-1"></i>'.Resources::GetInstance()
+            ->GetString($key).'</button>';
     }
 
     public function FilterButton($params, $smarty)
     {
         $key = $params['key'] ?? 'Filter';
         $class = $params['class'] ?? '';
-        echo '<button type="search" class="btn btn-primary ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-search"></i> ' . Resources::GetInstance()
-            ->GetString($key) . '</button>';
+        echo '<button type="search" class="btn btn-primary '.$class.'" '.$this->GetButtonAttributes($params).'><i class="bi bi-search"></i> '.Resources::GetInstance()
+            ->GetString($key).'</button>';
     }
 
     public function OkButton($params, $smarty)
     {
         $key = $params['key'] ?? 'OK';
         $class = $params['class'] ?? '';
-        echo '<button type="button" class="btn btn-primary ' . $class . '" ' . $this->GetButtonAttributes($params) . '><i class="bi bi-check2-circle"></i> ' . Resources::GetInstance()
-            ->GetString($key) . '</button>';
+        echo '<button type="button" class="btn btn-primary '.$class.'" '.$this->GetButtonAttributes($params).'><i class="bi bi-check2-circle"></i> '.Resources::GetInstance()
+            ->GetString($key).'</button>';
     }
 
     public function ShowHideIcon($params, $smarty)
     {
         $class = $params['class'] ?? '';
-        echo '<a class="link-primary" href="#"><i class="show-hide bi ' . $class . '"></i><span class="visually-hidden">Show/Hide</span></a>';
+        echo '<a class="link-primary" href="#"><i class="show-hide bi '.$class.'"></i><span class="visually-hidden">Show/Hide</span></a>';
     }
 
     public function SortColumn($params, $smarty)
@@ -930,17 +943,17 @@ class SmartyPage extends Smarty
 
         $indicator = '';
         if ($sortField == $currentField) {
-            $sortDirection = $currentDirection == 'asc' ? 'desc' : 'asc';
-            $indicator = "<i class=\"bi bi-caret-down-fill\"></i>";
-            if ($currentDirection == 'asc') {
-                $indicator = "<i class=\"bi bi-caret-up-fill\"></i>";
+            $sortDirection = 'asc' == $currentDirection ? 'desc' : 'asc';
+            $indicator = '<i class="bi bi-caret-down-fill"></i>';
+            if ('asc' == $currentDirection) {
+                $indicator = '<i class="bi bi-caret-up-fill"></i>';
             }
         }
 
         if (BookedStringHelper::Contains($url, $sd)) {
             $url = preg_replace("/$sd=(asc|desc)&?/", "$sd=$sortDirection&", (string) $url);
         } else {
-            $url = $url . ($hasQueryString ? "&" : "?") . "$sd=$sortDirection";
+            $url = $url.($hasQueryString ? '&' : '?')."$sd=$sortDirection";
         }
 
         if (BookedStringHelper::Contains($url, $sf)) {
@@ -949,7 +962,7 @@ class SmartyPage extends Smarty
             $url = "$url&$sf=$sortField";
         }
 
-        echo '<a href="' . $url . '">' . $this->Resources->GetString($params['key']) . ' ' . $indicator . '</a>';
+        echo '<a href="'.$url.'">'.$this->Resources->GetString($params['key']).' '.$indicator.'</a>';
     }
 
     public function FormatCurrency($params, $smarty)
@@ -958,8 +971,8 @@ class SmartyPage extends Smarty
         $currency = $params['currency'] ?? 'USD';
 
         if (!class_exists('NumberFormatter')) {
-            if ($currency == 'USD') {
-                echo '$' . number_format($amount, 2) . ' USD';
+            if ('USD' == $currency) {
+                echo '$'.number_format($amount, 2).' USD';
             } else {
                 echo 'We cannot format this currency. <a href="http://php.net/manual/en/book.intl.php">You must enable internationalization</a>.';
             }

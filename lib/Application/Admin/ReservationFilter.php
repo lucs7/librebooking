@@ -5,63 +5,63 @@ class ReservationFilter
     /**
      * @var Date|null
      */
-    private $startDate = null;
+    private $startDate;
 
     /**
      * @var Date|null
      */
-    private $endDate = null;
+    private $endDate;
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $referenceNumber = null;
-
-    /**
-     * @var int|null
-     */
-    private $scheduleId = null;
+    private $referenceNumber;
 
     /**
      * @var int|null
      */
-    private $resourceId = null;
+    private $scheduleId;
 
     /**
      * @var int|null
      */
-    private $userId = null;
+    private $resourceId;
 
     /**
      * @var int|null
      */
-    private $statusId = null;
+    private $userId;
 
     /**
      * @var int|null
      */
-    private $resourceStatusId = null;
+    private $statusId;
 
     /**
      * @var int|null
      */
-    private $resourceStatusReasonId = null;
+    private $resourceStatusId;
+
+    /**
+     * @var int|null
+     */
+    private $resourceStatusReasonId;
 
     /**
      * @var Attribute[]|null
      */
-    private $attributes = null;
+    private $attributes;
 
     /**
      * @var array|ISqlFilter[]
      */
     private $_and = [];
     /**
-     * @var null|string
+     * @var string|null
      */
     private $title;
     /**
-     * @var null|string
+     * @var string|null
      */
     private $description;
     /**
@@ -74,20 +74,20 @@ class ReservationFilter
     private $missedCheckout = false;
 
     /**
-     * @param Date $startDate
-     * @param Date $endDate
-     * @param string $referenceNumber
-     * @param int $scheduleId
-     * @param int $resourceId
-     * @param int $userId
-     * @param int $statusId
-     * @param int $resourceStatusId
-     * @param int $resourceStatusReasonId
+     * @param Date        $startDate
+     * @param Date        $endDate
+     * @param string      $referenceNumber
+     * @param int         $scheduleId
+     * @param int         $resourceId
+     * @param int         $userId
+     * @param int         $statusId
+     * @param int         $resourceStatusId
+     * @param int         $resourceStatusReasonId
      * @param Attribute[] $attributes
-     * @param string $title
-     * @param string $description
-     * @param bool $missedCheckin
-     * @param bool $missedCheckout
+     * @param string      $title
+     * @param string      $description
+     * @param bool        $missedCheckin
+     * @param bool        $missedCheckout
      */
     public function __construct(
         $startDate = null,
@@ -103,7 +103,7 @@ class ReservationFilter
         $title = null,
         $description = null,
         $missedCheckin = false,
-        $missedCheckout = false
+        $missedCheckout = false,
     ) {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
@@ -122,12 +122,12 @@ class ReservationFilter
     }
 
     /**
-     * @param ISqlFilter $filter
      * @return ReservationFilter
      */
     public function _And(ISqlFilter $filter)
     {
         $this->_and[] = $filter;
+
         return $this;
     }
 
@@ -147,12 +147,12 @@ class ReservationFilter
             $endFilter = new SqlFilterGreaterThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_END, 2), $this->startDate->ToDatabase(), true);
         }
         if (!empty($this->endDate)) {
-            if ($startFilter == null) {
+            if (null == $startFilter) {
                 $startFilter = new SqlFilterLessThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_START, 3), $this->endDate->AddDays(1)->ToDatabase(), true);
             } else {
                 $startFilter->_And(new SqlFilterLessThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_START, 4), $this->endDate->AddDays(1)->ToDatabase(), true));
             }
-            if ($endFilter == null) {
+            if (null == $endFilter) {
                 $endFilter = new SqlFilterLessThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_END, 3), $this->endDate->AddDays(1)->ToDatabase(), true);
             } else {
                 $endFilter->_And(new SqlFilterLessThan(new SqlRepeatingFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_END, 4), $this->endDate->AddDays(1)->ToDatabase(), true));
@@ -180,9 +180,9 @@ class ReservationFilter
             $filter->_And(new SqlFilterEquals(new SqlFilterColumn(TableNames::RESOURCES, ColumnNames::RESOURCE_STATUS_REASON_ID), $this->resourceStatusReasonId));
         }
         if (!empty($this->attributes)) {
-            $attributeFilter = AttributeFilter::Create(TableNames::RESERVATION_SERIES_ALIAS . '.' . ColumnNames::SERIES_ID, $this->attributes);
+            $attributeFilter = AttributeFilter::Create(TableNames::RESERVATION_SERIES_ALIAS.'.'.ColumnNames::SERIES_ID, $this->attributes);
 
-            if ($attributeFilter != null) {
+            if (null != $attributeFilter) {
                 $filter->_And($attributeFilter);
             }
         }
@@ -206,7 +206,7 @@ class ReservationFilter
             )->_Or(new SqlFilterLessThanColumn(new SqlFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::CHECKOUT_DATE), new SqlFilterColumn(TableNames::RESERVATION_INSTANCES_ALIAS, ColumnNames::RESERVATION_END))));
         }
 
-        if ($surroundFilter != null || $startFilter != null || $endFilter != null) {
+        if (null != $surroundFilter || null != $startFilter || null != $endFilter) {
             $dateFilter = new SqlFilterNull(true);
             $dateFilter->_Or($surroundFilter)->_Or($startFilter)->_Or($endFilter);
             $filter->_And($dateFilter);

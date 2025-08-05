@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
 class FakeGroupViewRepository implements IGroupViewRepository
 {
@@ -17,12 +17,14 @@ class FakeGroupViewRepository implements IGroupViewRepository
     {
         $this->_groupList[] = $groupItemView;
     }
+
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param string $sortField
-     * @param string $sortDirection
+     * @param int        $pageNumber
+     * @param int        $pageSize
+     * @param string     $sortField
+     * @param string     $sortDirection
      * @param ISqlFilter $filter
+     *
      * @return PageableData|GroupItemView[]
      */
     public function GetList(
@@ -30,17 +32,18 @@ class FakeGroupViewRepository implements IGroupViewRepository
         $pageSize = null,
         $sortField = null,
         $sortDirection = null,
-        $filter = null
+        $filter = null,
     ) {
         return new PageableData($this->_groupList);
     }
 
     /**
-     * @param int|array|int[] $groupIds
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @param ISqlFilter $filter
+     * @param int|array|int[]   $groupIds
+     * @param int               $pageNumber
+     * @param int               $pageSize
+     * @param ISqlFilter        $filter
      * @param AccountStatus|int $accountStatus
+     *
      * @return PageableData|GroupUserView[]
      */
     public function GetUsersInGroup(
@@ -48,7 +51,7 @@ class FakeGroupViewRepository implements IGroupViewRepository
         $pageNumber = null,
         $pageSize = null,
         $filter = null,
-        $accountStatus = AccountStatus::ALL
+        $accountStatus = AccountStatus::ALL,
     ) {
         // TODO: Implement GetUsersInGroup() method.
         return null;
@@ -56,6 +59,7 @@ class FakeGroupViewRepository implements IGroupViewRepository
 
     /**
      * @param $roleLevel int|RoleLevel
+     *
      * @return GroupItemView[]|array
      */
     public function GetGroupsByRole($roleLevel)

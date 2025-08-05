@@ -16,6 +16,7 @@ class Reminder
     {
         return $this->user_id;
     }
+
     /**
      * @return int
      */
@@ -56,7 +57,6 @@ class Reminder
         return $this->refNumber;
     }
 
-
     public function __construct($id, $userid, $address, $message, $sendtime, $refnumber)
     {
         $this->reminder_id = $id;
@@ -83,12 +83,13 @@ class Reminder
             $row[ColumnNames::REMINDER_REFNUMBER]
         );
     }
+
     public static function SendItOut(Reminder $reminder)
     {
         $message = $reminder->Message();
-        $subject = "Automatic Reminder from LibreBooking";
+        $subject = 'Automatic Reminder from LibreBooking';
         /* replace 'username' and 'password' with your GoogleVoice sign-in */
-        $gv = new GoogleVoice("username", "password");
+        $gv = new GoogleVoice('username', 'password');
         $addresses = explode(',', str_replace(' ', '', $reminder->Address()));
         foreach ($addresses as $address) {
             if (ctype_digit($address)) {
@@ -99,6 +100,7 @@ class Reminder
         }
         $repository = new ReminderRepository();
         $repository->DeleteReminder($reminder->ReminderID());
+
         return;
     }
 }

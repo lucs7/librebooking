@@ -70,7 +70,7 @@ class Pages
     {
         $pages = [];
         foreach (self::$_pages as $key => $page) {
-            if ($key != Pages::ID_LOGIN) {
+            if (Pages::ID_LOGIN != $key) {
                 $pages[$key] = $page;
             }
         }

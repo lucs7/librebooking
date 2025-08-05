@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 class AttributeServiceTest extends TestBase
 {
@@ -65,11 +65,11 @@ class AttributeServiceTest extends TestBase
         $attributeList = $this->attributeService->GetAttributes($category, $entityIds);
 
         $this->assertEquals([
-                                new LBAttribute($attributes[0], 'value1'),
-                                new LBAttribute($attributes[1], 'value2'),
-                                new LBAttribute($attributes[2], 'value3'),
-                                new LBAttribute($attributes[5], null),
-                            ], $attributeList->GetAttributes(1));
+            new LBAttribute($attributes[0], 'value1'),
+            new LBAttribute($attributes[1], 'value2'),
+            new LBAttribute($attributes[2], 'value3'),
+            new LBAttribute($attributes[5], null),
+        ], $attributeList->GetAttributes(1));
         $this->assertEquals([new LBAttribute($attributes[0], null), new LBAttribute($attributes[1], null), new LBAttribute($attributes[3], 'value20')], $attributeList->GetAttributes(20));
         $this->assertEquals(['label1', 'label2', 'label3', 'label4', 'label5', 'label6'], $attributeList->GetLabels());
     }
@@ -100,7 +100,7 @@ class AttributeServiceTest extends TestBase
         $this->assertEquals(3, count($result->Errors()));
     }
 
-    public function testWhenUserIsNotAdminButAttributeIsAdminOnly_ThenDoNotValidate()
+    public function testWhenUserIsNotAdminButAttributeIsAdminOnlyThenDoNotValidate()
     {
         $category = CustomAttributeCategory::RESERVATION;
         $isAdmin = false;
@@ -116,7 +116,7 @@ class AttributeServiceTest extends TestBase
         $this->assertTrue($result->IsValid());
     }
 
-    public function testWhenUserIsAdminAndAttributeIsAdminOnly_ThenValidate()
+    public function testWhenUserIsAdminAndAttributeIsAdminOnlyThenValidate()
     {
         $category = CustomAttributeCategory::RESERVATION;
         $isAdmin = true;

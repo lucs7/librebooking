@@ -13,12 +13,12 @@ class AccessoryReservation
     private $accessoryId;
 
     /**
-     * @var \Date
+     * @var Date
      */
     private $startDate;
 
     /**
-     * @var \Date
+     * @var Date
      */
     private $endDate;
 
@@ -29,10 +29,10 @@ class AccessoryReservation
 
     /**
      * @param string $referenceNumber
-     * @param Date $startDate
-     * @param Date $endDate
-     * @param int $accessoryId
-     * @param int $quantityReserved
+     * @param Date   $startDate
+     * @param Date   $endDate
+     * @param int    $accessoryId
+     * @param int    $quantityReserved
      */
     public function __construct($referenceNumber, $startDate, $endDate, $accessoryId, $quantityReserved)
     {

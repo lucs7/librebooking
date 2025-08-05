@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Values/FullName.php');
+require_once ROOT_DIR.'Domain/Values/FullName.php';
 
 class CreditLogView
 {
@@ -40,6 +40,7 @@ class CreditLogView
 
     /**
      * @param array $row
+     *
      * @return CreditLogView
      */
     public static function Populate($row)

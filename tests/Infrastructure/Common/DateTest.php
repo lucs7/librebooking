@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+require_once ROOT_DIR.'lib/Common/namespace.php';
 
 class DateTest extends TestBase
 {
@@ -95,7 +95,7 @@ class DateTest extends TestBase
         $datetime->setTimezone(new DateTimeZone('US/Eastern'));
 
         $expected = $datetime->format($format);
-        $adjusted = $now->ToTimezone("US/Eastern");
+        $adjusted = $now->ToTimezone('US/Eastern');
 
         $this->assertEquals($expected, $adjusted->Format($format));
     }
@@ -146,7 +146,6 @@ class DateTest extends TestBase
         $this->assertEquals($month, $date->Month());
         $this->assertEquals($day, $date->Day());
         $this->assertEquals($year, $date->Year());
-
 
         $adjusted = $date->ToTimezone('US/Eastern');
 
@@ -388,10 +387,10 @@ class DateTest extends TestBase
 
         //		$this->assertEquals($expected, $actual);
         $this->assertEquals(count($expected), count($actual));
-        $this->assertTrue($expected[0]->Equals($actual[0]), "Dates[0] are not equal");
-        $this->assertTrue($expected[1]->Equals($actual[1]), "Dates[1] are not equal");
-        $this->assertTrue($expected[2]->Equals($actual[2]), "Dates[2] are not equal");
-        $this->assertTrue($expected[3]->Equals($actual[3]), "Dates[3] are not equal");
+        $this->assertTrue($expected[0]->Equals($actual[0]), 'Dates[0] are not equal');
+        $this->assertTrue($expected[1]->Equals($actual[1]), 'Dates[1] are not equal');
+        $this->assertTrue($expected[2]->Equals($actual[2]), 'Dates[2] are not equal');
+        $this->assertTrue($expected[3]->Equals($actual[3]), 'Dates[3] are not equal');
     }
 
     public function testCanGetDifferenceBetweenTwoDates()
@@ -435,31 +434,31 @@ class DateTest extends TestBase
     public function testCanGetDifferenceFromTime()
     {
         $seconds = (12 * 60 * 60) + (60 * 35);
-        $str1 = "0d12h35m";
+        $str1 = '0d12h35m';
         $diff1 = DateDiff::FromTimeString($str1);
 
         $this->assertEquals($seconds, $diff1->TotalSeconds());
         $this->assertEquals(12, $diff1->Hours());
         $this->assertEquals(35, $diff1->Minutes());
         $this->assertEquals(0, $diff1->Days());
-        $this->assertEquals("12 hours 35 minutes", $diff1->__toString());
+        $this->assertEquals('12 hours 35 minutes', $diff1->__toString());
 
         $seconds2 = (4 * 24 * 60 * 60) + (12 * 60 * 60) + (60 * 35);
-        $str2 = "4d12h35m";
+        $str2 = '4d12h35m';
         $diff2 = DateDiff::FromTimeString($str2);
 
         $this->assertEquals($seconds2, $diff2->TotalSeconds());
         $this->assertEquals(12, $diff2->Hours());
         $this->assertEquals(35, $diff2->Minutes());
         $this->assertEquals(4, $diff2->Days());
-        $this->assertEquals("4 days 12 hours 35 minutes", $diff2->__toString());
+        $this->assertEquals('4 days 12 hours 35 minutes', $diff2->__toString());
 
-        $diff3 = DateDiff::FromTimeString("25h0m");
-        $this->assertEquals((25 * 60 * 60), $diff3->TotalSeconds());
+        $diff3 = DateDiff::FromTimeString('25h0m');
+        $this->assertEquals(25 * 60 * 60, $diff3->TotalSeconds());
 
-        $this->assertEquals(0, DateDiff::FromTimeString("dhm")->TotalSeconds());
-        $this->assertEquals(0, DateDiff::FromTimeString("hm")->TotalSeconds());
-        $this->assertEquals(0, DateDiff::FromTimeString("dm")->TotalSeconds());
+        $this->assertEquals(0, DateDiff::FromTimeString('dhm')->TotalSeconds());
+        $this->assertEquals(0, DateDiff::FromTimeString('hm')->TotalSeconds());
+        $this->assertEquals(0, DateDiff::FromTimeString('dm')->TotalSeconds());
     }
 
     public function testDateRangeOverlapsIfStartsWithinOrEndsWithin()
@@ -513,7 +512,7 @@ class DateTest extends TestBase
 
         $d2 = Date::ParseExact($iso);
 
-        $this->assertTrue($d->Equals($d2), $d->ToUtc()->ToString() . ' ' . $d2->ToString());
+        $this->assertTrue($d->Equals($d2), $d->ToUtc()->ToString().' '.$d2->ToString());
     }
 
     public function testJan31Bug()
@@ -531,7 +530,7 @@ class DateTest extends TestBase
         $this->assertEquals(0, $interval->TotalSeconds());
     }
 
-    public function testWhenComparingDatePartOnly_UseTimeOfSourceDate()
+    public function testWhenComparingDatePartOnlyUseTimeOfSourceDate()
     {
         $d1 = new Date('2014-09-14 02:00:00', 'America/Chicago');
         $d2 = new Date('2014-09-14 00:00:00', 'Europe/Berlin');
@@ -587,7 +586,7 @@ class DateTest extends TestBase
         $this->assertEquals(1, $range->NumberOfWeekendDays());
     }
 
-    public function testWhenEndDateIsAtMidnight_DoNotCountIt()
+    public function testWhenEndDateIsAtMidnightDoNotCountIt()
     {
         $timezone = 'America/Chicago';
         $begin = Date::Parse('2014-11-01 12:00', $timezone);
@@ -637,10 +636,10 @@ class DateTest extends TestBase
         $actual = $range->DateTimes();
 
         $this->assertEquals(count($expected), count($actual));
-        $this->assertTrue($expected[0]->Equals($actual[0]), "Dates[0] are not equal");
-        $this->assertTrue($expected[1]->Equals($actual[1]), "Dates[1] are not equal");
-        $this->assertTrue($expected[2]->Equals($actual[2]), "Dates[2] are not equal");
-        $this->assertTrue($expected[3]->Equals($actual[3]), "Dates[3] are not equal");
+        $this->assertTrue($expected[0]->Equals($actual[0]), 'Dates[0] are not equal');
+        $this->assertTrue($expected[1]->Equals($actual[1]), 'Dates[1] are not equal');
+        $this->assertTrue($expected[2]->Equals($actual[2]), 'Dates[2] are not equal');
+        $this->assertTrue($expected[3]->Equals($actual[3]), 'Dates[3] are not equal');
     }
 
     public function testAddMonth()

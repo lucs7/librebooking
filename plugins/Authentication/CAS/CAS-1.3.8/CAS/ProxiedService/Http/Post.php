@@ -20,11 +20,13 @@
  * PHP Version 5
  *
  * @file     CAS/ProxiedService/Http/Post.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 /**
@@ -61,25 +63,27 @@
  *	}
  *
  * @class    CAS_ProxiedService_Http_Post
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 class CAS_ProxiedService_Http_Post extends CAS_ProxiedService_Http_Abstract
 {
     /**
-     * The content-type of this request
+     * The content-type of this request.
      *
-     * @var string $_contentType
+     * @var string
      */
     private $_contentType;
 
     /**
-     * The body of the this request
+     * The body of the this request.
      *
-     * @var string $_body
+     * @var string
      */
     private $_body;
 
@@ -89,14 +93,13 @@ class CAS_ProxiedService_Http_Post extends CAS_ProxiedService_Http_Abstract
      * @param string $contentType content type
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function setContentType($contentType)
     {
         if ($this->hasBeenSent()) {
-            throw new CAS_OutOfSequenceException(
-                'Cannot set the content type, request already sent.'
-            );
+            throw new CAS_OutOfSequenceException('Cannot set the content type, request already sent.');
         }
 
         $this->_contentType = $contentType;
@@ -108,21 +111,20 @@ class CAS_ProxiedService_Http_Post extends CAS_ProxiedService_Http_Abstract
      * @param string $body body to set
      *
      * @return void
-     * @throws CAS_OutOfSequenceException If called after the Request has been sent.
+     *
+     * @throws CAS_OutOfSequenceException if called after the Request has been sent
      */
     public function setBody($body)
     {
         if ($this->hasBeenSent()) {
-            throw new CAS_OutOfSequenceException(
-                'Cannot set the body, request already sent.'
-            );
+            throw new CAS_OutOfSequenceException('Cannot set the body, request already sent.');
         }
 
         $this->_body = $body;
     }
 
     /**
-     * Add any other parts of the request needed by concrete classes
+     * Add any other parts of the request needed by concrete classes.
      *
      * @param CAS_Request_RequestInterface $request request interface class
      *
@@ -131,10 +133,7 @@ class CAS_ProxiedService_Http_Post extends CAS_ProxiedService_Http_Abstract
     protected function populateRequest(CAS_Request_RequestInterface $request)
     {
         if (empty($this->_contentType) && !empty($this->_body)) {
-            throw new CAS_ProxiedService_Exception(
-                "If you pass a POST body, you must specify a content type via "
-                .get_class($this).'->setContentType($contentType).'
-            );
+            throw new CAS_ProxiedService_Exception('If you pass a POST body, you must specify a content type via '.get_class($this).'->setContentType($contentType).');
         }
 
         $request->makePost();

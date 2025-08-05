@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/PaymentGateway.php');
+require_once ROOT_DIR.'Domain/PaymentGateway.php';
 
 class FakePayPalGateway extends PayPalGateway
 {
@@ -26,6 +26,7 @@ class FakePayPalGateway extends PayPalGateway
         $this->_PaymentCreatedCart = $cart;
         $this->_ReturnUrl = $returnUrl;
         $this->_CancelUrl = $cancelUrl;
+
         return $this->_Payment;
     }
 
@@ -34,6 +35,7 @@ class FakePayPalGateway extends PayPalGateway
         $this->_PaymentCreatedCart = $cart;
         $this->_PaymentId = $paymentId;
         $this->_PayerId = $payerId;
+
         return $this->_Payment;
     }
 
@@ -41,6 +43,7 @@ class FakePayPalGateway extends PayPalGateway
     {
         $this->_LastTransactionView = $log;
         $this->_LastRefundAmount = $amount;
+
         return $this->_Refund;
     }
 }

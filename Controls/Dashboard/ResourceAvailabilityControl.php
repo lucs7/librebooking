@@ -1,10 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Dashboard/ResourceAvailabilityControlPresenter.php');
-require_once(ROOT_DIR . 'Controls/Dashboard/DashboardItem.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+require_once ROOT_DIR.'Presenters/Dashboard/ResourceAvailabilityControlPresenter.php';
+require_once ROOT_DIR.'Controls/Dashboard/DashboardItem.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
 
 interface IResourceAvailabilityControl
 {
@@ -32,12 +32,11 @@ interface IResourceAvailabilityControl
 class AvailableDashboardItem
 {
     /**
-     * @var ResourceDto $resource
+     * @var ResourceDto
      */
     private $resource;
 
     /**
-     * @param ResourceDto $resource
      * @param ReservationItemView|null $next
      */
     public function __construct(ResourceDto $resource, private $next = null)
@@ -66,7 +65,7 @@ class AvailableDashboardItem
      */
     public function NextTime()
     {
-        if ($this->next != null) {
+        if (null != $this->next) {
             return $this->next->StartDate;
         }
 
@@ -78,8 +77,9 @@ class AvailableDashboardItem
      */
     public function HasColor()
     {
-        if ($this->resource != null) {
+        if (null != $this->resource) {
             $color = $this->resource->GetColor();
+
             return !empty($color);
         }
 
@@ -91,7 +91,7 @@ class AvailableDashboardItem
      */
     public function GetTextColor()
     {
-        if ($this->resource != null) {
+        if (null != $this->resource) {
             return $this->resource->GetTextColor();
         }
 
@@ -103,7 +103,7 @@ class AvailableDashboardItem
      */
     public function GetColor()
     {
-        if ($this->resource != null) {
+        if (null != $this->resource) {
             return $this->resource->GetColor();
         }
 
@@ -198,7 +198,6 @@ class ResourceAvailabilityControl extends DashboardItem implements IResourceAvai
 
         $this->Display('resource_availability.tpl');
     }
-
 
     public function SetAvailable($items)
     {

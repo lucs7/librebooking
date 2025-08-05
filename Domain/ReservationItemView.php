@@ -17,9 +17,6 @@ interface IReservedItemView
      */
     public function GetResourceId();
 
-    /**
-     * @return mixed
-     */
     public function GetResourceName();
 
     /**
@@ -28,7 +25,6 @@ interface IReservedItemView
     public function GetId();
 
     /**
-     * @param Date $date
      * @return bool
      */
     public function OccursOn(Date $date);
@@ -54,7 +50,7 @@ interface IReservedItemView
     public function BufferedTimes();
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetColor();
 
@@ -95,18 +91,21 @@ interface IReservedItemView
 
     /**
      * @param int $newMinutes
+     *
      * @return bool
      */
     public function GetIsNew($newMinutes);
 
     /**
      * @param int $updatedMinutes
+     *
      * @return bool
      */
     public function GetIsUpdated($updatedMinutes);
 
     /**
      * @param int $userId
+     *
      * @return bool
      */
     public function IsOwner($userId);
@@ -175,43 +174,44 @@ class ReservationItemView implements IReservedItemView
     public $ScheduleId;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $FirstName;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $LastName;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     public $UserId;
 
     /**
-     * @var null|Date
+     * @var Date|null
      */
     public $CreatedDate;
 
     /**
-     * alias of $CreatedDate
-     * @var null|Date
+     * alias of $CreatedDate.
+     *
+     * @var Date|null
      */
     public $DateCreated;
 
     /**
-     * @var null|Date
+     * @var Date|null
      */
     public $ModifiedDate;
 
     /**
-     * @var null|bool
+     * @var bool|null
      */
     public $IsRecurring;
 
     /**
-     * @var null|bool
+     * @var bool|null
      */
     public $RequiresApproval;
 
@@ -223,12 +223,10 @@ class ReservationItemView implements IReservedItemView
     /**
      * @var int
      */
-
     public $RepeatInterval;
     /**
      * @var array
      */
-
     public $RepeatWeekdays;
 
     /**
@@ -337,12 +335,12 @@ class ReservationItemView implements IReservedItemView
     public $ResourceId;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $OwnerFirstName;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $OwnerLastName;
 
@@ -392,14 +390,14 @@ class ReservationItemView implements IReservedItemView
     public $ResourceNames = [];
 
     /**
-     * @var null|int
+     * @var int|null
      */
-    public $ResourceAdminGroupId = null;
+    public $ResourceAdminGroupId;
 
     /**
-     * @var null|int
+     * @var int|null
      */
-    public $ScheduleAdminGroupId = null;
+    public $ScheduleAdminGroupId;
 
     /**
      * @var int|null
@@ -414,26 +412,26 @@ class ReservationItemView implements IReservedItemView
     private $StylingFactory;
 
     /**
-     * @param $referenceNumber string
-     * @param $startDate Date
-     * @param $endDate Date
-     * @param $resourceName string
-     * @param $resourceId int
-     * @param $reservationId int
-     * @param $userLevelId int|ReservationUserLevel
-     * @param $title string
-     * @param $description string
-     * @param $scheduleId int
-     * @param $userFirstName string
-     * @param $userLastName string
-     * @param $userId int
-     * @param $userPhone string
-     * @param $userPosition string
+     * @param $referenceNumber  string
+     * @param $startDate        Date
+     * @param $endDate          Date
+     * @param $resourceName     string
+     * @param $resourceId       int
+     * @param $reservationId    int
+     * @param $userLevelId      int|ReservationUserLevel
+     * @param $title            string
+     * @param $description      string
+     * @param $scheduleId       int
+     * @param $userFirstName    string
+     * @param $userLastName     string
+     * @param $userId           int
+     * @param $userPhone        string
+     * @param $userPosition     string
      * @param $userOrganization string
      * @param $participant_list string
-     * @param $invitee_list string
-     * @param $attribute_list string
-     * @param $preferences string
+     * @param $invitee_list     string
+     * @param $attribute_list   string
+     * @param $preferences      string
      */
     public function __construct(
         $referenceNumber = null,
@@ -455,7 +453,7 @@ class ReservationItemView implements IReservedItemView
         $participant_list = null,
         $invitee_list = null,
         $attribute_list = null,
-        $preferences = null
+        $preferences = null,
     ) {
         $this->ReferenceNumber = $referenceNumber;
         $this->StartDate = $startDate;
@@ -494,7 +492,7 @@ class ReservationItemView implements IReservedItemView
                 $firstnames = $name_parts[0];
                 $lastnames = $name_parts[1];
                 if (count($name_parts) > 2) {
-                    # more than just one first and one last name
+                    // more than just one first and one last name
                     $lastIndex = count($name_parts) - 1;
                     $firstnames = implode(' ', array_splice($name_parts, 0, $lastIndex));
                     $lastnames = $name_parts[0];
@@ -518,7 +516,7 @@ class ReservationItemView implements IReservedItemView
                 $firstnames = $name_parts[0];
                 $lastnames = $name_parts[1];
                 if (count($name_parts) > 2) {
-                    # more than just one first and one last name
+                    // more than just one first and one last name
                     $lastIndex = count($name_parts) - 1;
                     $firstnames = implode(' ', array_splice($name_parts, 0, $lastIndex));
                     $lastnames = $name_parts[$lastIndex];
@@ -533,12 +531,14 @@ class ReservationItemView implements IReservedItemView
         $this->Attributes = CustomAttributes::Parse($attribute_list);
         $this->UserPreferences = UserPreferences::Parse($preferences);
 
-        $this->StylingFactory= PluginManager::Instance()->LoadStyling();
+        $this->StylingFactory = PluginManager::Instance()->LoadStyling();
     }
 
     /**
      * @static
+     *
      * @param $row array
+     *
      * @return ReservationItemView
      */
     public static function Populate($row)
@@ -587,11 +587,11 @@ class ReservationItemView implements IReservedItemView
             $view->RepeatMonthlyType = $repeatConfig->MonthlyType;
             $view->RepeatTerminationDate = $repeatConfig->TerminationDate;
 
-            $view->IsRecurring = $row[ColumnNames::REPEAT_TYPE] != RepeatType::None;
+            $view->IsRecurring = RepeatType::None != $row[ColumnNames::REPEAT_TYPE];
         }
 
         if (isset($row[ColumnNames::RESERVATION_STATUS])) {
-            $view->RequiresApproval = $row[ColumnNames::RESERVATION_STATUS] == ReservationStatus::Pending;
+            $view->RequiresApproval = ReservationStatus::Pending == $row[ColumnNames::RESERVATION_STATUS];
         }
 
         if (isset($row[ColumnNames::EMAIL])) {
@@ -631,7 +631,7 @@ class ReservationItemView implements IReservedItemView
             $guests = explode('!sep!', $row[ColumnNames::GUEST_LIST]);
             foreach ($guests as $guest) {
                 $emailAndLevel = explode('=', $guest);
-                if ($emailAndLevel[1] == ReservationUserLevel::INVITEE) {
+                if (ReservationUserLevel::INVITEE == $emailAndLevel[1]) {
                     $view->InvitedGuests[] = $emailAndLevel[0];
                 } else {
                     $view->ParticipatingGuests[] = $emailAndLevel[0];
@@ -649,7 +649,7 @@ class ReservationItemView implements IReservedItemView
         $view->CheckinDate = Date::FromDatabase($row[ColumnNames::CHECKIN_DATE]);
         $view->CheckoutDate = Date::FromDatabase($row[ColumnNames::CHECKOUT_DATE]);
         $view->OriginalEndDate = Date::FromDatabase($row[ColumnNames::PREVIOUS_END_DATE]);
-        $view->IsCheckInEnabled = (bool)$row[ColumnNames::ENABLE_CHECK_IN];
+        $view->IsCheckInEnabled = (bool) $row[ColumnNames::ENABLE_CHECK_IN];
         $view->AutoReleaseMinutes = $row[ColumnNames::AUTO_RELEASE_MINUTES];
         $view->CreditsConsumed = $row[ColumnNames::CREDIT_COUNT];
         $view->ResourceAdminGroupId = $row[ColumnNames::RESOURCE_ADMIN_GROUP_ID_RESERVATIONS];
@@ -659,7 +659,6 @@ class ReservationItemView implements IReservedItemView
     }
 
     /**
-     * @param ReservationView $r
      * @return ReservationItemView
      */
     public static function FromReservationView(ReservationView $r)
@@ -715,7 +714,6 @@ class ReservationItemView implements IReservedItemView
     }
 
     /**
-     * @param Date $date
      * @return bool
      */
     public function OccursOn(Date $date)
@@ -778,11 +776,12 @@ class ReservationItemView implements IReservedItemView
 
     public function IsUserOwner($userId)
     {
-        return $this->UserId == $userId && $this->UserLevelId == ReservationUserLevel::OWNER;
+        return $this->UserId == $userId && ReservationUserLevel::OWNER == $this->UserLevelId;
     }
 
     /**
      * @param $userId int
+     *
      * @return bool
      */
     public function IsUserParticipating($userId)
@@ -792,6 +791,7 @@ class ReservationItemView implements IReservedItemView
 
     /**
      * @param $userId int
+     *
      * @return bool
      */
     public function IsUserInvited($userId)
@@ -838,7 +838,8 @@ class ReservationItemView implements IReservedItemView
 
     /**
      * @param int $attributeId
-     * @return null|string
+     *
+     * @return string|null
      */
     public function GetAttributeValue($attributeId)
     {
@@ -863,6 +864,7 @@ class ReservationItemView implements IReservedItemView
         }
 
         $buffer = $this->GetBufferTime();
+
         return new DateRange(
             $this->GetStartDate()->SubtractInterval($buffer),
             $this->GetEndDate()->AddInterval($buffer)
@@ -870,7 +872,6 @@ class ReservationItemView implements IReservedItemView
     }
 
     /**
-     * @param Date $date
      * @return bool
      */
     public function CollidesWith(Date $date)
@@ -896,18 +897,18 @@ class ReservationItemView implements IReservedItemView
     {
         $checkinMinutes = Configuration::Instance()->GetSectionKey(ConfigSection::RESERVATION, ConfigKeys::RESERVATION_CHECKIN_MINUTES, new IntConverter());
 
-        return ($this->CheckinDate->ToString() == '' &&
-                $this->IsCheckInEnabled &&
-                $this->EndDate->GreaterThan(Date::Now()) &&
-                Date::Now()->AddMinutes($checkinMinutes)->GreaterThanOrEqual($this->StartDate)
-        );
+        return '' == $this->CheckinDate->ToString()
+                && $this->IsCheckInEnabled
+                && $this->EndDate->GreaterThan(Date::Now())
+                && Date::Now()->AddMinutes($checkinMinutes)->GreaterThanOrEqual($this->StartDate)
+        ;
     }
 
     public function RequiresCheckOut()
     {
-        if ($this->StartDate->LessThan(Date::Now()) &&
-                $this->CheckoutDate->ToString() == '' &&
-                $this->CheckinDate->ToString() != '') {
+        if ($this->StartDate->LessThan(Date::Now())
+                && '' == $this->CheckoutDate->ToString()
+                && '' != $this->CheckinDate->ToString()) {
             return $this->IsCheckinEnabled();
         }
 
@@ -915,9 +916,9 @@ class ReservationItemView implements IReservedItemView
     }
 
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $_color = null;
+    private $_color;
 
     /**
      * @var ReservationColorRule[]
@@ -933,15 +934,15 @@ class ReservationItemView implements IReservedItemView
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function GetColor()
     {
         if ($this->RequiresApproval) {
             return '';
         }
-        if ($this->_color == null) {
-            $this->_color = "";
+        if (null == $this->_color) {
+            $this->_color = '';
             // cache the color after the first call to prevent multiple iterations of this logic
             $userColor = $this->UserPreferences->Get(UserPreferences::RESERVATION_COLOR);
             $resourceColor = $this->ResourceColor;
@@ -982,6 +983,7 @@ class ReservationItemView implements IReservedItemView
         $color = $this->GetColor();
         if (!empty($color)) {
             $contrastingColor = new ContrastingColor($color);
+
             return $contrastingColor->__toString();
         }
 
@@ -996,6 +998,7 @@ class ReservationItemView implements IReservedItemView
         $color = $this->GetColor();
         if (!empty($color)) {
             $contrastingColor = new AdjustedColor($color, 80);
+
             return $contrastingColor->__toString();
         }
 
@@ -1030,19 +1033,21 @@ class ReservationItemView implements IReservedItemView
     public function GetIsNew($newMinutes)
     {
         $modifiedDate = $this->ModifiedDate;
+
         return
-                ($newMinutes > 0) &&
-                (empty($modifiedDate)) &&
-                ($this->CreatedDate->AddMinutes($newMinutes)->GreaterThanOrEqual(Date::Now()));
+                ($newMinutes > 0)
+                && (empty($modifiedDate))
+                && $this->CreatedDate->AddMinutes($newMinutes)->GreaterThanOrEqual(Date::Now());
     }
 
     public function GetIsUpdated($updatedMinutes)
     {
         $modifiedDate = $this->ModifiedDate;
+
         return
-                ($updatedMinutes > 0) &&
-                (!empty($modifiedDate)) &&
-                ($this->ModifiedDate->AddMinutes($updatedMinutes)->GreaterThanOrEqual(Date::Now()));
+                ($updatedMinutes > 0)
+                && (!empty($modifiedDate))
+                && $this->ModifiedDate->AddMinutes($updatedMinutes)->GreaterThanOrEqual(Date::Now());
     }
 
     public function IsOwner($userId)
@@ -1109,17 +1114,17 @@ class BlackoutItemView extends ReservationItemView
     public $ScheduleId;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $FirstName;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     public $LastName;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     public $OwnerId;
 
@@ -1134,18 +1139,16 @@ class BlackoutItemView extends ReservationItemView
     public $IsRecurring;
 
     /**
-     * @param int $instanceId
-     * @param Date $startDate
-     * @param Date $endDate
-     * @param int $resourceId
-     * @param int $ownerId
-     * @param int $scheduleId
+     * @param int    $instanceId
+     * @param int    $resourceId
+     * @param int    $ownerId
+     * @param int    $scheduleId
      * @param string $title
      * @param string $description
      * @param string $firstName
      * @param string $lastName
      * @param string $resourceName
-     * @param int $seriesId
+     * @param int    $seriesId
      * @param string $repeatOptions
      * @param string $repeatType
      */
@@ -1163,7 +1166,7 @@ class BlackoutItemView extends ReservationItemView
         $resourceName,
         $seriesId,
         $repeatOptions,
-        $repeatType
+        $repeatType,
     ) {
         $this->InstanceId = $instanceId;
         $this->StartDate = $startDate;
@@ -1179,12 +1182,12 @@ class BlackoutItemView extends ReservationItemView
         $this->SeriesId = $seriesId;
         $this->Date = new DateRange($startDate, $endDate);
         $this->RepeatConfiguration = RepeatConfiguration::Create($repeatType, $repeatOptions);
-        $this->IsRecurring = !empty($repeatType) && $repeatType != RepeatType::None;
+        $this->IsRecurring = !empty($repeatType) && RepeatType::None != $repeatType;
     }
 
     /**
      * @static
-     * @param $row
+     *
      * @return BlackoutItemView
      */
     public static function Populate($row)
@@ -1240,7 +1243,6 @@ class BlackoutItemView extends ReservationItemView
     }
 
     /**
-     * @param Date $date
      * @return bool
      */
     public function OccursOn(Date $date)

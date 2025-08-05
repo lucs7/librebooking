@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/AccessoryRepository.php');
+require_once ROOT_DIR.'Domain/Access/AccessoryRepository.php';
 
 class AccessoryRepositoryTest extends TestBase
 {

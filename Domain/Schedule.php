@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Schedule/CalendarSubscriptionUrl.php');
+require_once ROOT_DIR.'lib/Application/Schedule/CalendarSubscriptionUrl.php';
 
 interface ISchedule
 {
@@ -78,7 +78,7 @@ class Schedule implements ISchedule
         $weekdayStart,
         $daysVisible,
         $timezone = null,
-        $layoutId = null
+        $layoutId = null,
     ) {
         $this->_id = $id;
         $this->_name = $name;
@@ -167,7 +167,7 @@ class Schedule implements ISchedule
 
     public function GetIsCalendarSubscriptionAllowed()
     {
-        return (bool)$this->_isCalendarSubscriptionAllowed;
+        return (bool) $this->_isCalendarSubscriptionAllowed;
     }
 
     protected function SetPublicId($publicId)
@@ -237,7 +237,7 @@ class Schedule implements ISchedule
      */
     public function GetAvailabilityBegin()
     {
-        if ($this->_availabilityBegin == null) {
+        if (null == $this->_availabilityBegin) {
             return new NullDate();
         }
 
@@ -249,7 +249,7 @@ class Schedule implements ISchedule
      */
     public function GetAvailabilityEnd()
     {
-        if ($this->_availabilityEnd == null) {
+        if (null == $this->_availabilityEnd) {
             return new NullDate();
         }
 
@@ -269,7 +269,7 @@ class Schedule implements ISchedule
      */
     public function HasAvailability()
     {
-        return $this->GetAvailabilityBegin()->ToString() != '' && $this->GetAvailabilityEnd()->ToString() != '';
+        return '' != $this->GetAvailabilityBegin()->ToString() && '' != $this->GetAvailabilityEnd()->ToString();
     }
 
     /**
@@ -290,6 +290,7 @@ class Schedule implements ISchedule
 
     /**
      * @static
+     *
      * @return Schedule
      */
     public static function null()
@@ -299,7 +300,9 @@ class Schedule implements ISchedule
 
     /**
      * @static
+     *
      * @param array $row
+     *
      * @return Schedule
      */
     public static function FromRow($row)
@@ -319,14 +322,18 @@ class Schedule implements ISchedule
         $schedule->SetAdminGroupId($row[ColumnNames::SCHEDULE_ADMIN_GROUP_ID]);
         $schedule->SetAvailability(Date::FromDatabase($row[ColumnNames::SCHEDULE_AVAILABLE_START_DATE]), Date::FromDatabase($row[ColumnNames::SCHEDULE_AVAILABLE_END_DATE]));
         $schedule->SetDefaultStyle($row[ColumnNames::SCHEDULE_DEFAULT_STYLE]);
-        if (in_array(ColumnNames::LAYOUT_TYPE, $row)) $schedule->SetLayoutType($row[ColumnNames::LAYOUT_TYPE]);
+        if (in_array(ColumnNames::LAYOUT_TYPE, $row)) {
+            $schedule->SetLayoutType($row[ColumnNames::LAYOUT_TYPE]);
+        }
         $schedule->SetTotalConcurrentReservations($row[ColumnNames::TOTAL_CONCURRENT_RESERVATIONS]);
         $schedule->SetMaxResourcesPerReservation($row[ColumnNames::MAX_RESOURCES_PER_RESERVATION]);
+
         return $schedule;
     }
 
     /**
      * @param bool $allowSubscription
+     *
      * @internal
      */
     public function WithSubscription($allowSubscription)
@@ -336,6 +343,7 @@ class Schedule implements ISchedule
 
     /**
      * @param string $publicId
+     *
      * @internal
      */
     public function WithPublicId($publicId)
@@ -369,7 +377,7 @@ class Schedule implements ISchedule
      */
     public function HasCustomLayout()
     {
-        return $this->_layoutType == ScheduleLayout::Custom;
+        return ScheduleLayout::Custom == $this->_layoutType;
     }
 
     /**
@@ -430,7 +438,6 @@ class NullSchedule extends Schedule
         parent::__construct(0, null, false, 0, 7);
     }
 }
-
 
 class ScheduleStyle
 {

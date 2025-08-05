@@ -102,7 +102,7 @@ class ReservationAuthorizationTest extends TestBase
         $reservationView = new ReservationView();
         $reservationView->OwnerId = $this->currentUser->UserId;
         $reservationView->EndDate = $past;
-        $reservationView->StartDate	= $past->AddDays(-1);
+        $reservationView->StartDate = $past->AddDays(-1);
 
         $isEditable = $this->reservationAuthorization->CanEdit($reservationView, $this->currentUser);
 

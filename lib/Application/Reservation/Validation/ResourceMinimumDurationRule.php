@@ -5,9 +5,11 @@ class ResourceMinimumDurationRule implements IReservationValidationRule
     /**
      * @see IReservationValidationRule::Validate()
      *
-     * @param ReservationSeries $reservationSeries
-     * @param null|ReservationRetryParameter[] $retryParameters
+     * @param ReservationSeries                $reservationSeries
+     * @param ReservationRetryParameter[]|null $retryParameters
+     *
      * @return ReservationRuleResult
+     *
      * @throws Exception
      */
     public function Validate($reservationSeries, $retryParameters)
@@ -26,7 +28,7 @@ class ResourceMinimumDurationRule implements IReservationValidationRule
                 if ($end->LessThan($minEnd)) {
                     return new ReservationRuleResult(
                         false,
-                        $r->GetString("MinDurationError", $minDuration)
+                        $r->GetString('MinDurationError', $minDuration)
                     );
                 }
             }

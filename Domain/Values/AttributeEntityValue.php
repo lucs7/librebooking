@@ -7,9 +7,6 @@ class AttributeEntityValue
      */
     public $AttributeId;
 
-    /**
-     * @var mixed
-     */
     public $Value;
 
     /**
@@ -19,8 +16,8 @@ class AttributeEntityValue
 
     /**
      * @param $attributeId int
-     * @param $entityId int
-     * @param $value mixed
+     * @param $entityId    int
+     * @param $value       mixed
      */
     public function __construct($attributeId, $entityId, $value)
     {
@@ -31,6 +28,6 @@ class AttributeEntityValue
 
     public function __toString()
     {
-        return sprintf("AttributeEntityValue attributeid:%s entityid:%s value:%s", $this->AttributeId, $this->EntityId, $this->Value);
+        return sprintf('AttributeEntityValue attributeid:%s entityid:%s value:%s', $this->AttributeId, $this->EntityId, $this->Value);
     }
 }

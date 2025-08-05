@@ -1,14 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/namespace.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+require_once ROOT_DIR.'Domain/namespace.php';
+require_once ROOT_DIR.'Domain/Access/namespace.php';
 
-require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Reservation/ReservationComponentBinder.php');
+require_once ROOT_DIR.'lib/Application/Authorization/namespace.php';
+require_once ROOT_DIR.'lib/Application/Schedule/namespace.php';
+require_once ROOT_DIR.'lib/Application/Attributes/namespace.php';
+require_once ROOT_DIR.'lib/Application/Reservation/ReservationComponentBinder.php';
 
-require_once(ROOT_DIR . 'Pages/Reservation/ReservationPage.php');
+require_once ROOT_DIR.'Pages/Reservation/ReservationPage.php';
 
 interface IReservationComponentInitializer
 {
@@ -48,11 +48,10 @@ interface IReservationComponentInitializer
     public function GetTimezone();
 
     /**
-     * @param Date $startDate
-     * @param Date $endDate
      * @param array|SchedulePeriod[] $startPeriods
      * @param array|SchedulePeriod[] $endPeriods
-     * @param int $firstWeekday
+     * @param int                    $firstWeekday
+     *
      * @parma bool $lockDates
      */
     public function SetDates(Date $startDate, Date $endDate, $startPeriods, $endPeriods, $firstWeekday, $lockDates = false);
@@ -124,7 +123,7 @@ interface IReservationComponentInitializer
 
     /**
      * @param $attribute CustomAttribute
-     * @param $value mixed
+     * @param $value     mixed
      */
     public function AddAttribute($attribute, $value);
 
@@ -143,9 +142,6 @@ interface IReservationComponentInitializer
      */
     public function IsNew();
 
-    /**
-     * @param DateRange $availability
-     */
     public function SetAvailability(DateRange $availability);
 }
 
@@ -196,12 +192,11 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
     protected $termsRepository;
 
     /**
-     * @param $page IReservationPage
-     * @param $userBinder IReservationComponentBinder
-     * @param $dateBinder IReservationComponentBinder
+     * @param $page           IReservationPage
+     * @param $userBinder     IReservationComponentBinder
+     * @param $dateBinder     IReservationComponentBinder
      * @param $resourceBinder IReservationComponentBinder
-     * @param $userSession UserSession
-     * @param ITermsOfServiceRepository $termsOfServiceRepository
+     * @param $userSession    UserSession
      */
     public function __construct(
         $page,
@@ -209,7 +204,7 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
         IReservationComponentBinder $dateBinder,
         IReservationComponentBinder $resourceBinder,
         UserSession $userSession,
-        ITermsOfServiceRepository $termsOfServiceRepository
+        ITermsOfServiceRepository $termsOfServiceRepository,
     ) {
         $this->basePage = $page;
         $this->userBinder = $userBinder;
@@ -267,12 +262,13 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
 
     /**
      * @param SchedulePeriod[] $periods
-     * @param Date $date
+     * @param Date             $date
+     *
      * @return SchedulePeriod
      */
     private function GetStartSlotClosestTo($periods, $date)
     {
-        for ($i = 0; $i < count($periods); $i++) {
+        for ($i = 0; $i < count($periods); ++$i) {
             $currentPeriod = $periods[$i];
             $periodBegin = $currentPeriod->BeginDate();
 
@@ -282,23 +278,25 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
         }
 
         $lastIndex = count($periods) - 1;
+
         return $periods[$lastIndex];
     }
 
     /**
      * @param SchedulePeriod[] $periods
-     * @param Date $date
+     * @param Date             $date
+     *
      * @return SchedulePeriod
      */
     private function GetEndSlotClosestTo($periods, $date)
     {
         $lastIndex = count($periods) - 1;
 
-        if ($periods[$lastIndex]->EndDate()->CompareTime($date) == 0) {
+        if (0 == $periods[$lastIndex]->EndDate()->CompareTime($date)) {
             return $periods[$lastIndex];
         }
 
-        for ($i = 0; $i < count($periods); $i++) {
+        for ($i = 0; $i < count($periods); ++$i) {
             $currentPeriod = $periods[$i];
             $periodEnd = $currentPeriod->EndDate();
 
@@ -312,13 +310,14 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
 
     public function SetDates(Date $startDate, Date $endDate, $startPeriods, $endPeriods, $firstWeekday, $lockDates = false)
     {
-        if (count($startPeriods) == 0 || count($endPeriods) == 0) {
+        if (0 == count($startPeriods) || 0 == count($endPeriods)) {
             $this->basePage->MakeUnavailable();
+
             return;
         }
         $this->basePage->BindPeriods($startPeriods, $endPeriods, $lockDates);
         $this->SetSelectedDates($startDate, $endDate, $startPeriods, $endPeriods);
-        if ($firstWeekday == Schedule::Today) {
+        if (Schedule::Today == $firstWeekday) {
             $this->basePage->SetFirstWeekday(0);
         } else {
             $this->basePage->SetFirstWeekday($firstWeekday);
@@ -418,7 +417,7 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
 
     /**
      * @param $attribute CustomAttribute
-     * @param $value mixed
+     * @param $value     mixed
      */
     public function AddAttribute($attribute, $value)
     {
@@ -453,7 +452,7 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
     private function SetTermsOfService()
     {
         $termsOfService = $this->termsRepository->Load();
-        if ($termsOfService != null && $termsOfService->AppliesToReservation()) {
+        if (null != $termsOfService && $termsOfService->AppliesToReservation()) {
             $this->basePage->SetTerms($termsOfService);
         }
     }

@@ -1,23 +1,25 @@
 <?php
 
 /**
- * Advanced example for SAML with attributes and single logout
+ * Advanced example for SAML with attributes and single logout.
  *
  * PHP Version 5
  *
  * @file     example_advanced_saml11.php
+ *
  * @category Authentication
- * @package  PhpCAS
+ *
  * @author   Joachim Fritschi <jfritschi@freenet.de>
  * @author   Adam Franco <afranco@middlebury.edu>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ *
+ * @see     https://wiki.jasig.org/display/CASC/phpCAS
  */
 
 // Load the settings from the central config file
 require_once 'config.php';
 // Load the CAS lib
-require_once $phpcas_path . '/CAS.php';
+require_once $phpcas_path.'/CAS.php';
 
 // Enable debugging
 phpCAS::setDebug();
@@ -56,7 +58,7 @@ if (isset($_REQUEST['logout'])) {
   </head>
   <body>
 <h2>Advanced SAML 1.1 example</h2>
-<?php require 'script_info.php' ?>
+<?php require 'script_info.php'; ?>
 
 Authentication succeeded for user
 <strong><?php echo phpCAS::getUser(); ?></strong>.
@@ -72,10 +74,10 @@ foreach (phpCAS::getAttributes() as $key => $value) {
         }
         echo '</ol></li>';
     } else {
-        echo '<li>', $key, ': <strong>', $value, '</strong></li>' . PHP_EOL;
+        echo '<li>', $key, ': <strong>', $value, '</strong></li>'.PHP_EOL;
     }
 }
-    ?>
+?>
 </ul>
 <p><a href="?logout=">Logout</a></p>
 </body>

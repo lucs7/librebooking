@@ -3,10 +3,11 @@
 class UserGroupHelper
 {
     /**
-     * Checks if a user is a member of a specific group
+     * Checks if a user is a member of a specific group.
      *
      * @param string|int $groupId The group ID to check
-     * @param string|int $userId The user ID to check
+     * @param string|int $userId  The user ID to check
+     *
      * @return bool True if user is in group, false otherwise
      */
     public static function isUserInGroup(string|int $groupId, string|int $userId): bool
@@ -18,6 +19,7 @@ class UserGroupHelper
                 return true;
             }
         }
+
         return false;
     }
 }

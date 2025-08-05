@@ -1,14 +1,15 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageReservationsPresenter.php');
+require_once ROOT_DIR.'Pages/IPageable.php';
+require_once ROOT_DIR.'Pages/Admin/AdminPage.php';
+require_once ROOT_DIR.'Pages/Ajax/AutoCompletePage.php';
+require_once ROOT_DIR.'Presenters/Admin/ManageReservationsPresenter.php';
 
 interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsComposite
 {
     /**
      * @param array|BlackoutItemView[] $blackouts
+     *
      * @return void
      */
     public function BindBlackouts($blackouts);
@@ -35,36 +36,42 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
 
     /**
      * @param Date $date |null
+     *
      * @return void
      */
     public function SetStartDate($date);
 
     /**
      * @param Date $date |null
+     *
      * @return void
      */
     public function SetEndDate($date);
 
     /**
      * @param int $scheduleId
+     *
      * @return void
      */
     public function SetScheduleId($scheduleId);
 
     /**
      * @param int $resourceId
+     *
      * @return void
      */
     public function SetResourceId($resourceId);
 
     /**
      * @param array|Schedule[] $schedules
+     *
      * @return void
      */
     public function BindSchedules($schedules);
 
     /**
      * @param array|BookableResource[] $resources
+     *
      * @return void
      */
     public function BindResources($resources);
@@ -152,11 +159,12 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
     public function GetUpdateBlackoutId();
 
     /**
-     * @param bool $wasAddedSuccessfully
-     * @param string $displayMessage
+     * @param bool                        $wasAddedSuccessfully
+     * @param string                      $displayMessage
      * @param array|ReservationItemView[] $conflictingReservations
-     * @param array|BlackoutItemView[] $conflictingBlackouts
-     * @param string $timezone
+     * @param array|BlackoutItemView[]    $conflictingBlackouts
+     * @param string                      $timezone
+     *
      * @return void
      */
     public function ShowAddResult(
@@ -164,15 +172,16 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
         $displayMessage,
         $conflictingReservations,
         $conflictingBlackouts,
-        $timezone
+        $timezone,
     );
 
     /**
-     * @param bool $wasAddedSuccessfully
-     * @param string $displayMessage
+     * @param bool                        $wasAddedSuccessfully
+     * @param string                      $displayMessage
      * @param array|ReservationItemView[] $conflictingReservations
-     * @param array|BlackoutItemView[] $conflictingBlackouts
-     * @param string $timezone
+     * @param array|BlackoutItemView[]    $conflictingBlackouts
+     * @param string                      $timezone
+     *
      * @return void
      */
     public function ShowUpdateResult(
@@ -180,7 +189,7 @@ interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsCom
         $displayMessage,
         $conflictingReservations,
         $conflictingBlackouts,
-        $timezone
+        $timezone,
     );
 
     /**
@@ -257,6 +266,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     /**
      * @var PageablePage
+     *
      * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
      */
     private $pageablePage;
@@ -275,7 +285,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
             new ResourceAdminResourceRepository($userRepo, $userSession)
         );
 
-        /**
+        /*
          * @todo(jlvillal): 2025-07-15: Convert this to `Page` for LibreBooking v4.0.0
          */
         $this->pageablePage = new PageablePage($this);
@@ -312,7 +322,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $displayMessage,
         $conflictingReservations,
         $conflictingBlackouts,
-        $timezone
+        $timezone,
     ) {
         $this->Set('Successful', $wasAddedSuccessfully);
         $this->Set('SuccessKey', 'BlackoutCreated');
@@ -329,7 +339,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $displayMessage,
         $conflictingReservations,
         $conflictingBlackouts,
-        $timezone
+        $timezone,
     ) {
         $this->Set('Successful', $wasAddedSuccessfully);
         $this->Set('SuccessKey', 'BlackoutUpdated');
@@ -364,6 +374,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     /**
      * @param Date $date
+     *
      * @return void
      */
     public function SetStartDate($date)
@@ -373,6 +384,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     /**
      * @param Date $date
+     *
      * @return void
      */
     public function SetEndDate($date)
@@ -398,6 +410,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     /**
      * @param int $scheduleId
+     *
      * @return void
      */
     public function SetScheduleId($scheduleId)
@@ -407,6 +420,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     /**
      * @param int $resourceId
+     *
      * @return void
      */
     public function SetResourceId($resourceId)
@@ -434,17 +448,17 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     /**
      * @return int
+     *
      * @todo(jlvillal): 2025-07-15: Remove this method for LibreBooking v4.0.0
      */
     public function GetPageSize()
     {
         /* replaced by dataTable */
-        /*return $this->pageablePage->GetPageSize();*/
-        throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
+        /* return $this->pageablePage->GetPageSize(); */
+        throw new LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
     /**
-     * @param PageInfo $pageInfo
      * @return void
      */
     public function BindPageInfo(PageInfo $pageInfo)
@@ -474,6 +488,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
     public function GetApplyBlackoutToAllResources()
     {
         $applyToSchedule = $this->GetForm(FormKeys::BLACKOUT_APPLY_TO_SCHEDULE);
+
         return isset($applyToSchedule);
     }
 
@@ -540,7 +555,6 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
     {
         return $this->GetForm(FormKeys::CONFLICT_ACTION);
     }
-
 
     /**
      * @return int
@@ -714,7 +728,6 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         if (!is_array($resources)) {
             return [$resources];
         }
-
 
         return $resources;
     }

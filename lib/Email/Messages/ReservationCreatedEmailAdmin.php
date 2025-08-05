@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/namespace.php');
+require_once ROOT_DIR.'lib/Email/namespace.php';
 
 // TODO: Need a way to unit test this
 class ReservationCreatedEmailAdmin extends EmailMessage
@@ -39,14 +39,6 @@ class ReservationCreatedEmailAdmin extends EmailMessage
      */
     private $userRepository;
 
-    /**
-     * @param UserDto $adminDto
-     * @param User $reservationOwner
-     * @param ReservationSeries $reservationSeries
-     * @param IResource $primaryResource
-     * @param IAttributeRepository $attributeRepository
-     * @param IUserRepository $userRepository
-     */
     public function __construct(UserDto $adminDto, User $reservationOwner, ReservationSeries $reservationSeries, IResource $primaryResource, IAttributeRepository $attributeRepository, IUserRepository $userRepository)
     {
         parent::__construct($adminDto->Language());
@@ -90,6 +82,7 @@ class ReservationCreatedEmailAdmin extends EmailMessage
     public function Body()
     {
         $this->PopulateTemplate();
+
         return $this->FetchTemplate($this->GetTemplateName());
     }
 
@@ -126,7 +119,7 @@ class ReservationCreatedEmailAdmin extends EmailMessage
         $this->Set('RepeatDates', $repeatDates);
         $this->Set('RepeatRanges', $repeatRanges);
         $this->Set('RequiresApproval', $this->reservationSeries->RequiresApproval());
-        $this->Set('ReservationUrl', Pages::RESERVATION . "?" . QueryStringKeys::REFERENCE_NUMBER . '=' . $currentInstance->ReferenceNumber());
+        $this->Set('ReservationUrl', Pages::RESERVATION.'?'.QueryStringKeys::REFERENCE_NUMBER.'='.$currentInstance->ReferenceNumber());
 
         $resourceNames = [];
         foreach ($this->reservationSeries->AllResources() as $resource) {
@@ -138,7 +131,7 @@ class ReservationCreatedEmailAdmin extends EmailMessage
         $attributes = $this->attributeRepository->GetByCategory(CustomAttributeCategory::RESERVATION);
         $attributeValues = [];
         foreach ($attributes as $attribute) {
-            if (($attribute->HasSecondaryEntities()) && in_array($this->reservationSeries->ResourceId(), $attribute->SecondaryEntityIds())) {
+            if ($attribute->HasSecondaryEntities() && in_array($this->reservationSeries->ResourceId(), $attribute->SecondaryEntityIds())) {
                 $attributeValues[] = new LBAttribute($attribute, $this->reservationSeries->GetAttributeValue($attribute->Id()));
             }
         }
@@ -146,7 +139,7 @@ class ReservationCreatedEmailAdmin extends EmailMessage
         $this->Set('Attributes', $attributeValues);
 
         $bookedBy = $this->reservationSeries->BookedBy();
-        if ($bookedBy != null && ($bookedBy->UserId != $this->reservationOwner->Id())) {
+        if (null != $bookedBy && ($bookedBy->UserId != $this->reservationOwner->Id())) {
             $this->Set('CreatedBy', new FullName($bookedBy->FirstName, $bookedBy->LastName));
         }
 
@@ -155,6 +148,6 @@ class ReservationCreatedEmailAdmin extends EmailMessage
 
     private function GetFullImagePath($img)
     {
-        return Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL) . '/' . $img;
+        return Configuration::Instance()->GetKey(ConfigKeys::IMAGE_UPLOAD_URL).'/'.$img;
     }
 }

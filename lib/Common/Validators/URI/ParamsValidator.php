@@ -5,10 +5,11 @@ class ParamsValidator
     /**
      * Validates query parameters in the request URI against predefined rules.
      *
-     * @param array $params       Parameter definitions and validation rules
-     * @param string $requestURI  The full request URI (e.g., $_SERVER['REQUEST_URI'])
-     * @param bool $optional      Whether validation is optional
-     * @return bool               True if validation passed or skipped; false if validation failed
+     * @param array  $params     Parameter definitions and validation rules
+     * @param string $requestURI The full request URI (e.g., $_SERVER['REQUEST_URI'])
+     * @param bool   $optional   Whether validation is optional
+     *
+     * @return bool True if validation passed or skipped; false if validation failed
      */
     public static function validate(array $params, string $requestURI, bool $optional): bool
     {
@@ -18,13 +19,15 @@ class ParamsValidator
 
         // If there are no query parameters
         if (empty($queryParams)) {
-            Log::Debug(message: "No parameters found in URI.");
+            Log::Debug(message: 'No parameters found in URI.');
 
             if ($optional) {
-                Log::Debug(message: "Validation optional. Skipping.");
+                Log::Debug(message: 'Validation optional. Skipping.');
+
                 return true;
             } else {
-                Log::Debug(message: "Parameters required but missing.");
+                Log::Debug(message: 'Parameters required but missing.');
+
                 return false;
             }
         }
@@ -40,19 +43,21 @@ class ParamsValidator
 
             if (!self::validateParam($param, $validators, $requestURI)) {
                 Log::Debug(message: "Validation failed for '$param'.");
+
                 return false;
             }
 
             Log::Debug(message: "Validation passed for '$param'.");
         }
+
         return true;
     }
 
     public static function validateOrRedirect(array $params, string $requestURI, string $redirectURL, bool $optional): void
     {
         if (!self::validate($params, $requestURI, $optional)) {
-            Log::Debug(message: "Validation failed. Redirecting to: " . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
-            header("Location: " . dirname($_SERVER['SCRIPT_NAME']) . $redirectURL);
+            Log::Debug(message: 'Validation failed. Redirecting to: '.dirname($_SERVER['SCRIPT_NAME']).$redirectURL);
+            header('Location: '.dirname($_SERVER['SCRIPT_NAME']).$redirectURL);
             exit;
         }
     }
@@ -71,7 +76,7 @@ class ParamsValidator
         $hasNormal = false;
         $passedNormal = false;
 
-        Log::Debug(message: "Validating param '$param' with rules: " . json_encode($validators));
+        Log::Debug(message: "Validating param '$param' with rules: ".json_encode($validators));
 
         foreach ($validators as $validator) {
             // MATCH validator (array of expected values)
@@ -80,7 +85,7 @@ class ParamsValidator
 
                 foreach ($validator as $expected) {
                     $result = ParamsValidatorMethods::matchValidator($param, $expected, $requestURI);
-                    Log::Debug(message: "MATCH validation for '$param' against expected '$expected': " . ($result ? "passed" : "failed"));
+                    Log::Debug(message: "MATCH validation for '$param' against expected '$expected': ".($result ? 'passed' : 'failed'));
 
                     if ($result) {
                         $passedMatch = true;
@@ -88,12 +93,12 @@ class ParamsValidator
                     }
                 }
 
-                // Simple validator (like 'n' for numerical, 'd' for date)
+            // Simple validator (like 'n' for numerical, 'd' for date)
             } else {
                 $hasNormal = true;
 
                 $result = self::runSimpleValidation($param, $validator, $requestURI);
-                Log::Debug(message: "Validator '$validator' for '$param': " . ($result ? "passed" : "failed"));
+                Log::Debug(message: "Validator '$validator' for '$param': ".($result ? 'passed' : 'failed'));
 
                 if ($result) {
                     $passedNormal = true;
@@ -106,7 +111,7 @@ class ParamsValidator
         // AND
         // - No normal validator is defined OR one normal validator passed
         $finalResult = (!$hasMatch || $passedMatch) && (!$hasNormal || $passedNormal);
-        Log::Debug(message: "Final validation result for '$param': " . ($finalResult ? "passed" : "failed"));
+        Log::Debug(message: "Final validation result for '$param': ".($finalResult ? 'passed' : 'failed'));
 
         return $finalResult;
     }
@@ -114,8 +119,8 @@ class ParamsValidator
     /**
      * Runs a basic single-type validation (non-MATCH).
      *
-     * @param string $param     Parameter name
-     * @param string $validator Validator key (e.g. 'n', 'd', etc.)
+     * @param string $param      Parameter name
+     * @param string $validator  Validator key (e.g. 'n', 'd', etc.)
      * @param string $requestURI Full request URI to extract value
      */
     private static function runSimpleValidation(string $param, string $validator, string $requestURI): bool
@@ -147,6 +152,7 @@ class ParamsValidator
 
             default:
                 Log::Debug(message: "Unknown validator '$validator' for param '$param'. Failing by default.");
+
                 return false;
         }
     }

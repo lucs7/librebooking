@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+require_once ROOT_DIR.'lib/Application/Authentication/namespace.php';
 
 class RegistrationTest extends TestBase
 {
@@ -37,7 +37,7 @@ class RegistrationTest extends TestBase
     private $language = 'en_US';
     private $homepageId = 1;
     private $attributes = [];
-    private $groups = null;
+    private $groups;
     private $acceptTerms = true;
 
     public function setUp(): void
@@ -365,9 +365,9 @@ class RegistrationTest extends TestBase
 
         $user = new AuthenticatedUser($username, $email, $fname, $lname, 'password', $langCode, $timezone, $phone, $inst, $title);
 
-        $this->assertNull($user->FirstName(), "needs to be null to make sure we do not clear values in the database");
-        $this->assertNull($user->LastName(), "needs to be null to make sure we do not clear values in the database");
-        $this->assertNull($user->Phone(), "needs to be null to make sure we do not clear values in the database");
+        $this->assertNull($user->FirstName(), 'needs to be null to make sure we do not clear values in the database');
+        $this->assertNull($user->LastName(), 'needs to be null to make sure we do not clear values in the database');
+        $this->assertNull($user->Phone(), 'needs to be null to make sure we do not clear values in the database');
         $this->assertEquals($email, $user->Email());
     }
 

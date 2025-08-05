@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Application/Reservation/PrivacyFilter.php');
+require_once ROOT_DIR.'lib/Application/Reservation/PrivacyFilter.php';
 
 class FakePrivacyFilter implements IPrivacyFilter
 {
@@ -34,7 +34,6 @@ class FakePrivacyFilter implements IPrivacyFilter
 
         return $this->_CanViewUser;
     }
-
 
     public function CanViewDetails(UserSession $currentUser, $reservationView = null, $ownerId = null)
     {

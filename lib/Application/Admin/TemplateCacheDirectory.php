@@ -8,8 +8,8 @@ class TemplateCacheDirectory
             $dirName = $this->GetDirectory();
             $cacheDir = opendir($dirName);
             while (false !== ($file = readdir($cacheDir))) {
-                if ($file != "." && $file != "..") {
-                    unlink($dirName . $file);
+                if ('.' != $file && '..' != $file) {
+                    unlink($dirName.$file);
                 }
             }
             closedir($cacheDir);
@@ -20,6 +20,6 @@ class TemplateCacheDirectory
 
     public function GetDirectory()
     {
-        return ROOT_DIR . 'tpl_c/';
+        return ROOT_DIR.'tpl_c/';
     }
 }

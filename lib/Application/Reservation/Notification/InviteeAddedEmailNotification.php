@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Email/Messages/InviteeAddedEmail.php');
+require_once ROOT_DIR.'lib/Email/Messages/InviteeAddedEmail.php';
 
 class InviteeAddedEmailNotification implements IReservationNotification
 {
@@ -29,7 +29,7 @@ class InviteeAddedEmailNotification implements IReservationNotification
 
         $instance = $reservationSeries->CurrentInstance();
         foreach ($instance->AddedInvitees() as $userId) {
-            if ($owner == null) {
+            if (null == $owner) {
                 $owner = $this->userRepository->LoadById($reservationSeries->UserId());
             }
 

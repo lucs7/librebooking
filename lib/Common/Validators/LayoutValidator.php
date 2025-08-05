@@ -20,7 +20,7 @@ class LayoutValidator extends ValidatorBase implements IValidator
     /**
      * @param string|string[] $reservableSlots
      * @param string|string[] $blockedSlots
-     * @param bool $validateSingle
+     * @param bool            $validateSingle
      */
     public function __construct($reservableSlots, $blockedSlots, $validateSingle = true)
     {
@@ -41,8 +41,9 @@ class LayoutValidator extends ValidatorBase implements IValidator
 
             if (!$this->validateSingle) {
                 Log::Debug('Validating daily layout');
-                if (count($this->reservableSlots) != DayOfWeek::NumberOfDays || count($this->blockedSlots) != DayOfWeek::NumberOfDays) {
+                if (DayOfWeek::NumberOfDays != count($this->reservableSlots) || DayOfWeek::NumberOfDays != count($this->blockedSlots)) {
                     $this->isValid = false;
+
                     return;
                 }
                 $layout = ScheduleLayout::ParseDaily('UTC', $this->reservableSlots, $this->blockedSlots);
@@ -67,13 +68,14 @@ class LayoutValidator extends ValidatorBase implements IValidator
                     $this->isValid = false;
                 }
 
-                if (count($slots) == 0 && $slots[0]->BeginDate()->IsMidnight() && $slots[0]->EndDate()->IsMidnight()) {
+                if (0 == count($slots) && $slots[0]->BeginDate()->IsMidnight() && $slots[0]->EndDate()->IsMidnight()) {
                     Log::Debug('Both dates are midnight');
                     $this->isValid = true;
+
                     return;
                 }
 
-                for ($i = 0; $i < count($slots) - 1; $i++) {
+                for ($i = 0; $i < count($slots) - 1; ++$i) {
                     if (!$slots[$i]->EndDate()->Equals($slots[$i + 1]->BeginDate())) {
                         $this->isValid = false;
                     }

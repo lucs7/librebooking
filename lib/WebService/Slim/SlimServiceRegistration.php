@@ -6,9 +6,6 @@ class SlimServiceRegistration
      * @var string
      */
     protected $route;
-    /**
-     * @var mixed
-     */
     protected $callback;
     /**
      * @var SlimServiceMetadata
@@ -21,7 +18,7 @@ class SlimServiceRegistration
 
     public function __construct($categoryName, $route, $callback, $routeName)
     {
-        $this->route = '/' . $this->trim($categoryName) . '/' . $this->trim($route);
+        $this->route = '/'.$this->trim($categoryName).'/'.$this->trim($route);
         $this->callback = $callback;
         $this->metadata = new SlimServiceMetadata($callback);
         $this->routeName = $routeName;
@@ -44,9 +41,6 @@ class SlimServiceRegistration
         return $this->route;
     }
 
-    /**
-     * @return mixed
-     */
     public function Callback()
     {
         return $this->callback;
@@ -133,6 +127,7 @@ class SlimServiceMetadata
         if (empty($this->name)) {
             return 'Missing Name';
         }
+
         return $this->name;
     }
 
@@ -144,6 +139,7 @@ class SlimServiceMetadata
         if (empty($this->description)) {
             return 'Missing Description';
         }
+
         return $this->description;
     }
 
@@ -158,8 +154,9 @@ class SlimServiceMetadata
                 if (method_exists($type, 'Example')) {
                     return $type::Example();
                 }
+
                 return new $type();
-            } elseif ($type != 'void') {
+            } elseif ('void' != $type) {
                 return $type;
             }
         }
@@ -178,6 +175,7 @@ class SlimServiceMetadata
                 if (method_exists($type, 'Example')) {
                     return $type::Example();
                 }
+
                 return new $type();
             } else {
                 return $type;
@@ -193,7 +191,7 @@ class SlimServiceMetadata
 
         $phpDoc = ['params' => [], 'response' => null];
         $docComment = $reflect->getDocComment();
-        if (trim($docComment) == '') {
+        if ('' == trim($docComment)) {
             return null;
         }
         $docComment = preg_replace('#[ \t]*(?:\/\*\*|\*\/|\*)?[ ]{0,1}(.*)?#', '$1', $docComment);
@@ -201,15 +199,15 @@ class SlimServiceMetadata
         $parsedDocComment = $docComment;
         $lineNumber = $firstBlandLineEncountered = 0;
         while (($newlinePos = strpos($parsedDocComment, "\n")) !== false) {
-            $lineNumber++;
+            ++$lineNumber;
             $line = substr($parsedDocComment, 0, $newlinePos);
 
             $matches = [];
-            if ((strpos($line, '@') === 0) && (preg_match(
+            if ((0 === strpos($line, '@')) && preg_match(
                 '#^(@\w+.*?)(\n)(?:@|\r?\n|$)#s',
                 $parsedDocComment,
                 $matches
-            ))
+            )
             ) {
                 $tagDocblockLine = $matches[1];
                 $matches2 = [];
@@ -221,24 +219,25 @@ class SlimServiceMetadata
                 if (!preg_match('#^@(\w+)\s+([\w|\\\]+)(?:\s+(\$\S+))?(?:\s+(.*))?#s', $tagDocblockLine, $matches3)) {
                     break;
                 }
-                if ($matches3[1] != 'param') {
+                if ('param' != $matches3[1]) {
                     $str = strtolower($matches3[1]);
-                    if ($str == 'response') {
+                    if ('response' == $str) {
                         $phpDoc['response'] = ['type' => $matches3[2]];
-                    } elseif (strtolower($matches3[1]) == 'request') {
+                    } elseif ('request' == strtolower($matches3[1])) {
                         $phpDoc['request'] = ['type' => $matches3[2]];
-                    } elseif (strtolower($matches3[1]) == 'name') {
+                    } elseif ('name' == strtolower($matches3[1])) {
                         $phpDoc['name'] = $matches3[2];
-                    } elseif (strtolower($matches3[1]) == 'description') {
+                    } elseif ('description' == strtolower($matches3[1])) {
                         $phpDoc['description'] = str_replace('@description ', '', $matches3[0]);
                     }
                 } else {
                     $phpDoc['params'][] = ['name' => $matches3[3], 'type' => $matches3[2]];
                 }
 
-                $parsedDocComment = str_replace($matches[1] . $matches[2], '', $parsedDocComment);
+                $parsedDocComment = str_replace($matches[1].$matches[2], '', $parsedDocComment);
             }
         }
+
         return $phpDoc;
     }
 }

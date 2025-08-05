@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Validators/UserRequestValidator.php');
+require_once ROOT_DIR.'WebServices/Validators/UserRequestValidator.php';
 
 class UserRequestValidatorTest extends TestBase
 {
@@ -47,7 +47,7 @@ class UserRequestValidatorTest extends TestBase
         $request->password = ' ';
 
         $errors = $this->validator->ValidateCreateRequest($request);
-        $this->assertTrue(count($errors) == 6);
+        $this->assertTrue(6 == count($errors));
     }
 
     public function testCreateValidatesEmailFormat()
@@ -56,7 +56,7 @@ class UserRequestValidatorTest extends TestBase
         $request = CreateUserRequest::Example();
         $request->emailAddress = 'aaaaaa.com';
         $errors = $this->validator->ValidateCreateRequest($request);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     public function testCreateValidatesExistingEmailAndUsername()
@@ -67,13 +67,13 @@ class UserRequestValidatorTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                 ->method('UserExists')
                 ->willReturnMap(
-                [
-                    [$request->emailAddress, null, 1],
-                    [null, $request->userName, 1]
-                ]);
+                    [
+                        [$request->emailAddress, null, 1],
+                        [null, $request->userName, 1],
+                    ]);
 
         $errors = $this->validator->ValidateCreateRequest($request);
-        $this->assertTrue(count($errors) == 2);
+        $this->assertTrue(2 == count($errors));
     }
 
     public function testCreateValidatesAttributes()
@@ -89,7 +89,7 @@ class UserRequestValidatorTest extends TestBase
                 ->willReturn($result);
 
         $errors = $this->validator->ValidateCreateRequest($request);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     public function testWhenUpdateRequestIsJunk()
@@ -108,7 +108,7 @@ class UserRequestValidatorTest extends TestBase
         $request->timezone = ' ';
 
         $errors = $this->validator->ValidateUpdateRequest(1, $request);
-        $this->assertTrue(count($errors) == 4);
+        $this->assertTrue(4 == count($errors));
     }
 
     public function testUpdateValidatesEmailFormat()
@@ -117,7 +117,7 @@ class UserRequestValidatorTest extends TestBase
         $request = UpdateUserRequest::Example();
         $request->emailAddress = 'aaaaaa.com';
         $errors = $this->validator->ValidateUpdateRequest(1, $request);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     public function testUpdateValidatesExistingEmail()
@@ -128,13 +128,13 @@ class UserRequestValidatorTest extends TestBase
         $this->userRepository->expects($this->exactly(2))
                 ->method('UserExists')
                 ->willReturnMap(
-                [
-                    [$request->emailAddress, null, 2],
-                    [null, $request->userName, 1]
-                ]);
+                    [
+                        [$request->emailAddress, null, 2],
+                        [null, $request->userName, 1],
+                    ]);
 
         $errors = $this->validator->ValidateUpdateRequest(1, $request);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     public function testUpdateValidatesExistingUsername()
@@ -147,11 +147,11 @@ class UserRequestValidatorTest extends TestBase
                 ->willReturnMap(
                     [
                         [$request->emailAddress, null, 1],
-                        [null, $request->userName, 2]
+                        [null, $request->userName, 2],
                     ]);
 
         $errors = $this->validator->ValidateUpdateRequest(1, $request);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     public function testUpdateValidatesAttributes()
@@ -167,7 +167,7 @@ class UserRequestValidatorTest extends TestBase
                 ->willReturn($result);
 
         $errors = $this->validator->ValidateUpdateRequest(1, $request);
-        $this->assertTrue(count($errors) == 1);
+        $this->assertTrue(1 == count($errors));
     }
 
     private function expectsAttributeValidator()

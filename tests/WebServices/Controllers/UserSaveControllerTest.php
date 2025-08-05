@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Controllers/UserSaveController.php');
+require_once ROOT_DIR.'WebServices/Controllers/UserSaveController.php';
 
 class UserSaveControllerTest extends TestBase
 {
@@ -128,7 +128,6 @@ class UserSaveControllerTest extends TestBase
                                      )])
                                  )
                                  ->willReturn($user);
-
 
         $result = $this->controller->Update($userId, $request, $session);
 

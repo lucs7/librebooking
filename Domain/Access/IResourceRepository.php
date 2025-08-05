@@ -3,45 +3,42 @@
 interface IResourceRepository
 {
     /**
-     * Gets all Resources for the given scheduleId
+     * Gets all Resources for the given scheduleId.
      *
      * @param int $scheduleId
+     *
      * @return array|BookableResource[]
      */
     public function GetScheduleResources($scheduleId);
 
     /**
      * @param int $resourceId
+     *
      * @return BookableResource
      */
     public function LoadById($resourceId);
 
     /**
      * @param string $publicId
+     *
      * @return BookableResource
      */
     public function LoadByPublicId($publicId);
 
     /**
      * @param string $resourceName
+     *
      * @return BookableResource
      */
     public function LoadByName($resourceName);
 
     /**
-     * @param BookableResource $resource
      * @return int ID of created resource
      */
     public function Add(BookableResource $resource);
 
-    /**
-     * @param BookableResource $resource
-     */
     public function Update(BookableResource $resource);
 
-    /**
-     * @param BookableResource $resource
-     */
     public function Delete(BookableResource $resource);
 
     /**
@@ -65,64 +62,67 @@ interface IResourceRepository
     public function GetUserResourceIdList();
 
     /**
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param int         $pageNumber
+     * @param int         $pageSize
      * @param string|null $sortField
      * @param string|null $sortDirection
-     * @param ISqlFilter $filter
+     * @param ISqlFilter  $filter
+     *
      * @return PageableData|BookableResource[]
      */
     public function GetList($pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null);
 
     /**
-     * @param array $resourceIds
-     * @param int $pageNumber
-     * @param int $pageSize
+     * @param array       $resourceIds
+     * @param int         $pageNumber
+     * @param int         $pageSize
      * @param string|null $sortField
      * @param string|null $sortDirection
-     * @param ISqlFilter $filter
+     * @param ISqlFilter  $filter
+     *
      * @return PageableData|BookableResource[]
      */
-    public function GetUserList($resourceIds,$pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null);
+    public function GetUserList($resourceIds, $pageNumber, $pageSize, $sortField = null, $sortDirection = null, $filter = null);
 
     /**
-     * @param null|string $sortField
-     * @param null|string $sortDirection
+     * @param string|null $sortField
+     * @param string|null $sortDirection
+     *
      * @return AccessoryDto[]|array all accessories
      */
     public function GetAccessoryList($sortField = null, $sortDirection = null);
 
     /**
-     * @param int|null $scheduleId
+     * @param int|null             $scheduleId
      * @param IResourceFilter|null $resourceFilter
+     *
      * @return ResourceGroupTree
      */
     public function GetResourceGroups($scheduleId = null, $resourceFilter = null);
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $resourceIds
      */
     public function GetUserResourcePermissions($userId, $resourceIds = []);
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $resourceIds
      */
     public function GetUserGroupResourcePermissions($userId, $resourceIds = []);
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $resourceIds
      */
-    public function GetResourceAdminResourceIds($userId,  $resourceIds = []);
+    public function GetResourceAdminResourceIds($userId, $resourceIds = []);
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $resourceIds
      */
-    public function GetScheduleAdminResourceIds($userId,  $resourceIds = []);
-
+    public function GetScheduleAdminResourceIds($userId, $resourceIds = []);
 
     /**
      * @param int $resourceId
@@ -137,31 +137,26 @@ interface IResourceRepository
     public function RemoveResourceFromGroup($resourceId, $groupId);
 
     /**
-     * @param ResourceGroup $group
      * @return ResourceGroup
      */
     public function AddResourceGroup(ResourceGroup $group);
 
     /**
      * @param int $groupId
+     *
      * @return ResourceGroup
      */
     public function LoadResourceGroup($groupId);
 
     /**
      * @param string $publicResourceGroupId
+     *
      * @return ResourceGroup
      */
     public function LoadResourceGroupByPublicId($publicResourceGroupId);
 
-    /**
-     * @param ResourceGroup $group
-     */
     public function UpdateResourceGroup(ResourceGroup $group);
 
-    /**
-     * @param $groupId
-     */
     public function DeleteResourceGroup($groupId);
 
     /**
@@ -171,19 +166,16 @@ interface IResourceRepository
 
     /**
      * @param int $resourceTypeId
+     *
      * @return ResourceType
      */
     public function LoadResourceType($resourceTypeId);
 
     /**
-     * @param ResourceType $type
      * @return int
      */
     public function AddResourceType(ResourceType $type);
 
-    /**
-     * @param ResourceType $type
-     */
     public function UpdateResourceType(ResourceType $type);
 
     /**
@@ -197,14 +189,15 @@ interface IResourceRepository
     public function GetStatusReasons();
 
     /**
-     * @param int $statusId
+     * @param int    $statusId
      * @param string $reasonDescription
+     *
      * @return int
      */
     public function AddStatusReason($statusId, $reasonDescription);
 
     /**
-     * @param int $reasonId
+     * @param int    $reasonId
      * @param string $reasonDescription
      */
     public function UpdateStatusReason($reasonId, $reasonDescription);
@@ -215,30 +208,33 @@ interface IResourceRepository
     public function RemoveStatusReason($reasonId);
 
     /**
-     * @param int $resourceId
-     * @param int|null $pageNumber
-     * @param int|null $pageSize
+     * @param int             $resourceId
+     * @param int|null        $pageNumber
+     * @param int|null        $pageSize
      * @param ISqlFilter|null $filter
-     * @param int $accountStatus
+     * @param int             $accountStatus
+     *
      * @return PageableData|UserPermissionItemView[]
      */
     public function GetUsersWithPermission($resourceId, $pageNumber = null, $pageSize = null, $filter = null, $accountStatus = AccountStatus::ACTIVE);
 
     /**
-     * @param int $resourceId
-     * @param int|null $pageNumber
-     * @param int|null $pageSize
+     * @param int             $resourceId
+     * @param int|null        $pageNumber
+     * @param int|null        $pageSize
      * @param ISqlFilter|null $filter
-     * @param int $accountStatus
+     * @param int             $accountStatus
+     *
      * @return PageableData|UserPermissionItemView[]
      */
     public function GetUsersWithPermissionsIncludingGroups($resourceId, $pageNumber = null, $pageSize = null, $filter = null, $accountStatus = AccountStatus::ACTIVE);
 
     /**
-     * @param int $resourceId
-     * @param int|null $pageNumber
-     * @param int|null $pageSize
+     * @param int             $resourceId
+     * @param int|null        $pageNumber
+     * @param int|null        $pageSize
      * @param ISqlFilter|null $filter
+     *
      * @return PageableData|GroupPermissionItemView[]
      */
     public function GetGroupsWithPermission($resourceId, $pageNumber = null, $pageSize = null, $filter = null);

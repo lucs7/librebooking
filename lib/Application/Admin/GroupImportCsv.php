@@ -47,7 +47,7 @@ class GroupImportCsvRow
     public $permissionsRead;
 
     /**
-     * @param $values array
+     * @param $values  array
      * @param $indexes array
      */
     public function __construct($values, $indexes)
@@ -73,11 +73,13 @@ class GroupImportCsvRow
         if (!$isValid) {
             Log::Debug('Group import row is not valid. Name %s', $this->name);
         }
+
         return $isValid;
     }
 
     /**
      * @param string[] $values
+     *
      * @return bool|string[]
      */
     public static function GetHeaders($values)
@@ -105,7 +107,7 @@ class GroupImportCsvRow
     private static function indexOrFalse($columnName, $values)
     {
         $index = array_search($columnName, $values);
-        if ($index === false) {
+        if (false === $index) {
             return false;
         }
 
@@ -114,22 +116,24 @@ class GroupImportCsvRow
 
     /**
      * @param $column string
+     *
      * @return string
      */
     private function valueOrDefault($column)
     {
-        return ($this->indexes[$column] === false || !array_key_exists($this->indexes[$column], $this->values)) ? '' : $this->tryToGetEscapedValue($this->values[$this->indexes[$column]]);
+        return (false === $this->indexes[$column] || !array_key_exists($this->indexes[$column], $this->values)) ? '' : $this->tryToGetEscapedValue($this->values[$this->indexes[$column]]);
     }
 
     /**
      * @param $column string
+     *
      * @return bool
      */
     private function valueOrFalse($column)
     {
         $value = $this->valueOrDefault($column);
 
-        return $value == "true";
+        return 'true' == $value;
     }
 
     private function tryToGetEscapedValue($v)
@@ -144,7 +148,7 @@ class GroupImportCsvRow
 
     private function asArray($column)
     {
-        return (!array_key_exists($column, $this->indexes) || $this->indexes[$column] === false) ? [] : array_map('trim', explode(',', htmlspecialchars($this->values[$this->indexes[$column]])));
+        return (!array_key_exists($column, $this->indexes) || false === $this->indexes[$column]) ? [] : array_map('trim', explode(',', htmlspecialchars($this->values[$this->indexes[$column]])));
     }
 }
 
@@ -160,9 +164,6 @@ class GroupImportCsv
      */
     private $skippedRowNumbers = [];
 
-    /**
-     * @param UploadedFile $file
-     */
     public function __construct(UploadedFile $file)
     {
         $this->file = $file;
@@ -180,8 +181,9 @@ class GroupImportCsv
         $contents = $this->RemoveUTF8BOM($contents);
         $csvRows = preg_split('/\n|\r\n?/', $contents);
 
-        if (count($csvRows) == 0) {
+        if (0 == count($csvRows)) {
             Log::Debug('No rows in group import file');
+
             return $rows;
         }
 
@@ -191,10 +193,11 @@ class GroupImportCsv
 
         if (!$headers) {
             Log::Debug('No headers in group import file');
+
             return $rows;
         }
 
-        for ($i = 1; $i < count($csvRows); $i++) {
+        for ($i = 1; $i < count($csvRows); ++$i) {
             $values = str_getcsv($csvRows[$i]);
 
             $row = new GroupImportCsvRow($values, $headers);

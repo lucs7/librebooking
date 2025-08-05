@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Events/IDomainEvent.php');
+require_once ROOT_DIR.'Domain/Events/IDomainEvent.php';
 
 class EventCategory
 {
@@ -18,6 +18,7 @@ class ReservationEvent
 
     /**
      * @static
+     *
      * @return array|IDomainEvent[]
      */
     public static function AllEvents()

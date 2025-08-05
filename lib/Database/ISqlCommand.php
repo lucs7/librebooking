@@ -2,14 +2,8 @@
 
 interface ISqlCommand
 {
-    /**
-     * @param Parameters $parameters
-     */
     public function SetParameters(Parameters $parameters);
 
-    /**
-     * @param Parameter $parameter
-     */
     public function AddParameter(Parameter $parameter);
 
     /**

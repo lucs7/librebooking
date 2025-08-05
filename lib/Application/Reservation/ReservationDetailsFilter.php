@@ -5,6 +5,7 @@ class ReservationDetailsFilter
     /**
      * @param Date|null $reservationStart
      * @param Date|null $reservationEnd
+     *
      * @return bool
      */
     public static function HideReservationDetails($reservationStart = null, $reservationEnd = null)
@@ -14,15 +15,16 @@ class ReservationDetailsFilter
             ConfigKeys::PRIVACY_HIDE_RESERVATION_DETAILS,
             new LowerCaseConverter()
         );
-        if ($hideReservationDetails == 'past' && $reservationEnd != null) {
+        if ('past' == $hideReservationDetails && null != $reservationEnd) {
             return $reservationEnd->LessThan(Date::Now());
-        } elseif ($hideReservationDetails == 'future' && $reservationEnd != null) {
+        } elseif ('future' == $hideReservationDetails && null != $reservationEnd) {
             return $reservationEnd->GreaterThan(Date::Now());
-        } elseif ($hideReservationDetails == 'current' && $reservationStart != null) {
+        } elseif ('current' == $hideReservationDetails && null != $reservationStart) {
             return $reservationStart->LessThan(Date::Now());
         }
 
         $converter = new BooleanConverter();
+
         return $converter->Convert($hideReservationDetails);
     }
 }

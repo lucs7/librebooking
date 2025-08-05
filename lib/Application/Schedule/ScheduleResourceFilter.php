@@ -4,14 +4,13 @@ interface IScheduleResourceFilter
 {
     /**
      * @param BookableResource[] $resources
-     * @param IResourceRepository $resourceRepository
-     * @param IAttributeService $attributeService
+     *
      * @return int[] filtered resource ids
      */
     public function FilterResources(
         $resources,
         IResourceRepository $resourceRepository,
-        IAttributeService $attributeService
+        IAttributeService $attributeService,
     );
 }
 
@@ -25,12 +24,12 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
     public $ResourceTypeAttributes;
 
     /**
-     * @param int|null $scheduleId
-     * @param int|null $resourceTypeId
-     * @param int|null $minCapacity
+     * @param int|null              $scheduleId
+     * @param int|null              $resourceTypeId
+     * @param int|null              $minCapacity
      * @param AttributeValue[]|null $resourceAttributes
      * @param AttributeValue[]|null $resourceTypeAttributes
-     * @param int[]|null $resourceIds
+     * @param int[]|null            $resourceIds
      */
     public function __construct(
         $scheduleId = null,
@@ -38,7 +37,7 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
         $minCapacity = null,
         $resourceAttributes = null,
         $resourceTypeAttributes = null,
-        $resourceIds = null
+        $resourceIds = null,
     ) {
         $this->ScheduleId = $scheduleId;
         $this->ResourceTypeId = $resourceTypeId;
@@ -115,7 +114,7 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
             if (!empty($this->ResourceAttributes)) {
                 $values = $resourceAttributeValues->GetAttributes($resource->GetId());
 
-                /** var @attribute AttributeValue */
+                /* var @attribute AttributeValue */
                 foreach ($this->ResourceAttributes as $attribute) {
                     $value = $this->GetAttribute($values, $attribute->AttributeId);
                     if (!$this->AttributeValueMatches($attribute, $value)) {
@@ -140,7 +139,7 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
                 }
                 $values = $resourceTypeAttributeValues->GetAttributes($resource->GetResourceTypeId());
 
-                /** var @attribute AttributeValue */
+                /* var @attribute AttributeValue */
                 foreach ($this->ResourceTypeAttributes as $attribute) {
                     $value = $this->GetAttribute($values, $attribute->AttributeId);
                     if (!$this->AttributeValueMatches($attribute, $value)) {
@@ -161,8 +160,9 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
 
     /**
      * @param Attribute[] $attributes
-     * @param int $attributeId
-     * @return null|Attribute
+     * @param int         $attributeId
+     *
+     * @return Attribute|null
      */
     private function GetAttribute($attributes, $attributeId)
     {
@@ -171,22 +171,24 @@ class ScheduleResourceFilter implements IScheduleResourceFilter
                 return $attribute;
             }
         }
+
         return null;
     }
 
     /**
      * @param AttributeValue $attribute
-     * @param Attribute $value
+     * @param Attribute      $value
+     *
      * @return bool
      */
     private function AttributeValueMatches($attribute, $value)
     {
-        if ($value == null) {
+        if (null == $value) {
             return false;
         }
 
-        if ($value->Type() == CustomAttributeTypes::SINGLE_LINE_TEXTBOX || $value->Type() == CustomAttributeTypes::MULTI_LINE_TEXTBOX) {
-            return strripos($value->Value() ?? "", $attribute->Value) !== false;
+        if (CustomAttributeTypes::SINGLE_LINE_TEXTBOX == $value->Type() || CustomAttributeTypes::MULTI_LINE_TEXTBOX == $value->Type()) {
+            return false !== strripos($value->Value() ?? '', $attribute->Value);
         } elseif (is_numeric($value->Value())) {
             return floatval($value->Value()) == $attribute->Value;
         } else {

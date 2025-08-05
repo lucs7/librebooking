@@ -4,12 +4,12 @@ interface IGuestUserService
 {
     /**
      * @param string $email
+     *
      * @return UserSession
      */
     public function CreateOrLoad($email);
 
     /**
-     * @param $email
      * @return bool
      */
     public function EmailExists($email);
@@ -46,12 +46,14 @@ class GuestUserService implements IGuestUserService
 
         $currentLanguage = Resources::GetInstance()->CurrentLanguage;
         $this->registration->Register($email, $email, 'Guest', 'Guest', Password::GenerateRandom(), null, $currentLanguage, null);
+
         return $this->authentication->Login($email, new WebLoginContext(new LoginData(false, $currentLanguage)));
     }
 
     public function EmailExists($email)
     {
         $user = $this->authentication->Login($email, new WebLoginContext(new LoginData()));
+
         return $user->IsLoggedIn();
     }
 }
