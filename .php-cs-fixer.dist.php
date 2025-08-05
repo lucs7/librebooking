@@ -22,6 +22,10 @@ return $config
     ->setRiskyAllowed(true)
     ->setRules([
         '@PSR12' => true, // https://www.php-fig.org/psr/psr-12/
+        '@Symfony' => true,
         'array_syntax' => ['syntax' => 'short'],
+        'array_indentation' => true,
+        'combine_consecutive_unsets' => true,
+        'single_quote' => true,
     ])
     ->setFinder($finder);
