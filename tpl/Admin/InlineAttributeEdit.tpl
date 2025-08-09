@@ -31,7 +31,7 @@
 					$('#inline{$attributeId}').editable({
 						url: "{$url}",
 						viewformat: "{Resources::GetInstance()->GetDateFormat('momentjs_datetime')}",
-						format: "YYYY-M-D H:m",
+						format: "YYYY-MM-DD HH:mm:ss",
 						template: "{Resources::GetInstance()->GetDateFormat('momentjs_datetime')}",
 						combodate: {
 							minYear: "{Date::Now()->AddYears(-20)->Format('Y')}",
