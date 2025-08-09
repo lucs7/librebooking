@@ -400,9 +400,6 @@
 
 			var attributeManagement = new AttributeManagement(attributeOptions);
 			attributeManagement.init();
-
-			// Initialize Bootstrap tooltips
-			$('[data-bs-toggle="tooltip"]').tooltip();
 		});
 	</script>
 </div>

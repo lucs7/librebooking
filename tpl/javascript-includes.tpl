@@ -87,4 +87,4 @@
     {/if}
 {/if}
 
-{jsfile src="phpscheduleit.js"}
+{jsfile src="librebooking.js"}

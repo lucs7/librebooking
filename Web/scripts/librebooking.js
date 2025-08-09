@@ -62,70 +62,18 @@ function getQueryStringValue(name) {
 
 }
 
+// Initialize Bootstrap tooltips
+function initializeBootstrapTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+}
+
 function init() {
 
 }
-/* Replaced by initializeAccordions function
-$.fn.showHidePanel = function () {
-    var panel = $(this);
 
-    function setIcon(panel, targetIcon) {
-        var iconSpan = panel.find('.show-hide');
-        iconSpan.removeClass('bi-chevron-up');
-        iconSpan.removeClass('bi-chevron-down');
-        iconSpan.addClass(targetIcon);
-    }
-
-    var visibility = readCookie(panel.attr('id'));
-    if (visibility && visibility == '0') {
-        panel.find('.card-body, .card-footer').hide();
-        setIcon(panel, 'bi-chevron-down');
-    } else {
-        setIcon(panel, 'bi-chevron-up');
-    }
-
-    panel.find('.show-hide').click(function (e) {
-        e.preventDefault();
-        var id = panel.attr('id');
-
-        var dashboard = panel.find('.card-body, .card-footer');
-        if (dashboard.css('display') == 'none') {
-            createCookie(id, '1', 30);
-            dashboard.show();
-            setIcon(panel, 'bi-chevron-up');
-        } else {
-            createCookie(id, '0', 30);
-            dashboard.hide();
-            setIcon(panel, 'bi-chevron-down');
-        }
-    });
-};
-*/
-
-/* Replaced by type="search"
-$.fn.clearable = function () {
-    var textbox = $(this);
-
-    textbox.closest('div').addClass('form-group has-feedback');
-    textbox.addClass('hasclear form-control');
-    if (textbox.next('.clearer').length === 0) {
-        $('<i/>', { class: 'clearer bi bi-remove-circle form-control-feedback' }).insertAfter(textbox);
-    }
-
-    textbox.keyup(function () {
-        var t = $(this);
-        t.next('.clearer').toggle(Boolean(t.val()));
-    });
-
-    var $clearer = $(".clearer");
-    $clearer.hide($(this).prev('input').val());
-
-    $clearer.on('click', function () {
-        $(this).siblings('input').val('').focus();
-        $(this).hide();
-    });
-};
-*/
 function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -226,4 +174,5 @@ $('.accordion-collapse').on('shown.bs.collapse', function () {
 // Call the function to initialize the accordions when the page is fully loaded
 document.addEventListener('DOMContentLoaded', function () {
     initializeAccordions();
+    initializeBootstrapTooltips();
 });
