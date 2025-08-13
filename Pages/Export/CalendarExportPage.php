@@ -1,7 +1,15 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
+namespace LibreBooking\Pages\Export;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use LibreBooking\Application\Schedule\ICalendarExportValidator;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/CalendarExportPresenter.php');
 
 interface ICalendarExportPage
@@ -100,3 +108,6 @@ class NullCalendarExportValidator implements ICalendarExportValidator
         return true;
     }
 }
+class_alias(__NAMESPACE__ . '\\ICalendarExportPage', 'ICalendarExportPage');
+class_alias(__NAMESPACE__ . '\\CalendarExportPage', 'CalendarExportPage');
+class_alias(__NAMESPACE__ . '\\NullCalendarExportValidator', 'NullCalendarExportValidator');

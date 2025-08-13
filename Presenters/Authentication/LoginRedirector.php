@@ -1,5 +1,11 @@
 <?php
 
+namespace LibreBooking\Presenters\Authentication;
+
+use LibreBooking\Pages\Authentication\ILoginBasePage;
+use ServiceLocator;
+use Pages;
+
 require_once(ROOT_DIR . 'Pages/Authentication/ILoginBasePage.php');
 
 class LoginRedirector
@@ -17,3 +23,5 @@ class LoginRedirector
         }
     }
 }
+
+class_alias(__NAMESPACE__.'\\LoginRedirector', 'LoginRedirector');

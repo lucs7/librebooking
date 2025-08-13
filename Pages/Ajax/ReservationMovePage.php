@@ -1,7 +1,16 @@
 <?php
 
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationMovePresenter.php');
-require_once(ROOT_DIR . 'Pages/Ajax/IReservationSaveResultsView.php');
 
 interface IReservationMovePage extends IReservationSaveResultsView
 {
@@ -124,3 +133,5 @@ class ReservationMovePage extends Page implements IReservationMovePage
         // no-op
     }
 }
+class_alias(__NAMESPACE__ . '\\IReservationMovePage', 'IReservationMovePage');
+class_alias(__NAMESPACE__ . '\\ReservationMovePage', 'ReservationMovePage');

@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Pages/Authentication/ILoginBasePage.php');
+namespace LibreBooking\Pages\Authentication;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 
 class ExternalAuthLoginPage extends Page implements ILoginBasePage
@@ -41,3 +48,4 @@ class ExternalAuthLoginPage extends Page implements ILoginBasePage
         $this->Display('ExternalAuth/external-login-error.tpl');
     }
 }
+class_alias(__NAMESPACE__ . '\\ExternalAuthLoginPage', 'ExternalAuthLoginPage');

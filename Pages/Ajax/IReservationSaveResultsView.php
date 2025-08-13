@@ -1,5 +1,15 @@
 <?php
 
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 interface IReservationSaveResultsView
 {
     /**
@@ -42,3 +52,4 @@ interface IReservationSaveResultsView
      */
     public function SetCanJoinWaitList($canJoinWaitlist);
 }
+class_alias(__NAMESPACE__ . '\\IReservationSaveResultsView', 'IReservationSaveResultsView');

@@ -1,5 +1,11 @@
 <?php
 
+namespace LibreBooking\Presenters\Calendar;
+
+use LibreBooking\Presenters\ActionPresenter;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\IActionPage;
+
 require_once(ROOT_DIR . 'Pages/SecurePage.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'lib/Config/namespace.php');
@@ -537,3 +543,9 @@ class UserCalendarFilter
         return new UserCalendarFilter($resourceId, $scheduleId, $groupId);
     }
 }
+
+class_alias(__NAMESPACE__ . '\\CalendarActions', 'CalendarActions');
+class_alias(__NAMESPACE__ . '\\ICommonCalendarPage', 'ICommonCalendarPage');
+class_alias(__NAMESPACE__ . '\\CommonCalendarPage', 'CommonCalendarPage');
+class_alias(__NAMESPACE__ . '\\CommonCalendarPresenter', 'CommonCalendarPresenter');
+class_alias(__NAMESPACE__ . '\\UserCalendarFilter', 'UserCalendarFilter');

@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages\Integrate;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Integrate/SlackPresenter.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
@@ -22,9 +30,9 @@ interface ISlackPage
     public function GetToken();
 
     /**
-     * @param SlackResponse $response
+     * @param \SlackResponse $response
      */
-    public function BindResponse(SlackResponse $response);
+    public function BindResponse(\SlackResponse $response);
 
     /**
      * @return void
@@ -65,7 +73,7 @@ class SlackPage extends Page implements ISlackPage
         return $this->GetForm(FormKeys::SLACK_TOKEN);
     }
 
-    public function BindResponse(SlackResponse $response)
+    public function BindResponse(\SlackResponse $response)
     {
         $this->SetJson($response);
     }
@@ -75,3 +83,5 @@ class SlackPage extends Page implements ISlackPage
         $this->SetJson('Command not supported', null, 500);
     }
 }
+class_alias(__NAMESPACE__ . '\\ISlackPage', 'ISlackPage');
+class_alias(__NAMESPACE__ . '\\SlackPage', 'SlackPage');

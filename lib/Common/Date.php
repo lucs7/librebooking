@@ -1,5 +1,11 @@
 <?php
 
+namespace LibreBooking\Common;
+
+use DateTime;
+use DateTimeZone;
+use Exception;
+
 //$serverTimezone = ini_get('date.timezone');
 //if (empty($serverTimezone))
 //{
@@ -1104,3 +1110,7 @@ class DateDiff
         return $daysUntilEndOfYear;
     }
 }
+
+class_alias(Date::class, 'Date');
+class_alias(NullDate::class, 'NullDate');
+class_alias(DateDiff::class, 'DateDiff');

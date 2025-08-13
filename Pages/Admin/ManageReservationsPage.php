@@ -1,8 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Admin/ManageReservationsPresenter.php');
 
 interface IManageReservationsPage extends IPageable, IActionPage
@@ -501,7 +507,7 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         throw new \LogicException('GetPageSize is not implemented - replaced by dataTable pagination');
     }
 
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->pageablePage->BindPageInfo($pageInfo);
     }
@@ -742,3 +748,5 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
         $this->Set('MissedCheckout', (bool)$missedCheckout);
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageReservationsPage', 'IManageReservationsPage');
+class_alias(__NAMESPACE__ . '\\ManageReservationsPage', 'ManageReservationsPage');

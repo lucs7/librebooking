@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/IReservationSaveResultsView.php');
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenterFactory.php');
 
 interface IReservationDeletePage extends IReservationSaveResultsView
@@ -185,3 +192,6 @@ class ReservationDeleteJsonPage extends ReservationDeletePage implements IReserv
         return [];
     }
 }
+class_alias(__NAMESPACE__ . '\\IReservationDeletePage', 'IReservationDeletePage');
+class_alias(__NAMESPACE__ . '\\ReservationDeletePage', 'ReservationDeletePage');
+class_alias(__NAMESPACE__ . '\\ReservationDeleteJsonPage', 'ReservationDeleteJsonPage');

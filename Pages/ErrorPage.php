@@ -1,6 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Common\ErrorMessages;
+use QueryStringKeys;
 
 class ErrorPage extends Page
 {
@@ -26,3 +29,4 @@ class ErrorPage extends Page
         $this->Display('error.tpl');
     }
 }
+class_alias(__NAMESPACE__ . '\\ErrorPage', 'ErrorPage');

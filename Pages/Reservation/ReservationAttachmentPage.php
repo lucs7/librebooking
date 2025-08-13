@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+namespace LibreBooking\Pages\Reservation;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationAttachmentPresenter.php');
 
 interface IReservationAttachmentPage
@@ -90,3 +98,5 @@ class ReservationAttachmentPage extends SecurePage implements IReservationAttach
         echo $contents;
     }
 }
+class_alias(__NAMESPACE__ . '\\IReservationAttachmentPage', 'IReservationAttachmentPage');
+class_alias(__NAMESPACE__ . '\\ReservationAttachmentPage', 'ReservationAttachmentPage');

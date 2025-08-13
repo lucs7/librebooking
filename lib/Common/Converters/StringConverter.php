@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Converters;
+
 class StringConverter implements IConvert
 {
     public function Convert(mixed $value): string
@@ -12,3 +14,5 @@ class StringConverter implements IConvert
         return is_string($value) || (is_object($value) && method_exists($value, '__toString'));
     }
 }
+
+class_alias(StringConverter::class, 'StringConverter');

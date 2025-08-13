@@ -1,5 +1,15 @@
 <?php
 
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 // debugging tools / libs
 if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
     require ROOT_DIR . 'vendor/autoload.php';
@@ -34,3 +44,5 @@ class StylingPluginPage implements IStylingPluginPage
         die();
     }
 }
+class_alias(__NAMESPACE__ . '\\IStylingPluginPage', 'IStylingPluginPage');
+class_alias(__NAMESPACE__ . '\\StylingPluginPage', 'StylingPluginPage');

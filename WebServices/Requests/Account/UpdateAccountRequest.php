@@ -1,6 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Requests/Account/AccountRequestBase.php');
+namespace LibreBooking\WebServices\Requests\Account;
+
+use AttributeValueRequest;
+use Configuration;
+use ConfigKeys;
 
 class UpdateAccountRequest extends AccountRequestBase
 {
@@ -21,3 +25,5 @@ class UpdateAccountRequest extends AccountRequestBase
         return $request;
     }
 }
+
+class_alias(UpdateAccountRequest::class, 'UpdateAccountRequest');

@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Domain;
+
 require_once(ROOT_DIR . 'Domain/Values/Currency.php');
 use Booked\Currency;
 
@@ -84,3 +86,5 @@ class CreditCost
         return $this->FormatCurrency($total);
     }
 }
+
+class_alias(__NAMESPACE__.'\\CreditCost', 'CreditCost');

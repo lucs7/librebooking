@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
 class TermsOfServiceValidator extends ValidatorBase implements IValidator
@@ -17,7 +19,7 @@ class TermsOfServiceValidator extends ValidatorBase implements IValidator
      * @param ITermsOfServiceRepository $termsOfServiceRepository
      * @param bool $hasAcknowledged
      */
-    public function __construct(ITermsOfServiceRepository $termsOfServiceRepository, $hasAcknowledged)
+    public function __construct(\ITermsOfServiceRepository $termsOfServiceRepository, $hasAcknowledged)
     {
         $this->termsOfServiceRepository = $termsOfServiceRepository;
         $this->hasAcknowledged = $hasAcknowledged;
@@ -34,3 +36,5 @@ class TermsOfServiceValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(TermsOfServiceValidator::class, 'TermsOfServiceValidator');

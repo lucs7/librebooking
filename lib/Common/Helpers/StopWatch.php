@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Helpers;
+
 class StopWatch
 {
     /**
@@ -72,3 +74,5 @@ class StopWatch
         return $this->stopTime - $this->startTime;
     }
 }
+
+class_alias(StopWatch::class, 'StopWatch');

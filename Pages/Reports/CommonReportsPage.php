@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Reports/IDisplayableReportPage.php');
+namespace LibreBooking\Pages\Reports;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Reports/CommonReportsPresenter.php');
 require_once(ROOT_DIR . 'Presenters/Reports/ReportCsvColumnView.php');
 
@@ -132,3 +139,5 @@ class CommonReportsPage extends ActionPage implements ICommonReportsPage
         return $this->GetForm(FormKeys::SELECTED_COLUMNS);
     }
 }
+class_alias(__NAMESPACE__ . '\\ICommonReportsPage', 'ICommonReportsPage');
+class_alias(__NAMESPACE__ . '\\CommonReportsPage', 'CommonReportsPage');

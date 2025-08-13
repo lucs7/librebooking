@@ -1,5 +1,11 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
+use Exception;
+use LibreBooking\Common\Date;
+use LibreBooking\Common\Logging\Log;
+
 class LayoutValidator extends ValidatorBase implements IValidator
 {
     /**
@@ -41,15 +47,15 @@ class LayoutValidator extends ValidatorBase implements IValidator
 
             if (!$this->validateSingle) {
                 Log::Debug('Validating daily layout');
-                if (count($this->reservableSlots) != DayOfWeek::NumberOfDays || count($this->blockedSlots) != DayOfWeek::NumberOfDays) {
+                if (count($this->reservableSlots) != \DayOfWeek::NumberOfDays || count($this->blockedSlots) != \DayOfWeek::NumberOfDays) {
                     $this->isValid = false;
                     return;
                 }
-                $layout = ScheduleLayout::ParseDaily('UTC', $this->reservableSlots, $this->blockedSlots);
-                $days = DayOfWeek::Days();
+                $layout = \ScheduleLayout::ParseDaily('UTC', $this->reservableSlots, $this->blockedSlots);
+                $days = \DayOfWeek::Days();
             } else {
                 Log::Debug('Validating single layout');
-                $layout = ScheduleLayout::Parse('UTC', $this->reservableSlots, $this->blockedSlots);
+                $layout = \ScheduleLayout::Parse('UTC', $this->reservableSlots, $this->blockedSlots);
             }
 
             foreach ($days as $day) {
@@ -85,3 +91,5 @@ class LayoutValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(LayoutValidator::class, 'LayoutValidator');

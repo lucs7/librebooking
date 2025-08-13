@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages;
 
 interface IPageable
 {
@@ -18,20 +18,20 @@ interface IPageable
 
     /**
      * @abstract
-     * @param PageInfo $pageInfo
+     * @param \PageInfo $pageInfo
      * @return void
      */
-    public function BindPageInfo(PageInfo $pageInfo);
+    public function BindPageInfo(\PageInfo $pageInfo);
 }
 
-class PageablePage extends Page implements IPageable
+class PageablePage extends \Page implements IPageable
 {
     /**
      * @var \Page
      */
     private $page;
 
-    public function __construct(Page $wrappedPage)
+    public function __construct(\Page $wrappedPage)
     {
         $this->page = $wrappedPage;
     }
@@ -41,7 +41,7 @@ class PageablePage extends Page implements IPageable
      */
     public function GetPageNumber()
     {
-        return $this->page->GetQuerystring(QueryStringKeys::PAGE);
+        return $this->page->GetQuerystring(\QueryStringKeys::PAGE);
     }
 
     /**
@@ -49,18 +49,18 @@ class PageablePage extends Page implements IPageable
      */
     public function GetPageSize()
     {
-        $size = $this->page->GetQuerystring(QueryStringKeys::PAGE_SIZE);
+        $size = $this->page->GetQuerystring(\QueryStringKeys::PAGE_SIZE);
         if (empty($size)) {
-            return Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_PAGE_SIZE);
+            return \Configuration::Instance()->GetKey(\ConfigKeys::DEFAULT_PAGE_SIZE);
         }
         return $size;
     }
 
     /**
-     * @param PageInfo $pageInfo
+     * @param \PageInfo $pageInfo
      * @return void
      */
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->page->Set('PageInfo', $pageInfo);
     }
@@ -70,3 +70,7 @@ class PageablePage extends Page implements IPageable
         $this->page->PageLoad();
     }
 }
+
+class_alias(__NAMESPACE__ . '\\IPageable', 'IPageable');
+class_alias(__NAMESPACE__ . '\\PageablePage', 'PageablePage');
+

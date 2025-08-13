@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Domain;
+
+use LibreBooking\Common\ContrastingColor;
+
 class ResourceGroupTree
 {
     /**
@@ -13,7 +17,7 @@ class ResourceGroupTree
     protected $groups = [];
 
     /**
-     * @var array|ResourceDto[]
+     * @var array|\ResourceDto[]
      */
     protected $resources = [];
 
@@ -53,7 +57,7 @@ class ResourceGroupTree
     public function AddAssignment(ResourceGroupAssignment $assignment)
     {
         if (array_key_exists($assignment->group_id, $this->references)) {
-            $this->resources[$assignment->resource_id] = new ResourceDto(
+            $this->resources[$assignment->resource_id] = new \ResourceDto(
                 $assignment->resource_id,
                 $assignment->resource_name,
                 true,
@@ -226,7 +230,7 @@ class ResourceGroup
     }
 }
 
-class ResourceGroupAssignment implements IBookableResource
+class ResourceGroupAssignment implements \IBookableResource
 {
     public $type = ResourceGroup::RESOURCE_TYPE;
     public $group_id;
@@ -369,3 +373,7 @@ class ResourceGroupAssignment implements IBookableResource
         return $this->maxConcurrentReservations;
     }
 }
+
+class_alias(__NAMESPACE__ . '\\ResourceGroupTree', 'ResourceGroupTree');
+class_alias(__NAMESPACE__ . '\\ResourceGroup', 'ResourceGroup');
+class_alias(__NAMESPACE__ . '\\ResourceGroupAssignment', 'ResourceGroupAssignment');

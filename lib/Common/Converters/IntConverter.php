@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Converters;
+
 class IntConverter implements IConvert
 {
     public function Convert($value)
@@ -12,3 +14,5 @@ class IntConverter implements IConvert
         return is_numeric($value) && intval($value) == $value;
     }
 }
+
+class_alias(IntConverter::class, 'IntConverter');

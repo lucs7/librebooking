@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Converters;
+
 class LowerCaseConverter implements IConvert
 {
     public function Convert($value)
@@ -12,3 +14,5 @@ class LowerCaseConverter implements IConvert
         return is_string($value);
     }
 }
+
+class_alias(LowerCaseConverter::class, 'LowerCaseConverter');

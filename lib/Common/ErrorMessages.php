@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common;
+
 class ErrorMessages
 {
     public const UNKNOWN_ERROR = 0;
@@ -48,3 +50,5 @@ class ErrorMessages
         return $this->_resourceKeys[$errorMessageId];
     }
 }
+
+class_alias(ErrorMessages::class, 'ErrorMessages');

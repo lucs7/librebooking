@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 
 interface IActionPage extends IPage
 {
@@ -130,3 +138,6 @@ class ActionErrors
         $this->Messages[$id] = $messages;
     }
 }
+class_alias(__NAMESPACE__ . '\\IActionPage', 'IActionPage');
+class_alias(__NAMESPACE__ . '\\ActionPage', 'ActionPage');
+class_alias(__NAMESPACE__ . '\\ActionErrors', 'ActionErrors');

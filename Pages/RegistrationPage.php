@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/RegistrationPresenter.php');
 require_once(ROOT_DIR . 'config/timezones.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
@@ -269,3 +276,5 @@ class RegistrationPage extends ActionPage implements IRegistrationPage
         $this->Set('Terms', $terms);
     }
 }
+class_alias(__NAMESPACE__ . '\\IRegistrationPage', 'IRegistrationPage');
+class_alias(__NAMESPACE__ . '\\RegistrationPage', 'RegistrationPage');

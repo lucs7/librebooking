@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common;
+
 class TimeInterval
 {
     /**
@@ -182,3 +184,5 @@ class TimeInterval
         return $this->__toString();
     }
 }
+
+class_alias(TimeInterval::class, 'TimeInterval');

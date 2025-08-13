@@ -1,5 +1,15 @@
 <?php
 
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationAttributesPresenter.php');
 
 interface IReservationAttributesPage
@@ -96,3 +106,5 @@ class ReservationAttributesPage extends Page implements IReservationAttributesPa
         return $this->GetQuerystring(QueryStringKeys::READ_ONLY);
     }
 }
+class_alias(__NAMESPACE__ . '\\IReservationAttributesPage', 'IReservationAttributesPage');
+class_alias(__NAMESPACE__ . '\\ReservationAttributesPage', 'ReservationAttributesPage');

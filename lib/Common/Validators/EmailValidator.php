@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 use Egulias\EmailValidator\EmailValidator as EguliasValidator;
 use Egulias\EmailValidator\Validation\RFCValidation;
 
@@ -29,3 +31,5 @@ class EmailValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(EmailValidator::class, 'EmailValidator');

@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Admin/ManageThemePresenter.php');
 
 class ManageThemePage extends ActionPage
@@ -63,3 +71,4 @@ class ManageThemePage extends ActionPage
         return $this->server->GetFile(FormKeys::FAVICON_FILE);
     }
 }
+class_alias(__NAMESPACE__ . '\\ManageThemePage', 'ManageThemePage');

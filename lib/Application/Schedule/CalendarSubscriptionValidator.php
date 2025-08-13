@@ -1,9 +1,10 @@
 <?php
 
+namespace LibreBooking\Application\Schedule;
+
 interface ICalendarExportValidator
 {
     /**
-     * @abstract
      * @return bool
      */
     public function IsValid();
@@ -12,16 +13,16 @@ interface ICalendarExportValidator
 class CalendarSubscriptionValidator implements ICalendarExportValidator
 {
     /**
-     * @var ICalendarSubscriptionPage
+     * @var \ICalendarSubscriptionPage
      */
     private $page;
 
     /**
-     * @var ICalendarSubscriptionService
+     * @var \ICalendarSubscriptionService
      */
     private $subscriptionService;
 
-    public function __construct(ICalendarSubscriptionPage $page, ICalendarSubscriptionService $subscriptionService)
+    public function __construct(\ICalendarSubscriptionPage $page, \ICalendarSubscriptionService $subscriptionService)
     {
         $this->page = $page;
         $this->subscriptionService = $subscriptionService;
@@ -29,11 +30,11 @@ class CalendarSubscriptionValidator implements ICalendarExportValidator
 
     public function IsValid()
     {
-        $key = Configuration::Instance()->GetKey(ConfigKeys::ICS_SUBSCRIPTION_KEY);
+        $key = \Configuration::Instance()->GetKey(\ConfigKeys::ICS_SUBSCRIPTION_KEY);
         $providedKey = $this->page->GetSubscriptionKey();
 
         if (empty($key) || $providedKey != $key) {
-            Log::Debug('Empty or invalid subscription key. Key provided: %s', $providedKey);
+            \Log::Debug('Empty or invalid subscription key. Key provided: %s', $providedKey);
 
             return false;
         }
@@ -57,3 +58,6 @@ class CalendarSubscriptionValidator implements ICalendarExportValidator
         return true;
     }
 }
+
+class_alias(__NAMESPACE__ . '\\ICalendarExportValidator', 'ICalendarExportValidator');
+class_alias(__NAMESPACE__ . '\\CalendarSubscriptionValidator', 'CalendarSubscriptionValidator');

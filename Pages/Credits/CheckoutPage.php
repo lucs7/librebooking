@@ -1,7 +1,16 @@
 <?php
 
+namespace LibreBooking\Pages\Credits;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/Credits/CheckoutPresenter.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
 
 interface ICheckoutPage extends IActionPage
 {
@@ -157,3 +166,5 @@ class CheckoutPage extends ActionPage implements ICheckoutPage
         $this->SetJson(['result'=>$result]);
     }
 }
+class_alias(__NAMESPACE__ . '\\ICheckoutPage', 'ICheckoutPage');
+class_alias(__NAMESPACE__ . '\\CheckoutPage', 'CheckoutPage');

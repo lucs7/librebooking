@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 
 class HelpPage extends Page
 {
@@ -20,3 +28,4 @@ class HelpPage extends Page
         $this->DisplayLocalized('support-and-credits.tpl');
     }
 }
+class_alias(__NAMESPACE__ . '\\HelpPage', 'HelpPage');

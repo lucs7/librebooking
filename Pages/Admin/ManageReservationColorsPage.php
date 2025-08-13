@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
@@ -153,3 +161,6 @@ class ManageReservationColorsPage extends ActionPage implements IManageReservati
         return $this->GetForm(FormKeys::RESERVATION_COLOR_RULE_ID);
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageReservationColorsPage', 'IManageReservationColorsPage');
+class_alias(__NAMESPACE__ . '\\ManageReservationColorsPresenter', 'ManageReservationColorsPresenter');
+class_alias(__NAMESPACE__ . '\\ManageReservationColorsPage', 'ManageReservationColorsPage');

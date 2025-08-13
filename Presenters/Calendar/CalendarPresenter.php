@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Presenters\Calendar;
+
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'lib/Config/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
@@ -119,3 +121,5 @@ class CalendarPresenter extends CommonCalendarPresenter
         return false;
     }
 }
+
+class_alias(__NAMESPACE__ . '\\CalendarPresenter', 'CalendarPresenter');

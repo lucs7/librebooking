@@ -1,7 +1,10 @@
 <?php
 
+namespace LibreBooking\Controls\Dashboard;
+
+use SmartyPage;
+
 require_once(ROOT_DIR . 'Controls/Dashboard/DashboardItem.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/AnnouncementPresenter.php');
 
 class AnnouncementsControl extends DashboardItem implements IAnnouncementsControl
 {
@@ -10,7 +13,7 @@ class AnnouncementsControl extends DashboardItem implements IAnnouncementsContro
     public function __construct(SmartyPage $smarty)
     {
         parent::__construct($smarty);
-        $this->presenter = new AnnouncementPresenter($this, new AnnouncementRepository(), PluginManager::Instance()->LoadPermission());
+        $this->presenter = new \AnnouncementPresenter($this, new \AnnouncementRepository(), \PluginManager::Instance()->LoadPermission());
     }
 
     public function PageLoad()
@@ -29,3 +32,6 @@ interface IAnnouncementsControl
 {
     public function SetAnnouncements($announcements);
 }
+
+class_alias(AnnouncementsControl::class, 'AnnouncementsControl');
+class_alias(IAnnouncementsControl::class, 'IAnnouncementsControl');

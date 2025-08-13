@@ -1,19 +1,14 @@
 <?php
 
-if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
-    require_once ROOT_DIR . 'vendor/autoload.php';
-}
-
-require_once(ROOT_DIR . 'Controls/Control.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
+namespace LibreBooking\Controls;
 
 class CaptchaControl extends Control
 {
     public function PageLoad()
     {
-        if (Configuration::Instance()->GetKey(
-            ConfigKeys::RECAPTCHA_ENABLED,
-            new BooleanConverter()
+        if (\Configuration::Instance()->GetKey(
+            \ConfigKeys::RECAPTCHA_ENABLED,
+            new \BooleanConverter()
         )
         ) {
             $this->showRecaptcha();
@@ -24,9 +19,9 @@ class CaptchaControl extends Control
 
     private function showRecaptcha()
     {
-        Log::Debug('CaptchaControl using Recaptcha');
+        \Log::Debug('CaptchaControl using Recaptcha');
 
-        $publicKey = Configuration::Instance()->GetKey(ConfigKeys::RECAPTCHA_PUBLIC_KEY);
+        $publicKey = \Configuration::Instance()->GetKey(\ConfigKeys::RECAPTCHA_PUBLIC_KEY);
 
         echo <<<ReCaptcha
         <script src="https://www.google.com/recaptcha/api.js?onload=ReCaptchaCallbackV3&render=$publicKey"></script>
@@ -50,12 +45,12 @@ class CaptchaControl extends Control
 
     private function showCaptcha()
     {
-        Log::Debug('CaptchaControl using Securimage');
-        $url = CaptchaService::Create()->GetImageUrl();
+        \Log::Debug('CaptchaControl using Securimage');
+        $url = \CaptchaService::Create()->GetImageUrl();
 
-        $label = Resources::GetInstance()->GetString('SecurityCode');
-        $message = Resources::GetInstance()->GetString('Required');
-        $formName = FormKeys::CAPTCHA;
+        $label = \Resources::GetInstance()->GetString('SecurityCode');
+        $message = \Resources::GetInstance()->GetString('Required');
+        $formName = \FormKeys::CAPTCHA;
 
         echo "<div id=\"captchaDiv\">
                 <div><img src=\"$url\" alt=\"captcha\" id=\"captchaImg\"/></div>
@@ -67,3 +62,5 @@ class CaptchaControl extends Control
             </div>";
     }
 }
+
+class_alias(CaptchaControl::class, 'CaptchaControl');

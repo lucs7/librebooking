@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Schedule/SchedulePresenter.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
@@ -466,3 +474,7 @@ class ReservationPopupPresenter
         return false;
     }
 }
+class_alias(__NAMESPACE__ . '\\IReservationPopupPage', 'IReservationPopupPage');
+class_alias(__NAMESPACE__ . '\\PopupFormatter', 'PopupFormatter');
+class_alias(__NAMESPACE__ . '\\ReservationPopupPage', 'ReservationPopupPage');
+class_alias(__NAMESPACE__ . '\\ReservationPopupPresenter', 'ReservationPopupPresenter');

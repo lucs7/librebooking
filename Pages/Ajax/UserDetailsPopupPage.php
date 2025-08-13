@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
@@ -119,3 +127,6 @@ class UserDetailsPopupPresenter
         }
     }
 }
+class_alias(__NAMESPACE__ . '\\IUserDetailsPopupPage', 'IUserDetailsPopupPage');
+class_alias(__NAMESPACE__ . '\\UserDetailsPopupPage', 'UserDetailsPopupPage');
+class_alias(__NAMESPACE__ . '\\UserDetailsPopupPresenter', 'UserDetailsPopupPresenter');

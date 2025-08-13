@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 class EqualValidator extends ValidatorBase implements IValidator
 {
     private $_value1;
@@ -21,3 +23,5 @@ class EqualValidator extends ValidatorBase implements IValidator
         return sprintf('value1: %s, value2: %s', $this->_value1, $this->_value2);
     }
 }
+
+class_alias(EqualValidator::class, 'EqualValidator');

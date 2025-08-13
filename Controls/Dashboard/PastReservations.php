@@ -1,9 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Controls/Dashboard/DashboardItem.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/PastReservationsPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/MissingCheckInOutReservationsPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/ReservationViewRepository.php');
+namespace LibreBooking\Controls\Dashboard;
+
+use SmartyPage;
 
 class PastReservations extends DashboardItem implements IPastReservationsControl
 {
@@ -15,13 +14,13 @@ class PastReservations extends DashboardItem implements IPastReservationsControl
     public function __construct(SmartyPage $smarty)
     {
         parent::__construct($smarty);
-        $this->presenter = new PastReservationsPresenter($this, new ReservationViewRepository());
+        $this->presenter = new \PastReservationsPresenter($this, new \ReservationViewRepository());
     }
 
     public function PageLoad()
     {
-        $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
-        $this->presenter->SetSearchCriteria(ServiceLocator::GetServer()->GetUserSession()->UserId, ReservationUserLevel::ALL);
+        $this->Set('DefaultTitle', \Resources::GetInstance()->GetString('NoTitleLabel'));
+        $this->presenter->SetSearchCriteria(\ServiceLocator::GetServer()->GetUserSession()->UserId, \ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
         $this->Display('past_reservations.tpl');
     }
@@ -96,8 +95,8 @@ class AllPastReservations extends PastReservations
 {
     public function PageLoad()
     {
-        $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
-        $this->presenter->SetSearchCriteria(ReservationViewRepository::ALL_USERS, ReservationUserLevel::ALL);
+        $this->Set('DefaultTitle', \Resources::GetInstance()->GetString('NoTitleLabel'));
+        $this->presenter->SetSearchCriteria(\ReservationViewRepository::ALL_USERS, \ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
         $this->Display('admin_upcoming_reservations.tpl');
     }
@@ -113,19 +112,25 @@ class MissingCheckInOutReservations extends PastReservations implements IRemaini
     public function __construct(SmartyPage $smarty)
     {
         parent::__construct($smarty);
-        $this->presenter = new MissingCheckInOutReservationsPresenter($this, new ReservationViewRepository());
+        $this->presenter = new \MissingCheckInOutReservationsPresenter($this, new \ReservationViewRepository());
     }
 
     public function PageLoad()
     {
-        $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
-        $this->presenter->SetSearchCriteria(ReservationViewRepository::ALL_USERS, ReservationUserLevel::ALL);
+        $this->Set('DefaultTitle', \Resources::GetInstance()->GetString('NoTitleLabel'));
+        $this->presenter->SetSearchCriteria(\ReservationViewRepository::ALL_USERS, \ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
         $this->Display('missing_check_in_out_reservations.tpl');
     }
 
-    public function BindRemaining($reservations)                 
+    public function BindRemaining($reservations)
     {
         $this->Set('RemainingReservations', $reservations);
     }
 }
+
+class_alias(PastReservations::class, 'PastReservations');
+class_alias(IPastReservationsControl::class, 'IPastReservationsControl');
+class_alias(IRemainingPastReservationsControl::class, 'IRemainingPastReservationsControl');
+class_alias(AllPastReservations::class, 'AllPastReservations');
+class_alias(MissingCheckInOutReservations::class, 'MissingCheckInOutReservations');

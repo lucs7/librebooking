@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 
 class DataCleanupPage extends AdminPage
 {
@@ -142,3 +150,4 @@ class DataCleanupPage extends AdminPage
         return $date;
     }
 }
+class_alias(__NAMESPACE__ . '\\DataCleanupPage', 'DataCleanupPage');

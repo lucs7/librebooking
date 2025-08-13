@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Admin/ManageSchedulesPresenter.php');
 require_once(ROOT_DIR . 'Domain/Access/ScheduleRepository.php');
 
@@ -451,7 +458,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
      * @param PageInfo $pageInfo
      * @return void
      */
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->pageablePage->BindPageInfo($pageInfo);
     }
@@ -654,3 +661,6 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         return $this->GetCheckbox(FormKeys::MAXIMUM_RESOURCES_PER_RESERVATION_UNLIMITED);
     }
 }
+class_alias(__NAMESPACE__ . '\\IUpdateSchedulePage', 'IUpdateSchedulePage');
+class_alias(__NAMESPACE__ . '\\IManageSchedulesPage', 'IManageSchedulesPage');
+class_alias(__NAMESPACE__ . '\\ManageSchedulesPage', 'ManageSchedulesPage');

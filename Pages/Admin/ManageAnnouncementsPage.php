@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Admin/ManageAnnouncementsPresenter.php');
 
 interface IManageAnnouncementsPage extends IActionPage
@@ -191,3 +199,5 @@ class ManageAnnouncementsPage extends ActionPage implements IManageAnnouncements
         return $this->GetForm(FormKeys::DISPLAY_PAGE);
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageAnnouncementsPage', 'IManageAnnouncementsPage');
+class_alias(__NAMESPACE__ . '\\ManageAnnouncementsPage', 'ManageAnnouncementsPage');

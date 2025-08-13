@@ -1,5 +1,12 @@
 <?php
 
+namespace LibreBooking\Presenters\Calendar;
+
+use Resources;
+use LibreBooking\Domain\ResourceGroupTree;
+use Schedule;
+use ResourceDto;
+
 class CalendarFilters
 {
     public const FilterSchedule = 'schedule';
@@ -167,3 +174,6 @@ class CalendarFilter
         return $this->filters;
     }
 }
+
+class_alias(__NAMESPACE__ . '\\CalendarFilters', 'CalendarFilters');
+class_alias(__NAMESPACE__ . '\\CalendarFilter', 'CalendarFilter');

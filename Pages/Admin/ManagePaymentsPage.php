@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Admin/ManagePaymentsPresenter.php');
 require_once(ROOT_DIR . 'Domain/Access/PaymentRepository.php');
 require_once(ROOT_DIR . 'Domain/Values/Currency.php');
@@ -88,7 +95,7 @@ interface IManagePaymentsPage extends IActionPage
     public function GetPageSize();
 
     /**
-     * @param PageableData|TransactionLogView[] $transactionLog
+     * @param PageableData|\TransactionLogView[] $transactionLog
      */
     public function BindTransactionLog($transactionLog);
 
@@ -108,9 +115,9 @@ interface IManagePaymentsPage extends IActionPage
     public function GetRefundAmount();
 
     /**
-     * @param TransactionLogView $transactionLogView
+     * @param \TransactionLogView $transactionLogView
      */
-    public function BindTransactionLogView(TransactionLogView $transactionLogView);
+    public function BindTransactionLogView(\TransactionLogView $transactionLogView);
 
     /**
      * @param int $wasIssued
@@ -259,7 +266,7 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
         return floatval($this->GetForm(FormKeys::REFUND_AMOUNT));
     }
 
-    public function BindTransactionLogView(TransactionLogView $transactionLogView)
+    public function BindTransactionLogView(\TransactionLogView $transactionLogView)
     {
         $this->SetJson($transactionLogView);
     }
@@ -269,3 +276,5 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
         $this->SetJson($wasIssued);
     }
 }
+class_alias(__NAMESPACE__ . '\\IManagePaymentsPage', 'IManagePaymentsPage');
+class_alias(__NAMESPACE__ . '\\ManagePaymentsPage', 'ManagePaymentsPage');

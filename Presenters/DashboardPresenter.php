@@ -1,14 +1,18 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/Config/namespace.php');
-require_once(ROOT_DIR . 'lib/Common/namespace.php');
-require_once(ROOT_DIR . 'lib/Database/namespace.php');
-require_once(ROOT_DIR . 'lib/Database/Commands/namespace.php');
+namespace LibreBooking\Presenters;
 
-require_once(ROOT_DIR . 'Controls/Dashboard/AnnouncementsControl.php');
-require_once(ROOT_DIR . 'Controls/Dashboard/UpcomingReservations.php');
-require_once(ROOT_DIR . 'Controls/Dashboard/ResourceAvailabilityControl.php');
-require_once(ROOT_DIR . 'Controls/Dashboard/PastReservations.php');
+use LibreBooking\Common\ServiceLocator;
+use LibreBooking\Common\SmartyPage;
+use LibreBooking\Controls\Dashboard\AnnouncementsControl;
+use LibreBooking\Controls\Dashboard\AllUpcomingReservations;
+use LibreBooking\Controls\Dashboard\GroupUpcomingReservations;
+use LibreBooking\Controls\Dashboard\MissingCheckInOutReservations;
+use LibreBooking\Controls\Dashboard\PastReservations;
+use LibreBooking\Controls\Dashboard\PendingApprovalReservations;
+use LibreBooking\Controls\Dashboard\ResourceAvailabilityControl;
+use LibreBooking\Controls\Dashboard\UpcomingReservations;
+use LibreBooking\Pages\IDashboardPage;
 
 class DashboardPresenter
 {
@@ -53,3 +57,5 @@ class DashboardPresenter
         }
     }
 }
+
+class_alias(DashboardPresenter::class, 'DashboardPresenter');

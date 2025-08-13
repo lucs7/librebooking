@@ -1,5 +1,15 @@
 <?php
 
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/UnavailableResourcesPresenter.php');
 
 interface IAvailableResourcesPage
@@ -79,3 +89,5 @@ class UnavailableResourcesPage extends Page implements IAvailableResourcesPage
         return $this->GetQuerystring(QueryStringKeys::SCHEDULE_ID);
     }
 }
+class_alias(__NAMESPACE__ . '\\IAvailableResourcesPage', 'IAvailableResourcesPage');
+class_alias(__NAMESPACE__ . '\\UnavailableResourcesPage', 'UnavailableResourcesPage');

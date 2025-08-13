@@ -1,5 +1,10 @@
 <?php
 
+namespace LibreBooking\Common\Helpers;
+
+use Exception;
+use LibreBooking\Common\Logging\Log;
+
 class BookedStringHelper
 {
     /**
@@ -57,3 +62,5 @@ class BookedStringHelper
         return $string;
     }
 }
+
+class_alias(BookedStringHelper::class, 'BookedStringHelper');

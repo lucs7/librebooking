@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common;
+
 class LoginTime
 {
     /**
@@ -19,3 +21,5 @@ class LoginTime
         }
     }
 }
+
+class_alias(LoginTime::class, 'LoginTime');

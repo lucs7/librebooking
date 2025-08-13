@@ -1,5 +1,16 @@
 <?php
 
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use LibreBooking\Pages\Reservation\IRequestedResourcePage;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/ResourceDisplayPresenter.php');
 
 interface IResourceDisplayPage extends IPage, IActionPage
@@ -29,7 +40,7 @@ interface IResourceDisplayPage extends IPage, IActionPage
     public function BindInvalidLogin();
 
     /**
-     * @param BookableResource[] $resourceList
+     * @param \BookableResource[] $resourceList
      */
     public function BindResourceList($resourceList);
 
@@ -38,7 +49,7 @@ interface IResourceDisplayPage extends IPage, IActionPage
      */
     public function SetActivatedResourceId($publicId);
 
-    public function BindResource(BookableResource $resource);
+    public function BindResource(\BookableResource $resource);
 
     /**
      * @param IDailyLayout $dailyLayout
@@ -50,7 +61,7 @@ interface IResourceDisplayPage extends IPage, IActionPage
      * @param bool $requiresCheckin
      * @param string $checkinReferenceNumber
      */
-    public function DisplayAvailability(IDailyLayout $dailyLayout, Date $today, Date $reservationDate, $current, $next, $upcoming, $requiresCheckin, $checkinReferenceNumber);
+    public function DisplayAvailability(\IDailyLayout $dailyLayout, \Date $today, \Date $reservationDate, $current, $next, $upcoming, $requiresCheckin, $checkinReferenceNumber);
 
     /**
      * @param bool $availableNow
@@ -97,7 +108,7 @@ interface IResourceDisplayPage extends IPage, IActionPage
     /**
      * @param Schedule $schedule
      */
-    public function BindSchedule(Schedule $schedule);
+    public function BindSchedule(\Schedule $schedule);
 
     /**
      * @param Attribute[] $attributes
@@ -249,13 +260,13 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         return $startDate;
     }
 
-    public function BindResource(BookableResource $resource)
+    public function BindResource(\BookableResource $resource)
     {
         $this->Set('ResourceName', $resource->GetName());
         $this->Set('ResourceId', $resource->GetId());
     }
 
-    public function DisplayAvailability(IDailyLayout $dailyLayout, Date $today, Date $reservationDate, $current, $next, $upcoming, $requiresCheckin, $checkinReferenceNumber)
+    public function DisplayAvailability(\IDailyLayout $dailyLayout, \Date $today, \Date $reservationDate, $current, $next, $upcoming, $requiresCheckin, $checkinReferenceNumber)
     {
         $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('period_time'));
         $this->Set('Today', $today);
@@ -334,7 +345,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         return $this->GetForm(FormKeys::SCHEDULE_ID);
     }
 
-    public function BindSchedule(Schedule $schedule)
+    public function BindSchedule(\Schedule $schedule)
     {
         $this->Set('ScheduleId', $schedule->GetId());
         $this->Set('Timezone', $schedule->GetTimezone());
@@ -370,3 +381,5 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         $this->Display('ResourceDisplay/resource-display-instructions.tpl');
     }
 }
+class_alias(__NAMESPACE__ . '\\IResourceDisplayPage', 'IResourceDisplayPage');
+class_alias(__NAMESPACE__ . '\\ResourceDisplayPage', 'ResourceDisplayPage');

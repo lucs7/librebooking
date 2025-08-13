@@ -1,5 +1,14 @@
 <?php
 
+namespace LibreBooking\Presenters;
+
+use LibreBooking\Pages\IActivationPage;
+use IAccountActivation;
+use IWebAuthentication;
+use WebLoginContext;
+use LoginData;
+use Pages;
+
 require_once(ROOT_DIR . 'Pages/ActivationPage.php');
 
 class ActivationPresenter
@@ -44,3 +53,5 @@ class ActivationPresenter
         }
     }
 }
+
+class_alias(__NAMESPACE__.'\\ActivationPresenter', 'ActivationPresenter');

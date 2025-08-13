@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Validators\URI;
+
 interface IParamsValidatorMethods
 {
     /**
@@ -95,3 +97,5 @@ interface IParamsValidatorMethods
      */
     public static function matchValidator(string $param, string $expectedValue, string $requestURI): bool;
 }
+
+class_alias(IParamsValidatorMethods::class, 'IParamsValidatorMethods');

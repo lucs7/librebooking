@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Validators\URI;
+
 interface IURIScriptValidator
 {
     /**
@@ -14,3 +16,5 @@ interface IURIScriptValidator
      */
     public static function validateOrRedirect(string $requestURI, string $redirectURL): void;
 }
+
+class_alias(IURIScriptValidator::class, 'IURIScriptValidator');

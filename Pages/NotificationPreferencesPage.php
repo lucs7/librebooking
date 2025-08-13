@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/NotificationPreferencesPresenter.php');
 
 interface INotificationPreferencesPage extends IPage
@@ -175,3 +183,5 @@ class NotificationPreferencesPage extends SecurePage implements INotificationPre
         $this->Set('ParticipationEnabled', $enabled);
     }
 }
+class_alias(__NAMESPACE__ . '\\INotificationPreferencesPage', 'INotificationPreferencesPage');
+class_alias(__NAMESPACE__ . '\\NotificationPreferencesPage', 'NotificationPreferencesPage');

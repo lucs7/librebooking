@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages\Export;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/EmbeddedCalendarPresenter.php');
 
 interface IEmbeddedCalendarPage
@@ -8,10 +16,10 @@ interface IEmbeddedCalendarPage
     /**
      * @param ReservationListing $reservations
      * @param string $timezone
-     * @param Date $startDate
-     * @param Date $endDate
+     * @param \Date $startDate
+     * @param \Date $endDate
      */
-    public function BindReservations($reservations, $timezone, Date $startDate, Date $endDate);
+    public function BindReservations($reservations, $timezone, \Date $startDate, \Date $endDate);
 
     public function DisplayAgenda();
 
@@ -47,9 +55,9 @@ interface IEmbeddedCalendarPage
     public function GetTitleFormat();
 
     /**
-     * @param EmbeddedCalendarTitleFormatter $formatter
+     * @param \EmbeddedCalendarTitleFormatter $formatter
      */
-    public function BindTitleFormatter(EmbeddedCalendarTitleFormatter $formatter);
+    public function BindTitleFormatter(\EmbeddedCalendarTitleFormatter $formatter);
 }
 
 class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
@@ -69,7 +77,7 @@ class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
         $this->presenter->PageLoad();
     }
 
-    public function BindReservations($reservations, $timezone, Date $startDate, Date $endDate)
+    public function BindReservations($reservations, $timezone, \Date $startDate, \Date $endDate)
     {
         $Range = new DateRange($startDate, $endDate);
         $this->Set('Reservations', $reservations);
@@ -123,8 +131,10 @@ class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
         return $this->GetQuerystring(QueryStringKeys::FORMAT);
     }
 
-    public function BindTitleFormatter(EmbeddedCalendarTitleFormatter $formatter)
+    public function BindTitleFormatter(\EmbeddedCalendarTitleFormatter $formatter)
     {
         $this->Set('TitleFormatter', $formatter);
     }
 }
+class_alias(__NAMESPACE__ . '\\IEmbeddedCalendarPage', 'IEmbeddedCalendarPage');
+class_alias(__NAMESPACE__ . '\\EmbeddedCalendarPage', 'EmbeddedCalendarPage');

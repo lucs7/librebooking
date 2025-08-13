@@ -1,12 +1,20 @@
 <?php
 
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+use LibreBooking\Pages\Authentication\ILoginBasePage;
+
 // debugging tools / libs
 if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
     require ROOT_DIR . 'vendor/autoload.php';
 }
-
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Pages/Authentication/ILoginBasePage.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 
 interface ILoginPage extends IPage, ILoginBasePage
@@ -375,3 +383,5 @@ class LoginPage extends Page implements ILoginPage
         }
     }
 }
+class_alias(__NAMESPACE__ . '\\ILoginPage', 'ILoginPage');
+class_alias(__NAMESPACE__ . '\\LoginPage', 'LoginPage');

@@ -1,6 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/JsonRequest.php');
+namespace LibreBooking\WebServices\Requests\Account;
+
+use JsonRequest;
+use Configuration;
+use ConfigKeys;
+use AttributeValueRequest;
 
 abstract class AccountRequestBase extends JsonRequest
 {
@@ -61,3 +66,5 @@ abstract class AccountRequestBase extends JsonRequest
             'position' => $this->position];
     }
 }
+
+class_alias(AccountRequestBase::class, 'AccountRequestBase');

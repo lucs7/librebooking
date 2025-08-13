@@ -17,16 +17,16 @@ class ApiPermissions
             // If a write API, then check if a RW group is set and verify access.
             // If no RW group, then check if a RO group is set and verify access
             if (is_numeric($this->rwGroupId)) {
-                return UserGroupHelper::isUserInGroup(groupId: $this->rwGroupId, userId: $userId);
+                return \LibreBooking\Common\Helpers\UserGroupHelper::isUserInGroup(groupId: $this->rwGroupId, userId: $userId);
             }
             if (is_numeric($this->roGroupId)) {
-                return UserGroupHelper::isUserInGroup(groupId: $this->roGroupId, userId: $userId);
+                return \LibreBooking\Common\Helpers\UserGroupHelper::isUserInGroup(groupId: $this->roGroupId, userId: $userId);
             }
             return true;
         }
 
         if (is_numeric($this->roGroupId)) {
-            return UserGroupHelper::isUserInGroup(groupId: $this->roGroupId, userId: $userId);
+            return \LibreBooking\Common\Helpers\UserGroupHelper::isUserInGroup(groupId: $this->roGroupId, userId: $userId);
         }
         return true;
     }

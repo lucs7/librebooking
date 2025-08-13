@@ -1,5 +1,15 @@
 <?php
 
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/MonitorDisplayPresenter.php');
 
 interface IMonitorDisplayPage extends IPage, IActionPage
@@ -40,12 +50,12 @@ interface IMonitorDisplayPage extends IPage, IActionPage
     public function RebindResources($resources);
 
     /**
-     * @param DateRange $range
-     * @param IDailyLayout $layout
+     * @param \DateRange $range
+     * @param \IDailyLayout $layout
      * @param ResourceDto[] $resources
      * @param int $format
      */
-    public function RebindSchedule(DateRange $range, IDailyLayout $layout, $resources, $format);
+    public function RebindSchedule(\DateRange $range, \IDailyLayout $layout, $resources, $format);
 }
 
 class MonitorDisplayPage extends ActionPage implements IMonitorDisplayPage
@@ -107,7 +117,7 @@ class MonitorDisplayPage extends ActionPage implements IMonitorDisplayPage
         $this->SetJson($resources);
     }
 
-    public function RebindSchedule(DateRange $range, IDailyLayout $layout, $resources, $format)
+    public function RebindSchedule(\DateRange $range, \IDailyLayout $layout, $resources, $format)
     {
         $this->Set('DisplaySlotFactory', new StaticDisplaySlotFactory());
         $this->Set('BoundDates', $range->Dates());
@@ -150,3 +160,5 @@ class MonitorDisplayPage extends ActionPage implements IMonitorDisplayPage
         return Configuration::Instance()->GetKey(ConfigKeys::PRIVACY_VIEW_SCHEDULES, new BooleanConverter());
     }
 }
+class_alias(__NAMESPACE__ . '\\IMonitorDisplayPage', 'IMonitorDisplayPage');
+class_alias(__NAMESPACE__ . '\\MonitorDisplayPage', 'MonitorDisplayPage');

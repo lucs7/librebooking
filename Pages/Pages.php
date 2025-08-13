@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Pages;
+
 class Pages
 {
     public const ID_DASHBOARD = 1;
@@ -78,3 +80,5 @@ class Pages
         return $pages;
     }
 }
+
+class_alias(__NAMESPACE__ . '\\Pages', 'Pages');

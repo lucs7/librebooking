@@ -1,8 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
+namespace LibreBooking\Pages\Search;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Search/SearchReservationsPresenter.php');
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
@@ -199,3 +205,5 @@ class SearchReservationsPage extends ActionPage implements ISearchReservationsPa
         return $this->GetForm(FormKeys::REFERENCE_NUMBER);
     }
 }
+class_alias(__NAMESPACE__ . '\\ISearchReservationsPage', 'ISearchReservationsPage');
+class_alias(__NAMESPACE__ . '\\SearchReservationsPage', 'SearchReservationsPage');

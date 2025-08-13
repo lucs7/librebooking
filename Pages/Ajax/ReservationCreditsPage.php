@@ -1,5 +1,15 @@
 <?php
 
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationCreditsPresenter.php');
 
 interface IReservationCreditsPage extends IRepeatOptionsComposite
@@ -204,3 +214,5 @@ class ReservationCreditsPage extends Page implements IReservationCreditsPage
         $this->SetJson(['creditsRequired' => $creditsRequired, 'cost' => $cost]);
     }
 }
+class_alias(__NAMESPACE__ . '\\IReservationCreditsPage', 'IReservationCreditsPage');
+class_alias(__NAMESPACE__ . '\\ReservationCreditsPage', 'ReservationCreditsPage');

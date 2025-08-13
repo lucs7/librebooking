@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\Validators\URI;
+
+use LibreBooking\Common\Logging\Log;
+
 class ParamsValidator
 {
     /**
@@ -121,28 +125,28 @@ class ParamsValidator
     private static function runSimpleValidation(string $param, string $validator, string $requestURI): bool
     {
         switch ($validator) {
-            case ParamsValidatorKeys::NUMERICAL:
+            case \ParamsValidatorKeys::NUMERICAL:
                 return ParamsValidatorMethods::numericalValidator($param, $requestURI);
 
-            case ParamsValidatorKeys::DATE:
+            case \ParamsValidatorKeys::DATE:
                 return ParamsValidatorMethods::dateValidator($param, $requestURI);
 
-            case ParamsValidatorKeys::SIMPLE_DATE:
+            case \ParamsValidatorKeys::SIMPLE_DATE:
                 return ParamsValidatorMethods::simpleDateValidatorList($param, $requestURI);
 
-            case ParamsValidatorKeys::SIMPLE_DATETIME:
+            case \ParamsValidatorKeys::SIMPLE_DATETIME:
                 return ParamsValidatorMethods::simpleDateTimeValidator($param, $requestURI);
 
-            case ParamsValidatorKeys::COMPLEX_DATETIME:
+            case \ParamsValidatorKeys::COMPLEX_DATETIME:
                 return ParamsValidatorMethods::complexDateTimedateValidator($param, $requestURI);
 
-            case ParamsValidatorKeys::EXISTS:
+            case \ParamsValidatorKeys::EXISTS:
                 return ParamsValidatorMethods::existsInURLValidator($param, $requestURI);
 
-            case ParamsValidatorKeys::REDIRECT_GUEST_RESERVATION:
+            case \ParamsValidatorKeys::REDIRECT_GUEST_RESERVATION:
                 return ParamsValidatorMethods::redirectGuestReservationValidator($requestURI);
 
-            case ParamsValidatorKeys::BOOLEAN:
+            case \ParamsValidatorKeys::BOOLEAN:
                 return ParamsValidatorMethods::booleanValidator($param, $requestURI);
 
             default:
@@ -151,3 +155,5 @@ class ParamsValidator
         }
     }
 }
+
+class_alias(ParamsValidator::class, 'ParamsValidator');

@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Helpers;
+
 class StringBuilder
 {
     private $_string = [];
@@ -29,3 +31,5 @@ class StringBuilder
         return join($glue, $this->_string);
     }
 }
+
+class_alias(StringBuilder::class, 'StringBuilder');

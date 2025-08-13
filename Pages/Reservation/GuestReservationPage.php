@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Reservation/NewReservationPage.php');
+namespace LibreBooking\Pages\Reservation;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Reservation/GuestReservationPresenter.php');
 
 interface IGuestReservationPage extends INewReservationPage
@@ -93,3 +101,5 @@ class GuestReservationPage extends NewReservationPage implements IGuestReservati
         }
     }
 }
+class_alias(__NAMESPACE__ . '\\IGuestReservationPage', 'IGuestReservationPage');
+class_alias(__NAMESPACE__ . '\\GuestReservationPage', 'GuestReservationPage');

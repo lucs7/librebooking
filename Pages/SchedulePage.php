@@ -1,6 +1,15 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+use LibreBooking\Domain\ResourceGroupTree;
 require_once(ROOT_DIR . 'Presenters/Schedule/SchedulePresenter.php');
 require_once(ROOT_DIR . 'Presenters/Schedule/LoadReservationRequest.php');
 
@@ -676,3 +685,5 @@ class SchedulePage extends ActionPage implements ISchedulePage
         return $this->GetQuerystring(FormKeys::PARTICIPANT_TEXT);
     }
 }
+class_alias(__NAMESPACE__ . '\\ISchedulePage', 'ISchedulePage');
+class_alias(__NAMESPACE__ . '\\SchedulePage', 'SchedulePage');

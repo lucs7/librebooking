@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 class RequiredValidator extends ValidatorBase implements IValidator
 {
     private $value;
@@ -15,3 +17,5 @@ class RequiredValidator extends ValidatorBase implements IValidator
         $this->isValid = !empty($trimmed);
     }
 }
+
+class_alias(RequiredValidator::class, 'RequiredValidator');

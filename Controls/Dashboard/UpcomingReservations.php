@@ -1,10 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Controls/Dashboard/DashboardItem.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/UpcomingReservationsPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/GroupUpcomingReservationsPresenter.php');
-require_once(ROOT_DIR . 'Presenters/Dashboard/PendingApprovalReservationsPresenter.php');
-require_once(ROOT_DIR . 'Domain/Access/ReservationViewRepository.php');
+namespace LibreBooking\Controls\Dashboard;
+
+use SmartyPage;
 
 class UpcomingReservations extends DashboardItem implements IUpcomingReservationsControl
 {
@@ -16,13 +14,13 @@ class UpcomingReservations extends DashboardItem implements IUpcomingReservation
     public function __construct(SmartyPage $smarty)
     {
         parent::__construct($smarty);
-        $this->presenter = new UpcomingReservationsPresenter($this, new ReservationViewRepository());
+        $this->presenter = new \UpcomingReservationsPresenter($this, new \ReservationViewRepository());
     }
 
     public function PageLoad()
     {
-        $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
-        $this->presenter->SetSearchCriteria(ServiceLocator::GetServer()->GetUserSession()->UserId, ReservationUserLevel::ALL);
+        $this->Set('DefaultTitle', \Resources::GetInstance()->GetString('NoTitleLabel'));
+        $this->presenter->SetSearchCriteria(\ServiceLocator::GetServer()->GetUserSession()->UserId, \ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
         $this->Display('upcoming_reservations.tpl');
     }
@@ -99,8 +97,8 @@ class AllUpcomingReservations extends UpcomingReservations
 {
     public function PageLoad()
     {
-        $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
-        $this->presenter->SetSearchCriteria(ReservationViewRepository::ALL_USERS, ReservationUserLevel::ALL);
+        $this->Set('DefaultTitle', \Resources::GetInstance()->GetString('NoTitleLabel'));
+        $this->presenter->SetSearchCriteria(\ReservationViewRepository::ALL_USERS, \ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
         $this->Display('admin_upcoming_reservations.tpl');
     }
@@ -111,13 +109,13 @@ class GroupUpcomingReservations extends UpcomingReservations
     public function __construct(SmartyPage $smarty)
     {
         parent::__construct($smarty);
-        $this->presenter = new GroupUpcomingReservationsPresenter($this, new ReservationViewRepository());
+        $this->presenter = new \GroupUpcomingReservationsPresenter($this, new \ReservationViewRepository());
     }
 
     public function PageLoad()
     {
-        $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
-        $this->presenter->SetSearchCriteria(ReservationViewRepository::ALL_USERS, ReservationUserLevel::ALL);
+        $this->Set('DefaultTitle', \Resources::GetInstance()->GetString('NoTitleLabel'));
+        $this->presenter->SetSearchCriteria(\ReservationViewRepository::ALL_USERS, \ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
         $this->Display('group_upcoming_reservations.tpl');
     }
@@ -128,13 +126,13 @@ class PendingApprovalReservations extends UpcomingReservations implements IAditi
     public function __construct(SmartyPage $smarty)
     {
         parent::__construct($smarty);
-        $this->presenter = new PendingApprovalReservationsPresenter($this, new ReservationViewRepository());
+        $this->presenter = new \PendingApprovalReservationsPresenter($this, new \ReservationViewRepository());
     }
 
     public function PageLoad()
     {
-        $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
-        $this->presenter->SetSearchCriteria(ReservationViewRepository::ALL_USERS, ReservationUserLevel::ALL);
+        $this->Set('DefaultTitle', \Resources::GetInstance()->GetString('NoTitleLabel'));
+        $this->presenter->SetSearchCriteria(\ReservationViewRepository::ALL_USERS, \ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
         $this->Display('pending_approval_reservations.tpl');
     }
@@ -154,3 +152,10 @@ class PendingApprovalReservations extends UpcomingReservations implements IAditi
         $this->Set('RemainingReservations', $reservations);
     }
 }
+
+class_alias(UpcomingReservations::class, 'UpcomingReservations');
+class_alias(IUpcomingReservationsControl::class, 'IUpcomingReservationsControl');
+class_alias(IAditionalUpcomingReservationsFieldsControl::class, 'IAditionalUpcomingReservationsFieldsControl');
+class_alias(AllUpcomingReservations::class, 'AllUpcomingReservations');
+class_alias(GroupUpcomingReservations::class, 'GroupUpcomingReservations');
+class_alias(PendingApprovalReservations::class, 'PendingApprovalReservations');

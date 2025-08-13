@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
+use LibreBooking\Common\Resources;
+
 class PasswordValidator extends ValidatorBase implements IValidator
 {
     /**
@@ -12,7 +16,7 @@ class PasswordValidator extends ValidatorBase implements IValidator
      * @param string $currentPasswordPlainText
      * @param User $user
      */
-    public function __construct($currentPasswordPlainText, User $user)
+    public function __construct($currentPasswordPlainText, \User $user)
     {
         $this->currentPasswordPlainText = $currentPasswordPlainText;
         $this->user = $user;
@@ -20,7 +24,7 @@ class PasswordValidator extends ValidatorBase implements IValidator
 
     public function Validate()
     {
-        $pw = new Password($this->currentPasswordPlainText, $this->user->encryptedPassword);
+        $pw = new \Password($this->currentPasswordPlainText, $this->user->encryptedPassword);
         $this->isValid = $pw->Validate($this->user->passwordSalt);
 
         if (!$this->isValid) {
@@ -28,3 +32,5 @@ class PasswordValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(PasswordValidator::class, 'PasswordValidator');

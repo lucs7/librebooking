@@ -1,8 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'Pages/Reports/IDisplayableReportPage.php');
+namespace LibreBooking\Pages\Reports;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Reports/SavedReportsPresenter.php');
 require_once(ROOT_DIR . 'Presenters/Reports/ReportCsvColumnView.php');
 
@@ -108,7 +114,7 @@ class SavedReportsPage extends ActionPage implements ISavedReportsPage
         $this->Set('ReportList', $reportList);
     }
 
-    public function BindReport(IReport $report, IReportDefinition $definition, $selectedColumns)
+    public function BindReport(\IReport $report, \IReportDefinition $definition, $selectedColumns)
     {
         $this->Set('HideSave', true);
         $this->Set('Definition', $definition);
@@ -158,3 +164,5 @@ class SavedReportsPage extends ActionPage implements ISavedReportsPage
         return $this->GetForm(FormKeys::SELECTED_COLUMNS);
     }
 }
+class_alias(__NAMESPACE__ . '\\ISavedReportsPage', 'ISavedReportsPage');
+class_alias(__NAMESPACE__ . '\\SavedReportsPage', 'SavedReportsPage');

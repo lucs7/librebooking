@@ -1,5 +1,11 @@
 <?php
 
+namespace LibreBooking\Domain;
+
+use BookedStringHelper;
+use BooleanConverter;
+use ColumnNames;
+
 class CustomAttributeTypes
 {
     public const SINGLE_LINE_TEXTBOX = 1;
@@ -554,3 +560,7 @@ class CustomAttribute
         }
     }
 }
+
+class_alias(__NAMESPACE__.'\\CustomAttributeTypes', 'CustomAttributeTypes');
+class_alias(__NAMESPACE__.'\\CustomAttributeCategory', 'CustomAttributeCategory');
+class_alias(__NAMESPACE__.'\\CustomAttribute', 'CustomAttribute');

@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common;
+
 class ContrastingColor
 {
     /**
@@ -65,3 +67,6 @@ class AdjustedColor
         return $this->GetHex();
     }
 }
+
+class_alias(ContrastingColor::class, 'ContrastingColor');
+class_alias(AdjustedColor::class, 'AdjustedColor');

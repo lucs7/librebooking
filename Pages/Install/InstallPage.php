@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages\Install;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Install/InstallPresenter.php');
 require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
 
@@ -310,3 +318,5 @@ class InstallPage extends Page implements IInstallPage
         $this->Set('ShowUpToDateMessage', $showUpToDateMessage);
     }
 }
+class_alias(__NAMESPACE__ . '\\IInstallPage', 'IInstallPage');
+class_alias(__NAMESPACE__ . '\\InstallPage', 'InstallPage');

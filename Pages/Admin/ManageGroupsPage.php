@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Admin/ManageGroupsPresenter.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
@@ -20,7 +27,7 @@ interface IManageGroupsPage extends IActionPage
     /**
      * @param PageInfo $pageInfo
      */
-    public function BindPageInfo(PageInfo $pageInfo);
+    public function BindPageInfo(\PageInfo $pageInfo);
 
     /**
      * @return int
@@ -172,7 +179,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->Display('Admin/Groups/manage_groups.tpl');
     }
 
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->pageable->BindPageInfo($pageInfo);
     }
@@ -320,3 +327,5 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         return $this->GetCheckbox(FormKeys::UPDATE_ON_IMPORT);
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageGroupsPage', 'IManageGroupsPage');
+class_alias(__NAMESPACE__ . '\\ManageGroupsPage', 'ManageGroupsPage');

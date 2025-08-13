@@ -1,7 +1,11 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Presenters/Admin/ManageAttributesPresenter.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Presenters\Admin\ManageAttributesPresenter;
+use FormKeys;
+use LibreBooking\Domain\CustomAttributeTypes;
 
 interface IManageAttributesPage extends IActionPage
 {
@@ -93,7 +97,7 @@ interface IManageAttributesPage extends IActionPage
     public function GetIsPrivate();
 }
 
-class ManageAttributesPage extends ActionPage implements IManageAttributesPage
+class ManageAttributesPage extends AdminPage implements IManageAttributesPage
 {
     /**
      * @var ManageAttributesPresenter
@@ -103,7 +107,7 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     public function __construct()
     {
         parent::__construct('CustomAttributes', 1);
-        $this->presenter = new ManageAttributesPresenter($this, new AttributeRepository());
+        $this->presenter = new ManageAttributesPresenter($this, new \AttributeRepository());
     }
 
     public function PageLoad()
@@ -245,3 +249,5 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
         $this->presenter->HandleDataRequest($dataRequest);
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageAttributesPage', 'IManageAttributesPage');
+class_alias(__NAMESPACE__ . '\\ManageAttributesPage', 'ManageAttributesPage');

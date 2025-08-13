@@ -1,10 +1,18 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Calendar/PersonalCalendarPresenter.php');
 require_once(ROOT_DIR . 'lib/Application/Schedule/CalendarSubscriptionService.php');
 
-class PersonalCalendarPage extends CommonCalendarPage implements ICommonCalendarPage
+class PersonalCalendarPage extends \CommonCalendarPage implements \ICommonCalendarPage
 {
     /**
      * @var PersonalCalendarPresenter
@@ -103,3 +111,5 @@ class PersonalCalendarUrl
         return $this->url;
     }
 }
+class_alias(__NAMESPACE__ . '\\PersonalCalendarPage', 'PersonalCalendarPage');
+class_alias(__NAMESPACE__ . '\\PersonalCalendarUrl', 'PersonalCalendarUrl');

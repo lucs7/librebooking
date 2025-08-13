@@ -1,7 +1,16 @@
 <?php
 
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'config/timezones.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
 require_once(ROOT_DIR . 'lib/Config/Configurator.php');
 require_once(ROOT_DIR . 'Presenters/Admin/ManageConfigurationPresenter.php');
 
@@ -18,17 +27,17 @@ interface IManageConfigurationPage extends IActionPage
     public function SetIsConfigFileWritable($isFileWritable);
 
     /**
-     * @param ConfigSetting $configSetting
+     * @param \ConfigSetting $configSetting
      */
-    public function AddSetting(ConfigSetting $configSetting);
+    public function AddSetting(\ConfigSetting $configSetting);
 
     /**
-     * @param ConfigSetting $configSetting
+     * @param \ConfigSetting $configSetting
      */
-    public function AddSectionSetting(ConfigSetting $configSetting);
+    public function AddSectionSetting(\ConfigSetting $configSetting);
 
     /**
-     * @return array|ConfigSetting[]
+     * @return array|\ConfigSetting[]
      */
     public function GetSubmittedSettings();
 
@@ -72,12 +81,12 @@ class ManageConfigurationPage extends ActionPage implements IManageConfiguration
     private $presenter;
 
     /**
-     * @var array|ConfigSetting[]
+     * @var array|\ConfigSetting[]
      */
     private $settings;
 
     /**
-     * @var array|ConfigSetting[]
+     * @var array|\ConfigSetting[]
      */
     private $sectionSettings;
 
@@ -130,13 +139,13 @@ class ManageConfigurationPage extends ActionPage implements IManageConfiguration
         $this->Set('IsConfigFileWritable', $isFileWritable);
     }
 
-    public function AddSetting(ConfigSetting $configSetting)
+    public function AddSetting(\ConfigSetting $configSetting)
     {
         $this->settings[] = $configSetting;
         $this->settingNames->Append($configSetting->Name . ',');
     }
 
-    public function AddSectionSetting(ConfigSetting $configSetting)
+    public function AddSectionSetting(\ConfigSetting $configSetting)
     {
         $this->sectionSettings[$configSetting->Section][] = $configSetting;
         $this->settingNames->Append($configSetting->Name . ',');
@@ -199,3 +208,5 @@ class ManageConfigurationPage extends ActionPage implements IManageConfiguration
         return $this->GetForm('homepage_id');
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageConfigurationPage', 'IManageConfigurationPage');
+class_alias(__NAMESPACE__ . '\\ManageConfigurationPage', 'ManageConfigurationPage');

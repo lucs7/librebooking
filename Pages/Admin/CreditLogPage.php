@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'Presenters/Admin/CreditLogPresenter.php');
 
@@ -69,7 +76,7 @@ class CreditLogPage extends ActionPage implements ICreditLogPage
         return $this->pageable->GetPageSize();
     }
 
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->Set('PageInfo', $pageInfo);
     }
@@ -94,3 +101,5 @@ class CreditLogPage extends ActionPage implements ICreditLogPage
         $this->Set('ShowError', true);
     }
 }
+class_alias(__NAMESPACE__ . '\\ICreditLogPage', 'ICreditLogPage');
+class_alias(__NAMESPACE__ . '\\CreditLogPage', 'CreditLogPage');

@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
+use LibreBooking\Common\Resources;
+
 abstract class ValidatorBase implements IValidator
 {
     /**
@@ -53,3 +57,5 @@ abstract class ValidatorBase implements IValidator
         $this->AddMessage(Resources::GetInstance()->GetString($resourceKey, $params));
     }
 }
+
+class_alias(ValidatorBase::class, 'ValidatorBase');

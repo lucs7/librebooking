@@ -1,7 +1,9 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/DashboardPresenter.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Controls\Dashboard\DashboardItem;
+use LibreBooking\Presenters\DashboardPresenter;
 
 class DashboardPage extends SecurePage implements IDashboardPage
 {
@@ -36,3 +38,5 @@ interface IDashboardPage
 {
     public function AddItem(DashboardItem $item);
 }
+class_alias(__NAMESPACE__ . '\\DashboardPage', 'DashboardPage');
+class_alias(__NAMESPACE__ . '\\IDashboardPage', 'IDashboardPage');

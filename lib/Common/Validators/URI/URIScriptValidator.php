@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\Validators\URI;
+
+use LibreBooking\Common\Logging\Log;
+
 class URIScriptValidator implements IURIScriptValidator
 
 {
@@ -83,3 +87,5 @@ class URIScriptValidator implements IURIScriptValidator
         return true;
     }
 }
+
+class_alias(URIScriptValidator::class, 'URIScriptValidator');

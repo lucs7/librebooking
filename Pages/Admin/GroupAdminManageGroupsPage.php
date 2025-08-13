@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/ManageGroupsPage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'lib/Application/Admin/namespace.php');
 
 class GroupAdminManageGroupsPage extends ManageGroupsPage
@@ -24,3 +32,4 @@ class GroupAdminManageGroupsPage extends ManageGroupsPage
         parent::ProcessPageLoad();
     }
 }
+class_alias(__NAMESPACE__ . '\\GroupAdminManageGroupsPage', 'GroupAdminManageGroupsPage');

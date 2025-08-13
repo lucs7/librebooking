@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
 class ResourceQRRouterPage extends Page
@@ -41,3 +49,4 @@ class ResourceQRRouterPage extends Page
         return null;
     }
 }
+class_alias(__NAMESPACE__ . '\\ResourceQRRouterPage', 'ResourceQRRouterPage');

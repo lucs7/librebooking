@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Helpers;
+
 class UserGroupHelper
 {
     /**
@@ -11,7 +13,7 @@ class UserGroupHelper
      */
     public static function isUserInGroup(string|int $groupId, string|int $userId): bool
     {
-        $groupRepository = new GroupRepository();
+        $groupRepository = new \GroupRepository();
         $group = $groupRepository->LoadById($groupId);
         foreach ($group->UserIds() as $groupUserId) {
             if ($groupUserId == $userId) {
@@ -21,3 +23,5 @@ class UserGroupHelper
         return false;
     }
 }
+
+class_alias(UserGroupHelper::class, 'UserGroupHelper');

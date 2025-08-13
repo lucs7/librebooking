@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+namespace LibreBooking\Pages\Admin\Import;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'Domain/namespace.php');
@@ -363,3 +370,5 @@ class QuartzyImportPresenter extends ActionPresenter
         return str_replace('*', '_', str_replace('/', '_', str_replace('.', '_', $name)));
     }
 }
+class_alias(__NAMESPACE__ . '\\QuartzyImportPage', 'QuartzyImportPage');
+class_alias(__NAMESPACE__ . '\\QuartzyImportPresenter', 'QuartzyImportPresenter');

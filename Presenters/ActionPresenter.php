@@ -1,5 +1,10 @@
 <?php
 
+namespace LibreBooking\Presenters;
+
+use LibreBooking\Pages\IActionPage;
+use Log;
+
 require_once(ROOT_DIR . 'Pages/ActionPage.php');
 
 abstract class ActionPresenter
@@ -75,3 +80,5 @@ abstract class ActionPresenter
         }
     }
 }
+
+class_alias(__NAMESPACE__.'\\ActionPresenter', 'ActionPresenter');

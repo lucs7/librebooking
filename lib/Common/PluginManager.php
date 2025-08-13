@@ -1,5 +1,10 @@
 <?php
 
+namespace LibreBooking\Common;
+
+use Exception;
+use LibreBooking\Common\Logging\Log;
+
 /**
  * Include plugins
  */
@@ -50,8 +55,8 @@ class PluginManager
     {
         require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
         require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-        $authentication = new Authentication($this->LoadAuthorization(), new UserRepository(), new GroupRepository());
-        $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_AUTHENTICATION, 'Authentication', $authentication);
+        $authentication = new \Authentication($this->LoadAuthorization(), new \UserRepository(), new \GroupRepository());
+        $plugin = $this->LoadPlugin(\ConfigKeys::PLUGIN_AUTHENTICATION, 'Authentication', $authentication);
 
         if (!is_null($plugin)) {
             return $plugin;
@@ -70,10 +75,10 @@ class PluginManager
     {
         require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
 
-        $resourcePermissionStore = new ResourcePermissionStore(new ScheduleUserRepository());
-        $permissionService = new PermissionService($resourcePermissionStore);
+        $resourcePermissionStore = new \ResourcePermissionStore(new \ScheduleUserRepository());
+        $permissionService = new \PermissionService($resourcePermissionStore);
 
-        $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_PERMISSION, 'Permission', $permissionService);
+        $plugin = $this->LoadPlugin(\ConfigKeys::PLUGIN_PERMISSION, 'Permission', $permissionService);
 
         if (!is_null($plugin)) {
             return $plugin;
@@ -92,9 +97,9 @@ class PluginManager
     {
         require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
 
-        $authorizationService = new AuthorizationService(new UserRepository());
+        $authorizationService = new \AuthorizationService(new \UserRepository());
 
-        $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_AUTHORIZATION, 'Authorization', $authorizationService);
+        $plugin = $this->LoadPlugin(\ConfigKeys::PLUGIN_AUTHORIZATION, 'Authorization', $authorizationService);
 
         if (!is_null($plugin)) {
             return $plugin;
@@ -113,9 +118,9 @@ class PluginManager
     {
         require_once(ROOT_DIR . 'lib/Application/Reservation/Validation/namespace.php');
 
-        $factory = new PreReservationFactory();
+        $factory = new \PreReservationFactory();
 
-        $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_PRERESERVATION, 'PreReservation', $factory);
+        $plugin = $this->LoadPlugin(\ConfigKeys::PLUGIN_PRERESERVATION, 'PreReservation', $factory);
 
         if (!is_null($plugin)) {
             return $plugin;
@@ -134,9 +139,9 @@ class PluginManager
     {
         require_once(ROOT_DIR . 'lib/Application/Reservation/Notification/namespace.php');
 
-        $factory = new PostReservationFactory();
+        $factory = new \PostReservationFactory();
 
-        $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_POSTRESERVATION, 'PostReservation', $factory);
+        $plugin = $this->LoadPlugin(\ConfigKeys::PLUGIN_POSTRESERVATION, 'PostReservation', $factory);
 
         if (!is_null($plugin)) {
             return $plugin;
@@ -155,10 +160,10 @@ class PluginManager
     {
         require_once(ROOT_DIR . 'lib/Application/Authorization/namespace.php');
 
-        $userRepository = new UserRepository();
-        $postRegistration = new PostRegistration(new WebAuthentication(self::LoadAuthentication()), new AccountActivation($userRepository, $userRepository));
+        $userRepository = new \UserRepository();
+        $postRegistration = new \PostRegistration(new \WebAuthentication(self::LoadAuthentication()), new \AccountActivation($userRepository, $userRepository));
 
-        $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_POSTREGISTRATION, 'PostRegistration', $postRegistration);
+        $plugin = $this->LoadPlugin(\ConfigKeys::PLUGIN_POSTREGISTRATION, 'PostRegistration', $postRegistration);
 
         if (!is_null($plugin)) {
             return $plugin;
@@ -177,9 +182,9 @@ class PluginManager
     {
         require_once(ROOT_DIR . 'lib/Application/Styling/namespace.php');
 
-        $factory = new StylingFactory();
+        $factory = new \StylingFactory();
 
-        $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_STYLING, 'Styling', $factory);
+        $plugin = $this->LoadPlugin(\ConfigKeys::PLUGIN_STYLING, 'Styling', $factory);
 
         if (!is_null($plugin)) {
             return $plugin;
@@ -198,9 +203,9 @@ class PluginManager
     {
         require_once(ROOT_DIR . 'lib/Application/Export/namespace.php');
 
-        $factory = new ExportFactory();
+        $factory = new \ExportFactory();
 
-        $plugin = $this->LoadPlugin(ConfigKeys::PLUGIN_EXPORT, 'Export', $factory);
+        $plugin = $this->LoadPlugin(\ConfigKeys::PLUGIN_EXPORT, 'Export', $factory);
 
         if (!is_null($plugin)) {
             return $plugin;
@@ -219,7 +224,7 @@ class PluginManager
     {
         $configKey = $configDef['key'];
         if (!$this->Cached($configKey)) {
-            $plugin = Configuration::Instance()->GetKey($configDef);
+            $plugin = \Configuration::Instance()->GetKey($configDef);
             $pluginFile = ROOT_DIR . "plugins/$pluginSubDirectory/$plugin/$plugin.php";
 
             if (!empty($plugin) && file_exists($pluginFile)) {
@@ -252,3 +257,5 @@ class PluginManager
         return $this->cache[$cacheKey];
     }
 }
+
+class_alias(PluginManager::class, 'PluginManager');

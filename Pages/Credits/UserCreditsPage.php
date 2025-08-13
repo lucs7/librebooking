@@ -1,8 +1,16 @@
 <?php
 
+namespace LibreBooking\Pages\Credits;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/Credits/UserCreditsPresenter.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
 
 interface IUserCreditsPage extends IPage, IActionPage
 {
@@ -149,3 +157,5 @@ class UserCreditsPage extends ActionPage implements IUserCreditsPage
         $this->Display('Credits/transaction_log.tpl');
     }
 }
+class_alias(__NAMESPACE__ . '\\IUserCreditsPage', 'IUserCreditsPage');
+class_alias(__NAMESPACE__ . '\\UserCreditsPage', 'UserCreditsPage');

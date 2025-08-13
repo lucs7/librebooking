@@ -300,7 +300,7 @@ abstract class GroupControllerPageFacade implements IManageGroupsPage
     {
     }
 
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
     }
 

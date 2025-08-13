@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 require_once(ROOT_DIR . 'lib/Application/Authentication/GuestUserService.php');
 
 class RestrictedGuestValidator extends ValidatorBase implements IValidator
@@ -10,7 +12,7 @@ class RestrictedGuestValidator extends ValidatorBase implements IValidator
      */
     private $guestUserService;
 
-    public function __construct($email, IGuestUserService $guestUserService)
+    public function __construct($email, \IGuestUserService $guestUserService)
     {
         $this->email = $email;
         $this->guestUserService = $guestUserService;
@@ -25,3 +27,5 @@ class RestrictedGuestValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(RestrictedGuestValidator::class, 'RestrictedGuestValidator');

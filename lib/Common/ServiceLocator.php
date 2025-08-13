@@ -1,24 +1,28 @@
 <?php
 
+namespace LibreBooking\Common;
+
+use LibreBooking\Common\Converters\BooleanConverter;
+
 class ServiceLocator
 {
     /**
-     * @var Database
+     * @var \Database
      */
     private static $_database = null;
 
     /**
-     * @var Server
+     * @var \Server
      */
     private static $_server = null;
 
     /**
-     * @var IRestServer
+     * @var \IRestServer|null
      */
-    private static IRestServer|null $_apiServer = null;
+    private static \IRestServer|null $_apiServer = null;
 
     /**
-     * @var IEmailService
+     * @var \IEmailService
      */
     private static $_emailService = null;
 
@@ -35,12 +39,12 @@ class ServiceLocator
         require_once(ROOT_DIR . 'lib/Database/namespace.php');
 
         if (self::$_database == null) {
-            self::$_database = DatabaseFactory::GetDatabase();
+            self::$_database = \DatabaseFactory::GetDatabase();
         }
         return self::$_database;
     }
 
-    public static function SetDatabase(Database $database)
+    public static function SetDatabase(\Database $database)
     {
         self::$_database = $database;
     }
@@ -66,12 +70,12 @@ class ServiceLocator
         require_once(ROOT_DIR . 'lib/Server/namespace.php');
 
         if (self::$_server == null) {
-            self::$_server = new Server();
+            self::$_server = new \Server();
         }
         return self::$_server;
     }
 
-    public static function SetServer(Server $server)
+    public static function SetServer(\Server $server)
     {
         self::$_server = $server;
     }
@@ -85,17 +89,17 @@ class ServiceLocator
         require_once(ROOT_DIR . 'lib/Email/namespace.php');
 
         if (self::$_emailService == null) {
-            if (Configuration::Instance()->GetKey(ConfigKeys::EMAIL_ENABLED, new BooleanConverter())) {
-                self::$_emailService = new EmailService();
-//                self::$_emailService = new EmailLogger();
+            if (\Configuration::Instance()->GetKey(\ConfigKeys::EMAIL_ENABLED, new BooleanConverter())) {
+                self::$_emailService = new \EmailService();
+//                self::$_emailService = new \EmailLogger();
             } else {
-                self::$_emailService = new NullEmailService();
+                self::$_emailService = new \NullEmailService();
             }
         }
         return self::$_emailService;
     }
 
-    public static function SetEmailService(IEmailService $emailService)
+    public static function SetEmailService(\IEmailService $emailService)
     {
         self::$_emailService = $emailService;
     }
@@ -120,11 +124,11 @@ class ServiceLocator
         self::$_fileSystem = $fileSystem;
     }
 
-    public static function GetUserSession(): UserSession|null
+    public static function GetUserSession(): \UserSession|null
     {
         if (!is_null(self::$_server)) {
             $userSession = self::$_server->GetUserSession();
-            if (!$userSession instanceof NullUserSession) {
+            if (!$userSession instanceof \NullUserSession) {
                 return $userSession;
             }
         }
@@ -135,3 +139,5 @@ class ServiceLocator
     }
 
 }
+
+class_alias(ServiceLocator::class, 'ServiceLocator');

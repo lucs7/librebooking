@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Converters;
+
 class BooleanConverter implements IConvert
 {
     public function Convert($value)
@@ -39,3 +41,5 @@ class BooleanConverter implements IConvert
         return $stringValue === 'true' || $stringValue === '1' || $value === 1;
     }
 }
+
+class_alias(BooleanConverter::class, 'BooleanConverter');

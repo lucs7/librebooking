@@ -36,8 +36,8 @@
         "fix": "./tools/php-cs-fixer fix -v",
         "lint": "./tools/php-cs-fixer fix -vv --dry-run",
         "phpunit": "./vendor/bin/phpunit",
-        "phpstan": "./vendor/bin/phpstan analyse",
-        "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline",
+        "phpstan": "./vendor/bin/phpstan analyse --memory-limit 2G",
+        "phpstan:baseline": "./vendor/bin/phpstan analyze --generate-baseline --memory-limit 2G",
         "test": [
             "@phpunit",
             "@lint"

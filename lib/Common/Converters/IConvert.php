@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Converters;
+
 interface IConvert
 {
     /**
@@ -18,3 +20,5 @@ interface IConvert
      */
     public function IsValid($value);
 }
+
+class_alias(IConvert::class, 'IConvert');

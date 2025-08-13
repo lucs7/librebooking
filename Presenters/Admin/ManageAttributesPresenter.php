@@ -1,7 +1,12 @@
 <?php
 
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
+namespace LibreBooking\Presenters\Admin;
+
+use LibreBooking\Common\Logging\Log;
+use LibreBooking\Domain\CustomAttribute;
+use LibreBooking\Domain\CustomAttributeCategory;
+use LibreBooking\Pages\Admin\IManageAttributesPage;
+use LibreBooking\Presenters\ActionPresenter;
 
 class ManageAttributesActions
 {
@@ -18,11 +23,11 @@ class ManageAttributesPresenter extends ActionPresenter
     private $page;
 
     /**
-     * @var IAttributeRepository
+     * @var \IAttributeRepository
      */
     private $attributeRepository;
 
-    public function __construct(IManageAttributesPage $page, IAttributeRepository $attributeRepository)
+    public function __construct(IManageAttributesPage $page, \IAttributeRepository $attributeRepository)
     {
         parent::__construct($page);
 
@@ -111,3 +116,6 @@ class ManageAttributesPresenter extends ActionPresenter
         }
     }
 }
+
+class_alias(ManageAttributesActions::class, 'ManageAttributesActions');
+class_alias(ManageAttributesPresenter::class, 'ManageAttributesPresenter');

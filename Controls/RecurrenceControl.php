@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROOT_DIR . 'Controls/Control.php');
+namespace LibreBooking\Controls;
 
 class RecurrenceControl extends Control
 {
@@ -34,3 +34,5 @@ class RecurrenceControl extends Control
         $this->Display('Controls/RecurrenceDiv.tpl');
     }
 }
+
+class_alias(RecurrenceControl::class, 'RecurrenceControl');

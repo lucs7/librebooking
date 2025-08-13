@@ -1,9 +1,15 @@
 <?php
 
+namespace LibreBooking\Controls;
+
+use SmartyPage;
+use Smarty\Smarty;
+use Smarty\Data;
+
 abstract class Control
 {
     /**
-     * @var SmartyPage|\Smarty\Smarty
+     * @var SmartyPage|Smarty
      */
     protected $smarty = null;
 
@@ -13,7 +19,7 @@ abstract class Control
     protected $id = null;
 
     /**
-     * @var \Smarty\Data
+     * @var Data
      */
     protected $data = null;
 
@@ -46,3 +52,5 @@ abstract class Control
 
     abstract public function PageLoad();
 }
+
+class_alias(Control::class, 'Control');

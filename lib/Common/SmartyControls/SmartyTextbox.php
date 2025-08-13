@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\SmartyControls;
+
+use LibreBooking\Common\ServiceLocator;
+
 class SmartyTextbox
 {
     private $name;
@@ -37,7 +41,7 @@ class SmartyTextbox
 
     private function GetName($formKey)
     {
-        return FormKeys::Evaluate($formKey);
+        return \FormKeys::Evaluate($formKey);
     }
 
     private function GetValue()
@@ -82,3 +86,6 @@ class SmartyPasswordbox extends SmartyTextbox
         return 'password';
     }
 }
+
+class_alias(SmartyTextbox::class, 'SmartyTextbox');
+class_alias(SmartyPasswordbox::class, 'SmartyPasswordbox');

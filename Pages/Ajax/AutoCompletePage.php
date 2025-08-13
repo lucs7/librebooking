@@ -1,7 +1,16 @@
 <?php
 
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
 
 class AutoCompletePage extends Page
 {
@@ -232,3 +241,7 @@ class AutoCompleteType
     public const MyUsers = 'myUsers';
     public const Organization = 'organization';
 }
+class_alias(__NAMESPACE__ . '\\AutoCompletePage', 'AutoCompletePage');
+class_alias(__NAMESPACE__ . '\\XAutocompleteUser', 'XAutocompleteUser');
+class_alias(__NAMESPACE__ . '\\AutocompleteUser', 'AutocompleteUser');
+class_alias(__NAMESPACE__ . '\\AutoCompleteType', 'AutoCompleteType');

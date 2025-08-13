@@ -1,12 +1,14 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 class UniqueEmailValidator extends ValidatorBase implements IValidator
 {
     private $_email;
     private $_userid;
     private $userRepository;
 
-    public function __construct(IUserViewRepository $userRepository, $email, $userid = null)
+    public function __construct(\IUserViewRepository $userRepository, $email, $userid = null)
     {
         $this->_email = $email;
         $this->_userid = $userid;
@@ -28,3 +30,5 @@ class UniqueEmailValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(UniqueEmailValidator::class, 'UniqueEmailValidator');

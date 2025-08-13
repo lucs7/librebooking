@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Domain;
+
 class Accessory
 {
     /**
@@ -168,3 +170,6 @@ class ResourceAccessory
         ;
     }
 }
+
+class_alias(__NAMESPACE__.'\\Accessory', 'Accessory');
+class_alias(__NAMESPACE__.'\\ResourceAccessory', 'ResourceAccessory');

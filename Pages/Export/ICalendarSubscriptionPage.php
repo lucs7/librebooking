@@ -1,5 +1,15 @@
 <?php
 
+namespace LibreBooking\Pages\Export;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 interface ICalendarSubscriptionPage
 {
     /**
@@ -47,3 +57,4 @@ interface ICalendarSubscriptionPage
      */
     public function GetFutureNumberOfDays();
 }
+class_alias(__NAMESPACE__ . '\\ICalendarSubscriptionPage', 'ICalendarSubscriptionPage');

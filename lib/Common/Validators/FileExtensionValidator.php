@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
+use LibreBooking\Common\Resources;
+
 class FileExtensionValidator extends ValidatorBase implements IValidator
 {
     /**
@@ -23,7 +27,7 @@ class FileExtensionValidator extends ValidatorBase implements IValidator
         }
         $this->validExtensions = $validExtensions;
 
-        if ($file == null || !is_a($file, 'UploadedFile')) {
+        if ($file == null || !is_a($file, '\\UploadedFile')) {
             $this->fileExtension = '';
         } else {
             $this->fileExtension = $file->Extension();
@@ -43,3 +47,5 @@ class FileExtensionValidator extends ValidatorBase implements IValidator
         return [Resources::GetInstance()->GetString('InvalidAttachmentExtension', implode(',', $this->validExtensions))];
     }
 }
+
+class_alias(FileExtensionValidator::class, 'FileExtensionValidator');

@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Domain;
+
 class AccessoryReservation
 {
     /**
@@ -91,3 +93,5 @@ class AccessoryReservation
         return new DateRange($this->GetStartDate(), $this->GetEndDate());
     }
 }
+
+class_alias(__NAMESPACE__.'\\AccessoryReservation', 'AccessoryReservation');

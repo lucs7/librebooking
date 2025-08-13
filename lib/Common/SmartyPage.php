@@ -1,5 +1,6 @@
 <?php
 
+namespace LibreBooking\Common;
 
 if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
     require_once ROOT_DIR . 'vendor/autoload.php';
@@ -10,6 +11,9 @@ require_once(ROOT_DIR . 'lib/Common/Converters/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/Helpers/namespace.php');
 require_once(ROOT_DIR . 'lib/Common/SmartyControls/namespace.php');
 
+use Exception;
+use LibreBooking\Common\Converters\BooleanConverter;
+use LibreBooking\Common\Validators\PageValidators;
 use Smarty\Smarty;
 
 class SmartyPage extends Smarty
@@ -54,7 +58,7 @@ class SmartyPage extends Smarty
         //$this->error_reporting = E_ALL & ~E_NOTICE;
         $this->muteUndefinedOrNullWarnings();
 
-        $cacheTemplates = Configuration::Instance()->GetKey(ConfigKeys::CACHE_TEMPLATES, new BooleanConverter());
+        $cacheTemplates = \Configuration::Instance()->GetKey(\ConfigKeys::CACHE_TEMPLATES, new BooleanConverter());
 
         $this->caching = false;
         $this->compile_check = !$cacheTemplates;
@@ -97,7 +101,7 @@ class SmartyPage extends Smarty
         $hasCustomTemplate = file_exists($localizedPath . '/' . $customTemplateName);
 
         if ($enforceCustomTemplate && !$hasCustomTemplate) {
-            $defaultLanguageCode = Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
+            $defaultLanguageCode = \Configuration::Instance()->GetKey(\ConfigKeys::DEFAULT_LANGUAGE);
             $defaultLocalizedPath = $langPath . $defaultLanguageCode;
             $hasCustomDefaultTemplate = file_exists($defaultLocalizedPath . '/' . $customTemplateName);
             if ($languageCode != $defaultLanguageCode && $hasCustomDefaultTemplate) {
@@ -1008,3 +1012,5 @@ class SmartyPage extends Smarty
         return strtolower((string) $string);
     }
 }
+
+class_alias(SmartyPage::class, 'SmartyPage');

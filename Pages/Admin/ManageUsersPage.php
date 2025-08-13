@@ -1,9 +1,16 @@
 <?php
 
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'config/timezones.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
 require_once(ROOT_DIR . 'Presenters/Admin/ManageUsersPresenter.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
@@ -171,7 +178,7 @@ interface IManageUsersPage extends IPageable, IActionPage
      * @param User $user
      * @param CustomAttribute[] $attributes
      */
-    public function ShowUserUpdate(User $user, $attributes);
+    public function ShowUserUpdate(\User $user, $attributes);
 }
 
 class ManageUsersPage extends ActionPage implements IManageUsersPage
@@ -241,7 +248,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Display('Admin/Users/manage_users.tpl');
     }
 
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->pageable->BindPageInfo($pageInfo);
     }
@@ -466,7 +473,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         return $this->GetCheckbox(FormKeys::UPDATE_ON_IMPORT);
     }
 
-    public function ShowUserUpdate(User $user, $attributes)
+    public function ShowUserUpdate(\User $user, $attributes)
     {
         $this->Set('Timezones', $GLOBALS['APP_TIMEZONES']);
         $this->Set('Languages', $GLOBALS['APP_TIMEZONES']);
@@ -475,3 +482,5 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Display('Admin/Users/user-update.tpl');
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageUsersPage', 'IManageUsersPage');
+class_alias(__NAMESPACE__ . '\\ManageUsersPage', 'ManageUsersPage');

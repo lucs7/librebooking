@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/ViewSchedulesPresenter.php');
 require_once(ROOT_DIR . 'Presenters/Admin/ManageSchedulesPresenter.php'); //ManageScheduleService
 
@@ -96,8 +104,9 @@ class ScheduleViewerViewSchedulesPage extends Page implements IPageable
      * @param PageInfo $pageInfo
      * @return void
      */
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->pageablePage->BindPageInfo($pageInfo);
     }
 }
+class_alias(__NAMESPACE__ . '\\ScheduleViewerViewSchedulesPage', 'ScheduleViewerViewSchedulesPage');

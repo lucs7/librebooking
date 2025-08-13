@@ -1,5 +1,11 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
+use LibreBooking\Common\Converters\BooleanConverter;
+use LibreBooking\Common\Converters\IntConverter;
+use LibreBooking\Common\Resources;
+
 class PasswordComplexityValidator extends ValidatorBase implements IValidator
 {
     private $password;
@@ -11,9 +17,9 @@ class PasswordComplexityValidator extends ValidatorBase implements IValidator
 
     public function Validate()
     {
-        $caseRequirements = Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_UPPER_AND_LOWER, new BooleanConverter());
-        $letters = Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
-        $numbers = Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_MINIMUM_NUMBERS, new IntConverter());
+        $caseRequirements = \Configuration::Instance()->GetKey(\ConfigKeys::PASSWORD_UPPER_AND_LOWER, new BooleanConverter());
+        $letters = \Configuration::Instance()->GetKey(\ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
+        $numbers = \Configuration::Instance()->GetKey(\ConfigKeys::PASSWORD_MINIMUM_NUMBERS, new IntConverter());
 
         $passwordNumbers = preg_match_all("/[^a-zA-Z]/", $this->password, $m1);
         $passwordUpper = preg_match_all("/[A-Z]/", $this->password, $m2);
@@ -39,3 +45,5 @@ class PasswordComplexityValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(PasswordComplexityValidator::class, 'PasswordComplexityValidator');

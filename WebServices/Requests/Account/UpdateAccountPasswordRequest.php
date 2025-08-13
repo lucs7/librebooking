@@ -1,6 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'lib/WebService/JsonRequest.php');
+namespace LibreBooking\WebServices\Requests\Account;
+
+use JsonRequest;
 
 class UpdateAccountPasswordRequest extends JsonRequest
 {
@@ -16,3 +18,5 @@ class UpdateAccountPasswordRequest extends JsonRequest
         return $request;
     }
 }
+
+class_alias(UpdateAccountPasswordRequest::class, 'UpdateAccountPasswordRequest');

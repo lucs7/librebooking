@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/CalendarPage.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Calendar/CalendarPresenter.php');
 require_once(ROOT_DIR . 'lib/Application/Authorization/GuestPermissionServiceFactory.php');
 
@@ -54,3 +62,4 @@ class ViewCalendarPage extends CalendarPage
     {
     }
 }
+class_alias(__NAMESPACE__ . '\\ViewCalendarPage', 'ViewCalendarPage');

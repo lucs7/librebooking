@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 interface IValidator
 {
     /**
@@ -22,3 +24,5 @@ interface IValidator
      */
     public function ReturnsErrorResponse();
 }
+
+class_alias(IValidator::class, 'IValidator');

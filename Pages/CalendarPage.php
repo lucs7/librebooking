@@ -1,9 +1,17 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Calendar/CalendarPresenter.php');
 
-class CalendarPage extends CommonCalendarPage implements ICommonCalendarPage
+class CalendarPage extends \CommonCalendarPage implements \ICommonCalendarPage
 {
     protected $presenter;
 
@@ -106,3 +114,5 @@ class CalendarUrl
         return $this->url;
     }
 }
+class_alias(__NAMESPACE__ . '\\CalendarPage', 'CalendarPage');
+class_alias(__NAMESPACE__ . '\\CalendarUrl', 'CalendarUrl');

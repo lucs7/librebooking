@@ -1,7 +1,17 @@
 <?php
 
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/ViewResourcesPresenter.php');
-require_once(ROOT_DIR . 'Pages/Admin/ManageResourcesPage.php');     //AttributeService
+     //AttributeService
 
 class ResourceViewerViewResourcesPage extends Page implements IPageable
 {
@@ -69,7 +79,7 @@ class ResourceViewerViewResourcesPage extends Page implements IPageable
      * @param PageInfo $pageInfo
      * @return void
      */
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->pageablePage->BindPageInfo($pageInfo);
     }
@@ -127,3 +137,4 @@ class ResourceViewerViewResourcesPage extends Page implements IPageable
         return $filterValues;
     }
 }
+class_alias(__NAMESPACE__ . '\\ResourceViewerViewResourcesPage', 'ResourceViewerViewResourcesPage');

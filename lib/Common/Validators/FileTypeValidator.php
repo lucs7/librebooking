@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
+use LibreBooking\Common\Resources;
+
 class FileTypeValidator extends ValidatorBase implements IValidator
 {
     /**
@@ -37,3 +41,5 @@ class FileTypeValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(FileTypeValidator::class, 'FileTypeValidator');

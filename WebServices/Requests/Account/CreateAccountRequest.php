@@ -1,7 +1,10 @@
 <?php
 
-require_once(ROOT_DIR . 'WebServices/Requests/Account/AccountRequestBase.php');
-require_once(ROOT_DIR . 'WebServices/Requests/CustomAttributes/AttributeValueRequest.php');
+namespace LibreBooking\WebServices\Requests\Account;
+
+use AttributeValueRequest;
+use Configuration;
+use ConfigKeys;
 
 class CreateAccountRequest extends AccountRequestBase
 {
@@ -28,3 +31,5 @@ class CreateAccountRequest extends AccountRequestBase
         return $request;
     }
 }
+
+class_alias(CreateAccountRequest::class, 'CreateAccountRequest');

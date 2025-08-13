@@ -1,11 +1,13 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 class CaptchaValidator extends ValidatorBase implements IValidator
 {
     private $captchaValue;
     private $captchaService;
 
-    public function __construct($captchaValue, ICaptchaService $captchaService)
+    public function __construct($captchaValue, \ICaptchaService $captchaService)
     {
         $this->captchaValue = $captchaValue;
         $this->captchaService = $captchaService;
@@ -16,3 +18,5 @@ class CaptchaValidator extends ValidatorBase implements IValidator
         $this->isValid = $this->captchaService->IsCorrect($this->captchaValue);
     }
 }
+
+class_alias(CaptchaValidator::class, 'CaptchaValidator');

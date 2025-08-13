@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'lib/Config/namespace.php');
 
 abstract class SecurePage extends Page
@@ -206,3 +213,7 @@ class SecurePageDecorator extends Page implements IPage
         return sprintf("%s%s?%s=%s", $this->page->path, Pages::LOGIN, QueryStringKeys::REDIRECT, urlencode($this->page->server->GetUrl()));
     }
 }
+class_alias(__NAMESPACE__ . '\\SecurePage', 'SecurePage');
+class_alias(__NAMESPACE__ . '\\SecureActionPageDecorator', 'SecureActionPageDecorator');
+class_alias(__NAMESPACE__ . '\\RoleRestrictedPageDecorator', 'RoleRestrictedPageDecorator');
+class_alias(__NAMESPACE__ . '\\SecurePageDecorator', 'SecurePageDecorator');

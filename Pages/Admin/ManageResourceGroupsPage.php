@@ -1,6 +1,15 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+use LibreBooking\Domain\ResourceGroupTree;
 require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
 
 interface IManageResourceGroupsPage extends IActionPage
@@ -184,3 +193,5 @@ class ManageResourceGroupsPage extends ActionPage implements IManageResourceGrou
         return $this->GetQuerystring(QueryStringKeys::PREVIOUS_ID);
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageResourceGroupsPage', 'IManageResourceGroupsPage');
+class_alias(__NAMESPACE__ . '\\ManageResourceGroupsPage', 'ManageResourceGroupsPage');

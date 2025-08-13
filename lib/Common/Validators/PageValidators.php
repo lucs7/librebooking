@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
+use LibreBooking\Common\SmartyPage;
+
 class PageValidators
 {
     /**
@@ -71,3 +75,6 @@ class NullValidator extends ValidatorBase implements IValidator
         $this->isValid = true;
     }
 }
+
+class_alias(PageValidators::class, 'PageValidators');
+class_alias(NullValidator::class, 'NullValidator');

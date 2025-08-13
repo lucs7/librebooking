@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common;
+
 class DateRange
 {
     /**
@@ -302,6 +304,8 @@ class DateRange
         return $this->_begin->GetDifference($this->_end);
     }
 }
+
+class_alias(DateRange::class, 'DateRange');
 
 class NullDateRange extends DateRange
 {

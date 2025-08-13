@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/ProfilePresenter.php');
 
 interface IProfilePage extends IPage, IActionPage
@@ -232,3 +239,5 @@ class ProfilePage extends ActionPage implements IProfilePage
         $this->Set('AllowUsernameChange', $options->AllowUsernameChange());
     }
 }
+class_alias(__NAMESPACE__ . '\\IProfilePage', 'IProfilePage');
+class_alias(__NAMESPACE__ . '\\ProfilePage', 'ProfilePage');

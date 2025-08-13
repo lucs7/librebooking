@@ -1,8 +1,15 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+use LibreBooking\Domain\ResourceGroupTree;
 require_once(ROOT_DIR . 'Presenters/Admin/ManageSchedulesPresenter.php');
 require_once(ROOT_DIR . 'Domain/Access/ScheduleRepository.php');
 require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
@@ -550,7 +557,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
      * @param PageInfo $pageInfo
      * @return void
      */
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->pageablePage->BindPageInfo($pageInfo);
     }
@@ -1341,3 +1348,7 @@ class ResourceFilterValues
         return $filter;
     }
 }
+class_alias(__NAMESPACE__ . '\\IUpdateResourcePage', 'IUpdateResourcePage');
+class_alias(__NAMESPACE__ . '\\IManageResourcesPage', 'IManageResourcesPage');
+class_alias(__NAMESPACE__ . '\\ManageResourcesPage', 'ManageResourcesPage');
+class_alias(__NAMESPACE__ . '\\ResourceFilterValues', 'ResourceFilterValues');

@@ -1,12 +1,14 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 class UniqueUserNameValidator extends ValidatorBase implements IValidator
 {
     private $_username;
     private $_userid;
     private $userRepository;
 
-    public function __construct(IUserViewRepository $userRepository, $username, $userid = null)
+    public function __construct(\IUserViewRepository $userRepository, $username, $userid = null)
     {
         $this->_username = $username;
         $this->_userid = $userid;
@@ -27,3 +29,5 @@ class UniqueUserNameValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(UniqueUserNameValidator::class, 'UniqueUserNameValidator');

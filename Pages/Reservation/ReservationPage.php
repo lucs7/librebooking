@@ -1,7 +1,15 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Presenters/Reservation/ReservationPresenter.php');
+namespace LibreBooking\Pages\Reservation;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+use LibreBooking\Domain\ResourceGroupTree;
 
 interface IReservationPage extends IPage
 {
@@ -28,31 +36,31 @@ interface IReservationPage extends IPage
     public function BindResourceGroups($groups);
 
     /**
-     * @param SchedulePeriod $selectedStart
-     * @param Date $startDate
+     * @param \SchedulePeriod $selectedStart
+     * @param \Date $startDate
      */
-    public function SetSelectedStart(SchedulePeriod $selectedStart, Date $startDate);
+    public function SetSelectedStart(\SchedulePeriod $selectedStart, \Date $startDate);
 
     /**
-     * @param SchedulePeriod $selectedEnd
-     * @param Date $endDate
+     * @param \SchedulePeriod $selectedEnd
+     * @param \Date $endDate
      */
-    public function SetSelectedEnd(SchedulePeriod $selectedEnd, Date $endDate);
+    public function SetSelectedEnd(\SchedulePeriod $selectedEnd, \Date $endDate);
 
     /**
-     * @param $repeatTerminationDate Date
+     * @param \Date $repeatTerminationDate
      */
-    public function SetRepeatTerminationDate($repeatTerminationDate);
+    public function SetRepeatTerminationDate(\Date $repeatTerminationDate);
 
     /**
-     * @param UserDto $user
+     * @param \UserDto $user
      */
-    public function SetReservationUser(UserDto $user);
+    public function SetReservationUser(\UserDto $user);
 
     /**
-     * @param IResource $resource
+     * @param \IResource $resource
      */
-    public function SetReservationResource($resource);
+    public function SetReservationResource(\IResource $resource);
 
     /**
      * @param int $scheduleId
@@ -60,22 +68,22 @@ interface IReservationPage extends IPage
     public function SetScheduleId($scheduleId);
 
     /**
-     * @param ReservationUserView[] $participants
+     * @param \ReservationUserView[] $participants
      */
     public function SetParticipants($participants);
 
     /**
-     * @param ReservationUserView[] $invitees
+     * @param \ReservationUserView[] $invitees
      */
     public function SetInvitees($invitees);
 
     /**
-     * @param $accessories ReservationAccessory[]|array
+     * @param \ReservationAccessory[]|array $accessories
      */
     public function SetAccessories($accessories);
 
     /**
-     * @param $attachments ReservationAttachmentView[]|array
+     * @param \ReservationAttachmentView[]|array $attachments
      */
     public function SetAttachments($attachments);
 
@@ -116,20 +124,20 @@ interface IReservationPage extends IPage
 
     /**
      * @param int $reminderValue
-     * @param ReservationReminderInterval $reminderInterval
+     * @param \ReservationReminderInterval $reminderInterval
      */
-    public function SetStartReminder($reminderValue, $reminderInterval);
+    public function SetStartReminder($reminderValue, \ReservationReminderInterval $reminderInterval);
 
     /**
      * @param int $reminderValue
-     * @param ReservationReminderInterval $reminderInterval
+     * @param \ReservationReminderInterval $reminderInterval
      */
-    public function SetEndReminder($reminderValue, $reminderInterval);
+    public function SetEndReminder($reminderValue, \ReservationReminderInterval $reminderInterval);
 
     /**
-     * @param DateRange $availability
+     * @param \DateRange $availability
      */
-    public function SetAvailability(DateRange $availability);
+    public function SetAvailability(\DateRange $availability);
 
     /**
      * @param int $weekday
@@ -144,9 +152,9 @@ interface IReservationPage extends IPage
     public function IsUnavailable();
 
     /**
-     * @param TermsOfService $termsOfService
+     * @param \TermsOfService $termsOfService
      */
-    public function SetTerms($termsOfService);
+    public function SetTerms(\TermsOfService $termsOfService);
 
     /**
      * @param bool $accepted
@@ -274,26 +282,26 @@ abstract class ReservationPage extends Page implements IReservationPage
         $this->Set('ResourceGroupsAsJson', json_encode($groups->GetGroups()));
     }
 
-    public function SetSelectedStart(SchedulePeriod $selectedStart, Date $startDate)
+    public function SetSelectedStart(\SchedulePeriod $selectedStart, \Date $startDate)
     {
         $this->Set('SelectedStart', $selectedStart);
         $this->Set('StartDate', $startDate);
     }
 
-    public function SetSelectedEnd(SchedulePeriod $selectedEnd, Date $endDate)
+    public function SetSelectedEnd(\SchedulePeriod $selectedEnd, \Date $endDate)
     {
         $this->Set('SelectedEnd', $selectedEnd);
         $this->Set('EndDate', $endDate);
     }
 
-    public function SetReservationUser(UserDto $user)
+    public function SetReservationUser(\UserDto $user)
     {
         $this->Set('ReservationUserName', $user->FullName());
         $this->Set('UserId', $user->Id());
         $this->Set('CurrentUserCredits', $user->CurrentCreditCount());
     }
 
-    public function SetReservationResource($resource)
+    public function SetReservationResource(\IResource $resource)
     {
         $this->Set('ResourceName', $resource->GetName());
         $this->Set('ResourceId', $resource->GetId());
@@ -305,7 +313,7 @@ abstract class ReservationPage extends Page implements IReservationPage
         $this->Set('ScheduleId', $scheduleId);
     }
 
-    public function SetRepeatTerminationDate($repeatTerminationDate)
+    public function SetRepeatTerminationDate(\Date $repeatTerminationDate)
     {
         $this->Set('RepeatTerminationDate', $repeatTerminationDate);
     }
@@ -386,19 +394,19 @@ abstract class ReservationPage extends Page implements IReservationPage
         );
     }
 
-    public function SetStartReminder($reminderValue, $reminderInterval)
+    public function SetStartReminder($reminderValue, \ReservationReminderInterval $reminderInterval)
     {
         $this->Set('ReminderTimeStart', $reminderValue);
         $this->Set('ReminderIntervalStart', $reminderInterval);
     }
 
-    public function SetEndReminder($reminderValue, $reminderInterval)
+    public function SetEndReminder($reminderValue, \ReservationReminderInterval $reminderInterval)
     {
         $this->Set('ReminderTimeEnd', $reminderValue);
         $this->Set('ReminderIntervalEnd', $reminderInterval);
     }
 
-    public function SetAvailability(DateRange $availability)
+    public function SetAvailability(\DateRange $availability)
     {
         $this->Set('AvailabilityStart', $availability->GetBegin());
         $this->Set('AvailabilityEnd', $availability->GetEnd());
@@ -419,7 +427,7 @@ abstract class ReservationPage extends Page implements IReservationPage
         return !$this->available;
     }
 
-    public function SetTerms($termsOfService)
+    public function SetTerms(\TermsOfService $termsOfService)
     {
         $this->Set('Terms', $termsOfService);
     }
@@ -429,3 +437,5 @@ abstract class ReservationPage extends Page implements IReservationPage
         $this->Set('MaximumResources', $this->server->GetUserSession()->IsAdmin ? 0 : $maximum);
     }
 }
+class_alias(__NAMESPACE__ . '\\IReservationPage', 'IReservationPage');
+class_alias(__NAMESPACE__ . '\\ReservationPage', 'ReservationPage');

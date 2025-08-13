@@ -1,5 +1,15 @@
 <?php
 
+namespace LibreBooking\Pages\Ajax;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/Reservation/ReservationEmailPresenter.php');
 
 interface IReservationEmailPage
@@ -56,3 +66,5 @@ class ReservationEmailPage extends Page implements IReservationEmailPage
         return preg_split('/, ?/', $email);
     }
 }
+class_alias(__NAMESPACE__ . '\\IReservationEmailPage', 'IReservationEmailPage');
+class_alias(__NAMESPACE__ . '\\ReservationEmailPage', 'ReservationEmailPage');

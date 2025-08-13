@@ -1,12 +1,12 @@
 <?php
 
+namespace LibreBooking\Pages;
+
+
 // debugging tools / libs
 if (file_exists(ROOT_DIR . 'vendor/autoload.php')) {
     require ROOT_DIR . 'vendor/autoload.php';
 }
-
-require_once(ROOT_DIR . 'Pages/IPage.php');
-require_once(ROOT_DIR . 'Pages/Pages.php');
 require_once(ROOT_DIR . 'lib/Common/namespace.php');
 require_once(ROOT_DIR . 'lib/Server/namespace.php');
 require_once(ROOT_DIR . 'lib/Config/namespace.php');
@@ -487,3 +487,4 @@ abstract class Page implements IPage
         return false;
     }
 }
+class_alias(__NAMESPACE__ . '\\Page', 'Page');

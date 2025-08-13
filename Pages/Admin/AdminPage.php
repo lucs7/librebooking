@@ -1,7 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 
 class AdminPageDecorator extends ActionPage implements IActionPage
 {
@@ -117,3 +124,5 @@ abstract class AdminPage extends SecurePage implements IActionPage
         return false;
     }
 }
+class_alias(__NAMESPACE__ . '\\AdminPageDecorator', 'AdminPageDecorator');
+class_alias(__NAMESPACE__ . '\\AdminPage', 'AdminPage');

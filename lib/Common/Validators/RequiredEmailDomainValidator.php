@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
+use LibreBooking\Common\Helpers\BookedStringHelper;
+
 class RequiredEmailDomainValidator extends ValidatorBase implements IValidator
 {
     private $value;
@@ -13,7 +17,7 @@ class RequiredEmailDomainValidator extends ValidatorBase implements IValidator
     {
         $this->isValid = true;
 
-        $domains = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_REQUIRED_EMAIL_DOMAINS);
+        $domains = \Configuration::Instance()->GetKey(\ConfigKeys::AUTHENTICATION_REQUIRED_EMAIL_DOMAINS);
 
         if (empty($domains)) {
             return;
@@ -33,3 +37,5 @@ class RequiredEmailDomainValidator extends ValidatorBase implements IValidator
         $this->isValid = false;
     }
 }
+
+class_alias(RequiredEmailDomainValidator::class, 'RequiredEmailDomainValidator');

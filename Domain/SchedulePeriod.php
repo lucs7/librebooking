@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Domain;
+
 class PeriodTypes
 {
     public const RESERVABLE = 1;
@@ -9,12 +11,12 @@ class PeriodTypes
 class SchedulePeriod
 {
     /**
-     * @var Date
+     * @var \Date
      */
     protected $_begin;
 
     /**
-     * @var Date
+     * @var \Date
      */
     protected $_end;
 
@@ -22,7 +24,7 @@ class SchedulePeriod
 
     protected $_id;
 
-    public function __construct(Date $begin, Date $end, $label = null)
+    public function __construct(\Date $begin, \Date $end, $label = null)
     {
         $this->_begin = $begin;
         $this->_end = $end;
@@ -46,7 +48,7 @@ class SchedulePeriod
     }
 
     /**
-     * @return Date
+     * @return \Date
      */
     public function BeginDate()
     {
@@ -54,7 +56,7 @@ class SchedulePeriod
     }
 
     /**
-     * @return Date
+     * @return \Date
      */
     public function EndDate()
     {
@@ -62,7 +64,7 @@ class SchedulePeriod
     }
 
     /**
-     * @param Date $dateOverride
+     * @param \Date $dateOverride
      * @return string
      */
     public function Label($dateOverride = null)
@@ -127,14 +129,14 @@ class SchedulePeriod
         return $this->_begin->Compare($other->_begin);
     }
 
-    public function BeginsBefore(Date $date)
+    public function BeginsBefore(\Date $date)
     {
         return $this->_begin->DateCompare($date) < 0;
     }
 
     public function IsPastDate()
     {
-        return ReservationPastTimeConstraint::IsPast($this->BeginDate(), $this->EndDate());
+        return \ReservationPastTimeConstraint::IsPast($this->BeginDate(), $this->EndDate());
     }
 
     /**
@@ -171,3 +173,7 @@ class NonSchedulePeriod extends SchedulePeriod
         return new NonSchedulePeriod($this->_begin->ToTimezone($timezone), $this->_end->ToTimezone($timezone), $this->_label);
     }
 }
+
+class_alias(__NAMESPACE__ . '\\PeriodTypes', 'PeriodTypes');
+class_alias(__NAMESPACE__ . '\\SchedulePeriod', 'SchedulePeriod');
+class_alias(__NAMESPACE__ . '\\NonSchedulePeriod', 'NonSchedulePeriod');

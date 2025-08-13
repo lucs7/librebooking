@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Helpers;
+
 class ArrayDiff
 {
     private $_added = [];
@@ -67,3 +69,5 @@ class ArrayDiff
         return $keep_key_assoc ? $array : array_values($array);
     }
 }
+
+class_alias(ArrayDiff::class, 'ArrayDiff');

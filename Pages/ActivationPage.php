@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/ActivationPresenter.php');
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 
@@ -65,3 +73,5 @@ class ActivationPage extends ActionPage implements IActivationPage
         return $this->GetQuerystring(QueryStringKeys::ACCOUNT_ACTIVATION_CODE);
     }
 }
+class_alias(__NAMESPACE__ . '\\IActivationPage', 'IActivationPage');
+class_alias(__NAMESPACE__ . '\\ActivationPage', 'ActivationPage');

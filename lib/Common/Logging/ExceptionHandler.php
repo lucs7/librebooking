@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Logging;
+
 abstract class ExceptionHandler
 {
     /**
@@ -46,4 +48,7 @@ class WebExceptionHandler extends ExceptionHandler
     }
 }
 
-set_exception_handler(['ExceptionHandler', 'Handle']);
+set_exception_handler([ExceptionHandler::class, 'Handle']);
+
+class_alias(ExceptionHandler::class, 'ExceptionHandler');
+class_alias(WebExceptionHandler::class, 'WebExceptionHandler');

@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
 
 interface IManageResourceStatusPage extends IActionPage
@@ -74,3 +82,5 @@ class ManageResourceStatusPage extends ActionPage implements IManageResourceStat
         return $this->GetQuerystring(QueryStringKeys::RESERVATION_STATUS_REASON_ID);
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageResourceStatusPage', 'IManageResourceStatusPage');
+class_alias(__NAMESPACE__ . '\\ManageResourceStatusPage', 'ManageResourceStatusPage');

@@ -1,10 +1,8 @@
 <?php
 
-require_once(ROOT_DIR . 'Presenters/Dashboard/ResourceAvailabilityControlPresenter.php');
-require_once(ROOT_DIR . 'Controls/Dashboard/DashboardItem.php');
-require_once(ROOT_DIR . 'Domain/Access/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
-require_once(ROOT_DIR . 'lib/Application/Attributes/namespace.php');
+namespace LibreBooking\Controls\Dashboard;
+
+use SmartyPage;
 
 interface IResourceAvailabilityControl
 {
@@ -32,15 +30,15 @@ interface IResourceAvailabilityControl
 class AvailableDashboardItem
 {
     /**
-     * @var ResourceDto $resource
+     * @var \ResourceDto $resource
      */
     private $resource;
 
     /**
-     * @param ResourceDto $resource
-     * @param ReservationItemView|null $next
+     * @param \ResourceDto $resource
+     * @param \ReservationItemView|null $next
      */
-    public function __construct(ResourceDto $resource, private $next = null)
+    public function __construct(\ResourceDto $resource, private $next = null)
     {
         $this->resource = $resource;
     }
@@ -114,16 +112,16 @@ class AvailableDashboardItem
 class UnavailableDashboardItem
 {
     /**
-     * @var ResourceDto
+     * @var \ResourceDto
      */
     private $resource;
 
     /**
-     * @var ReservationItemView
+     * @var \ReservationItemView
      */
     private $currentReservation;
 
-    public function __construct(ResourceDto $resource, ReservationItemView $currentReservation)
+    public function __construct(\ResourceDto $resource, \ReservationItemView $currentReservation)
     {
         $this->resource = $resource;
         $this->currentReservation = $currentReservation;
@@ -167,7 +165,7 @@ class UnavailableDashboardItem
 class ResourceAvailabilityControl extends DashboardItem implements IResourceAvailabilityControl
 {
     /**
-     * @var ResourceAvailabilityControlPresenter
+     * @var \ResourceAvailabilityControlPresenter
      */
     public $presenter;
 
@@ -175,23 +173,23 @@ class ResourceAvailabilityControl extends DashboardItem implements IResourceAvai
     {
         parent::__construct($smarty);
 
-        $this->presenter = new ResourceAvailabilityControlPresenter(
+        $this->presenter = new \ResourceAvailabilityControlPresenter(
             $this,
-            new ResourceService(
-                new ResourceRepository(),
-                new SchedulePermissionService(PluginManager::Instance()->LoadPermission()),
-                new AttributeService(new AttributeRepository()),
-                new UserRepository(),
-                new AccessoryRepository()
+            new \ResourceService(
+                new \ResourceRepository(),
+                new \SchedulePermissionService(\PluginManager::Instance()->LoadPermission()),
+                new \AttributeService(new \AttributeRepository()),
+                new \UserRepository(),
+                new \AccessoryRepository()
             ),
-            new ReservationViewRepository(),
-            new ScheduleRepository()
+            new \ReservationViewRepository(),
+            new \ScheduleRepository()
         );
     }
 
     public function PageLoad()
     {
-        $userSession = ServiceLocator::GetServer()->GetUserSession();
+        $userSession = \ServiceLocator::GetServer()->GetUserSession();
         $this->Set('Timezone', $userSession->Timezone);
 
         $this->presenter->PageLoad($userSession);
@@ -226,3 +224,8 @@ class ResourceAvailabilityControl extends DashboardItem implements IResourceAvai
         $this->Assign('Schedules', $schedules);
     }
 }
+
+class_alias(IResourceAvailabilityControl::class, 'IResourceAvailabilityControl');
+class_alias(AvailableDashboardItem::class, 'AvailableDashboardItem');
+class_alias(UnavailableDashboardItem::class, 'UnavailableDashboardItem');
+class_alias(ResourceAvailabilityControl::class, 'ResourceAvailabilityControl');

@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
 
 interface IForgotPwdPage extends IPage
@@ -52,3 +60,5 @@ class ForgotPwdPage extends Page implements IForgotPwdPage
         $this->Set('Enabled', $enabled);
     }
 }
+class_alias(__NAMESPACE__ . '\\IForgotPwdPage', 'IForgotPwdPage');
+class_alias(__NAMESPACE__ . '\\ForgotPwdPage', 'ForgotPwdPage');

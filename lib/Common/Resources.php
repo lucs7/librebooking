@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common;
+
 require_once(ROOT_DIR . 'lang/AvailableLanguages.php');
 
 interface IResourceLocalization
@@ -254,17 +256,17 @@ class Resources implements IResourceLocalization
 
     private function GetLanguageCode()
     {
-        $cookie = ServiceLocator::GetServer()->GetCookie(CookieKeys::LANGUAGE);
+        $cookie = ServiceLocator::GetServer()->GetCookie(\CookieKeys::LANGUAGE);
         if ($cookie != null) {
             return $cookie;
         } else {
-            return Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE);
+            return \Configuration::Instance()->GetKey(\ConfigKeys::DEFAULT_LANGUAGE);
         }
     }
 
     private function LoadAvailableLanguages()
     {
-        $this->AvailableLanguages = AvailableLanguages::GetAvailableLanguages();
+        $this->AvailableLanguages = \AvailableLanguages::GetAvailableLanguages();
     }
 
     private function LoadOverrides()
@@ -277,3 +279,7 @@ class Resources implements IResourceLocalization
         }
     }
 }
+
+class_alias(IResourceLocalization::class, 'IResourceLocalization');
+class_alias(ResourceKeys::class, 'ResourceKeys');
+class_alias(Resources::class, 'Resources');

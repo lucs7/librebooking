@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common\Validators;
+
 class RegexValidator extends ValidatorBase implements IValidator
 {
     /**
@@ -26,3 +28,5 @@ class RegexValidator extends ValidatorBase implements IValidator
         }
     }
 }
+
+class_alias(RegexValidator::class, 'RegexValidator');

@@ -1,8 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/IPageable.php');
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
-require_once(ROOT_DIR . 'Pages/Ajax/AutoCompletePage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Admin/ManageReservationsPresenter.php');
 
 interface IManageBlackoutsPage extends IPageable, IActionPage, IRepeatOptionsComposite
@@ -447,7 +453,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
      * @param PageInfo $pageInfo
      * @return void
      */
-    public function BindPageInfo(PageInfo $pageInfo)
+    public function BindPageInfo(\PageInfo $pageInfo)
     {
         $this->pageablePage->BindPageInfo($pageInfo);
     }
@@ -734,3 +740,5 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         return $ids;
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageBlackoutsPage', 'IManageBlackoutsPage');
+class_alias(__NAMESPACE__ . '\\ManageBlackoutsPage', 'ManageBlackoutsPage');

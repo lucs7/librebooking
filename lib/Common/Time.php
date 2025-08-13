@@ -1,5 +1,7 @@
 <?php
 
+namespace LibreBooking\Common;
+
 class Time
 {
     private $_hour;
@@ -129,3 +131,6 @@ class NullTime extends Time
         return '';
     }
 }
+
+class_alias(Time::class, 'Time');
+class_alias(NullTime::class, 'NullTime');

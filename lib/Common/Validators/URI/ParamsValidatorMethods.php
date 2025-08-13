@@ -1,5 +1,9 @@
 <?php
 
+namespace LibreBooking\Common\Validators\URI;
+
+use LibreBooking\Common\Logging\Log;
+
 class ParamsValidatorMethods implements IParamsValidatorMethods
 {
     public static function numericalValidator(string $param, string $requestURI): bool
@@ -107,9 +111,9 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
 
             preg_match('/[?&]ct=([a-zA-Z0-9_]+)/', $redirectURL, $ct);
             $validCt = in_array($ct[1], [
-                CalendarTypes::Day,
-                CalendarTypes::Week,
-                CalendarTypes::Month
+                \CalendarTypes::Day,
+                \CalendarTypes::Week,
+                \CalendarTypes::Month
             ]);
             return ($validCt && $validStart && !$possibleScripts);
         }
@@ -151,3 +155,5 @@ class ParamsValidatorMethods implements IParamsValidatorMethods
             preg_match('/<script>/', urldecode($requestURI));
     }
 }
+
+class_alias(ParamsValidatorMethods::class, 'ParamsValidatorMethods');

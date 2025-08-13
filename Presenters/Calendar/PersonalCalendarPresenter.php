@@ -1,5 +1,13 @@
 <?php
 
+namespace LibreBooking\Presenters\Calendar;
+
+use Log;
+use ServiceLocator;
+use Configuration;
+use NullPrivacyFilter;
+use SlotLabelFactory;
+
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 require_once(ROOT_DIR . 'Presenters/ActionPresenter.php');
@@ -73,3 +81,5 @@ class PersonalCalendarPresenter extends CommonCalendarPresenter
         $this->page->BindEvents(CalendarReservation::FromViewList($reservations, $userSession->Timezone, $userSession));
     }
 }
+
+class_alias(__NAMESPACE__ . '\\PersonalCalendarPresenter', 'PersonalCalendarPresenter');

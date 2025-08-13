@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Reservation/ReservationPage.php');
+namespace LibreBooking\Pages\Reservation;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 
 interface IExistingReservationPage extends IReservationPage
 {
@@ -363,3 +371,6 @@ class DuplicateReservationPage extends ExistingReservationPage
         $this->Set('TermsAccepted', false);
     }
 }
+class_alias(__NAMESPACE__ . '\\IExistingReservationPage', 'IExistingReservationPage');
+class_alias(__NAMESPACE__ . '\\ExistingReservationPage', 'ExistingReservationPage');
+class_alias(__NAMESPACE__ . '\\DuplicateReservationPage', 'DuplicateReservationPage');

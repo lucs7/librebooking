@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Admin/AdminPage.php');
+namespace LibreBooking\Pages\Admin;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 require_once(ROOT_DIR . 'Presenters/Admin/ManageAccessoriesPresenter.php');
 
 interface IManageAccessoriesPage extends IActionPage
@@ -165,3 +173,5 @@ class ManageAccessoriesPage extends ActionPage implements IManageAccessoriesPage
         return $r;
     }
 }
+class_alias(__NAMESPACE__ . '\\IManageAccessoriesPage', 'IManageAccessoriesPage');
+class_alias(__NAMESPACE__ . '\\ManageAccessoriesPage', 'ManageAccessoriesPage');

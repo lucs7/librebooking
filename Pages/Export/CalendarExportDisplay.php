@@ -1,6 +1,14 @@
 <?php
 
-require_once(ROOT_DIR . 'Pages/Page.php');
+namespace LibreBooking\Pages\Export;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
 
 class CalendarExportDisplay extends Page
 {
@@ -37,3 +45,4 @@ class CalendarExportDisplay extends Page
         // no-op
     }
 }
+class_alias(__NAMESPACE__ . '\\CalendarExportDisplay', 'CalendarExportDisplay');

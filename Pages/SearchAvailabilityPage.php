@@ -1,8 +1,16 @@
 <?php
 
+namespace LibreBooking\Pages;
+
+use LibreBooking\Pages\Page;
+use LibreBooking\Pages\ActionPage;
+use LibreBooking\Pages\SecurePage;
+use LibreBooking\Pages\IActionPage;
+use LibreBooking\Pages\IPage;
+use LibreBooking\Pages\IPageable;
+use IRepeatOptionsComposite;
+
 require_once(ROOT_DIR . 'Presenters/SearchAvailabilityPresenter.php');
-require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/ActionPage.php');
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
 
@@ -309,3 +317,5 @@ class SearchAvailabilityPage extends ActionPage implements ISearchAvailabilityPa
         return $this->GetCheckbox(FormKeys::SPECIFIC_TIME);
     }
 }
+class_alias(__NAMESPACE__ . '\\ISearchAvailabilityPage', 'ISearchAvailabilityPage');
+class_alias(__NAMESPACE__ . '\\SearchAvailabilityPage', 'SearchAvailabilityPage');
