@@ -22,9 +22,6 @@ require_once(ROOT_DIR . 'WebServices/AccountWebService.php');
 
 require_once(ROOT_DIR . 'Web/Services/Help/ApiHelpPage.php');
 
-if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConverter())) {
-    die("LibreBooking API has been configured as disabled.<br/><br/>Set \$conf['settings']['api']['enabled'] = 'true' to enable.");
-}
 
 \Slim\Slim::registerAutoloader();
 $app = new \Slim\Slim();
@@ -46,6 +43,10 @@ RegisterAccessories($server, $registry);
 RegisterAccounts($server, $registry);
 
 $app->hook('slim.before.dispatch', function () use ($app, $server, $registry) {
+if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConverter())) {
+        $app->halt(RestResponse::SERVICE_UNAVAILABLE, 'LibreBooking API is disabled. Set ["api"]["enabled"] = true');
+    }
+
     $routeName = $app->router()->getCurrentRoute()->getName();
     if ($registry->IsSecure($routeName)) {
         $security = new WebServiceSecurity(new UserSessionRepository());

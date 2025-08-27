@@ -9,6 +9,7 @@ class RestResponse
     public const FORBIDDEN = 403;
     public const NOT_FOUND_CODE = 404;
     public const SERVER_ERROR = 500;
+    public const SERVICE_UNAVAILABLE = 503;
 
     /**
      * @var array|RestServiceLink[]
