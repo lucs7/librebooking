@@ -67,7 +67,7 @@ if (!Configuration::Instance()->GetKey(ConfigKeys::API_ENABLED, new BooleanConve
         // Check if the user is allowed API access to the route
         if (!$registry->IsUserAllowedApiAccess(routeName: $routeName, userId: $userSession->UserId)) {
             $app->halt(
-                RestResponse::FORBIDDEN,
+                RestResponse::FORBIDDEN_CODE,
                 'You are not authorized to access this service.<br/>'
             );
         }
