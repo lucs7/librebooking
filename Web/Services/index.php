@@ -22,14 +22,26 @@ require_once(ROOT_DIR . 'WebServices/AccountWebService.php');
 
 require_once(ROOT_DIR . 'Web/Services/Help/ApiHelpPage.php');
 
+set_exception_handler(function ($e) {
+    Log::Error('Uncaught bootstrap exception: %s', $e);
+    $accept    = $_SERVER['HTTP_ACCEPT'] ?? '';
+    $wantsJson = stripos($accept, 'application/json') !== false;
+
+    header('Content-Type: ' . ($wantsJson ? 'application/json; charset=utf-8'
+                                          : 'text/plain; charset=utf-8'), true, 500);
+    echo $wantsJson
+        ? json_encode(['error' => 'server_error', 'message' => $e->getMessage()], JSON_UNESCAPED_SLASHES)
+        : 'Server error: ' . $e->getMessage();
+    exit;
+});
 
 \Slim\Slim::registerAutoloader();
 $app = new \Slim\Slim();
 
 $server = new SlimServer($app);
 ServiceLocator::SetApiServer(apiServer: $server);
-
 $registry = new SlimWebServiceRegistry($app);
+
 
 RegisterHelp($registry, $app);
 RegisterAuthentication($server, $registry);
