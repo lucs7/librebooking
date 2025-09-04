@@ -834,4 +834,9 @@ class he extends en_gb
     {
         return 'he';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

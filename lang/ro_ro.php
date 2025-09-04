@@ -583,4 +583,9 @@ class ro_ro extends en_gb
     {
         return 'ro';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

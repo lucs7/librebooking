@@ -810,4 +810,9 @@ class eu_es extends en_gb
     {
         return 'eu_es';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

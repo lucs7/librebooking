@@ -914,4 +914,9 @@ class cz extends en_us
     {
         return 'cz';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

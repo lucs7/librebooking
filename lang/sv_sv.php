@@ -652,4 +652,9 @@ class sv_sv extends en_gb
     {
         return 'sv';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

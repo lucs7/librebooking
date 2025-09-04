@@ -1079,4 +1079,9 @@ class hu_hu extends en_us
     {
         return 'hu';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

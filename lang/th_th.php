@@ -942,4 +942,9 @@ class th_th extends en_gb
     {
         return 'th';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 0; // Sunday
+    }
 }

@@ -749,4 +749,9 @@ class si_si extends en_gb
     {
         return 'si-si';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

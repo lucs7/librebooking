@@ -909,4 +909,9 @@ class ru_ru extends en_gb
     {
         return 'ru';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

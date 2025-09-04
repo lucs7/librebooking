@@ -1122,4 +1122,9 @@ class it_it extends en_us
     {
         return 'it';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

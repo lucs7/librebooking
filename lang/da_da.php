@@ -1101,4 +1101,9 @@ class da_da extends en_gb
     {
         return 'da';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

@@ -1127,4 +1127,9 @@ class pl extends en_gb
     {
         return 'pl';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

@@ -27,7 +27,7 @@ class DatePickerSetupControl extends Control
         $this->Set('AltId', $altId);
 
         $this->SetDefault('OnSelect', sprintf("function() { $('%s').trigger('change'); }", $elementsToTrigger));
-        $this->SetDefault('FirstDay', 0);
+        $this->SetDefault('FirstDayOfWeek', Resources::GetInstance()->GetFirstDayOfWeek());
 
         $hasTimepicker = $this->Get('HasTimepicker');
         $this->Set('HasTimepicker', $hasTimepicker);

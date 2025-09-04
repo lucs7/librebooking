@@ -637,4 +637,9 @@ class zh_cn extends en_us
     {
         return 'zh_cn';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

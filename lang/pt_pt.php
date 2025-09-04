@@ -1103,4 +1103,9 @@ class pt_pt extends en_gb
     {
         return 'pt_pt';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

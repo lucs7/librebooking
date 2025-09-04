@@ -724,4 +724,9 @@ class hr_hr extends en_gb
     {
         return 'hr';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

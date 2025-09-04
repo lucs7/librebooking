@@ -484,4 +484,9 @@ class ca extends en_gb
     {
         return 'ca';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

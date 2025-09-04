@@ -24,7 +24,7 @@
                 shorthand: {$MonthNamesShort},
                 longhand: {$MonthNames}
             },
-            firstDayOfWeek: {$FirstDay|default:0}
+            firstDayOfWeek: {$FirstDayOfWeek|default:0}
         },
         showMonths: {$NumberOfMonths|default:1},
         weekNumbers: {if $ShowWeekNumbers}true{else}false{/if},

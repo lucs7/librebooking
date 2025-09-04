@@ -667,4 +667,9 @@ class id_id extends en_gb
     {
         return 'id';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

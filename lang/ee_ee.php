@@ -863,4 +863,9 @@ class ee_ee extends en_gb
     {
         return 'ee';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

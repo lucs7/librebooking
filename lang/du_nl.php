@@ -1084,4 +1084,9 @@ class du_nl extends en_gb
     {
         return 'du_nl';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

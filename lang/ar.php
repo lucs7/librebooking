@@ -1106,4 +1106,9 @@ class ar extends en_us
     {
         return 'en';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

@@ -735,4 +735,9 @@ class sk extends en_gb
     {
         return 'sk';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

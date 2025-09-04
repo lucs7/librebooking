@@ -39,4 +39,9 @@ class en_gb extends en_us
         $this->Dates = $dates;
         return $this->Dates;
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

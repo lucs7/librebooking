@@ -601,4 +601,9 @@ class bg_bg extends en_gb
     {
         return 'bg';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

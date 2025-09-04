@@ -750,4 +750,9 @@ class sr_sr extends en_gb
     {
         return 'sr';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

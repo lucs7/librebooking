@@ -1119,4 +1119,9 @@ class pt_br extends en_gb
     {
         return 'pt_br';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 0; // Sunday
+    }
 }

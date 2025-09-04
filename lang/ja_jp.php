@@ -1097,4 +1097,9 @@ class ja_jp extends en_gb
     {
         return 'ja';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 0; // Sunday
+    }
 }

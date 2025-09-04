@@ -482,4 +482,9 @@ class du_be extends en_gb
     {
         return 'en_us';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

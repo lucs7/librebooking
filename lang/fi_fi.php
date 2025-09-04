@@ -1012,4 +1012,9 @@ class fi_fi extends en_gb
     {
         return 'fi';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

@@ -1120,4 +1120,9 @@ class el_gr extends en_gb
     {
         return 'el';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

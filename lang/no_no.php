@@ -729,4 +729,9 @@ class no_no extends en_gb
     {
         return 'no_no';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

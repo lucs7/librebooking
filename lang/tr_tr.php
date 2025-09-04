@@ -882,4 +882,9 @@ class tr_tr extends en_gb
     {
         return 'en';
     }
+
+    protected function _GetFirstDayOfWeek()
+    {
+        return 1; // Monday
+    }
 }

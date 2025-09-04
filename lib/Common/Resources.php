@@ -18,6 +18,8 @@ interface IResourceLocalization
 
     public function GetMonths($key);
 
+    public function GetFirstDayOfWeek();
+
     public function GeneralDateFormat();
 
     public function GeneralDateTimeFormat();
@@ -217,6 +219,11 @@ class Resources implements IResourceLocalization
         }
 
         return $months[$key];
+    }
+
+    public function GetFirstDayOfWeek()
+    {
+        return $this->_lang->FirstDayOfWeek;
     }
 
     /**
