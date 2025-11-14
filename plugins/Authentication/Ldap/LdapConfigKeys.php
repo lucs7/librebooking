@@ -85,12 +85,7 @@ class LdapConfigKeys extends PluginConfigKeys
         'default' => 'sub',
         'label' => 'Search Scope',
         'description' => 'LDAP search scope (base, one, or sub)',
-        'section' => 'ldap',
-        'choices' => [
-            'base' => 'Base',
-            'one' => 'One Level',
-            'sub' => 'Subtree'
-        ]
+        'section' => 'ldap'
     ];
 
     public const RETRY_AGAINST_DATABASE = [
