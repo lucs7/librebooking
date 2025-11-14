@@ -73,9 +73,9 @@ class LdapConfigKeys extends PluginConfigKeys
     public const FILTER = [
         'key' => 'filter',
         'type' => 'string',
-        'default' => '(uid=%s)',
+        'default' => '',
         'label' => 'Search Filter',
-        'description' => 'LDAP search filter (use %s for username)',
+        'description' => 'Optional LDAP search filter for additional constraints (leave empty for default)',
         'section' => 'ldap'
     ];
 
