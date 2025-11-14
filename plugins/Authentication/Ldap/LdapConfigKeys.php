@@ -149,7 +149,7 @@ class LdapConfigKeys extends PluginConfigKeys
 
     // Adding the debug setting that's referenced in LdapOptions::IsLdapDebugOn()
     public const DEBUG_ENABLED = [
-        'key' => 'ldap.debug.enabled',
+        'key' => 'debug.enabled',
         'type' => 'boolean',
         'default' => false,
         'label' => 'Enable LDAP Debug',
