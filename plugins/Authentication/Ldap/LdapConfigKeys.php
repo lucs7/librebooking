@@ -11,7 +11,7 @@ class LdapConfigKeys extends PluginConfigKeys
         'type' => 'string',
         'default' => '',
         'label' => 'LDAP Host',
-        'description' => 'Hostname or IP address of LDAP server',
+        'description' => 'Hostname or IP address of LDAP server. Should start with ldap:// or ldaps://',
         'section' => 'ldap'
     ];
 
