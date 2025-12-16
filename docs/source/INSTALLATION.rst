@@ -175,10 +175,27 @@ Manual Database Setup
 | The following SQL files are available:
 | - ``create-db.sql`` - Creates the database
 | - ``create-user.sql`` - Creates the database user (optional)
-| - ``create-schema.sql`` - Creates all tables and structure
+| - ``create-schema.sql`` - Creates base table structure
+| - ``database_schema/upgrades/*/schema.sql`` - Database schema upgrades
+| - ``database_schema/upgrades/*/data.sql`` - Database data upgrades
 | - ``create-data.sql`` - Inserts initial application data
 | - ``sample-data-utf8.sql`` - Sample data for testing (optional)
 |
+
+.. important::
+   **Correct Import Order**
+   
+   The automated installer (Web/install) follows this sequence:
+   
+   1. ``create-schema.sql`` - Base table structure
+   2. All upgrade scripts in ``database_schema/upgrades/`` (in version order)
+   3. ``create-data.sql`` - Initial data (depends on upgraded schema)
+   4. ``sample-data-utf8.sql`` (optional) - Sample data for testing
+   
+   **Warning:** Simply running create-schema.sql followed by create-data.sql will fail 
+   because create-data.sql expects the fully upgraded schema including all modifications 
+   from the upgrade scripts.
+
 | Import the SQL files in the following order (we recommend
   `phpMyAdmin <https://www.phpmyadmin.net/>`__):
 
@@ -212,12 +229,17 @@ file.
 | Click the SQL tab at the top of the page.
 | Import ``/database_schema/create-schema.sql`` to librebooking (or
   whatever database name was used in the creation process)
+| Import all upgrade scripts from ``/database_schema/upgrades/`` in version order.
+  For each version directory (2.1, 2.2, 2.3, etc.), import first the ``schema.sql`` 
+  then the ``data.sql`` file if they exist.
 | Import ``/database_schema/create-data.sql`` to librebooking (or
   whatever database name was used in the creation process)
 
 | If you have database creation privileges in MySQL
 | Open ``/database_schema/create-db.sql`` to create the database
 | Import ``/database_schema/create-schema.sql`` to create the table structure
+| Import all upgrade scripts from ``/database_schema/upgrades/`` in version order.
+  For each version directory, import ``schema.sql`` then ``data.sql`` if they exist.
 | Import ``/database_schema/create-data.sql`` to populate initial data
 | Optionally - import ``/database_schema/sample-data-utf8.sql`` to add
   sample application data (this will create 2 test users: admin/password
