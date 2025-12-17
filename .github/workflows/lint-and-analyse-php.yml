@@ -96,7 +96,7 @@ jobs:
               sudo chown www-data:www-data "config/$(basename ${target})"
             fi
             if ! [ -f ${target} ]; then
-              ln -s "config/$(basename ${target})" "${target}"
+              ln -s "$(pwd)/config/$(basename ${target})" "${target}"
             fi
           done
 
