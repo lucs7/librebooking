@@ -104,4 +104,26 @@ class ExistingReservationInitializer extends ReservationInitializerBase implemen
     {
         return ServiceLocator::GetServer()->GetUserSession()->Timezone;
     }
+
+    protected function BindCustomAttributes()
+    {
+        $attributeService = new AttributeService(new AttributeRepository());
+        $resourceIds = [$this->reservationView->ResourceId];
+        
+        // Add additional resources
+        foreach ($this->reservationView->Resources as $resource) {
+            if ($resource->Id() != $this->reservationView->ResourceId) {
+                $resourceIds[] = $resource->Id();
+            }
+        }
+        
+        $attributes = $attributeService->GetReservationAttributes(
+            $this->currentUser,
+            $this->reservationView,
+            $this->reservationView->OwnerId,
+            $resourceIds
+        );
+        
+        $this->basePage->BindAttributes($attributes);
+    }
 }

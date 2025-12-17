@@ -157,6 +157,11 @@ interface IReservationPage extends IPage
      * @param int $maximum
      */
     public function SetMaximumResources($maximum);
+
+    /**
+     * @param Attribute[] $attributes
+     */
+    public function BindAttributes($attributes);
 }
 
 abstract class ReservationPage extends Page implements IReservationPage
@@ -427,5 +432,10 @@ abstract class ReservationPage extends Page implements IReservationPage
     public function SetMaximumResources($maximum)
     {
         $this->Set('MaximumResources', $this->server->GetUserSession()->IsAdmin ? 0 : $maximum);
+    }
+
+    public function BindAttributes($attributes)
+    {
+        $this->Set('Attributes', $attributes);
     }
 }

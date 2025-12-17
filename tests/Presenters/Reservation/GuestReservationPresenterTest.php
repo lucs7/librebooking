@@ -308,4 +308,9 @@ class FakeGuestReservationPage implements IGuestReservationPage
     {
         // TODO: Implement SetMaximumResources() method.
     }
+
+    public function BindAttributes($attributes)
+    {
+        // TODO: Implement BindAttributes() method.
+    }
 }

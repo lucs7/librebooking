@@ -267,4 +267,9 @@ class FakeExistingReservationPage extends FakePageBase implements IExistingReser
     {
         // TODO: Implement SetMaximumResources() method.
     }
+
+    public function BindAttributes($attributes)
+    {
+        // TODO: Implement BindAttributes() method.
+    }
 }

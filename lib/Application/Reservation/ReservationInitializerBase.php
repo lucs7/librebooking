@@ -228,6 +228,7 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
         $this->BindResourceAndAccessories();
         $this->BindDates();
         $this->BindUser();
+        $this->BindCustomAttributes();
         $this->SetTermsOfService();
     }
 
@@ -456,5 +457,20 @@ abstract class ReservationInitializerBase implements IReservationInitializer, IR
         if ($termsOfService != null && $termsOfService->AppliesToReservation()) {
             $this->basePage->SetTerms($termsOfService);
         }
+    }
+
+    protected function BindCustomAttributes()
+    {
+        $attributeService = new AttributeService(new AttributeRepository());
+        $resourceIds = [$this->GetResourceId()];
+        
+        $attributes = $attributeService->GetReservationAttributes(
+            $this->currentUser,
+            new ReservationView(),
+            $this->GetOwnerId(),
+            $resourceIds
+        );
+        
+        $this->basePage->BindAttributes($attributes);
     }
 }
