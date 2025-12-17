@@ -103,7 +103,7 @@ class ConfigTest extends TestBase
 
         $this->assertLogMessage($errorLogs, "Invalid type for 'key1'. Should be 'string', using default.", 'key1 type validation error');
         $this->assertLogMessage($errorLogs, "Invalid type for 'server1.key'. Should be 'string', using default.", 'server1.key type validation error');
-        $this->assertLogMessage($errorLogs, "Invalid value 'invalid' for 'server2.key'. Should be one of the following options: [Option 1, Option 2, Option 3]", 'server2.key value validation error');
+        $this->assertLogMessage($errorLogs, "Invalid value 'invalid' for 'server2.key'. Should be one of the following options: [value1 => Option 1, value2 => Option 2, value3 => Option 3]", 'server2.key value validation error');
     }
 
     public function testEnvOverridesConfigWithPutenv()
