@@ -96,14 +96,15 @@ jobs:
               sudo chown www-data:www-data "config/$(basename ${target})"
             fi
             if ! [ -f ${target} ]; then
-              ln -s "config/$(basename ${target})" "${target}"
+              ln -s "$(pwd)/config/$(basename ${target})" "${target}"
             fi
           done
 
       - name: Unit Tests
         run: |
+          set -o pipefail
           composer phpunit | tee phpunit.log
-           if ! grep -qE "Tests:|OK \(" phpunit.log; then
+          if ! grep -qE "Tests:|OK \(" phpunit.log; then
             echo "❌ PHPUnit exited early (no summary line found)"
             exit 1
           fi
