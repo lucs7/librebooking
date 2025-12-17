@@ -320,7 +320,7 @@
 																		data-popover-content="#statusDialog">{translate key='Hidden'}</a>
 																	<i class="bi bi-x-circle-fill text-danger"></i>
 																{/if}
-																{if array_key_exists($resource->GetStatusReasonId(),$StatusReasons)}
+{if $resource->GetStatusReasonId() && array_key_exists($resource->GetStatusReasonId(),$StatusReasons)}
 																	<span
 																		class="statusReason">{$StatusReasons[$resource->GetStatusReasonId()]->Description()}</span>
 																{/if}
@@ -492,7 +492,13 @@
 																	<span class="propertyValue resourceAdminValue"
 																		data-type="select" data-pk="{$id}"
 																		data-value="{$resource->GetAdminGroupId()}"
-																		data-name="{FormKeys::RESOURCE_ADMIN_GROUP_ID}">{$GroupLookup[$resource->GetAdminGroupId()]->Name}</span>
+																		data-name="{FormKeys::RESOURCE_ADMIN_GROUP_ID}">
+																		{if $resource->GetAdminGroupId() && isset($GroupLookup[$resource->GetAdminGroupId()])}
+																			{$GroupLookup[$resource->GetAdminGroupId()]->Name}
+																		{else}
+																			{translate key=None}
+																		{/if}
+																	</span>
 																</div>
 															</div>
 															<div class="mt-2">
