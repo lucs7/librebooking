@@ -31,9 +31,10 @@ abstract class PluginConfigKeys
             $configKey = $config['key'] ?? null;
             $section = $config['section'] ?? null;
 
-            // If this config has a section, ONLY match the section-prefixed key
+            // If this config has a section, only match with the full key (section.key)
             if ($section) {
-                if ("{$section}.{$configKey}" === $key) {
+                $fullKey = "{$section}.{$configKey}";
+                if ($fullKey === $key) {
                     return $config;
                 }
             } else {
