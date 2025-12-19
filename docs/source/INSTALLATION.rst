@@ -102,8 +102,7 @@ read/write access to your configurable uploads directory specified by
 By default, LibreBooking uses standard username/password for user
 authentication.
 
-Alternatively, you can use LDAP authentication. See the plugins section of the
-application help page for more details.
+Alternatively, you can use LDAP or Active Directory authentication. See :doc:`LDAP-Authentication` or :doc:`ActiveDirectory-Authentication` for setup instructions.
 
 .. note::
    If you try to load the application at this time (eg.
@@ -594,8 +593,7 @@ After registration you will be logged in automatically.
 
 At this time, it is recommended to change your password.
 
--  For LDAP authentication please login with your LDAP
-   username/password.
+-  For LDAP or Active Directory authentication, login with your directory username/password. See :doc:`LDAP-Authentication` or :doc:`ActiveDirectory-Authentication` for configuration details.
 
 Log Files
 ^^^^^^^^^
