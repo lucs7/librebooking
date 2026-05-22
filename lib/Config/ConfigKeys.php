@@ -1212,8 +1212,8 @@ class ConfigKeys extends AbstractConfigKeys
         'type' => 'boolean',
         'default' => true,
         'label' => 'View Schedules',
-        'description' => 'Allow users to view schedules',
-        'config_file_comment' => 'Allow unauthenticated users to view schedules',
+        'description' => 'Allow public (not logged-in) users to browse schedule and calendar pages. When false, unauthenticated visitors are redirected to login.',
+        'config_file_comment' => 'Allow public (not logged-in) users to view schedule and calendar pages',
         'section' => 'privacy'
     ];
     public const PRIVACY_VIEW_RESERVATIONS = [
@@ -1221,8 +1221,8 @@ class ConfigKeys extends AbstractConfigKeys
         'type' => 'boolean',
         'default' => false,
         'label' => 'View Reservations',
-        'description' => 'Allow users to view reservations',
-        'config_file_comment' => 'Allow users to view reservation details',
+        'description' => 'When true, reservation details are visible to all users including public ones. When false (default), only the owner and participants see details; everyone else sees slots as occupied with no content. Affects schedule views, calendar labels, popups, and ICS feeds.',
+        'config_file_comment' => "When true, all users (including public) can see reservation details.\nWhen false (default), only the owner/participants see details; others see occupied slots with no content.",
         'section' => 'privacy'
     ];
     public const PRIVACY_HIDE_USER_DETAILS = [
@@ -1230,8 +1230,8 @@ class ConfigKeys extends AbstractConfigKeys
         'type' => 'boolean',
         'default' => false,
         'label' => 'Hide User Details',
-        'description' => 'Hide user details from other users',
-        'config_file_comment' => 'Hide user details from general users',
+        'description' => 'When true, the organizer name and email are hidden from users who are not the owner or an admin, showing &quot;Private&quot; instead. Affects schedule views, popups, calendar labels, autocomplete, ICS feeds, and the API.',
+        'config_file_comment' => 'When true, non-owner/non-admin users see "Private" instead of the organizer name and email',
         'section' => 'privacy'
     ];
     public const PRIVACY_HIDE_RESERVATION_DETAILS = [
