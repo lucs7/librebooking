@@ -483,6 +483,9 @@ return [
             # Enable or disable ICS calendar subscription feeds entirely (true/false)
             'enabled' => true,
 
+            # Enable HTTP Basic Authentication on ICS calendar subscription URLs
+            'basic.auth' => false,
+
             # Subscription key secret used for ICS calendar feeds
             'subscription.key' => '',
 

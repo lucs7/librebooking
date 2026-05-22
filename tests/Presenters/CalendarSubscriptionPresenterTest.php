@@ -243,4 +243,11 @@ class FakeCalendarSubscriptionPage implements ICalendarSubscriptionPage
     {
         $this->NotFound = true;
     }
+
+    public ?UserSession $FeedUserSession = null;
+
+    public function GetFeedUserSession(): ?UserSession
+    {
+        return $this->FeedUserSession;
+    }
 }

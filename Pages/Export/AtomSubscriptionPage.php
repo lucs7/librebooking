@@ -13,6 +13,11 @@ class AtomSubscriptionPage extends SubscriptionPage
 
     public function PageLoad()
     {
+        $this->tryBasicAuth();
+        if ($this->notFound) {
+            return;
+        }
+
         ob_clean();
         $this->presenter->PageLoad();
         if ($this->notFound) {

@@ -12,6 +12,11 @@ class CalendarSubscriptionPage extends SubscriptionPage
 
     public function PageLoad()
     {
+        $this->tryBasicAuth();
+        if ($this->notFound) {
+            return;
+        }
+
         $this->presenter->PageLoad();
         if ($this->notFound) {
             http_response_code(404);
