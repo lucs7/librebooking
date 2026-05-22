@@ -1115,7 +1115,6 @@ class ConfigKeys extends AbstractConfigKeys
         'description' => 'Number of past days to include in ICS feeds',
         'section' => 'ics'
     ];
-
     // Data Retention and Deletion
 
     # previously YEARS_OLD_DATA
@@ -1239,8 +1238,8 @@ class ConfigKeys extends AbstractConfigKeys
         'type' => 'boolean',
         'default' => false,
         'label' => 'Hide Reservation Details',
-        'description' => 'Hide reservation details from other users',
-        'config_file_comment' => 'Hide reservation details from general users',
+        'description' => 'When true, reservation title, description, and custom attributes show as &quot;Private&quot; for non-owners. Also accepts: \'past\' (hide ended), \'future\' (hide upcoming), \'current\' (hide ongoing). Affects schedule views, search, calendar labels, and ICS feeds.',
+        'config_file_comment' => "When true, non-owners see \"Private\" instead of reservation title/description.\nAlso accepts: 'past' (hide after end), 'future' (hide until end), 'current' (hide after start)",
         'section' => 'privacy'
     ];
     # previously PRIVACY_ALLOW_GUEST_BOOKING

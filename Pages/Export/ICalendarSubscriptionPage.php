@@ -18,6 +18,13 @@ interface ICalendarSubscriptionPage
     public function SetReservations($reservations);
 
     /**
+     * Signal that the current request should be aborted (e.g. when the
+     * subscription key is invalid). Implementations set a flag that PageLoad()
+     * checks after the presenter runs and returns the appropriate HTTP status.
+     */
+    public function SetIsNotFound(): void;
+
+    /**
      * @return string
      */
     public function GetScheduleId();

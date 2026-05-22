@@ -48,6 +48,7 @@ class CalendarSubscriptionPresenter
     public function PageLoad()
     {
         if (!$this->validator->IsValid()) {
+            $this->page->SetIsNotFound();
             return;
         }
 
@@ -123,6 +124,16 @@ class CalendarSubscriptionPresenter
         );
 
         $session = ServiceLocator::GetServer()->GetUserSession();
+
+        // For icskey-only requests the HTTP session is anonymous (NullUserSession).
+        // The icskey is a global installation secret, not per-user credentials, so
+        // we cannot verify the caller is actually the uid owner. Build a logged-in
+        // but ownerless session (UserId=0) so that SlotLabelFactory formats labels
+        // correctly, while privacy hide-flags still apply via the owner check.
+        if (!$session->IsLoggedIn() && $uid !== null) {
+            $session = new UserSession(0);
+            $session->Timezone = $user->Timezone();
+        }
 
         foreach ($res as $r) {
             if (empty($resourceIds) || in_array($r->ResourceId, $resourceIds)) {
