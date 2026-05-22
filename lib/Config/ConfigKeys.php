@@ -1172,6 +1172,18 @@ class ConfigKeys extends AbstractConfigKeys
         'section' => 'cleanup'
     ];
 
+    // Authentication
+
+    public const AUTH_FAILED_LOGIN_DELAY_MS = [
+        'key' => 'auth.failed.login.delay.ms',
+        'type' => 'integer',
+        'default' => 750,
+        'label' => 'Failed Login Delay (ms)',
+        'description' => 'Milliseconds to sleep after a failed credential check. Slows down brute-force and credential-stuffing. Applies to both the regular login form and ICS Basic Auth. Set to 0 to disable. Clamped to 0-5000ms.',
+        'config_file_comment' => "Milliseconds to sleep after a failed credential check\nSet to 0 to disable; clamped to 0-5000",
+        'section' => 'auth'
+    ];
+
     // Password Policy
 
     # previously DISABLE_PASSWORD_RESET

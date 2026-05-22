@@ -75,6 +75,15 @@ class Authentication implements IAuthentication
 
     public function Validate($username, $passwordPlainText)
     {
+        $valid = $this->validateCredentials($username, $passwordPlainText);
+        if (!$valid) {
+            $this->delayFailedLogin();
+        }
+        return $valid;
+    }
+
+    private function validateCredentials($username, $passwordPlainText)
+    {
         if (($this->ShowUsernamePrompt() && empty($username)) || ($this->ShowPasswordPrompt() && empty($passwordPlainText))) {
             return false;
         }
@@ -104,6 +113,27 @@ class Authentication implements IAuthentication
         }
 
         return $valid;
+    }
+
+    /**
+     * Sleep for the configured delay after a failed credential check. Reduces
+     * brute-force / credential-stuffing throughput without per-IP state. The
+     * delay is clamped to 0-5000ms so misconfiguration cannot tie up workers
+     * indefinitely. Defense-in-depth only — pair with upstream rate limiting
+     * for production deployments.
+     *
+     * Overridable in tests via a subclass to keep the suite fast.
+     */
+    protected function delayFailedLogin(): void
+    {
+        $ms = (int) Configuration::Instance()->GetKey(
+            ConfigKeys::AUTH_FAILED_LOGIN_DELAY_MS,
+            new IntConverter()
+        );
+        $ms = max(0, min(5000, $ms));
+        if ($ms > 0) {
+            usleep($ms * 1000);
+        }
     }
 
     public function Login($username, $loginContext)

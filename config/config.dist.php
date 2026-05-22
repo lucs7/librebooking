@@ -515,6 +515,16 @@ return [
             'delete.old.reservations' => false,
         ],
 
+        ################
+        # Authentication
+        ################
+
+        'auth' => [
+            # Milliseconds to sleep after a failed credential check
+            # Set to 0 to disable; clamped to 0-5000
+            'failed.login.delay.ms' => 750,
+        ],
+
         #################
         # Password Policy
         #################

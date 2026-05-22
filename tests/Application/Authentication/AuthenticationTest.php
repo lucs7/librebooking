@@ -109,9 +109,12 @@ class AuthenticationTest extends TestBase
         $this->groupRepository = $this->createMock('IGroupRepository');
         $this->fakeFirstRegistration = new FakeFirstRegistrationStrategy();
 
-        $this->auth = new Authentication($this->authorization, $this->userRepository, $this->groupRepository);
+        $this->auth = new TestableAuthentication($this->authorization, $this->userRepository, $this->groupRepository);
         $this->auth->SetMigration($this->fakeMigration);
         $this->auth->SetFirstRegistrationStrategy($this->fakeFirstRegistration);
+
+        // Disable failed-login delay by default; dedicated tests opt back in.
+        $this->fakeConfig->SetKey(ConfigKeys::AUTH_FAILED_LOGIN_DELAY_MS, 0);
 
         $this->loginContext = new WebLoginContext(new LoginData());
     }
@@ -219,6 +222,48 @@ class AuthenticationTest extends TestBase
         $this->assertTrue($this->fakePassword->_MigrateCalled);
         $this->assertEquals(null, $this->fakePassword->_LastSalt);
         $this->assertEquals($id, $this->fakePassword->_LastUserId);
+    }
+
+    public function testFailedLoginInvokesDelay()
+    {
+        $this->db->SetRows([]);
+
+        $this->auth->Validate('nobody', 'wrong');
+
+        $this->assertTrue($this->auth->_DelayCalled, 'delayFailedLogin must run on a failed credential check');
+    }
+
+    public function testSuccessfulLoginDoesNotInvokeDelay()
+    {
+        $rows = [[ColumnNames::USER_ID => 10, ColumnNames::PASSWORD => null, ColumnNames::SALT => null, ColumnNames::OLD_PASSWORD => 'x']];
+        $this->db->SetRows($rows);
+        $this->fakePassword->_ValidateResult = true;
+
+        $this->auth->Validate($this->username, $this->password);
+
+        $this->assertFalse($this->auth->_DelayCalled, 'delayFailedLogin must not run on success');
+    }
+
+    public function testEmptyCredentialsInvokeDelay()
+    {
+        $this->auth->Validate('', '');
+
+        $this->assertTrue($this->auth->_DelayCalled, 'delayFailedLogin must run when credentials are empty');
+    }
+}
+
+/**
+ * Test double that records delayFailedLogin invocations without sleeping.
+ * Keeps the suite fast and lets tests assert delay-call behavior directly
+ * instead of bracketing wall-clock time.
+ */
+class TestableAuthentication extends Authentication
+{
+    public bool $_DelayCalled = false;
+
+    protected function delayFailedLogin(): void
+    {
+        $this->_DelayCalled = true;
     }
 }
 
