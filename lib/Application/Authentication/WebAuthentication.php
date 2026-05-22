@@ -78,6 +78,13 @@ interface IWebAuthentication extends IAuthenticationPromptOptions
      * @return UserSession
      */
     public function LoginForFeed(string $username): UserSession;
+
+    /**
+     * Forward the source label to the underlying IAuthentication so auth.log
+     * records the correct entry point (e.g. 'feed' for ICS, 'cookie' for
+     * remember-me, 'web' for the regular login form).
+     */
+    public function SetAuthSource(string $source): void;
 }
 
 class WebAuthentication implements IWebAuthentication
@@ -132,6 +139,11 @@ class WebAuthentication implements IWebAuthentication
         return $this->authentication->BuildSession($username);
     }
 
+    public function SetAuthSource(string $source): void
+    {
+        $this->authentication->SetAuthSource($source);
+    }
+
     /**
      * @param UserSession $userSession
      * @return void
@@ -162,6 +174,7 @@ class WebAuthentication implements IWebAuthentication
     {
         $loginCookie = LoginCookie::FromValue($cookieValue);
         $valid = false;
+        $validEmail = null;
         $this->server->SetUserSession(new NullUserSession());
 
         if (!is_null($loginCookie)) {
@@ -179,6 +192,12 @@ class WebAuthentication implements IWebAuthentication
         }
 
         Log::Debug('Cookie login. IsValid: %s', $valid);
+        Log::Auth(
+            $valid ? 'success' : 'failure',
+            (string) ($validEmail ?? ''),
+            'cookie',
+            $valid ? [] : ['reason' => is_null($loginCookie) ? 'missing_cookie' : 'invalid_cookie']
+        );
 
         return $valid;
     }

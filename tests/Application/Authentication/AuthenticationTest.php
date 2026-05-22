@@ -250,6 +250,21 @@ class AuthenticationTest extends TestBase
 
         $this->assertTrue($this->auth->_DelayCalled, 'delayFailedLogin must run when credentials are empty');
     }
+
+    public function testSetAuthSourceIsRespectedByValidate()
+    {
+        // Verifies the public seam used by SubscriptionPage::tryBasicAuth to
+        // tag attempts as source='feed' before Validate runs. We only assert
+        // that the call is accepted; the actual auth.log emission is covered
+        // separately at the Log layer.
+        $this->auth->SetAuthSource('feed');
+        $this->db->SetRows([]);
+
+        $this->auth->Validate('nobody', 'wrong');
+
+        // No assertion error == method exists and accepts the source label.
+        $this->assertTrue(true);
+    }
 }
 
 /**

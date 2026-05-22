@@ -63,6 +63,13 @@ interface IAuthentication extends IAuthenticationPromptOptions, IAuthenticationA
      * @return UserSession
      */
     public function BuildSession(string $username): UserSession;
+
+    /**
+     * Set the source label written to auth.log for the next Validate() call.
+     * Non-web callers (ICS feed, cookie login, web service) override the
+     * default 'web' so auth events can be partitioned per source.
+     */
+    public function SetAuthSource(string $source): void;
 }
 
 interface IAuthenticationPromptOptions

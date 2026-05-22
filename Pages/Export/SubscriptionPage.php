@@ -153,6 +153,7 @@ abstract class SubscriptionPage extends Page implements ICalendarSubscriptionPag
         }
 
         $authentication = $this->createWebAuthentication();
+        $authentication->SetAuthSource('feed');
 
         if ($authentication->Validate($username, $password)) {
             $this->feedUserSession = $authentication->LoginForFeed($username);

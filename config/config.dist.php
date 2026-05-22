@@ -523,6 +523,13 @@ return [
             # Milliseconds to sleep after a failed credential check
             # Set to 0 to disable; clamped to 0-5000
             'failed.login.delay.ms' => 750,
+
+            # Write authentication events to auth.log
+            # Independent of logging.level; suitable input for fail2ban / SIEM
+            'log.enabled' => true,
+
+            # Which auth events to record (all, failure_only, none)
+            'log.level' => 'all',
         ],
 
         #################

@@ -118,6 +118,19 @@ class CalendarSubscriptionPageTest extends TestBase
         $this->assertTrue($this->page->fakeAuth->_LoginForFeedCalled, 'LoginForFeed must be called to build the feed session');
         $this->assertSame('admin', $this->page->fakeAuth->_LastLogin, 'LoginForFeed must receive the authenticated username');
         $this->assertNotNull($this->page->GetFeedUserSession(), 'feedUserSession must be captured for the presenter');
+        $this->assertSame('feed', $this->page->fakeAuth->_AuthSource, 'tryBasicAuth must tag the source as "feed" so auth.log records the right channel');
+    }
+
+    public function testFailedBasicAuthAlsoTagsSourceAsFeed(): void
+    {
+        $this->fakeConfig->SetKey(ConfigKeys::ICS_SUBSCRIPTION_BASIC_AUTH, true);
+        $_SERVER['PHP_AUTH_USER'] = 'user';
+        $_SERVER['PHP_AUTH_PW'] = 'wrong';
+        $this->page->fakeAuth->_ValidateResult = false;
+
+        $this->page->callTryBasicAuth();
+
+        $this->assertSame('feed', $this->page->fakeAuth->_AuthSource, 'source must be tagged "feed" before Validate even on failure');
     }
 }
 

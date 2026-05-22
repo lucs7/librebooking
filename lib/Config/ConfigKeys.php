@@ -1183,6 +1183,24 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => "Milliseconds to sleep after a failed credential check\nSet to 0 to disable; clamped to 0-5000",
         'section' => 'auth'
     ];
+    public const AUTH_LOG_ENABLED = [
+        'key' => 'auth.log.enabled',
+        'type' => 'boolean',
+        'default' => true,
+        'label' => 'Auth Log Enabled',
+        'description' => 'Write authentication events (success/failure for web login, ICS Basic Auth, and cookie login) to auth.log in the logging folder. Always on regardless of logging.level; suitable input for fail2ban or SIEM.',
+        'config_file_comment' => 'Write authentication events to auth.log (independent of logging.level)',
+        'section' => 'auth'
+    ];
+    public const AUTH_LOG_LEVEL = [
+        'key' => 'auth.log.level',
+        'type' => 'string',
+        'default' => 'all',
+        'label' => 'Auth Log Level',
+        'description' => 'Which auth events to record. Options: all (success + failure), failure_only, none.',
+        'config_file_comment' => "Which auth events to record\nOptions: all, failure_only, none",
+        'section' => 'auth'
+    ];
 
     // Password Policy
 

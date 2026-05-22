@@ -157,4 +157,11 @@ class FakeAuth implements IAuthentication
     {
         return $this->_Session;
     }
+
+    public string $_AuthSource = 'web';
+
+    public function SetAuthSource(string $source): void
+    {
+        $this->_AuthSource = $source;
+    }
 }

@@ -32,6 +32,14 @@ class Authentication implements IAuthentication
      */
     private $groupRepository;
 
+    /**
+     * Source label written to auth.log. Callers from non-web entry points
+     * (ICS feed, cookie login, etc.) override this via SetAuthSource() before
+     * calling Validate() so that auth events can be partitioned per source for
+     * fail2ban / SIEM. Defaults to 'web' (the dominant case).
+     */
+    private string $authSource = 'web';
+
     public function __construct(IRoleService $roleService, IUserRepository $userRepository, IGroupRepository $groupRepository)
     {
         $this->roleService = $roleService;
@@ -82,9 +90,21 @@ class Authentication implements IAuthentication
         return $valid;
     }
 
+    /**
+     * Set the source label used by Log::Auth() for the next Validate() call.
+     * Callers from non-web entry points should call this BEFORE Validate() so
+     * the resulting auth.log line is attributed correctly (e.g. 'feed' for ICS
+     * Basic Auth, 'cookie' for remember-me logins).
+     */
+    public function SetAuthSource(string $source): void
+    {
+        $this->authSource = $source;
+    }
+
     private function validateCredentials($username, $passwordPlainText)
     {
         if (($this->ShowUsernamePrompt() && empty($username)) || ($this->ShowPasswordPrompt() && empty($passwordPlainText))) {
+            Log::Auth('failure', (string) $username, $this->authSource, ['reason' => 'empty_credentials']);
             return false;
         }
 
@@ -93,8 +113,10 @@ class Authentication implements IAuthentication
         $command = new AuthorizationCommand($username);
         $reader = ServiceLocator::GetDatabase()->Query($command);
         $valid = false;
+        $userFound = false;
 
         if ($row = $reader->GetRow()) {
+            $userFound = true;
             Log::Debug('User was found: %s', $username);
             $migration = $this->GetMigration();
             $password = $migration->Create($passwordPlainText, $row[ColumnNames::OLD_PASSWORD], $row[ColumnNames::PASSWORD]);
@@ -108,8 +130,15 @@ class Authentication implements IAuthentication
 
         if ($valid) {
             Log::Debug('Successful user authentication for %s', $username);
+            Log::Auth('success', (string) $username, $this->authSource);
         } else {
             Log::Error('Failed user authentication for %s', $username);
+            Log::Auth(
+                'failure',
+                (string) $username,
+                $this->authSource,
+                ['reason' => $userFound ? 'invalid_password' : 'unknown_user']
+            );
         }
 
         return $valid;
