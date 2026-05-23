@@ -598,10 +598,29 @@ ICS Calendar Settings
 .. code-block:: php
 
    'ics' => [
+       'enabled' => true,
+       'basic.auth' => false,
        'subscription.key' => '',
        'future.days' => 30,
        'past.days' => 0,
    ],
+
+**ics.enabled**
+  Master switch to enable or disable all ICS/Atom calendar subscription feeds.
+  When set to ``false``, all feed endpoints return 404 regardless of any other
+  ICS settings. Defaults to ``true``.
+
+**ics.basic.auth**
+  Require HTTP Basic Authentication on calendar subscription URLs in addition to
+  the subscription key. When enabled, clients must supply valid LibreBooking
+  credentials (username and password) via the ``Authorization: Basic …`` header.
+  Authentication events are written to ``auth.log`` under the source label
+  ``feed``. Defaults to ``false``.
+
+  .. note::
+     The subscription key is **always** required even when ``basic.auth`` is
+     enabled. A request without a key is rejected before the password is
+     evaluated, so the credential check cannot be used as a login oracle.
 
 **ics.subscription.key**
   Secret key for calendar feed URLs (prevents unauthorized access).
@@ -637,6 +656,64 @@ Data Cleanup Settings
   Automatically delete old reservation records.
 
 Note: Cleanup requires setting up a cron job to run ``deleteolddata.php``.
+
+Authentication Hardening
+------------------------
+
+These settings reduce brute-force attack surface and provide security-event
+audit trails that can be consumed by fail2ban or SIEM systems.
+
+.. code-block:: php
+
+   'auth' => [
+       'failed.login.delay.ms' => 750,
+       'log.enabled' => true,
+       'log.level' => 'all',
+   ],
+
+**auth.failed.login.delay.ms**
+  Milliseconds to sleep after a failed credential check (invalid password or
+  unknown username). Slows down brute-force and credential-stuffing attacks
+  without per-IP state. The value is clamped to the range ``0``–``5000``; values
+  outside this range are silently clamped so a misconfiguration cannot tie up
+  worker processes indefinitely. Set to ``0`` to disable the delay entirely.
+  Defaults to ``750``.
+
+  .. note::
+     This is a defence-in-depth measure. For production deployments pair it
+     with upstream rate limiting (e.g. fail2ban rules on ``auth.log``, a
+     reverse-proxy rate limiter, or a WAF rule).
+
+**auth.log.enabled**
+  Write authentication events to ``auth.log`` in the configured log folder.
+  This channel is **independent of** ``logging.level``: events are recorded
+  even when the application log is set to ``none``, so security events are
+  never silenced by routine log-level tuning. Defaults to ``true``.
+
+**auth.log.level**
+  Controls which authentication events are recorded.
+
+  ========================  ============================================================
+  Value                     Behaviour
+  ========================  ============================================================
+  ``all`` *(default)*       Both successful and failed authentication events are logged.
+  ``failure_only``          Only failed events are logged; successes are dropped silently.
+  ``none``                  No events are written even if ``auth.log.enabled`` is ``true``.
+  ========================  ============================================================
+
+  Each log line uses a fail2ban-friendly ``key="value"`` format and includes the
+  outcome, username, source (``web``, ``feed``, or ``cookie``), remote IP,
+  user-agent, and request URI. Example::
+
+     outcome="failure" username="admin" source="web" ip="1.2.3.4" ua="curl/7.88" uri="/Web/login.php" reason="invalid_password"
+
+  A minimal fail2ban filter matching this format:
+
+  .. code-block:: ini
+
+     [Definition]
+     failregex = outcome="failure".*ip="<HOST>"
+     ignoreregex =
 
 Advanced Privacy Settings
 -------------------------
