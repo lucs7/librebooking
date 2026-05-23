@@ -27,8 +27,8 @@ final class TranslationLinter
     private bool $json = false;
     private ?string $filterLanguage = null;
 
-    /** @var array{errors:int,warnings:int,languages:array<string,array<string,array<int,array{severity:string,message:string}>>>} */
-    private array $report = ['errors' => 0, 'warnings' => 0, 'languages' => []];
+    /** @var array{errors:int,warnings:int,languages:array<string,array<string,array<int,array{severity:string,message:string}>>>,coverage:array<string,array{changed:int,total:int,pct:float}>} */
+    private array $report = ['errors' => 0, 'warnings' => 0, 'languages' => [], 'coverage' => []];
 
     public function __construct()
     {
@@ -74,7 +74,11 @@ Options:
   --help, -h           Show this message
 
 Checks (per language, against en_us baseline):
-  1. sprintf format-specifier mismatch                  [error]
+  1. Format-specifier analysis:
+       stray '%' (vsprintf will throw)                  [error]
+       more placeholders than en_us                     [error]
+       same count, different types                      [error]
+       fewer placeholders than en_us (likely editorial) [warn]
   2. Orphan keys not present in en_us                   [warn]
   3. Structural arrays Dates/Days/Months/Letters drift  [error/warn]
   4. Empty translation values (would render as '?')     [warn]
@@ -102,7 +106,10 @@ HELP);
             if ($this->filterLanguage !== null && $code !== $this->filterLanguage) {
                 continue;
             }
-            if ($code === 'en_us') {
+            // en_us is the baseline; en_gb is a regional spelling variant of it
+            // and the merged-catalogue comparison can't distinguish its overrides
+            // from inherited strings, so it always shows 0% coverage — noise.
+            if (in_array($code, ['en_us', 'en_gb'], true)) {
                 continue;
             }
             $lang = $this->loadLanguage($code);
@@ -174,7 +181,29 @@ HELP);
 
     private function checkLanguage(string $code, Language $lang, Language $baseline): void
     {
-        // 1. format specifier mismatches (only meaningful where the leaf overrode the value)
+        // Coverage: % of en_us keys whose value differs in this language.
+        // Conflates "translated" with "happens to share spelling" (e.g. 'Email'),
+        // so treat as an indicator, not a precise figure.
+        $baseKeys = array_keys($baseline->Strings);
+        $total = count($baseKeys);
+        $changed = 0;
+        foreach ($baseKeys as $k) {
+            if (isset($lang->Strings[$k]) && $lang->Strings[$k] !== $baseline->Strings[$k]) {
+                $changed++;
+            }
+        }
+        $this->report['coverage'][$code] = [
+            'changed' => $changed,
+            'total' => $total,
+            'pct' => $total > 0 ? round(100 * $changed / $total, 1) : 0.0,
+        ];
+
+        // 1. format-specifier analysis. Three distinct failure modes:
+        //   - stray '%'             → ValueError at runtime, user sees raw format    [error]
+        //   - more specs than en_us → ValueError at runtime (callsite passes too few) [error]
+        //   - type mismatch         → wrong substitution or ValueError                [error]
+        //   - fewer specs than en_us → vsprintf silently drops the extra arg          [warn]
+        //                              (often an intentional editorial choice)
         foreach ($baseline->Strings as $key => $baseStr) {
             if (!isset($lang->Strings[$key]) || !is_string($baseStr) || !is_string($lang->Strings[$key])) {
                 continue;
@@ -183,15 +212,47 @@ HELP);
             if ($tr === $baseStr) {
                 continue;
             }
-            $baseSpecs = $this->extractSpecifiers($baseStr);
-            $trSpecs = $this->extractSpecifiers($tr);
-            if ($baseSpecs !== $trSpecs) {
+
+            if ($this->hasStrayPercent($tr)) {
                 $this->langError(
                     $code,
-                    'format-mismatch',
-                    "key=$key\n"
-                    . '  en_us: "' . $this->trunc($baseStr) . '"  [' . implode(' ', $baseSpecs) . "]\n"
-                    . "  $code: \"" . $this->trunc($tr) . '"  [' . implode(' ', $trSpecs) . ']'
+                    'format-stray-percent',
+                    "key=$key  stray '%' is not a valid specifier — vsprintf will throw at runtime\n"
+                    . "  $code: \"" . $this->trunc($tr) . '"'
+                );
+                continue;
+            }
+
+            $baseSpecs = $this->extractSpecifiers($baseStr);
+            $trSpecs = $this->extractSpecifiers($tr);
+            if ($baseSpecs === $trSpecs) {
+                continue;
+            }
+
+            $baseLine = '  en_us [' . implode(' ', $baseSpecs) . ']: "' . $this->trunc($baseStr) . '"';
+            $trLine = "  $code [" . implode(' ', $trSpecs) . ']: "' . $this->trunc($tr) . '"';
+
+            if (count($trSpecs) > count($baseSpecs)) {
+                $this->langError(
+                    $code,
+                    'format-too-many',
+                    "key=$key  translation has MORE placeholders than en_us — callsite will under-supply args and vsprintf will fail\n"
+                    . $baseLine . "\n" . $trLine
+                );
+            } elseif (count($trSpecs) < count($baseSpecs)) {
+                $this->langWarn(
+                    $code,
+                    'format-too-few',
+                    "key=$key  translation has FEWER placeholders than en_us — extra callsite args silently dropped (may be intentional)\n"
+                    . $baseLine . "\n" . $trLine
+                );
+            } else {
+                // same count, different types or positional order
+                $this->langError(
+                    $code,
+                    'format-type-mismatch',
+                    "key=$key  placeholder count matches but types/positions differ\n"
+                    . $baseLine . "\n" . $trLine
                 );
             }
         }
@@ -265,6 +326,21 @@ HELP);
     }
 
     /**
+     * Detect a '%' that isn't part of a valid sprintf specifier or '%%'. PHP 8's
+     * vsprintf throws ValueError on such strings, which means a translator typo
+     * like '% s' (with a space) silently breaks the page at runtime.
+     */
+    private function hasStrayPercent(string $s): bool
+    {
+        $clean = preg_replace(
+            '/%(?:\d+\$)?[-+0 ]*\d*(?:\.\d+)?[bcdeEfFgGosuxX%]/',
+            '',
+            $s
+        );
+        return $clean !== null && str_contains($clean, '%');
+    }
+
+    /**
      * Extract sprintf specifiers preserving order and type, ignoring widths,
      * flags, and precision. Positional specifiers (e.g. %1$s) are kept as
      * '1$s' so reordering counts as a mismatch.
@@ -329,13 +405,36 @@ HELP);
 
     private function emitHumanReport(): void
     {
-        if (!$this->report['languages']) {
-            $this->println($this->c('All translations clean.', 'green'));
+        // Per-language sections: include every language with coverage data,
+        // plus any (registration)-style synthetic entries that only appear in 'languages'.
+        $allCodes = array_unique(array_merge(
+            array_keys($this->report['coverage']),
+            array_keys($this->report['languages']),
+        ));
+
+        if (!$allCodes) {
+            $this->println($this->c('No languages checked.', 'yellow'));
             return;
         }
-        foreach ($this->report['languages'] as $code => $issues) {
-            $bar = str_repeat('─', max(2, 40 - strlen($code)));
-            $this->println($this->c($code, 'bold') . " $bar");
+
+        foreach ($allCodes as $code) {
+            $coverage = $this->report['coverage'][$code] ?? null;
+            $issues = $this->report['languages'][$code] ?? [];
+
+            $header = $this->c($code, 'bold');
+            if ($coverage !== null) {
+                $pct = $this->colorByCoverage(sprintf('%5.1f%%', $coverage['pct']), $coverage['pct']);
+                $header .= sprintf(
+                    '  coverage: %s (%d/%d strings differ from en_us)',
+                    $pct,
+                    $coverage['changed'],
+                    $coverage['total']
+                );
+            }
+            $bar = str_repeat('─', max(2, 60 - strlen($code)));
+            $this->println($header);
+            $this->println($bar);
+
             foreach ($issues as $type => $entries) {
                 foreach ($entries as $entry) {
                     $tag = $entry['severity'] === 'error'
@@ -349,6 +448,20 @@ HELP);
             }
             $this->println('');
         }
+
+        // Overall coverage summary
+        if ($this->report['coverage']) {
+            $pcts = array_column($this->report['coverage'], 'pct');
+            $avg = array_sum($pcts) / count($pcts);
+            $this->println(sprintf(
+                'Coverage: avg %.1f%% across %d languages (min %.1f%%, max %.1f%%)',
+                $avg,
+                count($pcts),
+                min($pcts),
+                max($pcts)
+            ));
+        }
+
         $errStr = $this->report['errors'] > 0
             ? $this->c($this->report['errors'] . ' error(s)', 'red')
             : '0 errors';
@@ -356,6 +469,15 @@ HELP);
             ? $this->c($this->report['warnings'] . ' warning(s)', 'yellow')
             : '0 warnings';
         $this->println("Summary: $errStr, $warnStr");
+    }
+
+    private function colorByCoverage(string $s, float $pct): string
+    {
+        if (!$this->useColor) {
+            return $s;
+        }
+        $color = $pct >= 85 ? 'green' : ($pct >= 50 ? 'yellow' : 'red');
+        return $this->c($s, $color);
     }
 
     private function c(string $s, string $color): string

@@ -154,16 +154,13 @@ class Resources implements IResourceLocalization
         if (empty($args)) {
             return $strings[$key];
         }
-        $sprintf_args = '';
 
-        for ($i = 0; $i < count($args); $i++) {
-            $sprintf_args .= "'" . addslashes($args[$i]) . "',";
+        try {
+            $formatted = @vsprintf($strings[$key], $args);
+        } catch (\ValueError) {
+            return $strings[$key];
         }
-
-        $sprintf_args = substr($sprintf_args, 0, strlen($sprintf_args) - 1);
-        $string = addslashes($strings[$key]);
-        $return = eval("return sprintf('$string', $sprintf_args);");
-        return $return;
+        return $formatted === false ? $strings[$key] : $formatted;
     }
 
     public function GetDateFormat($key)
