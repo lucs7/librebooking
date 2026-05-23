@@ -102,6 +102,53 @@ will be generated in ``/.phpdoc/build``.
 | lints (just warnings) and fixes (changes files) code formating to
   [PSR-12]
 
+Translation linter
+~~~~~~~~~~~~~~~~~~
+
+| ``composer translations:lint`` runs ``scripts/lint-translations.php``,
+  which loads every language file in ``/lang`` and reports drift against
+  the ``en_us`` baseline.
+| ``composer translations:lint:strict`` exits non-zero when any errors are
+  reported — intended for CI use.
+
+Checks performed (per language):
+
+- ``sprintf`` format-specifier analysis. ``GetString()`` runs translations
+  through ``vsprintf``, so a malformed specifier or arg-count mismatch can
+  break the page at runtime.
+
+  - Stray ``%`` not part of a valid specifier — error.
+  - Translation has *more* placeholders than ``en_us`` (callsite will
+    under-supply args, ``vsprintf`` throws) — error.
+  - Same count but different types (``%d`` vs ``%s``) — error.
+  - Translation has *fewer* placeholders than ``en_us`` (extra callsite
+    args silently dropped, often an intentional editorial choice) —
+    warning.
+
+- Orphan keys defined in a translation but absent from ``en_us``.
+- Drift in the structural arrays ``Dates``, ``Days``, ``Months``,
+  ``Letters``.
+- Empty translation values (would render as ``?``).
+- Parity between ``/lang/*.php`` files and
+  ``lang/AvailableLanguages.php``.
+- Parity between ``lang/{code}/*.tpl`` email templates and
+  ``lang/en_us/*.tpl``.
+
+Other options:
+
+.. code:: bash
+
+   php scripts/lint-translations.php --language=de_de   # single language
+   php scripts/lint-translations.php --json             # machine-readable output
+   php scripts/lint-translations.php --strict           # exit non-zero on errors
+
+Each language gets a coverage line in the report (``% of en_us keys whose
+value differs``). The metric conflates "translated" with "happens to share
+spelling" (e.g. ``Email``, ``URL``), so treat it as a relative indicator —
+not a precise figure. ``en_us`` is excluded as the baseline; ``en_gb`` is
+excluded as a regional spelling variant whose overrides cannot be
+distinguished from inherited strings in the merged catalogue.
+
 Application Structure
 ---------------------
 
