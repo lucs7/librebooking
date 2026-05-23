@@ -53,7 +53,9 @@
         "config-dist:generate": "php scripts/generate-config-dist.php --write",
         "config-dist:check": "php scripts/generate-config-dist.php --check",
         "env-example:generate": "php scripts/generate-env-example.php --write",
-        "env-example:check": "php scripts/generate-env-example.php --check"
+        "env-example:check": "php scripts/generate-env-example.php --check",
+        "translations:lint": "php scripts/lint-translations.php",
+        "translations:lint:strict": "php scripts/lint-translations.php --strict"
     },
     "config": {
         "allow-plugins": {
