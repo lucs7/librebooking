@@ -47,6 +47,12 @@ interface ICalendarSubscriptionService
      * @return int[]
      */
     public function GetResourcesInGroup($publicResourceGroupId);
+
+    /**
+     * @param string $publicResourceGroupId
+     * @return null|string
+     */
+    public function GetResourceGroupName($publicResourceGroupId);
 }
 
 class CalendarSubscriptionDetails
@@ -180,14 +186,27 @@ class CalendarSubscriptionService implements ICalendarSubscriptionService
             $group = $this->resourceRepository->LoadResourceGroupByPublicId($publicResourceGroupId);
 
             if ($group == null) {
+                $this->cache[$publicResourceGroupId . '_name'] = null;
                 return [];
             }
 
             $groups = $this->resourceRepository->GetResourceGroups();
             $this->cache[$publicResourceGroupId] = $groups->GetResourceIds($group->id);
+            $this->cache[$publicResourceGroupId . '_name'] = $group->name;
         }
 
         return $this->cache[$publicResourceGroupId];
+    }
+
+    public function GetResourceGroupName($publicResourceGroupId)
+    {
+        $nameKey = $publicResourceGroupId . '_name';
+        if (!array_key_exists($nameKey, $this->cache)) {
+            $group = $this->resourceRepository->LoadResourceGroupByPublicId($publicResourceGroupId);
+            $this->cache[$nameKey] = $group === null ? null : $group->name;
+        }
+
+        return $this->cache[$nameKey];
     }
 
     public function ForUser($userId, $resourceId = null, $scheduleId = null)
