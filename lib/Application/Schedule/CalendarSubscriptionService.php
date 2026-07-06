@@ -47,6 +47,12 @@ interface ICalendarSubscriptionService
      * @return int[]
      */
     public function GetResourcesInGroup($publicResourceGroupId);
+
+    /**
+     * @param string $publicResourceGroupId
+     * @return null|string
+     */
+    public function GetResourceGroupName($publicResourceGroupId);
 }
 
 class CalendarSubscriptionDetails
@@ -188,6 +194,13 @@ class CalendarSubscriptionService implements ICalendarSubscriptionService
         }
 
         return $this->cache[$publicResourceGroupId];
+    }
+
+    public function GetResourceGroupName($publicResourceGroupId)
+    {
+        $group = $this->resourceRepository->LoadResourceGroupByPublicId($publicResourceGroupId);
+
+        return $group === null ? null : $group->name;
     }
 
     public function ForUser($userId, $resourceId = null, $scheduleId = null)
