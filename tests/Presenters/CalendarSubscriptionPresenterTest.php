@@ -66,7 +66,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $reservationResult = [new TestReservationItemView(1, Date::Now(), Date::Now())];
 
         $scheduleId = 999;
-        $schedule = new FakeSchedule($scheduleId);
+        $schedule = new FakeSchedule($scheduleId, 'Engineering Schedule');
 
         $weekAgo = Date::Now()->AddDays(0);
         $nextYear = Date::Now()->AddDays(30);
@@ -86,6 +86,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertCount(1, $this->page->Reservations);
+        $this->assertEquals('Engineering Schedule', $this->page->CalendarName);
     }
 
     public function testGetsScheduleReservationsForTheNextYearByResourceId()
@@ -94,7 +95,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $reservationResult = [new TestReservationItemView(1, Date::Now(), Date::Now())];
 
         $resourceId = 999;
-        $resource = new FakeBookableResource($resourceId);
+        $resource = new FakeBookableResource($resourceId, 'Meeting Room 3');
 
         $weekAgo = Date::Now()->AddDays(0);
         $nextYear = Date::Now()->AddDays(30);
@@ -114,6 +115,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertCount(1, $this->page->Reservations);
+        $this->assertEquals('Meeting Room 3', $this->page->CalendarName);
     }
 
     public function testGetsUserReservationsForTheNextYearByResourceId()
@@ -142,6 +144,7 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertCount(1, $this->page->Reservations);
+        $this->assertEquals(Resources::GetInstance()->GetString('MyCalendar'), $this->page->CalendarName);
     }
 
     public function testGetsResourceGroupReservationsForTheNextYearByGroupId()
@@ -172,6 +175,34 @@ class CalendarSubscriptionPresenterTest extends TestBase
         $this->presenter->PageLoad();
 
         $this->assertCount(1, $this->page->Reservations);
+    }
+
+    public function testGetsResourceGroupReservationsSetsCalendarNameFromGroup()
+    {
+        $publicId = '1';
+        $reservationResult = [new TestReservationItemView(1, Date::Now(), Date::Now(), 1)];
+
+        $resourceIds = [1];
+
+        $this->page->ResourceGroupId = $publicId;
+
+        $this->service->expects($this->once())
+                ->method('GetResourcesInGroup')
+                ->with($this->equalTo($publicId))
+                ->willReturn($resourceIds);
+
+        $this->service->expects($this->once())
+                ->method('GetResourceGroupName')
+                ->with($this->equalTo($publicId))
+                ->willReturn('Engineering Rooms');
+
+        $this->repo->expects($this->once())
+                ->method('GetReservations')
+                ->willReturn($reservationResult);
+
+        $this->presenter->PageLoad();
+
+        $this->assertEquals('Engineering Rooms', $this->page->CalendarName);
     }
 
     public function testPageLoadReturnsFalseAndDoesNotLoadReservationsWhenValidationFails()
@@ -215,6 +246,7 @@ class FakeCalendarSubscriptionPage implements ICalendarSubscriptionPage
     public $SubscriptionKey = '123';
     public $PastDays;
     public $FutureDays;
+    public $CalendarName;
 
     public function GetSubscriptionKey()
     {
@@ -229,6 +261,11 @@ class FakeCalendarSubscriptionPage implements ICalendarSubscriptionPage
     public function SetReservations($reservations)
     {
         $this->Reservations = $reservations;
+    }
+
+    public function SetCalendarName($calendarName)
+    {
+        $this->CalendarName = $calendarName;
     }
 
     public function GetScheduleId()

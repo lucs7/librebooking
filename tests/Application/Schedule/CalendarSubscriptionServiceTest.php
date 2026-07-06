@@ -82,6 +82,35 @@ class CalendarSubscriptionServiceTest extends TestBase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testGetsResourceGroupNameByPublicId()
+    {
+        $publicId = uniqid();
+        $group = new ResourceGroup(5, 'Engineering Rooms');
+
+        $this->resourceRepo->expects($this->once())
+                ->method('LoadResourceGroupByPublicId')
+                ->with($this->equalTo($publicId))
+                ->willReturn($group);
+
+        $actual = $this->service->GetResourceGroupName($publicId);
+
+        $this->assertEquals('Engineering Rooms', $actual);
+    }
+
+    public function testGetsNullResourceGroupNameWhenGroupNotFound()
+    {
+        $publicId = uniqid();
+
+        $this->resourceRepo->expects($this->once())
+                ->method('LoadResourceGroupByPublicId')
+                ->with($this->equalTo($publicId))
+                ->willReturn(null);
+
+        $actual = $this->service->GetResourceGroupName($publicId);
+
+        $this->assertNull($actual);
+    }
+
     public function testSubscriptionDetailsAreNotEnabledWhenIcsFeatureIsDisabled()
     {
         $this->fakeConfig->SetKey(ConfigKeys::ICS_ENABLED, false);
