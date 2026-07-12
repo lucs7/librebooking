@@ -3,6 +3,8 @@
 use Sabre\VObject\Component\VAlarm;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VEvent;
+use Sabre\VObject\ParseException;
+use Sabre\VObject\Reader;
 
 require_once(ROOT_DIR . 'Pages/Page.php');
 
@@ -60,12 +62,25 @@ class CalendarExportDisplay extends Page
             }
 
             if (!empty($res->ExtraIcalLines)) {
-                foreach (preg_split('/\r?\n/', trim((string)$res->ExtraIcalLines)) as $line) {
-                    $line = rtrim($line, "\r");
-                    if ($line !== '' && str_contains($line, ':')) {
-                        [$prop, $val] = explode(':', $line, 2);
-                        $event->add(trim($prop), $val);
+                // Parse with Sabre's own reader (wrapped in a throwaway VCALENDAR/VEVENT
+                // shell) rather than hand-splitting on ':', so parameters (e.g.
+                // ATTENDEE;CN=...), nested components (e.g. BEGIN:VALARM), and RFC 5545
+                // line folding round-trip correctly instead of becoming malformed
+                // flat properties.
+                try {
+                    $fragment = Reader::read(
+                        "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n"
+                        . rtrim((string)$res->ExtraIcalLines, "\r\n")
+                        . "\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n"
+                    );
+                    foreach ($fragment->getComponents()[0]->children() as $child) {
+                        $event->add($child);
                     }
+                } catch (ParseException $e) {
+                    // ExtraIcalLines is plugin-supplied extension data. A malformed
+                    // fragment must not take down the whole export/subscription feed;
+                    // skip it for this event and keep going.
+                    Log::Error('Failed to parse ExtraIcalLines for reservation %s: %s', $res->ReferenceNumber, $e->getMessage());
                 }
             }
 

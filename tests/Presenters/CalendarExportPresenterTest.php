@@ -288,4 +288,92 @@ class CalendarExportPresenterTest extends TestBase
         );
         $this->assertStringNotContainsString('9.9.9-user-config', $calendar);
     }
+
+    public function testExtraIcalLinesPreservesPropertyParametersAndNestedComponents()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Title';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+        // ATTENDEE carries parameters; VALARM is a nested component. Both must round-trip
+        // through Reader::read() rather than becoming malformed flat text.
+        $reservationView->ExtraIcalLines = "ATTENDEE;CN=JaneDoe;ROLE=REQ-PARTICIPANT:mailto:jane@example.com\r\n"
+            . "BEGIN:VALARM\r\nACTION:AUDIO\r\nTRIGGER:-PT15M\r\nEND:VALARM";
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        $this->assertStringContainsString('ATTENDEE;CN=JaneDoe;ROLE=REQ-PARTICIPANT:mailto:jane@example.com', $ics);
+        $this->assertStringContainsString('BEGIN:VALARM', $ics);
+        $this->assertStringContainsString('ACTION:AUDIO', $ics);
+    }
+
+    public function testExtraIcalLinesSupportsRfc5545FoldedContinuationLines()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Title';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+        // RFC 5545 §3.1: a line starting with a single space is a folded continuation
+        // of the previous line, joined without the leading space.
+        $reservationView->ExtraIcalLines = "X-CUSTOM-FIELD:Hello\r\n World";
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        $this->assertStringContainsString('X-CUSTOM-FIELD:HelloWorld', $ics);
+    }
+
+    public function testMalformedExtraIcalLinesIsSkippedWithoutBreakingTheExport()
+    {
+        $user = new FakeUserSession();
+
+        $goodRes = new ReservationItemView();
+        $goodRes->UserId = $user->UserId;
+        $goodRes->UserLevelId = ReservationUserLevel::OWNER;
+        $goodRes->ReferenceNumber = 'good-ref';
+        $goodRes->Title = 'Good reservation';
+        $goodRes->StartDate = Date::Now();
+        $goodRes->EndDate = Date::Now()->AddHours(1);
+
+        $badRes = new ReservationItemView();
+        $badRes->UserId = $user->UserId;
+        $badRes->UserLevelId = ReservationUserLevel::OWNER;
+        $badRes->ReferenceNumber = 'bad-ref';
+        $badRes->Title = 'Bad reservation';
+        $badRes->StartDate = Date::Now();
+        $badRes->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $goodView = new iCalendarReservationView($goodRes, $user, $this->privacyFilter, '{title}');
+        $badView = new iCalendarReservationView($badRes, $user, $this->privacyFilter, '{title}');
+        // Not valid iCalendar syntax: no property name/value separator.
+        $badView->ExtraIcalLines = 'this is not a valid ical line';
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$goodView, $badView]);
+
+        // The malformed fragment on one reservation must not prevent the other
+        // reservation (or the rest of the malformed one's own properties) from rendering.
+        $this->assertStringContainsString('good-ref', $ics);
+        $this->assertStringContainsString('bad-ref', $ics);
+    }
 }
