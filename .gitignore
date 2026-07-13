@@ -17,6 +17,7 @@
 
 /plugins/*
 !/plugins/Authentication
+!/plugins/ExternalLogin
 !/plugins/**/index.html
 !/plugins/**/*Example/*
 
