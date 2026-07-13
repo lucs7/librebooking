@@ -111,7 +111,7 @@
                                         Facebook</span></a>
                             {/if}
                             {foreach $ExternalLoginProviders as $provider}
-                                <a type="button" href="{$provider.url}"
+                                <a type="button" href="{$provider.url|escape}"
                                     class="btn btn-outline-primary">{translate key='SignInWith'}<span class="fw-medium">
                                         {$provider.label|escape}</span></a>
                             {/foreach}

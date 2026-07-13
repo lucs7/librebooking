@@ -148,7 +148,6 @@ $conf['settings']['google.analytics']['tracking.id'] = 'tracking_id';
 $conf['settings']['authentication']['allow.facebook.login'] = 'false';
 $conf['settings']['authentication']['allow.google.login'] = 'false';
 $conf['settings']['authentication']['allow.microsoft.login'] = 'false';
-$conf['settings']['authentication']['allow.oauth2.login'] = 'false';
 $conf['settings']['authentication']['required.email.domains'] = '';
 $conf['settings']['authentication']['hide.booked.login.prompt'] = 'false';
 $conf['settings']['authentication']['captcha.on.login'] = 'false';
@@ -184,14 +183,6 @@ $conf['settings']['authentication']['microsoft.redirect.uri'] = '/Web/microsoft-
 $conf['settings']['authentication']['facebook.client.id'] = '';
 $conf['settings']['authentication']['facebook.client.secret'] = '';
 $conf['settings']['authentication']['facebook.redirect.uri'] = '/Web/facebook-auth.php';
-
-$conf['settings']['authentication']['oauth2.name'] = 'OAuth2';
-$conf['settings']['authentication']['oauth2.url.authorize'] = '';
-$conf['settings']['authentication']['oauth2.url.token'] = '';
-$conf['settings']['authentication']['oauth2.url.userinfo'] = '';
-$conf['settings']['authentication']['oauth2.client.id'] = '';
-$conf['settings']['authentication']['oauth2.client.secret'] = '';
-$conf['settings']['authentication']['oauth2.client.uri'] = '/Web/oauth2-auth.php';
 
 $conf['settings']['delete.old.data']['years.old.data'] = '3';
 $conf['settings']['delete.old.data']['delete.old.announcements'] = 'false';

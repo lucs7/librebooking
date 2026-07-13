@@ -114,6 +114,36 @@ During migration you may see messages such as:
 After reviewing the generated file, replace ``config/config.php`` with the
 migrated file when you are satisfied with the result.
 
+OAuth2 Authentication (Migrated to Plugin)
+------------------------------------------
+
+.. note::
+
+   The built-in OAuth2 login integration has moved to a plugin in
+   LibreBooking 2.x. Users upgrading from an earlier version must
+   follow the migration steps below.
+
+**Migration from core config to plugin:**
+
+1. Copy the plugin config template::
+
+      cp plugins/ExternalLogin/OAuth2/OAuth2.config.dist.php \
+         plugins/ExternalLogin/OAuth2/OAuth2.config.php
+
+2. Edit ``OAuth2.config.php`` and fill in your provider's values
+   (authorize URL, token URL, userinfo URL, client ID, client secret).
+
+3. Enable the plugin in ``config.php`` (plugins section)::
+
+      'external.login.providers' => 'OAuth2',
+
+4. Remove the old ``authentication.oauth2.*`` keys from ``config.php``
+   (``oauth2.login.enabled``, ``oauth2.name``, ``oauth2.url.authorize``,
+   ``oauth2.url.token``, ``oauth2.url.userinfo``, ``oauth2.client.id``,
+   ``oauth2.client.secret``, ``oauth2.client.uri``).
+
+The callback URL (``/Web/oauth2-auth.php``) is unchanged.
+
 Language String Overrides
 -------------------------
 

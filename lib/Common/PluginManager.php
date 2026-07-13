@@ -80,6 +80,10 @@ class PluginManager
         $names = array_filter(array_map('trim', explode(',', $configValue)));
 
         foreach ($names as $name) {
+            if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $name)) {
+                Log::Error('ExternalLogin plugin name contains invalid characters: %s', $name);
+                continue;
+            }
             $pluginFile = ROOT_DIR . "plugins/ExternalLogin/$name/$name.php";
             if (!file_exists($pluginFile)) {
                 Log::Error('ExternalLogin plugin file not found: %s', $pluginFile);

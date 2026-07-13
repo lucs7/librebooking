@@ -662,34 +662,6 @@ return [
             # Facebook OAuth2 redirect URI
             # /Web/facebook-auth.php
             'facebook.redirect.uri' => '/Web/facebook-auth.php',
-
-            # Enable login via custom OAuth2 provider (true/false)
-            'oauth2.login.enabled' => false,
-
-            # OAuth2 identity provider name (shown on login button)
-            'oauth2.name' => 'OAuth2',
-
-            # OAuth2 endpoint URLs and client credentials
-            # If true, the configured authorize URL's trailing slash is removed (true/false)
-            'oauth2.strip.trailing.slash' => true,
-
-            # Authorization URL for OAuth2 login
-            'oauth2.url.authorize' => '',
-
-            # Token URL for OAuth2 login
-            'oauth2.url.token' => '',
-
-            # Userinfo URL for OAuth2 login
-            'oauth2.url.userinfo' => '',
-
-            # Client ID for OAuth2 login
-            'oauth2.client.id' => '',
-
-            # Client secret for OAuth2 login
-            'oauth2.client.secret' => '',
-
-            # Redirect URI for OAuth2 login
-            'oauth2.client.uri' => '/Web/oauth2-auth.php',
         ],
 
         ######################
