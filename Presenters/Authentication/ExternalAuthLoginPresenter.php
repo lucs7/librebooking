@@ -35,9 +35,6 @@ class ExternalAuthLoginPresenter
         if ($this->page->GetType() == 'microsoft') {
             $this->ProcessMicrosoftSingleSignOn();
         }
-        if ($this->page->GetType() == 'keycloak') {
-            $this->ProcessKeycloakSingleSignOn();
-        }
         if ($this->page->GetType() == 'oauth2') {
             $this->ProcessOauth2SingleSignOn();
         }
@@ -171,7 +168,7 @@ class ExternalAuthLoginPresenter
         $this->processUserData($email, $email, $firstName, $lastName);
     }
 
-    private function ProcessKeycloakSingleSignOn()
+    private function ProcessOauth2SingleSignOn(): void
     {
         $code = filter_input(INPUT_GET, 'code', FILTER_UNSAFE_RAW);
         if (!$code) {
@@ -179,104 +176,52 @@ class ExternalAuthLoginPresenter
             return;
         }
 
-        $keycloakUrl = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL);
-        $realm = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REALM);
-        $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_ID);
-        $clientSecret = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_SECRET);
-        $redirectUri = $this->buildRedirectUri(
-            Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REDIRECT_URI)
+        $this->exchangeOidcCode(
+            code: $code,
+            tokenEndpoint: Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_TOKEN),
+            userInfoEndpoint: Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_USERINFO),
+            clientId: Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID),
+            clientSecret: Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_SECRET),
+            redirectUri: $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI)),
+            providerName: 'OAuth2',
         );
+    }
 
-        $openIdConnectEndpoint = rtrim($keycloakUrl, '/') . '/realms/' . rawurlencode($realm) . '/protocol/openid-connect/';
-        $tokenEndpoint = $openIdConnectEndpoint . 'token';
-        $userInfoEndpoint = $openIdConnectEndpoint . 'userinfo';
-
-        $postData = [
-            'grant_type' => 'authorization_code',
-            'code' => $code,
-            'redirect_uri' => $redirectUri,
-            'client_id' => $clientId,
-            'client_secret' => $clientSecret,
-        ];
-
+    private function exchangeOidcCode(
+        string $code,
+        string $tokenEndpoint,
+        string $userInfoEndpoint,
+        string $clientId,
+        string $clientSecret,
+        string $redirectUri,
+        string $providerName,
+    ): void {
         $client = new \GuzzleHttp\Client();
 
         try {
-            $response = $client->post($tokenEndpoint, ['form_params' => $postData]);
+            $response = $client->post($tokenEndpoint, ['form_params' => [
+                'grant_type'    => 'authorization_code',
+                'code'          => $code,
+                'redirect_uri'  => $redirectUri,
+                'client_id'     => $clientId,
+                'client_secret' => $clientSecret,
+            ]]);
             $tokenData = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
             $accessToken = $tokenData['access_token'] ?? null;
             if (!$accessToken) {
-                $this->page->ShowError(['Keycloak: access_token missing.']);
+                $this->page->ShowError([$providerName . ': access_token missing.']);
                 return;
             }
             $uResp = $client->get($userInfoEndpoint, ['headers' => ['Authorization' => 'Bearer ' . $accessToken]]);
             $user = json_decode((string) $uResp->getBody(), true, 512, JSON_THROW_ON_ERROR);
         } catch (\Exception $e) {
-            $this->page->ShowError(['Error retrieving Keycloak token: ' . $e->getMessage()]);
+            $this->page->ShowError(['Error retrieving ' . $providerName . ' token: ' . $e->getMessage()]);
             return;
         }
 
         $email = $user['email'] ?? '';
         if ($email === '') {
-            $this->page->ShowError(['Email is not set in your Keycloak profile.']);
-            return;
-        }
-
-        $this->processUserData(
-            $user['preferred_username'] ?? $email,
-            $email,
-            $user['given_name'] ?? '',
-            $user['family_name'] ?? '',
-            $user['phone_number'] ?? '',
-            $user['organization'] ?? '',
-            $user['title'] ?? ''
-        );
-    }
-
-    private function ProcessOauth2SingleSignOn()
-    {
-        $code = filter_input(INPUT_GET, 'code', FILTER_UNSAFE_RAW);
-        if (!$code) {
-            $this->page->ShowError(['Missing authorization code.']);
-            return;
-        }
-
-        $oauth2UrlToken  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_TOKEN);
-        $oauth2UrlUserinfo = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_USERINFO);
-        $clientId     = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID);
-        $clientSecret = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_SECRET);
-        $redirectUri = $this->buildRedirectUri(
-            Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI)
-        );
-        // Prepare the POST data for the token request.
-        $postData = [
-            'grant_type'    => 'authorization_code',
-            'code'          => $code,
-            'redirect_uri'  => $redirectUri,
-            'client_id'     => $clientId,
-            'client_secret' => $clientSecret,
-        ];
-
-        $client = new \GuzzleHttp\Client();
-
-        try {
-            $response = $client->post($oauth2UrlToken, ['form_params' => $postData]);
-            $tokenData = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
-            $accessToken = $tokenData['access_token'] ?? null;
-            if (!$accessToken) {
-                $this->page->ShowError(['Oauth2: access_token missing.']);
-                return;
-            }
-            $uResp = $client->get($oauth2UrlUserinfo, ['headers' => ['Authorization' => 'Bearer ' . $accessToken]]);
-            $user = json_decode((string) $uResp->getBody(), true, 512, JSON_THROW_ON_ERROR);
-        } catch (\Exception $e) {
-            $this->page->ShowError(['Error retrieving Oauth2 token: ' . $e->getMessage()]);
-            return;
-        }
-
-        $email = $user['email'] ?? '';
-        if ($email === '') {
-            $this->page->ShowError(['Email is not set in your Oauth2 profile.']);
+            $this->page->ShowError(['Email is not set in your ' . $providerName . ' profile.']);
             return;
         }
 

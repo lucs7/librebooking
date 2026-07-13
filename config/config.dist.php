@@ -663,24 +663,6 @@ return [
             # /Web/facebook-auth.php
             'facebook.redirect.uri' => '/Web/facebook-auth.php',
 
-            # Enable login via Keycloak (true/false)
-            'keycloak.login.enabled' => false,
-
-            # Keycloak OAuth2 credentials
-            'keycloak.url' => '',
-
-            # Realm for Keycloak authentication
-            'keycloak.realm' => '',
-
-            # Client ID for Keycloak OAuth login
-            'keycloak.client.id' => '',
-
-            # Client secret for Keycloak OAuth login
-            'keycloak.client.secret' => '',
-
-            # Redirect URI for Keycloak OAuth login
-            'keycloak.client.uri' => '/Web/keycloak-auth.php',
-
             # Enable login via custom OAuth2 provider (true/false)
             'oauth2.login.enabled' => false,
 

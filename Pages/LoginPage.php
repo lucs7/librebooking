@@ -112,11 +112,6 @@ interface ILoginPage extends IPage, ILoginBasePage
     /**
      *
      */
-    public function SetKeycloakUrl($URL);
-
-    /**
-     *
-     */
     public function SetOauth2Url($URL);
     public function SetOauth2Name($Name);
 }
@@ -143,7 +138,6 @@ class LoginPage extends Page implements ILoginPage
         $this->Set('AllowFacebookLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_LOGIN_ENABLED, new BooleanConverter()));
         $this->Set('AllowGoogleLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, new BooleanConverter()));
         $this->Set('AllowMicrosoftLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, new BooleanConverter()));
-        $this->Set('AllowKeycloakLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter()));
         $this->Set('AllowOauth2Login', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter()));
         $scriptUrl = Configuration::Instance()->GetScriptUrl();
         $parts = explode('://', $scriptUrl);
@@ -360,13 +354,6 @@ class LoginPage extends Page implements ILoginPage
         if (isset($_SESSION['facebook_error']) && $_SESSION['facebook_error'] == true) {
             $this->Set('facebookError', $_SESSION['facebook_error']);
             unset($_SESSION['facebook_error']);
-        }
-    }
-
-    public function SetKeycloakUrl($KeycloakUrl)
-    {
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter())) {
-            $this->Set('KeycloakUrl', $KeycloakUrl);
         }
     }
 

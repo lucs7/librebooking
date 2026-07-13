@@ -331,10 +331,6 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     {
     }
 
-    public function SetKeycloakUrl($URL)
-    {
-    }
-
     public function SetOauth2Url($URL)
     {
     }

@@ -110,11 +110,6 @@
                                         class="bi bi-facebook me-1"></i>{translate key='SignInWith'}<span class="fw-medium">
                                         Facebook</span></a>
                             {/if}
-                            {if $AllowKeycloakLogin}
-                                <a type="button" href="{$KeycloakUrl}"
-                                    class="btn btn-outline-primary">{translate key='SignInWith'}<span class="fw-medium">
-                                        Keycloak</span></a>
-                            {/if}
                             {if $AllowOauth2Login}
                                 <a type="button" href="{$Oauth2Url}"
                                     class="btn btn-outline-primary">{translate key='SignInWith'}<span class="fw-medium">

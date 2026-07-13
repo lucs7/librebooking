@@ -1550,58 +1550,6 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => "Facebook OAuth2 redirect URI\n/Web/facebook-auth.php",
         'section' => 'authentication'
     ];
-    public const AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED = [
-        'key' => 'authentication.keycloak.login.enabled',
-        'legacy' => 'authentication.allow.keycloak.login',
-        'type' => 'boolean',
-        'default' => false,
-        'label' => 'Enable Keycloak Login',
-        'description' => 'Allow users to log in with Keycloak',
-        'config_file_comment' => 'Enable login via Keycloak',
-        'section' => 'authentication'
-    ];
-    public const AUTHENTICATION_KEYCLOAK_URL = [
-        'key' => 'authentication.keycloak.url',
-        'type' => 'string',
-        'default' => '',
-        'label' => 'Keycloak URL',
-        'description' => 'URL for Keycloak server',
-        'config_file_comment' => 'Keycloak OAuth2 credentials',
-        'section' => 'authentication'
-    ];
-    public const AUTHENTICATION_KEYCLOAK_REALM = [
-        'key' => 'authentication.keycloak.realm',
-        'type' => 'string',
-        'default' => '',
-        'label' => 'Keycloak Realm',
-        'description' => 'Realm for Keycloak authentication',
-        'section' => 'authentication'
-    ];
-    public const AUTHENTICATION_KEYCLOAK_CLIENT_ID = [
-        'key' => 'authentication.keycloak.client.id',
-        'type' => 'string',
-        'default' => '',
-        'label' => 'Keycloak Client ID',
-        'description' => 'Client ID for Keycloak OAuth login',
-        'section' => 'authentication'
-    ];
-    public const AUTHENTICATION_KEYCLOAK_CLIENT_SECRET = [
-        'key' => 'authentication.keycloak.client.secret',
-        'type' => 'string',
-        'default' => '',
-        'label' => 'Keycloak Client Secret',
-        'description' => 'Client secret for Keycloak OAuth login',
-        'section' => 'authentication',
-        'is_private' => true
-    ];
-    public const AUTHENTICATION_KEYCLOAK_REDIRECT_URI = [
-        'key' => 'authentication.keycloak.client.uri',
-        'type' => 'string',
-        'default' => '/Web/keycloak-auth.php',
-        'label' => 'Keycloak Redirect URI',
-        'description' => 'Redirect URI for Keycloak OAuth login',
-        'section' => 'authentication'
-    ];
     public const AUTHENTICATION_OAUTH2_LOGIN_ENABLED = [
         'key' => 'authentication.oauth2.login.enabled',
         'legacy' => 'authentication.allow.oauth2.login',

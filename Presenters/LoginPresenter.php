@@ -134,13 +134,11 @@ class LoginPresenter
         $googleEnabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, new BooleanConverter());
         $microsoftEnabled = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, new BooleanConverter());
         $facebookEnabled  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_LOGIN_ENABLED, new BooleanConverter());
-        $keycloakEnabled  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_LOGIN_ENABLED, new BooleanConverter());
         $oauth2Enabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter());
 
         $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl() : null);
         $this->_page->SetMicrosoftUrl($microsoftEnabled ? $this->GetMicrosoftUrl() : null);
         $this->_page->SetFacebookUrl($facebookEnabled ? $this->GetFacebookUrl() : null);
-        $this->_page->SetKeycloakUrl($keycloakEnabled ? $this->GetKeycloakUrl() : null);
         $this->_page->SetOauth2Url($oauth2Enabled ? $this->GetOauth2Url() : null);
         $this->_page->SetOauth2Name($oauth2Enabled ? Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_NAME) : null);
     }
@@ -362,46 +360,28 @@ class LoginPresenter
         return $FacebookUrl;
     }
 
-    public function GetKeycloakUrl()
+    public function GetOauth2Url(): string
     {
-        // Retrieve Keycloak configuration values
-        $baseUrl    = rtrim(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_URL), '/');
-        $realm = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REALM);
-        $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_CLIENT_ID);
-        $redirectUri = $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_KEYCLOAK_REDIRECT_URI));
+        $authorizeEndpoint = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE);
+        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_STRIP_TRAILING_SLASH)) {
+            $authorizeEndpoint = rtrim($authorizeEndpoint, '/');
+        }
 
-        $authorizeEndpoint = $baseUrl . '/realms/' . rawurlencode($realm) . '/protocol/openid-connect/auth';
-
-        $params = [
-            'client_id' => $clientId,
-            'redirect_uri' => $redirectUri,
-            'scope' => 'openid email profile',
-            'response_type' => 'code'
-        ];
-
-        return $authorizeEndpoint . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
+        return $this->buildOidcAuthorizeUrl(
+            $authorizeEndpoint,
+            Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID),
+            $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI))
+        );
     }
 
-    public function GetOauth2Url()
+    private function buildOidcAuthorizeUrl(string $authorizeEndpoint, string $clientId, string $redirectUri): string
     {
-        // Retrieve Oauth2 configuration values
-        $removeTrailingSlash = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_STRIP_TRAILING_SLASH);
-        $baseUrl = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE);
-        if ($removeTrailingSlash) {
-            $baseUrl = rtrim($baseUrl, '/');
-        }
-        $clientId = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID);
-        $redirectUri = $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI));
-
-        $params = [
-            'client_id' => $clientId,
-            'redirect_uri' => $redirectUri,
-            'scope' => 'openid email profile',
-            'response_type' => 'code'
-        ];
-
-        $Oauth2Url = $baseUrl . '?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
-        return $Oauth2Url;
+        return $authorizeEndpoint . '?' . http_build_query([
+            'client_id'     => $clientId,
+            'redirect_uri'  => $redirectUri,
+            'scope'         => 'openid email profile',
+            'response_type' => 'code',
+        ], '', '&', PHP_QUERY_RFC3986);
     }
 
 }

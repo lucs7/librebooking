@@ -184,12 +184,6 @@ $conf['settings']['authentication']['facebook.client.id'] = '';
 $conf['settings']['authentication']['facebook.client.secret'] = '';
 $conf['settings']['authentication']['facebook.redirect.uri'] = '/Web/facebook-auth.php';
 
-$conf['settings']['authentication']['keycloak.url'] = '';
-$conf['settings']['authentication']['keycloak.realm'] = '';
-$conf['settings']['authentication']['keycloak.client.id'] = '';
-$conf['settings']['authentication']['keycloak.client.secret'] = '';
-$conf['settings']['authentication']['keycloak.client.uri'] = '/Web/keycloak-auth.php';
-
 $conf['settings']['authentication']['oauth2.name'] = 'OAuth2';
 $conf['settings']['authentication']['oauth2.url.authorize'] = '';
 $conf['settings']['authentication']['oauth2.url.token'] = '';
