@@ -45,7 +45,7 @@ class ExternalAuthLoginPresenter
         foreach ($pluginManager->LoadExternalLoginProviders() as $provider) {
             if ($provider->getProviderName() === $type) {
                 try {
-                    $this->processUserData($provider->handleCallback());
+                    $this->processUserData($provider->handleCallback(), $provider->getProviderName());
                 } catch (\Exception $e) {
                     $this->page->ShowError([$e->getMessage()]);
                 }
@@ -192,7 +192,7 @@ class ExternalAuthLoginPresenter
     /**
      * Processes user given data, creates a user in database if it doesn't exist and logs it in
      */
-    private function processUserData(ExternalUser $user): void
+    private function processUserData(ExternalUser $user, ?string $providerName = null): void
     {
         $requiredDomainValidator = new RequiredEmailDomainValidator($user->email);
         $requiredDomainValidator->Validate();
@@ -203,6 +203,7 @@ class ExternalAuthLoginPresenter
         }
         if ($this->registration->UserExists($user->username, $user->email)) {
             $this->authentication->Login($user->email, new WebLoginContext(new LoginData()));
+            $this->recordExternalAuthProvider($providerName);
             LoginRedirector::Redirect($this->page);
         } else {
             if ($allowRegistration) {
@@ -223,10 +224,20 @@ class ExternalAuthLoginPresenter
                     overwritePassword: false
                 );
                 $this->authentication->Login($user->email, new WebLoginContext(new LoginData()));
+                $this->recordExternalAuthProvider($providerName);
                 LoginRedirector::Redirect($this->page);
             } else {
                 $this->page->ShowError([Resources::GetInstance()->GetString('SelfRegistrationDisabled')]);
             }
         }
+    }
+
+    private function recordExternalAuthProvider(?string $providerName): void
+    {
+        if ($providerName === null) {
+            return;
+        }
+        $userId = ServiceLocator::GetServer()->GetUserSession()->UserId;
+        ServiceLocator::GetDatabase()->Execute(new SetExternalAuthProviderCommand($userId, $providerName));
     }
 }

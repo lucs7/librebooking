@@ -2951,6 +2951,16 @@ class UpdateUserAttributesCommand extends SqlCommand
 }
 
 
+class SetExternalAuthProviderCommand extends SqlCommand
+{
+    public function __construct(int $userId, string $provider)
+    {
+        parent::__construct(Queries::SET_EXTERNAL_AUTH_PROVIDER);
+        $this->AddParameter(new Parameter(ParameterNames::USER_ID, $userId));
+        $this->AddParameter(new Parameter(ParameterNames::EXTERNAL_AUTH_PROVIDER, $provider));
+    }
+}
+
 class UpdateUserFromLdapCommand extends SqlCommand
 {
     public function __construct($username, $email, $fname, $lname, $password, $salt, $phone, $organization, $position)

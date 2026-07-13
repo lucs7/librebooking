@@ -149,6 +149,7 @@ CREATE TABLE `users` (
  `status_id` tinyint(2) unsigned NOT NULL,
  `legacyid` char(16),
  `legacypassword` varchar(32),
+ `external_auth_provider` varchar(64) NULL DEFAULT NULL,
  PRIMARY KEY (`user_id`),
  INDEX (`status_id`),
  FOREIGN KEY (`status_id`) 

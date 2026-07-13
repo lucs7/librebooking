@@ -1242,6 +1242,9 @@ class Queries
 		WHERE
 			`username` = @username OR `email` = @email';
 
+    public const SET_EXTERNAL_AUTH_PROVIDER =
+        'UPDATE `users` SET `external_auth_provider` = @external_auth_provider WHERE `user_id` = @userid';
+
     public const UPDATE_USER_PREFERENCE = 'UPDATE `user_preferences` SET `value` = @value WHERE `user_id` = @userid AND `name` = @name';
 
     public const UPDATE_USER_SESSION =

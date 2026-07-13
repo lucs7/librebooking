@@ -101,6 +101,8 @@ class ParameterNames
 
     public const NAME = '@name';
 
+    public const EXTERNAL_AUTH_PROVIDER = '@external_auth_provider';
+
     public const ORGANIZATION = '@organization';
     public const ORIGINAL_CREDIT_COUNT = '@original_credit_count';
 
