@@ -61,6 +61,42 @@ class PluginManager
     }
 
     /**
+     * Loads all configured ExternalLogin provider plugins.
+     * Each plugin name in the comma-separated config value must have a class file at
+     * plugins/ExternalLogin/{Name}/{Name}.php implementing IExternalLoginProvider.
+     *
+     * @return IExternalLoginProvider[]
+     */
+    public function LoadExternalLoginProviders(): array
+    {
+        require_once(ROOT_DIR . 'lib/Application/Authentication/namespace.php');
+
+        $configValue = Configuration::Instance()->GetKey(ConfigKeys::PLUGIN_EXTERNAL_LOGIN_PROVIDERS);
+        if (empty(trim((string) $configValue))) {
+            return [];
+        }
+
+        $providers = [];
+        $names = array_filter(array_map('trim', explode(',', $configValue)));
+
+        foreach ($names as $name) {
+            $pluginFile = ROOT_DIR . "plugins/ExternalLogin/$name/$name.php";
+            if (!file_exists($pluginFile)) {
+                Log::Error('ExternalLogin plugin file not found: %s', $pluginFile);
+                continue;
+            }
+            require_once($pluginFile);
+            if (!class_exists($name)) {
+                Log::Error('ExternalLogin plugin class not found: %s', $name);
+                continue;
+            }
+            $providers[] = new $name();
+        }
+
+        return $providers;
+    }
+
+    /**
      * Loads the configured Permission plugin, if one exists
      * If no plugin exists, the default PermissionService class is returned
      *

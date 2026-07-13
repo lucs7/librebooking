@@ -723,6 +723,9 @@ return [
 
             # Plugin class name to apply custom styling logic
             'styling' => '',
+
+            # Comma-separated list of external login provider plugins (e.g. OAuth2)
+            'external.login.providers' => '',
         ],
 
         ###################

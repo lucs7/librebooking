@@ -1749,6 +1749,15 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => 'Plugin class name to apply custom styling logic',
         'section' => 'plugins'
     ];
+    public const PLUGIN_EXTERNAL_LOGIN_PROVIDERS = [
+        'key' => 'plugins.external.login.providers',
+        'type' => 'string',
+        'default' => '',
+        'label' => 'External Login Providers',
+        'description' => 'Comma-separated list of ExternalLogin plugin names to enable (e.g. OAuth2)',
+        'config_file_comment' => 'Comma-separated list of external login provider plugins (e.g. OAuth2)',
+        'section' => 'plugins',
+    ];
 
     // API Configuration
 

@@ -102,6 +102,7 @@ $conf['settings']['phpmailer']['smtp.debug'] = 'false';
 $conf['settings']['plugins']['Authentication'] = '';
 $conf['settings']['plugins']['Authorization'] = '';
 $conf['settings']['plugins']['Export'] = '';
+$conf['settings']['plugins']['ExternalLoginProviders'] = '';
 $conf['settings']['plugins']['Permission'] = '';
 $conf['settings']['plugins']['PostRegistration'] = '';
 $conf['settings']['plugins']['PreReservation'] = '';
