@@ -134,13 +134,16 @@ class LoginPresenter
         $googleEnabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, new BooleanConverter());
         $microsoftEnabled = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, new BooleanConverter());
         $facebookEnabled  = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_LOGIN_ENABLED, new BooleanConverter());
-        $oauth2Enabled    = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter());
 
         $this->_page->SetGoogleUrl($googleEnabled ? $this->GetGoogleUrl() : null);
         $this->_page->SetMicrosoftUrl($microsoftEnabled ? $this->GetMicrosoftUrl() : null);
         $this->_page->SetFacebookUrl($facebookEnabled ? $this->GetFacebookUrl() : null);
-        $this->_page->SetOauth2Url($oauth2Enabled ? $this->GetOauth2Url() : null);
-        $this->_page->SetOauth2Name($oauth2Enabled ? Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_NAME) : null);
+
+        $externalProviders = PluginManager::Instance()->LoadExternalLoginProviders();
+        $this->_page->SetExternalLoginProviders(array_map(
+            fn (IExternalLoginProvider $p) => ['label' => $p->getButtonLabel(), 'url' => $p->getAuthorizeUrl()],
+            $externalProviders
+        ));
     }
 
     public function Login()
@@ -358,30 +361,6 @@ class LoginPresenter
         );
 
         return $FacebookUrl;
-    }
-
-    public function GetOauth2Url(): string
-    {
-        $authorizeEndpoint = Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_AUTHORIZE);
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_STRIP_TRAILING_SLASH)) {
-            $authorizeEndpoint = rtrim($authorizeEndpoint, '/');
-        }
-
-        return $this->buildOidcAuthorizeUrl(
-            $authorizeEndpoint,
-            Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID),
-            $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI))
-        );
-    }
-
-    private function buildOidcAuthorizeUrl(string $authorizeEndpoint, string $clientId, string $redirectUri): string
-    {
-        return $authorizeEndpoint . '?' . http_build_query([
-            'client_id'     => $clientId,
-            'redirect_uri'  => $redirectUri,
-            'scope'         => 'openid email profile',
-            'response_type' => 'code',
-        ], '', '&', PHP_QUERY_RFC3986);
     }
 
 }

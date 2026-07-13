@@ -24,30 +24,36 @@ class ExternalAuthLoginPresenter
         $this->registration = $registration;
     }
 
-    public function PageLoad()
+    public function PageLoad(): void
     {
-        if ($this->page->GetType() == 'google') {
-            $this->ProcessGoogleSingleSignOn();
-        }
-        if ($this->page->GetType() == 'fb') {
-            $this->ProcessFacebookSingleSignOn();
-        }
-        if ($this->page->GetType() == 'microsoft') {
-            $this->ProcessMicrosoftSingleSignOn();
-        }
-        if ($this->page->GetType() == 'oauth2') {
-            $this->ProcessOauth2SingleSignOn();
-        }
-    }
+        $type = $this->page->GetType();
 
-    private function buildRedirectUri(string $configuredPath): string
-    {
-        $scriptUrl = rtrim(Configuration::Instance()->GetScriptUrl(), '/');
-        $path = '/' . ltrim($configuredPath, '/');
-        if (str_ends_with($scriptUrl, '/Web') && str_starts_with($path, '/Web/')) {
-            $path = substr($path, 4);
+        if ($type === 'google') {
+            $this->ProcessGoogleSingleSignOn();
+            return;
         }
-        return $scriptUrl . $path;
+        if ($type === 'fb') {
+            $this->ProcessFacebookSingleSignOn();
+            return;
+        }
+        if ($type === 'microsoft') {
+            $this->ProcessMicrosoftSingleSignOn();
+            return;
+        }
+
+        $pluginManager = PluginManager::Instance();
+        foreach ($pluginManager->LoadExternalLoginProviders() as $provider) {
+            if ($provider->getProviderName() === $type) {
+                try {
+                    $this->processUserData($provider->handleCallback());
+                } catch (\Exception $e) {
+                    $this->page->ShowError([$e->getMessage()]);
+                }
+                return;
+            }
+        }
+
+        $this->page->ShowError(['Unknown authentication type.']);
     }
 
     /**
@@ -78,7 +84,12 @@ class ExternalAuthLoginPresenter
             $lastName  = $google_account_info->family_name;
 
             //Process $userData as needed (e.g., create a user, log in, etc.)
-            $this->processUserData($email, $email, $firstName, $lastName);
+            $this->processUserData(new ExternalUser(
+                username: $email,
+                email: $email,
+                firstName: $firstName,
+                lastName: $lastName,
+            ));
         }
     }
 
@@ -135,7 +146,12 @@ class ExternalAuthLoginPresenter
             $lastName  = $userData['surname'];
 
             //Process $userData as needed (e.g., create a user, log in, etc.)
-            $this->processUserData($email, $email, $firstName, $lastName);
+            $this->processUserData(new ExternalUser(
+                username: $email,
+                email: $email,
+                firstName: $firstName,
+                lastName: $lastName,
+            ));
         }
     }
 
@@ -165,116 +181,51 @@ class ExternalAuthLoginPresenter
         $lastName  = $profile->getField('last_name');
 
         //Process $userData as needed (e.g., create a user, log in, etc.)
-        $this->processUserData($email, $email, $firstName, $lastName);
+        $this->processUserData(new ExternalUser(
+            username: $email,
+            email: $email,
+            firstName: $firstName,
+            lastName: $lastName,
+        ));
     }
-
-    private function ProcessOauth2SingleSignOn(): void
-    {
-        $code = filter_input(INPUT_GET, 'code', FILTER_UNSAFE_RAW);
-        if (!$code) {
-            $this->page->ShowError(['Missing authorization code.']);
-            return;
-        }
-
-        $this->exchangeOidcCode(
-            code: $code,
-            tokenEndpoint: Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_TOKEN),
-            userInfoEndpoint: Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_URL_USERINFO),
-            clientId: Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_ID),
-            clientSecret: Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_CLIENT_SECRET),
-            redirectUri: $this->buildRedirectUri(Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_REDIRECT_URI)),
-            providerName: 'OAuth2',
-        );
-    }
-
-    private function exchangeOidcCode(
-        string $code,
-        string $tokenEndpoint,
-        string $userInfoEndpoint,
-        string $clientId,
-        string $clientSecret,
-        string $redirectUri,
-        string $providerName,
-    ): void {
-        $client = new \GuzzleHttp\Client();
-
-        try {
-            $response = $client->post($tokenEndpoint, ['form_params' => [
-                'grant_type'    => 'authorization_code',
-                'code'          => $code,
-                'redirect_uri'  => $redirectUri,
-                'client_id'     => $clientId,
-                'client_secret' => $clientSecret,
-            ]]);
-            $tokenData = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
-            $accessToken = $tokenData['access_token'] ?? null;
-            if (!$accessToken) {
-                $this->page->ShowError([$providerName . ': access_token missing.']);
-                return;
-            }
-            $uResp = $client->get($userInfoEndpoint, ['headers' => ['Authorization' => 'Bearer ' . $accessToken]]);
-            $user = json_decode((string) $uResp->getBody(), true, 512, JSON_THROW_ON_ERROR);
-        } catch (\Exception $e) {
-            $this->page->ShowError(['Error retrieving ' . $providerName . ' token: ' . $e->getMessage()]);
-            return;
-        }
-
-        $email = $user['email'] ?? '';
-        if ($email === '') {
-            $this->page->ShowError(['Email is not set in your ' . $providerName . ' profile.']);
-            return;
-        }
-
-        $this->processUserData(
-            $user['preferred_username'] ?? $email,
-            $email,
-            $user['given_name'] ?? '',
-            $user['family_name'] ?? '',
-            $user['phone_number'] ?? '',
-            $user['organization'] ?? '',
-            $user['title'] ?? ''
-        );
-    }
-
 
     /**
      * Processes user given data, creates a user in database if it doesn't exist and logs it in
      */
-    private function processUserData($username, $email, $firstName, $lastName, $phone = null, $organization = null, $title = null)
+    private function processUserData(ExternalUser $user): void
     {
-        $requiredDomainValidator = new RequiredEmailDomainValidator($email);
+        $requiredDomainValidator = new RequiredEmailDomainValidator($user->email);
         $requiredDomainValidator->Validate();
         $allowRegistration = Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_ALLOW_SELF, new BooleanConverter());
         if (!$requiredDomainValidator->IsValid()) {
             $this->page->ShowError([Resources::GetInstance()->GetString('InvalidEmailDomain')]);
             return;
         }
-        if ($this->registration->UserExists($username, $email)) {
-            $this->authentication->Login($email, new WebLoginContext(new LoginData()));
+        if ($this->registration->UserExists($user->username, $user->email)) {
+            $this->authentication->Login($user->email, new WebLoginContext(new LoginData()));
             LoginRedirector::Redirect($this->page);
         } else {
             if ($allowRegistration) {
                 $this->registration->Synchronize(
                     user: new AuthenticatedUser(
-                        $username,
-                        $email,
-                        $firstName,
-                        $lastName,
+                        $user->username,
+                        $user->email,
+                        $user->firstName,
+                        $user->lastName,
                         Password::GenerateRandom(),
                         Resources::GetInstance()->CurrentLanguage,
                         Configuration::Instance()->GetDefaultTimezone(),
-                        $phone,
-                        $organization,
-                        $title
+                        $user->phone,
+                        $user->organization,
+                        $user->title
                     ),
                     insertOnly: false,
                     overwritePassword: false
                 );
-                $this->authentication->Login($email, new WebLoginContext(new LoginData()));
+                $this->authentication->Login($user->email, new WebLoginContext(new LoginData()));
                 LoginRedirector::Redirect($this->page);
             } else {
                 $this->page->ShowError([Resources::GetInstance()->GetString('SelfRegistrationDisabled')]);
-                return;
             }
         }
     }

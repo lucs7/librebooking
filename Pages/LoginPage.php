@@ -109,11 +109,7 @@ interface ILoginPage extends IPage, ILoginBasePage
      */
     public function SetFacebookUrl($URL);
 
-    /**
-     *
-     */
-    public function SetOauth2Url($URL);
-    public function SetOauth2Name($Name);
+    public function SetExternalLoginProviders(array $providers): void;
 }
 
 class LoginPage extends Page implements ILoginPage
@@ -138,7 +134,6 @@ class LoginPage extends Page implements ILoginPage
         $this->Set('AllowFacebookLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_FACEBOOK_LOGIN_ENABLED, new BooleanConverter()));
         $this->Set('AllowGoogleLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_GOOGLE_LOGIN_ENABLED, new BooleanConverter()));
         $this->Set('AllowMicrosoftLogin', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_MICROSOFT_LOGIN_ENABLED, new BooleanConverter()));
-        $this->Set('AllowOauth2Login', Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter()));
         $scriptUrl = Configuration::Instance()->GetScriptUrl();
         $parts = explode('://', $scriptUrl);
         $this->Set('Protocol', $parts[0]);
@@ -357,17 +352,8 @@ class LoginPage extends Page implements ILoginPage
         }
     }
 
-    public function SetOauth2Url($Oauth2Url)
+    public function SetExternalLoginProviders(array $providers): void
     {
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter())) {
-            $this->Set('Oauth2Url', $Oauth2Url);
-        }
-    }
-
-    public function SetOauth2Name($Oauth2Name)
-    {
-        if (Configuration::Instance()->GetKey(ConfigKeys::AUTHENTICATION_OAUTH2_LOGIN_ENABLED, new BooleanConverter())) {
-            $this->Set('Oauth2Name', $Oauth2Name);
-        }
+        $this->Set('ExternalLoginProviders', $providers);
     }
 }

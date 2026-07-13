@@ -110,11 +110,11 @@
                                         class="bi bi-facebook me-1"></i>{translate key='SignInWith'}<span class="fw-medium">
                                         Facebook</span></a>
                             {/if}
-                            {if $AllowOauth2Login}
-                                <a type="button" href="{$Oauth2Url}"
+                            {foreach $ExternalLoginProviders as $provider}
+                                <a type="button" href="{$provider.url}"
                                     class="btn btn-outline-primary">{translate key='SignInWith'}<span class="fw-medium">
-                                        {$Oauth2Name}</span></a>
-                            {/if}
+                                        {$provider.label|escape}</span></a>
+                            {/foreach}
                         </section>
                         {if $facebookError}
                             <p class="text-center my-3">

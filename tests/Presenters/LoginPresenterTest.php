@@ -331,11 +331,7 @@ class FakeLoginPage extends FakePageBase implements ILoginPage
     {
     }
 
-    public function SetOauth2Url($URL)
-    {
-    }
-
-    public function SetOauth2Name($Name)
+    public function SetExternalLoginProviders(array $providers): void
     {
     }
 
