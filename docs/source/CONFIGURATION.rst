@@ -114,14 +114,16 @@ During migration you may see messages such as:
 After reviewing the generated file, replace ``config/config.php`` with the
 migrated file when you are satisfied with the result.
 
-OAuth2 Authentication (Migrated to Plugin)
-------------------------------------------
+OAuth2 and Keycloak (Migrated to Plugin)
+-----------------------------------------
 
 .. note::
 
-   The built-in OAuth2 login integration has moved to a plugin in
-   LibreBooking 2.x. Users upgrading from an earlier version must
-   follow the migration steps below.
+   In LibreBooking 5.0 the built-in OAuth2 and Keycloak integrations were
+   removed and replaced by the OAuth2 ExternalLogin plugin. Users upgrading
+   from an earlier version must follow the migration steps below.
+
+For full setup instructions see :doc:`Oauth2-Configuration`.
 
 **Migration from core config to plugin:**
 
@@ -137,10 +139,19 @@ OAuth2 Authentication (Migrated to Plugin)
 
       'external.login.providers' => 'OAuth2',
 
-4. Remove the old ``authentication.oauth2.*`` keys from ``config.php``
-   (``oauth2.login.enabled``, ``oauth2.name``, ``oauth2.url.authorize``,
-   ``oauth2.url.token``, ``oauth2.url.userinfo``, ``oauth2.client.id``,
-   ``oauth2.client.secret``, ``oauth2.client.uri``).
+4. Remove the old keys from the ``authentication`` section of ``config.php``:
+
+   - OAuth2: ``authentication.oauth2.login.enabled``, ``authentication.oauth2.name``,
+     ``authentication.oauth2.url.authorize``, ``authentication.oauth2.url.token``,
+     ``authentication.oauth2.url.userinfo``, ``authentication.oauth2.client.id``,
+     ``authentication.oauth2.client.secret``, ``authentication.oauth2.client.uri``,
+     ``authentication.oauth2.strip.trailing.slash``
+   - Keycloak: ``authentication.keycloak.login.enabled``, ``authentication.keycloak.url``,
+     ``authentication.keycloak.realm``, ``authentication.keycloak.client.id``,
+     ``authentication.keycloak.client.secret``, ``authentication.keycloak.client.uri``
+
+   Any of these keys still present in ``config.php`` will produce a deprecation
+   message in the PHP error log on startup.
 
 The callback URL (``/Web/oauth2-auth.php``) is unchanged.
 

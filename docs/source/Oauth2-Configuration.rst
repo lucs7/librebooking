@@ -1,77 +1,105 @@
-Oauth2 Configuration
+OAuth2 Configuration
 ====================
 
-You can use any IdP (Identity Provider) which supports Oauth2 like
-`authentik <https://goauthentik.io>`__ or
-`Keycloak <https://www.keycloak.org/>`__ for authentication with
-LibreBooking
+The OAuth2 ExternalLogin plugin lets you log in via any OAuth2/OIDC provider
+such as `authentik <https://goauthentik.io>`__, `Keycloak <https://www.keycloak.org/>`__,
+or any other provider that supports the Authorization Code flow.
+
+.. note::
+
+   Upgrading from an earlier version? See :ref:`oauth2-migration` below.
 
 IdP Configuration
 -----------------
 
-First you need to create a Client in your IdP in Confidential mode
-(Client ID and Client Secret). The Client need to allow redirects to
-``<LibreBooking URL>/Web/oauth2-auth.php`` ex.
-``https://librebooking.com/Web/oauth2-auth.php`` and needs the scopes
-``openid``, ``email`` and ``profile``.
+Create a confidential client (Client ID + Client Secret) in your identity
+provider. Set the allowed redirect URI to::
 
-The mapping of Oauth2 attributes to LibreBooking attributes is:
+   <LibreBooking URL>/Web/oauth2-auth.php
 
--  ``email`` -> ``email``
--  ``given_name`` -> ``firstName``
--  ``family_name`` -> ``lastName``
--  ``preferred_username`` -> ``username``
--  ``phone`` -> ``phone_number``
--  ``organization`` -> ``organization``
--  ``title`` -> ``title``
+e.g. ``https://librebooking.example.com/Web/oauth2-auth.php``
 
-LibreBooking Config
--------------------
+Required scopes: ``openid``, ``email``, ``profile``.
 
-To connect LibreBooking with your Oauth2 IdP, add the following settings to
-the ``authentication`` section of your ``config/config.php`` file. This example
-uses authentik as the IdP with the URL ``authentik.io``.
+The plugin reads the following claims from the userinfo endpoint:
 
-.. code-block:: php
+- ``email`` → email
+- ``given_name`` → first name
+- ``family_name`` → last name
+- ``preferred_username`` → username
+- ``phone_number`` → phone
+- ``organization`` → organization
+- ``title`` → title
 
-   return [
-       'settings' => [
-           'authentication' => [
-               'oauth2.login.enabled' => true,
-               'oauth2.name' => 'authentik',
-               'oauth2.strip.trailing.slash' => false,
-               'oauth2.url.authorize' => 'https://authentik.io/application/o/authorize/',
-               'oauth2.url.token' => 'https://authentik.io/application/o/token/',
-               'oauth2.url.userinfo' => 'https://authentik.io/application/o/userinfo/',
-               'oauth2.client.id' => 'c3zzBXq9Qw3K9KErd9ta6tQgvVhr6wT3rkQaInz8',
-               'oauth2.client.secret' => '13246zgtfd4t456zhg8rdgf98g789df7gFG56z5zhb',
-               'oauth2.client.uri' => '/Web/oauth2-auth.php',
-           ],
-       ],
-   ];
+Plugin Setup
+------------
+
+1. Copy the plugin config template::
+
+      cp plugins/ExternalLogin/OAuth2/OAuth2.config.dist.php \
+         plugins/ExternalLogin/OAuth2/OAuth2.config.php
+
+2. Edit ``OAuth2.config.php`` and fill in your provider's values:
+
+   .. code-block:: php
+
+      return [
+          'settings' => [
+              'oauth2' => [
+                  'name'                => 'Sign in with Authentik',
+                  'strip.trailing.slash' => false,
+                  'url.authorize'       => 'https://authentik.io/application/o/authorize/',
+                  'url.token'           => 'https://authentik.io/application/o/token/',
+                  'url.userinfo'        => 'https://authentik.io/application/o/userinfo/',
+                  'client.id'           => 'your-client-id',
+                  'client.secret'       => 'your-client-secret',
+                  'redirect.uri'        => '/Web/oauth2-auth.php',
+              ],
+          ],
+      ];
+
+3. Enable the plugin in ``config/config.php`` (plugins section)::
+
+      'external.login.providers' => 'OAuth2',
+
+The login page will now show an **Sign in with Authentik** button alongside
+the standard username/password form.
 
 Trailing Slash Handling
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-By default, LibreBooking strips the trailing slash from the configured
-``oauth2.url.authorize`` URL. Some identity providers require the trailing slash
-to be preserved. To keep the trailing slash as configured, set:
+By default the plugin strips the trailing slash from ``url.authorize`` before
+appending the query string. Set ``strip.trailing.slash`` to ``false`` to
+preserve the trailing slash as configured.
 
-.. code-block:: php
+This setting affects only the authorize URL; token and userinfo URLs are
+passed through unchanged.
 
-   'oauth2.strip.trailing.slash' => false,
+.. _oauth2-migration:
 
-This setting only affects the authorize URL. The token and userinfo URLs are not
-modified.
+Migrating from the Built-in OAuth2 Config
+------------------------------------------
 
-To hide the internal LibreBooking login prompt, also set:
+Before LibreBooking 5.0, OAuth2 settings lived in the ``authentication``
+section of ``config.php``. They have moved to the plugin config file.
 
-.. code-block:: php
+1. Follow the plugin setup steps above, copying your existing values across.
 
-   return [
-       'settings' => [
-           'authentication' => [
-               'hide.login.prompt' => true,
-           ],
-       ],
-   ];
+2. Enable the plugin::
+
+      'external.login.providers' => 'OAuth2',
+
+3. Remove the old ``authentication.oauth2.*`` keys from ``config.php``.
+   Any key still present will produce a deprecation message in the PHP
+   error log pointing to this guide.
+
+Keycloak users
+^^^^^^^^^^^^^^
+
+The dedicated Keycloak integration was removed in 5.0. Keycloak supports
+standard OIDC, so it works with the OAuth2 plugin. Use your Keycloak realm's
+``.well-known/openid-configuration`` discovery document to find the three
+endpoint URLs, then follow the plugin setup above.
+
+Remove the old ``authentication.keycloak.*`` keys from ``config.php`` once
+the plugin is configured.
