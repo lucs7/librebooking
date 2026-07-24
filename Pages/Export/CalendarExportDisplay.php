@@ -24,7 +24,12 @@ class CalendarExportDisplay extends Page
     {
         $vcal = new VCalendar();
         $vcal->PRODID = '-//LibreBooking//NONSGML ' . Configuration::VERSION . '//EN';
-        $vcal->add('METHOD', 'PUBLISH');
+        // A single reservation with real attendees is a scheduling request a client can act
+        // on (Accept/Decline). Anything else (no attendees, or a multi-event export/subscription
+        // feed) stays PUBLISH; see commit dfd28fef ("remove METHOD:REQUEST ... fix Add to Outlook")
+        // for why REQUEST without attendee data broke basic calendar import.
+        $hasSingleReservationWithAttendees = count($reservations) === 1 && !empty($reservations[0]->Attendees);
+        $vcal->add('METHOD', $hasSingleReservationWithAttendees ? 'REQUEST' : 'PUBLISH');
 
         if ($calendarName !== null && $calendarName !== '') {
             $vcal->add('NAME', $calendarName);
@@ -41,7 +46,7 @@ class CalendarExportDisplay extends Page
             $event = new VEvent($vcal, 'VEVENT');
             $vcal->add($event);
             // VEvent auto-generates UID and DTSTAMP in getDefaults(); use = to replace them.
-            $event->UID = $res->ReferenceNumber . '&' . $uid;
+            $event->UID = $res->ReferenceNumber . '@' . $uid;
             $event->DTSTAMP = $res->DateCreated->Format($isoFormat);
             $event->add('CLASS', $res->Classification);
             $event->add('CREATED', $res->DateCreated->Format($isoFormat));
@@ -51,6 +56,14 @@ class CalendarExportDisplay extends Page
             $event->add('LAST-MODIFIED', $res->LastModified->Format($isoFormat));
             $event->add('LOCATION', $res->Location);
             $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
+            foreach ($res->Attendees as $attendee) {
+                $event->add('ATTENDEE', 'mailto:' . $attendee['Email'], [
+                    'CN' => $attendee['Name'],
+                    'ROLE' => 'REQ-PARTICIPANT',
+                    'PARTSTAT' => 'NEEDS-ACTION',
+                    'RSVP' => 'TRUE',
+                ]);
+            }
             $event->add('STATUS', $res->IsPending ? 'TENTATIVE' : 'CONFIRMED');
             $event->add('SUMMARY', $res->Summary);
             $event->add('SEQUENCE', 0);

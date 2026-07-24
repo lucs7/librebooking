@@ -21,6 +21,11 @@ class iCalendarReservationView
     public $ExtraIcalLines;
 
     /**
+     * @var array List of ['Email' => string, 'Name' => string] for participants, invitees, and guests.
+     */
+    public $Attendees = [];
+
+    /**
      * @var ExportFactory
      */
     private $ExportFactory;
@@ -91,11 +96,42 @@ class iCalendarReservationView
         $this->LastModified = empty($res->ModifiedDate) || $res->ModifiedDate->ToString() == '' ? $this->DateCreated : $res->ModifiedDate;
         $this->IsPending = $res->RequiresApproval;
 
-        if ($canViewUser && $res->OwnerId == $currentUser->UserId) {
-            $this->OrganizerEmail = str_replace('@', '-noreply@', $res->OwnerEmailAddress);
+        if ($canViewDetails) {
+            $this->Attendees = $this->BuildAttendees($res);
         }
 
         $this->ExtraIcalLines = method_exists($this->ExportFactory, 'GetIcalendarExtraLines') ? $this->ExportFactory->GetIcalendarExtraLines($res) : null;
+    }
+
+    /**
+     * @param ReservationItemView $res
+     * @return array
+     */
+    private function BuildAttendees($res)
+    {
+        $attendees = [];
+
+        foreach ($res->ParticipantIds as $id) {
+            if (!empty($res->ParticipantEmails[$id])) {
+                $attendees[] = ['Email' => $res->ParticipantEmails[$id], 'Name' => $res->ParticipantNames[$id] ?? $res->ParticipantEmails[$id]];
+            }
+        }
+
+        foreach ($res->InviteeIds as $id) {
+            if (!empty($res->InviteeEmails[$id])) {
+                $attendees[] = ['Email' => $res->InviteeEmails[$id], 'Name' => $res->InviteeNames[$id] ?? $res->InviteeEmails[$id]];
+            }
+        }
+
+        foreach ($res->ParticipatingGuests as $email) {
+            $attendees[] = ['Email' => $email, 'Name' => $email];
+        }
+
+        foreach ($res->InvitedGuests as $email) {
+            $attendees[] = ['Email' => $email, 'Name' => $email];
+        }
+
+        return $attendees;
     }
 
     /**
