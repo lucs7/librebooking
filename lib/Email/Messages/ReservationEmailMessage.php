@@ -215,6 +215,27 @@ abstract class ReservationEmailMessage extends EmailMessage
         $rv->UserPreferences = $this->reservationOwner->GetPreferences();
         $rv->OwnerEmailAddress = $this->reservationOwner->EmailAddress();
 
+        $rv->ParticipantIds = $currentInstance->Participants();
+        foreach ($rv->ParticipantIds as $id) {
+            $participant = $this->userRepository->GetById($id);
+            if ($participant !== null) {
+                $rv->ParticipantNames[$id] = (new FullName($participant->FirstName, $participant->LastName))->__toString();
+                $rv->ParticipantEmails[$id] = $participant->EmailAddress;
+            }
+        }
+
+        $rv->InviteeIds = $currentInstance->Invitees();
+        foreach ($rv->InviteeIds as $id) {
+            $invitee = $this->userRepository->GetById($id);
+            if ($invitee !== null) {
+                $rv->InviteeNames[$id] = (new FullName($invitee->FirstName, $invitee->LastName))->__toString();
+                $rv->InviteeEmails[$id] = $invitee->EmailAddress;
+            }
+        }
+
+        $rv->ParticipatingGuests = $currentInstance->ParticipatingGuests();
+        $rv->InvitedGuests = $currentInstance->InvitedGuests();
+
         $icsView = new iCalendarReservationView($rv, $this->reservationSeries->BookedBy(), new NullPrivacyFilter());
 
         $display = new CalendarExportDisplay();

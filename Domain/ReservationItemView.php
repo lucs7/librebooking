@@ -299,6 +299,16 @@ class ReservationItemView implements IReservedItemView
     public $InviteeNames = [];
 
     /**
+     * @var array|string[] Map of user id to email address, for registered-user participants.
+     */
+    public $ParticipantEmails = [];
+
+    /**
+     * @var array|string[] Map of user id to email address, for registered-user invitees.
+     */
+    public $InviteeEmails = [];
+
+    /**
      * @var CustomAttributes
      */
     public $Attributes;
@@ -690,10 +700,14 @@ class ReservationItemView implements IReservedItemView
 
         foreach ($r->Participants as $u) {
             $item->ParticipantIds[] = $u->UserId;
+            $item->ParticipantNames[$u->UserId] = $u->FullName;
+            $item->ParticipantEmails[$u->UserId] = $u->Email;
         }
 
         foreach ($r->Invitees as $u) {
             $item->InviteeIds[] = $u->UserId;
+            $item->InviteeNames[$u->UserId] = $u->FullName;
+            $item->InviteeEmails[$u->UserId] = $u->Email;
         }
 
         foreach ($r->Attributes as $a) {

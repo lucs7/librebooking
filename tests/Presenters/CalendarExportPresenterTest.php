@@ -110,9 +110,12 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertEquals($fullName->__toString(), $reservationView->Organizer);
     }
 
-    public function testOrganizerIsDefaultedIfCurrentUserIsOrganizer()
+    public function testOrganizerIsRealAddressEvenIfCurrentUserIsOrganizer()
     {
-        // this fixes a bug in outlook which prevents you from adding a meeting that you are the organizer of
+        // Previously this address was mangled (e.g. "e-noreply@m.com") to work around an
+        // old Outlook quirk with self-organized events. Issue #1336 reported that this made
+        // the ORGANIZER look like an invalid/synthesized address. Now that ATTENDEE lines
+        // are emitted for participants/invitees, the real organizer address is used instead.
         $user = new FakeUserSession();
         $res = new ReservationItemView();
         $res->OwnerId = $user->UserId;
@@ -121,9 +124,49 @@ class CalendarExportPresenterTest extends TestBase
         $res->OwnerEmailAddress = 'e@m.com';
 
         $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
-        $this->assertEquals('e-noreply@m.com', $reservationView->OrganizerEmail);
+        $this->assertEquals('e@m.com', $reservationView->OrganizerEmail);
         $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
         $this->assertEquals($fullName->__toString(), $reservationView->Organizer);
+    }
+
+    public function testAttendeesIncludeParticipantsInviteesAndGuests()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->ParticipantIds = [1];
+        $res->ParticipantNames = [1 => 'Part One'];
+        $res->ParticipantEmails = [1 => 'part1@example.com'];
+        $res->InviteeIds = [2];
+        $res->InviteeNames = [2 => 'Invite Two'];
+        $res->InviteeEmails = [2 => 'invite2@example.com'];
+        $res->ParticipatingGuests = ['guest1@example.com'];
+        $res->InvitedGuests = ['guest2@example.com'];
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->assertEquals([
+            ['Email' => 'part1@example.com', 'Name' => 'Part One'],
+            ['Email' => 'invite2@example.com', 'Name' => 'Invite Two'],
+            ['Email' => 'guest1@example.com', 'Name' => 'guest1@example.com'],
+            ['Email' => 'guest2@example.com', 'Name' => 'guest2@example.com'],
+        ], $reservationView->Attendees);
+    }
+
+    public function testAttendeesAreOmittedWhenDetailsAreNotVisible()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->ParticipantIds = [1];
+        $res->ParticipantNames = [1 => 'Part One'];
+        $res->ParticipantEmails = [1 => 'part1@example.com'];
+
+        $this->privacyFilter->_CanViewDetails = false;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->assertEquals([], $reservationView->Attendees);
     }
 
     public function testViewHidesDetailsWhenNoAccess()
@@ -272,6 +315,112 @@ class CalendarExportPresenterTest extends TestBase
         // RFC 5545 §3.3.11: backslash, comma, semicolon are reserved in TEXT values.
         $this->assertStringContainsString('SUMMARY:Title\; with\, reserved\\\\ chars', $ics);
         $this->assertStringContainsString('DESCRIPTION:Desc\; with\, reserved\\\\ chars', $ics);
+    }
+
+    public function testUidUsesAtSignRatherThanAmpersand()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->ReferenceNumber = 'abc123';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        // RFC 5545 §3.8.4.7 UIDs conventionally follow the <unique>@<host> form so that
+        // clients can reliably treat them as globally-unique identifiers.
+        $this->assertStringContainsString('UID:abc123@example.com', $ics);
+        $this->assertStringNotContainsString('abc123&example.com', $ics);
+    }
+
+    public function testAttendeeLinesAreRenderedForParticipantsInviteesAndGuests()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->ParticipantIds = [1];
+        $res->ParticipantNames = [1 => 'Part One'];
+        $res->ParticipantEmails = [1 => 'part1@example.com'];
+        $res->InvitedGuests = ['guest@example.com'];
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+        // RFC 5545 §3.1 folds lines longer than 75 octets; unfold before matching.
+        $unfolded = str_replace("\r\n ", '', $ics);
+
+        $this->assertMatchesRegularExpression('/ATTENDEE[^\r\n]*mailto:part1@example\.com/', $unfolded);
+        $this->assertMatchesRegularExpression('/ATTENDEE[^\r\n]*mailto:guest@example\.com/', $unfolded);
+        $this->assertStringContainsString('CN=Part One', $ics);
+        $this->assertStringContainsString('CN=guest@example.com', $ics);
+        $this->assertStringContainsString('ROLE=REQ-PARTICIPANT', $ics);
+        $this->assertStringContainsString('PARTSTAT=NEEDS-ACTION', $ics);
+        $this->assertStringContainsString('RSVP=TRUE', $ics);
+    }
+
+    public function testMethodIsRequestForSingleReservationWithAttendees()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->ParticipantIds = [1];
+        $res->ParticipantNames = [1 => 'Part One'];
+        $res->ParticipantEmails = [1 => 'part1@example.com'];
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        $this->assertStringContainsString('METHOD:REQUEST', $ics);
+        $this->assertStringNotContainsString('METHOD:PUBLISH', $ics);
+    }
+
+    public function testMethodIsPublishWhenThereAreNoAttendees()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        $this->assertStringContainsString('METHOD:PUBLISH', $ics);
+        $this->assertStringNotContainsString('METHOD:REQUEST', $ics);
+    }
+
+    public function testMethodIsPublishForMultipleReservationsEvenWithAttendees()
+    {
+        $user = new FakeUserSession();
+        $res1 = new ReservationItemView();
+        $res1->StartDate = Date::Now();
+        $res1->EndDate = Date::Now()->AddHours(1);
+        $res1->ParticipantIds = [1];
+        $res1->ParticipantEmails = [1 => 'part1@example.com'];
+        $res2 = new ReservationItemView();
+        $res2->StartDate = Date::Now();
+        $res2->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $view1 = new iCalendarReservationView($res1, $user, $this->privacyFilter);
+        $view2 = new iCalendarReservationView($res2, $user, $this->privacyFilter);
+
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$view1, $view2]);
+
+        $this->assertStringContainsString('METHOD:PUBLISH', $ics);
+        $this->assertStringNotContainsString('METHOD:REQUEST', $ics);
     }
 
     public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()
