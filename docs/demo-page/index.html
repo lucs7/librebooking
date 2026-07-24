@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LibreBooking Demo</title>
+<style>
+  :root {
+    color-scheme: light;
+    --primary: #2b6b6b;
+    --primary-hover: color-mix(in oklab, var(--primary) 80%, black);
+    --text-color: #1a2b30;
+    --bg-color: #f6f6f4;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Hind', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
+    text-align: center;
+    padding: 2rem 2.5rem;
+    max-width: 28rem;
+    background: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+  .spinner {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto 1.5rem;
+    border: 4px solid color-mix(in oklab, var(--primary) 15%, white);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  #status {
+    font-size: 1rem;
+    color: color-mix(in oklab, var(--text-color) 65%, white);
+    min-height: 1.5em;
+  }
+  #fallback {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+  }
+  #fallback a {
+    color: var(--primary);
+  }
+  #fallback a:hover {
+    color: var(--primary-hover);
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>LibreBooking Demo</h1>
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="status">Waking up the demo server&hellip;</p>
+    <p id="fallback" hidden>
+      Taking a while? <a href="https://librebooking-demo.fly.dev/Web/">Open the demo directly</a>.
+    </p>
+  </div>
+  <script>
+    (function () {
+      var DEMO_URL = 'https://librebooking-demo.fly.dev/Web/';
+      var RETRY_DELAY_MS = 2000;
+      var PROBE_TIMEOUT_MS = 8000;
+      var SLOW_NOTICE_AFTER_MS = 30000;
+      var FALLBACK_LINK_AFTER_MS = 90000;
+      var MIN_DISPLAY_MS = 2000;
+      var startTime = Date.now();
+      var statusEl = document.getElementById('status');
+      var fallbackEl = document.getElementById('fallback');
+
+      function updateStatus() {
+        var elapsed = Date.now() - startTime;
+        if (elapsed < SLOW_NOTICE_AFTER_MS) {
+          statusEl.textContent = 'Waking up the demo server…';
+        } else {
+          statusEl.textContent = 'Still waking up — Fly.io cold-start can take up to 2 minutes…';
+          if (elapsed >= FALLBACK_LINK_AFTER_MS) {
+            fallbackEl.hidden = false;
+          }
+        }
+      }
+
+      function probeOnce() {
+        return fetch(DEMO_URL, {
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: AbortSignal.timeout(PROBE_TIMEOUT_MS)
+        }).then(function () {
+          return true;
+        }).catch(function () {
+          return false;
+        });
+      }
+
+      function pollLoop() {
+        updateStatus();
+        probeOnce().then(function (ok) {
+          if (ok) {
+            var remaining = MIN_DISPLAY_MS - (Date.now() - startTime);
+            setTimeout(function () {
+              window.location.href = DEMO_URL;
+            }, Math.max(remaining, 0));
+          } else {
+            setTimeout(pollLoop, RETRY_DELAY_MS);
+          }
+        });
+      }
+
+      setInterval(updateStatus, 1000);
+      pollLoop();
+    })();
+  </script>
+</body>
+</html>
