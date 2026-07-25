@@ -45,6 +45,11 @@ class EmailService implements IEmailService
     {
         $this->phpMailer->clearAllRecipients();
         $this->phpMailer->clearReplyTos();
+        // GetEmailService() returns a singleton wrapping one PHPMailer instance for the whole
+        // request, and PHPMailer's attachment list persists across send() calls otherwise —
+        // without this, a reservation notification burst (owner, participants, invitees, guests)
+        // would leak each prior message's attachment onto every subsequent one.
+        $this->phpMailer->clearAttachments();
         $this->phpMailer->CharSet = $emailMessage->Charset();
         $this->phpMailer->Subject = $emailMessage->Subject();
         $this->phpMailer->Body = $emailMessage->Body();
