@@ -77,7 +77,16 @@ class iCalendarReservationView
         $this->DateEnd = $res->EndDate;
         $this->DateStart = $res->StartDate;
         $this->Summary = $canViewDetails ? $factory->Format($res, $summaryFormat) : $privateNotice;
-        $this->Description = $canViewDetails ? ($res->Description ?? '') : $privateNotice;
+        if ($canViewDetails) {
+            $desc = $res->Description ?? '';
+            if ($desc === '') {
+                $label = Resources::GetInstance()->GetString('Reservations');
+                $desc = !empty($res->ResourceName) ? $label . ' – ' . $res->ResourceName : $label;
+            }
+            $this->Description = $desc;
+        } else {
+            $this->Description = $privateNotice;
+        }
         $fullName = new FullName($res->OwnerFirstName, $res->OwnerLastName);
         $this->Organizer = $canViewUser ? $fullName->__toString() : $privateNotice;
         $this->OrganizerEmail = $canViewUser ? $res->OwnerEmailAddress : $privateNotice;
