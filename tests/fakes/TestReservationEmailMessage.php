@@ -20,8 +20,8 @@ class TestReservationEmailMessage extends ReservationEmailMessage
      * @param Reservation $currentInstance
      * @param Attribute[] $attributeValues
      */
-    public function PopulateIcsAttachmentForTest($currentInstance, $attributeValues = [])
+    public function PopulateIcsAttachmentForTest($currentInstance, $attributeValues = [], array $participantUsers = [], array $inviteeUsers = [])
     {
-        $this->PopulateIcsAttachment($currentInstance, $attributeValues);
+        $this->PopulateIcsAttachment($currentInstance, $attributeValues, $participantUsers, $inviteeUsers);
     }
 }

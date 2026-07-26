@@ -38,4 +38,12 @@ class ReservationShareEmail extends ReservationEmailMessage
     {
         return 'ReservationCreated.tpl';
     }
+
+    protected function GetIcsMethod(): string
+    {
+        // The share recipient is never added to the reservation's own Attendees list, so a
+        // scheduling REQUEST addressed to them would have no matching ATTENDEE property.
+        // This is an informational share, not an invite.
+        return 'PUBLISH';
+    }
 }

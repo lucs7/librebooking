@@ -158,23 +158,24 @@ abstract class ReservationEmailMessage extends EmailMessage
             }
         }
 
-        $this->PopulateIcsAttachment($currentInstance, $attributeValues);
+        $participantUsers = [];
+        foreach ($currentInstance->Participants() as $id) {
+            $participantUsers[$id] = $this->userRepository->GetById($id);
+        }
+
+        $inviteeUsers = [];
+        foreach ($currentInstance->Invitees() as $id) {
+            $inviteeUsers[$id] = $this->userRepository->GetById($id);
+        }
+
+        $this->PopulateIcsAttachment($currentInstance, $attributeValues, $participantUsers, $inviteeUsers);
 
         $this->Set('AutoReleaseMinutes', $minimumAutoRelease);
         $this->Set('ReferenceNumber', $currentInstance->ReferenceNumber());
 
-        $participants = [];
-        foreach ($currentInstance->Participants() as $id) {
-            $participants[] = $this->userRepository->GetById($id);
-        }
-        $this->Set('Participants', $participants);
+        $this->Set('Participants', array_values($participantUsers));
         $this->Set('ParticipatingGuests', $currentInstance->ParticipatingGuests());
-
-        $invitees = [];
-        foreach ($currentInstance->Invitees() as $id) {
-            $invitees[] = $this->userRepository->GetById($id);
-        }
-        $this->Set('Invitees', $invitees);
+        $this->Set('Invitees', array_values($inviteeUsers));
         $this->Set('InvitedGuests', $currentInstance->InvitedGuests());
 
         $this->Set('CreditsCurrent', $currentInstance->GetCreditsRequired());
@@ -185,7 +186,13 @@ abstract class ReservationEmailMessage extends EmailMessage
      * @param Reservation $currentInstance
      * @param Attribute[] $attributeValues
      */
-    protected function PopulateIcsAttachment($currentInstance, $attributeValues)
+    /**
+     * @param Reservation $currentInstance
+     * @param Attribute[] $attributeValues
+     * @param array $participantUsers Map of user id => User, pre-fetched by caller to avoid duplicate DB queries.
+     * @param array $inviteeUsers Map of user id => User, pre-fetched by caller.
+     */
+    protected function PopulateIcsAttachment($currentInstance, $attributeValues, array $participantUsers = [], array $inviteeUsers = [])
     {
         $rv = new ReservationItemView(
             $currentInstance->ReferenceNumber(),
@@ -217,7 +224,7 @@ abstract class ReservationEmailMessage extends EmailMessage
 
         $rv->ParticipantIds = $currentInstance->Participants();
         foreach ($rv->ParticipantIds as $id) {
-            $participant = $this->userRepository->GetById($id);
+            $participant = $participantUsers[$id] ?? $this->userRepository->GetById($id);
             if ($participant !== null) {
                 $rv->ParticipantNames[$id] = (new FullName($participant->FirstName, $participant->LastName))->__toString();
                 $rv->ParticipantEmails[$id] = $participant->EmailAddress;
@@ -226,7 +233,7 @@ abstract class ReservationEmailMessage extends EmailMessage
 
         $rv->InviteeIds = $currentInstance->Invitees();
         foreach ($rv->InviteeIds as $id) {
-            $invitee = $this->userRepository->GetById($id);
+            $invitee = $inviteeUsers[$id] ?? $this->userRepository->GetById($id);
             if ($invitee !== null) {
                 $rv->InviteeNames[$id] = (new FullName($invitee->FirstName, $invitee->LastName))->__toString();
                 $rv->InviteeEmails[$id] = $invitee->EmailAddress;
@@ -238,8 +245,42 @@ abstract class ReservationEmailMessage extends EmailMessage
 
         $icsView = new iCalendarReservationView($rv, $this->reservationSeries->BookedBy(), new NullPrivacyFilter());
 
+        // GetIcsMethod() declares this email's iTip intent. REQUEST is provisional: whether
+        // a reservation actually ships as METHOD:REQUEST or falls back to METHOD:PUBLISH
+        // depends on attendee presence, and CalendarExportDisplay::DetermineMethod() is the
+        // single place that rule lives (shared with the export/subscription pages) — call it
+        // here rather than re-implementing the same attendee check inline.
+        $method = $this->GetIcsMethod();
+        if ($method === 'REQUEST') {
+            $method = CalendarExportDisplay::DetermineMethod([$icsView]);
+        }
+        if ($method === 'CANCEL') {
+            $icsView->IsCancelled = true;
+        }
+
         $display = new CalendarExportDisplay();
-        $icsContents = $display->Render([$icsView]);
-        $this->AddStringAttachment($icsContents, 'reservation.ics');
+        $icsContents = $display->Render([$icsView], null, $method);
+        $this->AddStringAttachment($icsContents, 'reservation.ics', "text/calendar; charset=UTF-8; method={$method}");
+    }
+
+    /**
+     * The iTip (RFC 5546) method this email's ICS attachment represents, before the
+     * attendee-based REQUEST/PUBLISH check in PopulateIcsAttachment() runs. Defaults to
+     * REQUEST: the actionable "here's a scheduling invite" case for owner/participant/
+     * invitee/guest add & update notifications. PopulateIcsAttachment() downgrades this
+     * to PUBLISH via CalendarExportDisplay::DetermineMethod() when the reservation has no
+     * attendees to invite (see commit dfd28fef, "remove METHOD:REQUEST ... fix Add to
+     * Outlook", for why a REQUEST with no attendee data broke calendar import).
+     * Subclasses override this when the email isn't a REQUEST-shaped notification at all:
+     * ReservationDeletedEmail (and its subclasses covering removed participants, invitees,
+     * and guests) always uses CANCEL, and ReservationShareEmail — whose recipient is never
+     * added as an ATTENDEE — always uses PUBLISH, bypassing the attendee check entirely
+     * (only 'REQUEST' routes through DetermineMethod()).
+     *
+     * @return string 'REQUEST', 'CANCEL', or 'PUBLISH'
+     */
+    protected function GetIcsMethod(): string
+    {
+        return 'REQUEST';
     }
 }

@@ -18,6 +18,7 @@ class iCalendarReservationView
     public $EndReminder;
     public $LastModified;
     public $IsPending;
+    public $IsCancelled = false;
     public $ExtraIcalLines;
 
     /**

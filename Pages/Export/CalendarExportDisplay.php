@@ -16,20 +16,32 @@ class CalendarExportDisplay extends Page
     }
 
     /**
+     * A single reservation with real attendees is a scheduling request a client can act
+     * on (Accept/Decline). Anything else (no attendees, or a multi-event export/subscription
+     * feed) stays PUBLISH; see commit dfd28fef ("remove METHOD:REQUEST ... fix Add to Outlook")
+     * for why REQUEST without attendee data broke basic calendar import.
+     *
+     * @param $reservations iCalendarReservationView[]
+     * @return string 'REQUEST' or 'PUBLISH'
+     */
+    public static function DetermineMethod(array $reservations): string
+    {
+        $hasSingleReservationWithAttendees = count($reservations) === 1 && !empty($reservations[0]->Attendees);
+        return $hasSingleReservationWithAttendees ? 'REQUEST' : 'PUBLISH';
+    }
+
+    /**
      * @param $reservations iCalendarReservationView[]
      * @param string|null $calendarName Optional display name rendered as X-WR-CALNAME
+     * @param string|null $forceMethod Overrides DetermineMethod(), e.g. reservation invite emails
+     *                                 always send METHOD:REQUEST regardless of attendee count.
      * @return string
      */
-    public function Render(array $reservations, ?string $calendarName = null): string
+    public function Render(array $reservations, ?string $calendarName = null, ?string $forceMethod = null): string
     {
         $vcal = new VCalendar();
         $vcal->PRODID = '-//LibreBooking//NONSGML ' . Configuration::VERSION . '//EN';
-        // A single reservation with real attendees is a scheduling request a client can act
-        // on (Accept/Decline). Anything else (no attendees, or a multi-event export/subscription
-        // feed) stays PUBLISH; see commit dfd28fef ("remove METHOD:REQUEST ... fix Add to Outlook")
-        // for why REQUEST without attendee data broke basic calendar import.
-        $hasSingleReservationWithAttendees = count($reservations) === 1 && !empty($reservations[0]->Attendees);
-        $vcal->add('METHOD', $hasSingleReservationWithAttendees ? 'REQUEST' : 'PUBLISH');
+        $vcal->add('METHOD', $forceMethod ?? self::DetermineMethod($reservations));
 
         if ($calendarName !== null && $calendarName !== '') {
             $vcal->add('NAME', $calendarName);
@@ -55,7 +67,9 @@ class CalendarExportDisplay extends Page
             $event->add('DTEND', $res->DateEnd->Format($isoFormat));
             $event->add('LAST-MODIFIED', $res->LastModified->Format($isoFormat));
             $event->add('LOCATION', $res->Location);
-            $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
+            if (!empty($res->OrganizerEmail) && $res->OrganizerEmail !== 'Private') {
+                $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
+            }
             foreach ($res->Attendees as $attendee) {
                 $event->add('ATTENDEE', 'mailto:' . $attendee['Email'], [
                     'CN' => $attendee['Name'],
@@ -64,7 +78,7 @@ class CalendarExportDisplay extends Page
                     'RSVP' => 'TRUE',
                 ]);
             }
-            $event->add('STATUS', $res->IsPending ? 'TENTATIVE' : 'CONFIRMED');
+            $event->add('STATUS', $res->IsCancelled ? 'CANCELLED' : ($res->IsPending ? 'TENTATIVE' : 'CONFIRMED'));
             $event->add('SUMMARY', $res->Summary);
             $event->add('SEQUENCE', 0);
             $event->add('URL', $res->ReservationUrl);
