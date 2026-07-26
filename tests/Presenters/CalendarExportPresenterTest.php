@@ -423,6 +423,51 @@ class CalendarExportPresenterTest extends TestBase
         $this->assertStringNotContainsString('METHOD:REQUEST', $ics);
     }
 
+    public function testDetermineMethodReturnsRequestForSingleReservationWithAttendees()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->ParticipantIds = [1];
+        $res->ParticipantEmails = [1 => 'part1@example.com'];
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->assertEquals('REQUEST', CalendarExportDisplay::DetermineMethod([$reservationView]));
+    }
+
+    public function testDetermineMethodReturnsPublishWhenThereAreNoAttendees()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->assertEquals('PUBLISH', CalendarExportDisplay::DetermineMethod([$reservationView]));
+    }
+
+    public function testDetermineMethodReturnsPublishForMultipleReservationsEvenWithAttendees()
+    {
+        $user = new FakeUserSession();
+        $res1 = new ReservationItemView();
+        $res1->ParticipantIds = [1];
+        $res1->ParticipantEmails = [1 => 'part1@example.com'];
+        $res2 = new ReservationItemView();
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $view1 = new iCalendarReservationView($res1, $user, $this->privacyFilter);
+        $view2 = new iCalendarReservationView($res2, $user, $this->privacyFilter);
+
+        $this->assertEquals('PUBLISH', CalendarExportDisplay::DetermineMethod([$view1, $view2]));
+    }
+
+    public function testDetermineMethodReturnsPublishForEmptyReservationList()
+    {
+        $this->assertEquals('PUBLISH', CalendarExportDisplay::DetermineMethod([]));
+    }
+
     public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()
     {
         $this->fakeConfig->SetKey('version', '9.9.9-user-config');
@@ -524,5 +569,24 @@ class CalendarExportPresenterTest extends TestBase
         // reservation (or the rest of the malformed one's own properties) from rendering.
         $this->assertStringContainsString('good-ref', $ics);
         $this->assertStringContainsString('bad-ref', $ics);
+    }
+
+    public function testOrganizerIsOmittedFromRenderedOutputWhenPrivacyFilteringHidesUserDetails()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $privacyFilter = new FakePrivacyFilter();
+        $privacyFilter->_CanViewUser = false;
+
+        $reservationView = new iCalendarReservationView($res, $user, $privacyFilter);
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $display = new CalendarExportDisplay();
+        $ics = $display->Render([$reservationView]);
+
+        $this->assertStringNotContainsString('ORGANIZER', $ics);
+        $this->assertStringNotContainsString('mailto:Private', $ics);
     }
 }
