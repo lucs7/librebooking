@@ -18,6 +18,11 @@ interface ICalendarSubscriptionPage
     public function SetReservations($reservations);
 
     /**
+     * @param string $calendarName
+     */
+    public function SetCalendarName($calendarName);
+
+    /**
      * @return string
      */
     public function GetScheduleId();
