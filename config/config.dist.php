@@ -539,10 +539,10 @@ return [
             'view.schedules' => true,
 
             # When true, public (unauthenticated) views show reservation details.
-            # When false (default), public views show only that a slot is occupied with no content. (true/false)
+            # When false (default), public views and ICS feeds show only that a slot is occupied with no content. (true/false)
             'view.reservations' => false,
 
-            # When true, non-owner/non-admin users see "Private" instead of the organizer name and email (true/false)
+            # When true, non-owner/non-admin users see "Private" instead of the organizer name and email in interface and ICS feeds (true/false)
             'hide.user.details' => false,
 
             # Hide reservation details from general users (true/false)

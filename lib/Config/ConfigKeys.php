@@ -1221,8 +1221,8 @@ class ConfigKeys extends AbstractConfigKeys
         'type' => 'boolean',
         'default' => false,
         'label' => 'View Reservations',
-        'description' => 'When true, reservation details are shown in public schedule/calendar views. When false (default), public views show only that a slot is occupied with no details. Authenticated users and admins can still see full details via the regular schedule regardless of this setting. Also affects ICS feeds.',
-        'config_file_comment' => "When true, public (unauthenticated) views show reservation details.\nWhen false (default), public views show only that a slot is occupied with no content.",
+        'description' => 'When true, reservation details are shown in public schedule/calendar views and ics subscriptions. When false (default), public views show only that a slot is occupied with no details. Authenticated users and admins can still see full details via the regular schedule regardless of this setting.',
+        'config_file_comment' => "When true, public (unauthenticated) views show reservation details.\nWhen false (default), public views and ICS feeds show only that a slot is occupied with no content.",
         'section' => 'privacy'
     ];
     public const PRIVACY_HIDE_USER_DETAILS = [
@@ -1231,7 +1231,7 @@ class ConfigKeys extends AbstractConfigKeys
         'default' => false,
         'label' => 'Hide User Details',
         'description' => 'When true, the organizer name and email are hidden from users who are not the owner or an admin, showing "Private" instead. Affects schedule views, popups, calendar labels, autocomplete, ICS feeds, and the API.',
-        'config_file_comment' => 'When true, non-owner/non-admin users see "Private" instead of the organizer name and email',
+        'config_file_comment' => 'When true, non-owner/non-admin users see "Private" instead of the organizer name and email in interface and ICS feeds',
         'section' => 'privacy'
     ];
     public const PRIVACY_HIDE_RESERVATION_DETAILS = [
