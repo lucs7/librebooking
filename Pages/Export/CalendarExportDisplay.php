@@ -16,16 +16,33 @@ class CalendarExportDisplay extends Page
     }
 
     /**
+     * A single reservation with real attendees is a scheduling request a client can act
+     * on (Accept/Decline). Anything else (no attendees, or a multi-event export/subscription
+     * feed) stays PUBLISH; see commit dfd28fef ("remove METHOD:REQUEST ... fix Add to Outlook")
+     * for why REQUEST without attendee data broke basic calendar import.
+     *
+     * @param iCalendarReservationView[] $reservations
+     * @return string 'REQUEST' or 'PUBLISH'
+     */
+    public static function DetermineMethod(array $reservations): string
+    {
+        $hasSingleReservationWithAttendees = count($reservations) === 1 && !empty($reservations[0]->Attendees);
+        return $hasSingleReservationWithAttendees ? 'REQUEST' : 'PUBLISH';
+    }
+
+    /**
      * @param iCalendarReservationView[] $reservations
      * @param string|null $calendarName Optional display name rendered as X-WR-CALNAME
+     * @param string|null $forceMethod Overrides DetermineMethod(), e.g. reservation invite emails
+     *                                 always send METHOD:REQUEST regardless of attendee count.
      */
-    public function Render(array $reservations, ?string $calendarName = null): string
+    public function Render(array $reservations, ?string $calendarName = null, ?string $forceMethod = null): string
     {
         // Values passed as constructor children are merged over getDefaults(),
         // replacing the PRODID that VCalendar would otherwise generate.
         $vcal = new VCalendar([
             'PRODID' => '-//LibreBooking//NONSGML ' . Configuration::VERSION . '//EN',
-            'METHOD' => 'REQUEST',
+            'METHOD' => $forceMethod ?? self::DetermineMethod($reservations),
         ]);
 
         if ($calendarName !== null && $calendarName !== '') {
@@ -54,8 +71,25 @@ class CalendarExportDisplay extends Page
             $event->add('DTEND', $res->DateEnd->Format($isoFormat));
             $event->add('LAST-MODIFIED', $res->LastModified->Format($isoFormat));
             $event->add('LOCATION', $res->Location);
-            $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
-            $event->add('STATUS', $res->IsPending ? 'TENTATIVE' : 'CONFIRMED');
+            if (!empty($res->OrganizerEmail) && $res->OrganizerEmail !== 'Private') {
+                $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
+            }
+            // RFC 5546 §3.2.1: a PUBLISH VEVENT's ATTENDEE list MUST be empty, since PUBLISH
+            // doesn't solicit a reply. ATTENDEE is only meaningful for a single-event render —
+            // either a one-to-one scheduling email (REQUEST/CANCEL, always exactly one
+            // reservation) or an export of exactly one reservation. A multi-event feed always
+            // resolves to PUBLISH (see DetermineMethod()) and must never carry ATTENDEE data.
+            if (count($reservations) === 1) {
+                foreach ($res->Attendees as $attendee) {
+                    $event->add('ATTENDEE', 'mailto:' . $attendee['Email'], [
+                        'CN' => $attendee['Name'],
+                        'ROLE' => 'REQ-PARTICIPANT',
+                        'PARTSTAT' => 'NEEDS-ACTION',
+                        'RSVP' => 'TRUE',
+                    ]);
+                }
+            }
+            $event->add('STATUS', $res->IsCancelled ? 'CANCELLED' : ($res->IsPending ? 'TENTATIVE' : 'CONFIRMED'));
             $event->add('SUMMARY', $res->Summary);
             $event->add('SEQUENCE', 0);
             $event->add('URL', $res->ReservationUrl);
