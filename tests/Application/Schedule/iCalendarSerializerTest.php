@@ -1,0 +1,214 @@
+<?php
+
+declare(strict_types=1);
+
+require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
+require_once(ROOT_DIR . 'Domain/Access/namespace.php');
+
+class iCalendarSerializerTest extends TestBase
+{
+    /**
+     * @var FakePrivacyFilter
+     */
+    private $privacyFilter;
+
+    public function setUp(): void
+    {
+        parent::setup();
+
+        $this->privacyFilter = new FakePrivacyFilter();
+    }
+
+    public function testSerializedOutputEscapesRFC5545ReservedCharactersInDescriptionAndSummary()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Title; with, reserved\\ chars';
+        $res->Description = 'Desc; with, reserved\\ chars';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->OwnerId = $user->UserId + 1;
+        $res->OwnerEmailAddress = 'owner@example.com';
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $ics = iCalendarSerializer::Render([$reservationView]);
+
+        // RFC 5545 §3.3.11: backslash, comma, semicolon are reserved in TEXT values.
+        $this->assertStringContainsString('SUMMARY:Title\; with\, reserved\\\\ chars', $ics);
+        $this->assertStringContainsString('DESCRIPTION:Desc\; with\, reserved\\\\ chars', $ics);
+    }
+
+    public function testCalendarExportProdIdUsesApplicationVersionInsteadOfConfigValue()
+    {
+        $this->fakeConfig->SetKey('version', '9.9.9-user-config');
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+
+        $calendar = iCalendarSerializer::Render([]);
+
+        $this->assertStringContainsString(
+            'PRODID:-//LibreBooking//NONSGML ' . Configuration::VERSION . '//EN',
+            $calendar
+        );
+        $this->assertStringNotContainsString('9.9.9-user-config', $calendar);
+    }
+
+    public function testExtraIcalLinesPreservesPropertyParametersAndNestedComponents()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Title';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+        // ATTENDEE carries parameters; VALARM is a nested component. Both must round-trip
+        // through Reader::read() rather than becoming malformed flat text.
+        $reservationView->ExtraIcalLines = "ATTENDEE;CN=JaneDoe;ROLE=REQ-PARTICIPANT:mailto:jane@example.com\r\n"
+            . "BEGIN:VALARM\r\nACTION:AUDIO\r\nTRIGGER:-PT15M\r\nEND:VALARM";
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $ics = iCalendarSerializer::Render([$reservationView]);
+
+        $this->assertStringContainsString('ATTENDEE;CN=JaneDoe;ROLE=REQ-PARTICIPANT:mailto:jane@example.com', $ics);
+        $this->assertStringContainsString('BEGIN:VALARM', $ics);
+        $this->assertStringContainsString('ACTION:AUDIO', $ics);
+    }
+
+    public function testExtraIcalLinesSupportsRfc5545FoldedContinuationLines()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->UserId = $user->UserId;
+        $res->UserLevelId = ReservationUserLevel::OWNER;
+        $res->Title = 'Title';
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter, '{title}');
+        // RFC 5545 §3.1: a line starting with a single space is a folded continuation
+        // of the previous line, joined without the leading space.
+        $reservationView->ExtraIcalLines = "X-CUSTOM-FIELD:Hello\r\n World";
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $ics = iCalendarSerializer::Render([$reservationView]);
+
+        $this->assertStringContainsString('X-CUSTOM-FIELD:HelloWorld', $ics);
+    }
+
+    public function testMalformedExtraIcalLinesIsSkippedWithoutBreakingTheExport()
+    {
+        $user = new FakeUserSession();
+
+        $goodRes = new ReservationItemView();
+        $goodRes->UserId = $user->UserId;
+        $goodRes->UserLevelId = ReservationUserLevel::OWNER;
+        $goodRes->ReferenceNumber = 'good-ref';
+        $goodRes->Title = 'Good reservation';
+        $goodRes->StartDate = Date::Now();
+        $goodRes->EndDate = Date::Now()->AddHours(1);
+
+        $badRes = new ReservationItemView();
+        $badRes->UserId = $user->UserId;
+        $badRes->UserLevelId = ReservationUserLevel::OWNER;
+        $badRes->ReferenceNumber = 'bad-ref';
+        $badRes->Title = 'Bad reservation';
+        $badRes->StartDate = Date::Now();
+        $badRes->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+
+        $goodView = new iCalendarReservationView($goodRes, $user, $this->privacyFilter, '{title}');
+        $badView = new iCalendarReservationView($badRes, $user, $this->privacyFilter, '{title}');
+        // Not valid iCalendar syntax: no property name/value separator.
+        $badView->ExtraIcalLines = 'this is not a valid ical line';
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $ics = iCalendarSerializer::Render([$goodView, $badView]);
+
+        // The malformed fragment on one reservation must not prevent the other
+        // reservation (or the rest of the malformed one's own properties) from rendering.
+        $this->assertStringContainsString('good-ref', $ics);
+        $this->assertStringContainsString('bad-ref', $ics);
+    }
+
+    public function testOrganizerIsOmittedFromRenderedOutputWhenPrivacyFilteringHidesUserDetails()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+
+        $privacyFilter = new FakePrivacyFilter();
+        $privacyFilter->_CanViewUser = false;
+
+        $reservationView = new iCalendarReservationView($res, $user, $privacyFilter);
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $ics = iCalendarSerializer::Render([$reservationView]);
+
+        $this->assertStringNotContainsString('ORGANIZER', $ics);
+    }
+
+    public function testSingleReservationWithAttendeesUsesRequestMethodAndListsAttendees()
+    {
+        $user = new FakeUserSession();
+        $res = new ReservationItemView();
+        $res->StartDate = Date::Now();
+        $res->EndDate = Date::Now()->AddHours(1);
+        $res->ParticipantIds = [2];
+        $res->ParticipantNames = [2 => 'Part One'];
+        $res->ParticipantEmails = [2 => 'part1@example.com'];
+
+        $this->privacyFilter->_CanViewDetails = true;
+        $reservationView = new iCalendarReservationView($res, $user, $this->privacyFilter);
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $ics = iCalendarSerializer::Render([$reservationView]);
+        $unfolded = str_replace("\r\n ", '', $ics);
+
+        $this->assertStringContainsString('METHOD:REQUEST', $ics);
+        $this->assertMatchesRegularExpression('/ATTENDEE[^\r\n]*mailto:part1@example\.com/', $unfolded);
+    }
+
+    public function testMultipleReservationsWithAttendeesStayPublish()
+    {
+        $user = new FakeUserSession();
+
+        $res1 = new ReservationItemView();
+        $res1->ReferenceNumber = 'ref-1';
+        $res1->StartDate = Date::Now();
+        $res1->EndDate = Date::Now()->AddHours(1);
+        $res1->ParticipantIds = [2];
+        $res1->ParticipantNames = [2 => 'Part One'];
+        $res1->ParticipantEmails = [2 => 'part1@example.com'];
+
+        $res2 = new ReservationItemView();
+        $res2->ReferenceNumber = 'ref-2';
+        $res2->StartDate = Date::Now();
+        $res2->EndDate = Date::Now()->AddHours(1);
+
+        $this->privacyFilter->_CanViewDetails = true;
+        $view1 = new iCalendarReservationView($res1, $user, $this->privacyFilter);
+        $view2 = new iCalendarReservationView($res2, $user, $this->privacyFilter);
+
+        $this->fakeConfig->_ScriptUrl = 'https://example.com/Web';
+        $ics = iCalendarSerializer::Render([$view1, $view2]);
+
+        // RFC 5546 §3.2.1: a PUBLISH VEVENT's ATTENDEE property list MUST be empty, since
+        // PUBLISH doesn't solicit a reply. A multi-event feed always stays PUBLISH (see
+        // DetermineMethod()), so it must never carry ATTENDEE data even when one of its
+        // reservations has real attendees.
+        $this->assertStringContainsString('METHOD:PUBLISH', $ics);
+        $this->assertStringNotContainsString('ATTENDEE', $ics);
+    }
+}

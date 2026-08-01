@@ -1,7 +1,6 @@
 <?php
 
 require_once(ROOT_DIR . 'Pages/Export/SubscriptionPage.php');
-require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
 
 class CalendarSubscriptionPage extends SubscriptionPage
 {
@@ -20,7 +19,6 @@ class CalendarSubscriptionPage extends SubscriptionPage
         header('Content-Type: text/Calendar');
         header('Content-Disposition: inline; filename=calendar.ics');
 
-        $display = new CalendarExportDisplay();
-        echo $display->Render($this->reservations, $this->calendarName);
+        echo iCalendarSerializer::Render($this->reservations, $this->calendarName);
     }
 }

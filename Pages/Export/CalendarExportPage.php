@@ -1,7 +1,6 @@
 <?php
 
 require_once(ROOT_DIR . 'Pages/SecurePage.php');
-require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
 require_once(ROOT_DIR . 'Presenters/CalendarExportPresenter.php');
 
 interface ICalendarExportPage
@@ -60,8 +59,7 @@ class CalendarExportPage extends Page implements ICalendarExportPage
         header('Content-Type: text/Calendar');
         header('Content-Disposition: inline; filename=calendar.ics');
 
-        $display = new CalendarExportDisplay();
-        echo $display->Render($this->reservations);
+        echo iCalendarSerializer::Render($this->reservations);
     }
 
     public function GetReferenceNumber()

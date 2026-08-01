@@ -2,7 +2,6 @@
 
 require_once(ROOT_DIR . 'lib/Email/namespace.php');
 require_once(ROOT_DIR . 'Pages/Pages.php');
-require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
 require_once(ROOT_DIR . 'lib/Application/Schedule/namespace.php');
 require_once(ROOT_DIR . 'lib/Application/Reservation/namespace.php');
 require_once(ROOT_DIR . 'Domain/Access/namespace.php');
@@ -252,8 +251,7 @@ abstract class ReservationEmailMessage extends EmailMessage
             }
         }
 
-        $display = new CalendarExportDisplay();
-        $icsContents = $display->Render([$icsView], null, $method);
+        $icsContents = iCalendarSerializer::Render([$icsView], null, $method);
         $this->AddStringAttachment($icsContents, 'reservation.ics', "text/calendar; charset=UTF-8; method={$method}");
     }
 

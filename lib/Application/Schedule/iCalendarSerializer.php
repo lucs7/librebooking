@@ -6,15 +6,8 @@ use Sabre\VObject\Component\VEvent;
 use Sabre\VObject\ParseException;
 use Sabre\VObject\Reader;
 
-require_once(ROOT_DIR . 'Pages/Page.php');
-
-class CalendarExportDisplay extends Page
+class iCalendarSerializer
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     /**
      * A single reservation with real attendees is a scheduling request a client can act
      * on (Accept/Decline). Anything else (no attendees, or a multi-event export/subscription
@@ -36,7 +29,7 @@ class CalendarExportDisplay extends Page
      * @param string|null $forceMethod Overrides DetermineMethod(), e.g. reservation invite emails
      *                                 always send METHOD:REQUEST regardless of attendee count.
      */
-    public function Render(array $reservations, ?string $calendarName = null, ?string $forceMethod = null): string
+    public static function Render(array $reservations, ?string $calendarName = null, ?string $forceMethod = null): string
     {
         // Values passed as constructor children are merged over getDefaults(),
         // replacing the PRODID that VCalendar would otherwise generate.
@@ -71,7 +64,7 @@ class CalendarExportDisplay extends Page
             $event->add('DTEND', $res->DateEnd->Format($isoFormat));
             $event->add('LAST-MODIFIED', $res->LastModified->Format($isoFormat));
             $event->add('LOCATION', $res->Location);
-            if (!empty($res->OrganizerEmail) && $res->OrganizerEmail !== 'Private') {
+            if (!empty($res->OrganizerEmail)) {
                 $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
             }
             // RFC 5546 §3.2.1: a PUBLISH VEVENT's ATTENDEE list MUST be empty, since PUBLISH
@@ -141,10 +134,5 @@ class CalendarExportDisplay extends Page
         }
 
         return $vcal->serialize();
-    }
-
-    public function PageLoad()
-    {
-        // no-op
     }
 }
