@@ -168,6 +168,19 @@ class SlotLabelFactoryTest extends TestBase
         $this->assertEquals('', $label);
     }
 
+    public function testAnonymousUserSeesLabelWhenPublicViewingIsAllowed()
+    {
+        $this->SetConfig('{name} - {title}');
+        $this->fakeConfig->SetKey(ConfigKeys::PRIVACY_VIEW_RESERVATIONS, 'true');
+
+        $anonymousUser = new NullUserSession();
+        $factory = new SlotLabelFactory($anonymousUser);
+
+        $label = $factory->Format($this->reservation);
+
+        $this->assertEquals('first last - some title', $label);
+    }
+
     private function SetConfig($value)
     {
         $this->fakeConfig->SetKey(ConfigKeys::SCHEDULE_RESERVATION_LABEL, $value);

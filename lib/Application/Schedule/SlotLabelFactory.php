@@ -72,7 +72,13 @@ class SlotLabelFactory
             return '';
         }
 
-        if (!in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId)) && !$reservation->IsUserOwner($this->user->UserId) && !$reservation->IsUserInvited($this->user->UserId) && !$reservation->IsUserParticipating($this->user->UserId)) {
+        if (
+            $this->user->IsLoggedIn() &&
+            !in_array($reservation->ResourceId, $this->UserResourcePermissions($this->user->UserId)) &&
+            !$reservation->IsUserOwner($this->user->UserId) &&
+            !$reservation->IsUserInvited($this->user->UserId) &&
+            !$reservation->IsUserParticipating($this->user->UserId)
+        ) {
             return '';
         }
 
