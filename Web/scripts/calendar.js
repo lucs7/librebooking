@@ -455,8 +455,20 @@ function Calendar(opts) {
     var url = _options.getSubscriptionUrl + '&rid=' + rid + '&sid=' + sid + '&gid=' + gid;
     ajaxGet(
       url,
-      function () {},
+      function () {
+        // Disable the link while it may still reflect the previous filter selection.
+        // The href and inline onclick are dropped as well: pointer-events: none only
+        // blocks the mouse, so a focused link could otherwise still be activated with
+        // the keyboard and copy the stale subscription URL to the clipboard.
+        $('#subscribeToCalendar')
+          .addClass('disabled')
+          .attr('aria-disabled', 'true')
+          .removeAttr('onclick')
+          .removeAttr('href');
+      },
       function (response) {
+        // Re-enabling happens by replacement: the link lives inside #calendarSubscription
+        // and is rendered fresh, enabled, and carrying the current filter's URL.
         $('#calendarSubscription').html(response);
       }
     );
