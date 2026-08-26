@@ -157,6 +157,11 @@ script) in a short written finding. Tool output is **always** followed by manual
 Decisions: goldens captured from **current Smarty output** as source of truth;
 normalization targets **structural equivalence**, not byte-identical.
 
+**Manual verification.** The dev server runs in Docker watching the `app/` folder,
+so edits to templates/PHP reflect live in the running container (served at
+`http://localhost:80`). Use it for per-page visual spot-checks during each area's
+migration, in addition to (not instead of) the golden tests.
+
 ### 5. Sequencing & end state
 
 **Faithful 1:1 conversion first; `embed`/optimization is a later pass.** All templates
