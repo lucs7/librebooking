@@ -30,15 +30,22 @@ UPDATE_GOLDEN=1 composer phpunit -- tests/Golden/SomeTemplateTest.php
 `HtmlNormalizer::normalize()` applies structural normalization before comparison so that
 cosmetic rendering differences do not cause false failures:
 
-- **Inter-tag whitespace** is collapsed: `>\n   <` becomes `><`
-- **Whitespace runs** are collapsed to a single space
-- **Numeric HTML entities** are canonicalized: `&#039;` and `&#39;` both become `&apos;`;
-  `&#34;` and `&quot;` remain as `&quot;`
+- **Numeric HTML entities** are canonicalized: `&#039;` and `&#39;` are converted to `&apos;`;
+  `&#34;` is converted to `&quot;`
+- **All whitespace runs** are collapsed to a single space (including between tags, within text content, and in attribute values)
 - The result is trimmed
 
 This means two renders are considered equivalent when they produce the same DOM structure
 and text content, regardless of indentation or line breaks. Differences in tag names, tag
 order, attributes, or text content **will** cause assertion failures.
+
+### Limitations
+
+`HtmlNormalizer` collapses all contiguous whitespace to a single space, including whitespace
+within text content (e.g., `Hello  world` becomes `Hello world`), inside attribute values,
+and within `<pre>` blocks. The harness will not catch regressions that change only inline
+whitespace. This is an intentional trade-off to focus on structural equivalence; Phase 1
+authors should be aware when designing test coverage.
 
 ## How to add a golden test for a migrated template
 
@@ -53,13 +60,7 @@ order, attributes, or text content **will** cause assertion failures.
    ];
    ```
 
-2. **Capture the Smarty baseline** (run once, then commit the baseline file):
-
-   ```bash
-   UPDATE_GOLDEN=1 composer phpunit -- tests/Golden/LoginTemplateTest.php
-   ```
-
-3. **Create the test class** extending `GoldenTemplateTestCase`:
+2. **Create the test class** extending `GoldenTemplateTestCase`:
 
    ```php
    // tests/Golden/LoginTemplateTest.php
@@ -81,7 +82,13 @@ order, attributes, or text content **will** cause assertion failures.
    }
    ```
 
-4. **Commit** the fixture, baseline, and test together.
+3. **Capture the Smarty baseline** (run once to write the baseline file):
+
+   ```bash
+   UPDATE_GOLDEN=1 composer phpunit -- tests/Golden/LoginTemplateTest.php
+   ```
+
+4. **Review and commit** the fixture, baseline, and test together.
 
 ## Directory structure
 
