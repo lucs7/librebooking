@@ -30,6 +30,41 @@ class LibreBookingExtension extends AbstractExtension
         return $result;
     }
 
+    /**
+     * Returns the configured default DataTable page size, falling back to 50.
+     * Reproduces SmartyPage::GetDefaultDataTablePageSize logic.
+     */
+    private function getDefaultDataTablePageSize(): int
+    {
+        $defaultPageSize = intval(Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_PAGE_SIZE));
+        return $defaultPageSize > 0 ? $defaultPageSize : 50;
+    }
+
+    /**
+     * Builds the DataTable lengthMenu array string (values + labels).
+     * Reproduces SmartyPage::BuildDataTableLengthMenu logic.
+     */
+    private function buildDataTableLengthMenu(string $allText): string
+    {
+        $defaultPageSize = $this->getDefaultDataTablePageSize();
+
+        $pageSizes = [25, 50, 75, 100];
+        if (!in_array($defaultPageSize, $pageSizes, true)) {
+            $pageSizes[] = $defaultPageSize;
+            sort($pageSizes);
+        }
+
+        $lengthValues = array_merge($pageSizes, [-1]);
+        $lengthLabels = array_map('strval', $pageSizes);
+        $lengthLabels[] = $allText;
+
+        return sprintf(
+            '[%s, %s]',
+            json_encode($lengthValues),
+            json_encode($lengthLabels, JSON_UNESCAPED_UNICODE)
+        );
+    }
+
     public function getFunctions(): array
     {
         return [
@@ -656,6 +691,209 @@ class LibreBookingExtension extends AbstractExtension
                 static function (): string {
                     flush();
                     return '<!-- flushing -->';
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            // ── Group D: asset includes & datatables ────────────────────────
+
+            /**
+             * Renders a <script> tag for an application JS file.
+             * Equivalent to SmartyPage::IncludeJavascriptFile (echoed; returned here).
+             *
+             * Prepends rootPath + 'scripts/' and appends the version query string.
+             * Pass `async=true` to add the async attribute.
+             */
+            new TwigFunction(
+                'jsfile',
+                function (string $src, bool $async = false): string {
+                    $versionNumber = Configuration::VERSION;
+                    $asyncAttr = $async ? ' async' : '';
+                    return "<script type=\"text/javascript\" src=\"{$this->rootPath}scripts/{$src}?v={$versionNumber}\"{$asyncAttr}></script>";
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Renders a <link> tag for an application CSS file.
+             * Equivalent to SmartyPage::IncludeCssFile (echoed; returned here).
+             *
+             * When `src` contains no '/', prepends 'css/' automatically.
+             */
+            new TwigFunction(
+                'cssfile',
+                function (string $src): string {
+                    $versionNumber = Configuration::VERSION;
+                    if (!BookedStringHelper::Contains($src, '/')) {
+                        $src = "css/{$src}";
+                    }
+                    return "<link rel='stylesheet' type='text/css' href='{$this->rootPath}{$src}?v={$versionNumber}'/>";
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Renders a <script> tag for a vendor JS file.
+             * Equivalent to SmartyPage::IncludeVendorJavascriptFile (echoed; returned here).
+             *
+             * Prepends rootPath + 'assets/vendor/' and appends the version query string.
+             * Pass `async=true` to add the async attribute.
+             */
+            new TwigFunction(
+                'vendor_js',
+                function (string $src, bool $async = false): string {
+                    $versionNumber = Configuration::VERSION;
+                    $asyncAttr = $async ? ' async' : '';
+                    return "<script type=\"text/javascript\" src=\"{$this->rootPath}assets/vendor/{$src}?v={$versionNumber}\"{$asyncAttr}></script>";
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Renders a <link> tag for a vendor CSS file.
+             * Equivalent to SmartyPage::IncludeVendorCssFile (echoed; returned here).
+             *
+             * Prepends rootPath + 'assets/vendor/' and appends the version query string.
+             */
+            new TwigFunction(
+                'vendor_css',
+                function (string $src): string {
+                    $versionNumber = Configuration::VERSION;
+                    return "<link rel='stylesheet' type='text/css' href='{$this->rootPath}assets/vendor/{$src}?v={$versionNumber}'/>";
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Renders the DataTable initialisation <script> block.
+             * Equivalent to SmartyPage::CreateDataTable (already returns).
+             *
+             * The `report-results` tableId uses a minimal, non-paginating config;
+             * all other ids use the configurable page-size and length menu.
+             */
+            new TwigFunction(
+                'datatable',
+                function (string $tableId): string {
+                    $searchText = $this->resources->GetString('Filter');
+                    $allText = $this->resources->GetString('All');
+                    $noResultsFoundText = $this->resources->GetString('NoResultsFound');
+                    $copyText = $this->resources->GetString('Copy');
+                    $exportText = $this->resources->GetString('Export');
+                    $printText = $this->resources->GetString('Print');
+                    $showHideText = $this->resources->GetString('ShowHide');
+                    $infoText = $this->resources->GetString('Info');
+                    $lengthMenuText = $this->resources->GetString('LengthMenu');
+                    $defaultPageSize = $this->getDefaultDataTablePageSize();
+                    $lengthMenu = $this->buildDataTableLengthMenu($allText);
+
+                    if ($tableId == 'report-results') {
+                        $pagination = '"paging": false,
+                "lengthChange": false,
+                "searching": false,
+                "info": false,
+                "ordering": false,';
+                    } else {
+                        $pagination = '"pageLength": ' . $defaultPageSize . ', "lengthMenu": ' . $lengthMenu . ',';
+                    }
+
+                    return sprintf(
+                        '<script>
+           var table =  $("#' . $tableId . '").DataTable({
+                "searching": false,
+                "dom": \'<"d-flex justify-content-center flex-wrap"B><"d-flex justify-content-between flex-wrap mt-2"fil>rt<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
+                ' . $pagination . '
+                "language": {
+                    search: "' . $searchText . '",
+                    info: "' . $infoText . '",
+                    infoEmpty: "' . $noResultsFoundText . '",
+                    infoFiltered: "",
+                    lengthMenu: "' . $lengthMenuText . '",
+                    zeroRecords: "' . $noResultsFoundText . '",
+                },
+                "buttons": [
+                    {
+                        extend: "copyHtml5",
+                        text: "<i class=\"bi bi-copy me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $copyText . '</div>",
+                    },
+                    {
+                        extend: "excelHtml5",
+                        text: "<i class=\"bi bi-file-earmark-spreadsheet me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $exportText . ' Excel</div>",
+                    },
+                    {
+                        extend: "pdfHtml5",
+                        text: "<i class=\"bi bi-filetype-pdf me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $exportText . ' PDF</div>",
+                    },
+                    {
+                        extend: "print",
+                        text: "<i class=\"bi bi-printer me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $printText . '</div>",
+                    },
+                    {
+                        extend: "colvis",
+                        text: "<i class=\"bi bi-list-check me-1\"></i><div class=\"d-none d-sm-inline-block\">' . $showHideText . '</div>",
+                    }
+                ],
+                "initComplete": function(settings, json) {
+                    var table = this.api();
+                    table.on("init.dt", function () {
+                        $(".dt-buttons .btn-secondary").removeClass("btn-secondary").addClass("btn-primary");
+                        $(".dt-buttons").addClass("btn-group-sm");
+                        $(".buttons-collection").addClass("btn-sm");
+                    });
+                },
+                "drawCallback": function (settings) {
+                    if (typeof setUpEditables !== "undefined") {
+                        setUpEditables();
+                    }
+                }
+            });
+        </script>
+        '
+                    );
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Renders the DataTable filter initialisation <script> block.
+             * Equivalent to SmartyPage::CreateDataTableFilter (already returns).
+             *
+             * Uses a compact dom layout with built-in search/filter input.
+             */
+            new TwigFunction(
+                'datatablefilter',
+                function (string $tableId): string {
+                    $searchText = $this->resources->GetString('Filter');
+                    $viewAllText = $this->resources->GetString('All');
+                    $noResultsFoundText = $this->resources->GetString('NoResultsFound');
+                    $infoText = $this->resources->GetString('Info');
+                    $lengthMenuText = $this->resources->GetString('LengthMenu');
+                    $defaultPageSize = $this->getDefaultDataTablePageSize();
+                    $lengthMenu = $this->buildDataTableLengthMenu($viewAllText);
+
+                    return sprintf(
+                        '<script>
+           var table =  $("#' . $tableId . '").DataTable({
+                "dom": \'<"d-flex justify-content-between my-1"fl><t>t<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
+                "pageLength": ' . $defaultPageSize . ',
+                "lengthMenu": ' . $lengthMenu . ',
+                language: {
+                    search: "' . $searchText . '",
+                    info: "' . $searchText . '",
+                    infoEmpty: "' . $infoText . '",
+                    infoFiltered: "",
+                    lengthMenu: "' . $lengthMenuText . '",
+                    zeroRecords: "' . $noResultsFoundText .
+                        '"
+                },
+                "drawCallback": function (settings) {
+                    if (typeof setUpEditables !== "undefined") {
+                        setUpEditables();
+                    }
+                }
+            });
+        </script>
+        '
+                    );
                 },
                 ['is_safe' => ['html']]
             ),
