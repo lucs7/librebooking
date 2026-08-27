@@ -187,7 +187,8 @@ class ExportGoldenTest extends GoldenTemplateTestCase
     }
 
     /**
-     * Two reservations on different dates: date headers appear, color conditional exercised.
+     * Two reservations on different dates: date headers appear.
+     * color='' (no color set) — color conditional takes the false branch in both engines.
      */
     public function testAgendaWithReservationsMatchesSmarty(): void
     {
@@ -266,7 +267,8 @@ class ExportGoldenTest extends GoldenTemplateTestCase
     }
 
     /**
-     * One reservation on Wednesday: color conditional exercised.
+     * One reservation on Wednesday.
+     * color='' (no color set) — color conditional takes the false branch in both engines.
      */
     public function testWeekWithReservationsMatchesSmarty(): void
     {
@@ -310,7 +312,8 @@ class ExportGoldenTest extends GoldenTemplateTestCase
     }
 
     /**
-     * One reservation: color, TitleFormatter output exercised.
+     * One reservation: TitleFormatter output exercised.
+     * color='' (no color set) — color conditional takes the false branch in both engines.
      */
     public function testMonthWithReservationsMatchesSmarty(): void
     {
@@ -332,5 +335,151 @@ class ExportGoldenTest extends GoldenTemplateTestCase
             'Export/embedded-calendar-month.twig',
             $vars
         );
+    }
+
+    // ── color-branch coverage ─────────────────────────────────────────────────
+
+    /**
+     * Agenda: color conditional true branch.
+     *
+     * Smarty emits a stray } after the style attribute due to the way {if}
+     * tags close inside an HTML attribute context; Twig correctly omits it.
+     * This is a known intentional divergence — Twig is correct.
+     *
+     * We assert Twig output separately rather than using assertParity().
+     */
+    public function testAgendaColorConditionalTwigOutput(): void
+    {
+        $range = new DateRange(
+            Date::Parse('2025-06-15', 'UTC'),
+            Date::Parse('2025-06-20', 'UTC')
+        );
+
+        $start = Date::Parse('2025-06-15 09:00:00', 'UTC');
+        $end = Date::Parse('2025-06-15 10:00:00', 'UTC');
+        $item = $this->makeReservationItem('REF-COLOR-A', $start, $end, 'Colored Meeting');
+        $item->ResourceColor = '#3399ff';
+
+        $listing = new ReservationListing('UTC', $range);
+        $listing->Add($item);
+
+        $vars = $this->agendaVars($listing, $range);
+
+        // Twig: color conditional renders the style attribute correctly (no stray }).
+        $twig = new TwigRenderer();
+        foreach ($vars as $k => $v) {
+            $twig->assign($k, $v);
+        }
+        $twigOutput = $twig->render('Export/embedded-calendar-agenda.twig');
+
+        $this->assertStringContainsString('background-color:#3399ff !important', $twigOutput);
+        // Twig must NOT emit a stray } immediately after the closing double-quote of the style attribute.
+        $this->assertStringNotContainsString('!important"}'."\n", $twigOutput);
+        $this->assertStringNotContainsString('!important"}>', $twigOutput);
+
+        // Smarty emits a stray } after the style attribute — document the known bug.
+        // Smarty emits a stray } after the style attribute; Twig correctly omits it.
+        $smarty = new SmartyRenderer();
+        foreach ($vars as $k => $v) {
+            $smarty->assign($k, $v);
+        }
+        $smartyOutput = $smarty->render('Export/embedded-calendar-agenda.tpl');
+
+        $this->assertStringContainsString('background-color:#3399ff !important', $smartyOutput);
+        $this->assertStringContainsString('!important"}>', $smartyOutput);
+    }
+
+    /**
+     * Week: color conditional true branch.
+     *
+     * Smarty emits a stray } after the style attribute; Twig correctly omits it.
+     * We assert each engine independently rather than using assertParity().
+     */
+    public function testWeekColorConditionalTwigOutput(): void
+    {
+        $range = new DateRange(
+            Date::Parse('2025-06-09', 'UTC'),
+            Date::Parse('2025-06-16', 'UTC')
+        );
+
+        $start = Date::Parse('2025-06-11 10:00:00', 'UTC');
+        $end = Date::Parse('2025-06-11 11:00:00', 'UTC');
+        $item = $this->makeReservationItem('REF-COLOR-W', $start, $end, 'Colored Wednesday');
+        $item->ResourceColor = '#3399ff';
+
+        $listing = new ReservationListing('UTC', $range);
+        $listing->Add($item);
+
+        $vars = $this->weekVars($listing, $range);
+
+        // Twig: color conditional renders the style attribute correctly (no stray }).
+        $twig = new TwigRenderer();
+        foreach ($vars as $k => $v) {
+            $twig->assign($k, $v);
+        }
+        $twigOutput = $twig->render('Export/embedded-calendar-week.twig');
+
+        $this->assertStringContainsString('background-color:#3399ff !important', $twigOutput);
+        // Twig must NOT emit a stray } after the closing double-quote of the style attribute.
+        $this->assertStringNotContainsString('!important"}', $twigOutput);
+
+        // Smarty emits a stray } after the style attribute; Twig correctly omits it.
+        $smarty = new SmartyRenderer();
+        foreach ($vars as $k => $v) {
+            $smarty->assign($k, $v);
+        }
+        $smartyOutput = $smarty->render('Export/embedded-calendar-week.tpl');
+
+        $this->assertStringContainsString('background-color:#3399ff !important', $smartyOutput);
+        $this->assertStringContainsString('!important"', $smartyOutput);
+        // The stray } appears on its own line after the style value in the week template.
+        $this->assertMatchesRegularExpression('/!important"\s*\}/', $smartyOutput);
+    }
+
+    /**
+     * Month: color conditional true branch.
+     *
+     * Smarty emits a stray } after the style attribute; Twig correctly omits it.
+     * We assert each engine independently rather than using assertParity().
+     */
+    public function testMonthColorConditionalTwigOutput(): void
+    {
+        $range = new DateRange(
+            Date::Parse('2025-06-01', 'UTC'),
+            Date::Parse('2025-06-30', 'UTC')
+        );
+
+        $start = Date::Parse('2025-06-15 09:00:00', 'UTC');
+        $end = Date::Parse('2025-06-15 10:00:00', 'UTC');
+        $item = $this->makeReservationItem('REF-COLOR-M', $start, $end, 'Colored June Meeting');
+        $item->ResourceColor = '#3399ff';
+
+        $listing = new ReservationListing('UTC', $range);
+        $listing->Add($item);
+
+        $vars = $this->monthVars($listing, $range);
+
+        // Twig: color conditional renders the style attribute correctly (no stray }).
+        $twig = new TwigRenderer();
+        foreach ($vars as $k => $v) {
+            $twig->assign($k, $v);
+        }
+        $twigOutput = $twig->render('Export/embedded-calendar-month.twig');
+
+        $this->assertStringContainsString('background-color:#3399ff !important', $twigOutput);
+        // Twig must NOT emit a stray } after the closing double-quote of the style attribute.
+        $this->assertStringNotContainsString('!important"}', $twigOutput);
+
+        // Smarty emits a stray } after the style attribute; Twig correctly omits it.
+        $smarty = new SmartyRenderer();
+        foreach ($vars as $k => $v) {
+            $smarty->assign($k, $v);
+        }
+        $smartyOutput = $smarty->render('Export/embedded-calendar-month.tpl');
+
+        $this->assertStringContainsString('background-color:#3399ff !important', $smartyOutput);
+        $this->assertStringContainsString('!important"', $smartyOutput);
+        // The stray } appears on its own line after the style value in the month template.
+        $this->assertMatchesRegularExpression('/!important"\s*\}/', $smartyOutput);
     }
 }
