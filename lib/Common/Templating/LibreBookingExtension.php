@@ -1060,7 +1060,7 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                     '<s' => '<\s',
                     '<S' => '<\S',
                     '`' => '\\\\`',
-                    '${' => '\\\\${',
+                    '${' => '\\\\\\$\\{',
                 ]);
             }, ['is_safe' => ['html']]),
 
