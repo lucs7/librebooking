@@ -112,6 +112,48 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                 ['is_safe' => ['html']]
             ),
 
+            /**
+             * Renders an already-constructed DashboardItem (or any Control) by calling
+             * its PageLoad() method and capturing echoed output.
+             * Equivalent to `{$dashboardItem->PageLoad()}` in the Smarty dashboard template.
+             */
+            new TwigFunction(
+                'dashboard_item',
+                static function (object $item): string {
+                    ob_start();
+                    $item->PageLoad();
+                    return (string) ob_get_clean();
+                },
+                ['is_safe' => ['html']]
+            ),
+
+            /**
+             * Renders <option> elements from parallel arrays.
+             * Equivalent to Smarty's built-in {html_options values=... output=... selected=...}.
+             *
+             * @param mixed[] $values   Array of option value attributes.
+             * @param mixed[] $output   Array of option display labels.
+             * @param mixed   $selected Currently selected value.
+             */
+            new TwigFunction(
+                'html_options',
+                static function (array $values, array $output, mixed $selected = ''): string {
+                    $builder = new StringBuilder();
+                    foreach ($values as $i => $value) {
+                        $label = $output[$i] ?? $value;
+                        $isSelected = ((string) $value === (string) $selected) ? ' selected="selected"' : '';
+                        $builder->Append(sprintf(
+                            '<option value="%s"%s>%s</option>',
+                            htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8'),
+                            $isSelected,
+                            htmlspecialchars((string) $label, ENT_QUOTES, 'UTF-8')
+                        ));
+                    }
+                    return $builder->ToString();
+                },
+                ['is_safe' => ['html']]
+            ),
+
             // ── Group A: buttons & icons ────────────────────────────────────
 
             /**
@@ -365,19 +407,40 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                     $type = strtolower($type === '' ? 'text' : $type);
                     $isRequired = (bool) $required;
 
-                    // Build the synthetic $params array in insertion order, mirroring Smarty tag order:
-                    // class first (always present after Textbox modifies it), then id, then placeholder,
-                    // then any caller-supplied extras.
+                    // Build the synthetic $params array in insertion order, mirroring Smarty tag order.
+                    //
+                    // SmartyPage::Textbox adds 'class' and 'placeholder' to $params AFTER reading the
+                    // tag attributes.  PHP associative-array semantics mean:
+                    //   - If 'class' was already a key (explicitly in the tag), assigning it modifies
+                    //     in-place — so class stays BEFORE any subsequent data-bv-* attributes.
+                    //   - If 'class' was absent, it is appended at the END of $params —  so class ends
+                    //     up AFTER data-bv-* attributes but BEFORE 'placeholder' (which is added next).
+                    //   - 'placeholder' (from placeholderkey) is always appended AFTER class.
+                    //
+                    // Mirror this insertion order here:
+                    //   class-provided  → class, id?, placeholder?, extras
+                    //   class-absent    → id?,  extras,  class,  placeholder?
                     $params = [];
-                    $params['class'] = $cssClass;
+
+                    $classWasProvided = $class !== '';
+                    if ($classWasProvided) {
+                        $params['class'] = $cssClass;
+                    }
+
                     if ($id !== '') {
                         $params['id'] = $id;
                     }
-                    if ($placeholderkey !== '') {
-                        $params['placeholder'] = $this->resources->GetString($placeholderkey);
-                    }
+
                     foreach ($attributes as $k => $v) {
                         $params[$k] = $v;
+                    }
+
+                    if (!$classWasProvided) {
+                        $params['class'] = $cssClass;
+                    }
+
+                    if ($placeholderkey !== '') {
+                        $params['placeholder'] = $this->resources->GetString($placeholderkey);
                     }
 
                     $extraStr = self::buildAttributes($params);
