@@ -5,5 +5,17 @@
   "singleQuote": true,
   "trailingComma": "es5",
   "printWidth": 120,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+
+  	"twigMultiTags": [
+		"nav,endnav",
+		"switch,case,default,endswitch",
+		"ifchildren,endifchildren",
+		"cache,endcache",
+		"js,endjs"
+	],
+
+	"plugins": [
+		"@zackad/prettier-plugin-twig",
+	]
 }
