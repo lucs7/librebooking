@@ -20,7 +20,8 @@
             var dashboardOpts = {
                 reservationUrl: "{{ constant('Pages::RESERVATION') }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}=",
                 summaryPopupUrl: "ajax/respopup.php",
-                scriptUrl: '{{ ScriptUrl }}'
+                {# raw: JS string context, matches Smarty; ScriptUrl is developer-config #}
+                scriptUrl: '{{ ScriptUrl|raw }}'
             };
 
             var dashboard = new Dashboard(dashboardOpts);

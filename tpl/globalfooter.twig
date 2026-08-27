@@ -64,7 +64,8 @@
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
 			gtag('js', new Date());
-			gtag('config', '{{ GoogleAnalyticsTrackingId }}');
+			{# raw: JS string context, matches Smarty; GoogleAnalyticsTrackingId is developer-config #}
+			gtag('config', '{{ GoogleAnalyticsTrackingId|raw }}');
 		</script>
 	{% endif %}
 

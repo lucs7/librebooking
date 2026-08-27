@@ -138,15 +138,26 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
             new TwigFunction(
                 'html_options',
                 static function (array $values, array $output, mixed $selected = ''): string {
+                    // Use ENT_COMPAT + no double-encode to match Smarty's smarty_function_escape_special_chars.
+                    $escapeAttr = static fn (string $s): string =>
+                        htmlspecialchars($s, ENT_COMPAT, 'UTF-8', false);
+                    // Smarty escapes the selected value before comparing against escaped option values.
+                    $escapedSelected = is_array($selected)
+                        ? array_map(static fn ($s) => $escapeAttr((string) $s), $selected)
+                        : $escapeAttr((string) $selected);
                     $builder = new StringBuilder();
                     foreach ($values as $i => $value) {
                         $label = $output[$i] ?? $value;
-                        $isSelected = ((string) $value === (string) $selected) ? ' selected="selected"' : '';
+                        $escapedValue = $escapeAttr((string) $value);
+                        $isSelected = is_array($escapedSelected)
+                            ? (isset($escapedSelected[$escapedValue]) ? ' selected="selected"' : '')
+                            : ($escapedValue === $escapedSelected ? ' selected="selected"' : '');
+                        // Trailing \n matches Smarty's {html_options} byte-for-byte output.
                         $builder->Append(sprintf(
-                            '<option value="%s"%s>%s</option>',
-                            htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8'),
+                            '<option value="%s"%s>%s</option>' . "\n",
+                            $escapedValue,
                             $isSelected,
-                            htmlspecialchars((string) $label, ENT_QUOTES, 'UTF-8')
+                            $escapeAttr((string) $label)
                         ));
                     }
                     return $builder->ToString();

@@ -171,7 +171,8 @@
             langCode = (navigator.language + "").replace("-", "_").toLowerCase();
 
             var availableLanguages = [{% for lang in Languages %}"{{ lang.GetLanguageCode() }}",{% endfor %}];
-            if (langCode !== "" && langCode != '{{ SelectedLanguage|lower }}') {
+            {# raw: JS string context, matches Smarty; SelectedLanguage is a language code #}
+            if (langCode !== "" && langCode != '{{ SelectedLanguage|lower|raw }}') {
             if (availableLanguages.indexOf(langCode) !== -1) {
                 window.location.href = url + langCode;
             }
