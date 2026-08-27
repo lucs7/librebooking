@@ -1224,6 +1224,24 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                 ]);
             }, ['is_safe' => ['html']]),
 
+            // Encodes a value as JSON.
+            // Equivalent to Smarty's |json_encode modifier.
+            // Marked is_safe because JSON text is safe in HTML context.
+            new TwigFilter('json_encode', static function (mixed $value): string {
+                return (string) json_encode($value);
+            }, ['is_safe' => ['html']]),
+
+            // Truncates a string to a maximum length, appending a suffix.
+            // Equivalent to Smarty's |truncate modifier (single-byte-safe via mb_strlen/mb_substr).
+            // NOT marked is_safe — callers should pipe |nl2br or |escape as needed.
+            new TwigFilter('truncate', static function (mixed $text, int $length = 80, string $suffix = '...'): string {
+                $str = (string) $text;
+                if (mb_strlen($str) > $length) {
+                    return mb_substr($str, 0, $length) . $suffix;
+                }
+                return $str;
+            }),
+
             // NOTE: The following Smarty modifiers are intentionally NOT added
             // as custom Twig filters because Twig provides equivalent built-ins:
             //   strtolower  → Twig native |lower
