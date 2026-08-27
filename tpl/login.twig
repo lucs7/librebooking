@@ -134,7 +134,7 @@
                                 {{ translate('ForgotMyPassword') }}</a>
                         </div>
                     {% endif %}
-                    {% if Languages|length > 1 %}
+                    {% if Languages is defined and Languages|length > 1 %}
                     <div id="change-language" class="text-end">
                         <a type="button" class="link-primary" data-bs-toggle="collapse"
                             data-bs-target="#change-language-options"><span><i class="bi bi-globe-americas"></i></span>
