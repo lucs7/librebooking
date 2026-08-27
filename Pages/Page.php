@@ -458,10 +458,27 @@ abstract class Page implements IPage
             $twig->Validators = $this->renderer->validators();
 
             echo $twig->render($twigName);
+            $this->EchoRenderEngineIndicator('Twig', '#7cb342');
             return;
         }
 
         $this->smarty->display($templateName);
+        $this->EchoRenderEngineIndicator('Smarty', '#c62828');
+    }
+
+    /**
+     * Dev-only badge showing which template engine rendered the page.
+     * Echoed OUTSIDE the rendered template output so golden tests
+     * (which call the renderers directly) are unaffected. Shown only when
+     * the ?debug query flag is present, matching the renderers' debug gate.
+     */
+    private function EchoRenderEngineIndicator(string $engine, string $color): void
+    {
+
+        echo '<div style="position:fixed;bottom:0;right:0;z-index:99999;'
+            . 'background:' . $color . ';color:#fff;font:12px/1.4 sans-serif;'
+            . 'padding:2px 8px;border-top-left-radius:4px;pointer-events:none;'
+            . 'opacity:.9;">' . htmlspecialchars($engine) . '</div>';
     }
 
     /**
