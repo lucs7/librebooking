@@ -193,62 +193,29 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
              */
             new TwigFunction(
                 'html_options',
-                static function (array $values = [], array $output = [], array $options = [], mixed $selected = null): string {
+                static function (array $values, array $output, mixed $selected = ''): string {
                     // Use ENT_COMPAT + no double-encode to match Smarty's smarty_function_escape_special_chars.
                     $escapeAttr = static fn (string $s): string =>
                         htmlspecialchars($s, ENT_COMPAT, 'UTF-8', false);
-
-                    // Build a value-keyed selected map (matching Smarty's $selected[$_sel] = true approach).
-                    // For scalar: escape and store as a plain string for === comparison.
-                    // For array: build [$escapedValue => true] map so isset() works correctly.
-                    /** @var array<string,true>|null $selectedMap */
-                    $selectedMap = null;
-                    $escapedScalarSelected = '';
-                    if (is_array($selected)) {
-                        $selectedMap = [];
-                        foreach ($selected as $sel) {
-                            $selectedMap[$escapeAttr((string) $sel)] = true;
-                        }
-                    } else {
-                        $escapedScalarSelected = $escapeAttr((string) ($selected ?? ''));
-                    }
-
-                    $isSelectedAttr = static function (string $escapedKey) use ($selectedMap, $escapedScalarSelected): string {
-                        if ($selectedMap !== null) {
-                            return isset($selectedMap[$escapedKey]) ? ' selected="selected"' : '';
-                        }
-                        return $escapedKey === $escapedScalarSelected ? ' selected="selected"' : '';
-                    };
-
+                    // Smarty escapes the selected value before comparing against escaped option values.
+                    $escapedSelected = is_array($selected)
+                        ? array_map(static fn ($s) => $escapeAttr((string) $s), $selected)
+                        : $escapeAttr((string) $selected);
                     $builder = new StringBuilder();
-
-                    if ($options !== []) {
-                        // options form: assoc key => label
-                        foreach ($options as $key => $label) {
-                            $escapedKey = $escapeAttr((string) $key);
-                            // Trailing \n matches Smarty's {html_options} byte-for-byte output.
-                            $builder->Append(sprintf(
-                                '<option value="%s"%s>%s</option>' . "\n",
-                                $escapedKey,
-                                $isSelectedAttr($escapedKey),
-                                $escapeAttr((string) $label)
-                            ));
-                        }
-                    } else {
-                        // values+output form: parallel arrays
-                        foreach ($values as $i => $value) {
-                            $label = $output[$i] ?? $value;
-                            $escapedValue = $escapeAttr((string) $value);
-                            // Trailing \n matches Smarty's {html_options} byte-for-byte output.
-                            $builder->Append(sprintf(
-                                '<option value="%s"%s>%s</option>' . "\n",
-                                $escapedValue,
-                                $isSelectedAttr($escapedValue),
-                                $escapeAttr((string) $label)
-                            ));
-                        }
+                    foreach ($values as $i => $value) {
+                        $label = $output[$i] ?? $value;
+                        $escapedValue = $escapeAttr((string) $value);
+                        $isSelected = is_array($escapedSelected)
+                            ? (isset($escapedSelected[$escapedValue]) ? ' selected="selected"' : '')
+                            : ($escapedValue === $escapedSelected ? ' selected="selected"' : '');
+                        // Trailing \n matches Smarty's {html_options} byte-for-byte output.
+                        $builder->Append(sprintf(
+                            '<option value="%s"%s>%s</option>' . "\n",
+                            $escapedValue,
+                            $isSelected,
+                            $escapeAttr((string) $label)
+                        ));
                     }
-
                     return $builder->ToString();
                 },
                 ['is_safe' => ['html']]

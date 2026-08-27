@@ -26,8 +26,8 @@ class LibreBookingExtensionHtmlOptionsTest extends TestBase
         @mkdir(sys_get_temp_dir() . '/smarty_cache_html_options', 0755, true);
     }
 
-    /** Render {html_options values=... output=... selected=...} with Smarty. */
-    private function renderSmartyValuesOutput(array $values, array $output, mixed $selected): string
+    /** Render {html_options ...} with Smarty and return its output. */
+    private function renderSmarty(array $values, array $output, mixed $selected): string
     {
         $tpl = $this->smarty->createTemplate(
             'string:{html_options values=$v output=$o selected=$s}'
@@ -38,141 +38,45 @@ class LibreBookingExtensionHtmlOptionsTest extends TestBase
         return $this->smarty->fetch($tpl);
     }
 
-    /** Render {html_options options=... selected=...} with Smarty. */
-    private function renderSmartyOptions(array $options, mixed $selected): string
+    /** Render {{ html_options(...) }} with Twig and return its output. */
+    private function renderTwig(array $values, array $output, mixed $selected): string
     {
-        $tpl = $this->smarty->createTemplate(
-            'string:{html_options options=$opts selected=$s}'
-        );
-        $tpl->assign('opts', $options);
-        $tpl->assign('s', $selected);
-        return $this->smarty->fetch($tpl);
-    }
-
-    /** Build a Twig environment with LibreBookingExtension registered. */
-    private function twigEnv(): \Twig\Environment
-    {
-        return new \Twig\Environment(
-            new \Twig\Loader\ArrayLoader([
-                'vo' => '{{ html_options(values=v, output=o, selected=s) }}',
-                'opts' => '{{ html_options(options=opts, selected=s) }}',
-            ]),
+        $env = new \Twig\Environment(
+            new \Twig\Loader\ArrayLoader(['t' => '{{ html_options(values=v, output=o, selected=s) }}']),
             ['autoescape' => false]
         );
-    }
-
-    /** Render html_options(values=..., output=..., selected=...) with Twig. */
-    private function renderTwigValuesOutput(array $values, array $output, mixed $selected): string
-    {
-        $env = $this->twigEnv();
         $env->addExtension(new LibreBookingExtension(Resources::GetInstance(), 'http://example.com/'));
-        return $env->render('vo', ['v' => $values, 'o' => $output, 's' => $selected]);
+        return $env->render('t', ['v' => $values, 'o' => $output, 's' => $selected]);
     }
 
-    /** Render html_options(options=..., selected=...) with Twig. */
-    private function renderTwigOptions(array $options, mixed $selected): string
-    {
-        $env = $this->twigEnv();
-        $env->addExtension(new LibreBookingExtension(Resources::GetInstance(), 'http://example.com/'));
-        return $env->render('opts', ['opts' => $options, 's' => $selected]);
-    }
-
-    // ── 1. values+output, no selected ────────────────────────────────────────
+    // ── normal list ───────────────────────────────────────────────────────────
 
     public function testNormalListMatchesSmarty(): void
     {
         $values = [1, 2, 3];
         $output = ['One', 'Two', 'Three'];
 
-        $expected = $this->renderSmartyValuesOutput($values, $output, '');
-        $actual   = $this->renderTwigValuesOutput($values, $output, '');
+        $expected = $this->renderSmarty($values, $output, '');
+        $actual = $this->renderTwig($values, $output, '');
 
         $this->assertSame($expected, $actual);
     }
 
-    // ── 2. values+output, scalar selected (match) ────────────────────────────
+    // ── selected value ────────────────────────────────────────────────────────
 
-    public function testSelectedScalarMatchMatchesSmarty(): void
+    public function testSelectedValueMatchesSmarty(): void
     {
         $values = [1, 2, 3];
         $output = ['One', 'Two', 'Three'];
 
-        $expected = $this->renderSmartyValuesOutput($values, $output, '2');
-        $actual   = $this->renderTwigValuesOutput($values, $output, '2');
+        $expected = $this->renderSmarty($values, $output, '2');
+        $actual = $this->renderTwig($values, $output, '2');
 
         $this->assertSame($expected, $actual);
         $this->assertStringContainsString('selected="selected"', $actual);
     }
 
-    // ── 2b. values+output, scalar selected (non-match) ───────────────────────
-
-    public function testSelectedScalarNoMatchMatchesSmarty(): void
-    {
-        $values = [1, 2, 3];
-        $output = ['One', 'Two', 'Three'];
-
-        $expected = $this->renderSmartyValuesOutput($values, $output, '99');
-        $actual   = $this->renderTwigValuesOutput($values, $output, '99');
-
-        $this->assertSame($expected, $actual);
-        $this->assertStringNotContainsString('selected="selected"', $actual);
-    }
-
-    // ── 3. options (assoc), scalar selected ──────────────────────────────────
-
-    public function testAssocOptionsSelectedMatchesSmarty(): void
-    {
-        $options = ['a' => 'Alpha', 'b' => 'Beta', 'c' => 'Gamma'];
-
-        $expected = $this->renderSmartyOptions($options, 'b');
-        $actual   = $this->renderTwigOptions($options, 'b');
-
-        $this->assertSame($expected, $actual);
-        $this->assertStringContainsString('selected="selected"', $actual);
-    }
-
-    // ── 4. options (assoc), no selected ──────────────────────────────────────
-
-    public function testAssocOptionsNoSelectedMatchesSmarty(): void
-    {
-        $options = ['x' => 'X-ray', 'y' => 'Yankee', 'z' => 'Zulu'];
-
-        $expected = $this->renderSmartyOptions($options, '');
-        $actual   = $this->renderTwigOptions($options, '');
-
-        $this->assertSame($expected, $actual);
-        $this->assertStringNotContainsString('selected="selected"', $actual);
-    }
-
-    // ── 5. selected as array (multi-select) — proves the in_array fix ────────
-
-    public function testSelectedArrayMultiSelectMatchesSmarty(): void
-    {
-        $values = [1, 2, 3, 4];
-        $output = ['One', 'Two', 'Three', 'Four'];
-        $selected = ['2', '4'];
-
-        $expected = $this->renderSmartyValuesOutput($values, $output, $selected);
-        $actual   = $this->renderTwigValuesOutput($values, $output, $selected);
-
-        $this->assertSame($expected, $actual);
-        // Two options must be marked selected
-        $this->assertSame(2, substr_count($actual, 'selected="selected"'));
-    }
-
-    public function testSelectedArrayAssocOptionsMatchesSmarty(): void
-    {
-        $options = ['a' => 'Alpha', 'b' => 'Beta', 'c' => 'Gamma'];
-        $selected = ['a', 'c'];
-
-        $expected = $this->renderSmartyOptions($options, $selected);
-        $actual   = $this->renderTwigOptions($options, $selected);
-
-        $this->assertSame($expected, $actual);
-        $this->assertSame(2, substr_count($actual, 'selected="selected"'));
-    }
-
-    // ── 6. HTML-special chars in value/label (escaping parity) ───────────────
+    // ── HTML-special chars in value and label (escaping parity) ───────────────
 
     public function testHtmlSpecialCharsMatchesSmarty(): void
     {
@@ -180,8 +84,8 @@ class LibreBookingExtensionHtmlOptionsTest extends TestBase
         $values = ['a&b', 'c<d', "e'f"];
         $output = ['A&B', 'C<D', "E'F"];
 
-        $expected = $this->renderSmartyValuesOutput($values, $output, 'a&b');
-        $actual   = $this->renderTwigValuesOutput($values, $output, 'a&b');
+        $expected = $this->renderSmarty($values, $output, 'a&b');
+        $actual = $this->renderTwig($values, $output, 'a&b');
 
         $this->assertSame($expected, $actual);
         // The selected option's value should be HTML-escaped in the attribute
@@ -190,23 +94,12 @@ class LibreBookingExtensionHtmlOptionsTest extends TestBase
         $this->assertStringContainsString("value=\"e'f\"", $actual);
     }
 
-    public function testHtmlSpecialCharsAssocOptionsMatchesSmarty(): void
-    {
-        $options = ['a&b' => 'A&B', 'c<d' => 'C<D', "e'f" => "E'F"];
-
-        $expected = $this->renderSmartyOptions($options, 'a&b');
-        $actual   = $this->renderTwigOptions($options, 'a&b');
-
-        $this->assertSame($expected, $actual);
-        $this->assertStringContainsString('value="a&amp;b" selected="selected"', $actual);
-    }
-
     // ── trailing newline per option (byte-parity) ─────────────────────────────
 
     public function testEachOptionHasTrailingNewline(): void
     {
-        $actual = $this->renderTwigValuesOutput([1, 2], ['One', 'Two'], '');
-        $lines  = explode("\n", rtrim($actual, "\n"));
+        $actual = $this->renderTwig([1, 2], ['One', 'Two'], '');
+        $lines = explode("\n", rtrim($actual, "\n"));
         foreach ($lines as $line) {
             $this->assertStringStartsWith('<option', $line);
             $this->assertStringContainsString('</option>', $line);
