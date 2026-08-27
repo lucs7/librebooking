@@ -145,7 +145,7 @@
                                 {% set selected = ' selected="selected"' %}
                                 {% set startPeriod = period %}
                                 {% endif %}
-                                <option value="{{ period.Begin() }}" {{ selected|raw }}>{{ period.Label() }}</option>
+                                <option value="{{ period.Begin() }}" {{ selected|raw }}{# raw: developer-controlled HTML attribute ('selected="selected"' or '') #}>{{ period.Label() }}</option>
                                 {% endif %}
                                 {% endfor %}
                             </select>
@@ -168,7 +168,7 @@
                                 {% set selected = ' selected="selected"' %}
                                 {% set endPeriod = period %}
                                 {% endif %}
-                                <option value="{{ period.End() }}" {{ selected|raw }}>{{ period.LabelEnd() }}</option>
+                                <option value="{{ period.End() }}" {{ selected|raw }}{# raw: developer-controlled HTML attribute ('selected="selected"' or '') #}>{{ period.LabelEnd() }}</option>
                                 {% endif %}
                                 {% endfor %}
                             </select>
@@ -594,11 +594,11 @@
         {% endfor %}
 
         {% for guest in ParticipatingGuests %}
-        reservation.addParticipatingGuest('{{ guest }}');
+        reservation.addParticipatingGuest('{{ guest|escape_js }}');{# raw: escape_js for JS string context #}
         {% endfor %}
 
         {% for guest in InvitedGuests %}
-        reservation.addInvitedGuest('{{ guest }}');
+        reservation.addInvitedGuest('{{ guest|escape_js }}');{# raw: escape_js for JS string context #}
         {% endfor %}
 
         {% for accessory in Accessories %}
