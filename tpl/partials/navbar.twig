@@ -1,0 +1,304 @@
+    {% if HideNavBar is not defined or HideNavBar == false %}
+        <nav class="navbar navbar-expand-lg bg-light shadow-sm py-2 mb-4 sticky-top">
+            <div class="container-fluid">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
+                    data-bs-target="#librebooking-navigation" aria-controls="librebooking-navigation" aria-expanded="false"
+                    aria-label="{{ translate('ShowHideNavigation') }}">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="librebooking-navigation">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        {% if LoggedIn is defined and LoggedIn %}
+                            <li class="nav-item" id="navDashboard"><a class="nav-link link-primary"
+                                    href="{{ Path }}{{ constant('Pages::DASHBOARD') }}">{{ translate('Dashboard') }}</a></li>
+                            <li class="nav-item dropdown" id="navMyAccountDropdown">
+                                <a href="#" class="nav-link  link-primary dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown">{{ translate('MyAccount') }}</a>
+                                <ul class="dropdown-menu">
+                                    <li id="navProfile"><a class="dropdown-item"
+                                            href="{{ Path }}{{ constant('Pages::PROFILE') }}">{{ translate('Profile') }}</a></li>
+                                    <li id="navPassword"><a class="dropdown-item"
+                                            href="{{ Path }}{{ constant('Pages::PASSWORD') }}">{{ translate('ChangePassword') }}</a></li>
+                                    <li id="navNotification">
+                                        <a class="dropdown-item"
+                                            href="{{ Path }}{{ constant('Pages::NOTIFICATION_PREFERENCES') }}">{{ translate('NotificationPreferences') }}</a>
+                                    </li>
+                                    {% if ShowParticipation is defined and ShowParticipation %}
+                                        <li id="navInvitations">
+                                            <a class="dropdown-item"
+                                                href="{{ Path }}{{ constant('Pages::PARTICIPATION') }}">{{ translate('OpenInvitations') }}</a>
+                                        </li>
+                                    {% endif %}
+                                    {% if CreditsEnabled is defined and CreditsEnabled %}
+                                        <li id="navUserCredits">
+                                            <a class="dropdown-item" href="{{ Path }}{{ constant('Pages::CREDITS') }}">{{ translate('Credits') }}</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown" id="navScheduleDropdown">
+                                <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown">{{ translate('Schedule') }}</a>
+                                <ul class="dropdown-menu">
+                                    <li id="navBookings"><a class="dropdown-item"
+                                            href="{{ Path }}{{ constant('Pages::SCHEDULE') }}">{{ translate('Bookings') }}</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li id="navMyCalendar"><a class="dropdown-item"
+                                            href="{{ Path }}{{ constant('Pages::MY_CALENDAR') }}">{{ translate('MyCalendar') }}</a></li>
+                                    <li id="navResourceCalendar"><a class="dropdown-item"
+                                            href="{{ Path }}{{ constant('Pages::CALENDAR') }}">{{ translate('ResourceCalendar') }}</a></li>
+                                    <!--<li class="menuitem"><a href="#">{{ translate('Current Status') }}</a></li>-->
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li id="navFindATime"><a class="dropdown-item"
+                                            href="{{ Path }}{{ constant('Pages::OPENINGS') }}">{{ translate('FindATime') }}</a>
+                                    </li>
+                                    <li id="navFindATime"><a class="dropdown-item"
+                                            href="{{ Path }}{{ constant('Pages::SEARCH_RESERVATIONS') }}">{{ translate('SearchReservations') }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown" id="navReportsDropdown">
+                                <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown">{{ translate('Check') }}</a>
+                                <ul class="dropdown-menu">
+                                    <li id="CheckResources"><a class="dropdown-item"
+                                            href="{{ Path }}view_resources.php">{{ translate('Resources') }}</a>
+                                    </li>
+                                    <li id="CheckSchedules"><a class="dropdown-item"
+                                            href="{{ Path }}view_schedules.php">{{ translate('Schedules') }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% if CanViewAdmin is defined and CanViewAdmin %}
+                                <li class="nav-item dropdown" id="navApplicationManagementDropdown">
+                                    <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                        data-bs-toggle="dropdown">{{ translate('ApplicationManagement') }}</a>
+                                    <ul class="dropdown-menu">
+                                        <li id="navManageReservations"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_reservations.php">{{ translate('ManageReservations') }}</a>
+                                        </li>
+                                        <li id="navManageBlackouts"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_blackouts.php">{{ translate('ManageBlackouts') }}</a>
+                                        </li>
+                                        <li id="navManageQuotas"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_quotas.php">{{ translate('ManageQuotas') }}</a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li id="navManageSchedules"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_schedules.php">{{ translate('ManageSchedules') }}</a>
+                                        <li id="navManageResources"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_resources.php">{{ translate('ManageResources') }}</a>
+                                        </li>
+                                        <li id="navManageAccessories"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_accessories.php">{{ translate('ManageAccessories') }}</a>
+                                        </li>
+
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li id="navManageUsers"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_users.php">{{ translate('ManageUsers') }}</a>
+                                        </li>
+                                        <li id="navManageGroups"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_groups.php">{{ translate('ManageGroups') }}</a>
+                                        </li>
+
+                                        <li id="navManageAnnouncements"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_announcements.php">{{ translate('ManageAnnouncements') }}</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        {% if PaymentsEnabled is defined and PaymentsEnabled %}
+                                            <li id="navManagePayments"><a class="dropdown-item"
+                                                    href="{{ Path }}admin/manage_payments.php">{{ translate('ManagePayments') }}</a>
+                                            </li>
+                                        {% endif %}
+                                        <li id="navManageAttributes"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_attributes.php">{{ translate('CustomAttributes') }}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            {% if CanViewResponsibilities is defined and CanViewResponsibilities %}
+                                <li class="nav-item dropdown" id="navResponsibilitiesDropdown">
+                                    <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                        data-bs-toggle="dropdown">{{ translate('Responsibilities') }}</a>
+                                    <ul class="dropdown-menu">
+                                        {% if CanViewGroupAdmin is defined and CanViewGroupAdmin %}
+                                            <li id="navResponsibilitiesGAUsers"><a class="dropdown-item"
+                                                    href="{{ Path }}admin/manage_group_users.php">{{ translate('ManageUsers') }}</a>
+                                            </li>
+                                            <li id="navResponsibilitiesGAReservations"><a class="dropdown-item"
+                                                    href="{{ Path }}admin/manage_group_reservations.php">{{ translate('GroupReservations') }}</a>
+                                            </li>
+                                            <li id="navResponsibilitiesGAGroups"><a class="dropdown-item"
+                                                    href="{{ Path }}admin/manage_admin_groups.php">{{ translate('ManageGroups') }}</a>
+                                            </li>
+                                        {% endif %}
+                                        {% if (CanViewResourceAdmin is defined and CanViewResourceAdmin) or (CanViewScheduleAdmin is defined and CanViewScheduleAdmin) %}
+                                            <li id="navResponsibilitiesRAResources"><a class="dropdown-item"
+                                                    href="{{ Path }}admin/manage_admin_resources.php">{{ translate('ManageResources') }}</a>
+                                            </li>
+                                            <li id="navResponsibilitiesRABlackouts"><a class="dropdown-item"
+                                                    href="{{ Path }}admin/manage_blackouts.php">{{ translate('ManageBlackouts') }}</a>
+                                            </li>
+                                        {% endif %}
+                                        {% if CanViewResourceAdmin is defined and CanViewResourceAdmin %}
+                                            <li id="navResponsibilitiesRAReservations">
+                                                <a class="dropdown-item"
+                                                    href="{{ Path }}admin/manage_resource_reservations.php">{{ translate('ResourceReservations') }}</a>
+                                            </li>
+                                        {% endif %}
+                                        {% if CanViewScheduleAdmin is defined and CanViewScheduleAdmin %}
+                                            <li id="navResponsibilitiesSASchedules">
+                                                <a class="dropdown-item"
+                                                    href="{{ Path }}admin/manage_admin_schedules.php">{{ translate('ManageSchedules') }}</a>
+                                            </li>
+                                            <li id="navResponsibilitiesSAReservations">
+                                                <a class="dropdown-item"
+                                                    href="{{ Path }}admin/manage_schedule_reservations.php">{{ translate('ScheduleReservations') }}</a>
+                                            </li>
+                                        {% endif %}
+                                        <li id="navResponsibilitiesAnnouncements">
+                                            <a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_announcements.php">{{ translate('ManageAnnouncements') }}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            {% if CanViewReports is defined and CanViewReports %}
+                                <li class="nav-item dropdown" id="navReportsDropdown">
+                                    <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                        data-bs-toggle="dropdown">{{ translate('Reports') }}</a>
+                                    <ul class="dropdown-menu">
+                                        <li id="navGenerateReport">
+                                            <a class="dropdown-item"
+                                                href="{{ Path }}reports/{{ constant('Pages::REPORTS_GENERATE') }}">{{ translate('GenerateReport') }}</a>
+                                        </li>
+                                        <li id="navSavedReports">
+                                            <a class="dropdown-item"
+                                                href="{{ Path }}reports/{{ constant('Pages::REPORTS_SAVED') }}">{{ translate('MySavedReports') }}</a>
+                                        </li>
+                                        <li id="navCommonReports">
+                                            <a class="dropdown-item"
+                                                href="{{ Path }}reports/{{ constant('Pages::REPORTS_COMMON') }}">{{ translate('CommonReports') }}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+
+                    </ul>
+                    <ul class="navbar-nav navbar-right">
+                        {% if ShowScheduleLink is defined and ShowScheduleLink %}
+                            <li class="nav-item dropdown" id="navScheduleDropdown">
+                                <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown">{{ translate('Schedule') }}</a>
+                                <ul class="dropdown-menu">
+                                    <li id="navViewSchedule"><a class="dropdown-item"
+                                            href="view-schedule.php">{{ translate('ViewSchedule') }}</a>
+                                    </li>
+                                    <li id="navViewCalendar"><a class="dropdown-item"
+                                            href="view-calendar.php">{{ translate('ViewCalendar') }}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if CanViewAdmin is defined and CanViewAdmin %}
+                            <li class="nav-item dropdown" id="navHelpDropdown">
+                                <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown">
+                                    <span class="visually-hidden">Configuration</span>
+                                    <i class="bi bi-gear-fill"></i>
+                                    {% if ShowNewVersion is defined and ShowNewVersion %}<span
+                                            class="badge badge-new-version new-version"
+                                        id="newVersionBadge">{{ translate('NewVersion') }}</span>{% endif %}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    {% if EnableConfigurationPage is defined and EnableConfigurationPage %}
+                                        <li id="navManageConfiguration"><a class="dropdown-item"
+                                                href="{{ Path }}admin/manage_configuration.php">{{ translate('ManageConfiguration') }}</a>
+                                        </li>
+                                    {% endif %}
+                                    <li id="navEmailTemplates"><a class="dropdown-item"
+                                            href="{{ Path }}admin/manage_email_templates.php">{{ translate('ManageEmailTemplates') }}</a>
+                                    </li>
+                                    <li id="navLookAndFeel"><a class="dropdown-item"
+                                            href="{{ Path }}admin/manage_theme.php">{{ translate('LookAndFeel') }}</a>
+                                    </li>
+                                    <li id="navImport"><a class="dropdown-item"
+                                            href="{{ Path }}admin/ics_import.php">{{ translate('Import') }}</a>
+                                    </li>
+                                    <li id="navServerSettings"><a class="dropdown-item"
+                                            href="{{ Path }}admin/server_settings.php">{{ translate('ServerSettings') }}</a>
+                                    </li>
+                                    <li id="navDataCleanup"><a class="dropdown-item"
+                                            href="{{ Path }}admin/data_cleanup.php">{{ translate('DataCleanup') }}</a>
+                                    </li>
+                                    {% if ShowNewVersion is defined and ShowNewVersion %}
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li id="navNewVersion" class="new-version">
+                                            <a class="dropdown-item"
+                                                href="https://github.com/LibreBooking/librebooking/releases">{{ translate('WhatsNew') }}</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if LoggedIn is defined and LoggedIn and AvailableLanguages|length > 1 %}
+                            <li class="nav-item dropdown" id="navLanguageDropdown">
+                                <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                    data-bs-toggle="dropdown" aria-label="{{ translate('ChangeLanguage') }}"
+                                    title="{{ translate('ChangeLanguage') }}">
+                                    <span class="visually-hidden">{{ translate('ChangeLanguage') }}</span>
+                                    <i class="bi bi-globe-americas" aria-hidden="true"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" id="languageDropdownMenu"
+                                    style="max-height: 70vh; overflow-y: auto; min-width: 14rem;">
+                                    {% for lang in AvailableLanguages %}
+                                        <li>
+                                            <a class="dropdown-item {% if CurrentLanguage == lang.GetLanguageCode() %}active{% endif %}"
+                                                href="#" data-lang-code="{{ lang.GetLanguageCode() }}">
+                                                {{ lang.GetDisplayName() }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item dropdown" id="navHelpDropdown">
+                            <a href="#" class="nav-link link-primary dropdown-toggle" role="button"
+                                data-bs-toggle="dropdown">{{ translate('Help') }}</a>
+                            <ul class="dropdown-menu  dropdown-menu-end">
+                                <li id="navHelp"><a class="dropdown-item"
+                                        href="https://librebooking.readthedocs.io/en/latest/">{{ translate('Help') }}</a>
+                                </li>
+                                {% if CanViewAdmin is defined and CanViewAdmin %}
+                                    <li id="navHelpAdmin"><a class="dropdown-item"
+                                            href="https://librebooking.readthedocs.io/en/latest/ADMINISTRATION.html">{{ translate('Administration') }}</a>
+                                    </li>
+                                {% endif %}
+                                <li id="navAbout"><a class="dropdown-item"
+                                        href="{{ Path }}help.php?ht=about">{{ translate('About') }}</a></li>
+                            </ul>
+                        </li>
+                        {% if LoggedIn is defined and LoggedIn %}
+                            <li class="nav-item" id="navSignOut"><a class="nav-link link-primary"
+                                    href="{{ Path }}logout.php">{{ translate('SignOut') }}</a></li>
+                        {% else %}
+                            <li class="nav-item" id="navLogIn"><a class="nav-link  link-primary"
+                                    href="{{ Path }}index.php">{{ translate('LogIn') }}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    {% endif %}
