@@ -1,35 +1,47 @@
 {#
-    Reusable Bootstrap modal. Use with `{% embed 'components/common/modal.twig' with {...} %}`
-    and override the `body` block (required) and optionally `header`/`footer` — same free-form
-    block convention as `components/common/card.twig`. `id` is required (used for the outer id
-    and, when a header is given, the `aria-labelledby`/title id). Pass `centered`/`scrollable`/
-    `size` ('sm'|'lg'|'xl') for `.modal-dialog` modifiers, `static` for a non-dismissable
-    backdrop, and `class`/`bodyClass` for extra CSS classes. The close button is rendered
-    automatically alongside the header, so `header` only needs the title markup itself.
+  Reusable Bootstrap modal. Use with `{% embed 'components/common/modal.twig' with {...} %}`
+  and override the `body` block (required) and optionally `header`/`footer` — same free-form
+  block convention as `components/common/card.twig`. `id` is required (used for the outer id
+  and, when a header is given, the `aria-labelledby`/title id). Pass `centered`/`scrollable`/
+  `size` ('sm'|'lg'|'xl') for `.modal-dialog` modifiers, `static` for a non-dismissable
+  backdrop, and `class`/`bodyClass` for extra CSS classes. The close button is rendered
+  automatically alongside the header, so `header` only needs the title markup itself.
 
-    {% embed 'components/common/modal.twig' with {'id': 'someModal', 'centered': true} %}
-        {% block header %}<h5 class="modal-title" id="someModalLabel">{{ translate('SomeTitle') }}</h5>{% endblock %}
-        {% block body %}...{% endblock %}
-        {% block footer %}<div class="modal-footer">{{ cancel_button() }}</div>{% endblock %}
-    {% endembed %}
+  {% embed 'components/common/modal.twig' with {'id': 'someModal', 'centered': true} %}
+  {% block header %}<h5 class="modal-title" id="someModalLabel">{{ translate('SomeTitle') }}</h5>{% endblock %}
+  {% block body %}...{% endblock %}
+  {% block footer %}<div class="modal-footer">{{ cancel_button() }}</div>{% endblock %}
+  {% endembed %}
 #}
 {# capture the header block so the wrapper (and close button) only render when there's content #}
-{% set headerContent %}{% block header %}{% endblock %}{% endset %}
-<div class="modal fade {{ class|default('') }}" id="{{ id }}" tabindex="-1" role="dialog"
-    {% if headerContent|trim != '' %}aria-labelledby="{{ id }}Label"{% endif %}
-    aria-hidden="true"{% if static|default(false) %} data-bs-backdrop="static"{% endif %}>
-    <div class="modal-dialog {% if centered|default(false) %}modal-dialog-centered{% endif %} {% if scrollable|default(false) %}modal-dialog-scrollable{% endif %}{% if size is defined %} modal-{{ size }}{% endif %}">
-        <div class="modal-content">
-            {% if headerContent|trim != '' %}
-                <div class="modal-header">
-                    {{ headerContent|raw }}
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-            {% endif %}
-            <div class="modal-body {{ bodyClass|default('') }}">
-                {% block body %}{% endblock %}
-            </div>
-            {% block footer %}{% endblock %}
+{% set headerContent -%}
+{%- block header %}{% endblock -%}
+{%- endset %}
+<div
+  class="modal fade {{ class|default('') }}"
+  id='{{ id }}'
+  tabindex='-1'
+  role='dialog'
+  {% if headerContent|trim != '' %}
+    aria-labelledby='{{ id }}Label'
+  {% endif %}
+  aria-hidden='true'
+  {% if static|default(false) %}
+    data-bs-backdrop='static'
+  {% endif %}
+>
+  <div class='modal-dialog {% if centered|default(false) %}modal-dialog-centered{% endif %} {% if scrollable|default(false) %}modal-dialog-scrollable{% endif %}{% if size is defined %} modal-{{ size }}{% endif %}'>
+    <div class='modal-content'>
+      {% if headerContent|trim != '' %}
+        <div class='modal-header'>
+          {{ headerContent|raw }}
+          <button type='button' class='btn-close' data-bs-dismiss='modal' aria-hidden='true'></button>
         </div>
+      {% endif %}
+      <div class="modal-body {{ bodyClass|default('') }}">
+        {% block body %}{% endblock %}
+      </div>
+      {% block footer %}{% endblock %}
     </div>
+  </div>
 </div>

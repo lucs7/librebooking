@@ -1,16 +1,24 @@
 {#
-    Generic Bootstrap button. `icon` is a Bootstrap icon class suffix (e.g. "bi-search").
-    `key` is a translation key, same as every other button label in this app.
-    `attrs` takes a pre-rendered raw attribute string for things like `formname(key='SUBMIT')`.
+  Generic Bootstrap button. `icon` is a Bootstrap icon class suffix (e.g. "bi-search").
+  `key` is a translation key, same as every other button label in this app.
+  `attrs` takes a pre-rendered raw attribute string for things like `formname(key='SUBMIT')`.
 
-    {% include 'components/common/button.twig' with {
-        'type': 'submit', 'variant': 'primary', 'icon': 'bi-search', 'key': 'Filter',
-        'class': 'btn-block', 'attrs': formname(key='SUBMIT')
-    } %}
+  {% include 'components/common/button.twig' with {
+  'type': 'submit', 'variant': 'primary', 'icon': 'bi-search', 'key': 'Filter',
+  'class': 'btn-block', 'attrs': formname(key='SUBMIT')
+  } %}
 #}
-<button type="{{ type|default('button') }}"
-    class="btn btn-{{ variant|default('primary') }} btn-sm {{ class|default('') }}"
-    id="{{ id|default('') }}" name="{{ name|default('') }}" value="{{ value|default('') }}"
-    {% if disabled is defined and disabled %}disabled{% endif %}
-    {{ attrs|default('')|raw }}
->{% if icon is defined and icon %}<i class="bi {{ icon }}"></i> {% endif %}{{ translate(key) }}</button>
+<button
+  type="{{ type|default('button') }}"
+  class="btn btn-{{ variant|default('primary') }} btn-sm {{ class|default('') }}"
+  id="{{ id|default('') }}"
+  name="{{ name|default('') }}"
+  value="{{ value|default('') }}"
+  {% if disabled is defined and disabled %}
+    disabled
+  {% endif %}
+  {{ attrs|default('')|raw }}
+>
+  {% if icon is defined and icon %}<i class='bi {{ icon }}'></i> {% endif -%}
+  {{- translate(key) }}
+</button>
