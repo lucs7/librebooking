@@ -158,7 +158,7 @@ class LoginPage extends Page implements ILoginPage
     public function PageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Display('login.tpl');
+        $this->Display('pages/login.tpl');
     }
 
     public function GetEmailAddress()
