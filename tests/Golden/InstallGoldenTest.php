@@ -204,28 +204,28 @@ class InstallGoldenTest extends GoldenTemplateTestCase
 
     /**
      * The ManualConfig branch renders PHP config text via Smarty's |nl2br modifier
-     * (which applies nl2br to the raw string without HTML-escaping) vs Twig's
-     * |raw|nl2br|raw chain.  The single-quote escaping behaviour differs slightly;
-     * use assertTwigContains for structural coverage.
+     * (which calls PHP nl2br() on the raw string without HTML-escaping).  The Twig
+     * template uses |raw|nl2br so that special characters such as &, <, >, ' and "
+     * are preserved verbatim and newlines become <br />, byte-identical to Smarty.
+     *
+     * This test uses assertParity with a ManualConfig fixture containing HTML-special
+     * characters to prove the two renderers produce identical output.  It would FAIL
+     * with the old |raw|nl2br|raw rendering only if pre_escape fired (Twig version
+     * dependent), and definitively fails with plain |nl2br (no leading |raw) where
+     * pre_escape always escapes the input.
      */
-    public function testConfigureShowManualConfigRendersCorrectly(): void
+    public function testConfigureShowManualConfigMatchesSmarty(): void
     {
         $_SERVER['SCRIPT_NAME'] = '/web/install/configure.php';
         $vars = array_merge($this->baseVars(), [
             'ShowPasswordPrompt' => false,
             'ShowManualConfig' => true,
-            'ManualConfig' => "\$conf['settings']['db.name'] = 'librebooking';\n\$conf['settings']['db.user'] = 'lbuser';",
+            // ManualConfig with HTML-special chars: &, <, >, ', " and multiple newlines.
+            'ManualConfig' => "\$conf['settings']['db.name'] = 'libre & booking';\n"
+                . "\$conf['settings']['db.user'] = '<admin>';\n"
+                . "\$conf['settings']['db.password'] = 'p&ss\"w<o>rd';",
         ]);
-        $this->assertTwigContains('Install/configure.twig', $vars, [
-            'alert-secondary',
-            'font-family: courier',
-            'error_reporting',
-            'db.name',
-            'librebooking',
-            'db.user',
-            'lbuser',
-            '<br />',
-        ]);
+        $this->assertParity('Install/configure.tpl', 'Install/configure.twig', $vars);
     }
 
     // ── migrate.twig ─────────────────────────────────────────────────────────
