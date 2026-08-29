@@ -1,0 +1,38 @@
+{#
+  tpl/components/common/accordion-item.twig
+  Bootstrap `.accordion-item` panel shared by every dashboard widget. Use with
+  `{% embed %}` and override `body` (required); `footer` is optional extra markup
+  rendered inside the item but outside the collapsible content (e.g. a hidden form).
+  `id`/`contentsId` are required; `title` is a translation key for the toggle button
+  label; `badge` is an optional count shown next to the title.
+
+  {% embed 'components/common/accordion-item.twig' with {
+  'id': 'announcementsDashboard', 'contentsId': 'announcementsContents',
+  'title': 'Announcements', 'badge': (Announcements ?? [])|length
+  } %}
+  {% block body %}...{% endblock %}
+  {% endembed %}
+#}
+<div class="accordion-item shadow mb-2 {{ class|default('') }}" id='{{ id }}'>
+  <div class='accordion-header dashboardHeader'>
+    <button
+      class='accordion-button collapsed link-primary fw-bold'
+      type='button'
+      data-bs-toggle='collapse'
+      data-bs-target='#{{ contentsId }}'
+      aria-expanded='false'
+      aria-controls='{{ contentsId }}'
+    >
+      {{ translate(title) -}}
+      {%- if badge is defined and badge is not null -%}
+        <span class='badge bg-primary ms-1'>{{ badge }}</span>
+      {%- endif %}
+    </button>
+  </div>
+  <div id='{{ contentsId }}' class="accordion-collapse collapse {{ contentsClass|default('') }}">
+    <div class="accordion-body {{ bodyClass|default('') }}">
+      {% block body %}{% endblock %}
+    </div>
+  </div>
+  {% block footer %}{% endblock %}
+</div>
