@@ -1,9 +1,4 @@
-{% embed 'components/common/modal.twig' with {id: 'wait-box', centered: true, static: true} %}
-{% block body %}
-<div id="creatingNotification" class="p-2 d-flex align-items-center">
-    <strong class="h3 m-0" role="status">{{ translate(translateKey|default('Working')) }}</strong>
-    <div class="spinner-border ms-auto" aria-hidden="true"></div>
-</div>
-<div id="result" class="text-center"></div>
-{% endblock %}
-{% endembed %}
+  <div id='waiting-box-content' class='p-2 d-flex align-items-center'>
+    <strong class='h3 m-0' role='status'>{{ translate(translateKey|default('Working')) }}</strong>
+    <div class='spinner-border ms-auto' aria-hidden='true'></div>
+  </div>
