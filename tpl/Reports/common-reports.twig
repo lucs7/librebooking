@@ -1,4 +1,4 @@
-{% include 'globalheader.twig' with {'DataTable': true} %}
+{{ include('globalheader.twig', {DataTable: true}) }}
 
 <div id="page-common-reports" class="accordion">
     <div>
@@ -128,14 +128,14 @@
 </div>
 
 <div id="indicator" class="d-none card shadow p-2">
-    {% include 'wait-box.twig' with {'translateKey': 'Working'} %}
+    {{ include('components/common/wait-box.twig') }}
 </div>
 
 {{ csrf_token() }}
 
-{% include 'Reports/chart.twig' %}
+{{ include('Reports/chart.twig') }}
 
-{% include 'javascript-includes.twig' with {'DataTable': true} %}
+{{ include('javascript-includes.twig', {DataTable: true}) }}
 {{ jsfile('ajax-helpers.js') }}
 {{ jsfile('reports/canned-reports.js') }}
 {{ jsfile('reports/chart.js') }}
@@ -165,4 +165,4 @@
     });
 </script>
 
-{% include 'globalfooter.twig' %}
+{{ include('globalfooter.twig') }}
