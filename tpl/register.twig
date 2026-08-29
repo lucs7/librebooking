@@ -1,4 +1,4 @@
-{% include 'globalheader.twig' with {'Validator': true} %}
+{{ include('globalheader.twig', {Validator: true}) }}
 
 <div id="page-register">
 
@@ -15,24 +15,23 @@
                         {{ translate('UnknownError') }}
                     </div>
 
-
                     <div class="validationSummary alert alert-danger d-none" id="validationErrors">
                         <ul>
-                            {{ async_validator(id='uniqueemail', key='UniqueEmailRequired') }}
-                            {{ async_validator(id='uniqueusername', key='UniqueUsernameRequired') }}
-                            {{ async_validator(id='username', key='UserNameRequired') }}
-                            {{ async_validator(id='emailformat', key='ValidEmailRequired') }}
-                            {{ async_validator(id='fname', key='FirstNameRequired') }}
-                            {{ async_validator(id='lname', key='LastNameRequired') }}
-                            {{ async_validator(id='passwordmatch', key='PwMustMatch') }}
-                            {{ async_validator(id='passwordcomplexity', key='') }}
-                            {{ async_validator(id='captcha', key='CaptchaMustMatch') }}
-                            {{ async_validator(id='additionalattributes', key='') }}
-                            {{ async_validator(id='requiredEmailDomain', key='InvalidEmailDomain') }}
-                            {{ async_validator(id='termsOfService', key='TermsOfServiceError') }}
-                            {{ async_validator(id='phoneRequired', key='PhoneRequired') }}
-                            {{ async_validator(id='positionRequired', key='PositionRequired') }}
-                            {{ async_validator(id='organizationRequired', key='OrganizationRequired') }}
+                            {{ async_validator(id: 'uniqueemail', key: 'UniqueEmailRequired') }}
+                            {{ async_validator(id: 'uniqueusername', key: 'UniqueUsernameRequired') }}
+                            {{ async_validator(id: 'username', key: 'UserNameRequired') }}
+                            {{ async_validator(id: 'emailformat', key: 'ValidEmailRequired') }}
+                            {{ async_validator(id: 'fname', key: 'FirstNameRequired') }}
+                            {{ async_validator(id: 'lname', key: 'LastNameRequired') }}
+                            {{ async_validator(id: 'passwordmatch', key: 'PwMustMatch') }}
+                            {{ async_validator(id: 'passwordcomplexity', key: '') }}
+                            {{ async_validator(id: 'captcha', key: 'CaptchaMustMatch') }}
+                            {{ async_validator(id: 'additionalattributes', key: '') }}
+                            {{ async_validator(id: 'requiredEmailDomain', key: 'InvalidEmailDomain') }}
+                            {{ async_validator(id: 'termsOfService', key: 'TermsOfServiceError') }}
+                            {{ async_validator(id: 'phoneRequired', key: 'PhoneRequired') }}
+                            {{ async_validator(id: 'positionRequired', key: 'PositionRequired') }}
+                            {{ async_validator(id: 'organizationRequired', key: 'OrganizationRequired') }}
                         </ul>
                     </div>
 
@@ -42,7 +41,7 @@
                                 <label class="reg fw-bold" for="login">{{ translate('Username') }}<i
                                         class="bi bi-asterisk text-danger align-top"
                                         style="font-size: 0.5rem;"></i></label>
-                                {{ textbox(name='LOGIN', value='Login', required=true, class='has-feedback', attributes={'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('UserNameRequired')}) }}
+                                {{ textbox(name: 'LOGIN', value: 'Login', required: true, class: 'has-feedback', attributes: {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('UserNameRequired')}) }}
                             </div>
                         </div>
 
@@ -51,7 +50,7 @@
                                 <label class="reg fw-bold" for="email">{{ translate('Email') }}<i
                                         class="bi bi-asterisk text-danger align-top"
                                         style="font-size: 0.5rem;"></i></label>
-                                {{ textbox(type='email', name='EMAIL', class='input', value='Email', required=true, attributes={'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('ValidEmailRequired'), 'data-bv-emailaddress': 'true', 'data-bv-emailaddress-message': translate('ValidEmailRequired')}) }}
+                                {{ textbox(type: 'email', name: 'EMAIL', class: 'input', value: 'Email', required: true, attributes: {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('ValidEmailRequired'), 'data-bv-emailaddress': 'true', 'data-bv-emailaddress-message': translate('ValidEmailRequired')}) }}
                             </div>
                         </div>
 
@@ -60,7 +59,7 @@
                                 <label class="reg fw-bold" for="password">{{ translate('Password') }}<i
                                         class="bi bi-asterisk text-danger align-top"
                                         style="font-size: 0.5rem;"></i></label>
-                                {{ textbox(type='password', name='PASSWORD', value='', required=true, attributes={'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('PwMustMatch'), 'data-bv-identical': 'true', 'data-bv-identical-field': constant('FormKeys::PASSWORD_CONFIRM'), 'data-bv-identical-message': translate('PwMustMatch')}) }}
+                                {{ textbox(type: 'password', name: 'PASSWORD', value: '', required: true, attributes: {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('PwMustMatch'), 'data-bv-identical': 'true', 'data-bv-identical-field': constant('FormKeys::PASSWORD_CONFIRM'), 'data-bv-identical-message': translate('PwMustMatch')}) }}
                             </div>
                         </div>
 
@@ -70,7 +69,7 @@
                                     for="passwordConfirm">{{ translate('PasswordConfirmation') }}<i
                                         class="bi bi-asterisk text-danger align-top"
                                         style="font-size: 0.5rem;"></i></label>
-                                {{ textbox(type='password', name='PASSWORD_CONFIRM', value='', required=true, attributes={'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('PwMustMatch'), 'data-bv-identical': 'true', 'data-bv-identical-field': constant('FormKeys::PASSWORD'), 'data-bv-identical-message': translate('PwMustMatch')}) }}
+                                {{ textbox(type: 'password', name: 'PASSWORD_CONFIRM', value: '', required: true, attributes: {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('PwMustMatch'), 'data-bv-identical': 'true', 'data-bv-identical-field': constant('FormKeys::PASSWORD'), 'data-bv-identical-message': translate('PwMustMatch')}) }}
                             </div>
                         </div>
 
@@ -79,7 +78,7 @@
                                 <label class="reg fw-bold" for="fname">{{ translate('FirstName') }}<i
                                         class="bi bi-asterisk text-danger align-top"
                                         style="font-size: 0.5rem;"></i></label>
-                                {{ textbox(name='FIRST_NAME', class='input', value='FirstName', required=true, attributes={'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('FirstNameRequired')}) }}
+                                {{ textbox(name: 'FIRST_NAME', class: 'input', value: 'FirstName', required: true, attributes: {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('FirstNameRequired')}) }}
                             </div>
                         </div>
                         <div class="col-12 col-sm-6" id="last-name">
@@ -87,16 +86,16 @@
                                 <label class="reg fw-bold" for="lname">{{ translate('LastName') }}<i
                                         class="bi bi-asterisk text-danger align-top"
                                         style="font-size: 0.5rem;"></i></label>
-                                {{ textbox(name='LAST_NAME', class='input', value='LastName', required=true, attributes={'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('LastNameRequired')}) }}
+                                {{ textbox(name: 'LAST_NAME', class: 'input', value: 'LastName', required: true, attributes: {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('LastNameRequired')}) }}
                             </div>
                         </div>
 
                         <div class="col-12 col-sm-6" id="default-page">
                             <div class="form-group">
                                 <label class="reg fw-bold" for="homepage">{{ translate('DefaultPage') }}</label>
-                                <select {{ formname(key='DEFAULT_HOMEPAGE') }} id="homepage"
+                                <select {{ formname(key: 'DEFAULT_HOMEPAGE') }} id="homepage"
                                     class="form-select form-select-sm">
-                                    {{ html_options(values=HomepageValues, output=HomepageOutput, selected=Homepage) }}
+                                    {{ html_options(values: HomepageValues, output: HomepageOutput, selected: Homepage) }}
                                 </select>
                             </div>
 
@@ -107,9 +106,9 @@
                             <div class="input-group">
                                 <span class="input-group-text"><a href="#" id="detectTimezone" class="link-primary"
                                         title="{{ translate('Detect') }}"><i class="bi bi-clock"></i></a></span>
-                                <select {{ formname(key='TIMEZONE') }} class="form-select form-select-sm"
+                                <select {{ formname(key: 'TIMEZONE') }} class="form-select form-select-sm"
                                     id="timezoneDropDown">
-                                    {{ html_options(values=TimezoneValues, output=TimezoneOutput, selected=Timezone) }}
+                                    {{ html_options(values: TimezoneValues, output: TimezoneOutput, selected: Timezone) }}
                                 </select>
                             </div>
                         </div>
@@ -120,7 +119,7 @@
                                     <label class="reg fw-bold" for="phone">{{ translate('Phone') }}{% if RequirePhone is defined and RequirePhone %}<i
                                                 class="bi bi-asterisk text-danger align-top"
                                             style="font-size: 0.5rem;"></i>{% endif %}</label>
-                                    <input type="text" id="phone" {{ formname(key='PHONE') }}
+                                    <input type="text" id="phone" {{ formname(key: 'PHONE') }}
                                         class="form-control form-control-sm" size="20" {% if RequirePhone is defined and RequirePhone %}required="required"
                                             data-bv-notempty="true" data-bv-notempty-message="{{ translate('PhoneRequired') }}"
                                         {% endif %} />
@@ -135,7 +134,7 @@
                                         for="txtOrganization">{{ translate('Organization') }}{% if RequireOrganization is defined and RequireOrganization %}<i
                                                 class="bi bi-asterisk text-danger align-top"
                                             style="font-size: 0.5rem;"></i>{% endif %}</label>
-                                    <input type="text" id="txtOrganization" {{ formname(key='ORGANIZATION') }}
+                                    <input type="text" id="txtOrganization" {{ formname(key: 'ORGANIZATION') }}
                                         class="form-control form-control-sm" size="20"
                                         {% if RequireOrganization is defined and RequireOrganization %}required="required" data-bv-notempty="true"
                                         data-bv-notempty-message="{{ translate('OrganizationRequired') }}" {% endif %} />
@@ -150,7 +149,7 @@
                                         for="txtPosition">{{ translate('Position') }}{% if RequirePosition is defined and RequirePosition %}<i
                                                 class="bi bi-asterisk text-danger align-top"
                                             style="font-size: 0.5rem;"></i>{% endif %}</label>
-                                    <input type="text" id="txtPosition" {{ formname(key='POSITION') }}
+                                    <input type="text" id="txtPosition" {{ formname(key: 'POSITION') }}
                                         class="form-control form-control-sm" size="20"
                                         {% if RequirePosition is defined and RequirePosition %}required="required" data-bv-notempty="true"
                                         data-bv-notempty-message="{{ translate('PositionRequired') }}" {% endif %} />
@@ -175,7 +174,7 @@
                             </div>
                         </div>
                     {% else %}
-                        <input type="hidden" {{ formname(key='CAPTCHA') }} value="" />
+                        <input type="hidden" {{ formname(key: 'CAPTCHA') }} value="" />
                     {% endif %}
 
                     {% if Terms is defined and Terms != null %}
@@ -183,7 +182,7 @@
                             <div class="mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="termsAndConditionsAcknowledgement"
-                                        {{ formname(key='TOS_ACKNOWLEDGEMENT') }} />
+                                        {{ formname(key: 'TOS_ACKNOWLEDGEMENT') }} />
                                     <label class="form-check-label"
                                         for="termsAndConditionsAcknowledgement">{{ translate('IAccept') }}</label>
                                     <a href="{{ Terms.DisplayUrl() }}" class="link-primary"
@@ -202,11 +201,11 @@
         </div>
     </div>
 
-    {% include 'javascript-includes.twig' with {'Validator': true} %}
+    {{ include('javascript-includes.twig', {Validator: true}) }}
 
-    {{ jsfile(src='ajax-helpers.js') }}
-    {{ jsfile(src='autocomplete.js') }}
-    {{ jsfile(src='registration.js') }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'autocomplete.js') }}
+    {{ jsfile(src: 'registration.js') }}
 
     <script type="text/javascript">
         function enableButton() {
@@ -251,8 +250,8 @@
 
     <div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
         data-bs-backdrop="static" aria-hidden="true">
-        {% include 'wait-box.twig' with {'translateKey': 'Working'} %}
+        {{ include('common/wait-box.twig') }}
     </div>
 
 </div>
-{% include 'globalfooter.twig' %}
+{{ include('globalfooter.twig') }}
