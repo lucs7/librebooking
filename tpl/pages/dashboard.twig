@@ -1,12 +1,11 @@
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
-
-<div class="accordion" id="page-dashboard">
-    <div id="dashboardList">
-        {% for dashboardItem in items %}
-            <div>{{ dashboard_item(dashboardItem) }}</div>
-        {% endfor %}
+  <div class='accordion' id='page-dashboard'>
+    <div id='dashboardList'>
+      {% for dashboardItem in items %}
+        <div>{{ dashboard_item(dashboardItem) }}</div>
+      {% endfor %}
     </div>
 
     {{ include('javascript-includes.twig') }}
@@ -15,21 +14,21 @@
     {{ jsfile(src: 'resourcePopup.js') }}
     {{ jsfile(src: 'ajax-helpers.js') }}
 
-    <script type="text/javascript">
-        $(document).ready(function() {
+    <script type='text/javascript'>
+      $(document).ready(function() {
 
-            var dashboardOpts = {
-                reservationUrl: "{{ constant('Pages::RESERVATION') }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}=",
-                summaryPopupUrl: "ajax/respopup.php",
-                {# raw: JS string context, matches Smarty; ScriptUrl is developer-config #}
-                scriptUrl: '{{ ScriptUrl|raw }}'
-            };
+          var dashboardOpts = {
+              reservationUrl: "{{ constant('Pages::RESERVATION') }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}=",
+              summaryPopupUrl: "ajax/respopup.php",
+              {# raw: JS string context, matches Smarty; ScriptUrl is developer-config #}
+              scriptUrl: '{{ ScriptUrl|raw }}'
+          };
 
-            var dashboard = new Dashboard(dashboardOpts);
-            dashboard.init();
-        });
+          var dashboard = new Dashboard(dashboardOpts);
+          dashboard.init();
+      });
     </script>
-</div>
+  </div>
 
 {{ include('components/common/wait-box-modal.twig') }}
 {% endblock %}

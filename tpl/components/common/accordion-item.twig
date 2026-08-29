@@ -25,7 +25,7 @@
     >
       {{ translate(title) -}}
       {%- if badge is defined and badge is not null -%}
-        <span class='badge bg-primary ms-1'>{{ badge }}</span>
+        {{ include('components/common/badge.twig', {text: badge, class: 'ms-1'}, false) }}
       {%- endif %}
     </button>
   </div>
