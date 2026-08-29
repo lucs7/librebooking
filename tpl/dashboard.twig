@@ -30,16 +30,5 @@
     </script>
 </div>
 
-<div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div id="creatingNotification">
-                    {{ include('wait-box.twig', {translateKey: 'Working'}) }}
-                </div>
-                <div id="result" class="text-center"></div>
-            </div>
-        </div>
-    </div>
-</div>
-{{ include('globalfooter.twig') }}
+{{ include('components/common/wait-box.twig') }}
+{% endblock %}
