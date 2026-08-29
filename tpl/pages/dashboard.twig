@@ -1,4 +1,6 @@
-{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
 
 <div class="accordion" id="page-dashboard">
     <div id="dashboardList">
@@ -8,7 +10,6 @@
     </div>
 
     {{ include('javascript-includes.twig') }}
-
     {{ jsfile(src: 'reservationPopup.js') }}
     {{ jsfile(src: 'dashboard.js') }}
     {{ jsfile(src: 'resourcePopup.js') }}
@@ -30,5 +31,5 @@
     </script>
 </div>
 
-{{ include('components/common/wait-box.twig') }}
+{{ include('components/common/wait-box-modal.twig') }}
 {% endblock %}

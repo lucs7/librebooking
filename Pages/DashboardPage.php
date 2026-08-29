@@ -23,7 +23,7 @@ class DashboardPage extends SecurePage implements IDashboardPage
         $this->_presenter->Initialize();
 
         $this->Set('items', $this->items);
-        $this->Display('dashboard.tpl');
+        $this->Display('pages/dashboard.twig');
     }
 
     public function AddItem(DashboardItem $item)

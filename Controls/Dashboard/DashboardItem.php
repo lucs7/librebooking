@@ -11,7 +11,7 @@ abstract class DashboardItem extends Control
 
     protected function Display($templateName)
     {
-        parent::Display("Dashboard/$templateName");
+        parent::Display("components/dashboard/$templateName");
     }
 
     protected function Assign($name, $value)

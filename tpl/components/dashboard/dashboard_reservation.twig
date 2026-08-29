@@ -7,10 +7,10 @@
     <div class="col-sm-3 col-12"><span class="reservationTitle" data-bs-custom-class="respopup-tooltip"
             data-bs-html="true">{{ reservation.Title is not empty ? reservation.Title : DefaultTitle }}</span></div>
     <div class="col-sm-3 col-12">
-        {{ fullname(first=reservation.FirstName|html_entity_decode, last=reservation.LastName|html_entity_decode, ignorePrivacy=reservation.IsUserOwner(UserId)) }}
+        {{ fullname(first: reservation.FirstName|html_entity_decode, last: reservation.LastName|html_entity_decode, ignorePrivacy: reservation.IsUserOwner(UserId)) }}
         {% if not reservation.IsUserOwner(UserId) %}<i class="bi bi-people-fill"></i> {% endif %}</div>
-    <div class="col-sm-3 col-6">{{ formatdate(date=reservation.StartDate.ToTimezone(Timezone), key='dashboard') }} -
-        {{ formatdate(date=reservation.EndDate.ToTimezone(Timezone), key='dashboard') }}</div>
+    <div class="col-sm-3 col-6">{{ formatdate(date: reservation.StartDate.ToTimezone(Timezone), key: 'dashboard') }} -
+        {{ formatdate(date: reservation.EndDate.ToTimezone(Timezone), key: 'dashboard') }}</div>
     {# <div class="col-sm-2 col-6">{{ formatdate(date=reservation.EndDate.ToTimezone(Timezone), key='dashboard') }}</div> #}
     <div class="col-sm-{% if checkin or checkout %}2{% else %}3{% endif %} col-12">{{ reservation.ResourceNames|join(', ') }}</div>
     {% if allowCheckin %}

@@ -16,7 +16,7 @@ class AnnouncementsControl extends DashboardItem implements IAnnouncementsContro
     public function PageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Display('announcements.tpl');
+        $this->Display('announcements.twig');
     }
 
     public function SetAnnouncements($announcements)

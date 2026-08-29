@@ -24,7 +24,7 @@ class UpcomingReservations extends DashboardItem implements IUpcomingReservation
         $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
         $this->presenter->SetSearchCriteria(ServiceLocator::GetServer()->GetUserSession()->UserId, ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
-        $this->Display('upcoming_reservations.tpl');
+        $this->Display('upcoming_reservations.twig');
     }
 
     public function SetTimezone($timezone)
@@ -102,7 +102,7 @@ class AllUpcomingReservations extends UpcomingReservations
         $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
         $this->presenter->SetSearchCriteria(ReservationViewRepository::ALL_USERS, ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
-        $this->Display('admin_upcoming_reservations.tpl');
+        $this->Display('admin_upcoming_reservations.twig');
     }
 }
 
@@ -119,7 +119,7 @@ class GroupUpcomingReservations extends UpcomingReservations
         $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
         $this->presenter->SetSearchCriteria(ReservationViewRepository::ALL_USERS, ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
-        $this->Display('group_upcoming_reservations.tpl');
+        $this->Display('group_upcoming_reservations.twig');
     }
 }
 
@@ -136,7 +136,7 @@ class PendingApprovalReservations extends UpcomingReservations implements IAditi
         $this->Set('DefaultTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
         $this->presenter->SetSearchCriteria(ReservationViewRepository::ALL_USERS, ReservationUserLevel::ALL);
         $this->presenter->PageLoad();
-        $this->Display('pending_approval_reservations.tpl');
+        $this->Display('pending_approval_reservations.twig');
     }
 
     public function BindThisMonth($reservations)
