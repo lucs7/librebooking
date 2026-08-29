@@ -1,0 +1,57 @@
+{%
+  embed 'components/common/accordion-item.twig' with {
+      id: 'upcomingReservationsDashboard', contentsId: 'MissingCheckOutReservationsContents',
+      title: 'MissingCheckOutReservations', badge: Total, class: 'dashboard upcomingReservationsDashboard',
+      bodyClass: 'dashboardContents',
+  }
+%}
+{% block body %}
+  {% if Total > 0 %}
+    <div>
+      <div class='timespan bg-warning border-bottom p-1 fw-medium fst-italic'>
+        {{ translate('Today') }} ({{ (TodaysReservations ?? [])|length }})
+      </div>
+      {% for reservation in TodaysReservations %}
+        {{ include('components/dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout}) }}
+      {% endfor %}
+
+      <div class='timespan bg-warning border-bottom p-1 fw-medium fst-italic'>
+        {{ translate('Yesterday') }} ({{ (YesterdayReservations ?? [])|length }})
+      </div>
+      {% for reservation in YesterdayReservations %}
+        {{ include('components/dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout}) }}
+      {% endfor %}
+
+      <div class='timespan bg-warning border-bottom p-1 fw-medium fst-italic'>
+        {{ translate('EarlierThisWeek') }} ({{ (ThisWeeksReservations ?? [])|length }})
+      </div>
+      {% for reservation in ThisWeeksReservations %}
+        {{ include('components/dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout}) }}
+      {% endfor %}
+
+      <div class='timespan bg-warning border-bottom p-1 fw-medium fst-italic'>
+        {{ translate('PreviousWeek') }} ({{ (PreviousWeekReservations ?? [])|length }})
+      </div>
+      {% for reservation in PreviousWeekReservations %}
+        {{ include('components/dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout}) }}
+      {% endfor %}
+
+      <div class='timespan bg-warning border-bottom p-1 fw-medium fst-italic'>
+        {{ translate('Other') }} ({{ (RemainingReservations ?? [])|length }})
+      </div>
+      {% for reservation in RemainingReservations %}
+        {{ include('components/dashboard/dashboard_reservation.twig', {reservation: reservation, allowCheckin: allowCheckin, allowCheckout: allowCheckout}) }}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class='noresults text-center fst-italic fs-5'>{{ translate('NoMissingCheckOutReservations') }}</div>
+  {% endif %}
+{% endblock %}
+{% block footer %}
+  <form id='form-checkin' method='post'>
+    <input type='hidden' id='referenceNumber' {{ formname('REFERENCE_NUMBER') }}>
+    {{ csrf_token() }}
+  </form>
+
+{% endblock %}
+{% endembed %}

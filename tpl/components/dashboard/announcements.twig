@@ -1,0 +1,18 @@
+{%
+  embed 'components/common/accordion-item.twig' with {
+      id: 'announcementsDashboard', contentsId: 'announcementsContents',
+      title: 'Announcements', badge: (Announcements ?? [])|length,
+  }
+%}
+{% block body %}
+  <div class='announcementContent'>
+    {% for each in Announcements %}
+      <div class='py-2{% if not loop.last %} border-bottom{% endif %}'>
+        {{ each.Text()|sanitize_rich_text|url2link|nl2br|raw }}
+      </div>
+    {% else %}
+      <p class='noresults text-center fst-italic fs-5'>{{ translate('NoAnnouncements') }}</p>
+    {% endfor %}
+  </div>
+{% endblock %}
+{% endembed %}

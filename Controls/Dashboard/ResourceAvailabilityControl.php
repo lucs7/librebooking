@@ -211,7 +211,7 @@ class ResourceAvailabilityControl extends DashboardItem implements IResourceAvai
 
         $this->presenter->PageLoad($userSession);
 
-        $this->Display('resource_availability.tpl');
+        $this->Display('resource_availability.twig');
     }
 
 
