@@ -1,0 +1,16 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <div id='page-terms-of-service' class='col-12 col-sm-8 mx-auto mt-5'>
+    {% embed 'components/common/card.twig' with {id: 'terms-of-service-card'} %}
+    {% block header %}
+      <h1 class='text-center m-0'>{{ translate('TermsOfService') }}</h1>
+    {% endblock %}
+    {% block body %}
+      <div id='termsofservice-text'>
+        {{ TermsContent|default('No TOC set ')|nl2br }}
+      </div>
+    {% endblock %}
+    {% endembed %}
+  </div>
+{% endblock %}

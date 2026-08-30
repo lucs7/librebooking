@@ -1,0 +1,38 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <div id='page-support-and-credits' class='col-12 col-sm-8 mx-auto'>
+    {% embed 'components/common/card.twig' with {id: 'support-and-credits-card'} %}
+    {% block header %}
+      <h1 class='text-center m-0'>About LibreBooking</h1>
+    {% endblock %}
+    {% block body %}
+      <h2>Documentation</h2>
+      <p>
+        <a class='link-primary' href='https://librebooking.readthedocs.io/en/latest/'>LibreBooking Documentation</a>
+      </p>
+      <h2>Support</h2>
+      <p><a class='link-primary' href='https://github.com/LibreBooking/librebooking'>LibreBooking Support</a></p>
+      <p>
+        <a class='link-primary' href='https://discord.gg/4TGThPtmX8'
+          >LibreBooking Community discussion channel on Discord</a
+        >
+      </p>
+      <h2>Credits</h2>
+      <p>
+        see
+        <a
+          class='link-primary'
+          href='https://github.com/LibreBooking/librebooking/blob/develop/CONTRIBUTORS.md'
+          >CONTRIBUTORS.md</a
+        >
+      </p>
+      <h2>License</h2>
+      <p>
+        LibreBooking free and open source, licenced under the GNU GENERAL PUBLIC LICENSE. Please see the included
+        License file for more details.
+      </p>
+    {% endblock %}
+    {% endembed %}
+  </div>
+{% endblock %}
