@@ -1,4 +1,6 @@
-{% include 'globalheader.twig' %}
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
 <div class="error text-center">
     <h3>{{ translate(ErrorMessage) }}</h3>
     <h5>
@@ -7,5 +9,5 @@
     </h5>
 </div>
 
-{% include 'javascript-includes.twig' %}
-{% include 'globalfooter.twig' %}
+{{ include('javascript-includes.twig') }}
+{% endblock %}
