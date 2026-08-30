@@ -228,7 +228,7 @@ abstract class Page implements IPage
         $errorMessageKey = ErrorMessages::Instance()->GetResourceKey($errorMessageId);
         $this->Set('ErrorMessage', $errorMessageKey);
         $this->Set('TitleKey', 'Error');
-        $this->Display('error.tpl');
+        $this->Display('pages/error.tpl');
         die();
     }
 
