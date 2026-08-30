@@ -23,6 +23,6 @@ class ErrorPage extends Page
 
         $this->Set('ReturnUrl', urldecode($returnUrl));
         $this->Set('ErrorMessage', $errorMessageKey);
-        $this->Display('error.tpl');
+        $this->Display('pages/error.twig');
     }
 }
