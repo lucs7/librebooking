@@ -17,6 +17,6 @@ class HelpPage extends Page
         $this->Set('MissedCheckinPath', realpath(ROOT_DIR . 'Jobs/sendmissedcheckin.php'));
         $this->Set('ServerTimezone', date_default_timezone_get());
 
-        $this->DisplayLocalized('support-and-credits.tpl');
+        $this->DisplayLocalized('pages/support-and-credits.twig');
     }
 }
