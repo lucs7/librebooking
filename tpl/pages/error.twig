@@ -1,13 +1,17 @@
 {% extends 'layouts/base.twig' %}
 
 {% block content %}
-<div class="error text-center">
+  <div class='error text-center'>
     <h3>{{ translate(ErrorMessage) }}</h3>
     <h5>
-        <a class="link-primary"
-            href="//{{ server.HTTP_HOST }}{{ server.REQUEST_URI }}">{{ translate('ReturnToPreviousPage') }}</a>
+      <a
+        class='link-primary'
+        href='//{{ server.HTTP_HOST }}{{ server.REQUEST_URI }}'
+      >
+        {{- translate('ReturnToPreviousPage') -}}
+      </a>
     </h5>
-</div>
+  </div>
 
-{{ include('javascript-includes.twig') }}
+  {{ include('javascript-includes.twig') }}
 {% endblock %}
