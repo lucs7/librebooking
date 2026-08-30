@@ -433,7 +433,7 @@ abstract class Page implements IPage
     protected function Display($templateName)
     {
         if ($this->InMaintenanceMode()) {
-            $this->RenderTemplate('maintenance.tpl');
+            $this->RenderTemplate('pages/maintenance.twig');
             return;
         }
         $this->RenderTemplate($templateName);
