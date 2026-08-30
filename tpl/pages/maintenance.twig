@@ -2,17 +2,16 @@
 
 {% block content %}
   <div id='maintenance' class='col-sm-8 col-12 mx-auto mt-5'>
-  {% embed 'components/common/card.twig' with {id: 'maintenance-card', class: 'p-4'} %}
-  {% block body %}
-    <div id='maintenance-box' class='default-box'>
-      <div class='text-center mb-2'>
-        <i class='bi bi-tools fs-1'></i>
-        <h2 class='fw-bold mb-3'>{{ translate('MaintenanceNotice') }}</h2>
+    {% embed 'components/common/card.twig' with {id: 'maintenance-card', class: 'p-4'} %}
+    {% block body %}
+      <div id='maintenance-box' class='default-box'>
+        <div class='text-center mb-2'>
+          <i class='bi bi-tools fs-1'></i>
+          <h2 class='fw-bold mb-3'>{{ translate('MaintenanceNotice') }}</h2>
+        </div>
       </div>
-    </div>
-    </div>
-  {% endblock %}
-  {% endembed %}
-
+    {% endblock %}
+    {% endembed %}
+  </div>
   {{ include('javascript-includes.twig') }}
 {% endblock %}
