@@ -38,10 +38,28 @@ class WebExceptionHandler extends ExceptionHandler
 
     public function HandleException($exception)
     {
-        error_log('Error: ' . $exception);
-        ob_start();
-        debug_print_backtrace();
-        error_log(ob_get_clean());
+        // Written directly to stderr (not error_log()) so the trace keeps real
+        // newlines and ANSI colors instead of Apache stamping its
+        // [timestamp][pid][client] prefix on every line and escaping control
+        // characters (including newlines and the color escape byte).
+        $stderr = fopen('php://stderr', 'ab');
+        if ($stderr !== false) {
+            $header = sprintf(
+                "\033[1;31mUncaught exception: %s: %s in %s:%d\033[0m",
+                get_class($exception),
+                $exception->getMessage(),
+                $exception->getFile(),
+                $exception->getLine()
+            );
+
+            $trace = array_map(
+                static fn($line) => "\033[2m => {$line}\033[0m",
+                explode("\n", $exception->getTraceAsString())
+            );
+
+            fwrite($stderr, $header . "\n" . implode("\n", $trace) . "\n");
+            fclose($stderr);
+        }
 
         // Uncaught exceptions indicate a server-side failure.
         // Set 500 only while headers are still mutable.
