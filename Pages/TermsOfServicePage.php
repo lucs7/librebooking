@@ -18,6 +18,6 @@ class TermsOfServicePage extends Page
         if ($tos != null) {
             $this->Set('TermsContent', $tos->Text());
         }
-        $this->Display('tos.tpl');
+        $this->Display('pages/terms-of-service.twig');
     }
 }
