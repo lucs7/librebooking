@@ -79,7 +79,7 @@ class ParticipationPage extends SecurePage implements IParticipationPage
 
     public function DisplayParticipation()
     {
-        $this->Display('MyAccount/participation.tpl');
+        $this->Display('pages/my-account/participation.twig');
     }
 
     public function DisplayResult($results)
