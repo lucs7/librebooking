@@ -28,7 +28,7 @@ class ForgotPwdPage extends Page implements IForgotPwdPage
         $this->SetEnabled(true);
         $this->_presenter->PageLoad();
 
-        $this->Display('forgot_pwd.tpl');
+        $this->Display('pages/forgot-password.twig');
     }
 
     public function ResetClicked()
