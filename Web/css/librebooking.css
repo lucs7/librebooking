@@ -160,6 +160,11 @@ fieldset:disabled .btn {
   background-color: var(--primary) !important;
 }
 
+.text-bg-primary {
+  color: var(--text-color-btn) !important;
+  background-color: var(--primary) !important;
+}
+
 .bg-primary-opacity {
   background-color: var(--primary) !important;
   --bs-bg-opacity: 0.5 !important;
