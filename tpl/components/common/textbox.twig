@@ -4,11 +4,14 @@
   and are being migrated to declarative components.
 
   `key` is a FormKeys key, resolved via `formname()` for the `name` attribute
-  and defaulted for `id` unless `id` is passed explicitly. `value` is rendered
-  as-is — pass an already-resolved value (e.g. a posted form value fetched by
-  the Page) to repopulate the field; omit for an empty input. `labelkey` is a
-  translation key for the field's label, rendered bound to the input via
-  for/id; omit to render the input without a label.
+  and defaulted for `id` unless `id` is passed explicitly. `value` is the
+  fallback shown when the field wasn't just posted — pass the field's current
+  stored value (e.g. from the Page); omit for an empty input when nothing was
+  posted. If `key` was submitted in the current request, its raw posted value
+  takes precedence over `value`, matching the legacy `textbox()` plugin's
+  redisplay-after-failed-submit behavior. `labelkey` is a translation key for
+  the field's label, rendered bound to the input via for/id; omit to render
+  the input without a label.
 
   {% include 'components/common/textbox.twig' with {
   'key': 'EMAIL', 'type': 'email', 'required': true, 'class': 'input',
@@ -22,6 +25,8 @@
 {% endfor -%}
 {%- endset %}
 {% set inputId = id|default(formkey(key)) %}
+{% set postedValue = posted_form_value(key) %}
+{% set resolvedValue = (postedValue is not empty ? postedValue : value|default(''))|trim %}
 {% if labelkey is defined and labelkey %}
   <label for='{{ inputId }}' class="{{ labelClass|default('form-label') }}">{{ translate(labelkey) }}</label>
   <br>
@@ -30,7 +35,7 @@
   type="{{ type|default('text') }}"
   {{ formname(key: key) }}
   id='{{ inputId }}'
-  value="{{ value|default('') }}"
+  value='{{ resolvedValue }}'
   {% if required is defined and required %}
     required='required'
   {% endif %}
