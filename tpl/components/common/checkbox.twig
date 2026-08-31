@@ -1,0 +1,38 @@
+{#
+  Reusable Bootstrap `.form-check` checkbox, based on the legacy raw
+  `<input type="checkbox">` + `<label>` pattern used for toggle-style
+  preferences.
+
+  Unlike `textbox.twig`, `name` here is not a FormKeys key — it's the raw,
+  already-resolved field name (checkboxes are commonly keyed off a
+  domain-specific constant rather than FormKeys, and only need a single
+  name/id, not `formname()`/`formkey()` resolution). It's used as both the
+  `name` and default `id` unless `id` is passed explicitly. `checked` is a
+  boolean for the initial state. `labelkey` is a translation key for the
+  associated label, rendered bound to the input via for/id. `switchStyle`
+  (default true) renders the pill-style Bootstrap switch; pass false for a
+  plain checkbox.
+
+  {% include 'components/common/checkbox.twig' with {
+  'name': constant('ReservationEvent::Created'),
+  'checked': Created is defined and Created,
+  'labelkey': 'PreferenceSendEmail'
+  } only %}
+#}
+{% set inputId = id|default(name) %}
+{% set isSwitch = switchStyle is not defined or switchStyle %}
+<div class="form-check {{ isSwitch ? 'form-switch' : '' }} {{ class|default('') }}">
+  <input
+    class='form-check-input'
+    type='checkbox'
+    {% if isSwitch %}
+      role='switch'
+    {% endif %}
+    id='{{ inputId }}'
+    name='{{ name }}'
+    {% if checked is defined and checked %}
+      checked='checked'
+    {% endif %}
+  >
+  <label class='form-check-label' for='{{ inputId }}'>{{ translate(labelkey) }}</label>
+</div>
