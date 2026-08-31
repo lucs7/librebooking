@@ -36,7 +36,7 @@ class PasswordPage extends SecurePage implements IPasswordPage
     public function PageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Display('MyAccount/password.tpl');
+        $this->Display('pages/my-account/password.twig');
     }
 
     public function GetCurrentPassword()
