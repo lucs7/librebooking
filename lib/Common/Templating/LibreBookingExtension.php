@@ -627,6 +627,18 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
             ),
 
             /**
+             * Resolves a FormKeys key to its raw field name, unwrapped (unlike
+             * `formname`, which returns a full `name='...'` attribute string).
+             * Used by components that need the bare name, e.g. as an `id` default.
+             */
+            new TwigFunction(
+                'formkey',
+                static function (string $key): string {
+                    return FormKeys::Evaluate($key);
+                }
+            ),
+
+            /**
              * Renders a hidden CSRF token input.
              * Equivalent to SmartyPage::CSRFToken (echoed in Smarty; returned here).
              */
