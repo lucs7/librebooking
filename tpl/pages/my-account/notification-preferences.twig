@@ -1,115 +1,114 @@
-{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
 
-<div class="page-notification-preferences">
+{% block content %}
+  <div id='page-notification-preferences' class='col-sm-8 col-12 mx-auto mt-5'>
     {% if not (EmailEnabled is defined and EmailEnabled) %}
-        <div class="alert alert-danger text-center">
-            <i class="bi bi-exclamation-triangle-fill fs-5"></i> {{ translate('EmailDisabled') }}
-        </div>
+      <div class='alert alert-danger text-center'>
+        <i class='bi bi-exclamation-triangle-fill fs-5'></i> {{ translate('EmailDisabled') }}
+      </div>
     {% else %}
-        {% embed 'components/common/card.twig' with {id: 'notification-preferences-box', class: 'default-box col-12 col-sm-8 mx-auto', bodyClass: 'mx-3'} %}
-        {% block header %}
-            <h1 class="text-center m-0">{{ translate('NotificationPreferences') }}</h1>
-        {% endblock %}
-        {% block body %}
-            <form id="notification-preferences-form" method="post" action="{{ server.SCRIPT_NAME }}">
-                {% if PreferencesUpdated is defined and PreferencesUpdated %}
-                    <div class="success alert alert-success">
-                        <i class="bi bi-check-circle-fill"></i> {{ translate('YourSettingsWereUpdated') }}
-                    </div>
-                {% endif %}
-                <div class="row gy-3">
-                    <div class="notification-row col-12 col-sm-6">
-                        <div class="notification-type">{{ translate('ReservationCreatedPreference') }}</div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="{{ constant('ReservationEvent::Created') }}" name="{{ constant('ReservationEvent::Created') }}"
-                                {% if Created is defined and Created %}checked="checked" {% endif %}>
-                            <label class="form-check-label"
-                                for="{{ constant('ReservationEvent::Created') }}">{{ translate('PreferenceSendEmail') }}</label>
-                        </div>
-                    </div>
+      {% embed 'components/common/card.twig' with {id: 'notification-preferences-box'} %}
+      {% block header %}
+        <h1 class='text-center m-0'>{{ translate('NotificationPreferences') }}</h1>
+      {% endblock %}
+      {% block body %}
+        <form id='notification-preferences-form' method='post' action='{{ server.SCRIPT_NAME }}'>
+          {% if PreferencesUpdated is defined and PreferencesUpdated %}
+            <div class='success alert alert-success'>
+              <i class='bi bi-check-circle-fill'></i> {{ translate('YourSettingsWereUpdated') }}
+            </div>
+          {% endif %}
+          <div class='row gy-3'>
+            <div class='notification-row col-12 col-sm-6'>
+              <div class='notification-type'>{{ translate('ReservationCreatedPreference') }}</div>
+              {{
+                include('components/common/checkbox.twig', {
+                  name: constant('ReservationEvent::Created'),
+                  checked: Created is defined and Created,
+                  labelkey: 'PreferenceSendEmail',
+                }
+              , false) }}
+            </div>
 
-                    <div class="notification-row col-12 col-sm-6">
-                        <div class="notification-type">{{ translate('ReservationUpdatedPreference') }}</div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="{{ constant('ReservationEvent::Updated') }}" name="{{ constant('ReservationEvent::Updated') }}"
-                                {% if Updated is defined and Updated %}checked="checked" {% endif %}>
-                            <label class="form-check-label"
-                                for="{{ constant('ReservationEvent::Updated') }}">{{ translate('PreferenceSendEmail') }}</label>
-                        </div>
-                    </div>
+            <div class='notification-row col-12 col-sm-6'>
+              <div class='notification-type'>{{ translate('ReservationUpdatedPreference') }}</div>
+              {{
+                include('components/common/checkbox.twig', {
+                  name: constant('ReservationEvent::Updated'),
+                  checked: Updated is defined and Updated,
+                  labelkey: 'PreferenceSendEmail',
+                }
+              , false) }}
+            </div>
 
-                    <div class="notification-row col-12 col-sm-6">
-                        <div class="notification-type">
-                            {{ translate('ReservationDeletedPreference') }}
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="{{ constant('ReservationEvent::Deleted') }}" name="{{ constant('ReservationEvent::Deleted') }}"
-                                {% if Deleted is defined and Deleted %}checked="checked" {% endif %}>
-                            <label class="form-check-label"
-                                for="{{ constant('ReservationEvent::Deleted') }}">{{ translate('PreferenceSendEmail') }}</label>
-                        </div>
+            <div class='notification-row col-12 col-sm-6'>
+              <div class='notification-type'>
+                {{ translate('ReservationDeletedPreference') }}
+              </div>
+              {{
+                include('components/common/checkbox.twig', {
+                  name: constant('ReservationEvent::Deleted'),
+                  checked: Deleted is defined and Deleted,
+                  labelkey: 'PreferenceSendEmail',
+                }
+              , false) }}
+            </div>
 
-                    </div>
+            <div class='notification-row alt col-12 col-sm-6'>
+              <div class='notification-type'>
+                {{ translate('ReservationApprovalPreference') }}
+              </div>
+              {{
+                include('components/common/checkbox.twig', {
+                  name: constant('ReservationEvent::Approved'),
+                  checked: Approved is defined and Approved,
+                  labelkey: 'PreferenceSendEmail',
+                }
+              , false) }}
+            </div>
 
-                    <div class="notification-row alt col-12 col-sm-6">
-                        <div class="notification-type">
-                            {{ translate('ReservationApprovalPreference') }}
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="{{ constant('ReservationEvent::Approved') }}" name="{{ constant('ReservationEvent::Approved') }}"
-                                {% if Approved is defined and Approved %}checked="checked" {% endif %}>
-                            <label class="form-check-label"
-                                for="{{ constant('ReservationEvent::Approved') }}">{{ translate('PreferenceSendEmail') }}</label>
-                        </div>
-                    </div>
+            <div class='notification-row col-12 col-sm-6'>
+              <div class='notification-type'>
+                {{ translate('ReservationParticipationActivityPreference') }}
+              </div>
+              {{
+                include('components/common/checkbox.twig', {
+                  name: constant('ReservationEvent::ParticipationChanged'),
+                  checked: ParticipantChanged is defined and ParticipantChanged,
+                  labelkey: 'PreferenceSendEmail',
+                }
+              , false) }}
+            </div>
 
-                    <div class="notification-row col-12 col-sm-6">
-                        <div class="notification-type">
-                            {{ translate('ReservationParticipationActivityPreference') }}
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="{{ constant('ReservationEvent::ParticipationChanged') }}"
-                                name="{{ constant('ReservationEvent::ParticipationChanged') }}"
-                                {% if ParticipantChanged is defined and ParticipantChanged %}checked="checked" {% endif %}>
-                            <label class="form-check-label"
-                                for="{{ constant('ReservationEvent::ParticipationChanged') }}">{{ translate('PreferenceSendEmail') }}</label>
-                        </div>
-                    </div>
-
-                    <div class="notification-row-alt col-12 col-sm-6">
-                        <div class="notification-type">
-                            {{ translate('ReservationSeriesEndingPreference') }}
-                        </div>
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch"
-                                id="{{ constant('ReservationEvent::SeriesEnding') }}" name="{{ constant('ReservationEvent::SeriesEnding') }}"
-                                {% if SeriesEnding is defined and SeriesEnding %}checked="checked" {% endif %}>
-                            <label class="form-check-label"
-                                for="{{ constant('ReservationEvent::SeriesEnding') }}">{{ translate('PreferenceSendEmail') }}</label>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="form-group d-grid mt-3">
-                    {{ include('components/common/button.twig', {
-                        type: 'submit',
-                        variant: 'primary',
-                        class: 'update prompt',
-                        name: constant('Actions::SAVE'),
-                        key: 'Update',
-                    }, false) }}
-                </div>
-            </form>
-        {% endblock %}
-        {% endembed %}
+            <div class='notification-row-alt col-12 col-sm-6'>
+              <div class='notification-type'>
+                {{ translate('ReservationSeriesEndingPreference') }}
+              </div>
+              {{
+                include('components/common/checkbox.twig', {
+                  name: constant('ReservationEvent::SeriesEnding'),
+                  checked: SeriesEnding is defined and SeriesEnding,
+                  labelkey: 'PreferenceSendEmail',
+                }
+              , false) }}
+            </div>
+          </div>
+          <div class='form-group d-grid mt-3'>
+            {{
+              include('components/common/button.twig', {
+                  type: 'submit',
+                  variant: 'primary',
+                  class: 'update prompt',
+                  name: constant('Actions::SAVE'),
+                  key: 'Update',
+              }
+            , false) }}
+          </div>
+        </form>
+      {% endblock %}
+      {% endembed %}
     {% endif %}
+  </div>
 
-</div>
-
-{{ include('javascript-includes.twig') }}
-{{ include('globalfooter.twig') }}
+  {{ include('javascript-includes.twig') }}
+{% endblock %}

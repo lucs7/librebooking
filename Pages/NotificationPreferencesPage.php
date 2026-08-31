@@ -97,7 +97,7 @@ class NotificationPreferencesPage extends SecurePage implements INotificationPre
     public function PageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Display('MyAccount/notification-preferences.tpl');
+        $this->Display('pages/my-account/notification-preferences.tpl');
     }
 
     public function SetApproved($wantsApprovalEmails)
