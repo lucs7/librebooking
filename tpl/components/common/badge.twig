@@ -1,0 +1,18 @@
+{#
+  Generic Bootstrap badge, using the contrast-aware `text-bg-*` class (not
+  plain `bg-*`) so text stays readable against every variant color.
+
+  `variant` is a Bootstrap contextual color suffix (primary, secondary,
+  success, danger, warning, info, light, dark) — default 'primary'. `text`
+  is the badge's content, rendered as-is: pass `translate(key)` yourself for
+  a translated label, or a raw count/value for dynamic badges (e.g. an
+  unread count). `class` appends extra CSS classes (e.g. spacing utilities
+  like `ms-1`), `id` sets an id attribute.
+
+  {% include 'components/common/badge.twig' with {
+  'variant': 'secondary', 'text': Reservations|default([])|length, 'class': 'ms-1'
+  } only %}
+#}
+<span class="badge text-bg-{{ variant|default('primary') }} {{ class|default('') }}" id="{{ id|default('') }}">
+  {{- text|default('') -}}
+</span>
