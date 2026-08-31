@@ -639,6 +639,18 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
             ),
 
             /**
+             * Returns the raw posted value for a FormKeys key, or '' if not posted.
+             * Equivalent to SmartyTextbox::GetPostedValue, used by components to
+             * repopulate a field from the submitted form after a failed redisplay.
+             */
+            new TwigFunction(
+                'posted_form_value',
+                static function (string $key): string {
+                    return (string) ServiceLocator::GetServer()->GetForm(FormKeys::Evaluate($key));
+                }
+            ),
+
+            /**
              * Renders a hidden CSRF token input.
              * Equivalent to SmartyPage::CSRFToken (echoed in Smarty; returned here).
              */

@@ -86,7 +86,7 @@ class ProfilePage extends ActionPage implements IProfilePage
         $this->Set('RequireOrganization', Configuration::Instance()->GetKey(ConfigKeys::REGISTRATION_REQUIRE_ORGANIZATION, new BooleanConverter()));
 
         $this->presenter->PageLoad();
-        $this->Display('MyAccount/profile.tpl');
+        $this->Display('pages/my-account/profile.twig');
     }
 
     public function SetFirstName($firstName)

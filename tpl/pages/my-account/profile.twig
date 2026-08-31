@@ -1,0 +1,260 @@
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
+  <div id='page-profile' class='col-sm-8 col-12 mx-auto mt-5'>
+    {% embed 'components/common/card.twig' with {id: 'profile-box'} %}
+    {% block header %}
+      <h1 class='text-center m-0'>{{ translate('EditProfile') }}</h1>
+    {% endblock %}
+    {% block body %}
+      <form
+        method='post'
+        ajaxAction="{{ constant('ProfileActions::Update') }}"
+        id='form-profile'
+        class='was-validated'
+        action='{{ server.SCRIPT_NAME }}'
+        role='form'
+        data-bv-submitbuttons='button[type="submit"]'
+        data-bv-onerror='enableButton'
+        data-bv-onsuccess='enableButton'
+        data-bv-live='enabled'
+      >
+        <div class='d-none alert alert-success' role='alert' id='profileUpdatedMessage'>
+          <i class='bi bi-check-circle-fill text-success'></i> {{ translate('YourProfileWasUpdated') }}
+        </div>
+
+        <div class='validationSummary alert alert-danger d-none' id='validationErrors'>
+          <ul>
+            {{ async_validator(id: 'fname', key: 'FirstNameRequired') }}
+            {{ async_validator(id: 'lname', key: 'LastNameRequired') }}
+            {{ async_validator(id: 'username', key: 'UserNameRequired') }}
+            {{ async_validator(id: 'emailformat', key: 'ValidEmailRequired') }}
+            {{ async_validator(id: 'uniqueemail', key: 'UniqueEmailRequired') }}
+            {{ async_validator(id: 'uniqueusername', key: 'UniqueUsernameRequired') }}
+            {{ async_validator(id: 'phoneRequired', key: 'PhoneRequired') }}
+            {{ async_validator(id: 'positionRequired', key: 'PositionRequired') }}
+            {{ async_validator(id: 'organizationRequired', key: 'OrganizationRequired') }}
+            {{ async_validator(id: 'additionalattributes', key: '') }}
+          </ul>
+        </div>
+
+        <div class='row gy-2'>
+          <div class='col-12 col-sm-6'>
+            <div class='form-group'>
+              <label class='reg fw-bold' for='username'>{{ translate('Username') }}</label>
+              {% set usernameAttrs = {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('UserNameRequired')}|merge(AllowUsernameChange ? {autofocus: 'autofocus'} : {readonly: 'readonly'}) %}
+              {{
+                include('components/common/textbox.twig', {
+                  key: 'USERNAME',
+                  value: Username,
+                  required: true,
+                  attributes: usernameAttrs,
+                }
+              , false) }}
+            </div>
+          </div>
+
+          <div class='col-12 col-sm-6'>
+            <div class='form-group'>
+              <label class='reg fw-bold' for='email'>{{ translate('Email') }}</label>
+              {% set emailAttrs = {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('ValidEmailRequired'), 'data-bv-emailaddress': 'true', 'data-bv-emailaddress-message': translate('ValidEmailRequired')} %}
+              {% set emailAttrs = AllowEmailAddressChange ? emailAttrs : emailAttrs|merge({readonly: 'readonly'}) %}
+              {{
+                include('components/common/textbox.twig', {
+                  key: 'EMAIL',
+                  type: 'email',
+                  class: 'input',
+                  value: Email,
+                  required: true,
+                  attributes: emailAttrs,
+                }
+              , false) }}
+            </div>
+          </div>
+
+          <div class='col-12 col-sm-6'>
+            <div class='form-group'>
+              <label class='reg fw-bold' for='fname'>{{ translate('FirstName') }}</label>
+              {% set fnameAttrs = {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('FirstNameRequired')} %}
+              {% set fnameAttrs = AllowNameChange ? fnameAttrs : fnameAttrs|merge({readonly: 'readonly'}) %}
+              {{
+                include('components/common/textbox.twig', {
+                  key: 'FIRST_NAME',
+                  class: 'input',
+                  value: FirstName,
+                  required: true,
+                  attributes: fnameAttrs,
+                }
+              , false) }}
+            </div>
+          </div>
+
+          <div class='col-12 col-sm-6'>
+            <div class='form-group'>
+              <label class='reg fw-bold' for='lname'>{{ translate('LastName') }}</label>
+              {% set lnameAttrs = {'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('LastNameRequired')} %}
+              {% set lnameAttrs = AllowNameChange ? lnameAttrs : lnameAttrs|merge({readonly: 'readonly'}) %}
+              {{
+                include('components/common/textbox.twig', {
+                  key: 'LAST_NAME',
+                  class: 'input',
+                  value: LastName,
+                  required: true,
+                  attributes: lnameAttrs,
+                }
+              , false) }}
+            </div>
+          </div>
+
+          <div class='col-12 col-sm-6'>
+            <div class='form-group'>
+              <label class='reg fw-bold' for='homepage'>{{ translate('DefaultPage') }}</label>
+              <select {{ formname(key: 'DEFAULT_HOMEPAGE') }} id='homepage' class='form-select form-select-sm'>
+                {{ html_options(values: HomepageValues, output: HomepageOutput, selected: Homepage) }}
+              </select>
+            </div>
+          </div>
+          <div class='col-12 col-sm-6'>
+            <div class='form-group'>
+              <label class='reg fw-bold' for='timezoneDropDown'>{{ translate('Timezone') }}</label>
+              <select {{ formname(key: 'TIMEZONE') }} class='form-select form-select-sm' id='timezoneDropDown'>
+                {{ html_options(values: TimezoneValues, output: TimezoneOutput, selected: Timezone) }}
+              </select>
+            </div>
+          </div>
+
+          <div class='col-12 col-sm-6'>
+            <div class='form-group'>
+              <label class='reg fw-bold' for='phone'>{{ translate('Phone') }}</label>
+              {% set phoneRequired = AllowPhoneChange and RequirePhone %}
+              {% set phoneAttrs = {size: '20'} %}
+              {% set phoneAttrs = phoneRequired ? phoneAttrs|merge({'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('PhoneRequired')}) : phoneAttrs %}
+              {% set phoneAttrs = AllowPhoneChange ? phoneAttrs : phoneAttrs|merge({readonly: 'readonly'}) %}
+              {{
+                include('components/common/textbox.twig', {
+                  key: 'PHONE',
+                  id: 'phone',
+                  value: Phone,
+                  required: phoneRequired,
+                  attributes: phoneAttrs,
+                }
+              , false) }}
+            </div>
+          </div>
+
+          <div class='col-12 col-sm-6'>
+            <div class='form-group'>
+              <label class='reg fw-bold' for='txtOrganization'>{{ translate('Organization') }}</label>
+              {% set organizationRequired = AllowOrganizationChange and RequireOrganization %}
+              {% set organizationAttrs = {size: '20'} %}
+              {% set organizationAttrs = organizationRequired ? organizationAttrs|merge({'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('OrganizationRequired')}) : organizationAttrs %}
+              {% set organizationAttrs = AllowOrganizationChange ? organizationAttrs : organizationAttrs|merge({readonly: 'readonly'}) %}
+              {{
+                include('components/common/textbox.twig', {
+                  key: 'ORGANIZATION',
+                  id: 'txtOrganization',
+                  value: Organization,
+                  required: organizationRequired,
+                  attributes: organizationAttrs,
+                }
+              , false) }}
+            </div>
+          </div>
+
+          <div class='col-12 col-sm-6'>
+            <div class='form-group'>
+              <label class='reg fw-bold' for='txtPosition'>{{ translate('Position') }}</label>
+              {% set positionRequired = AllowPositionChange and RequirePosition %}
+              {% set positionAttrs = {size: '20'} %}
+              {% set positionAttrs = positionRequired ? positionAttrs|merge({'data-bv-notempty': 'true', 'data-bv-notempty-message': translate('PositionRequired')}) : positionAttrs %}
+              {% set positionAttrs = AllowPositionChange ? positionAttrs : positionAttrs|merge({readonly: 'readonly'}) %}
+              {{
+                include('components/common/textbox.twig', {
+                  key: 'POSITION',
+                  id: 'txtPosition',
+                  value: Position,
+                  required: positionRequired,
+                  attributes: positionAttrs,
+                }
+              , false) }}
+            </div>
+          </div>
+
+          {% for attribute in Attributes %}
+            <div class='col-12 col-sm-6'>
+              {{ control('AttributeControl', {attribute: attribute}) }}
+            </div>
+          {% endfor %}
+
+          <div class='d-grid mt-3'>
+            {{
+              include('components/common/button.twig', {
+                type: 'submit',
+                variant: 'primary',
+                class: 'update btn-block',
+                id: 'btnUpdate',
+                name: constant('Actions::SAVE'),
+                key: 'Update',
+              }
+            , false) }}
+          </div>
+        </div>
+        {{ csrf_token() }}
+      </form>
+    {% endblock %}
+    {% endembed %}
+
+    {{ setfocus(key: 'FIRST_NAME') }}
+
+    {{ include('javascript-includes.twig', {Validator: true}) }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'autocomplete.js') }}
+    {{ jsfile(src: 'profile.js') }}
+
+    <script type='text/javascript'>
+      function enableButton() {
+        $('#form-profile').find('button').removeAttr('disabled');
+      }
+
+      $(document).ready(function () {
+        var profilePage = new Profile();
+        profilePage.init();
+
+        var profileForm = $('#form-profile');
+
+        profileForm
+          .on('init.field.bv', function (e, data) {
+            var $parent = data.element.parents('.form-group');
+            var $icon = $parent.find('.form-control-feedback[data-bv-icon-for="' + data.field + '"]');
+            var validators = data.bv.getOptions(data.field).validators;
+
+            if (validators.notEmpty) {
+              $icon.addClass('bi bi-asterisk').show();
+            }
+          })
+          .off('success.form.bv')
+          .on('success.form.bv', function (e) {
+            e.preventDefault();
+          });
+
+        profileForm.bootstrapValidator();
+
+        $('#txtOrganization').orgAutoComplete(
+          "ajax/autocomplete.php?type={{ constant('AutoCompleteType::Organization') }}"
+        );
+      });
+    </script>
+
+    <div
+      class='modal'
+      id='waitModal'
+      tabindex='-1'
+      role='dialog'
+      aria-labelledby='waitModalLabel'
+      data-bs-backdrop='static'
+      aria-hidden='true'
+    >
+      {{ include('components/common/wait-box.twig') }}
+    </div>
+  </div>
+{% endblock %}
