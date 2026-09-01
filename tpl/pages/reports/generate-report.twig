@@ -1,17 +1,17 @@
-{{ include('globalheader.twig', {Select2: true, DataTable: true}) }}
+{% extends 'layouts/base.twig' %}
+{% set Select2 = true %}
+{% set DataTable = true %}
 
+{% block content %}
 <div id="page-generate-report">
-    <div id="customReportInput-container" class="accordion">
+    <div id="customReportInput-container">
         <form role="form" id="customReportInput">
-            <div class="accordion-item shadow mb-2 panel-default" id="report-filter-panel">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#panelCustomReport" aria-expanded="true"
-                        aria-controls="panelCustomReport">{{ translate('GenerateReport') }}
-                    </button>
-                </h2>
-                <div id="panelCustomReport" class="accordion-collapse collapse">
-                    <div class="accordion-body no-padding">
+            {% embed 'components/common/card.twig' with {id: 'report-filter-panel', class: 'mb-2 panel-default', bodyClass: 'no-padding'} %}
+                {% block header %}
+                    <h2 class="m-0">{{ translate('GenerateReport') }}</h2>
+                {% endblock %}
+                {% block body %}
+                    <div id="panelCustomReport">
                         <div id="custom-report-input">
                             <div class="row mb-2 input-set" id="selectDiv">
                                 <div class="col-md-1"><span class="fw-bold">{{ translate('Select') }}</span></div>
@@ -218,9 +218,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                {{ csrf_token() }}
-            </div>
+                {% endblock %}
+            {% endembed %}
+            {{ csrf_token() }}
         </form>
     </div>
 </div>
@@ -237,37 +237,31 @@
     {{ include('components/common/wait-box.twig') }}
 </div>
 
-{{ include('Reports/chart.twig') }}
-<div class="modal fade" id="saveDialog" tabindex="-1" role="dialog" aria-labelledby="saveDialogLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
+{{ include('components/reports/chart.twig') }}
+{% embed 'components/common/modal.twig' with {id: 'saveDialog'} %}
+    {% block header %}<h5 class="modal-title" id="saveDialogLabel">{{ translate('SaveThisReport') }}</h5>{% endblock %}
+    {% block body %}
         <form id="saveReportForm" method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="saveDialogLabel">{{ translate('SaveThisReport') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="saveReportName" class="fw-bold">{{ translate('Name') }}</label>
-                        <input type="text" id="saveReportName" {{ formname('REPORT_NAME') }} class="form-control"
-                            placeholder="{{ translate('NoTitleLabel') }}" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary cancel"
-                        data-bs-dismiss="modal">{{ translate('Cancel') }}</button>
-                    <button type="button" id="btnSaveReport" class="btn btn-primary"><span
-                            class="bi bi-check-circle"></span>
-                        {{ translate('SaveThisReport') }}
-                    </button>
-                    {{ indicator() }}
-                </div>
+            <div class="form-group">
+                <label for="saveReportName" class="fw-bold">{{ translate('Name') }}</label>
+                <input type="text" id="saveReportName" {{ formname('REPORT_NAME') }} class="form-control"
+                    placeholder="{{ translate('NoTitleLabel') }}" />
             </div>
         </form>
-    </div>
-</div>
+    {% endblock %}
+    {% block footer %}
+        <div class="modal-footer">
+            {{ cancel_button() }}
+            <button type="button" id="btnSaveReport" class="btn btn-primary"><span
+                    class="bi bi-check-circle"></span>
+                {{ translate('SaveThisReport') }}
+            </button>
+            {{ indicator() }}
+        </div>
+    {% endblock %}
+{% endembed %}
 
+{{ include('components/common/wait-box-modal.twig') }}
 {{ include('javascript-includes.twig', {Select2: true, DataTable: true}) }}
 {{ jsfile('autocomplete.js') }}
 {{ jsfile('ajax-helpers.js') }}
@@ -321,4 +315,4 @@
 {{ control('DatePickerSetupControl', {ControlId: 'endDate'}) }}
 
 </div>
-{{ include('globalfooter.twig') }}
+{% endblock %}

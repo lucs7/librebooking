@@ -96,7 +96,7 @@ function GenerateReports(reportOptions) {
   }
 
   function getGeneratedReportTitle() {
-    var baseTitle = reportsCleanText($('#page-generate-report .accordion-header .accordion-button:first').text());
+    var baseTitle = reportsCleanText($('#report-filter-panel .card-header h2').text());
     var resultTitle = checkedLabelText('#selectDiv');
     var usageTitle = $('#listOfDiv').is(':visible') ? checkedLabelText('#listOfDiv') : '';
     var groupTitle = $('#aggregateDiv').is(':visible') ? checkedLabelText('#aggregateDiv') : '';
