@@ -7,8 +7,7 @@ function ReportsCommon(opts) {
     init: function () {
       $(document).on('click', '#btnChart', function (e) {
         e.preventDefault();
-        $('#approveDiv').modal('show');
-
+        $('#wait-box').modal('show');
         // Use a small delay to ensure the modal is displayed sooner
         setTimeout(function () {
           try {
@@ -18,7 +17,7 @@ function ReportsCommon(opts) {
           } catch (error) {
             console.error('Unable to generate report chart', error);
           } finally {
-            $('#approveDiv').modal('hide');
+            $('#wait-box').modal('hide');
           }
         }, 500);
       });
