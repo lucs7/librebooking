@@ -51,7 +51,7 @@ class MigrationPage extends Page
     public function StartMigration()
     {
         $this->Set('StartMigration', true);
-        $this->Display('Install/migrate.tpl');
+        $this->Display('pages/install/migrate.twig');
     }
 
     public function GetRunTarget()
@@ -61,7 +61,7 @@ class MigrationPage extends Page
 
     public function DisplayMigrationPrompt()
     {
-        $this->Display('Install/migrate.tpl');
+        $this->Display('pages/install/migrate.twig');
     }
 
     public function GetLegacyUserName()
