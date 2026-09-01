@@ -149,7 +149,7 @@ class GenerateReportPage extends ActionPage implements IGenerateReportPage
     {
         $this->presenter->PageLoad();
         $this->Set('DateAxisFormat', Resources::GetInstance()->GetDateFormat('report_date'));
-        $this->Display('Reports/generate-report.tpl');
+        $this->Display('pages/reports/generate-report.twig');
     }
 
     public function GetUsage()
@@ -272,23 +272,23 @@ class GenerateReportPage extends ActionPage implements IGenerateReportPage
     public function ShowCsv()
     {
         $this->Set('ReportCsvColumnView', new ReportCsvColumnView($this->GetVar('SelectedColumns')));
-        $this->DisplayCsv('Reports/custom-csv.tpl', 'report.csv');
+        $this->DisplayCsv('components/reports/custom-csv.twig', 'report.csv');
     }
 
     public function DisplayError()
     {
-        $this->Display('Reports/error.tpl');
+        $this->Display('components/reports/error.twig');
     }
 
     public function ShowResults()
     {
-        $this->Display('Reports/results-custom.tpl');
+        $this->Display('components/reports/results-custom.twig');
     }
 
     public function PrintReport()
     {
         $this->Set('ReportCsvColumnView', new ReportCsvColumnView($this->GetVar('SelectedColumns')));
-        $this->Display('Reports/print-custom-report.tpl');
+        $this->Display('components/reports/print-custom-report.twig');
     }
 
     public function BindGroups($groups)
