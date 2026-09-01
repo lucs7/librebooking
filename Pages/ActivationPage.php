@@ -48,12 +48,12 @@ class ActivationPage extends ActionPage implements IActivationPage
 
     public function ShowSent()
     {
-        $this->Display('Activation/activation-sent.tpl');
+        $this->Display('pages/activation/activation-sent.twig');
     }
 
     public function ShowError()
     {
-        $this->Display('Activation/activation-error.tpl');
+        $this->Display('pages/activation/activation-error.twig');
     }
 
 
