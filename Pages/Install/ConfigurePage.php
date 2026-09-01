@@ -61,7 +61,7 @@ class ConfigurePage extends Page implements IConfgurePage
         $this->Set('ConfigSetting', '$conf[\'settings\'][\'install.password\']');
         $this->Set('ConfigPath', '/config/config.php');
         $this->presenter->PageLoad();
-        $this->Display('Install/configure.tpl');
+        $this->Display('pages/install/configure.twig');
     }
 
     public function SetPasswordMissing($isPasswordMissing)
