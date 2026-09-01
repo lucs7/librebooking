@@ -139,7 +139,7 @@ class InstallPage extends Page implements IInstallPage
         $this->Set('ConfigSetting', '$conf[\'settings\'][\'install.password\']');
         $this->Set('ConfigPath', '/config/config.php');
         $this->presenter->PageLoad();
-        $this->Display('Install/install.tpl');
+        $this->Display('pages/install/install.twig');
     }
 
     public function SetInstallPasswordMissing($isMissing)
@@ -175,7 +175,7 @@ class InstallPage extends Page implements IInstallPage
     }
 
     /**
-     * Set values for displayed template - install.tpl
+     * Set values for displayed template - install.twig
      * @param string $dbname database name
      * @param string $dbuser mysql user for your database e.g LibreBooking
      * @param string $dbhost server address/name where mySql lives
