@@ -89,7 +89,7 @@ class MonitorDisplayPage extends ActionPage implements IMonitorDisplayPage
     public function ProcessPageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Display('MonitorDisplay/monitor-display.tpl');
+        $this->Display('pages/monitor-display/monitor-display.twig');
     }
 
     public function BindSchedules($schedules)
@@ -114,7 +114,7 @@ class MonitorDisplayPage extends ActionPage implements IMonitorDisplayPage
         $this->Set('DailyLayout', $layout);
         $this->Set('Resources', $resources);
         $this->Set('Format', $format);
-        $this->Display('MonitorDisplay/monitor-display-schedule.tpl');
+        $this->Display('pages/monitor-display/monitor-display-schedule.twig');
     }
 
     public function GetScheduleId()
