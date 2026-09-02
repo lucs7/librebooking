@@ -1,11 +1,16 @@
-{{ include('globalheader.twig', {Select2: true, DataTable: true}) }}
+{% extends 'layouts/base.twig' %}
+{% set Select2 = true %}
+{% set DataTable = true %}
 
+{% block content %}
 <div class="page-search-reservations">
-    <div class="card shadow mb-2">
-        <div class="card-body">
+    {% embed 'components/common/card.twig' with {class: 'mb-2'} %}
+        {% block header %}
+            <h1 class="text-center m-0">{{ translate('SearchReservations') }}</h1>
+        {% endblock %}
+        {% block body %}
             <form role="form" name="searchForm" id="searchForm" method="post" class="row gy-2"
                 action="{{ server.SCRIPT_NAME }}?action=search">
-                <h1 class="text-center border-bottom mb-2">{{ translate('SearchReservations') }}</h1>
                 <div class="form-group col-sm-4">
                     <label for="userFilter" class="fw-bold">{{ translate('User') }}</label>
                     <div class="position-relative">
@@ -104,8 +109,8 @@
                     <div class="text-center">{{ indicator() }}</div>
                 </div>
             </form>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
     <div id="reservation-results"></div>
 
@@ -143,5 +148,4 @@
         });
     </script>
 </div>
-
-{{ include('globalfooter.twig') }}
+{% endblock %}

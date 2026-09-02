@@ -114,7 +114,7 @@ class SearchReservationsPage extends ActionPage implements ISearchReservationsPa
         $this->presenter->PageLoad();
         $this->Set('BeginDate', Date::Now());
         $this->Set('EndDate', Date::Now()->AddDays(7));
-        $this->Display('Search/search-reservations.tpl');
+        $this->Display('pages/search/search-reservations.twig');
     }
 
     public function SetResources($resources)
@@ -143,7 +143,7 @@ class SearchReservationsPage extends ActionPage implements ISearchReservationsPa
     {
         $this->Set('Reservations', $reservations);
         $this->Set('Timezone', $timezone);
-        $this->Display('Search/search-reservations-results.tpl');
+        $this->Display('components/search/search-reservations-results.twig');
     }
 
     public function GetRequestedRange()
