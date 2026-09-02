@@ -32,8 +32,12 @@ function SavedReports(reportOptions) {
 
     wireUpReportLinks();
 
-    $('.save').on('click', function () {
-      $(this).closest('form').submit();
+    elements.sendEmailButton.on('click', function () {
+      elements.emailForm.trigger('submit');
+    });
+
+    elements.deleteReportButton.on('click', function () {
+      elements.deleteForm.trigger('submit');
     });
   };
 

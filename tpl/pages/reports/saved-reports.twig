@@ -1,0 +1,144 @@
+{% extends 'layouts/base.twig' %}
+{% set DataTable = true %}
+
+{% block content %}
+<div id="page-saved-reports">
+    {% set savedReportCount = ReportList is defined and ReportList ? ReportList|length : 0 %}
+    {% set tableId = savedReportCount > 0 ? 'saved-reportsListTable' : '' %}
+    {% embed 'components/common/card.twig' with {id: 'saved-reports-panel', class: 'mb-2'} %}
+        {% block header %}
+            <h2 class="m-0">
+                {{ translate('MySavedReports') }}
+                {{ include('components/common/badge.twig', {text: savedReportCount, class: 'ms-1'}, false) }}
+            </h2>
+        {% endblock %}
+        {% block body %}
+            {% if savedReportCount == 0 %}
+                <h3 class="no-data text-center">{{ translate('NoSavedReports') }}</h3>
+                <div class="text-center"><a href="{{ Path }}reports/{{ constant('Pages::REPORTS_GENERATE') }}"
+                        class="link-primary">{{ translate('GenerateReport') }}</a></div>
+            {% else %}
+                <div id="report-list">
+                    <table class="table table-striped table-hover border-top w-100" id="{{ tableId }}">
+                        <thead>
+                            <tr>
+                                <th>{{ translate('Title') }}</th>
+                                <th>{{ translate('Date') }}</th>
+                                <th>{{ translate('RunReport') }}</th>
+                                <th>{{ translate('EmailReport') }}</th>
+                                <th>{{ translate('Delete') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for report in ReportList %}
+                                <tr reportId="{{ report.Id() }}">
+                                    <td><span class="fw-bold">{{ report.ReportName() ?? untitled }}</span></td>
+                                    <td data-order="{{ format_date(date: report.DateCreated(), format: 'Y-m-d H:i:s') }}">
+                                        <span
+                                            class="report-created-date fst-italic">{{ format_date(date: report.DateCreated()) }}</span>
+                                    </td>
+
+                                    <td class="report-action"><a href="#" class="runNow report link-primary"><i
+                                                class="bi bi-play-circle text-success me-1"></i>{{ translate('RunReport') }}
+                                        </a></td>
+                                    <td class="report-action"><a href="#" class="emailNow report link-primary"><span
+                                                class="bi bi-envelope me-1 icon"></span>{{ translate('EmailReport') }}</a>
+                                    </td>
+                                    <td class="report-action"><a href="#"
+                                            class="delete report link-danger text-decoration-none"><i
+                                                class="bi bi-trash3-fill me-1 icon remove"></i>{{ translate('Delete') }}</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        {% endblock %}
+    {% endembed %}
+
+    <div id="resultsDiv">
+    </div>
+
+    <div id="emailSent" class="alert alert-success no-show">
+        <strong>{{ translate('ReportSent') }}</strong>
+    </div>
+
+    <div id="indicator" class="d-none card shadow p-2">
+        {{ include('components/common/wait-box.twig') }}
+    </div>
+</div>
+
+{% embed 'components/common/modal.twig' with {id: 'emailDiv'} %}
+    {% block header %}<h5 class="modal-title" id="emailDialogLabel">{{ translate('EmailReport') }}</h5>{% endblock %}
+    {% block body %}
+        <form id="emailForm" method="post">
+            <div class="form-group">
+                <label class="fw-bold" for="emailTo">{{ translate('Email') }}</label>
+                <input id="emailTo" {{ formname('EMAIL') }} value="{{ UserEmail }}" class="form-control" />
+            </div>
+        </form>
+    {% endblock %}
+    {% block footer %}
+        <div class="modal-footer">
+            {{ cancel_button() }}
+            <button id="btnSendEmail" type="button" class="btn btn-primary"><i
+                    class="bi bi-envelope me-1"></i>{{ translate('EmailReport') }}
+            </button>
+            {{ indicator() }}
+        </div>
+    {% endblock %}
+{% endembed %}
+
+{% embed 'components/common/modal.twig' with {id: 'deleteDiv'} %}
+    {% block header %}<h5 class="modal-title" id="deleteLabel">{{ translate('Delete') }}</h5>{% endblock %}
+    {% block body %}
+        <form id="deleteForm" method="post">
+            <div class="alert alert-danger">
+                {{ translate('DeleteWarning') }}
+            </div>
+        </form>
+    {% endblock %}
+    {% block footer %}
+        <div class="modal-footer">
+            {{ cancel_button() }}
+            <button type="button" id="btnDeleteReport" class="btn btn-danger">{{ translate('Delete') }}</button>
+            {{ indicator() }}
+        </div>
+    {% endblock %}
+{% endembed %}
+
+{{ csrf_token() }}
+
+{{ include('components/reports/chart.twig') }}
+
+{{ include('javascript-includes.twig', {DataTable: true}) }}
+{{ datatable(tableId) }}
+{{ jsfile('ajax-helpers.js') }}
+{{ jsfile('reports/saved-reports.js') }}
+{{ jsfile('reports/chart.js') }}
+{{ jsfile('reports/common.js') }}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var reportOptions = {
+            generateUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Generate') }}&{{ constant('QueryStringKeys::REPORT_ID') }}=",
+            emailUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Email') }}&{{ constant('QueryStringKeys::REPORT_ID') }}=",
+            deleteUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Delete') }}&{{ constant('QueryStringKeys::REPORT_ID') }}=",
+            printUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::PrintReport') }}&{{ constant('QueryStringKeys::REPORT_ID') }}=",
+            csvUrl: "{{ server.SCRIPT_NAME|raw }}?{{ constant('QueryStringKeys::ACTION') }}={{ constant('ReportActions::Csv') }}&{{ constant('QueryStringKeys::REPORT_ID') }}="
+        };
+
+        var reports = new SavedReports(reportOptions);
+        reports.init();
+
+        var common = new ReportsCommon({
+            scriptUrl: '{{ ScriptUrl|raw }}',
+            chartOpts: {
+                dateAxisFormat: '{{ DateAxisFormat|raw }}'
+            }
+        });
+        common.init();
+    });
+</script>
+{% endblock %}
