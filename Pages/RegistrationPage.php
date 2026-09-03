@@ -84,7 +84,7 @@ class RegistrationPage extends ActionPage implements IRegistrationPage
 
         $this->_presenter->PageLoad();
 
-        $this->Display('register.tpl');
+        $this->Display('pages/register.twig');
     }
 
     public function RegisterClicked()
