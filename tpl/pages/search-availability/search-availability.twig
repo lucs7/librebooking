@@ -1,9 +1,13 @@
-{% include 'globalheader.twig' with {Select2: true} %}
+{% extends 'layouts/base.twig' %}
+{% set Select2 = true %}
 
+{% block content %}
 <div class="page-search-availability">
-    <div class="card shadow mb-3">
-        <div class="card-body">
-            <h1 class="text-center border-bottom mb-2">{{ translate('FindATime') }}</h1>
+    {% embed 'components/common/card.twig' with {class: 'mb-3'} %}
+        {% block header %}
+            <h1 class="text-center m-0">{{ translate('FindATime') }}</h1>
+        {% endblock %}
+        {% block body %}
             <form role="form" name="searchForm" id="searchForm" method="post"
                 action="{{ server.SCRIPT_NAME }}?action=search">
                 <div class="row gy-2 mb-2">
@@ -16,7 +20,7 @@
                     <div class="form-group col-12 col-sm-10">
                         <label for="resourceGroups" class="visually-hidden">{{ translate('Resources') }}</label>
                         <select id="resourceGroups" class="form-select form-select-sm" multiple="multiple"
-                            {{ formname(key='RESOURCE_ID', multi=true) }} disabled="disabled">
+                            {{ formname(key: 'RESOURCE_ID', multi: true) }} disabled="disabled">
                             {% for resource in Resources %}
                                 <option value="{{ resource.GetId() }}">{{ resource.GetName() }}</option>
                             {% endfor %}
@@ -26,14 +30,14 @@
                     <div class="form-group col-6 col-sm-2">
                         <div class="input-group input-group-sm">
                             <input type="number" min="0" step="1" value="0" class="form-control hours-minutes"
-                                id="hours" {{ formname(key='HOURS') }} autofocus="autofocus" />
+                                id="hours" {{ formname(key: 'HOURS') }} autofocus="autofocus" />
                             <label class="input-group-text hours-minutes" for="hours">{{ translate('Hours') }}</label>
                         </div>
                     </div>
                     <div class="form-group col-6 col-sm-2 me-1 me-md-5">
                         <div class="input-group input-group-sm">
                             <input type="number" min="0" step="5" value="30" class="form-control hours-minutes"
-                                id="minutes" {{ formname(key='MINUTES') }} />
+                                id="minutes" {{ formname(key: 'MINUTES') }} />
                             <label class="input-group-text hours-minutes" for="minutes">{{ translate('Minutes') }}</label>
                         </div>
                     </div>
@@ -41,15 +45,15 @@
                     <div class="form-group col-12 col-sm-7 d-flex align-items-center flex-wrap gap-2">
                         <div class="form-check d-inline-block me-2">
                             <input class="form-check-input" type="checkbox" id="specificTime"
-                                {{ formname(key='SPECIFIC_TIME') }} />
+                                {{ formname(key: 'SPECIFIC_TIME') }} />
                             <label class="form-check-label" for="specificTime">{{ translate('SpecificTime') }}</label>
                         </div>
-                        <select {{ formname(key='BEGIN_TIME') }} id="startTime" aria-label="{{ translate('StartTime') }}"
+                        <select {{ formname(key: 'BEGIN_TIME') }} id="startTime" aria-label="{{ translate('StartTime') }}"
                             class="form-select form-select-sm w-auto timepicker" data-format='{{ TimeFormat }}'
                             data-step='30' data-default="{{ now().Format('H:00') }}" disabled="disabled">
                         </select>
                         <div class='mx-1'>-</div>
-                        <select {{ formname(key='END_TIME') }} id="endTime" aria-label="{{ translate('EndTime') }}"
+                        <select {{ formname(key: 'END_TIME') }} id="endTime" aria-label="{{ translate('EndTime') }}"
                             class="form-select form-select-sm w-auto timepicker" data-format='{{ TimeFormat }}'
                             data-step='30' data-default="{{ now().AddHours(1).Format('H:00') }}"
                             disabled="disabled">
@@ -60,28 +64,28 @@
                 <div class="form-group d-flex flex-wrap mb-2">
                     <div class="btn-group-sm form-group" role="group" data-bs-toggle="buttons">
                         <input type="radio" id="today" class="btn-check" checked value="today"
-                            {{ formname(key='AVAILABILITY_RANGE') }} />
+                            {{ formname(key: 'AVAILABILITY_RANGE') }} />
                         <label class="btn btn-outline-primary" for="today">
                             <span class="d-none d-sm-inline-block">{{ translate('Today') }}</span>
-                            <span class="d-inline-block"> {{ format_date(date=Today, key='calendar_dates') }}</span>
+                            <span class="d-inline-block"> {{ format_date(date: Today, key: 'calendar_dates') }}</span>
                         </label>
 
                         <input type="radio" id="tomorrow" class="btn-check" value="tomorrow"
-                            {{ formname(key='AVAILABILITY_RANGE') }} />
+                            {{ formname(key: 'AVAILABILITY_RANGE') }} />
                         <label class="btn btn-outline-primary" for="tomorrow">
                             <div class="d-none d-sm-inline-block">{{ translate('Tomorrow') }}</div>
-                            <div class="d-inline-block"> {{ format_date(date=Tomorrow, key='calendar_dates') }}</div>
+                            <div class="d-inline-block"> {{ format_date(date: Tomorrow, key: 'calendar_dates') }}</div>
                         </label>
 
                         <input type="radio" id="thisweek" class="btn-check" value="thisweek"
-                            {{ formname(key='AVAILABILITY_RANGE') }} />
+                            {{ formname(key: 'AVAILABILITY_RANGE') }} />
                         <label class="btn btn-outline-primary" for="thisweek">
                             <div class="d-none d-sm-inline-block">{{ translate('ThisWeek') }}</div>
                             <div class="d-inline-block d-sm-none">{{ translate('Week') }}</div>
                         </label>
 
                         <input type="radio" id="daterange" class="btn-check" value="daterange"
-                            {{ formname(key='AVAILABILITY_RANGE') }} />
+                            {{ formname(key: 'AVAILABILITY_RANGE') }} />
                         <label class="btn btn-outline-primary" for="daterange">
                             <i class="bi bi-calendar3-range"></i>
                             <div class="d-none d-sm-inline-block"> {{ translate('DateRange') }}</div>
@@ -92,12 +96,12 @@
                         <div class="form-group px-2">
                             <label for="beginDate" class="visually-hidden">{{ translate('BeginDate') }}</label>
                             <input type="text" id="BeginDate" class="form-control form-control-sm"
-                                placeholder="{{ translate('BeginDate') }}" disabled="disabled" {{ formname(key='BEGIN_DATE') }} />
+                                placeholder="{{ translate('BeginDate') }}" disabled="disabled" {{ formname(key: 'BEGIN_DATE') }} />
                         </div>
                         <div class="form-group">
                             <label for="endDate" class="visually-hidden">{{ translate('EndDate') }}</label>
                             <input type="text" id="EndDate" class="form-control form-control-sm"
-                                placeholder="{{ translate('EndDate') }}" disabled="disabled" {{ formname(key='END_DATE') }} />
+                                placeholder="{{ translate('EndDate') }}" disabled="disabled" {{ formname(key: 'END_DATE') }} />
                         </div>
                     </div>
                 </div>
@@ -117,16 +121,16 @@
                     <div class="form-group col-6">
                         <label for="maxCapacity" class="hidden">{{ translate('MinimumCapacity') }}</label>
                         <input type='number' id='maxCapacity' min='0' size='5' maxlength='5'
-                            class="form-control form-control-sm" {{ formname(key='MAX_PARTICIPANTS') }}
+                            class="form-control form-control-sm" {{ formname(key: 'MAX_PARTICIPANTS') }}
                             value="{{ MaxParticipantsFilter|default('') }}" placeholder="{{ translate('MinimumCapacity') }}" />
 
                     </div>
                     <div class="form-group col-6">
                         <label for="resourceType" class="hidden">{{ translate('ResourceType') }}</label>
-                        <select id="resourceType" {{ formname(key='RESOURCE_TYPE_ID') }} {{ formname(key='RESOURCE_TYPE_ID') }}
+                        <select id="resourceType" {{ formname(key: 'RESOURCE_TYPE_ID') }} {{ formname(key: 'RESOURCE_TYPE_ID') }}
                             class="form-select form-select-sm">
                             <option value="">- {{ translate('ResourceType') }} -</option>
-                            {{ object_html_options(options=ResourceTypes, label='Name', key='Id', selected=ResourceTypeIdFilter) }}
+                            {{ object_html_options(options: ResourceTypes, label: 'Name', key: 'Id', selected: ResourceTypeIdFilter) }}
                         </select>
                     </div>
 
@@ -140,28 +144,28 @@
                 </div>
 
                 <div class="form-group d-grid gy-2">
-                    <button type="submit" class="btn btn-primary" value="submit" {{ formname(key='SUBMIT') }}>
+                    <button type="submit" class="btn btn-primary" value="submit" {{ formname(key: 'SUBMIT') }}>
                         <i class="bi bi-search me-1"></i>{{ translate('FindATime') }}
                     </button>
                     <div class="text-center">{{ indicator() }}</div>
                 </div>
             </form>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
+
     <div class="clearfix"></div>
     <div id="availability-results"></div>
 
-
     {{ csrf_token() }}
 
-    {% include 'javascript-includes.twig' with {Select2: true} %}
-    {{ vendor_js(src='jqtree/1.8.11/js/tree.jquery.js') }}
-    {{ vendor_js(src='jquery-cookie/1.3.1/js/jquery.cookie.js') }}
-    {{ jsfile(src='ajax-helpers.js') }}
-    {{ jsfile(src='availability-search.js') }}
-    {{ jsfile(src='resourcePopup.js') }}
-    {{ jsfile(src='date-helper.js') }}
-    {{ jsfile(src='recurrence.js') }}
+    {{ include('javascript-includes.twig', {Select2: true}) }}
+    {{ vendor_js(src: 'jqtree/1.8.11/js/tree.jquery.js') }}
+    {{ vendor_js(src: 'jquery-cookie/1.3.1/js/jquery.cookie.js') }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'availability-search.js') }}
+    {{ jsfile(src: 'resourcePopup.js') }}
+    {{ jsfile(src: 'date-helper.js') }}
+    {{ jsfile(src: 'recurrence.js') }}
 
     {{ control('DatePickerSetupControl', {ControlId: 'BeginDate', DefaultDate: Today, MinDate: Today}) }}
     {{ control('DatePickerSetupControl', {ControlId: 'EndDate', DefaultDate: Tomorrow, MinDate: Today}) }}
@@ -188,7 +192,7 @@
             search.init();
 
             $('#resourceGroups').select2({
-                placeholder: '{{ translate("Resources")|raw }}{# raw: JS string context #}'
+                placeholder: '{{ translate('Resources')|raw }}{# raw: JS string context #}'
             });
 
             document.querySelectorAll('.timepicker').forEach(el => {
@@ -196,7 +200,5 @@
             });
         });
     </script>
-
 </div>
-
-{% include 'globalfooter.twig' %}
+{% endblock %}
