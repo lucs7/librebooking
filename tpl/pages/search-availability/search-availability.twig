@@ -1,9 +1,13 @@
-{{ include('globalheader.twig', {Select2: true}) }}
+{% extends 'layouts/base.twig' %}
+{% set Select2 = true %}
 
+{% block content %}
 <div class="page-search-availability">
-    <div class="card shadow mb-3">
-        <div class="card-body">
-            <h1 class="text-center border-bottom mb-2">{{ translate('FindATime') }}</h1>
+    {% embed 'components/common/card.twig' with {class: 'mb-3'} %}
+        {% block header %}
+            <h1 class="text-center m-0">{{ translate('FindATime') }}</h1>
+        {% endblock %}
+        {% block body %}
             <form role="form" name="searchForm" id="searchForm" method="post"
                 action="{{ server.SCRIPT_NAME }}?action=search">
                 <div class="row gy-2 mb-2">
@@ -146,8 +150,9 @@
                     <div class="text-center">{{ indicator() }}</div>
                 </div>
             </form>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
+
     <div class="clearfix"></div>
     <div id="availability-results"></div>
 
@@ -195,7 +200,5 @@
             });
         });
     </script>
-
 </div>
-
-{{ include('globalfooter.twig') }}
+{% endblock %}

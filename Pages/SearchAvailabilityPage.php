@@ -138,7 +138,7 @@ class SearchAvailabilityPage extends ActionPage implements ISearchAvailabilityPa
     public function ProcessPageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Display('SearchAvailability/search-availability.tpl');
+        $this->Display('pages/search-availability/search-availability.twig');
     }
 
     public function SetResources($resources)
@@ -154,7 +154,7 @@ class SearchAvailabilityPage extends ActionPage implements ISearchAvailabilityPa
     public function ShowOpenings($openings)
     {
         $this->Set('Openings', $openings);
-        $this->Display('SearchAvailability/search-availability-results.tpl');
+        $this->Display('components/search-availability/search-availability-results.twig');
     }
 
     public function GetRequestedHours()
