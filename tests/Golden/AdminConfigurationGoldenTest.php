@@ -511,4 +511,69 @@ class AdminConfigurationGoldenTest extends GoldenTemplateTestCase
             $this->makeConfigurationVars(isConfigFileWritable: false)
         );
     }
+
+    /**
+     * Covers the AllowCustom + Choices datalist branch in manage_configuration.
+     *
+     * The datalist branch renders a text input with `list="<name>-list"` plus a
+     * `<datalist>` element containing `<option>` elements for each choice. This
+     * branch fires when `setting.AllowCustom == true && is_array(setting.Choices)`
+     * (Smarty) / `setting.AllowCustom and setting.Choices is iterable` (Twig).
+     *
+     * This test exercises that branch live through both engines and asserts
+     * byte-parity after normalization, ensuring the Twig datalist rendering
+     * exactly matches Smarty's output.
+     */
+    public function testManageConfigurationWithAllowCustomDatalist(): void
+    {
+        $datalistSetting = new ConfigSetting(
+            Key: 'css.theme',
+            Section: null,
+            Value: 'default',
+            Type: ConfigSettingType::String,
+            Choices: ['default' => 'Default', 'dark' => 'Dark Mode', 'high-contrast' => 'High Contrast'],
+            Label: 'CSS Theme',
+            Description: 'The visual theme',
+            AllowCustom: true,
+        );
+
+        $languageEn = new class () {
+            public function GetLanguageCode(): string
+            {
+                return 'en_us';
+            }
+
+            public function GetDisplayName(): string
+            {
+                return 'English (United States)';
+            }
+        };
+
+        $configFile = new ConfigFileOption('config.php', '', ConfigKeys::class, '');
+
+        $settingNames = $datalistSetting->Name . ',';
+
+        $vars = [
+            'IsPageEnabled' => true,
+            'IsConfigFileWritable' => true,
+            'IsEnvPresent' => false,
+            'ConfigFiles' => [$configFile],
+            'SelectedFile' => '',
+            'Settings' => [$datalistSetting],
+            'SectionSettings' => [],
+            'SettingNames' => $settingNames,
+            'DefaultTimezoneKey' => 'default.timezone',
+            'DefaultLanguageKey' => 'default.language',
+            'DefaultHomepageKey' => 'default.homepage',
+            'TimezoneValues' => ['UTC'],
+            'TimezoneOutput' => ['UTC'],
+            'Languages' => [$languageEn],
+        ];
+
+        $this->assertParity(
+            'Admin/Configuration/manage_configuration.tpl',
+            'Admin/Configuration/manage_configuration.twig',
+            $vars
+        );
+    }
 }
