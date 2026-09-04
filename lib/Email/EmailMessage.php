@@ -24,11 +24,12 @@ abstract class EmailMessage implements IEmailMessage
         $this->enforceCustomTemplate = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_ENFORCE_CUSTOM_TEMPLATE, new BooleanConverter());
         $resources = Resources::GetInstance();
         if (!empty($languageCode)) {
-            $resources->SetLanguage($languageCode); // switch BEFORE SmartyPage is created
+            $resources->SetLanguage($languageCode); // switch BEFORE renderer is created
         }
-        $smartyRenderer = new SmartyRenderer($resources);
-        $this->renderer = $smartyRenderer;
-        $this->email = $smartyRenderer->smarty(); // BC alias
+        $this->renderer = new TwigRenderer($resources);
+        // BC alias: kept for subclasses that call $this->email->FetchLocalized() directly
+        // (e.g. ReportEmailMessage). Shares the same $resources instance so language is in sync.
+        $this->email = (new SmartyRenderer($resources))->smarty();
         if (!empty($languageCode)) {
             $this->Set('CurrentLanguage', $resources->CurrentLanguage);
         }
@@ -40,14 +41,16 @@ abstract class EmailMessage implements IEmailMessage
 
     protected function Set($var, $value)
     {
+        $this->renderer->assign($var, $value);
+        // Keep BC alias in sync so subclasses using $this->email see the same variables.
         $this->email->assign($var, $value);
     }
 
     protected function FetchTemplate($templateName, $includeHeaders = true)
     {
-        $header = $includeHeaders ? $this->email->fetch('Email/emailheader.tpl') : '';
-        $body = $this->email->FetchLocalized($templateName, $this->enforceCustomTemplate);
-        $footer = $includeHeaders ? $this->email->fetch('Email/emailfooter.tpl') : '';
+        $header = $includeHeaders ? $this->renderer->fetch('Email/emailheader.tpl') : '';
+        $body = $this->renderer->fetchLocalized($templateName, $this->enforceCustomTemplate);
+        $footer = $includeHeaders ? $this->renderer->fetch('Email/emailfooter.tpl') : '';
 
         return $header . $body . $footer;
     }
@@ -57,7 +60,11 @@ abstract class EmailMessage implements IEmailMessage
         if (!is_array($args)) {
             $args = [$args];
         }
-        return $this->email->SmartyTranslate(['key' => $key, 'args' => implode(',', $args)], $this->email);
+        $resources = Resources::GetInstance();
+        if (empty($args)) {
+            return $resources->GetString($key, '');
+        }
+        return $resources->GetString($key, $args);
     }
 
     public function ReplyTo()
@@ -82,7 +89,7 @@ abstract class EmailMessage implements IEmailMessage
 
     public function Charset()
     {
-        return $this->email->getTemplateVars('Charset');
+        return $this->renderer->getTemplateVars('Charset');
     }
 
     public function AddStringAttachment($contents, $fileName)
