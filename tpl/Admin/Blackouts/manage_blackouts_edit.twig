@@ -24,7 +24,7 @@
 					<div class="resourceItem col-12 col-sm-6">
 						<div class="form-check">
 							<input class="form-check-input" {{ formname('RESOURCE_ID', multi=true) }} type="checkbox"
-								value="{{ resource.GetId() }}" {% if resource.GetId() in BlackoutResourceIds %}checked="checked"{% endif %} id="r{{ resource.GetId() }}" />
+								value="{{ resource.GetId() }}" {% if resource.GetId() in BlackoutResourceIds %}checked='checked'{% endif %} id="r{{ resource.GetId() }}" />
 							<label class="form-check-label" for="r{{ resource.GetId() }}">{{ resource.GetName() }}</label>
 						</div>
 					</div>
