@@ -1,0 +1,39 @@
+{% include 'globalheader.twig' %}
+
+<div id="server-settings-page" class="admin-page">
+    <div class="card shadow col-12 col-sm-8 mx-auto">
+        <div class="card-body">
+            <h1 class="border-bottom mb-3">{{ translate('ServerSettings') }}</h1>
+
+            <ul class="indented">
+                <li>Current Time: {{ currentTime }}</li>
+                <li>Image Upload Physical Directory: {{ imageUploadDirectory }} ({{ translate('Permissions') }}
+                    : {{ imageUploadDirPermissions }}) <a
+                        href="{{ server.SCRIPT_NAME }}?{{ constant('QueryStringKeys::ACTION') }}=changePermissions"
+                        class="link-primary">Try to apply
+                        correct permissions</a></li>
+                <li>Template Cache Directory: {{ templateCacheDirectory }} <a
+                        href="{{ server.SCRIPT_NAME }}?{{ constant('QueryStringKeys::ACTION') }}=flush" class="link-primary">Try to
+                        flush cached
+                        files</a>
+                </li>
+            </ul>
+
+            <h2 class="mt-4 fs-4">Plugins</h2>
+            <ul class="indented">
+                {% for category, items in plugins %}
+                    <li>{{ category }}
+                        <ul>
+                            {% for pluginName in items %}
+                                <li>{{ pluginName }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% include 'javascript-includes.twig' %}
+{% include 'globalfooter.twig' %}
