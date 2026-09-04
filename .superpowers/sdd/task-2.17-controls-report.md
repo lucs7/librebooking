@@ -163,3 +163,60 @@ All gates pass:
 3. **DateSetup template uses `AddDays(1)` method call**: In `DateSetup.twig`, the line `{{ formatdate(date=MaxDate.AddDays(1), format='Y-m-d') }}` calls a method on a Date object via Twig. Twig supports method/property access on objects via dot notation, so `MaxDate.AddDays(1)` calls `$MaxDate->AddDays(1)`. This is confirmed working by the tests.
 
 4. **`render_partial` vs control template scope**: The two functions differ in their data scope. `renderControlTemplate` creates an isolated data scope; `renderPartial` uses full-page context. Both are covered by TwigRenderer and fall back to Smarty correctly.
+
+## Fix: fallback coverage + test renames
+
+### Renames (commit a5d968a7c)
+
+Two misleading test method names were renamed to match what they actually test (the Twig path, since `Controls/Checkbox.twig` now exists):
+
+- `ControlTwigFunctionTest::testControlFunctionCheckboxControlFallsBackToTpl`
+  → `testControlFunctionCheckboxControlRendersViaTwig`
+  (updated docblock to match; assertions unchanged)
+
+- `RenderPartialTwigFunctionTest::testRenderPartialFallsBackToSmartyWhenNoTwigExists`
+  → `testRenderPartialRendersCheckboxViaTwig`
+  (same body; Twig-path parity via HtmlNormalizer)
+
+- `RenderPartialTwigFunctionTest::testRenderPartialSmartyFallbackOutputIsNonEmpty`
+  → `testRenderPartialCheckboxOutputIsNonEmpty`
+  (clarifies it tests the checkbox Twig output, not a fallback)
+
+### Fallback probe approach
+
+Added `tpl/_render_fallback_probe.tpl` — a minimal Smarty template with header comment
+declaring it a test-only fixture with NO `.twig` counterpart:
+
+```smarty
+{* test-only fixture for renderControlTemplate/render_partial Smarty-fallback coverage *}
+{* intentionally has NO .twig counterpart; do not migrate *}
+<span class="probe">{$probeValue}</span>
+```
+
+### New fallback tests
+
+**`ControlTwigFunctionTest::testRenderControlTemplateFallsBackToSmartyWhenNoTwigExists`**
+- Asserts `assertFileDoesNotExist('tpl/_render_fallback_probe.twig')` (guards against future accidental migration)
+- Calls `TwigRenderer::renderControlTemplate('_render_fallback_probe.tpl', ['probeValue' => 'hello-fallback'])`
+- Compares `trim($output)` with `trim(SmartyRenderer::renderControlTemplate(...))` via `assertSame`
+- Also checks `assertStringContainsString('hello-fallback', $output)` and `assertStringContainsString('probe', $output)`
+
+**`RenderPartialTwigFunctionTest::testRenderPartialFallsBackToSmartyWhenNoTwigExists`** (new genuine fallback)
+- Asserts `assertFileDoesNotExist('tpl/_render_fallback_probe.twig')`
+- Calls `render_partial('_render_fallback_probe.tpl', vars)` via a Twig environment
+- Compares `trim($actual)` with `trim(SmartyRenderer::render(...))` via `assertSame`
+- Also checks `assertStringContainsString('smarty-fallback', $actual)` and `assertStringContainsString('probe', $actual)`
+
+### Results
+
+- 14/14 targeted tests pass (`ControlTwigFunctionTest` + `RenderPartialTwigFunctionTest`)
+- `composer phpunit -- --testsuite golden`: 283/283 pass
+- `composer phpunit` (full suite): 2196/2196 pass (0 failures)
+- `composer phpcsfixer:fix`: 0 files changed
+- `composer phpstan`: 0 errors
+- `composer phpstan_next`: 0 errors
+
+### Commit
+
+SHA: `a5d968a7c`
+Subject: `test(templating): restore control/partial fallback test coverage`

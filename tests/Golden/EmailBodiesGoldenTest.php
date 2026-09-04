@@ -597,6 +597,146 @@ class EmailBodiesGoldenTest extends GoldenTemplateTestCase
         ]);
     }
 
+    // ── ReservationCreated / ReservationCreatedAdmin: attributeRows ──────────
+
+    /**
+     * ReservationCreated.twig renders a resource-attributes table when
+     * resource.attributeRows is non-empty ({% for row in resource.attributeRows %}).
+     *
+     * This test supplies a resource with two attribute rows — one with a plain
+     * single-line displayValue and one with a multi-line displayValue (to exercise
+     * |nl2br) — and asserts byte-level parity between Twig and Smarty output.
+     *
+     * Escaping equivalence:
+     *   .tpl:  {$row.label|escape} / {$row.displayValue|escape|nl2br}
+     *   .twig: {{ row.label }}     / {{ row.displayValue|nl2br }}
+     * With Twig autoescape enabled, {{ row.label }} HTML-escapes, matching |escape.
+     * {{ row.displayValue|nl2br }} calls Twig's built-in nl2br which first escapes
+     * then inserts <br /> — identical to Smarty's |escape|nl2br. Plain ASCII fixture
+     * data produces no escaping differences, so exact byte-level parity is expected.
+     */
+    public function testReservationCreatedWithAttributeRowsParity(): void
+    {
+        $start = Date::Parse('2025-07-01 09:00', 'UTC');
+        $end = Date::Parse('2025-07-01 10:00', 'UTC');
+
+        $resource = $this->makeResource('Attr Room');
+        $resource['attributeRows'] = [
+            ['label' => 'Capacity', 'displayValue' => '12'],
+            ['label' => 'Location Detail', 'displayValue' => "Floor 2\nWing B"],
+        ];
+
+        $this->assertBodyParity('ReservationCreated.tpl', [
+            'StartDate' => $start,
+            'EndDate' => $end,
+            'Title' => 'Attr Test Meeting',
+            'Description' => 'Testing attribute rows',
+            'Attributes' => [],
+            'Resources' => [$resource],
+            'RequiresApproval' => false,
+            'CheckInEnabled' => false,
+            'RepeatRanges' => [],
+            'Participants' => [],
+            'ParticipatingGuests' => [],
+            'Invitees' => [],
+            'InvitedGuests' => [],
+            'Accessories' => [],
+            'CreditsCurrent' => 0,
+            'CreditsTotal' => 0,
+            'ReferenceNumber' => 'REF-ATTR-001',
+            'ScriptUrl' => 'http://localhost/',
+            'ReservationUrl' => 'reservation.php?rn=REF-ATTR-001',
+            'ICalUrl' => 'export/calendar.php?rn=REF-ATTR-001',
+            'GoogleCalendarUrl' => 'https://www.google.com/calendar/event',
+            'AppTitle' => 'LibreBooking',
+            'Deleted' => false,
+        ]);
+    }
+
+    /**
+     * ReservationCreated.twig: structural assertion that the attribute table renders
+     * with the correct label, displayValue, and nl2br conversion visible in the output.
+     */
+    public function testReservationCreatedAttributeRowsTableRendered(): void
+    {
+        $start = Date::Parse('2025-07-01 09:00', 'UTC');
+        $end = Date::Parse('2025-07-01 10:00', 'UTC');
+
+        $resource = $this->makeResource('Structural Room');
+        $resource['attributeRows'] = [
+            ['label' => 'Building', 'displayValue' => "Block A\nBlock B"],
+        ];
+
+        $this->assertTwigBodyContains('ReservationCreated.tpl', [
+            'StartDate' => $start,
+            'EndDate' => $end,
+            'Title' => 'Attr Structural Test',
+            'Description' => 'Structural',
+            'Attributes' => [],
+            'Resources' => [$resource],
+            'RequiresApproval' => false,
+            'CheckInEnabled' => false,
+            'RepeatRanges' => [],
+            'Participants' => [],
+            'ParticipatingGuests' => [],
+            'Invitees' => [],
+            'InvitedGuests' => [],
+            'Accessories' => [],
+            'CreditsCurrent' => 0,
+            'CreditsTotal' => 0,
+            'ReferenceNumber' => 'REF-ATTR-002',
+            'ScriptUrl' => 'http://localhost/',
+            'ReservationUrl' => 'reservation.php?rn=REF-ATTR-002',
+            'ICalUrl' => 'export/calendar.php?rn=REF-ATTR-002',
+            'GoogleCalendarUrl' => 'https://www.google.com/calendar/event',
+            'AppTitle' => 'LibreBooking',
+            'Deleted' => false,
+        ], [
+            'Resource Details',
+            'Building',
+            'Block A',
+            '<br />',
+            'Block B',
+        ]);
+    }
+
+    /**
+     * ReservationCreatedAdmin.twig renders the same attribute table — verify parity.
+     */
+    public function testReservationCreatedAdminWithAttributeRowsParity(): void
+    {
+        $start = Date::Parse('2025-07-01 09:00', 'UTC');
+        $end = Date::Parse('2025-07-01 10:00', 'UTC');
+
+        $resource = $this->makeResource('Admin Attr Room');
+        $resource['attributeRows'] = [
+            ['label' => 'Floor', 'displayValue' => '3'],
+            ['label' => 'Notes', 'displayValue' => "Quiet area\nNo calls"],
+        ];
+
+        $this->assertBodyParity('ReservationCreatedAdmin.tpl', [
+            'UserName' => 'Test User',
+            'StartDate' => $start,
+            'EndDate' => $end,
+            'Title' => 'Admin Attr Meeting',
+            'Description' => 'Admin attr test',
+            'Attributes' => [],
+            'Resources' => [$resource],
+            'RequiresApproval' => false,
+            'CheckInEnabled' => false,
+            'RepeatRanges' => [],
+            'Participants' => [],
+            'ParticipatingGuests' => [],
+            'Invitees' => [],
+            'InvitedGuests' => [],
+            'Accessories' => [],
+            'ReferenceNumber' => 'REF-ATTR-ADMIN-001',
+            'ScriptUrl' => 'http://localhost/',
+            'ReservationUrl' => 'reservation.php?rn=REF-ATTR-ADMIN-001',
+            'AppTitle' => 'LibreBooking',
+        ]);
+    }
+
     // ── ReservationDeleted ───────────────────────────────────────────────────
 
     public function testReservationDeletedSingleResourceParity(): void
