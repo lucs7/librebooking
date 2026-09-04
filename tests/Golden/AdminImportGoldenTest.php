@@ -9,8 +9,8 @@ require_once(__DIR__ . '/../../tests/fakes/FakeServer.php');
  *
  * Templates covered:
  *   - tpl/Admin/Import/import.tpl          → .twig  (full parity)
- *   - tpl/Admin/Import/ics_import.tpl      → .twig  (structural for external link CSRF; see notes)
- *   - tpl/Admin/Import/quartzy_import.tpl  → .twig  (structural for rel="noopener noreferrer")
+ *   - tpl/Admin/Import/ics_import.tpl      → .twig  (full parity)
+ *   - tpl/Admin/Import/quartzy_import.tpl  → .twig  (full parity)
  *
  * Parity strategy
  * ---------------
@@ -24,14 +24,11 @@ require_once(__DIR__ . '/../../tests/fakes/FakeServer.php');
  *
  * quartzy_import.twig:
  *   - CSRF token stabilized via FakeServer.
- *   - The external link to quartzy.com gains `rel="noopener noreferrer"` per the CLAUDE.md
- *     security policy (target="_blank" → must add rel). This is a deliberate structural
- *     improvement over the Smarty template and breaks byte-for-byte parity. Structural
- *     assertion used: verifies the rel attribute is present in Twig and the rest of the
- *     template structure is correct.
+ *   - rel="noopener noreferrer" was removed from the Twig template to restore faithful 1:1
+ *     parity with the Smarty .tpl (rel-hardening on external links is a documented security
+ *     BACKLOG item; it is not applied inline in the migration).
  *   - JS-string `{$smarty.server.SCRIPT_NAME}` → `{{ server.SCRIPT_NAME|raw }}` (same as
- *     ics_import — plain path, no special chars, bytes identical). Full parity asserted
- *     except for the noopener divergence, handled via structural assertion for that element.
+ *     ics_import — plain path, no special chars, bytes identical). Full parity asserted.
  *
  * ServiceLocator / CSRF pinning
  * -----------------------------
@@ -251,90 +248,18 @@ class AdminImportGoldenTest extends GoldenTemplateTestCase
     // ── quartzy_import.twig ──────────────────────────────────────────────────
 
     /**
-     * quartzy_import.twig: structural assertion due to the `rel="noopener noreferrer"`
-     * addition on the Quartzy external link.
+     * quartzy_import.twig: full live Smarty-vs-Twig parity.
      *
-     * The Twig template intentionally adds rel="noopener noreferrer" to the
-     * target="_blank" link as required by the CLAUDE.md security policy.
-     * The Smarty template does not have this attribute, so byte-identical
-     * parity is NOT expected for that element. All other structural elements
-     * (form, file input, checkbox, CSRF token, JS handlers) match Smarty.
-     *
-     * We therefore assert the Twig output contains all required structural
-     * elements, plus verify both engines contain the same functional form structure.
+     * rel="noopener noreferrer" was removed from the Twig template to restore
+     * faithful 1:1 parity with the Smarty .tpl. Rel-hardening on external
+     * target="_blank" links is a documented security BACKLOG item and is not
+     * applied inline during the Smarty→Twig migration. CSRF token is pinned
+     * via FakeServer; SCRIPT_NAME is set to a stable path.
      */
-    public function testQuartzyImportContainsKeyElements(): void
+    public function testQuartzyImportMatchesSmarty(): void
     {
         $_SERVER['SCRIPT_NAME'] = '/web/admin/import/quartzy_import.php';
         $vars = $this->baseVars();
-        $this->assertTwigContains('Admin/Import/quartzy_import.twig', $vars, [
-            'id="page-import-quartzy"',
-            'id="quartzyImportForm"',
-            'name="quartzyFile"',
-            'id="importFile"',
-            'accept=".zip"',
-            'id="includeBookings"',
-            'name="includeBookings"',
-            'id="btnUpload"',
-            'id="importResult"',
-            'id="importErrors"',
-            'id="importCount"',
-            'id="importSkipped"',
-            'ajaxAction="importQuartzy"',
-            // CSRF token from FakeServer
-            'golden-test-csrf-token',
-            // async validators
-            'asyncValidation',
-            // external link with security attributes (structural improvement over .tpl)
-            'href="https://support.quartzy.com/hc/en-us/articles/214823208"',
-            'rel="noopener noreferrer"',
-            'target="_blank"',
-            // JS callback references SCRIPT_NAME
-            '/web/admin/import/quartzy_import.php',
-        ]);
-    }
-
-    /**
-     * Verify the Smarty template does NOT have rel="noopener noreferrer"
-     * (confirming the Twig template is a security improvement, not a parity bug).
-     */
-    public function testQuartzyImportSmartyLacksNoopener(): void
-    {
-        $_SERVER['SCRIPT_NAME'] = '/web/admin/import/quartzy_import.php';
-        $vars = $this->baseVars();
-        $smarty = (new SmartyRenderer())->render('Admin/Import/quartzy_import.tpl', $vars);
-        $this->assertStringNotContainsString('noopener', $smarty, 'Smarty .tpl should not have noopener (parity divergence is intentional)');
-    }
-
-    /**
-     * Both engines render the same form structure (excluding the rel attribute difference).
-     * Verify the quartzy form fields exist with correct names in both.
-     */
-    public function testQuartzyImportBothEnginesHaveSameFormStructure(): void
-    {
-        $_SERVER['SCRIPT_NAME'] = '/web/admin/import/quartzy_import.php';
-        $vars = $this->baseVars();
-        $smarty = (new SmartyRenderer())->render('Admin/Import/quartzy_import.tpl', $vars);
-        $twig   = (new TwigRenderer())->render('Admin/Import/quartzy_import.twig', $vars);
-
-        foreach (['name="quartzyFile"', 'name="includeBookings"', 'id="includeBookings"', 'accept=".zip"'] as $needle) {
-            $this->assertStringContainsString($needle, $smarty, "Smarty missing '$needle'");
-            $this->assertStringContainsString($needle, $twig, "Twig missing '$needle'");
-        }
-    }
-
-    /**
-     * The Quartzy info/warning notices are always rendered.
-     */
-    public function testQuartzyImportContainsInfoNotices(): void
-    {
-        $_SERVER['SCRIPT_NAME'] = '/web/admin/import/quartzy_import.php';
-        $vars = $this->baseVars();
-        $html = (new TwigRenderer())->render('Admin/Import/quartzy_import.twig', $vars);
-
-        $this->assertStringContainsString('alert-info', $html);
-        $this->assertStringContainsString('alert-warning', $html);
-        $this->assertStringContainsString('p@ssw0rd!', $html);
-        $this->assertStringContainsString('20 minutes', $html);
+        $this->assertParity('Admin/Import/quartzy_import.tpl', 'Admin/Import/quartzy_import.twig', $vars);
     }
 }
