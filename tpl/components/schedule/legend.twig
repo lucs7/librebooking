@@ -1,0 +1,38 @@
+{#
+  Colour key for the schedule slot states. Hidden below the sm breakpoint.
+  The mobile and week-condensed variants blank this out by overriding the
+  `legend` block in schedule.twig.
+
+  Needs: LoggedIn.
+#}
+<div class="schedule-legend mt-3">
+    <div class="d-none d-sm-flex justify-content-center flex-wrap gap-1 text-center">
+        <div
+            class="legend reservable border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">
+            {{ translate('Reservable') }}</div>
+        <div
+            class="legend unreservable border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">
+            {{ translate('Unreservable') }}</div>
+        <div
+            class="legend reserved border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">
+            {{ translate('Reserved') }}</div>
+        {% if LoggedIn %}
+            <div
+                class="legend reserved mine border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">
+                {{ translate('MyReservation') }}
+            </div>
+            <div
+                class="legend reserved participating border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">
+                {{ translate('Participant') }}</div>
+        {% endif %}
+        <div
+            class="legend reserved pending border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">
+            {{ translate('Pending') }}</div>
+        <div
+            class="legend pasttime border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">
+            {{ translate('Past') }}</div>
+        <div
+            class="legend restricted border border-dark-subtle rounded-2 d-flex align-items-center justify-content-center lh-sm py-1">
+            {{ translate('Restricted') }}</div>
+    </div>
+</div>
