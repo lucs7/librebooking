@@ -1,10 +1,15 @@
-{{ include('globalheader.twig', {Select2: true, Fullcalendar: true, cssFiles: 'assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css', printCssFiles: 'css/calendar.print.css'}) }}
+{% extends 'layouts/base.twig' %}
+{% set Select2 = true %}
+{% set Fullcalendar = true %}
+{% set cssFiles = 'assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css' %}
+{% set printCssFiles = 'css/calendar.print.css' %}
 
+{% block content %}
 <div id="page-{{ pageIdSuffix }}">
-    {{ include('Calendar/calendar.filter.twig') }}
+    {{ include('components/calendar/calendar.filter.twig') }}
 
     <div id="subscriptionContainer">
-        {{ render_partial('Calendar/' ~ subscriptionTpl, {IsSubscriptionAllowed: IsSubscriptionAllowed, IsSubscriptionEnabled: IsSubscriptionEnabled, SubscriptionUrl: SubscriptionUrl}) }}
+        {% include subscriptionTpl with {IsSubscriptionAllowed: IsSubscriptionAllowed, IsSubscriptionEnabled: IsSubscriptionEnabled, SubscriptionUrl: SubscriptionUrl} %}
     </div>
 
     <div id="calendar" class="mt-4"></div>
@@ -22,25 +27,21 @@
         </div>
     </div>
 
-    <div class="modal fade" id="moveErrorDialog" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="errorModalLabel">{{ translate('ErrorMovingReservation') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger">
-                        <ul id="moveErrorsList"></ul>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    {{ ok_button(attributes: {id: 'moveErrorOk'}) }}
-                </div>
+    {% embed 'components/common/modal.twig' with {id: 'moveErrorDialog'} %}
+        {% block header %}
+            <h5 class="modal-title" id="moveErrorDialogLabel">{{ translate('ErrorMovingReservation') }}</h5>
+        {% endblock %}
+        {% block body %}
+            <div class="alert alert-danger">
+                <ul id="moveErrorsList"></ul>
             </div>
-        </div>
-    </div>
+        {% endblock %}
+        {% block footer %}
+            <div class="modal-footer">
+                {{ ok_button(attributes: {id: 'moveErrorOk'}) }}
+            </div>
+        {% endblock %}
+    {% endembed %}
 
     <form id="moveReservationForm">
         <input id="moveReferenceNumber" type="hidden" {{ formname('REFERENCE_NUMBER') }} />
@@ -51,7 +52,7 @@
 
     {{ csrf_token() }}
 
-    {{ include('javascript-includes.twig', {Select2: true, Fullcalendar: true}) }}
+    {{ include('javascript-includes.twig') }}
     {{ jsfile(src: 'reservationPopup.js') }}
     {{ jsfile(src: 'calendar.js') }}
     {{ jsfile(src: 'ajax-helpers.js') }}
@@ -106,4 +107,4 @@
         });
     </script>
 </div>
-{{ include('globalfooter.twig') }}
+{% endblock %}
