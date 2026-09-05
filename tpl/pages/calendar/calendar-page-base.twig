@@ -9,7 +9,7 @@
     {{ include('components/calendar/calendar.filter.twig') }}
 
     <div id="subscriptionContainer">
-        {% include subscriptionTpl with {IsSubscriptionAllowed: IsSubscriptionAllowed, IsSubscriptionEnabled: IsSubscriptionEnabled, SubscriptionUrl: SubscriptionUrl} %}
+        {% block subscription %}{% endblock %}
     </div>
 
     <div id="calendar" class="mt-4"></div>
