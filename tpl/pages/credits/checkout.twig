@@ -1,11 +1,13 @@
-{% include 'globalheader.twig' %}
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
 <div id="page-checkout">
 
-	<div class="card shadow">
-		<div class="card-body">
-			<h1 class="border-bottom mb-3">
-				{{ translate('Checkout') }}
-			</h1>
+	{% embed 'components/common/card.twig' with {id: 'checkout-card'} %}
+		{% block header %}
+			<h1 class="m-0">{{ translate('Checkout') }}</h1>
+		{% endblock %}
+		{% block body %}
 			<script
 				src="https://www.paypal.com/sdk/js?client-id={{ PayPalClientId }}&intent=capture&currency={{ Currency }}&commit=true&disable-funding=credit">
 			</script>
@@ -198,8 +200,7 @@
 				</script>
 
 			</div>
-		</div>
-	</div>
+		{% endblock %}
+	{% endembed %}
 </div>
-
-{% include 'globalfooter.twig' %}
+{% endblock %}

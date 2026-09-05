@@ -1,14 +1,17 @@
-{% include 'globalheader.twig' with {DataTable: true} only %}
+{% extends 'layouts/base.twig' %}
+{% set DataTable = true %}
 
+{% block content %}
 <div id="page-user-credits">
 
-    <div class="card shadow default-box">
-        <div class="card-body">
-            <div class="clearfix border-bottom mb-3">
-                <h1 class="float-start">{{ translate('YourCredits') }}</h1>
-                <h1 class="float-end">{{ CurrentCredits }}</h1>
+    {% embed 'components/common/card.twig' with {id: 'user-credits-card', class: 'default-box'} %}
+        {% block header %}
+            <div class="clearfix">
+                <h1 class="float-start m-0">{{ translate('YourCredits') }}</h1>
+                <h1 class="float-end m-0">{{ CurrentCredits }}</h1>
             </div>
-
+        {% endblock %}
+        {% block body %}
             <ul class="nav nav-tabs mb-3" role="tablist">
                 <li class="nav-item active" role="presentation">
                     <a class="nav-link active link-primary" data-bs-toggle="tab" href="#credit-log"
@@ -82,11 +85,11 @@
                     </div>
                 {% endif %}
             </div>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 </div>
 
-{% include 'javascript-includes.twig' with {DataTable: true} only %}
+{% include 'javascript-includes.twig' %}
 {{ jsfile(src='user-credits.js') }}
 {{ jsfile(src='ajax-helpers.js') }}
 
@@ -112,4 +115,4 @@
         });
     });
 </script>
-{% include 'globalfooter.twig' %}
+{% endblock %}
