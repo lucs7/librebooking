@@ -28,7 +28,7 @@
     <tbody>
         {% for resource in Resources %}
             {% set resourceId = resource.Id %}
-            {% set href = constant('Pages::RESERVATION') ~ '?rid=' ~ resourceId ~ '&sid=' ~ ScheduleId %}
+            {% set href = CreateReservationPage ~ '?rid=' ~ resourceId ~ '&sid=' ~ ScheduleId %}
             <tr class="slots">
                 <td class="resourcename"
                     {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important" {% endif %}>
