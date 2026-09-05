@@ -2,6 +2,7 @@
 {# standard interactive schedule grid.
    The literal comment above mirrors the Smarty .tpl first line byte-for-byte. #}
 {% import 'components/schedule/slot_macros.twig' as slot %}
+{% import 'components/schedule/resource_macros.twig' as res %}
 
 {% set TodaysDate = now() %}
 {# Is this a view page and guests are allowed to book #}
@@ -34,19 +35,7 @@
                     <tr class="slots" data-resourceid="{{ resource.GetId() }}">
                         <td class="resourcename"
                             {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important" {% endif %}>
-                            {% if (resource.CanBook or GuestViewBookable) and DailyLayout.IsDateReservable(date) %}
-                                <span resourceId="{{ resourceId }}"
-                                    class="d-sm-inline-block d-md-none resourceNameSelector bi bi-info-circle-fill"
-                                    data-show-event="click"
-                                    {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important" {% endif %}></span>
-                                <a href="{{ href|raw }}" resourceId="{{ resource.Id }}" class="resourceNameSelector"
-                                    {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
-                                    {% endif %}>{{ resource.Name }}</a>
-                            {% else %}
-                                <span resourceId="{{ resource.Id }}" class="resourceNameSelector"
-                                    {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
-                                    {% endif %}>{{ resource.Name }}</span>
-                            {% endif %}
+                            {{ res.nameCell(resource, href, (resource.CanBook or GuestViewBookable) and DailyLayout.IsDateReservable(date), true) }}
                         </td>
                         {% for Slot in slots %}
                             {% set slotRef = Slot.BeginDate().Format('YmdHis') ~ resourceId %}

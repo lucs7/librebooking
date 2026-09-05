@@ -8,6 +8,7 @@
   first line byte-for-byte (golden parity).
 #}
 {% import 'pages/monitor-display/_slot_macros_monitor.twig' as slot %}
+{% import 'components/schedule/resource_macros.twig' as res %}
 
 {% set TodaysDate = now() %}
 {% for date in BoundDates %}
@@ -36,15 +37,7 @@
                     <tr class="slots">
                         <td class="resourcename"
                             {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important"{% endif %}>
-                            {% if resource.CanAccess and DailyLayout.IsDateReservable(date) %}
-                                <a href="{{ href|raw }}" resourceId="{{ resource.Id }}"
-                                   class="resourceNameSelector"
-                                   {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"{% endif %}>{{ resource.Name }}</a>
-                            {% else %}
-                                <span resourceId="{{ resource.Id }}"
-                                      class="resourceNameSelector"
-                                      {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"{% endif %}>{{ resource.Name }}</span>
-                            {% endif %}
+                            {{ res.nameCell(resource, href, resource.CanAccess and DailyLayout.IsDateReservable(date)) }}
                         </td>
                         {% for Slot in slots %}
                             {% set slotRef = Slot.BeginDate().Format('YmdHis') ~ resourceId %}
