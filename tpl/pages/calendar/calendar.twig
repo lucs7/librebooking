@@ -1,6 +1,12 @@
+{% extends 'pages/calendar/calendar-page-base.twig' %}
+
+{# ViewCalendarPage assigns pageUrl (Pages::VIEW_CALENDAR) before rendering, so
+   only fall back to the logged-in calendar when nothing has set it. #}
 {% if pageUrl is not defined or pageUrl is null %}
     {% set pageUrl = constant('Pages::CALENDAR') %}
 {% endif %}
 {% set pageIdSuffix = 'calendar' %}
-{% set subscriptionTpl = 'components/calendar/calendar.subscription.twig' %}
-{% include 'pages/calendar/calendar-page-base.twig' %}
+
+{% block subscription %}
+    {% include 'components/calendar/calendar.subscription.twig' with {IsSubscriptionAllowed: IsSubscriptionAllowed, IsSubscriptionEnabled: IsSubscriptionEnabled, SubscriptionUrl: SubscriptionUrl} %}
+{% endblock %}
