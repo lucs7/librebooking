@@ -39,7 +39,7 @@
 
     {% for resource in Resources %}
         {% set resourceId = resource.Id %}
-        {% set href = constant('Pages::RESERVATION') ~ '?rid=' ~ resource.Id ~ '&sid=' ~ ScheduleId %}
+        {% set href = CreateReservationPage ~ '?rid=' ~ resource.Id ~ '&sid=' ~ ScheduleId %}
         <tr class="slots">
             <td class="resourcename"
                 {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important"{% endif %}>
@@ -55,7 +55,7 @@
             {% for date in BoundDates %}
                 {% set dateSlots = DailyLayout.GetPeriods(date, false) %}
                 {% for Slot in dateSlots %}
-                    {% set slotHref = constant('Pages::RESERVATION') ~ '?rid=' ~ resource.Id ~ '&sid=' ~ ScheduleId ~ '&rd=' ~ formatdate(date, null, null, 'url') %}
+                    {% set slotHref = CreateReservationPage ~ '?rid=' ~ resource.Id ~ '&sid=' ~ ScheduleId ~ '&rd=' ~ formatdate(date, null, null, 'url') %}
                     {% set slotRef = Slot.BeginDate().Format('YmdHis') ~ resourceId %}
                     {{ slot.dispatch(DisplaySlotFactory.GetFunction(Slot, resource.CanAccess), Slot, slotHref|raw, slotRef, resourceId) }}
                 {% endfor %}
