@@ -1,0 +1,37 @@
+{#
+  Shared resource-cell macros for the schedule grids.
+
+  nameCell() renders the contents of a <td class="resourcename"> — the
+  bookable/non-bookable branch plus the optional responsive info-icon. The
+  <td> itself stays at the call site, because the grids differ in what they
+  put on it (the tall grid adds its own resourceId attribute).
+
+  Callers compute `bookable` themselves: the interactive grid gates on
+  (CanBook or GuestViewBookable) and DailyLayout.IsDateReservable(date), the
+  static grid on CanAccess and IsDateReservable(date), and the tall / wide /
+  week-condensed grids on CanAccess alone.
+
+  `withInfoIcon` emits the small-screen info toggle that the interactive and
+  tall grids show and the others do not.
+
+  The mobile grid deliberately does not use this macro: it renders an <i>
+  icon in both branches and omits resourceNameSelector / resourceId on the
+  name itself, so it has no shape in common beyond the branch.
+#}
+
+{% macro nameCell(resource, href, bookable, withInfoIcon) %}
+    {%- set colorStyle = resource.HasColor() ? 'color:' ~ resource.GetTextColor() ~ ' !important' : '' -%}
+    {% if bookable %}
+        {% if withInfoIcon|default(false) %}
+            <span resourceId="{{ resource.Id }}"
+                class="d-sm-inline-block d-md-none resourceNameSelector bi bi-info-circle-fill"
+                data-show-event="click"
+                {% if colorStyle %}style="{{ colorStyle }}"{% endif %}></span>
+        {% endif %}
+        <a href="{{ href|raw }}" resourceId="{{ resource.Id }}" class="resourceNameSelector"
+            {% if colorStyle %}style="{{ colorStyle }}"{% endif %}>{{ resource.Name }}</a>
+    {% else %}
+        <span resourceId="{{ resource.Id }}" class="resourceNameSelector"
+            {% if colorStyle %}style="{{ colorStyle }}"{% endif %}>{{ resource.Name }}</span>
+    {% endif %}
+{% endmacro %}
