@@ -1,10 +1,15 @@
-{% include 'globalheader.twig' with {Select2: true, Fullcalendar: true, cssFiles: 'assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css', printCssFiles: 'css/calendar.print.css'} %}
+{% extends 'layouts/base.twig' %}
+{% set Select2 = true %}
+{% set Fullcalendar = true %}
+{% set cssFiles = 'assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css' %}
+{% set printCssFiles = 'css/calendar.print.css' %}
 
+{% block content %}
 <div id="page-{{ pageIdSuffix }}">
-    {% include 'Calendar/calendar.filter.twig' %}
+    {{ include('components/calendar/calendar.filter.twig') }}
 
     <div id="subscriptionContainer">
-        {{ render_partial('Calendar/' ~ subscriptionTpl, {IsSubscriptionAllowed: IsSubscriptionAllowed, IsSubscriptionEnabled: IsSubscriptionEnabled, SubscriptionUrl: SubscriptionUrl}) }}
+        {% include subscriptionTpl with {IsSubscriptionAllowed: IsSubscriptionAllowed, IsSubscriptionEnabled: IsSubscriptionEnabled, SubscriptionUrl: SubscriptionUrl} %}
     </div>
 
     <div id="calendar" class="mt-4"></div>
@@ -22,25 +27,21 @@
         </div>
     </div>
 
-    <div class="modal fade" id="moveErrorDialog" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="errorModalLabel">{{ translate('ErrorMovingReservation') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger">
-                        <ul id="moveErrorsList"></ul>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    {{ ok_button(attributes={'id': 'moveErrorOk'}) }}
-                </div>
+    {% embed 'components/common/modal.twig' with {id: 'moveErrorDialog'} %}
+        {% block header %}
+            <h5 class="modal-title" id="moveErrorDialogLabel">{{ translate('ErrorMovingReservation') }}</h5>
+        {% endblock %}
+        {% block body %}
+            <div class="alert alert-danger">
+                <ul id="moveErrorsList"></ul>
             </div>
-        </div>
-    </div>
+        {% endblock %}
+        {% block footer %}
+            <div class="modal-footer">
+                {{ ok_button(attributes: {id: 'moveErrorOk'}) }}
+            </div>
+        {% endblock %}
+    {% endembed %}
 
     <form id="moveReservationForm">
         <input id="moveReferenceNumber" type="hidden" {{ formname('REFERENCE_NUMBER') }} />
@@ -51,13 +52,13 @@
 
     {{ csrf_token() }}
 
-    {% include 'javascript-includes.twig' with {Select2: true, Fullcalendar: true} %}
-    {{ jsfile(src='reservationPopup.js') }}
-    {{ jsfile(src='calendar.js') }}
-    {{ jsfile(src='ajax-helpers.js') }}
-    {{ jsfile(src='date-helper.js') }}
-    {{ jsfile(src='autocomplete.js') }}
-    {{ vendor_js(src='jqtree/1.8.11/js/tree.jquery.js') }}
+    {{ include('javascript-includes.twig') }}
+    {{ jsfile(src: 'reservationPopup.js') }}
+    {{ jsfile(src: 'calendar.js') }}
+    {{ jsfile(src: 'ajax-helpers.js') }}
+    {{ jsfile(src: 'date-helper.js') }}
+    {{ jsfile(src: 'autocomplete.js') }}
+    {{ vendor_js(src: 'jqtree/1.8.11/js/tree.jquery.js') }}
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -72,10 +73,10 @@
                 listText: '{{ translate('List')|escape_js }}', {# raw: JS string context #}
                 dayClickUrl: '{{ pageUrl|raw }}?ct={{ constant('CalendarTypes::Day')|raw }}&sid={{ ScheduleId|escape_js }}&rid={{ ResourceId|escape_js }}&gid={% if GroupId is defined %}{{ GroupId|escape_js }}{% endif %}', {# raw: JS string context #}
                 dayClickUrlTemplate: '{{ pageUrl|raw }}?ct={{ constant('CalendarTypes::Day')|raw }}&sid=[sid]&rid=[rid]&gid=[gid]', {# raw: JS string context, developer-controlled #}
-                dayNames: {{ js_array(array=DayNames) }},
-                dayNamesShort: {{ js_array(array=DayNamesShort) }},
-                monthNames: {{ js_array(array=MonthNames) }},
-                monthNamesShort: {{ js_array(array=MonthNamesShort) }},
+                dayNames: {{ js_array(array: DayNames) }},
+                dayNamesShort: {{ js_array(array: DayNamesShort) }},
+                monthNames: {{ js_array(array: MonthNames) }},
+                monthNamesShort: {{ js_array(array: MonthNamesShort) }},
                 timeFormat: '{{ TimeFormat|raw }}', {# raw: JS string context, developer-controlled format #}
                 dayMonth: '{{ DateFormat|raw }}', {# raw: JS string context, developer-controlled format #}
                 firstDay: {{ FirstDay }},
@@ -106,4 +107,4 @@
         });
     </script>
 </div>
-{% include 'globalfooter.twig' %}
+{% endblock %}
