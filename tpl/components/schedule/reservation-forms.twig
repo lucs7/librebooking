@@ -1,0 +1,42 @@
+{#
+  Hidden forms the schedule JS reads and submits.
+
+  moveReservationForm carries the drag-and-drop move payload;
+  fetchReservationsForm carries the current date range and every active
+  filter, and is serialised by schedule.js when it reloads the grid.
+
+  Needs: FirstDate, LastDate, ScheduleId, SpecificDates, MinCapacityFilter,
+  ResourceTypeIdFilter, ResourceAttributes, ResourceTypeAttributes,
+  ResourceIds, UserIdFilter, ParticipantIdFilter.
+#}
+<form id="moveReservationForm">
+    <input id="moveReferenceNumber" type="hidden" {{ formname('REFERENCE_NUMBER') }} />
+    <input id="moveStartDate" type="hidden" {{ formname('BEGIN_DATE') }} />
+    <input id="moveResourceId" type="hidden" {{ formname('RESOURCE_ID') }} />
+    <input id="moveSourceResourceId" type="hidden" {{ formname('ORIGINAL_RESOURCE_ID') }} />
+    {{ csrf_token() }}
+</form>
+
+
+<form id="fetchReservationsForm">
+    <input type="hidden" {{ formname('BEGIN_DATE') }} value="{{ formatdate(FirstDate, null, null, 'system') }}" />
+    <input type="hidden" {{ formname('END_DATE') }} value="{{ formatdate(LastDate, null, null, 'system') }}" />
+    <input type="hidden" {{ formname('SCHEDULE_ID') }} value="{{ ScheduleId }}" />
+    {% for d in SpecificDates %}
+        <input type="hidden" {{ formname('SPECIFIC_DATES', true) }} value="{{ formatdate(d, null, null, 'system') }}" />
+    {% endfor %}
+    <input type="hidden" {{ formname('MIN_CAPACITY') }} value="{% if MinCapacityFilter is defined %}{{ MinCapacityFilter }}{% endif %}" />
+    <input type="hidden" {{ formname('RESOURCE_TYPE_ID') }} value="{{ ResourceTypeIdFilter }}" />
+    {% for attribute in ResourceAttributes %}
+        <input type="hidden" name="RESOURCE_ATTRIBUTE_ID[{{ attribute.Id() }}]" value="{{ attribute.Value() }}" />
+    {% endfor %}
+    {% for attribute in ResourceTypeAttributes %}
+        <input type="hidden" name="RESOURCE_TYPE_ATTRIBUTE_ID[{{ attribute.Id() }}]" value="{{ attribute.Value() }}" />
+    {% endfor %}
+    {% for id in ResourceIds %}
+        <input type="hidden" {{ formname('RESOURCE_ID', true) }} value="{{ id }}" />
+    {% endfor %}
+    <input type="hidden" {{ formname('USER_ID') }} value="{{ UserIdFilter }}" />
+    <input type="hidden" {{ formname('PARTICIPANT_ID') }} value="{{ ParticipantIdFilter }}" />
+    {{ csrf_token() }}
+</form>
