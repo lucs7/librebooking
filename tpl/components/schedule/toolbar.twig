@@ -1,0 +1,63 @@
+{#
+  Schedule actions: print, make-default, the four style switchers and the
+  Atom/iCalendar subscription links. Rendered through the `actions` block in
+  schedule.twig so variants can override it.
+
+  Needs: LoggedIn, ScheduleStyle, IsMobile, IsTablet, SubscriptionUrl,
+  ShowSubscription.
+#}
+<div class="d-flex align-items-center mb-2">
+    <div class="me-4 d-flex align-items-center gap-2">
+        <a href="#" id="print_schedule" class="link-primary me-1" title="{{ translate('Print') }}">
+            <i class="bi bi-printer schedule_icon"></i>
+        </a>
+        {% if LoggedIn %}
+            <a href="#" id="make_default" class="link-primary" title="{{ translate('MakeDefaultSchedule') }}">
+                <i class="bi bi-star-fill schedule_icon"></i>
+            </a>
+        {% endif %}
+    </div>
+    <a href="#"
+        class="schedule-style me-2 d-inline-flex align-items-center{% if ScheduleStyle == constant('ScheduleStyle::Standard').value %} active{% endif %}"
+        id="schedule_standard" schedule-display="{{ constant('ScheduleStyle::Standard').value }}"
+        title="{% if IsMobile and not IsTablet %}{{ translate('CondensedWeekScheduleDisplay') }}{% else %}{{ translate('StandardScheduleDisplay') }}{% endif %}">
+        <img class="schedule_icon shadow-sm" src="{% if IsMobile and not IsTablet %}img/table-week.png{% else %}img/table.png{% endif %}"
+            alt="{% if IsMobile and not IsTablet %}{{ translate('CondensedWeekScheduleDisplay') }}{% else %}{{ translate('StandardScheduleDisplay') }}{% endif %}" />
+    </a>
+    <a href="#"
+        class="schedule-style me-2 d-inline-flex align-items-center{% if ScheduleStyle == constant('ScheduleStyle::Tall').value %} active{% endif %}"
+        id="schedule_tall" schedule-display="{{ constant('ScheduleStyle::Tall').value }}"
+        title="{{ translate('TallScheduleDisplay') }}">
+        <img class="schedule_icon shadow-sm" src="img/table-tall.png"
+            alt="{{ translate('TallScheduleDisplay') }}" />
+    </a>
+    {% if not IsMobile or IsTablet %}
+    <a href="#"
+        class="schedule-style d-inline-flex me-2 align-items-center{% if ScheduleStyle == constant('ScheduleStyle::Wide').value %} active{% endif %}"
+        id="schedule_wide" schedule-display="{{ constant('ScheduleStyle::Wide').value }}"
+        title="{{ translate('WideScheduleDisplay') }}">
+        <img class="schedule_icon shadow-sm" src="img/table-wide.png"
+            alt="{{ translate('WideScheduleDisplay') }}" />
+    </a>
+    <a href="#"
+        class="schedule-style d-inline-flex align-items-center{% if ScheduleStyle == constant('ScheduleStyle::CondensedWeek').value %} active{% endif %}"
+        id="schedule_week" schedule-display="{{ constant('ScheduleStyle::CondensedWeek').value }}"
+        title="{{ translate('CondensedWeekScheduleDisplay') }}">
+        <img class="schedule_icon shadow-sm" src="img/table-week.png"
+            alt="{{ translate('CondensedWeekScheduleDisplay') }}" />
+    </a>
+    {% endif %}
+</div>
+{% if SubscriptionUrl is defined and SubscriptionUrl != null and ShowSubscription and LoggedIn %}
+    {% set atomUrl = SubscriptionUrl.GetAtomUrl() %}
+    {% set icalUrl = SubscriptionUrl.GetWebcalUrl() %}
+    <div class="d-flex align-items-center"><i class="bi bi-rss-fill link-primary me-1"></i>
+        <a class="link-primary me-1" target="_blank" href="{{ atomUrl|e('html') }}"
+            title="{{ translate('UrlCopiedToClipboard') }}"
+            onclick="copyUrlToClipboard('{{ atomUrl|escape_js|e('html') }}'); return false;">Atom</a>
+        <div class="vr me-1"></div>
+        <a class="link-primary" target="_blank" href="{{ icalUrl|e('html') }}"
+            title="{{ translate('UrlCopiedToClipboard') }}"
+            onclick="copyUrlToClipboard('{{ icalUrl|escape_js|e('html') }}'); return false;">iCalendar</a>
+    </div>
+{% endif %}
