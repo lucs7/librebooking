@@ -1,0 +1,38 @@
+{#
+  Today / previous / next links with the displayed date range, plus the
+  optional full-week link. Emitted twice per page (above and below the
+  grid), so schedule.twig captures it into `date_navigation` rather than
+  including it directly -- that also keeps it empty when the schedule is
+  not accessible, matching the original behaviour.
+
+  Needs: HideSchedule, TodaysDate, PreviousDate, NextDate, FirstDate,
+  LastDate, ShowWeekNumbers, ShowFullWeekLink.
+#}
+{% if HideSchedule is not defined or not HideSchedule %}
+    <div class="schedule-dates d-flex justify-content-center mt-2 fs-5 gap-2">
+        <a href="#" class="change-date link-primary" data-year="{{ TodaysDate.Year() }}"
+            data-month="{{ TodaysDate.Month() }}" data-day="{{ TodaysDate.Day() }}" aria-label="{{ translate('Today') }}">
+            <i class="bi bi-house-fill" aria-hidden="true"></i>
+        </a>
+        <a href="#" class="change-date link-primary" data-year="{{ PreviousDate.Year() }}"
+            data-month="{{ PreviousDate.Month() }}" data-day="{{ PreviousDate.Day() }}"
+            aria-label="{{ translate('PreviousWeek') }}">
+            <i class="bi bi-arrow-left-circle-fill" aria-hidden="true"></i>
+        </a>
+        {{ formatdate(FirstDate) }}
+        {% if ShowWeekNumbers %}({{ FirstDate.WeekNumber() }}){% endif %}
+        -
+        {{ formatdate(LastDate) }}
+        {% if ShowWeekNumbers %}({{ LastDate.WeekNumber() }}){% endif %}
+        <a href="#" class="change-date link-primary" data-year="{{ NextDate.Year() }}" data-month="{{ NextDate.Month() }}"
+            data-day="{{ NextDate.Day() }}" aria-label="{{ translate('NextWeek') }}">
+            <i class="bi bi-arrow-right-circle-fill" aria-hidden="true"></i>
+        </a>
+    </div>
+    {% if ShowFullWeekLink %}
+        <div class="d-flex justify-content-center fs-5">
+            <a class="link-primary" href="{{ add_querystring('SHOW_FULL_WEEK', '1') }}"
+                id="showFullWeek">({{ translate('ShowFullWeek') }})</a>
+        </div>
+    {% endif %}
+{% endif %}

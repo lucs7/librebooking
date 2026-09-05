@@ -1,0 +1,97 @@
+{#
+  Collapsible resource filter beside the schedule grid.
+
+  Needs: CanViewUsers, AllowParticipation, OwnerText, OwnerId,
+  ParticipantText, ParticipantId, MaxParticipantsFilter, ResourceTypes,
+  ResourceTypeIdFilter, ResourceAttributes, ResourceTypeAttributes,
+  ScheduleId, SpecificDates, DisplayDates.
+#}
+<div id="reservations-left" class="col-md-2 col-sm-12">
+    <div class="card h-100">
+        <div
+            class="reservations-left-header card-header d-flex justify-content-between align-items-center px-3 py-2">
+            <h5 class="card-title text-center mb-0">{{ translate('Filter') }}</h5>
+            <a href="#" class="toggle-sidebar link-primary" title="Hide Reservation Filter">
+                <i class="bi bi-x-circle-fill"></i>
+                <span class="visually-hidden">Hide Reservation Filter</span>
+            </a>
+        </div>
+
+        <div class="reservations-left-content card-body">
+            <form method="get" role="form" id="advancedFilter">
+
+                {% if ResourceAttributes|length + ResourceTypeAttributes|length > 5 %}
+                    <div>
+                        <input type="submit" value="{{ translate('Filter') }}" class="btn btn-primary btn-sm"
+                            {{ formname('SUBMIT') }} />
+                    </div>
+                {% endif %}
+
+                <div>
+                    <div id="resourceGroups"></div>
+                </div>
+
+                <div id="resettable">
+                    {% if CanViewUsers %}
+                        <div class="form-group mb-2">
+                            <label for="ownerFilter" class="fw-bold">{{ translate('Owner') }}</label>
+                            <input type='search' id='ownerFilter' class="form-control form-control-sm search"
+                                {{ formname('OWNER_TEXT') }} value="{% if OwnerText is defined %}{{ OwnerText }}{% endif %}" />
+                            <input {{ formname('USER_ID') }} id="ownerId" type="hidden" value="{{ OwnerId }}" />
+                            <span class="searchclear searchclear-label" ref="ownerFilter,ownerId"></span>
+                        </div>
+                        {% if AllowParticipation %}
+                            <div class="form-group mb-2">
+                                <label for="participantFilter" class="fw-bold">{{ translate('Participant') }}</label>
+                                <input type='search' id='participantFilter' class="form-control form-control-sm search"
+                                    {{ formname('PARTICIPANT_TEXT') }}
+                                    value="{% if ParticipantText is defined %}{{ ParticipantText }}{% endif %}" />
+                                <input {{ formname('PARTICIPANT_ID') }} id="participantId" type="hidden"
+                                    value="{{ ParticipantId }}" />
+                                <span class="searchclear searchclear-label"
+                                    ref="participantFilter,participantId"></span>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    <div class="form-group mb-2">
+                        <label for="maxCapactiy" class="fw-bold">{{ translate('MinimumCapacity') }}</label>
+                        <input type='number' min='0' id='maxCapactiy' size='5' maxlength='5'
+                            class="form-control form-control-sm" {{ formname('MAX_PARTICIPANTS') }}
+                            value="{{ MaxParticipantsFilter }}" />
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="resourceType" class="fw-bold">{{ translate('ResourceType') }}</label>
+                        <select id="resourceType" {{ formname('RESOURCE_TYPE_ID') }}
+                            class="form-select form-select-sm">
+                            <option value="">- {{ translate('All') }} -</option>
+                            {{ object_html_options(options=ResourceTypes, label='Name', key='Id', selected=ResourceTypeIdFilter) }}
+                        </select>
+                    </div>
+
+                    {% for attribute in ResourceAttributes %}
+                        {{ control('AttributeControl', {attribute: attribute, searchmode: true, namePrefix: 'r', class: 'customAttribute mb-2'}) }}
+                    {% endfor %}
+
+                    {% for attribute in ResourceTypeAttributes %}
+                        {{ control('AttributeControl', {attribute: attribute, searchmode: true, namePrefix: 'rt', class: 'customAttribute mb-2'}) }}
+                    {% endfor %}
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-block btn-sm"
+                            value="submit">{{ translate('Filter') }}</button>
+                        <button id="show_all_resources" type="button"
+                            class="btn btn-outline-secondary btn-sm">{{ translate('ClearFilter') }}</button>
+                    </div>
+                </div>
+
+                <input type="hidden" name="sid" value="{{ ScheduleId }}" />
+                <input type="hidden" name="sds"
+                    value="{% for d in SpecificDates %}{{ d.Format('Y-m-d') }},{% endfor %}" />
+                <input type="hidden" name="sd" value="{{ DisplayDates.GetBegin().Format('Y-m-d') }}" />
+                <input type="hidden" {{ formname('SUBMIT') }} value="true" />
+                <input type="hidden" name="clearFilter" id="clearFilter" value="0" />
+            </form>
+        </div>
+    </div>
+</div>
