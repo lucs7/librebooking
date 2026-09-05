@@ -41,7 +41,7 @@
                                    class="resourceNameSelector"
                                    {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"{% endif %}>{{ resource.Name }}</a>
                             {% else %}
-                                <span resourceId="{{ resource.Id }}" resourceId="{{ resource.Id }}"
+                                <span resourceId="{{ resource.Id }}"
                                       class="resourceNameSelector"
                                       {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"{% endif %}>{{ resource.Name }}</span>
                             {% endif %}
