@@ -50,12 +50,12 @@ class CalendarPage extends CommonCalendarPage implements ICommonCalendarPage
 
     protected function DisplayPage()
     {
-        $this->Display('Calendar/calendar.tpl');
+        $this->Display('pages/calendar/calendar.twig');
     }
 
     public function RenderSubscriptionDetails()
     {
-        $this->Display('Calendar/calendar.subscription.tpl');
+        $this->Display('components/calendar/calendar.subscription.twig');
     }
 
     public function ProcessAction()

@@ -52,7 +52,7 @@ class PersonalCalendarPage extends CommonCalendarPage implements ICommonCalendar
 
     public function RenderSubscriptionDetails()
     {
-        $this->Display('pages/calendar/mycalendar.subscription.twig');
+        $this->Display('components/calendar/mycalendar.subscription.twig');
     }
 
     public function ProcessAction()
