@@ -1,11 +1,9 @@
-<!-- tpl/Schedule/schedule.tpl -->
-{# main schedule page (standard grid host).
-   The literal comment above mirrors the Smarty .tpl first line byte-for-byte. #}
-{% import 'Schedule/_slot_macros.twig' as slot %}
-{% block header %}
-    {{ include('globalheader.twig', {Select2: true, DatePicker: true, cssFiles: 'assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css', printCssFiles: 'css/schedule.print.css'}) }}
-{% endblock %}
+{% extends 'layouts/base.twig' %}
+{% set Select2 = true %}
+{% set cssFiles = 'assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css' %}
+{% set printCssFiles = 'css/schedule.print.css' %}
 
+{% block content %}
 <div id="page-schedule">
 
     {% if ShowResourceWarning is defined and ShowResourceWarning %}
@@ -144,7 +142,7 @@
                 {% endif %}
 
                 <div id="schedule-title" class="schedule_title {{ titleWidth }}">
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center align-items-center gap-2">
                         {% if Schedules|length > 1 %}
                             <label for="schedules" class="visually-hidden">{{ translate('Schedules') }}</label>
                             <select id="schedules" class="form-select w-auto">
@@ -155,10 +153,10 @@
                                 {% endfor %}
                             </select>
                         {% endif %}
-                        <a class="link-primary" href="#" id="calendar_toggle" title="{{ translate('ShowHideNavigation') }}"
+                        <a class="link-primary d-inline-flex align-items-center" href="#" id="calendar_toggle" title="{{ translate('ShowHideNavigation') }}"
                             data-bs-toggle="collapse" data-bs-target="#individualDates" aria-expanded="false"
                             aria-controls="individualDates">
-                            <span class="bi bi-calendar schedule_icon"></span>
+                            <span class="bi bi-calendar schedule_icon d-inline-flex align-items-center lh-1"></span>
                             <span class="visually-hidden">{{ translate('ShowHideNavigation') }}</span>
                         </a>
                     </div>
@@ -180,6 +178,8 @@
                     <div id="datepicker" class="collapse"></div>
                 </div>
             </div>
+
+
 
             {{ date_navigation }}
         {% endblock %}
@@ -313,7 +313,7 @@
                                         <select id="resourceType" {{ formname('RESOURCE_TYPE_ID') }}
                                             class="form-select form-select-sm">
                                             <option value="">- {{ translate('All') }} -</option>
-                                            {{ object_html_options(options: ResourceTypes, label: 'Name', key: 'Id', selected: ResourceTypeIdFilter) }}
+                                            {{ object_html_options(options=ResourceTypes, label='Name', key='Id', selected=ResourceTypeIdFilter) }}
                                         </select>
                                     </div>
 
@@ -346,7 +346,7 @@
 
                 <div id="reservations" class="col-md-10 col-sm-12">
                     {% block reservations %}
-                        {{ include('Schedule/schedule-reservations-grid.twig') }}
+                        {% include 'components/schedule/schedule-reservations-grid.twig' %}
                     {% endblock %}
                 </div>
             </div>
@@ -370,6 +370,7 @@
     <input id="moveSourceResourceId" type="hidden" {{ formname('ORIGINAL_RESOURCE_ID') }} />
     {{ csrf_token() }}
 </form>
+
 
 <form id="fetchReservationsForm">
     <input type="hidden" {{ formname('BEGIN_DATE') }} value="{{ formatdate(FirstDate, null, null, 'system') }}" />
@@ -402,25 +403,26 @@ opacity-75">
     <span aria-hidden="true">{{ translate('Working') }}</span>
 </div>
 
-{{ include('javascript-includes.twig', {Select2: true, Clear: true, DatePicker: true}) }}
+{% include 'javascript-includes.twig' %}
 
 {% block scripts_before %}
 
 {% endblock %}
 
-{{ vendor_js(src: 'html2canvas-pro/2.0.2/js/html2canvas-pro.min.js') }}
-{{ jsfile(src: 'reservationPopup.js') }}
-{{ jsfile(src: 'schedule.js') }}
-{{ jsfile(src: 'resourcePopup.js') }}
-{{ vendor_js(src: 'jqtree/1.8.11/js/tree.jquery.js') }}
-{{ vendor_js(src: 'jquery-cookie/1.3.1/js/jquery.cookie.js') }}
-{{ jsfile(src: 'autocomplete.js') }}
-{{ jsfile(src: 'ajax-helpers.js') }}
+{{ vendor_js(src='html2canvas-pro/2.0.2/js/html2canvas-pro.min.js') }}
+{{ jsfile(src='reservationPopup.js') }}
+{{ jsfile(src='schedule.js') }}
+{{ jsfile(src='resourcePopup.js') }}
+{{ vendor_js(src='jqtree/1.8.11/js/tree.jquery.js') }}
+{{ vendor_js(src='jquery-cookie/1.3.1/js/jquery.cookie.js') }}
+{{ jsfile(src='autocomplete.js') }}
+{{ jsfile(src='ajax-helpers.js') }}
 <script type="text/javascript">
     let resourceMaxConcurrentReservations = {};
     {% for r in Resources %}
         resourceMaxConcurrentReservations[{{ r.GetId() }}] = {{ r.MaxConcurrentReservations }};
     {% endfor %}
+
 
     const scheduleOpts = {
         reservationUrlTemplate: "{{ Path|raw }}{{ constant('Pages::RESERVATION')|raw }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER')|raw }}=[referenceNumber]",
@@ -476,6 +478,7 @@ opacity-75">
 
 {% endblock %}
 
+
 {{ control('DatePickerSetupControl', {
     ControlId: 'datepicker',
     AltInput: false,
@@ -484,7 +487,6 @@ opacity-75">
     NumberOfMonths: PopupMonths,
     ShowButtonPanel: 'true',
     OnSelect: 'dpDateChanged',
-    FirstDay: FirstWeekday,
+    FirstDay: FirstWeekday
 }) }}
-
-{{ include('globalfooter.twig') }}
+{% endblock %}
