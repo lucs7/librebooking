@@ -5,7 +5,7 @@
             <span class="groupName fw-bold fs-5">{{ GroupName }}</span>
         {% else %}
             <div class="d-flex justify-content-center align-items-center">
-                <div>{{ indicator(id='loadingIndicator') }}</div>
+                <div>{{ indicator(id: 'loadingIndicator') }}</div>
                 <label class="fw-bold me-2" for="calendarFilter">{{ translate('ChangeCalendar') }}</label>
                 <select id="calendarFilter" class="form-select w-auto">
                     {% for filter in filters.GetFilters() %}
@@ -25,7 +25,6 @@
     <div id="resourceGroupsContainer" class="bg-white border rounded pt-2">
         <div id="resourceGroups"></div>
     </div>
-
 
     {# {if false} block omitted — dead code in source that never renders #}
 

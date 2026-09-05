@@ -47,12 +47,12 @@ class PersonalCalendarPage extends CommonCalendarPage implements ICommonCalendar
         $this->Set('DateFormat', Resources::GetInstance()->GetDateFormat('calendar_dates'));
         $this->Set('CreateReservationPage', Pages::RESERVATION);
 
-        $this->Display('Calendar/mycalendar.tpl');
+        $this->Display('pages/calendar/mycalendar.twig');
     }
 
     public function RenderSubscriptionDetails()
     {
-        $this->Display('Calendar/mycalendar.subscription.tpl');
+        $this->Display('pages/calendar/mycalendar.subscription.twig');
     }
 
     public function ProcessAction()
