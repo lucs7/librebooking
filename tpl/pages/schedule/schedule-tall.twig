@@ -3,6 +3,7 @@
 
 {% block reservations %}
 {% import 'components/schedule/slot_macros.twig' as slot %}
+{% import 'components/schedule/resource_macros.twig' as res %}
 
 {% set TodaysDate = now() %}
 
@@ -14,18 +15,7 @@
             {% set href = CreateReservationPage ~ '?rid=' ~ resource.Id ~ '&sid=' ~ ScheduleId %}
             <td class="resourcename" resourceId="{{ resource.Id }}"
                 {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important" {% endif %}>
-                {% if resource.CanAccess %}
-                    <span resourceId="{{ resourceId }}" class="d-sm-inline-block d-md-none resourceNameSelector bi bi-info-circle-fill"
-                        data-show-event="click" {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
-                        {% endif %}></span>
-                    <a href="{{ href|raw }}" resourceId="{{ resourceId }}" class="resourceNameSelector"
-                        {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important" {% endif %}>{{ resource.Name }}</a>
-
-                {% else %}
-                    <span resourceId="{{ resourceId }}" class="resourceNameSelector"
-                        {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
-                        {% endif %}>{{ resource.Name }}</span>
-                {% endif %}
+                {{ res.nameCell(resource, href, resource.CanAccess, true) }}
             </td>
         {% endfor %}
     </tr>

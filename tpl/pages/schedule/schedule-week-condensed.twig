@@ -5,6 +5,7 @@
 
 {% block reservations %}
 {% import 'components/schedule/slot_macros_week-condensed.twig' as slot %}
+{% import 'components/schedule/resource_macros.twig' as res %}
 
 {% set TodaysDate = now() %}
 {% set columnWidth = (1 / ((BoundDates|default([])|length) + 1)) * 100 %}
@@ -32,15 +33,7 @@
             <tr class="slots">
                 <td class="resourcename"
                     {% if resource.HasColor() %}style="background-color:{{ resource.GetColor() }} !important" {% endif %}>
-                    {% if resource.CanAccess %}
-                        <a href="{{ href|raw }}" resourceId="{{ resourceId }}" class="resourceNameSelector"
-                            {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
-                            {% endif %}>{{ resource.Name }}</a>
-                    {% else %}
-                        <span resourceId="{{ resource.Id }}" class="resourceNameSelector"
-                            {% if resource.HasColor() %}style="color:{{ resource.GetTextColor() }} !important"
-                            {% endif %}>{{ resource.Name }}</span>
-                    {% endif %}
+                    {{ res.nameCell(resource, href, resource.CanAccess) }}
                 </td>
                 {% for date in BoundDates %}
                     {% set datePeriods = DailyLayout.GetPeriods(date, false) %}
