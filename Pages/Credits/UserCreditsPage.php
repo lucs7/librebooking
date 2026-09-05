@@ -85,7 +85,7 @@ class UserCreditsPage extends ActionPage implements IUserCreditsPage
     public function ProcessPageLoad()
     {
         $this->presenter->PageLoad(ServiceLocator::GetServer()->GetUserSession());
-        $this->Display('Credits/user_credits.tpl');
+        $this->Display('pages/credits/user-credits.twig');
     }
 
     public function SetCurrentCredits($credits)
@@ -133,13 +133,13 @@ class UserCreditsPage extends ActionPage implements IUserCreditsPage
     {
         $this->Set('CreditLog', $creditLog->Results());
         $this->Set('PageInfo', $creditLog->PageInfo());
-        $this->Display('Credits/credit_log.tpl');
+        $this->Display('components/credits/credit-log.twig');
     }
 
     public function BindTransactionLog($transactionLog)
     {
         $this->Set('TransactionLog', $transactionLog->Results());
         $this->Set('PageInfo', $transactionLog->PageInfo());
-        $this->Display('Credits/transaction_log.tpl');
+        $this->Display('components/credits/transaction-log.twig');
     }
 }

@@ -91,7 +91,7 @@ class CheckoutPage extends ActionPage implements ICheckoutPage
 
         $this->Set('Email', ServiceLocator::GetServer()->GetUserSession()->Email);
         $this->presenter->PageLoad(ServiceLocator::GetServer()->GetUserSession());
-        $this->Display('Credits/checkout.tpl');
+        $this->Display('pages/credits/checkout.twig');
     }
 
     public function GetCreditCount()
