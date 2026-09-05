@@ -1,11 +1,9 @@
-<!-- tpl/Schedule/schedule.tpl -->
-{# main schedule page (standard grid host).
-   The literal comment above mirrors the Smarty .tpl first line byte-for-byte. #}
-{% import 'Schedule/_slot_macros.twig' as slot %}
-{% block header %}
-    {% include 'globalheader.twig' with {Select2: true, DatePicker: true, cssFiles: 'assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css', printCssFiles: 'css/schedule.print.css'} %}
-{% endblock %}
+{% extends 'layouts/base.twig' %}
+{% set Select2 = true %}
+{% set cssFiles = 'assets/vendor/jqtree/1.8.11/css/jqtree.css,css/schedule.css' %}
+{% set printCssFiles = 'css/schedule.print.css' %}
 
+{% block content %}
 <div id="page-schedule">
 
     {% if ShowResourceWarning is defined and ShowResourceWarning %}
@@ -144,7 +142,7 @@
                 {% endif %}
 
                 <div id="schedule-title" class="schedule_title {{ titleWidth }}">
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center align-items-center gap-2">
                         {% if Schedules|length > 1 %}
                             <label for="schedules" class="visually-hidden">{{ translate('Schedules') }}</label>
                             <select id="schedules" class="form-select w-auto">
@@ -155,10 +153,10 @@
                                 {% endfor %}
                             </select>
                         {% endif %}
-                        <a class="link-primary" href="#" id="calendar_toggle" title="{{ translate('ShowHideNavigation') }}"
+                        <a class="link-primary d-inline-flex align-items-center" href="#" id="calendar_toggle" title="{{ translate('ShowHideNavigation') }}"
                             data-bs-toggle="collapse" data-bs-target="#individualDates" aria-expanded="false"
                             aria-controls="individualDates">
-                            <span class="bi bi-calendar schedule_icon"></span>
+                            <span class="bi bi-calendar schedule_icon d-inline-flex align-items-center lh-1"></span>
                             <span class="visually-hidden">{{ translate('ShowHideNavigation') }}</span>
                         </a>
                     </div>
@@ -348,7 +346,7 @@
 
                 <div id="reservations" class="col-md-10 col-sm-12">
                     {% block reservations %}
-                        {% include 'Schedule/schedule-reservations-grid.twig' %}
+                        {% include 'components/schedule/schedule-reservations-grid.twig' %}
                     {% endblock %}
                 </div>
             </div>
@@ -405,7 +403,7 @@ opacity-75">
     <span aria-hidden="true">{{ translate('Working') }}</span>
 </div>
 
-{% include 'javascript-includes.twig' with {Select2: true, Clear: true, DatePicker: true} %}
+{% include 'javascript-includes.twig' %}
 
 {% block scripts_before %}
 
@@ -491,5 +489,4 @@ opacity-75">
     OnSelect: 'dpDateChanged',
     FirstDay: FirstWeekday
 }) }}
-
-{% include 'globalfooter.twig' %}
+{% endblock %}
