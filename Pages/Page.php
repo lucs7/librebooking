@@ -484,6 +484,9 @@ abstract class Page implements IPage
      */
     private function EchoRenderEngineIndicator(string $engine, string $color): void
     {
+        if (!isset($_GET['debug'])) {
+            return;
+        }
 
         echo '<div style="position:fixed;bottom:0;right:0;z-index:99999;'
             . 'background:' . $color . ';color:#fff;font:12px/1.4 sans-serif;'
