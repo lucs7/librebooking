@@ -11,7 +11,7 @@
 <h1 id='scheduleName' class='text-center'></h1>
 
 {% if Format == 1 %}
-  {{ render_partial('Schedule/schedule-reservations-grid-static.tpl', _context) }}
+  {% include 'components/schedule/schedule-reservations-grid-static.twig' %}
 {% else %}
   {% set TodaysDate = now() %}
   {% for date in BoundDates %}

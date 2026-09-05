@@ -1,10 +1,10 @@
 {# schedule-week-condensed.tpl #}
-{% extends 'Schedule/schedule.twig' %}
+{% extends 'pages/schedule/schedule.twig' %}
 
 {% block legend %}{% endblock %}
 
 {% block reservations %}
-{% import 'Schedule/_slot_macros_condensed.twig' as slot %}
+{% import 'components/schedule/slot_macros_week-condensed.twig' as slot %}
 
 {% set TodaysDate = now() %}
 {% set columnWidth = (1 / ((BoundDates|default([])|length) + 1)) * 100 %}

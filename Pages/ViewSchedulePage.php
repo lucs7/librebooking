@@ -9,9 +9,9 @@ class ViewSchedulePage extends SchedulePage
     private $userRepository;
 
     private $_styles = [
-        ScheduleStyle::Wide->value => 'Schedule/schedule-days-horizontal.tpl',
-        ScheduleStyle::Tall->value => 'Schedule/schedule-flipped.tpl',
-        ScheduleStyle::CondensedWeek->value => 'Schedule/schedule-week-condensed.tpl',
+        ScheduleStyle::Wide->value => 'pages/schedule/schedule-wide.twig',
+        ScheduleStyle::Tall->value => 'pages/schedule/schedule-tall.twig',
+        ScheduleStyle::CondensedWeek->value => 'pages/schedule/schedule-week-condensed.twig',
     ];
 
     public function __construct()
@@ -61,16 +61,16 @@ class ViewSchedulePage extends SchedulePage
 
         if ($this->IsMobile && !$this->IsTablet) {
             if ($this->ScheduleStyle == ScheduleStyle::Tall) {
-                $this->Display('Schedule/schedule-flipped.tpl');
+                $this->Display('pages/schedule/schedule-tall.twig');
             } else {
-                $this->Display('Schedule/schedule-mobile.tpl');
+                $this->Display('pages/schedule/schedule-mobile.twig');
             }
         } else {
             $styleValue = $this->ScheduleStyle->value;
             if (array_key_exists($styleValue, $this->_styles)) {
                 $this->Display($this->_styles[$styleValue]);
             } else {
-                $this->Display('Schedule/schedule.tpl');
+                $this->Display('pages/schedule/schedule.twig');
             }
         }
     }

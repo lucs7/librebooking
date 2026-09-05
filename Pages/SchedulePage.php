@@ -237,9 +237,9 @@ class SchedulePage extends ActionPage implements ISchedulePage
     protected $_presenter;
 
     private $_styles = [
-        ScheduleStyle::Wide->value => 'Schedule/schedule-days-horizontal.tpl',
-        ScheduleStyle::Tall->value => 'Schedule/schedule-flipped.tpl',
-        ScheduleStyle::CondensedWeek->value => 'Schedule/schedule-week-condensed.tpl',
+        ScheduleStyle::Wide->value => 'pages/schedule/schedule-wide.twig',
+        ScheduleStyle::Tall->value => 'pages/schedule/schedule-tall.twig',
+        ScheduleStyle::CondensedWeek->value => 'pages/schedule/schedule-week-condensed.twig',
     ];
 
     /**
@@ -313,16 +313,16 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
         if ($this->IsMobile && !$this->IsTablet) {
             if ($this->ScheduleStyle == ScheduleStyle::Tall) {
-                $this->Display('Schedule/schedule-flipped.tpl');
+                $this->Display('pages/schedule/schedule-tall.twig');
             } else {
-                $this->Display('Schedule/schedule-mobile.tpl');
+                $this->Display('pages/schedule/schedule-mobile.twig');
             }
         } else {
             $styleValue = $this->ScheduleStyle->value;
             if (array_key_exists($styleValue, $this->_styles)) {
                 $this->Display($this->_styles[$styleValue]);
             } else {
-                $this->Display('Schedule/schedule.tpl');
+                $this->Display('pages/schedule/schedule.twig');
             }
         }
 
@@ -469,7 +469,7 @@ class SchedulePage extends ActionPage implements ISchedulePage
 
     public function SetScheduleStyle(ScheduleStyle $style): void
     {
-        // Phones render schedule-mobile.tpl for every style except Tall, and that
+        // Phones render schedule-mobile.twig for every style except Tall, and that
         // template is the Standard layout. Keep the effective style aligned with
         // the template that is actually rendered so that the active style control
         // and the scheduleStyle passed to schedule.js both describe it. The stored
