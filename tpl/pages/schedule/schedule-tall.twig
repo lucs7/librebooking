@@ -1,8 +1,8 @@
-{# schedule-flipped.tpl #}
-{% extends 'Schedule/schedule.twig' %}
+{# schedule-tall.tpl #}
+{% extends 'pages/schedule/schedule.twig' %}
 
 {% block reservations %}
-{% import 'Schedule/_slot_macros.twig' as slot %}
+{% import 'components/schedule/slot_macros.twig' as slot %}
 
 {% set TodaysDate = now() %}
 

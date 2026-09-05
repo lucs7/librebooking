@@ -1,7 +1,7 @@
 <!-- schedule-reservations-grid.tpl -->
 {# standard interactive schedule grid.
    The literal comment above mirrors the Smarty .tpl first line byte-for-byte. #}
-{% import 'Schedule/_slot_macros.twig' as slot %}
+{% import 'components/schedule/slot_macros.twig' as slot %}
 
 {% set TodaysDate = now() %}
 {# Is this a view page and guests are allowed to book #}
