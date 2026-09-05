@@ -12,36 +12,35 @@
   this file's own macros even when imported from another template.
 #}
 
-{% macro displayPastTime(Slot, Href, SlotRef, ResourceId) %}
-    <td ref="{{ SlotRef }}" class="pasttime slot" data-href="{{ Href|raw }}"
+{#
+  The four leaf states below only ever differ by CSS class — same markup,
+  same data attributes — so they share one implementation. They're kept as
+  separate zero-arg-beyond-slot macros (rather than inlining the class into
+  dispatch()) so each still has a name matching DisplaySlotFactory's output,
+  in case something needs to call one directly in the future.
+#}
+{% macro renderSlot(Slot, Href, SlotRef, ResourceId, className) %}
+    <td ref="{{ SlotRef }}" class="{{ className }} slot" data-href="{{ Href|raw }}"
         data-start="{{ Slot.BeginDate().Format('Y-m-d H:i:s')|url_encode }}"
         data-end="{{ Slot.EndDate().Format('Y-m-d H:i:s')|url_encode }}" data-min="{{ Slot.BeginDate().Timestamp() }}"
         data-max="{{ Slot.EndDate().Timestamp() }}" data-resourceId="{{ ResourceId }}">&nbsp;
     </td>
+{% endmacro %}
+
+{% macro displayPastTime(Slot, Href, SlotRef, ResourceId) %}
+    {{ _self.renderSlot(Slot, Href, SlotRef, ResourceId, 'pasttime') }}
 {% endmacro %}
 
 {% macro displayReservable(Slot, Href, SlotRef, ResourceId) %}
-    <td class="reservable clickres slot" ref="{{ SlotRef }}" data-href="{{ Href|raw }}"
-        data-start="{{ Slot.BeginDate().Format('Y-m-d H:i:s')|url_encode }}"
-        data-end="{{ Slot.EndDate().Format('Y-m-d H:i:s')|url_encode }}" data-min="{{ Slot.BeginDate().Timestamp() }}"
-        data-max="{{ Slot.EndDate().Timestamp() }}" data-resourceId="{{ ResourceId }}">&nbsp;
-    </td>
+    {{ _self.renderSlot(Slot, Href, SlotRef, ResourceId, 'reservable clickres') }}
 {% endmacro %}
 
 {% macro displayRestricted(Slot, Href, SlotRef, ResourceId) %}
-    <td ref="{{ SlotRef }}" class="restricted slot" data-href="{{ Href|raw }}"
-        data-start="{{ Slot.BeginDate().Format('Y-m-d H:i:s')|url_encode }}"
-        data-end="{{ Slot.EndDate().Format('Y-m-d H:i:s')|url_encode }}" data-min="{{ Slot.BeginDate().Timestamp() }}"
-        data-max="{{ Slot.EndDate().Timestamp() }}" data-resourceId="{{ ResourceId }}">&nbsp;
-    </td>
+    {{ _self.renderSlot(Slot, Href, SlotRef, ResourceId, 'restricted') }}
 {% endmacro %}
 
 {% macro displayUnreservable(Slot, Href, SlotRef, ResourceId) %}
-    <td ref="{{ SlotRef }}" class="unreservable slot" data-href="{{ Href|raw }}"
-        data-start="{{ Slot.BeginDate().Format('Y-m-d H:i:s')|url_encode }}"
-        data-end="{{ Slot.EndDate().Format('Y-m-d H:i:s')|url_encode }}" data-min="{{ Slot.BeginDate().Timestamp() }}"
-        data-max="{{ Slot.EndDate().Timestamp() }}" data-resourceId="{{ ResourceId }}">&nbsp;
-    </td>
+    {{ _self.renderSlot(Slot, Href, SlotRef, ResourceId, 'unreservable') }}
 {% endmacro %}
 
 {#
