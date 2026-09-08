@@ -1,4 +1,7 @@
-{% include 'globalheader.twig' with {HideNavBar: true, cssFiles: 'css/schedule.css'} %}
+{% extends 'layouts/display.twig' %}
+{% set cssFiles = 'css/schedule.css' %}
+
+{% block content %}
 
 <div id="page-resource-display-resource">
 
@@ -13,10 +16,7 @@
         <div id="placeholder"></div>
 </div>
 
-<div class="modal" id="wait-modal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
-        data-bs-backdrop="static" aria-hidden="true">
-        {% include 'wait-box.twig' with {translateKey: 'Working'} %}
-</div>
+{% include 'components/common/wait-box-modal.twig' with {id: 'wait-modal'} %}
 
 {% include 'javascript-includes.twig' %}
 {{ jsfile(src='resourceDisplay.js') }}
@@ -40,5 +40,4 @@
                 });
         });
 </script>
-
-{% include 'globalfooter.twig' %}
+{% endblock %}

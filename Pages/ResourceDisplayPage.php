@@ -194,7 +194,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
 
     public function DisplayLogin()
     {
-        $this->Display('ResourceDisplay/resource-display-login.tpl');
+        $this->Display('pages/resource-display/resource-display-login.twig');
     }
 
     public function EnforceCSRFCheck()
@@ -272,7 +272,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         $this->Set('RequiresCheckin', $requiresCheckin);
         $this->Set('CheckinReferenceNumber', $checkinReferenceNumber);
         $this->Set('NoTitle', Resources::GetInstance()->GetString('NoTitleLabel'));
-        $this->Display('ResourceDisplay/resource-display-resource.tpl');
+        $this->Display('components/resource-display/resource-display-resource.twig');
     }
 
     public function SetIsAvailableNow($availableNow)
@@ -282,7 +282,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
 
     public function DisplayNotEnabled()
     {
-        $this->Display('ResourceDisplay/resource-display-not-enabled.tpl');
+        $this->Display('components/resource-display/resource-display-not-enabled.twig');
     }
 
     public function DisplayResourceShell()
@@ -295,7 +295,7 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         }
         $this->Set('MinDate', Date::Now());
         $this->Set('MaxFutureDate', Date::Now()->AddDays($futureDays - 1));
-        $this->Display('ResourceDisplay/resource-display-shell.tpl');
+        $this->Display('pages/resource-display/resource-display-shell.twig');
     }
 
     public function GetTimezone()
@@ -371,6 +371,6 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
 
     public function DisplayInstructions()
     {
-        $this->Display('ResourceDisplay/resource-display-instructions.tpl');
+        $this->Display('pages/resource-display/resource-display-instructions.twig');
     }
 }
