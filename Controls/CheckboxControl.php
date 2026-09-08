@@ -8,6 +8,6 @@ class CheckboxControl extends Control
     {
         $this->Set('name', FormKeys::Evaluate($this->Get('name-key')));
         $this->Set('label', Resources::GetInstance()->GetString($this->Get('label-key')));
-        $this->Display('Controls/Checkbox.tpl');
+        $this->Display('components/controls/checkbox.twig');
     }
 }
