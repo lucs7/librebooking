@@ -31,6 +31,6 @@ class RecurrenceControl extends Control
             ]
         );
 
-        $this->Display('Controls/RecurrenceDiv.tpl');
+        $this->Display('components/controls/recurrence-div.twig');
     }
 }
