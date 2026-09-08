@@ -1,4 +1,10 @@
-{% embed 'components/common/modal.twig' with {id: 'wait-box', centered: true, static: true} %}
+{#
+  The wait-box wrapped in a static, centered modal.
+
+  `id` defaults to 'wait-box'; pass it when the page's JS toggles the modal by
+  a different id (the resource display uses 'wait-modal' and 'waitModal').
+#}
+{% embed 'components/common/modal.twig' with {id: id|default('wait-box'), centered: true, static: true} %}
 {% block body %}
   {{ include('components/common/wait-box.twig') }}
 {% endblock %}

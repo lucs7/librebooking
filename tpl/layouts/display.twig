@@ -1,0 +1,23 @@
+{#
+  Base page layout: header (doctype/head/navbar) + main content + footer.
+  Pages extend this and override the `content` block. Override `header`/`footer`
+  if a page needs a different chrome (e.g. no navbar).
+#}
+
+<!doctype html>
+<html lang='{{ HtmlLang }}' dir='{{ HtmlTextDirection }}'>
+  {{ include('partials/head.twig') }}
+
+  <body data-bs-theme='{{ cssTheme }}'>
+    {% block header %}
+    {% endblock %}
+
+    <main id='' class='container-fluid'>
+      {% block content %}{% endblock %}
+    </main>
+
+    {% block footer %}
+      {{ include('partials/footer.twig') }}
+    {% endblock %}
+  </body>
+</html>
