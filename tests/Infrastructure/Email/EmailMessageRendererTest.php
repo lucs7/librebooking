@@ -62,8 +62,8 @@ class EmailMessageRendererTest extends TestBase
 
         $html = $msg->exposeFetchTemplate('AccountActivation.tpl');
 
-        $this->assertStringStartsWith('<?xml version="1.0"', $html);
-        $this->assertStringContainsString('<!DOCTYPE html', $html);
+        $this->assertStringStartsWith('<!doctype html>', $html);
+        $this->assertStringContainsString('<html lang=', $html);
         $this->assertStringContainsString('</body>', $html);
         $this->assertStringEndsWith("</html>\n", $html);
         // The body itself is inside the layout, not appended after it.
@@ -80,7 +80,7 @@ class EmailMessageRendererTest extends TestBase
         $html = $msg->exposeFetchTemplate('AccountActivation.tpl', false);
 
         $this->assertStringContainsString('activate your account', $html);
-        $this->assertStringNotContainsString('<!DOCTYPE html', $html);
+        $this->assertStringNotContainsString('<!doctype html>', $html);
     }
 
     /**

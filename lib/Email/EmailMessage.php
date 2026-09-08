@@ -40,6 +40,10 @@ abstract class EmailMessage implements IEmailMessage
         }
         $this->Set('ScriptUrl', Configuration::Instance()->GetScriptUrl());
         $this->Set('Charset', $resources->Charset);
+        // Mirrors Page::__construct so the layout can declare the recipient's
+        // language and reading direction instead of hardcoding English/LTR.
+        $this->Set('HtmlLang', $resources->HtmlLang);
+        $this->Set('HtmlTextDirection', $resources->TextDirection);
         $appTitle = Configuration::Instance()->GetKey(ConfigKeys::APP_TITLE);
         $this->Set('AppTitle', (empty($appTitle) ? 'LibreBooking' : $appTitle));
     }
