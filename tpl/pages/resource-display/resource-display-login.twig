@@ -1,4 +1,6 @@
-{{ include('globalheader.twig', {HideNavBar: true}) }}
+{% extends 'layouts/display.twig' %}
+
+{% block content %}
 
 <div id="page-resource-display-shell">
 
@@ -50,10 +52,7 @@
     </div>
 </div>
 
-<div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel" data-bs-backdrop="static"
-    aria-hidden="true">
-    {{ include('components/common/wait-box.twig') }}
-</div>
+{{ include('components/common/wait-box-modal.twig', {id: 'waitModal'}) }}
 
 {{ include('javascript-includes.twig') }}
 {{ jsfile(src: 'resourceDisplay.js') }}
@@ -65,5 +64,4 @@
         resourceDisplay.init();
     });
 </script>
-
-{{ include('globalfooter.twig') }}
+{% endblock %}
