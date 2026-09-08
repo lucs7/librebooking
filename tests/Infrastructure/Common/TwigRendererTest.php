@@ -33,13 +33,12 @@ class TwigRendererTest extends TestCase
     {
         $renderer = new TwigRenderer();
         $renderer->environment()->setLoader(
-            new \Twig\Loader\ArrayLoader(['Email/emailheader.twig' => 'TWIG_HEADER'])
+            new \Twig\Loader\ArrayLoader(['some/template.twig' => 'FROM_TWIG'])
         );
-        $renderer->assign('Charset', 'UTF-8');
 
-        $result = $renderer->fetch('Email/emailheader.tpl');
+        $result = $renderer->fetch('some/template.tpl');
 
-        $this->assertSame('TWIG_HEADER', $result);
+        $this->assertSame('FROM_TWIG', $result);
     }
 
     /**

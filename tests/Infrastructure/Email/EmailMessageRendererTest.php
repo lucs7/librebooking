@@ -53,6 +53,37 @@ class EmailMessageRendererTest extends TestBase
     }
 
     /**
+     * FetchTemplate() must render the body into the email layout rather than
+     * concatenating header/footer fragments around it.
+     */
+    public function testFetchTemplateWrapsBodyInLayout(): void
+    {
+        $msg = $this->makeMessage();
+
+        $html = $msg->exposeFetchTemplate('AccountActivation.tpl');
+
+        $this->assertStringStartsWith('<?xml version="1.0"', $html);
+        $this->assertStringContainsString('<!DOCTYPE html', $html);
+        $this->assertStringContainsString('</body>', $html);
+        $this->assertStringEndsWith("</html>\n", $html);
+        // The body itself is inside the layout, not appended after it.
+        $this->assertStringContainsString('activate your account', $html);
+    }
+
+    /**
+     * $includeHeaders = false must still return the bare body, unwrapped.
+     */
+    public function testFetchTemplateWithoutHeadersReturnsBareBody(): void
+    {
+        $msg = $this->makeMessage();
+
+        $html = $msg->exposeFetchTemplate('AccountActivation.tpl', false);
+
+        $this->assertStringContainsString('activate your account', $html);
+        $this->assertStringNotContainsString('<!DOCTYPE html', $html);
+    }
+
+    /**
      * Charset() must read from the TwigRenderer (not the BC alias).
      * In test environments FakeResources has no Charset, so the result may be null;
      * what matters is the method delegates to the renderer without crashing.
@@ -100,5 +131,10 @@ class TestableEmailMessage extends EmailMessage
     public function exposeBCEmail(): SmartyPage
     {
         return $this->email;
+    }
+
+    public function exposeFetchTemplate(string $templateName, bool $includeHeaders = true): string
+    {
+        return $this->FetchTemplate($templateName, $includeHeaders);
     }
 }

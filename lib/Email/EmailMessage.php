@@ -3,6 +3,11 @@
 abstract class EmailMessage implements IEmailMessage
 {
     /**
+     * Document chrome every message body is rendered into.
+     */
+    private const LAYOUT = 'layouts/email.twig';
+
+    /**
      * @var SmartyPage
      */
     protected $email;
@@ -46,13 +51,20 @@ abstract class EmailMessage implements IEmailMessage
         $this->email->assign($var, $value);
     }
 
+    /**
+     * Renders the localized message body and, unless the caller opts out, wraps it
+     * in the email layout instead of concatenating a header and footer fragment
+     * around it.
+     */
     protected function FetchTemplate($templateName, $includeHeaders = true)
     {
-        $header = $includeHeaders ? $this->renderer->fetch('Email/emailheader.tpl') : '';
         $body = $this->renderer->fetchLocalized($templateName, $this->enforceCustomTemplate);
-        $footer = $includeHeaders ? $this->renderer->fetch('Email/emailfooter.tpl') : '';
 
-        return $header . $body . $footer;
+        if (!$includeHeaders) {
+            return $body;
+        }
+
+        return $this->renderer->render(self::LAYOUT, ['EmailBody' => $body]);
     }
 
     protected function Translate($key, $args = [])
