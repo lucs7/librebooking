@@ -1,0 +1,38 @@
+{#
+  Email layout: the XHTML document chrome (head, inline styles, body) that wraps
+  every outgoing message. Replaces the emailheader/emailfooter fragment pair that
+  EmailMessage used to concatenate around the rendered body.
+
+  Message bodies live in lang/<code>/ and are resolved on their own (the en_us set
+  as Twig, the remaining languages still as Smarty), so EmailMessage renders the
+  body first and passes it in as `EmailBody`. A Twig-only template can extend this
+  layout and override `content` instead.
+-#}
+<?xml version="1.0" encoding="{{ Charset }}"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset={{ Charset }}" />
+    <style type="text/css">
+
+      body {
+          font: 13px Helvetica, "Lucida Grande", Verdana, Arial, sans-serif;
+          background-color: #fefefe;
+          color: #333333;
+          height: 100%;
+      }
+
+      div.resource-image img
+      {
+          padding-bottom:25px;
+          max-height:200px;
+          max-width:200px;
+      }
+
+    </style>
+  </head>
+  <body>
+    {%- block content %}{{ EmailBody|raw }}{% endblock %}
+  </body>
+</html>
