@@ -11,11 +11,11 @@ class AttributeControl extends Control
 
     public function PageLoad()
     {
-        $templates[CustomAttributeTypes::CHECKBOX] = 'Checkbox.tpl';
-        $templates[CustomAttributeTypes::MULTI_LINE_TEXTBOX] = 'MultiLineTextbox.tpl';
-        $templates[CustomAttributeTypes::SELECT_LIST] = 'SelectList.tpl';
-        $templates[CustomAttributeTypes::SINGLE_LINE_TEXTBOX] = 'SingleLineTextbox.tpl';
-        $templates[CustomAttributeTypes::DATETIME] = 'Date.tpl';
+        $templates[CustomAttributeTypes::CHECKBOX] = 'checkbox.twig';
+        $templates[CustomAttributeTypes::MULTI_LINE_TEXTBOX] = 'multi-line-textbox.twig';
+        $templates[CustomAttributeTypes::SELECT_LIST] = 'select-list.twig';
+        $templates[CustomAttributeTypes::SINGLE_LINE_TEXTBOX] = 'single-line-textbox.twig';
+        $templates[CustomAttributeTypes::DATETIME] = 'date.twig';
 
         /** @var Attribute|CustomAttribute $attribute */
         $attribute = $this->Get('attribute');
@@ -31,6 +31,6 @@ class AttributeControl extends Control
 
         $this->Set('attributeName', sprintf('%s%s[%s]', $prefix, FormKeys::ATTRIBUTE_PREFIX, $attribute->Id()));
         $this->Set('attributeId', sprintf('%s%s%s', $idPrefix, FormKeys::ATTRIBUTE_PREFIX, $attribute->Id()));
-        $this->Display('Controls/Attributes/' . $templates[$attribute->Type()]);
+        $this->Display('components/controls/attributes/' . $templates[$attribute->Type()]);
     }
 }

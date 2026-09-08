@@ -168,9 +168,9 @@ class DatePickerSetupControl extends Control
         $this->SetDefault('MaxDate', null);
 
         if (!$altId) {
-            $this->Display('Controls/DatePickerSetup.tpl');
+            $this->Display('components/controls/date-picker-setup.twig');
         } else {
-            $this->Display('Controls/DateSetup.tpl');
+            $this->Display('components/controls/date-setup.twig');
         }
     }
 

@@ -19,7 +19,7 @@
 
         {% endif %}
 
-        {% if AltId != '' %}
+        {% if AltId is not empty %}
             $controlId.on('change', function() {
                 var dateVal = $controlId.val();
                 $altId.val(dateVal);
