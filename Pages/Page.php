@@ -409,7 +409,7 @@ abstract class Page implements IPage
         } else {
             $this->Set('error', json_encode(['response' => $objectToSerialize, 'errors' => $error]));
         }
-        $this->RenderTemplate('json_data.tpl');
+        $this->RenderTemplate('layouts/json_data.twig');
     }
 
     /**
@@ -423,7 +423,7 @@ abstract class Page implements IPage
 
         $this->Set('data', json_encode($objectToSerialize));
 
-        $this->RenderTemplate('json_data.tpl');
+        $this->RenderTemplate('layouts/json_data.twig');
     }
 
     /**
