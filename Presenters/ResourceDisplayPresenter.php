@@ -23,14 +23,6 @@ class ResourceDisplayPresenter extends ActionPresenter
      */
     private $reservationService;
     /**
-     * @var IAuthorizationService
-     */
-    private $authorizationService;
-    /**
-     * @var IWebAuthentication
-     */
-    private $authentication;
-    /**
      * @var IScheduleRepository
      */
     private $scheduleRepository;
@@ -73,8 +65,6 @@ class ResourceDisplayPresenter extends ActionPresenter
         IResourceDisplayPage $page,
         IResourceRepository $resourceRepository,
         IReservationService $reservationService,
-        IAuthorizationService $authorizationService,
-        IWebAuthentication $authentication,
         IScheduleRepository $scheduleRepository,
         IDailyLayoutFactory $dailyLayoutFactory,
         IGuestUserService $guestUserService,
@@ -86,8 +76,6 @@ class ResourceDisplayPresenter extends ActionPresenter
         $this->page = $page;
         $this->resourceRepository = $resourceRepository;
         $this->reservationService = $reservationService;
-        $this->authorizationService = $authorizationService;
-        $this->authentication = $authentication;
         $this->scheduleRepository = $scheduleRepository;
         $this->dailyLayoutFactory = $dailyLayoutFactory;
         $this->guestUserService = $guestUserService;
@@ -95,8 +83,6 @@ class ResourceDisplayPresenter extends ActionPresenter
         $this->reservationRepository = $reservationRepository;
         $this->termsOfServiceRepository = $termsOfServiceRepository;
 
-        parent::AddAction('login', 'Login');
-        parent::AddAction('activate', 'Activate');
         parent::AddAction('reserve', 'Reserve');
         parent::AddAction('checkin', 'Checkin');
     }
@@ -108,40 +94,6 @@ class ResourceDisplayPresenter extends ActionPresenter
             $this->page->DisplayResourceShell();
         } else {
             $this->page->DisplayInstructions();
-        }
-    }
-
-    public function Login()
-    {
-        $username = $this->page->GetEmail();
-        $password = $this->page->GetPassword();
-
-        $isValid = $this->authentication->Validate($username, $password);
-
-        if ($isValid) {
-            $this->authentication->Login($username, new WebLoginContext(new LoginData()));
-            $user = ServiceLocator::GetServer()->GetUserSession();
-            $resourceList = [];
-            $resources = $this->resourceRepository->GetResourceList();
-            foreach ($resources as $resource) {
-                if ($this->authorizationService->CanEditForResource($user, $resource)) {
-                    $resourceList[] = $resource;
-                }
-            }
-
-            $this->page->BindResourceList($resourceList);
-        } else {
-            $this->page->BindInvalidLogin();
-        }
-    }
-
-    public function Activate()
-    {
-        $resource = $this->resourceRepository->LoadById($this->page->GetResourceId());
-        if ($this->authorizationService->CanEditForResource(ServiceLocator::GetServer()->GetUserSession(), $resource)) {
-            $resource->EnableDisplay();
-            $this->resourceRepository->Update($resource);
-            $this->page->SetActivatedResourceId($resource->GetPublicId());
         }
     }
 

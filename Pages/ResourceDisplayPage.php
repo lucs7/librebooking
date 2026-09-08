@@ -4,8 +4,6 @@ require_once(ROOT_DIR . 'Presenters/ResourceDisplayPresenter.php');
 
 interface IResourceDisplayPage extends IPage, IActionPage
 {
-    public function DisplayLogin();
-
     /**
      * @return string
      */
@@ -20,23 +18,6 @@ interface IResourceDisplayPage extends IPage, IActionPage
      * @return string
      */
     public function GetEmail();
-
-    /**
-     * @return string
-     */
-    public function GetPassword();
-
-    public function BindInvalidLogin();
-
-    /**
-     * @param BookableResource[] $resourceList
-     */
-    public function BindResourceList($resourceList);
-
-    /**
-     * @param $publicId
-     */
-    public function SetActivatedResourceId($publicId);
 
     public function BindResource(BookableResource $resource);
 
@@ -149,8 +130,6 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
                 new ReservationViewRepository(),
                 new ReservationListingFactory()
             ),
-            PluginManager::Instance()->LoadAuthorization(),
-            new WebAuthentication(PluginManager::Instance()->LoadAuthentication()),
             new ScheduleRepository(),
             new DailyLayoutFactory(),
             new GuestUserService(
@@ -192,11 +171,6 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
         return $this->GetForm(FormKeys::RESOURCE_ID);
     }
 
-    public function DisplayLogin()
-    {
-        $this->Display('pages/resource-display/resource-display-login.twig');
-    }
-
     public function EnforceCSRFCheck()
     {
         // no op
@@ -205,34 +179,6 @@ class ResourceDisplayPage extends ActionPage implements IResourceDisplayPage, IR
     public function GetEmail()
     {
         return $this->GetForm(FormKeys::EMAIL);
-    }
-
-    public function GetPassword()
-    {
-        $password = $this->GetRawForm(FormKeys::PASSWORD);
-
-        return is_string($password) ? $password : '';
-    }
-
-    public function BindInvalidLogin()
-    {
-        $this->SetJson(['error' => true]);
-    }
-
-    public function BindResourceList($resourceList)
-    {
-        $resources = [];
-        foreach ($resourceList as $resource) {
-            $resources[] = ['id' => $resource->GetId(), 'name' => $resource->GetName()];
-        }
-
-        $this->SetJson(['resources' => $resources]);
-    }
-
-    public function SetActivatedResourceId($publicId)
-    {
-        $resourceDisplayUrl = Configuration::Instance()->GetScriptUrl() . '/' . Pages::DISPLAY_RESOURCE . '?' . QueryStringKeys::RESOURCE_ID . '=' . $publicId;
-        $this->SetJson(['location' => $resourceDisplayUrl]);
     }
 
     public function GetPublicResourceId()
