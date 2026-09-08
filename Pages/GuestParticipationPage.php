@@ -99,7 +99,7 @@ class GuestParticipationPage extends Page implements IGuestParticipationPage
 
     public function DisplayParticipation()
     {
-        $this->Display('guest-participation.tpl');
+        $this->Display('pages/guest-participation.twig');
     }
 
     public function DisplayResult($results)
