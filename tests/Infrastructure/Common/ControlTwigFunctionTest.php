@@ -117,7 +117,7 @@ class ControlTwigFunctionTest extends TestBase
         $this->assertNotEmpty($twigActual);
 
         // Structural parity: both engines produce the same normalised HTML.
-        require_once(__DIR__ . '/../../Golden/HtmlNormalizer.php');
+        require_once(__DIR__ . '/HtmlNormalizer.php');
         $this->assertSame(
             HtmlNormalizer::normalize($smartyExpected),
             HtmlNormalizer::normalize($twigActual)

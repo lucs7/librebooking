@@ -140,7 +140,7 @@ class RenderPartialTwigFunctionTest extends TestBase
         $actual = $env->render('t', ['vars' => $vars]);
 
         // Structural parity: both engines produce equivalent normalised HTML.
-        require_once(__DIR__ . '/../../Golden/HtmlNormalizer.php');
+        require_once(__DIR__ . '/HtmlNormalizer.php');
         $this->assertSame(
             HtmlNormalizer::normalize($expected),
             HtmlNormalizer::normalize($actual)
