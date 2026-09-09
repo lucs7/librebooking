@@ -38,6 +38,6 @@ class ExternalAuthLoginPage extends Page implements ILoginBasePage
     public function ShowError($messages)
     {
         $this->Set('Errors', $messages);
-        $this->Display('ExternalAuth/external-login-error.tpl');
+        $this->Display('pages/external-login-error.twig');
     }
 }
