@@ -1,5 +1,6 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
 use Sabre\VObject\Component\VAlarm;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Component\VEvent;
@@ -18,14 +19,20 @@ class CalendarExportDisplay extends Page
     /**
      * @param iCalendarReservationView[] $reservations
      * @param string|null $calendarName Optional display name rendered as X-WR-CALNAME
+     * @param IcsMethod $method PUBLISH by default. Pull-based exports and subscription feeds
+     *                          (CalendarExportPage, CalendarSubscriptionPage) always use the
+     *                          PUBLISH default, since fetching a calendar file is never a
+     *                          scheduling action addressed to a specific attendee — only a
+     *                          lifecycle notification email sent to a known attendee (see
+     *                          ReservationEmailMessage::GetIcsMethod()) may use REQUEST/CANCEL.
      */
-    public function Render(array $reservations, ?string $calendarName = null): string
+    public function Render(array $reservations, ?string $calendarName = null, IcsMethod $method = IcsMethod::PUBLISH): string
     {
         // Values passed as constructor children are merged over getDefaults(),
         // replacing the PRODID that VCalendar would otherwise generate.
         $vcal = new VCalendar([
             'PRODID' => '-//LibreBooking//NONSGML ' . Configuration::VERSION . '//EN',
-            'METHOD' => 'REQUEST',
+            'METHOD' => $method->value,
         ]);
 
         if ($calendarName !== null && $calendarName !== '') {
@@ -54,10 +61,33 @@ class CalendarExportDisplay extends Page
             $event->add('DTEND', $res->DateEnd->Format($isoFormat));
             $event->add('LAST-MODIFIED', $res->LastModified->Format($isoFormat));
             $event->add('LOCATION', $res->Location);
-            $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, ['CN' => $res->Organizer]);
-            $event->add('STATUS', $res->IsPending ? 'TENTATIVE' : 'CONFIRMED');
+            if (!empty($res->OrganizerEmail)) {
+                $organizerParams = ['CN' => $res->Organizer];
+                if (!empty($res->OrganizerSentBy)) {
+                    // RFC 5545 §3.2.18: SENT-BY names the calendar user acting on the
+                    // organizer's behalf — the site's own address, technically responsible
+                    // for delivering this message.
+                    $organizerParams['SENT-BY'] = 'mailto:' . $res->OrganizerSentBy;
+                }
+                $event->add('ORGANIZER', 'mailto:' . $res->OrganizerEmail, $organizerParams);
+            }
+            foreach ($res->Attendees as $attendee) {
+                $isChair = $attendee['IsChair'] ?? false;
+                $accepted = $attendee['Accepted'] ?? false;
+                $event->add('ATTENDEE', 'mailto:' . $attendee['Email'], [
+                    'CN' => $attendee['Name'],
+                    'ROLE' => $isChair ? 'CHAIR' : 'REQ-PARTICIPANT',
+                    'PARTSTAT' => ($isChair || $accepted) ? 'ACCEPTED' : 'NEEDS-ACTION',
+                    // The chair (reservation owner) never needs to RSVP.
+                    'RSVP' => ($isChair || $accepted) ? 'FALSE' : 'TRUE',
+                ]);
+            }
+            $event->add('STATUS', $res->IsCancelled ? 'CANCELLED' : ($res->IsPending ? 'TENTATIVE' : 'CONFIRMED'));
             $event->add('SUMMARY', $res->Summary);
-            $event->add('SEQUENCE', 0);
+            // RFC 5546 §3.2.5: CANCEL must carry a SEQUENCE strictly greater than the last
+            // REQUEST for the same UID so calendar clients know to apply it. Since LibreBooking
+            // always emits SEQUENCE:0 on REQUEST, CANCEL uses 1.
+            $event->add('SEQUENCE', $method === IcsMethod::CANCEL ? 1 : 0);
             $event->add('URL', $res->ReservationUrl);
             $event->add('X-MICROSOFT-CDO-BUSYSTATUS', 'BUSY');
 
@@ -86,6 +116,14 @@ class CalendarExportDisplay extends Page
                     // skip it for this event and keep going.
                     Log::Error('Failed to parse ExtraIcalLines for reservation %s: %s', $res->ReferenceNumber, $e->getMessage());
                 }
+            }
+
+            // RFC 5546 §3.2.1: a PUBLISH VEVENT's ATTENDEE list MUST be empty. Enforced here,
+            // after every possible source of ATTENDEE data (participants/invitees/guests above,
+            // and plugin-supplied ExtraIcalLines), rather than gating each source individually —
+            // a new attendee source added later gets this invariant for free.
+            if ($method === IcsMethod::PUBLISH) {
+                $event->remove('ATTENDEE');
             }
 
             if ($res->StartReminder !== null) {
