@@ -234,7 +234,7 @@ PHP
             $this->assertEquals('error', $loggingLevel, 'Invalid choice should be replaced with default');
 
             $minimumLetters = $config->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
-            $this->assertEquals(6, $minimumLetters, 'Type conversion should return integer');
+            $this->assertEquals(8, $minimumLetters, 'Type conversion should return integer');
         });
 
         $this->assertLogMessage($errorLogs, "Invalid type for 'app.debug'. Should be 'boolean'", 'app.debug type validation error');
