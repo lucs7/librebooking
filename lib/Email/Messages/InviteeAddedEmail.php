@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
+
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationDeletedEmail.php');
 require_once(ROOT_DIR . 'Domain/Values/InvitationAction.php');
@@ -39,7 +41,7 @@ class InviteeAddedEmail extends ReservationEmailMessage
         return $this->Translate('InviteeAddedSubjectWithResource', [$this->reservationOwner->FullName(), $this->primaryResource->GetName()]);
     }
 
-    public function From()
+    public function ReplyTo()
     {
         return new EmailAddress($this->reservationOwner->EmailAddress(), $this->reservationOwner->FullName());
     }
@@ -73,6 +75,11 @@ class InviteeAddedEmail extends ReservationEmailMessage
             QueryStringKeys::INVITATION_ACTION,
             $action
         );
+    }
+
+    protected function GetIcsMethod(Reservation $currentInstance): IcsMethod
+    {
+        return IcsMethod::REQUEST;
     }
 }
 
@@ -119,7 +126,7 @@ class InviteeRemovedEmail extends ReservationDeletedEmail
         return new EmailAddress($address, $name);
     }
 
-    public function From()
+    public function ReplyTo()
     {
         return new EmailAddress($this->reservationOwner->EmailAddress(), $this->reservationOwner->FullName());
     }
@@ -132,5 +139,10 @@ class InviteeRemovedEmail extends ReservationDeletedEmail
     public function GetTemplateName()
     {
         return 'ReservationDeleted.tpl';
+    }
+
+    protected function GetCancelledAttendee(): ?array
+    {
+        return ['Email' => $this->invitee->EmailAddress(), 'Name' => $this->invitee->FullName()];
     }
 }

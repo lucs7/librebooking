@@ -29,7 +29,7 @@ class GuestDeletedEmail extends ReservationDeletedEmail
         return $this->Translate('ParticipantDeletedSubjectWithResource', [$this->reservationOwner->FullName(), $this->primaryResource->GetName()]);
     }
 
-    public function From()
+    public function ReplyTo()
     {
         return new EmailAddress($this->reservationOwner->EmailAddress(), $this->reservationOwner->FullName());
     }
@@ -37,5 +37,10 @@ class GuestDeletedEmail extends ReservationDeletedEmail
     public function GetTemplateName()
     {
         return 'ReservationInvitation.tpl';
+    }
+
+    protected function GetCancelledAttendee(): ?array
+    {
+        return ['Email' => $this->guestEmail, 'Name' => $this->guestEmail];
     }
 }

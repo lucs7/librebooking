@@ -1,8 +1,9 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
+
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
 
-// TODO: Need a way to unit test this
 class ReservationCreatedEmail extends ReservationEmailMessage
 {
     public function Subject()
@@ -13,5 +14,10 @@ class ReservationCreatedEmail extends ReservationEmailMessage
     protected function GetTemplateName()
     {
         return 'ReservationCreated.tpl';
+    }
+
+    protected function GetIcsMethod(Reservation $currentInstance): IcsMethod
+    {
+        return $this->HasAttendees($currentInstance) ? IcsMethod::REQUEST : IcsMethod::PUBLISH;
     }
 }

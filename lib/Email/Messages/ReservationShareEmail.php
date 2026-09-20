@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
+
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
 
 class ReservationShareEmail extends ReservationEmailMessage
@@ -29,7 +31,7 @@ class ReservationShareEmail extends ReservationEmailMessage
         return $this->Translate('ReservationShareSubject', [$this->reservationSeries->BookedBy()->FullName(), $this->primaryResource->GetName()]);
     }
 
-    public function From()
+    public function ReplyTo()
     {
         return new EmailAddress($this->reservationOwner->EmailAddress(), $this->reservationOwner->FullName());
     }
@@ -37,5 +39,10 @@ class ReservationShareEmail extends ReservationEmailMessage
     public function GetTemplateName()
     {
         return 'ReservationCreated.tpl';
+    }
+
+    protected function GetIcsMethod(Reservation $currentInstance): IcsMethod
+    {
+        return IcsMethod::PUBLISH;
     }
 }

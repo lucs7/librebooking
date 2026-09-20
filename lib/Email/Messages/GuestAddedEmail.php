@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
+
 require_once(ROOT_DIR . 'lib/Email/Messages/ReservationEmailMessage.php');
 
 class GuestAddedEmail extends ReservationEmailMessage
@@ -29,7 +31,7 @@ class GuestAddedEmail extends ReservationEmailMessage
         return $this->Translate('ParticipantAddedSubjectWithResource', [$this->reservationOwner->FullName(), $this->primaryResource->GetName()]);
     }
 
-    public function From()
+    public function ReplyTo()
     {
         return new EmailAddress($this->reservationOwner->EmailAddress(), $this->reservationOwner->FullName());
     }
@@ -46,6 +48,11 @@ class GuestAddedEmail extends ReservationEmailMessage
 
         $this->Set('AcceptUrl', sprintf('%s?%s=%s&%s=%s&%s=%s', Pages::GUEST_INVITATION_RESPONSES, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber(), QueryStringKeys::EMAIL, $this->guestEmail, QueryStringKeys::INVITATION_ACTION, InvitationAction::Accept));
         $this->Set('DeclineUrl', sprintf('%s?%s=%s&%s=%s&%s=%s', Pages::GUEST_INVITATION_RESPONSES, QueryStringKeys::REFERENCE_NUMBER, $currentInstance->ReferenceNumber(), QueryStringKeys::EMAIL, $this->guestEmail, QueryStringKeys::INVITATION_ACTION, InvitationAction::Decline));
+    }
+
+    protected function GetIcsMethod(Reservation $currentInstance): IcsMethod
+    {
+        return IcsMethod::REQUEST;
     }
 }
 
