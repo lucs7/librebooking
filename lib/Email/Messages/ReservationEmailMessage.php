@@ -1,5 +1,7 @@
 <?php
 
+use LibreBooking\Calendar\IcsMethod;
+
 require_once(ROOT_DIR . 'lib/Email/namespace.php');
 require_once(ROOT_DIR . 'Pages/Pages.php');
 require_once(ROOT_DIR . 'Pages/Export/CalendarExportDisplay.php');
@@ -80,6 +82,14 @@ abstract class ReservationEmailMessage extends EmailMessage
 
     public function From()
     {
+        return new EmailAddress(
+            Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS),
+            Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_NAME)
+        );
+    }
+
+    public function ReplyTo()
+    {
         $bookedBy = $this->reservationSeries->BookedBy();
         if ($bookedBy != null) {
             $name = new FullName($bookedBy->FirstName, $bookedBy->LastName);
@@ -158,23 +168,14 @@ abstract class ReservationEmailMessage extends EmailMessage
             }
         }
 
-        $this->PopulateIcsAttachment($currentInstance, $attributeValues);
+        $resolvedAttendees = $this->PopulateIcsAttachment($currentInstance, $attributeValues);
 
         $this->Set('AutoReleaseMinutes', $minimumAutoRelease);
         $this->Set('ReferenceNumber', $currentInstance->ReferenceNumber());
 
-        $participants = [];
-        foreach ($currentInstance->Participants() as $id) {
-            $participants[] = $this->userRepository->GetById($id);
-        }
-        $this->Set('Participants', $participants);
+        $this->Set('Participants', array_values($resolvedAttendees['Participants']));
         $this->Set('ParticipatingGuests', $currentInstance->ParticipatingGuests());
-
-        $invitees = [];
-        foreach ($currentInstance->Invitees() as $id) {
-            $invitees[] = $this->userRepository->GetById($id);
-        }
-        $this->Set('Invitees', $invitees);
+        $this->Set('Invitees', array_values($resolvedAttendees['Invitees']));
         $this->Set('InvitedGuests', $currentInstance->InvitedGuests());
 
         $this->Set('CreditsCurrent', $currentInstance->GetCreditsRequired());
@@ -184,8 +185,12 @@ abstract class ReservationEmailMessage extends EmailMessage
     /**
      * @param Reservation $currentInstance
      * @param Attribute[] $attributeValues
+     * @return array{Participants: array<int, UserDto|null>, Invitees: array<int, UserDto|null>}
+     *         The users resolved via IUserRepository::GetById() while building the ICS attendee
+     *         list, returned so PopulateTemplate() can reuse them for the Participants/Invitees
+     *         template variables instead of a second N+1 lookup.
      */
-    protected function PopulateIcsAttachment($currentInstance, $attributeValues)
+    protected function PopulateIcsAttachment($currentInstance, $attributeValues): array
     {
         $rv = new ReservationItemView(
             $currentInstance->ReferenceNumber(),
@@ -215,10 +220,40 @@ abstract class ReservationEmailMessage extends EmailMessage
         $rv->UserPreferences = $this->reservationOwner->GetPreferences();
         $rv->OwnerEmailAddress = $this->reservationOwner->EmailAddress();
 
-        $icsView = new iCalendarReservationView($rv, $this->reservationSeries->BookedBy(), new NullPrivacyFilter());
+        $resolvedParticipants = [];
+        foreach ($currentInstance->Participants() as $id) {
+            $resolvedParticipants[$id] = $this->userRepository->GetById($id);
+        }
+
+        $resolvedInvitees = [];
+        foreach ($currentInstance->Invitees() as $id) {
+            $resolvedInvitees[$id] = $this->userRepository->GetById($id);
+        }
+
+        // BookedBy() is null for a series loaded without an explicit UpdateBookedBy() call
+        // (e.g. ReservationRepository::BuildSeries() never sets it); fall back to a session
+        // wrapping the owner so the non-nullable UserSession parameter below never gets null.
+        $currentUser = $this->reservationSeries->BookedBy() ?? new UserSession($this->reservationOwner->Id());
+        $icsView = new iCalendarReservationView($rv, $currentUser, new NullPrivacyFilter());
+
+        $method = $this->GetIcsMethod($currentInstance);
+        if ($method === IcsMethod::CANCEL) {
+            $icsView->IsCancelled = true;
+        }
 
         $display = new CalendarExportDisplay();
-        $icsContents = $display->Render([$icsView]);
-        $this->AddStringAttachment($icsContents, 'reservation.ics');
+        $icsContents = $display->Render([$icsView], null, $method);
+        $this->AddStringAttachment(
+            contents: $icsContents,
+            fileName: 'reservation.ics',
+            mimeType: "text/calendar; charset=UTF-8; method={$method->value}"
+        );
+
+        return ['Participants' => $resolvedParticipants, 'Invitees' => $resolvedInvitees];
+    }
+
+    protected function GetIcsMethod(Reservation $currentInstance): IcsMethod
+    {
+        return IcsMethod::PUBLISH;
     }
 }

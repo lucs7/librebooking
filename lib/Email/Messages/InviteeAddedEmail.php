@@ -39,7 +39,7 @@ class InviteeAddedEmail extends ReservationEmailMessage
         return $this->Translate('InviteeAddedSubjectWithResource', [$this->reservationOwner->FullName(), $this->primaryResource->GetName()]);
     }
 
-    public function From()
+    public function ReplyTo()
     {
         return new EmailAddress($this->reservationOwner->EmailAddress(), $this->reservationOwner->FullName());
     }
@@ -119,7 +119,7 @@ class InviteeRemovedEmail extends ReservationDeletedEmail
         return new EmailAddress($address, $name);
     }
 
-    public function From()
+    public function ReplyTo()
     {
         return new EmailAddress($this->reservationOwner->EmailAddress(), $this->reservationOwner->FullName());
     }
