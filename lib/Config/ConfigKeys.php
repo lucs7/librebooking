@@ -1176,9 +1176,10 @@ class ConfigKeys extends AbstractConfigKeys
         'config_file_comment' => 'Disable the \'Forgot Password\' feature',
         'section' => 'password'
     ];
-    # previously PASSWORD_LETTERS
-    public const PASSWORD_MINIMUM_LETTERS = [
-        'key' => 'password.minimum.letters',
+    # previously PASSWORD_LETTERS AND PASSWORD_MINIMUM_LETTERS
+    public const PASSWORD_MINIMUM_LENGTH = [
+        'key' => 'password.minimum.length',
+        'legacy' => 'password.minimum.letters',
         'type' => 'integer',
         'default' => 8,
         'label' => 'Minimum Length of the Password',

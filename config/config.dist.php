@@ -521,7 +521,7 @@ return [
             'disable.reset' => false,
 
             # Minimum number of characters required in passwords
-            'minimum.letters' => 8,
+            'minimum.length' => 8,
 
             # Minimum number of numeric digits required in passwords
             'minimum.numbers' => 1,

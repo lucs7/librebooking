@@ -8,7 +8,7 @@ class PasswordComplexityValidatorTest extends TestBase
     {
         parent::setUp();
 
-        $this->fakeConfig->SetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, 8);
+        $this->fakeConfig->SetKey(ConfigKeys::PASSWORD_MINIMUM_LENGTH, 8);
         $this->fakeConfig->SetKey(ConfigKeys::PASSWORD_MINIMUM_NUMBERS, 1);
         $this->fakeConfig->SetKey(ConfigKeys::PASSWORD_UPPER_AND_LOWER, true);
         $this->fakeConfig->SetKey(ConfigKeys::PASSWORD_MINIMUM_SPECIALCHAR, 1);

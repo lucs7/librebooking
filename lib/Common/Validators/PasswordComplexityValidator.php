@@ -12,7 +12,7 @@ class PasswordComplexityValidator extends ValidatorBase implements IValidator
     public function Validate()
     {
         $caseRequirements = Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_UPPER_AND_LOWER, new BooleanConverter());
-        $length = Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_MINIMUM_LETTERS, new IntConverter());
+        $length = Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_MINIMUM_LENGTH, new IntConverter());
         $numbers = Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_MINIMUM_NUMBERS, new IntConverter());
         $specialCharacters = Configuration::Instance()->GetKey(ConfigKeys::PASSWORD_MINIMUM_SPECIALCHAR, new IntConverter());
 
