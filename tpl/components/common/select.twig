@@ -1,0 +1,34 @@
+{#
+  components/common/select.twig — Bootstrap `<select>` wrapper.
+
+  Owns the `<select>` chrome (id, `form-select`, optional form binding and a
+  leading placeholder option) and delegates the `<option>` rows to the
+  html_options / object_html_options extension functions: structure as a
+  component, option-rendering stays a tested function.
+
+  Params:
+    id           required  element id
+    options      required  option source — an assoc {value: label} map, OR a
+                           list of objects when `key`/`label` are supplied
+    key, label   optional  object accessor names; when present rows render via
+                           object_html_options(options, key, label, selected),
+                           otherwise via html_options(options, selected)
+    selected     optional  currently selected value
+    placeholder  optional  translation key for a leading empty-value option
+    class        optional  extra classes on the `<select>`
+    attrs        optional  pre-rendered raw attributes, e.g. formname(key='X')
+    title        optional  title attribute (already-translated string)
+
+  {% include 'components/common/select.twig' with {
+    id: 'filterScheduleId', options: AllSchedules, key: 'GetId', label: 'GetName',
+    selected: ScheduleIdFilter, placeholder: 'AllSchedules', attrs: formname(key='SCHEDULE_ID')
+  } only %}
+#}
+<select id='{{ id }}' class='form-select {{ class|default('') }}'{% if title is defined %} title='{{ title }}'{% endif %} {{ attrs|default('')|raw }}>
+  {% if placeholder is defined %}<option value=''>{{ translate(placeholder) }}</option>{% endif %}
+  {% if key is defined and label is defined %}
+    {{ object_html_options(options: options, key: key, label: label, selected: selected|default('')) }}
+  {% else %}
+    {{ html_options(options: options, selected: selected|default('')) }}
+  {% endif %}
+</select>

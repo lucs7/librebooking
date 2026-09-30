@@ -1,0 +1,42 @@
+{#
+  components/common/searchbox.twig — filter/search text input with a clear button.
+
+  Owns the `.position-relative` wrapper, the `.form-control` input, and the
+  `.searchclear` clear-button span (wired by Web/scripts/search-clear.js, which
+  reads the span's `ref` and blanks each referenced input id). Centralizes the
+  filter-bar search field so its structure and style live in one place.
+
+  The value is rendered under Twig autoescape (no |raw) inside a quoted
+  attribute — reflected filter values stay inert; do not add |raw.
+
+  Params:
+    id           required  input element id
+    key          optional  FormKeys key -> formname() name binding
+    value        optional  current field value
+    placeholder  optional  translation key for the placeholder
+    type         optional  input type, default 'text'
+    class        optional  extra input classes (e.g. 'form-control-sm')
+    ref          optional  clear-target id(s), comma-separated; defaults to `id`
+    labelStyle   optional  true (default) adds `searchclear-label` positioning;
+                           false renders the plain top-bar clear style
+    spanClass    optional  extra classes on the clear span (e.g. 'me-4')
+
+  {% include 'components/common/searchbox.twig' with {
+    id: 'filterResourceName', key: 'RESOURCE_NAME', value: ResourceNameFilter,
+    placeholder: 'Name'
+  } only %}
+#}
+<div class="position-relative">
+  <input
+    type="{{ type|default('text') }}"
+    id="{{ id }}"
+    class="form-control {{ class|default('') }}"
+    {% if key is defined %}{{ formname(key: key) }}{% endif %}
+    value="{{ value|default('') }}"
+    {% if placeholder is defined %}placeholder="{{ translate(placeholder) }}"{% endif %}
+  />
+  <span
+    class="searchclear {{ labelStyle is not defined or labelStyle ? 'searchclear-label ' : '' }}bi bi-x-circle-fill {{ spanClass|default('') }}"
+    ref="{{ ref|default(id) }}"
+  ></span>
+</div>
