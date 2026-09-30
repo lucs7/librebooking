@@ -25,7 +25,7 @@ class ResourceViewerViewResourcesPage extends Page implements IPageable
     public function PageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Display(ROOT_DIR.'tpl/Admin/Resources/view_resources.tpl');
+        $this->Display('pages/resource/view_resources.twig');
     }
 
     public function BindResources($resources)

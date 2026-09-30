@@ -1,7 +1,8 @@
 {#
   Reusable Bootstrap `.card`. Use with `{% embed 'components/common/card.twig' with {...} %}`
   and override the `header`, `body`, and `footer` blocks. Pass `class`/`bodyClass` for extra
-  CSS classes on the outer card / `.card-body`, and `id` for an id attribute on the card.
+  CSS classes on the outer card / `.card-body`, `id` for an id on the card, and `bodyId`
+  for an id on the `.card-body`.
 #}
 {# capture the header block so the wrapper only renders when there's content #}
 {% set headerContent -%}
@@ -13,7 +14,7 @@
       {{ headerContent|raw }}
     </div>
   {% endif %}
-  <div class="card-body {{ bodyClass|default('') }}">
+  <div id="{{ bodyId|default('') }}" class="card-body {{ bodyClass|default('') }}">
     {% block body %}{% endblock %}
   </div>
   {% block footer %}{% endblock %}

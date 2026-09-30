@@ -1,56 +1,39 @@
-{% include 'globalheader.twig' with {DataTable: true} %}
+{% extends 'layouts/base.twig' %}
+{% set DataTable = true %}
 
+{% block content %}
 <div id="page-manage-resources" class="admin-page">
     <div class="clearfix border-bottom mb-3">
         <h1 class="float-start">{{ translate('ManageResources') }}</h1>
     </div>
 
+    {% set filterTitle %}<i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}{% endset %}
     <div class="accordion">
-        <div class="accordion-item shadow mb-3 panel-default filterTable" id="filter-resources-panel">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#filter-resources-content" aria-expanded="false"
-                    aria-controls="filter-resources-content">
-                    <i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}
-                </button>
-            </h2>
-            <div id="filter-resources-content" class="accordion-collapse collapse">
+        {% embed 'components/common/accordion-item.twig' with {id: 'filter-resources-panel', contentsId: 'filter-resources-content', title: filterTitle, class: 'mb-3 filterTable'} %}
+        {% block body %}
                 <form id="filterForm" class="horizontal-list" role="form" method="get">
-                    <div class="accordion-body">
                         <div class="row gy-2 mb-2">
                             {% set groupClass = 'col-12 col-sm-4 col-md-3' %}
 
                             <div class="form-group {{ groupClass }}">
                                 <label for="filterResourceName" class="fw-bold">{{ translate('Resource') }}</label>
-                                <div class="position-relative">
-                                    <input type="text" id="filterResourceName" class="form-control"
-                                        {{ formname(key='RESOURCE_NAME') }} value="{{ ResourceNameFilter }}"
-                                        placeholder="{{ translate('Name') }}" />
-                                    <span class="searchclear searchclear-label bi bi-x-circle-fill"
-                                        ref="filterResourceName"></span>
-                                </div>
+                                {{ include('components/common/searchbox.twig', {id: 'filterResourceName', key: 'RESOURCE_NAME', value: ResourceNameFilter, placeholder: 'Name'}, false) }}
                             </div>
                             <div class="form-group {{ groupClass }}">
                                 <label for="filterScheduleId" class="fw-bold">{{ translate('Schedule') }}</label>
-                                <select id="filterScheduleId" {{ formname(key='SCHEDULE_ID') }} class="form-select">
-                                    <option value="">{{ translate('AllSchedules') }}</option>
-                                    {{ object_html_options(options=AllSchedules, key='GetId', label='GetName', selected=ScheduleIdFilter) }}
-                                </select>
+                                {{ include('components/common/select.twig', {id: 'filterScheduleId', options: AllSchedules, key: 'GetId', label: 'GetName', selected: ScheduleIdFilter, placeholder: 'AllSchedules', attrs: formname(key: 'SCHEDULE_ID')}, false) }}
                             </div>
 
                             <div class="form-group {{ groupClass }}">
                                 <label for="filterResourceType" class="fw-bold">{{ translate('ResourceType') }}</label>
-                                <select id="filterResourceType" class="form-select" {{ formname(key='RESOURCE_TYPE_ID') }}>
-                                    <option value="">{{ translate('AllResourceTypes') }}</option>
-                                    {{ object_html_options(options=ResourceTypes, key='Id', label='Name', selected=ResourceTypeFilter) }}
-                                </select>
+                                {{ include('components/common/select.twig', {id: 'filterResourceType', options: ResourceTypes, key: 'Id', label: 'Name', selected: ResourceTypeFilter, placeholder: 'AllResourceTypes', attrs: formname(key: 'RESOURCE_TYPE_ID')}, false) }}
                             </div>
                             <div class="form-group {{ groupClass }}">
                                 <label for="resourceStatusIdFilter"
                                     class="fw-bold">{{ translate('ResourceStatus') }}</label>
                                 <div class="d-flex flex-wrap">
                                     <select id="resourceStatusIdFilter" class="form-select inline w-auto"
-                                        {{ formname(key='RESOURCE_STATUS_ID') }}>
+                                        {{ formname(key: 'RESOURCE_STATUS_ID') }}>
                                         <option value="">{{ translate('AllResourceStatuses') }}</option>
                                         <option value="{{ constant('ResourceStatus::AVAILABLE') }}">{{ translate('Available') }}</option>
                                         <option value="{{ constant('ResourceStatus::UNAVAILABLE') }}">{{ translate('Unavailable') }}
@@ -60,7 +43,7 @@
                                     <label for="resourceReasonIdFilter"
                                         class="visually-hidden">{{ translate('Reason') }}</label>
                                     <select id="resourceReasonIdFilter" class="form-select w-auto inline"
-                                        {{ formname(key='RESOURCE_STATUS_REASON_ID') }}>
+                                        {{ formname(key: 'RESOURCE_STATUS_REASON_ID') }}>
                                         <option value="">-</option>
                                     </select>
                                 </div>
@@ -68,35 +51,23 @@
                             <div class="form-group {{ groupClass }}">
                                 <label for="filterCapacity" class="fw-bold">{{ translate('MinimumCapacity') }}</label>
                                 <input type="number" min="0" id="filterCapacity" class="form-control"
-                                    {{ formname(key='MAX_PARTICIPANTS') }} value="{{ CapacityFilter }}"
+                                    {{ formname(key: 'MAX_PARTICIPANTS') }} value="{{ CapacityFilter }}"
                                     placeholder="{{ translate('MinimumCapacity') }}" />
                             </div>
                             <div class="form-group {{ groupClass }}">
                                 <label for="filterRequiresApproval"
                                     class="fw-bold">{{ translate('ResourceRequiresApproval') }}</label>
-                                <select id="filterRequiresApproval" class="form-select" {{ formname(key='REQUIRES_APPROVAL') }}
-                                    title="{{ translate('ResourceRequiresApproval') }}">
-                                    <option value="">{{ translate('ResourceRequiresApproval') }}</option>
-                                    {{ html_options(options=YesNoOptions, selected=RequiresApprovalFilter) }}
-                                </select>
+                                {{ include('components/common/select.twig', {id: 'filterRequiresApproval', options: YesNoOptions, selected: RequiresApprovalFilter, placeholder: 'ResourceRequiresApproval', title: translate('ResourceRequiresApproval'), attrs: formname(key: 'REQUIRES_APPROVAL')}, false) }}
                             </div>
                             <div class="form-group {{ groupClass }}">
                                 <label for="filterAutoAssign"
                                     class="fw-bold">{{ translate('ResourcePermissionAutoGranted') }}</label>
-                                <select id="filterAutoAssign" class="form-select" {{ formname(key='AUTO_ASSIGN') }}
-                                    title="{{ translate('ResourcePermissionAutoGranted') }}">
-                                    <option value="">{{ translate('ResourcePermissionAutoGranted') }}</option>
-                                    {{ html_options(options=YesNoOptions, selected=AutoPermissionFilter) }}
-                                </select>
+                                {{ include('components/common/select.twig', {id: 'filterAutoAssign', options: YesNoOptions, selected: AutoPermissionFilter, placeholder: 'ResourcePermissionAutoGranted', title: translate('ResourcePermissionAutoGranted'), attrs: formname(key: 'AUTO_ASSIGN')}, false) }}
                             </div>
                             <div class="form-group {{ groupClass }}">
                                 <label for="filterAllowMultiDay"
                                     class="fw-bold">{{ translate('ResourceAllowMultiDay') }}</label>
-                                <select id="filterAllowMultiDay" class="form-select" {{ formname(key='ALLOW_MULTIDAY') }}
-                                    title="{{ translate('ResourceAllowMultiDay') }}">
-                                    <option value="">{{ translate('ResourceAllowMultiDay') }}</option>
-                                    {{ html_options(options=YesNoOptions, selected=AllowMultiDayFilter) }}
-                                </select>
+                                {{ include('components/common/select.twig', {id: 'filterAllowMultiDay', options: YesNoOptions, selected: AllowMultiDayFilter, placeholder: 'ResourceAllowMultiDay', title: translate('ResourceAllowMultiDay'), attrs: formname(key: 'ALLOW_MULTIDAY')}, false) }}
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -106,21 +77,20 @@
                         </div>
 
                         <div class="card-footer border-top pt-3">
-                            {{ filter_button(attributes={id: 'filter'}) }}
-                            {{ reset_button(attributes={id: 'clearFilter'}) }}
+                            {{ filter_button(attributes: {id: 'filter'}) }}
+                            {{ reset_button(attributes: {id: 'clearFilter'}) }}
                         </div>
-                    </div>
                 </form>
-            </div>
-        </div>
+        {% endblock %}
+        {% endembed %}
     </div>
 
     <div id="globalError" class="error d-none"></div>
 
-    <div class="card shadow panel-default admin-panel" id="list-resources-panel">
-        <div class="card-body accordion" id="resourceList">
+    {% set tableId = (Resources is defined and Resources|length > 0) ? 'resourcesTable' : '' %}
+    {% embed 'components/common/card.twig' with {id: 'list-resources-panel', bodyClass: 'accordion', bodyId: 'resourceList'} %}
+    {% block body %}
             {% if Resources is defined and Resources|length > 0 %}
-                {% set tableId = 'resourcesTable' %}
                 <table class="table table-borderless w-100" id="{{ tableId }}">
                     <thead class="d-none">
                         <tr>
@@ -132,16 +102,8 @@
                             {% set id = resource.GetResourceId() %}
                             <tr>
                                 <td>
-                                    <div class="accordion-item shadow mb-2">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#id{{ resource.GetResourceId() }}" aria-expanded="false"
-                                                aria-controls="id{{ resource.GetResourceId() }}">
-                                                {{ resource.GetName() }}
-                                            </button>
-                                        </h2>
-                                        <div id="id{{ id }}" class="accordion-collapse collapse">
-                                            <div class="accordion-body resourceDetails row" data-resourceId="{{ id }}">
+                                    {% embed 'components/common/accordion-item.twig' with {id: 'resource' ~ id, contentsId: 'id' ~ id, title: resource.GetName(), buttonClass: '', bodyClass: 'resourceDetails row'} %}
+                                    {% block body %}
                                                 <div class="col-12 col-sm-5">
                                                     <input type="hidden" class="id" value="{{ id }}" />
                                                     <div class="row gy-2">
@@ -293,14 +255,13 @@
                                                     </div>
                                                 </div>
 
-
                                                 <div class="col-12 col-sm-7">
                                                     <div class="row">
                                                         <div class="col-sm-6 col-12">
                                                             <div class="mb-4">
                                                                 <span class="fs-6 fw-bold">{{ translate('Duration') }}</span>
                                                                 <div class="durationPlaceHolder">
-                                                                    {% include 'Admin/Resources/manage_resources_duration.twig' with {resource: resource} %}
+                                                                    {{ include('Admin/Resources/manage_resources_duration.twig', {resource: resource}) }}
                                                                 </div>
                                                             </div>
 
@@ -308,7 +269,7 @@
                                                                 <div class="mb-4">
                                                                     <span class="fs-6 fw-bold">{{ translate('Credits') }}</span>
                                                                     <div class="creditsPlaceHolder">
-                                                                        {% include 'Admin/Resources/manage_resources_credits.twig' with {resource: resource} %}
+                                                                        {{ include('Admin/Resources/manage_resources_credits.twig', {resource: resource}) }}
                                                                     </div>
                                                                 </div>
                                                             {% endif %}
@@ -316,7 +277,7 @@
                                                             <div style="mb-4">
                                                                 <span class="fs-6 fw-bold">{{ translate('Capacity') }}</span>
                                                                 <div class="capacityPlaceHolder">
-                                                                    {% include 'Admin/Resources/manage_resources_capacity.twig' with {resource: resource} %}
+                                                                    {{ include('Admin/Resources/manage_resources_capacity.twig', {resource: resource}) }}
                                                                 </div>
                                                             </div>
 
@@ -326,7 +287,7 @@
                                                             <div style="mb-4">
                                                                 <span class="fs-6 fw-bold">{{ translate('Access') }}</span>
                                                                 <div class="accessPlaceHolder">
-                                                                    {% include 'Admin/Resources/manage_resources_access.twig' with {resource: resource} %}
+                                                                    {{ include('Admin/Resources/manage_resources_access.twig', {resource: resource}) }}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -356,10 +317,10 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-12 mt-2">
+                                                        <div class="col-12 mt-4">
                                                             <div class="fs-6 fw-bold">{{ translate('Public') }}</div>
                                                             <div class="publicSettingsPlaceHolder">
-                                                                {% include 'Admin/Resources/manage_resources_public.twig' with {resource: resource, modeEdit: true} %}
+                                                                {{ include('Admin/Resources/manage_resources_public.twig', {resource: resource, modeEdit: true}) }}
                                                             </div>
                                                         </div>
 
@@ -369,13 +330,12 @@
                                                 <div class="customAttributes">
                                                     {% if AttributeList is defined and AttributeList|length > 0 %}
                                                         {% for attribute in AttributeList %}
-                                                            {% include 'Admin/InlineAttributeEdit.twig' with {url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageResourcesActions::ActionChangeAttribute'), id: id, attribute: attribute, value: resource.GetAttributeValue(attribute.Id())} %}
+                                                            {{ include('Admin/InlineAttributeEdit.twig', {url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageResourcesActions::ActionChangeAttribute'), id: id, attribute: attribute, value: resource.GetAttributeValue(attribute.Id())}) }}
                                                         {% endfor %}
                                                     {% endif %}
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% endblock %}
+                                    {% endembed %}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -384,15 +344,13 @@
             {% else %}
                 <h3 class="text-center">{{ translate('NoResourcesToView') }}</h3>
             {% endif %}
-        </div>
-    </div>
+    {% endblock %}
+    {% endembed %}
 
     {{ csrf_token() }}
 
-    {% include 'javascript-includes.twig' with {DataTable: true} %}
-    {{ datatable(tableId is defined ? tableId : '') }}
+    {{ include('javascript-includes.twig', {DataTable: true}) }}
+    {{ datatable(tableId) }}
     {{ jsfile('search-clear.js') }}
 </div>
-
-
-{% include 'globalfooter.twig' %}
+{% endblock %}

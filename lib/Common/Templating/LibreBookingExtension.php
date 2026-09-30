@@ -193,7 +193,12 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
              */
             new TwigFunction(
                 'html_options',
-                static function (array $values, array $output, mixed $selected = ''): string {
+                static function (array $values = [], array $output = [], mixed $selected = '', array $options = []): string {
+                    // options form: assoc key=>label map. Derive parallel value/label lists.
+                    if (empty($values) && !empty($options)) {
+                        $values = array_keys($options);
+                        $output = array_values($options);
+                    }
                     // Use ENT_COMPAT + no double-encode to match Smarty's smarty_function_escape_special_chars.
                     $escapeAttr = static fn (string $s): string =>
                         htmlspecialchars($s, ENT_COMPAT, 'UTF-8', false);
