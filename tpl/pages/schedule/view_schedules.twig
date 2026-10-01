@@ -1,15 +1,17 @@
-{% set DataTable = true %}{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
+{% set DataTable = true %}
 
+{% block content %}
 <div id="page-manage-schedules" class="admin-page">
 
     <div class="border-bottom mb-3 clearfix">
         <h1 class="float-start">{{ translate('ManageSchedules') }}</h1>
     </div>
 
-    <div class="card shadow" id="list-schedules-panel">
-        <div class="card-body" id="scheduleList">
+    {% set tableIdFilter = 'schedulesViewTable' %}
+    {% embed 'components/common/card.twig' with {id: 'list-schedules-panel', bodyId: 'scheduleList'} %}
+    {% block body %}
             <div class="accordion" id="scheduleAccordion">
-                {% set tableIdFilter = 'schedulesViewTable' %}
                 <table class="table table-borderless w-100" id="{{ tableIdFilter }}">
                     <thead class="d-none">
                         <tr>
@@ -25,16 +27,8 @@
                                     {% set daysVisibleSpan %}<span class='fw-bold'>{{ schedule.GetDaysVisible() }}</span>{% endset %}
                                     {% set dayNameSpan %}<span
                                         class='fw-bold'>{% if dayOfWeek == constant('Schedule::Today') %}{{ Today }}{% else %}{{ DayNames[dayOfWeek] }}{% endif %}</span>{% endset %}
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#panel{{ id }}" aria-expanded="true"
-                                                aria-controls="panel{{ id }}">
-                                                {{ schedule.GetName() }}
-                                            </button>
-                                        </h2>
-                                        <div id="panel{{ id }}" class="accordion-collapse collapse show">
-                                            <div class="accordion-body">
+                                    {% embed 'components/common/accordion-item.twig' with {id: 'schedule' ~ id, contentsId: 'panel' ~ id, title: schedule.GetName(), open: true, buttonClass: ''} %}
+                                    {% block body %}
                                                 <div class="scheduleDetails row">
                                                     <div class="col-12 col-sm-6">
                                                         <div class="fw-bold">{{ schedule.GetName() }}</div>
@@ -200,20 +194,18 @@
                                                         <div class="clear"></div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% endblock %}
+                                    {% endembed %}
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+    {% endblock %}
+    {% endembed %}
 
-    {% set DataTable = true %}{{ include('javascript-includes.twig') }}
+    {{ include('javascript-includes.twig', {DataTable: true}) }}
     {{ datatablefilter(tableIdFilter) }}
 </div>
-
-{{ include('globalfooter.twig') }}
+{% endblock %}
