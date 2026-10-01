@@ -1,0 +1,15 @@
+{#
+  Link to one reservation in the embedded calendars, coloured by the reservation colour.
+  Uses ReservationUrl and TitleFormatter from the calling context. Params: `r` (reservation view), `date` (the day it is shown on, passed to TitleFormatter).
+#}
+{% set color = r.GetColor() %}
+<a
+  class="booked-calendar-event"
+  href="{{ ReservationUrl }}{{ r.ReferenceNumber() }}"
+  title="{{ translate('ViewReservation') }}"
+  {% if color is not empty -%}
+    style="background-color:{{ r.GetColor() }} !important;color:{{ r.GetTextColor() }} !important;border-color:{{ r.GetBorderColor() }} !important"
+  {%- endif %}
+>
+  {{ TitleFormatter.Format(r, date)|raw }}
+</a>

@@ -1,0 +1,20 @@
+{% extends 'components/embedded-calendar/container.twig' %}
+{% block calendar %}
+    {% set weekStart = Range.GetBegin() %}
+    {{ include('components/embedded-calendar/weekday-names.twig', {Width: Width}, false) }}
+    <div class="booked-calendar-week">
+        {% for date in Range.Dates() %}
+            <div class="booked-week-date" style="width:{{ Width }}">
+                <div class="booked-week-date-title {% if date.DateEquals(now()) %}booked-today{% endif %}">
+                    <a href="{{ ScheduleUrl }}{{ format_date(date: date, timezone: Timezone, key: 'url') }}"
+                       title="{{ translate('ViewCalendar') }}">{{ format_date(date: date, timezone: Timezone, format: 'd') }}</a>
+                </div>
+                {% for r in Reservations.OnDate(date).Reservations() %}
+                                    <div class="booked-day-events">
+                        {{ include('components/embedded-calendar/event.twig', {r: r, date: date}) }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
