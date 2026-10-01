@@ -1,28 +1,26 @@
-{extends file="Reservation/view.tpl"}
+{% extends 'pages/reservations/view.twig' %}
 
-{block name=header}
-    {include file='globalheader.tpl' TitleKey='EditReservationHeading'}
-{/block}
+{% set TitleKey = 'EditReservationHeading' %}
 
-{block name=reservationHeader}
-    {translate key="EditReservationHeading"}
-{/block}
+{% block reservationHeader %}
+    {{ translate('EditReservationHeading') }}
+{% endblock %}
 
-{block name=deleteButtons}
+{% block deleteButtons %}
     <div class="btn-group">
         <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
             aria-expanded="false">
-            {translate key=More}
+            {{ translate('More') }}
         </button>
 
         <ul class="dropdown-menu" role="menu">
             <li>
-                {assign var=icsUrl value="{$Path}export/{Pages::CALENDAR_EXPORT}?{QueryStringKeys::REFERENCE_NUMBER}={$ReferenceNumber}"}
-                <a href="{$icsUrl}" download="{$icsUrl}" class="dropdown-item">
-                    <i class="bi bi-calendar3 me-1"></i>{translate key=AddToOutlook}</a>
+                {% set icsUrl %}{{ Path }}export/{{ constant('Pages::CALENDAR_EXPORT') }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}={{ ReferenceNumber }}{% endset %}
+                <a href="{{ icsUrl }}" download="{{ icsUrl }}" class="dropdown-item">
+                    <i class="bi bi-calendar3 me-1"></i>{{ translate('AddToOutlook') }}</a>
             </li>
             <li><a href="#" class="btnPrint dropdown-item">
-                    <i class="bi bi-printer me-1"></i>{translate key='Print'}</a>
+                    <i class="bi bi-printer me-1"></i>{{ translate('Print') }}</a>
             </li>
             <li><a href="#" class="btnPDF dropdown-item">
                     <i class="bi bi-filetype-pdf me-1"></i>PDF</a>
@@ -34,19 +32,19 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateButtonsLabel">{translate key=Reject}</h5>
+                    <h5 class="modal-title" id="updateButtonsLabel">{{ translate('Reject') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">
-                    <div>{translate key=DeleteReminderWarning}</div>
+                    <div>{{ translate('DeleteReminderWarning') }}</div>
                     <div>
-                        <label for="deleteReason" class="fw-bold">{translate key=Reason} ({translate key=Optional})</label>
+                        <label for="deleteReason" class="fw-bold">{{ translate('Reason') }} ({{ translate('Optional') }})</label>
                         <textarea id="deleteReason" class="deleteReason form-control"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    {cancel_button class="cancelDelete cancel"}
-                    {delete_button class="confirmDelete delete save" key=Reject}
+                    {{ cancel_button(class: 'cancelDelete cancel') }}
+                    {{ delete_button(key: 'Reject', class: 'confirmDelete delete save') }}
                 </div>
             </div>
         </div>
@@ -57,54 +55,54 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="updateButtonsLabel">{translate key=ApplyUpdatesTo}</h5>
+                    <h5 class="modal-title" id="updateButtonsLabel">{{ translate('ApplyUpdatesTo') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">
                     <div id="deleteRecurringButtons" class="no-show margin-bottom-15">
-                        <div>{translate key=DeleteReminderWarning}</div>
+                        <div>{{ translate('DeleteReminderWarning') }}</div>
                         <div>
-                            <label for="deleteReasonRecurring">{translate key=Reason} ({translate key=Optional})</label>
+                            <label for="deleteReasonRecurring">{{ translate('Reason') }} ({{ translate('Optional') }})</label>
                             <textarea class="deleteReasonRecurring form-control"></textarea>
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary save btnUpdateThisInstance">
-                        <i class="bi bi-check-lg me-1"></i>{translate key='ThisInstance'}
+                        <i class="bi bi-check-lg me-1"></i>{{ translate('ThisInstance') }}
                     </button>
                     <button type="button" class="btn btn-primary save btnUpdateAllInstances">
-                        <i class="bi bi-check-square-fill"></i>{translate key='AllInstances'}
+                        <i class="bi bi-check-square-fill"></i>{{ translate('AllInstances') }}
                     </button>
                     <button type="button" class="btn btn-primary save btnUpdateFutureInstances">
-                        <i class="bi bi-check2-square me-1"></i>{translate key='FutureInstances'}
+                        <i class="bi bi-check2-square me-1"></i>{{ translate('FutureInstances') }}
                     </button>
                     <button type="button" class="btn btn-outline-secondary">
-                        {translate key='Cancel'}
+                        {{ translate('Cancel') }}
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-{/block}
+{% endblock %}
 
-{block name=submitButtons}
-    <a href="{$SCRIPT_NAME}?{QueryStringKeys::REFERENCE_NUMBER}={$ReferenceNumber}&update=1&{QueryStringKeys::REDIRECT}={$ReturnUrl|escape:url}"
+{% block submitButtons %}
+    <a href="{{ SCRIPT_NAME }}?{{ constant('QueryStringKeys::REFERENCE_NUMBER') }}={{ ReferenceNumber }}&update=1&{{ constant('QueryStringKeys::REDIRECT') }}={{ ReturnUrl|urlencode }}"
         class="btn btn-outline-secondary" id="btnApprovalUpdate">
         <span class=""></span>
-        {translate key='Update'}
+        {{ translate('Update') }}
     </a>
     <button type="button"
-        class="btn btn-danger {if $IsRecurring}delete prompt{else}triggerDeletePrompt delete prompt-single{/if}">
+        class="btn btn-danger {% if IsRecurring %}delete prompt{% else %}triggerDeletePrompt delete prompt-single{% endif %}">
         <span class="bi bi-x-lg"></span>
-        {translate key='Reject'}
+        {{ translate('Reject') }}
     </button>
     <button type="button" class="btn btn-primary" id="btnApprove">
         <span class="bi bi-check-circle"></span>
-        {translate key='Approve'}
+        {{ translate('Approve') }}
     </button>
-{/block}
+{% endblock %}
 
-{block name="ajaxMessage"}
-    {translate key=UpdatingReservation}...
+{% block ajaxMessage %}
+    {{ translate('UpdatingReservation') }}...
     <br />
-{/block}
+{% endblock %}

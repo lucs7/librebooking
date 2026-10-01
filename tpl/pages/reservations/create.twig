@@ -1,6 +1,6 @@
-{% block header %}
-    {% include 'globalheader.twig' with {'cssFiles': 'css/schedule.css', 'printCssFiles': 'css/reservation.print.css'} %}
-{% endblock %}
+{% extends 'layouts/base.twig' %}
+{% set cssFiles = 'css/schedule.css' %}
+{% set printCssFiles = 'css/reservation.print.css' %}
 
 {% macro displayResource(resource) %}
 <div class="resourceName rounded-1 m-1 p-1 {% if not resource.GetColor() %}text-success bg-success bg-opacity-10" {% else %}"
@@ -15,6 +15,7 @@
 </div>
 {% endmacro %}
 
+{% block content %}
 <div id="page-reservation">
     <div id="reservation-box" class="mx-3">
         <form id="form-reservation" method="post" enctype="multipart/form-data" role="form">
@@ -54,7 +55,7 @@
                             <i class="bi bi-asterisk text-danger align-top text-small"></i>
                             {% endif %}
                         </label>
-                        {{ textbox(name='RESERVATION_TITLE', class='form-control has-feedback', value='ReservationTitle', id='reservationTitle', attributes={'maxlength': '300'}, required=TitleRequired) }}
+                        {{ textbox(name: 'RESERVATION_TITLE', class: 'form-control has-feedback', value: 'ReservationTitle', id: 'reservationTitle', attributes: {maxlength: '300'}, required: TitleRequired) }}
                     </div>
                 </div>
                 {% set detailsCol = 'col-12' %}
@@ -70,7 +71,7 @@
                     {% else %}
                     {{ translate('Private') }}
                     {% endif %}
-                    <input id="userId" type="hidden" {{ formname(key='USER_ID') }} value="{{ UserId }}" />
+                    <input id="userId" type="hidden" {{ formname(key: 'USER_ID') }} value="{{ UserId }}" />
                     {% if CanChangeUser %}
                     <a href="#" id="showChangeUsers" class="link-primary">{{ translate('Change') }} <i
                             class="bi bi-person-fill"></i></a>
@@ -104,7 +105,6 @@
                         <span id="creditCost" class="fw-bold"></span>
                     </div>
 
-
                     <div class="mb-4" id="changeUsers" style="display: none;">
                         <div class="form-group d-flex align-items-center gap-1">
                             <label for="changeUserAutocomplete" class="visually-hidden">{{ translate('User') }}</label>
@@ -121,12 +121,11 @@
 
                 <div class="form-group {{ detailsCol }} py-2 border-bottom">
                     {% if ShowParticipation and AllowParticipation and ShowReservationDetails %}
-                    {% include 'Reservation/participation.twig' %}
+                    {{ include('components/reservation/participation.twig') }}
                     {% else %}
-                    {% include 'Reservation/private-participation.twig' %}
+                    {{ include('components/reservation/private-participation.twig') }}
                     {% endif %}
                 </div>
-
 
                 <div class="reservationDates col-12 py-2 border-bottom">
                     <div class="d-flex flex-wrap">
@@ -134,8 +133,8 @@
                             <label for="BeginDate" class="reservationDate fw-bold">{{ translate('BeginDate') }}</label>
                             <input type="text" id="BeginDate"
                                 class="form-control form-control-sm d-inline-block w-auto{% if LockPeriods %} no-show{% endif %}"
-                                {{ formname(key='BEGIN_DATE') }} />
-                            <select id="BeginPeriod" {{ formname(key='BEGIN_PERIOD') }}
+                                {{ formname(key: 'BEGIN_DATE') }} />
+                            <select id="BeginPeriod" {{ formname(key: 'BEGIN_PERIOD') }}
                                 class="form-select form-select-sm w-auto timeinput{% if LockPeriods %} no-show{% endif %}"
                                 title="Begin time">
                                 {% for period in StartPeriods %}
@@ -157,8 +156,8 @@
                                 class="reservationDate fw-bold text-md-end pe-md-1">{{ translate('EndDate') }}</label>
                             <input type="text" id="EndDate"
                                 class="form-control form-control-sm d-inline-block w-auto{% if LockPeriods %} no-show{% endif %}"
-                                {{ formname(key='END_DATE') }} />
-                            <select id="EndPeriod" {{ formname(key='END_PERIOD') }}
+                                {{ formname(key: 'END_DATE') }} />
+                            <select id="EndPeriod" {{ formname(key: 'END_PERIOD') }}
                                 class="form-select form-select-sm w-auto timeinput{% if LockPeriods %} no-show{% endif %}"
                                 title="End time">
                                 {% for period in EndPeriods %}
@@ -174,7 +173,6 @@
                             </select>
                             {% if LockPeriods %}{{ formatdate(EndDate) }} {{ endPeriod.LabelEnd() }}{% endif %}
                         </div>
-
 
                         <div class="reservationLength d-flex align-items-center ms-5">
                             <div class="form-group">
@@ -196,7 +194,7 @@
 
                     {% if not HideRecurrence %}
                     <div class="pt-2">{{ HideRecurrence }}
-                        {{ control('RecurrenceControl', {'RepeatTerminationDate': RepeatTerminationDate}) }}
+                        {{ control('RecurrenceControl', {RepeatTerminationDate: RepeatTerminationDate}) }}
                     </div>
                     {% endif %}
 
@@ -214,8 +212,8 @@
 
                     <div class="d-inline-block">
                         <div id="primaryResourceContainer">
-                            <input type="hidden" id="scheduleId" {{ formname(key='SCHEDULE_ID') }} value="{{ ScheduleId }}" />
-                            <input class="resourceId" type="hidden" id="primaryResourceId" {{ formname(key='RESOURCE_ID') }}
+                            <input type="hidden" id="scheduleId" {{ formname(key: 'SCHEDULE_ID') }} value="{{ ScheduleId }}" />
+                            <input class="resourceId" type="hidden" id="primaryResourceId" {{ formname(key: 'RESOURCE_ID') }}
                                 value="{{ ResourceId }}" />
                             {{ _self.displayResource(Resource) }}
                         </div>
@@ -248,12 +246,11 @@
 
                 <div class="form-group col-12 py-2 border-bottom">
                     {% if ShowParticipation and AllowParticipation and ShowReservationDetails %}
-                    {% include 'Reservation/invitees.twig' %}
+                    {{ include('components/reservation/invitees.twig') }}
                     {% else %}
-                    {% include 'Reservation/private-participation.twig' %}
+                    {{ include('components/reservation/private-participation.twig') }}
                     {% endif %}
                 </div>
-
 
                 {% if RemindersEnabled %}
                 <div class="reservationReminders border-bottom py-2">
@@ -262,16 +259,16 @@
                         <div id="reminderOptionsStart" class="d-flex align-items-center flex-wrap gap-1">
                             <div class="form-check">
                                 <input type="checkbox" id="startReminderEnabled"
-                                    class="reminderEnabled form-check-input" {{ formname(key='START_REMINDER_ENABLED') }}
+                                    class="reminderEnabled form-check-input" {{ formname(key: 'START_REMINDER_ENABLED') }}
                                     aria-label="Enable Start Reminder Interval" />
                             </div>
                             <label for="startReminderTime" class="visually-hidden">Start Reminder Time</label>
                             <label for="startReminderInterval" class="visually-hidden">Start Reminder Interval</label>
                             <input type="number" min="0" max="999" size="3" maxlength="3" value="15"
                                 class="reminderTime form-control form-control-sm w-auto"
-                                {{ formname(key='START_REMINDER_TIME') }} id="startReminderTime" />
+                                {{ formname(key: 'START_REMINDER_TIME') }} id="startReminderTime" />
                             <select class="reminderInterval form-select form-select-sm w-auto"
-                                {{ formname(key='START_REMINDER_INTERVAL') }} id="startReminderInterval">
+                                {{ formname(key: 'START_REMINDER_INTERVAL') }} id="startReminderInterval">
                                 <option value="{{ constant('ReservationReminderInterval::Minutes') }}">{{ translate('minutes') }}
                                 </option>
                                 <option value="{{ constant('ReservationReminderInterval::Hours') }}">{{ translate('hours') }}</option>
@@ -283,15 +280,15 @@
                         <div id="reminderOptionsEnd" class="d-flex align-items-center flex-wrap gap-1">
                             <div class="form-check">
                                 <input type="checkbox" id="endReminderEnabled" class="reminderEnabled form-check-input"
-                                    {{ formname(key='END_REMINDER_ENABLED') }} aria-label="Enable End Reminder Interval" />
+                                    {{ formname(key: 'END_REMINDER_ENABLED') }} aria-label="Enable End Reminder Interval" />
                             </div>
                             <label for="endReminderTime" class="visually-hidden">End Reminder Time</label>
                             <label for="endReminderInterval" class="visually-hidden">End Reminder Interval</label>
                             <input type="number" min="0" max="999" size="3" maxlength="3" value="15"
                                 class="reminderTime form-control form-control-sm w-auto"
-                                {{ formname(key='END_REMINDER_TIME') }} id="endReminderTime" />
+                                {{ formname(key: 'END_REMINDER_TIME') }} id="endReminderTime" />
                             <select class="reminderInterval form-select form-select-sm w-auto"
-                                {{ formname(key='END_REMINDER_INTERVAL') }} id="endReminderInterval">
+                                {{ formname(key: 'END_REMINDER_INTERVAL') }} id="endReminderInterval">
                                 <option value="{{ constant('ReservationReminderInterval::Minutes') }}">{{ translate('minutes') }}
                                 </option>
                                 <option value="{{ constant('ReservationReminderInterval::Hours') }}">{{ translate('hours') }}</option>
@@ -331,7 +328,7 @@
                     <div id="reservationAttachments">
                         <div class="attachment-item">
                             <label class="fw-bold" for="reservationUploadFile">Reservation Upload File</label>
-                            <input type="file" {{ formname(key='RESERVATION_FILE', multi=true) }} id="reservationUploadFile"
+                            <input type="file" {{ formname(key: 'RESERVATION_FILE', multi: true) }} id="reservationUploadFile"
                                 class="form-control form-control-sm w-auto" />
                             <a class="add-attachment link-primary" href="#">{{ translate('Add') }}<i
                                     class="bi bi-plus-square-fill ms-1"></i></a>
@@ -356,7 +353,7 @@
                     {% else %}
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="termsAndConditionsAcknowledgement"
-                            {{ formname(key='TOS_ACKNOWLEDGEMENT') }} {% if TermsAccepted %}checked="checked" {% endif %} />
+                            {{ formname(key: 'TOS_ACKNOWLEDGEMENT') }} {% if TermsAccepted %}checked="checked" {% endif %} />
                         <label for="termsAndConditionsAcknowledgement">{{ translate('IAccept') }}</label>
                         <a href="{{ Terms.DisplayUrl() }}" class="link-primary"
                             target="_blank">{{ translate('TheTermsOfService') }}</a>
@@ -366,13 +363,12 @@
             </div>
             {% endif %}
 
+            <input type="hidden" {{ formname(key: 'RESERVATION_ID') }} value="{{ ReservationId }}" />
+            <input type="hidden" {{ formname(key: 'REFERENCE_NUMBER') }} value="{{ ReferenceNumber }}" id="referenceNumber" />
+            <input type="hidden" {{ formname(key: 'RESERVATION_ACTION') }} value="{{ ReservationAction }}" />
+            <input type="hidden" {{ formname(key: 'DELETE_REASON') }} value="" id="hdnDeleteReason" />
 
-            <input type="hidden" {{ formname(key='RESERVATION_ID') }} value="{{ ReservationId }}" />
-            <input type="hidden" {{ formname(key='REFERENCE_NUMBER') }} value="{{ ReferenceNumber }}" id="referenceNumber" />
-            <input type="hidden" {{ formname(key='RESERVATION_ACTION') }} value="{{ ReservationAction }}" />
-            <input type="hidden" {{ formname(key='DELETE_REASON') }} value="" id="hdnDeleteReason" />
-
-            <input type="hidden" {{ formname(key='SERIES_UPDATE_SCOPE') }} id="hdnSeriesUpdateScope"
+            <input type="hidden" {{ formname(key: 'SERIES_UPDATE_SCOPE') }} id="hdnSeriesUpdateScope"
                 value="{{ constant('SeriesUpdateScope::FullSeries') }}" />
 
             <div class="">
@@ -484,7 +480,6 @@
     </div>
 </div>
 
-
 <div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -518,12 +513,12 @@
 
 {% block extras %}{% endblock %}
 
-{% include 'javascript-includes.twig' %}
+{{ include('javascript-includes.twig') }}
 
-{{ control('DatePickerSetupControl', {'ControlId': 'BeginDate', 'DefaultDate': StartDate, 'MinDate': AvailabilityStart, 'MaxDate': AvailabilityEnd, 'FirstDay': FirstWeekday}) }}
-{{ control('DatePickerSetupControl', {'ControlId': 'EndDate', 'DefaultDate': EndDate, 'MinDate': AvailabilityStart, 'MaxDate': AvailabilityEnd, 'FirstDay': FirstWeekday}) }}
-{{ control('DatePickerSetupControl', {'ControlId': 'EndRepeat', 'DefaultDate': RepeatTerminationDate, 'MinDate': StartDate, 'MaxDate': AvailabilityEnd, 'FirstDay': FirstWeekday}) }}
-{{ control('DatePickerSetupControl', {'ControlId': 'RepeatDate', 'MaxDate': AvailabilityEnd, 'FirstDay': FirstWeekday, 'MinDate': now().ToTimezone(Timezone), 'Multiple': false}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'BeginDate', DefaultDate: StartDate, MinDate: AvailabilityStart, MaxDate: AvailabilityEnd, FirstDay: FirstWeekday}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'EndDate', DefaultDate: EndDate, MinDate: AvailabilityStart, MaxDate: AvailabilityEnd, FirstDay: FirstWeekday}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'EndRepeat', DefaultDate: RepeatTerminationDate, MinDate: StartDate, MaxDate: AvailabilityEnd, FirstDay: FirstWeekday}) }}
+{{ control('DatePickerSetupControl', {ControlId: 'RepeatDate', MaxDate: AvailabilityEnd, FirstDay: FirstWeekday, MinDate: now().ToTimezone(Timezone), Multiple: false}) }}
 
 {{ jsfile('resourcePopup.js') }}
 {{ jsfile('userPopup.js') }}
@@ -537,8 +532,8 @@
 {{ jsfile('reservation-pdf.js') }}
 {{ vendor_js('jqtree/1.8.11/js/tree.jquery.js') }}
 
-{% include 'Reservation/pdf_libraries.twig' %}
-{% include 'Reservation/pdf.twig' %}
+{{ include('components/reservation/pdf_libraries.twig') }}
+{{ include('components/reservation/pdf.twig') }}
 <script type="text/javascript">
     $(function() {
         var scopeOptions = {
@@ -580,7 +575,7 @@
         };
 
         var reservation = new Reservation(reservationOpts);
-        reservation.init('{{ UserId }}', '{{ format_date(StartDate, key='system_datetime', timezone=Timezone) }}', '{{ format_date(EndDate, key='system_datetime', timezone=Timezone) }}');
+        reservation.init('{{ UserId }}', '{{ format_date(StartDate, key: 'system_datetime', timezone: Timezone) }}', '{{ format_date(EndDate, key: 'system_datetime', timezone: Timezone) }}');
 
         var reminders = new Reminder(reminderOpts);
         reminders.init();
@@ -613,7 +608,7 @@
             repeatMonthlyType: '{{ RepeatMonthlyType }}',
             repeatWeekdays: [{% for day in RepeatWeekdays %}{{ day }}, {% endfor %}],
             autoSetTerminationDate: $('#referenceNumber').val() != '',
-            customRepeatExclusions: ['{{ formatdate(StartDate, key='system') }}']
+            customRepeatExclusions: ['{{ formatdate(StartDate, key: 'system') }}']
         };
 
         var recurrence = new Recurrence(recurOpts);
@@ -622,8 +617,8 @@
         recurrence.onChange(reservation.repeatOptionsChanged);
 
         {% for date in CustomRepeatDates %}
-        recurrence.addCustomDate('{{ format_date(date, key='system', timezone=Timezone) }}',
-        '{{ format_date(date, key='schedule_daily', timezone=Timezone) }}');
+        recurrence.addCustomDate('{{ format_date(date, key: 'system', timezone: Timezone) }}',
+        '{{ format_date(date, key: 'schedule_daily', timezone: Timezone) }}');
         {% endfor %}
 
         var ajaxOptions = {
@@ -660,7 +655,7 @@
                 var tooltipText ="{{ translate('RequiresCheckInNotification') }}";
             }
             if (tooltipType === 'autorelease') {
-                var text = "{{ translate('AutoReleaseNotification', {'0': '%s'}) }}";
+                var text = "{{ translate('AutoReleaseNotification', {0: '%s'}) }}";
                     var tooltipText = text.replace('%s', resource.getAttribute('data-autorelease'));
                 }
                 resource.setAttribute('data-bs-title', tooltipText);
@@ -668,5 +663,4 @@
             });
         }
     </script>
-
-    {% include 'globalfooter.twig' %}
+{% endblock %}

@@ -1,6 +1,8 @@
-{% block header %}
-{% include 'globalheader.twig' with {'TitleKey': 'ViewReservationHeading', 'printCssFiles': 'css/reservation.print.css'} %}
-{% endblock %}
+{% extends 'layouts/base.twig' %}
+{% set TitleKey = TitleKey|default('ViewReservationHeading') %}
+{% set printCssFiles = 'css/reservation.print.css' %}
+
+{% block content %}
 <div id="page-view-reservation">
     <div id="reservation-box" class="card shadow readonly">
         <div id="reservationFormDiv" class="card-body">
@@ -43,7 +45,7 @@
                     <div class="row">
                         <div class="col-md-6 no-padding-left">
                             <label class="fw-bold">{{ translate('BeginDate') }}</label> {{ formatdate(StartDate) }}
-                            <input type="hidden" id="BeginDate" value="{{ formatdate(StartDate, key='system') }}" />
+                            <input type="hidden" id="BeginDate" value="{{ formatdate(StartDate, key: 'system') }}" />
                             {% for period in StartPeriods %}
                                 {% if period == SelectedStart %}
                                     {{ period.Label() }}
@@ -53,7 +55,7 @@
                         </div>
                         <div class="col-md-6 no-padding-left">
                             <label class="fw-bold">{{ translate('EndDate') }}</label> {{ formatdate(EndDate) }}
-                            <input type="hidden" id="EndDate" value="{{ formatdate(EndDate, key='system') }}" />
+                            <input type="hidden" id="EndDate" value="{{ formatdate(EndDate, key: 'system') }}" />
                             {% for period in EndPeriods %}
                                 {% if period == SelectedEnd %}
                                     {{ period.LabelEnd() }}
@@ -270,8 +272,8 @@
                                     <i class="bi bi-calendar3"></i>
                                     {{ translate('AddToOutlook') }}</a>
                                 <a href="http://www.google.com/calendar/event?action=TEMPLATE&text={{ ReservationTitle|urlencode }}&dates=
-                                    {{ formatdate(StartDate.ToUtc(), key='google') }}/
-                                    {{ formatdate(EndDate.ToUtc(), key='google') }}&ctz={{ StartDate.Timezone() }}&details={{ Description|urlencode }}&location={{ Resource.Name|urlencode }}&trp=false&sprop=&sprop=name:"
+                                    {{ formatdate(StartDate.ToUtc(), key: 'google') }}/
+                                    {{ formatdate(EndDate.ToUtc(), key: 'google') }}&ctz={{ StartDate.Timezone() }}&details={{ Description|urlencode }}&location={{ Resource.Name|urlencode }}&trp=false&sprop=&sprop=name:"
                                     target="_blank" rel="nofollow" class="btn btn-outline-secondary">
                                     <i class="bi bi-google"></i>
                                     {{ translate('AddToGoogleCalendar') }}</a>
@@ -317,7 +319,7 @@
                     </div>
                 {% endif %}
             {% endif %}
-            <input type="hidden" id="referenceNumber" {{ formname(key='reference_number') }} value="{{ ReferenceNumber }}" />
+            <input type="hidden" id="referenceNumber" {{ formname(key: 'reference_number') }} value="{{ ReferenceNumber }}" />
         </div>
     </div>
 
@@ -352,18 +354,18 @@
 
     <div style="display: none">
         <form id="form-reservation" method="post" enctype="application/x-www-form-urlencoded">
-            <input type="hidden" {{ formname(key='RESERVATION_ID') }} value="{{ ReservationId }}" />
-            <input type="hidden" {{ formname(key='REFERENCE_NUMBER') }} value="{{ ReferenceNumber }}" />
-            <input type="hidden" {{ formname(key='RESERVATION_ACTION') }} value="{{ ReservationAction }}" />
-            <input type="hidden" {{ formname(key='SERIES_UPDATE_SCOPE') }} id="hdnSeriesUpdateScope"
+            <input type="hidden" {{ formname(key: 'RESERVATION_ID') }} value="{{ ReservationId }}" />
+            <input type="hidden" {{ formname(key: 'REFERENCE_NUMBER') }} value="{{ ReferenceNumber }}" />
+            <input type="hidden" {{ formname(key: 'RESERVATION_ACTION') }} value="{{ ReservationAction }}" />
+            <input type="hidden" {{ formname(key: 'SERIES_UPDATE_SCOPE') }} id="hdnSeriesUpdateScope"
                 value="{{ constant('SeriesUpdateScope::FullSeries') }}" />
-            <input type="hidden" {{ formname(key='DELETE_REASON') }} value="" id="hdnDeleteReason" />
-            <input type="hidden" {{ formname(key='BEGIN_DATE') }} value="{{ formatdate(StartDate, key='system') }}" />
-            <input type="hidden" {{ formname(key='BEGIN_PERIOD') }} value="{{ SelectedStart.Begin() }}" />
-            <input type="hidden" {{ formname(key='END_DATE') }} value="{{ formatdate(EndDate, key='system') }}" />
-            <input type="hidden" {{ formname(key='END_PERIOD') }} value="{{ SelectedEnd.End() }}" />
-            <input type="hidden" {{ formname(key='USER_ID') }} value="{{ UserId }}" />
-            <input type="hidden" {{ formname(key='RESOURCE_ID') }} value="{{ ResourceId }}" />
+            <input type="hidden" {{ formname(key: 'DELETE_REASON') }} value="" id="hdnDeleteReason" />
+            <input type="hidden" {{ formname(key: 'BEGIN_DATE') }} value="{{ formatdate(StartDate, key: 'system') }}" />
+            <input type="hidden" {{ formname(key: 'BEGIN_PERIOD') }} value="{{ SelectedStart.Begin() }}" />
+            <input type="hidden" {{ formname(key: 'END_DATE') }} value="{{ formatdate(EndDate, key: 'system') }}" />
+            <input type="hidden" {{ formname(key: 'END_PERIOD') }} value="{{ SelectedEnd.End() }}" />
+            <input type="hidden" {{ formname(key: 'USER_ID') }} value="{{ UserId }}" />
+            <input type="hidden" {{ formname(key: 'RESOURCE_ID') }} value="{{ ResourceId }}" />
             {{ csrf_token() }}
         </form>
     </div>
@@ -371,7 +373,7 @@
 
 {% block reservationHeader %}{% endblock %}
 
-{% include 'javascript-includes.twig' %}
+{{ include('javascript-includes.twig') }}
 {{ jsfile('participation.js') }}
 {{ jsfile('approval.js') }}
 {{ jsfile('resourcePopup.js') }}
@@ -386,8 +388,8 @@
 {{ jsfile('reservation-pdf.js') }}
 {{ vendor_js('jqtree/1.8.11/js/tree.jquery.js') }}
 
-{% include 'Reservation/pdf_libraries.twig' %}
-{% include 'Reservation/pdf.twig' %}
+{{ include('components/reservation/pdf_libraries.twig') }}
+{{ include('components/reservation/pdf.twig') }}
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -426,8 +428,8 @@
         };
         var reservation = new Reservation(reservationOpts);
         reservation.init('{{ UserId }}',
-            '{{ format_date(StartDate, key='system_datetime', timezone=Timezone) }}',
-            '{{ format_date(EndDate, key='system_datetime', timezone=Timezone) }}'
+            '{{ format_date(StartDate, key: 'system_datetime', timezone: Timezone) }}',
+            '{{ format_date(EndDate, key: 'system_datetime', timezone: Timezone) }}'
         );
 
         var ajaxOptions = {
@@ -443,4 +445,4 @@
 
     });
 </script>
-{% include 'globalfooter.twig' %}
+{% endblock %}

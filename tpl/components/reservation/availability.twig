@@ -1,7 +1,7 @@
-{% import 'Reservation/_slot_macros_availability.twig' as slots %}
+{% import 'components/reservation/_slot_macros_availability.twig' as slots %}
 {# All of the slot display formatting #}
 
-{#<div id="availability-highlighter"></div>#}
+{# <div id="availability-highlighter"></div> #}
 <div class="clearfix">
     <a href="#" id="" class="btnHideAvailability link-primary mb-3 float-end"><i
             class="bi bi-arrow-left-circle-fill me-1"></i>{{ translate('ReservationDetails') }}</a>
@@ -9,15 +9,15 @@
 {# End slot display formatting #}
 {% for date in BoundDates %}
     <div>
-        <table id="reservations-{{ formatdate(date, format='Y-m-d') }}" data-date="{{ formatdate(date, format='Y-m-d') }}"
+        <table id="reservations-{{ formatdate(date, format: 'Y-m-d') }}" data-date="{{ formatdate(date, format: 'Y-m-d') }}"
             class="reservations w-100">
             <thead>
                 <tr>
-                    <td class="resdate">{{ formatdate(date, key='schedule_daily') }}</td>
+                    <td class="resdate">{{ formatdate(date, key: 'schedule_daily') }}</td>
                     {% for period in DailyLayout.GetPeriods(date) %}
                         <td class="reslabel" colspan="{{ period.Span() }}"
-                            data-start="{{ period.Begin().Hour()*60+period.Begin().Minute() }}"
-                            data-end="{{ period.End().Hour()*60+period.End().Minute() }}">{{ period.Label(date) }}</td>
+                            data-start="{{ period.Begin().Hour() * 60 + period.Begin().Minute() }}"
+                            data-end="{{ period.End().Hour() * 60 + period.End().Minute() }}">{{ period.Label(date) }}</td>
                     {% endfor %}
                 </tr>
             </thead>

@@ -1,8 +1,6 @@
-{% extends 'Reservation/create.twig' %}
+{% extends 'pages/reservations/create.twig' %}
 
-{% block header %}
-    {% include 'globalheader.twig' with {'TitleKey': 'EditReservationHeading', 'TitleArgs': '', 'cssFiles': 'css/schedule.css', 'printCssFiles': 'css/reservation.print.css'} %}
-{% endblock %}
+{% set TitleKey = 'EditReservationHeading' %}
 
 {% block reservationHeader %}
     {{ translate('EditReservationHeading', '') }}
@@ -24,7 +22,7 @@
                         {{ translate('AddToOutlook') }}</a>
                 </li>
                 <li>
-                    <a href="http://www.google.com/calendar/event?action=TEMPLATE&text={{ ReservationTitle|urlencode }}&dates={{ formatdate(StartDate.ToUtc(), key='google') }}/{{ formatdate(EndDate.ToUtc(), key='google') }}&ctz={{ StartDate.Timezone() }}&details={{ Description|urlencode }}&location={{ Resource.Name|urlencode }}&trp=false&sprop=&sprop=name:"
+                    <a href="http://www.google.com/calendar/event?action=TEMPLATE&text={{ ReservationTitle|urlencode }}&dates={{ formatdate(StartDate.ToUtc(), key: 'google') }}/{{ formatdate(EndDate.ToUtc(), key: 'google') }}&ctz={{ StartDate.Timezone() }}&details={{ Description|urlencode }}&location={{ Resource.Name|urlencode }}&trp=false&sprop=&sprop=name:"
                         target="_blank" rel="nofollow" class="dropdown-item">
                         <span class="bi bi-google"></span>
                         {{ translate('AddToGoogleCalendar') }}</a>
@@ -71,7 +69,6 @@
                 </li>
             </ul>
         </div>
-
 
         {% if CheckInRequired and (not checkinAdminOnly or CanViewAdmin) %}
             <button type="button" class="btn btn-sm btn-warning btnCheckin"><i class="bi bi-box-arrow-in-right"></i>
@@ -151,8 +148,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        {{ cancel_button(class='cancelDelete cancel') }}
-                        {{ delete_button(class='confirmDelete delete save') }}
+                        {{ cancel_button(class: 'cancelDelete cancel') }}
+                        {{ delete_button(class: 'confirmDelete delete save') }}
                     </div>
                 </div>
             </div>
