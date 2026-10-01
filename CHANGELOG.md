@@ -3,6 +3,77 @@
 
 <!-- version list -->
 
+## v6.0.0 (2026-10-01)
+
+### Bug Fixes
+
+- **calendar**: Disable subscription link during loading
+  ([`b0036e0`](https://github.com/LibreBooking/librebooking/commit/b0036e022a99899963ff91b40b3daee97b91c8e1))
+
+- **email**: Clear attachments before each send to stop them leaking
+  ([`8c74172`](https://github.com/LibreBooking/librebooking/commit/8c741725e1b1a6b730448c6d27437850d4c6e42b))
+
+- **i18n**: Extend and correct the Russian translation
+  ([`0439874`](https://github.com/LibreBooking/librebooking/commit/043987478b4739c8bd827bbe47db2555f9c12a30))
+
+- **ics**: Fix ICS subscription key generation if empty
+  ([`ccaa611`](https://github.com/LibreBooking/librebooking/commit/ccaa6116a1d26834644e793e4178e86f43eebdbd))
+
+- **lang**: Update HTML lang codes for multiple language files
+  ([`a156fc1`](https://github.com/LibreBooking/librebooking/commit/a156fc1e320ea6609233486557ac801d29a2c5c0))
+
+- **schedule**: Correct schedule style icons on mobile devices
+  ([`11f81db`](https://github.com/LibreBooking/librebooking/commit/11f81db494193615cd90e5b26f55bd37b0f8e29a))
+
+- **schedule**: Fix anonymous slots in SlotFactory for ics
+  ([`b676b6f`](https://github.com/LibreBooking/librebooking/commit/b676b6f86b52647cf95dd3018f413a4baf45e311))
+
+- **schedule**: Normalize phone schedule styles
+  ([`e40db27`](https://github.com/LibreBooking/librebooking/commit/e40db274ee2863cc78f0646e50455b4694e68a70))
+
+- **schedule**: Remove empty query strings
+  ([`7606a05`](https://github.com/LibreBooking/librebooking/commit/7606a054d9d407c77af777223d3a94398391851a))
+
+### Chores
+
+- Update DataTables suite to 3.0.1 and pdfmake 0.2.7
+  ([`cbeb5d5`](https://github.com/LibreBooking/librebooking/commit/cbeb5d52dc1f1d0da856b8650f13d5cd13127fd5))
+
+- Update select2 to 4.1.0
+  ([`dec67b9`](https://github.com/LibreBooking/librebooking/commit/dec67b92d8d06278f65de83a751a495b6d481e22))
+
+### Documentation
+
+- **security**: Direct vulnerability reports to private form
+  ([`3f92ba2`](https://github.com/LibreBooking/librebooking/commit/3f92ba22be6b3e0b1deeb3504851cd37dda6dab3))
+
+### Features
+
+- **calendar**: Show a descriptive name in ICS subscription feeds
+  ([`d4fbb90`](https://github.com/LibreBooking/librebooking/commit/d4fbb900064ad64f9784be21fdec1f8cfb321c96))
+
+- **email**: Enhance attachment handling with MIME type support
+  ([`913581c`](https://github.com/LibreBooking/librebooking/commit/913581c2c6f819d1d3b5f61fb03d80d1a69fb8d2))
+
+- **password**: Enhance password complexity requirements and validation
+  ([`d1d27d1`](https://github.com/LibreBooking/librebooking/commit/d1d27d1db7e42f37a9cbf5a1445a6312f1f99f8f))
+
+- **password**: Rename password minimum letters to minimum length
+  ([`c811eb1`](https://github.com/LibreBooking/librebooking/commit/c811eb1caed012dc45c968d9a0875bf6753a7b1f))
+
+### Refactoring
+
+- Restore GetPageSize method implementation
+  ([`01f8eef`](https://github.com/LibreBooking/librebooking/commit/01f8eef5549d1fc789a7462aca50c50f4f8dcee7))
+
+- **calendar**: Replace subscription link with button in calendars
+  ([`0c43a41`](https://github.com/LibreBooking/librebooking/commit/0c43a41d03a3779d40b9f150bc4c60e4114f80f4))
+
+### Breaking Changes
+
+- **password**: Config.php 'password.minimum letters' has been renamed to 'password.minimum length'
+
+
 ## v5.3.0 (2026-08-03)
 
 ### Bug Fixes

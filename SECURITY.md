@@ -5,7 +5,7 @@
 Only the most current stable version receives patches for security
 vulnerabilities.
 
-supported_version: 5.3.0
+supported_version: 6.0.0
 
 ## Reporting a Vulnerability
 
