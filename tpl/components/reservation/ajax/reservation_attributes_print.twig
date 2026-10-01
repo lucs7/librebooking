@@ -3,9 +3,9 @@
     {% for attribute in Attributes %}
         {% set attributeValue = attribute.Value()|default('') %}
         {% if attribute.Type() == CustomAttributeTypeDateTime and attribute.Value() is not null %}
-            {% set attributeValue %}{{ format_date(attribute.Value(), key='general_datetime') }}{% endset %}
+            {% set attributeValue %}{{ format_date(attribute.Value(), key: 'general_datetime') }}{% endset %}
         {% endif %}
-        {{ (attribute.Id()~'')|json_encode }} :
+        {{ (attribute.Id() ~ '')|json_encode }} :
         [ {{ attribute.Type()|json_encode }} ,
         {{ attribute.Label()|default('')|json_encode }} ,
         {{ attributeValue|json_encode }} ] {% if not loop.last %},{% endif %}

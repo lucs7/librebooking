@@ -1,0 +1,37 @@
+{% embed 'components/reservation/response.twig' with {id: 'reservation-failed', class: 'reservationResponseMessage', status: 'error', messageId: 'failed-message', message: translate('ReservationFailed'), errors: Errors} %}
+  {% block actions %}
+    <div>
+        <button id="btnSaveFailed" class="btn btn-warning text-white" data-bs-dismiss="modal"><i
+                class="bi bi-arrow-left-circle-fill me-1"></i>{{ translate('ReservationErrors') }}</button>
+
+        {% if CanJoinWaitList %}
+            <button id="btnWaitList" class="btn btn-info"><i
+                    class="bi bi-bell-fill me-1"></i>{{ translate('NotifyWhenAvailable') }}</button>
+        {% endif %}
+
+        {% if CanBeRetried %}
+            <div id="retryParams" class="d-none">
+                {% for retryParam in RetryParameters %}
+                    <input type="hidden" id="{{ retryParam.Name() }}"
+                        name="{{ constant('FormKeys::RESERVATION_RETRY_PREFIX') }}[{{ retryParam.Name() }}]"
+                        value="{{ retryParam.Value() }}" />
+                {% endfor %}
+            </div>
+            <div id="retryMessages" class="d-none">
+                {% for each in RetryMessages %}
+                    <div>{{ each|nl2br }}</div>
+                {% endfor %}
+            </div>
+            <button id="btnRetry" class="btn btn-primary"><i
+                    class="bi bi-arrow-repeat me-1"></i>{{ translate('RetrySkipConflicts') }}
+            </button>
+        {% endif %}
+    </div>
+  {% endblock %}
+{% endembed %}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#reservation-failed').trigger('loaded');
+    });
+</script>

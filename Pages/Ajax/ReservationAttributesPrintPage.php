@@ -52,7 +52,7 @@ class ReservationAttributesPrintPage extends Page implements IReservationAttribu
         $this->presenter->PageLoad($userSession);
         $this->Set('ReadOnly', BooleanConverter::ConvertValue($this->GetIsReadOnly()));
         $this->Set('CustomAttributeTypeDateTime', CustomAttributeTypes::DATETIME);
-        $this->Display('Ajax/reservation/reservation_attributes_print.tpl');
+        $this->Display('components/reservation/ajax/reservation_attributes_print.twig');
     }
 
     /**

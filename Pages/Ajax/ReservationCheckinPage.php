@@ -46,13 +46,13 @@ class ReservationCheckinPage extends Page implements IReservationCheckinPage
             $this->Set('IsCheckingIn', $this->GetAction() == ReservationAction::Checkin);
             $this->Set('IsCheckingOut', $this->GetAction() != ReservationAction::Checkin);
             if ($this->_reservationSavedSuccessfully) {
-                $this->Display('Ajax/reservation/checkin_successful.tpl');
+                $this->Display('components/reservation/ajax/checkin_successful.twig');
             } else {
-                $this->Display('Ajax/reservation/checkin_failed.tpl');
+                $this->Display('components/reservation/ajax/checkin_failed.twig');
             }
         } catch (Exception $ex) {
             Log::Error('ReservationCheckinPage - Critical error checking in reservation: %s', $ex);
-            $this->Display('Ajax/reservation/reservation_error.tpl');
+            $this->Display('components/reservation/ajax/reservation_error.twig');
         }
     }
 

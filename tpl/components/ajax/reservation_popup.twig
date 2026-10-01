@@ -49,7 +49,7 @@
             {% set datesKey = 'res_popup_time' %}
         {% endif %}
         {% set datesContent %}
-            <div class="dates">{{ formatdate(startDate, key='res_popup') }} - {{ formatdate(endDate, key=datesKey) }}</div>
+            <div class="dates">{{ formatdate(startDate, key: 'res_popup') }} - {{ formatdate(endDate, key: datesKey) }}</div>
         {% endset %}
         {{ formatter.Add('dates', datesContent) }}
 

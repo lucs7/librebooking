@@ -1,0 +1,26 @@
+{% embed 'components/reservation/response.twig' with {id: divId|default('reservation-created'), class: 'reservationResponseMessage', status: RequiresApproval ? 'warning' : 'success', messageId: 'created-message', message: translate(messageKey|default('ReservationCreated'))} %}
+  {% block body %}
+    <div id="reference-number">{{ translate('YourReferenceNumber', ReferenceNumber) }}</div>
+
+    <div class="dates" style="max-height: 15em;display: block;overflow-y: auto;margin: 0.5em 0;">
+        <span class="fw-bold">{{ translate('Dates') }}:</span>
+        {% for instance in Instances %}
+            <span
+                class="date">{{ format_date(instance.StartDate(), timezone: Timezone) }}{% if not loop.last %},
+        {% endif %}</span>
+        {% endfor %}
+    </div>
+
+    <div class="resources">
+        <span class="fw-bold">{{ translate('Resources') }}:</span>
+        {% for resource in Resources %}
+            <span class="resource">{{ resource.GetName() }}{% if not loop.last %}, {% endif %}</span>
+        {% endfor %}
+    </div>
+
+    {% if RequiresApproval %}
+        <div id="approval-message" class="fst-italic">{{ translate('ReservationRequiresApproval') }}</div>
+    {% endif %}
+
+  {% endblock %}
+{% endembed %}

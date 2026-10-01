@@ -43,7 +43,7 @@ class UserDetailsPopupPage extends Page implements IUserDetailsPopupPage
     public function PageLoad()
     {
         $this->presenter->PageLoad(ServiceLocator::GetServer()->GetUserSession());
-        $this->Display('Ajax/user_popup.tpl');
+        $this->Display('components/ajax/user_popup.twig');
     }
 
     public function SetCanViewUser($canView)

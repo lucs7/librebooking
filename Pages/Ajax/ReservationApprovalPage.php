@@ -32,7 +32,7 @@ class ReservationApprovalPage extends SecurePage implements IReservationApproval
             $presenter->PageLoad();
         } catch (Exception $ex) {
             Log::Error('ReservationApprovalPage - Critical error saving reservation: %s', $ex);
-            $this->Display('Ajax/reservation/reservation_error.tpl');
+            $this->Display('components/reservation/ajax/reservation_error.twig');
         }
     }
 
