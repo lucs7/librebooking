@@ -51,7 +51,7 @@ class ReservationAttributesPage extends Page implements IReservationAttributesPa
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         $this->presenter->PageLoad($userSession);
         $this->Set('ReadOnly', BooleanConverter::ConvertValue($this->GetIsReadOnly()));
-        $this->Display('Ajax/reservation/reservation_attributes.tpl');
+        $this->Display('components/reservation/ajax/reservation_attributes.twig');
     }
 
     /**

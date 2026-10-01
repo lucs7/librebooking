@@ -1,14 +1,5 @@
-<div id="{{ divId|default('reservation-created') }}" class="reservationResponseMessage">
-    <div id="reservation-response-image">
-        {% if RequiresApproval %}
-            <i class="bi bi-flag-fill fs-1 text-warning"></i>
-        {% else %}
-            <i class="bi bi-check-lg fs-1 text-success"></i>
-        {% endif %}
-    </div>
-
-    <div id="created-message" class="reservation-message fw-bold fs-4">
-        {{ translate(messageKey|default('ReservationCreated')) }}</div>
+{% embed 'components/reservation/response.twig' with {id: divId|default('reservation-created'), class: 'reservationResponseMessage', status: RequiresApproval ? 'warning' : 'success', messageId: 'created-message', message: translate(messageKey|default('ReservationCreated'))} %}
+  {% block body %}
     <div id="reference-number">{{ translate('YourReferenceNumber', ReferenceNumber) }}</div>
 
     <div class="dates" style="max-height: 15em;display: block;overflow-y: auto;margin: 0.5em 0;">
@@ -31,5 +22,5 @@
         <div id="approval-message" class="fst-italic">{{ translate('ReservationRequiresApproval') }}</div>
     {% endif %}
 
-    <input type="button" id="btnSaveSuccessful" value="{{ translate('Close') }}" class="btn btn-primary" />
-</div>
+  {% endblock %}
+{% endembed %}

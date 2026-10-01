@@ -1,16 +1,5 @@
-<div id="reservation-failed" class="reservationResponseMessage">
-    <div id="reservation-response-image">
-        <i class="bi bi-exclamation-triangle-fill fs-1 text-danger"></i>
-    </div>
-
-    <div id="failed-message" class="reservation-message fw-bold fs-4">{{ translate('ReservationFailed') }}</div>
-
-    <div class="error">
-        {% for each in Errors %}
-            <div>{{ each|nl2br }}</div>
-        {% endfor %}
-    </div>
-
+{% embed 'components/reservation/response.twig' with {id: 'reservation-failed', class: 'reservationResponseMessage', status: 'error', messageId: 'failed-message', message: translate('ReservationFailed'), errors: Errors} %}
+  {% block actions %}
     <div>
         <button id="btnSaveFailed" class="btn btn-warning text-white" data-bs-dismiss="modal"><i
                 class="bi bi-arrow-left-circle-fill me-1"></i>{{ translate('ReservationErrors') }}</button>
@@ -38,7 +27,8 @@
             </button>
         {% endif %}
     </div>
-</div>
+  {% endblock %}
+{% endembed %}
 
 <script type="text/javascript">
     $(document).ready(function() {

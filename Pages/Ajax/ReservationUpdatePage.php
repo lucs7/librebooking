@@ -52,13 +52,13 @@ class ReservationUpdatePage extends ReservationSavePage implements IReservationU
                 $this->Set('Resources', $reservation->AllResources());
                 $this->Set('Instances', $reservation->SortedInstances());
                 $this->Set('Timezone', ServiceLocator::GetServer()->GetUserSession()->Timezone);
-                $this->Display('Ajax/reservation/update_successful.tpl');
+                $this->Display('components/reservation/ajax/update_successful.twig');
             } else {
-                $this->Display('Ajax/reservation/save_failed.tpl');
+                $this->Display('components/reservation/ajax/save_failed.twig');
             }
         } catch (Exception $ex) {
             Log::Error('ReservationUpdatePage - Critical error saving reservation: %s', $ex);
-            $this->Display('Ajax/reservation/reservation_error.tpl');
+            $this->Display('components/reservation/ajax/reservation_error.twig');
         }
     }
 

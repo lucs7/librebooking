@@ -1,0 +1,38 @@
+{#
+  Result panel shown in the reservation modal after save/update/delete/check-in/waitlist.
+  Use with `{{ include(..., false) }}` for the plain case, or `{% embed %}` and override
+  `body` (extra details between the message and the buttons) and/or `actions` (replaces the
+  default Close button, which carries the `#btnSaveSuccessful` JS hook).
+
+  Params: `status` success|warning|error (icon; default success), `message` (already
+  translated), `messageId`/`id`/`class` optional attributes on the message / outer div,
+  `errors` optional list of error strings rendered in `.error`.
+#}
+{% set statusIcons = {
+  success: 'bi-check-lg text-success',
+  warning: 'bi-flag-fill text-warning',
+  error: 'bi-exclamation-triangle-fill text-danger',
+} %}
+<div{% if id is defined %} id='{{ id }}'{% endif %}{% if class is defined %} class='{{ class }}'{% endif %}>
+  <div id='reservation-response-image'>
+    <i class='bi {{ statusIcons[status|default('success')] }} fs-1'></i>
+  </div>
+
+  <div{% if messageId is defined %} id='{{ messageId }}'{% endif %} class='reservation-message fw-bold fs-4'>
+    {{- message -}}
+  </div>
+
+  {% if errors is defined %}
+    <div class='error'>
+      {% for each in errors %}
+        <div>{{ each|nl2br }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% block body %}{% endblock %}
+
+  {% block actions %}
+    <input type='button' id='btnSaveSuccessful' value="{{ translate('Close') }}" class='btn btn-primary'>
+  {% endblock %}
+</div>

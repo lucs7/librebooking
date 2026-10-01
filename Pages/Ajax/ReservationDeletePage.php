@@ -50,13 +50,13 @@ class ReservationDeletePage extends SecurePage implements IReservationDeletePage
             $this->presenter->HandleReservation($reservation);
 
             if ($this->reservationSavedSuccessfully) {
-                $this->Display('Ajax/reservation/delete_successful.tpl');
+                $this->Display('components/reservation/ajax/delete_successful.twig');
             } else {
-                $this->Display('Ajax/reservation/delete_failed.tpl');
+                $this->Display('components/reservation/ajax/delete_failed.twig');
             }
         } catch (Exception $ex) {
             Log::Error('ReservationDeletePage - Critical error saving reservation: %s', $ex);
-            $this->Display('Ajax/reservation/reservation_error.tpl');
+            $this->Display('components/reservation/ajax/reservation_error.twig');
         }
     }
 

@@ -73,10 +73,10 @@ class ReservationWaitlistPage extends SecurePage implements IReservationWaitlist
         try {
             $this->EnforceCSRFCheck();
             $this->_presenter->PageLoad();
-            $this->Display('Ajax/reservation/waitlist_added.tpl');
+            $this->Display('components/reservation/ajax/waitlist_added.twig');
         } catch (Exception $ex) {
             Log::Error('ReservationWaitlistPage - Critical error for reservation: %s', $ex);
-            $this->Display('Ajax/reservation/reservation_error.tpl');
+            $this->Display('components/reservation/ajax/reservation_error.twig');
         }
     }
 

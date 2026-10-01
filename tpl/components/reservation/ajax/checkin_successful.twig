@@ -1,0 +1,1 @@
+{{ include('components/reservation/response.twig', {messageId: IsCheckingIn ? 'checked-in-message' : 'checked-out-message', message: IsCheckingIn ? translate('CheckedInSuccess') : translate('CheckedOutSuccess')}, false) }}

@@ -1,0 +1,5 @@
+{% embed 'components/reservation/response.twig' with {status: 'error', messageId: 'failed-message', message: translate('ReservationCriticalError')} %}
+  {% block actions %}
+    <button id='btnSaveFailed' class='btn btn-warning text-white'><i class='bi bi-arrow-left-circle-fill me-1'></i>{{ translate('ReservationErrors') }}</button>
+  {% endblock %}
+{% endembed %}
