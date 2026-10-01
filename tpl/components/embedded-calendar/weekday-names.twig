@@ -1,0 +1,9 @@
+{#
+  Row of abbreviated weekday names (Sunday first) for the embedded week/month calendars.
+  Params: `Width` (CSS width of each cell).
+#}
+<div class="booked-weekday-names">
+  {% for key in ['DaySundayAbbr', 'DayMondayAbbr', 'DayTuesdayAbbr', 'DayWednesdayAbbr', 'DayThursdayAbbr', 'DayFridayAbbr', 'DaySaturdayAbbr'] %}
+    <div class="booked-weekday-name" style="width:{{ Width }}">{{ translate(key) }}</div>
+  {% endfor %}
+</div>

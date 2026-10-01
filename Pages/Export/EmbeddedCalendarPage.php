@@ -80,17 +80,17 @@ class EmbeddedCalendarPage extends Page implements IEmbeddedCalendarPage
 
     public function DisplayAgenda()
     {
-        $this->Display('Export/embedded-calendar-agenda.tpl');
+        $this->Display('components/embedded-calendar/agenda.twig');
     }
 
     public function DisplayWeek()
     {
-        $this->Display('Export/embedded-calendar-week.tpl');
+        $this->Display('components/embedded-calendar/week.twig');
     }
 
     public function DisplayMonth()
     {
-        $this->Display('Export/embedded-calendar-month.tpl');
+        $this->Display('components/embedded-calendar/month.twig');
     }
 
     public function DisplayError()
