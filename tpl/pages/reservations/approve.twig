@@ -1,8 +1,6 @@
-{% extends 'Reservation/view.twig' %}
+{% extends 'pages/reservations/view.twig' %}
 
-{% block header %}
-    {{ include('globalheader.twig', {TitleKey: 'EditReservationHeading'}) }}
-{% endblock %}
+{% set TitleKey = 'EditReservationHeading' %}
 
 {% block reservationHeader %}
     {{ translate('EditReservationHeading') }}

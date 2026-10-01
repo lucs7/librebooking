@@ -1,6 +1,8 @@
-{% block header %}
-{{ include('globalheader.twig', {TitleKey: 'ViewReservationHeading', printCssFiles: 'css/reservation.print.css'}) }}
-{% endblock %}
+{% extends 'layouts/base.twig' %}
+{% set TitleKey = TitleKey|default('ViewReservationHeading') %}
+{% set printCssFiles = 'css/reservation.print.css' %}
+
+{% block content %}
 <div id="page-view-reservation">
     <div id="reservation-box" class="card shadow readonly">
         <div id="reservationFormDiv" class="card-body">
@@ -386,8 +388,8 @@
 {{ jsfile('reservation-pdf.js') }}
 {{ vendor_js('jqtree/1.8.11/js/tree.jquery.js') }}
 
-{{ include('Reservation/pdf_libraries.twig') }}
-{{ include('Reservation/pdf.twig') }}
+{{ include('components/reservation/pdf_libraries.twig') }}
+{{ include('components/reservation/pdf.twig') }}
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -443,4 +445,4 @@
 
     });
 </script>
-{{ include('globalfooter.twig') }}
+{% endblock %}

@@ -1,4 +1,6 @@
-{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
+
+{% block content %}
 <div class="page-guest-collect">
 
     {% set _vg %}
@@ -34,8 +36,8 @@
     {{ jsfile('ajax-helpers.js') }}
 
     <div id="wait-box" class="wait-box">
-        {{ render_partial('wait-box.tpl', _context|merge({translateKey: 'Working'})) }}
+        {{ include('components/common/wait-box.twig', {translateKey: 'Working'}, false) }}
     </div>
 
 </div>
-{{ include('globalfooter.twig') }}
+{% endblock %}

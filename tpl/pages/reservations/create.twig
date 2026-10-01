@@ -1,6 +1,6 @@
-{% block header %}
-    {{ include('globalheader.twig', {cssFiles: 'css/schedule.css', printCssFiles: 'css/reservation.print.css'}) }}
-{% endblock %}
+{% extends 'layouts/base.twig' %}
+{% set cssFiles = 'css/schedule.css' %}
+{% set printCssFiles = 'css/reservation.print.css' %}
 
 {% macro displayResource(resource) %}
 <div class="resourceName rounded-1 m-1 p-1 {% if not resource.GetColor() %}text-success bg-success bg-opacity-10" {% else %}"
@@ -15,6 +15,7 @@
 </div>
 {% endmacro %}
 
+{% block content %}
 <div id="page-reservation">
     <div id="reservation-box" class="mx-3">
         <form id="form-reservation" method="post" enctype="multipart/form-data" role="form">
@@ -120,9 +121,9 @@
 
                 <div class="form-group {{ detailsCol }} py-2 border-bottom">
                     {% if ShowParticipation and AllowParticipation and ShowReservationDetails %}
-                    {{ include('Reservation/participation.twig') }}
+                    {{ include('components/reservation/participation.twig') }}
                     {% else %}
-                    {{ include('Reservation/private-participation.twig') }}
+                    {{ include('components/reservation/private-participation.twig') }}
                     {% endif %}
                 </div>
 
@@ -245,9 +246,9 @@
 
                 <div class="form-group col-12 py-2 border-bottom">
                     {% if ShowParticipation and AllowParticipation and ShowReservationDetails %}
-                    {{ include('Reservation/invitees.twig') }}
+                    {{ include('components/reservation/invitees.twig') }}
                     {% else %}
-                    {{ include('Reservation/private-participation.twig') }}
+                    {{ include('components/reservation/private-participation.twig') }}
                     {% endif %}
                 </div>
 
@@ -531,8 +532,8 @@
 {{ jsfile('reservation-pdf.js') }}
 {{ vendor_js('jqtree/1.8.11/js/tree.jquery.js') }}
 
-{{ include('Reservation/pdf_libraries.twig') }}
-{{ include('Reservation/pdf.twig') }}
+{{ include('components/reservation/pdf_libraries.twig') }}
+{{ include('components/reservation/pdf.twig') }}
 <script type="text/javascript">
     $(function() {
         var scopeOptions = {
@@ -662,5 +663,4 @@
             });
         }
     </script>
-
-    {{ include('globalfooter.twig') }}
+{% endblock %}

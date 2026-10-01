@@ -52,7 +52,7 @@ class NewReservationPage extends ReservationPage implements INewReservationPage
 
     protected function GetTemplateName()
     {
-        return 'Reservation/create.tpl';
+        return 'pages/reservations/create.twig';
     }
 
     protected function GetReservationAction()

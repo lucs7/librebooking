@@ -59,7 +59,7 @@ class GuestReservationPage extends NewReservationPage implements IGuestReservati
             return parent::GetTemplateName();
         }
 
-        return 'Reservation/collect-guest.tpl';
+        return 'pages/reservations/collect-guest.twig';
     }
 
     public function GuestInformationCollected()

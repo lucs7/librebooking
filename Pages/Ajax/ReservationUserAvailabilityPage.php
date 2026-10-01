@@ -110,7 +110,7 @@ class ReservationUserAvailabilityPage extends Page implements IReservationUserAv
         $this->Set('User', $user);
         $this->Set('Participants', $participants);
         $this->Set('Invitees', $invitees);
-        $this->Display('Reservation/availability.tpl');
+        $this->Display('components/reservation/availability.twig');
     }
 
     public function GetStartDate()

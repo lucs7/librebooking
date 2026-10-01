@@ -1,8 +1,6 @@
-{% extends 'Reservation/create.twig' %}
+{% extends 'pages/reservations/create.twig' %}
 
-{% block header %}
-    {{ include('globalheader.twig', {TitleKey: 'EditReservationHeading', TitleArgs: '', cssFiles: 'css/schedule.css', printCssFiles: 'css/reservation.print.css'}) }}
-{% endblock %}
+{% set TitleKey = 'EditReservationHeading' %}
 
 {% block reservationHeader %}
     {{ translate('EditReservationHeading', '') }}

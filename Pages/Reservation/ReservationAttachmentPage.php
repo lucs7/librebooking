@@ -71,7 +71,8 @@ class ReservationAttachmentPage extends SecurePage implements IReservationAttach
      */
     public function ShowError()
     {
-        $this->Display('Reservation/attachment-error.tpl');
+        $this->Set('ErrorMessage', 'AttachmentLoadingError');
+        $this->Display('pages/error.twig');
     }
 
     /**

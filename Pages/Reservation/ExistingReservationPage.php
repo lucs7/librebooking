@@ -164,12 +164,12 @@ class ExistingReservationPage extends ReservationPage implements IExistingReserv
         $readOnly = $this->GetQuerystring(QueryStringKeys::READ_ONLY) == 1;
 
         if (!$readOnly && $this->IsApprovable && !$this->UpdatingBeforeApproving()) {
-            return 'Reservation/approve.tpl';
+            return 'pages/reservations/approve.twig';
         }
         if (!$readOnly && $this->IsEditable) {
-            return 'Reservation/edit.tpl';
+            return 'pages/reservations/edit.twig';
         }
-        return 'Reservation/view.tpl';
+        return 'pages/reservations/view.twig';
     }
 
     protected function UpdatingBeforeApproving()
@@ -333,7 +333,7 @@ class DuplicateReservationPage extends ExistingReservationPage
 
     protected function GetTemplateName()
     {
-        return 'Reservation/create.tpl';
+        return 'pages/reservations/create.twig';
     }
 
     public function PageLoad()
