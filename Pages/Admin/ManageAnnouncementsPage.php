@@ -100,7 +100,7 @@ class ManageAnnouncementsPage extends ActionPage implements IManageAnnouncements
         $this->Set('priorities', range(1, 10));
         $this->Set('timezone', ServiceLocator::GetServer()->GetUserSession()->Timezone);
 
-        $this->Display('Admin/manage_announcements.tpl');
+        $this->Display('pages/admin/manage_announcements.twig');
     }
 
     public function BindAnnouncements($announcements)

@@ -4,7 +4,7 @@
   block convention as `components/common/card.twig`. `id` is required (used for the outer id
   and, when a header is given, the `aria-labelledby`/title id). Pass `centered`/`scrollable`/
   `size` ('sm'|'lg'|'xl') for `.modal-dialog` modifiers, `static` for a non-dismissable
-  backdrop, and `class`/`bodyClass` for extra CSS classes. The close button is rendered
+  backdrop, `focus: false` to disable Bootstrap's focus trap (needed for select2/editors inside), and `class`/`bodyClass` for extra CSS classes. The close button is rendered
   automatically alongside the header, so `header` only needs the title markup itself.
 
   {% embed 'components/common/modal.twig' with {'id': 'someModal', 'centered': true} %}
@@ -28,6 +28,9 @@
   aria-hidden='true'
   {% if static|default(false) %}
     data-bs-backdrop='static'
+  {% endif %}
+  {% if focus is defined and not focus %}
+    data-bs-focus='false'
   {% endif %}
 >
   <div class='modal-dialog {% if centered|default(false) %}modal-dialog-centered{% endif %} {% if scrollable|default(false) %}modal-dialog-scrollable{% endif %}{% if size is defined %} modal-{{ size }}{% endif %}'>
