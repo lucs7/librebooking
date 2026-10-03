@@ -56,7 +56,7 @@ class CreditLogPage extends ActionPage implements ICreditLogPage
     {
         $this->presenter->PageLoad(ServiceLocator::GetServer()->GetUserSession());
 
-        $this->Display('Admin/Users/credit_log.tpl');
+        $this->Display('pages/admin/credit_log.twig');
     }
 
     public function GetPageNumber()
