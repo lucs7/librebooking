@@ -1,18 +1,14 @@
-{% set DataTable = true %}{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
+{% set DataTable = true %}
+
+{% block content %}
 <div id="page-manage-blackouts" class="admin-page">
     <h1 class="border-bottom mb-3">{{ translate('ManageBlackouts') }}</h1>
     <div class="accordion">
         <form id="addBlackoutForm" role="form" method="post">
-            <div class="accordion-item shadow mb-2 panel-default" id="add-blackout-panel">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed link-primary" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#add-blackout-content" aria-expanded="false"
-                        aria-controls="add-blackout-content">
-                        <i class="bi bi-plus-circle-fill me-1"></i>{{ translate('AddBlackout') }}
-                    </button>
-                </h2>
-                <div id="add-blackout-content" class="accordion-collapse collapse">
-                    <div class="accordion-body add-contents">
+            {% set addTitle %}<i class="bi bi-plus-circle-fill me-1"></i>{{ translate('AddBlackout') }}{% endset %}
+            {% embed 'components/common/accordion-item.twig' with {id: 'add-blackout-panel', contentsId: 'add-blackout-content', title: addTitle, buttonClass: 'link-primary', bodyClass: 'add-contents', open: true} %}
+                {% block body %}
                         <div class="form-group d-flex align-items-center flex-wrap gap-1 mb-2">
                             <div class="d-flex align-items-center flex-wrap gap-1 me-sm-4">
                                 <label class="fw-bold" for="addStartDate">{{ translate('BeginDate') }}</label>
@@ -38,25 +34,12 @@
                         </div>
                         <div class="form-group d-flex align-items-center flex-wrap gap-1 mb-2">
                             <label class="fw-bold" for="addResourceId">{{ translate('Resource') }}</label>
-                            <select {{ formname('RESOURCE_ID') }} class="form-select form-select-sm w-auto"
-                                id="addResourceId">
-                                {{ object_html_options(options: Resources, key: 'GetId', label: 'GetName', selected: ResourceId) }}
-                            </select>
+                            {{ include('components/common/select.twig', {id: 'addResourceId', options: Resources, key: 'GetId', label: 'GetName', selected: ResourceId, class: 'form-select-sm w-auto', attrs: formname('RESOURCE_ID')}, false) }}
                             {% if Schedules is defined and Schedules|length > 0 %}
-                                <div class="vr mx-2"></div>
-                                <div class="form-check me-2">
-                                    <input class="form-check-input" {{ formname('BLACKOUT_APPLY_TO_SCHEDULE') }}
-                                        type="checkbox" id="allResources" />
-                                    <label class="form-check-label" for="allResources"
-                                        style="">{{ translate('AllResourcesOn') }}
-                                    </label>
-                                </div>
+                                <div class="vr mx-2 d-none d-md-inline-block"></div>
+                                {{ include('components/common/checkbox.twig', {id: 'allResources', name: constant('FormKeys::BLACKOUT_APPLY_TO_SCHEDULE'), labelkey: 'AllResourcesOn', switchStyle: false, class: 'me-2'}, false) }}
                                 <label for="addScheduleId" class="visually-hidden">{{ translate('Schedule') }} </label>
-                                <select {{ formname('SCHEDULE_ID') }} id="addScheduleId"
-                                    class="form-select form-select-sm w-auto" disabled="disabled"
-                                    title="{{ translate('Schedule') }}">
-                                    {{ object_html_options(options: Schedules, key: 'GetId', label: 'GetName', selected: ScheduleId) }}
-                                </select>
+                                {{ include('components/common/select.twig', {id: 'addScheduleId', options: Schedules, key: 'GetId', label: 'GetName', selected: ScheduleId, class: 'form-select-sm w-auto', title: translate('Schedule'), attrs: formname('SCHEDULE_ID') ~ ' disabled="disabled"'}, false) }}
                             {% endif %}
                         </div>
                         <div class="form-group d-flex align-items-center gap-1 mb-2">
@@ -97,21 +80,14 @@
                             {{ add_button() }}
                             {{ reset_button() }}
                         </div>
-                    </div>
-                </div>
-            </div>
+                {% endblock %}
+            {% endembed %}
         </form>
 
         <form role="form">
-            <div class="accordion-item shadow mb-2 panel panel-default" id="filter-panel">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed link-primary" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#filter-content" aria-expanded="false" aria-controls="filter-content">
-                        <i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}
-                    </button>
-                </h2>
-                <div id="filter-content" class="accordion-collapse collapse">
-                    <div class="accordion-body row gy-2">
+            {% set filterTitle %}<i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}{% endset %}
+            {% embed 'components/common/accordion-item.twig' with {id: 'filter-panel', contentsId: 'filter-content', title: filterTitle, buttonClass: 'link-primary', bodyClass: 'row gy-2', open: true} %}
+                {% block body %}
                         <div class="form-group col-12 col-sm-4">
                             <div class="d-flex align-items-center justify-content-between flex-wrap">
                                 <div class="d-flex flex-column">
@@ -129,32 +105,26 @@
                         <div class="form-group col-12 col-sm-4">
                             <label for="scheduleId" class="fw-bold">{{ translate('Schedule') }} </label>
 
-                            <select id="scheduleId" class="form-select form-select-sm col-12 col-sm-4">
-                                <option value="">{{ translate('AllSchedules') }}</option>
-                                {{ object_html_options(options: Schedules, key: 'GetId', label: 'GetName', selected: ScheduleId) }}
-                            </select>
+                            {{ include('components/common/select.twig', {id: 'scheduleId', options: Schedules, key: 'GetId', label: 'GetName', selected: ScheduleId, placeholder: 'AllSchedules', class: 'form-select-sm'}, false) }}
                         </div>
                         <div class="form-group col-12 col-sm-4 mb-2">
                             <label for="resourceId" class="fw-bold">{{ translate('Resource') }} </label>
 
-                            <select id="resourceId" class="form-select form-select-sm col-12 col-sm-4">
-                                <option value="">{{ translate('AllResources') }}</option>
-                                {{ object_html_options(options: Resources, key: 'GetId', label: 'GetName', selected: ResourceId) }}
-                            </select>
+                            {{ include('components/common/select.twig', {id: 'resourceId', options: Resources, key: 'GetId', label: 'GetName', selected: ResourceId, placeholder: 'AllResources', class: 'form-select-sm'}, false) }}
                         </div>
                         <div class="accordion-footer border-top pt-3">
                             {{ filter_button(attributes: {id: 'filter'}) }}
                             <button id="showAll" class="btn btn-outline-secondary btn-sm"><i
                                     class="bi bi-list-task me-1"></i>{{ translate('ViewAll') }}</button>
                         </div>
-                    </div>
-                </div>
-            </div>
+                {% endblock %}
+            {% endembed %}
         </form>
     </div>
 
-    <div class="card shadow">
-        <div class="card-body">
+    {% set tableId = 'blackoutTable' %}
+    {% embed 'components/common/card.twig' %}
+        {% block body %}
             <div class="table-responsive">
                 {% set tableId = 'blackoutTable' %}
                 <table class="table table-striped table-hover border-top w-100" id="{{ tableId }}">
@@ -174,7 +144,7 @@
                                     <label class="visually-hidden">{{ translate('Delete') }}</label>
                                     <a href="#" id="delete-selected" class="link-danger d-none"
                                         title="{{ translate('Delete') }}"><i
-                                            class="bi bi-trash3-fill text-danger icon remove"></i>
+                                            class="bi bi-trash3-fill text-danger icon remove"></i></a>
                                 </div>
                             </th>
                         </tr>
@@ -216,94 +186,72 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
-    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="deleteModalLabel">{{ translate('Delete') }}</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+    {% embed 'components/common/modal.twig' with {id: 'deleteDialog', centered: true} %}
+        {% block header %}<h4 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h4>{% endblock %}
+        {% block body %}
+            <div class="alert alert-warning">
+                {{ translate('DeleteWarning') }}
+            </div>
+        {% endblock %}
+        {% block footer %}
+            <div class="modal-footer">
+                <form id="deleteForm" method="post">
+                    {{ cancel_button() }}
+                    {{ delete_button(class: 'btnUpdateAllInstances') }}
+                </form>
+            </div>
+        {% endblock %}
+    {% endembed %}
+
+    {% embed 'components/common/modal.twig' with {id: 'deleteRecurringDialog', centered: true} %}
+        {% block header %}<h4 class="modal-title" id="deleteRecurringDialogLabel">{{ translate('Delete') }}</h4>{% endblock %}
+        {% block body %}
+            <div class="alert alert-warning">
+                {{ translate('DeleteWarning') }}
+            </div>
+        {% endblock %}
+        {% block footer %}
+            <div class="modal-footer">
+                <form id="deleteRecurringForm" method="post" class="gap-2 d-md-flex justify-content-md-end">
+                    {{ cancel_button() }}
+
+                    <button type="button" class="btn btn-danger save btnUpdateThisInstance">
+                        <i class="bi bi-x-lg"></i> {{ translate('ThisInstance') }}</button>
+
+                    <button type="button" class="btn btn-danger save btnUpdateAllInstances">
+                        <i class="bi bi-x-circle"></i> {{ translate('AllInstances') }}</button>
+
+                    <input type="hidden" {{ formname('SERIES_UPDATE_SCOPE') }} class="hdnSeriesUpdateScope"
+                        value="{{ constant('SeriesUpdateScope::FullSeries') }}" />
+                </form>
+            </div>
+        {% endblock %}
+    {% endembed %}
+
+    <form id="deleteMultipleForm" method="post" action="{{ server.SCRIPT_NAME }}?action={{ constant('ManageBlackoutsActions::DELETE_MULTIPLE') }}">
+        {% embed 'components/common/modal.twig' with {id: 'deleteMultipleDialog', centered: true} %}
+            {% block header %}<h4 class="modal-title" id="deleteMultipleDialogLabel">{{ translate('Delete') }} (<span id="deleteMultipleCount"></span>)</h4>{% endblock %}
+            {% block body %}
+                <div class="alert alert-warning">
+                    <div>{{ translate('DeleteWarning') }}</div>
                 </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning">
-                        {{ translate('DeleteWarning') }}
-                    </div>
-                </div>
+            {% endblock %}
+            {% block footer %}
                 <div class="modal-footer">
-                    <form id="deleteForm" method="post">
-                        {{ cancel_button() }}
-                        {{ delete_button(class: 'btnUpdateAllInstances') }}
-                    </form>
-
+                    {{ cancel_button() }}
+                    {{ delete_button() }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="deleteRecurringDialog" tabindex="-1" role="dialog"
-        aria-labelledby="deleteRecurringModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="deleteRecurringModalLabel">{{ translate('Delete') }}</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-warning">
-                        {{ translate('DeleteWarning') }}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <form id="deleteRecurringForm" method="post" class="gap-2 d-md-flex justify-content-md-end">
-                        {{ cancel_button() }}
-
-                        <button type="button" class="btn btn-danger save btnUpdateThisInstance">
-                            <i class="bi bi-x-lg"></i> {{ translate('ThisInstance') }}</button>
-
-                        <button type="button" class="btn btn-danger save btnUpdateAllInstances">
-                            <i class="bi bi-x-circle"></i> {{ translate('AllInstances') }}</button>
-
-                        <input type="hidden" {{ formname('SERIES_UPDATE_SCOPE') }} class="hdnSeriesUpdateScope"
-                            value="{{ constant('SeriesUpdateScope::FullSeries') }}" />
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="deleteMultipleDialog" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="deleteMultipleModalLabel" aria-hidden="true">
-        <form id="deleteMultipleForm" method="post"
-            action="{{ server.SCRIPT_NAME }}?action={{ constant('ManageBlackoutsActions::DELETE_MULTIPLE') }}">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="deleteMultipleModalLabel">{{ translate('Delete') }} (<span
-                                id="deleteMultipleCount"></span>)</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-warning">
-                            <div>{{ translate('DeleteWarning') }}</div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button() }}
-                        {{ indicator() }}
-                    </div>
-                    <div id="deleteMultiplePlaceHolder" class="d-none"></div>
-                </div>
-            </div>
-        </form>
-    </div>
+                <div id="deleteMultiplePlaceHolder" class="d-none"></div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
     {{ csrf_token() }}
-    {% set DataTable = true %}{{ include('javascript-includes.twig') }}
+    {{ include('javascript-includes.twig', {DataTable: true}, false) }}
     {{ datatable(tableId) }}
     {{ jsfile(src: 'reservationPopup.js') }}
     {{ jsfile(src: 'ajax-helpers.js') }}
@@ -360,33 +308,22 @@
     {{ control('DatePickerSetupControl', {ControlId: 'addStartDate', DefaultDate: AddStartDate}) }}
     {{ control('DatePickerSetupControl', {ControlId: 'addEndDate', DefaultDate: AddEndDate}) }}
     {{ control('DatePickerSetupControl', {ControlId: 'EndRepeat', DefaultDate: AddEndDate}) }}
-    {{ control('DatePickerSetupControl', {ControlId: 'RepeatDate', Multiple: false}) }}
 
-    <div id="wait-box" class="modal fade" aria-labelledby="update-boxLabel" data-bs-backdrop="static"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div id="creatingNotification">
-                        {{ include('wait-box.twig', {translateKey: 'Working'}) }}
-                    </div>
-                    <div id="result" class="text-center"></div>
-                </div>
+    {% embed 'components/common/modal.twig' with {id: 'wait-box', size: 'xl', centered: true, scrollable: true, static: true} %}
+        {% block body %}
+            <div id="creatingNotification">
+                {{ include('components/common/wait-box.twig', {translateKey: 'Working'}, false) }}
             </div>
-        </div>
-    </div>
+            <div id="result" class="text-center"></div>
+        {% endblock %}
+    {% endembed %}
 
-    <div class="modal fade" id="update-box" tabindex="-1" aria-labelledby="update-boxLabel" data-bs-backdrop="static"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-body">
-                    {{ indicator(id: 'update-spinner') }}
-                    <div id="update-contents"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% embed 'components/common/modal.twig' with {id: 'update-box', size: 'xl', centered: true, scrollable: true, static: true} %}
+        {% block body %}
+            {{ indicator(id: 'update-spinner') }}
+            <div id="update-contents"></div>
+        {% endblock %}
+    {% endembed %}
 
 </div>
-{{ include('globalfooter.twig') }}
+{% endblock %}

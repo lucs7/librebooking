@@ -299,13 +299,13 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
 
     public function ShowPage()
     {
-        $this->Display('Admin/Blackouts/manage_blackouts.tpl');
+        $this->Display('pages/admin/manage_blackouts.twig');
     }
 
     public function ShowBlackout()
     {
         $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('period_time'));
-        $this->Display('Admin/Blackouts/manage_blackouts_edit.tpl');
+        $this->Display('components/blackout/edit-form.twig');
     }
 
     public function ShowAddResult(
@@ -322,7 +322,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $this->Set('Reservations', $conflictingReservations);
         $this->Set('Blackouts', $conflictingBlackouts);
         $this->Set('Timezone', $timezone);
-        $this->Display('Admin/Blackouts/manage_blackouts_response.tpl');
+        $this->Display('components/blackout/response.twig');
     }
 
     public function ShowUpdateResult(
@@ -339,7 +339,7 @@ class ManageBlackoutsPage extends ActionPage implements IManageBlackoutsPage
         $this->Set('Reservations', $conflictingReservations);
         $this->Set('Blackouts', $conflictingBlackouts);
         $this->Set('Timezone', $timezone);
-        $this->Display('Admin/Blackouts/manage_blackouts_response.tpl');
+        $this->Display('components/blackout/response.twig');
     }
 
     public function BindBlackouts($blackouts)
