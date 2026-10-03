@@ -249,7 +249,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
 
     protected function RenderPageTemplate(): void
     {
-        $this->Display('Admin/Users/manage_users.tpl');
+        $this->Display('pages/admin/manage_users.twig');
     }
 
     public function BindPageInfo(PageInfo $pageInfo)
@@ -431,7 +431,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
     public function ShowTemplateCSV($attributes)
     {
         $this->Set('attributes', $attributes);
-        $this->DisplayCsv('Admin/Users/import_user_template_csv.tpl', 'users.csv');
+        $this->DisplayCsv('components/user/import-template-csv.twig', 'users.csv');
     }
 
     public function GetImportFile()
@@ -451,7 +451,7 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
 
     public function ShowExportCsv()
     {
-        $this->DisplayCsv('Admin/Users/users_csv.tpl', 'users.csv');
+        $this->DisplayCsv('components/user/users-csv.twig', 'users.csv');
     }
 
     public function GetDeletedUserIds()
@@ -480,6 +480,6 @@ class ManageUsersPage extends ActionPage implements IManageUsersPage
         $this->Set('Languages', $GLOBALS['APP_TIMEZONES']);
         $this->Set('User', $user);
         $this->Set('Attributes', $attributes);
-        $this->Display('Admin/Users/user-update.tpl');
+        $this->Display('components/user/update-form.twig');
     }
 }
