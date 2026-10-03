@@ -3,6 +3,77 @@
 
 <!-- version list -->
 
+## v6.1.0 (2026-10-03)
+
+### Bug Fixes
+
+- **calendar**: Honor resource group filter when the group empty
+  ([`c9920ea`](https://github.com/LibreBooking/librebooking/commit/c9920ea272d6212e87cb6ada7544914bb559ec91))
+
+- **csv**: Close header and add max concurrent column in resources export
+  ([`2c8772c`](https://github.com/LibreBooking/librebooking/commit/2c8772c03487591a4d0f0154eafcc3a6c396c3b5))
+
+- **csv**: Drop trailing comma from report CSV
+  ([`6fd7f1f`](https://github.com/LibreBooking/librebooking/commit/6fd7f1f515c8081cdbd3dfba8f93a9414eea3655))
+
+- **csv**: Escape double quotes correctly in user and resource exports
+  ([`209564f`](https://github.com/LibreBooking/librebooking/commit/209564ff2d71852c194bfbd8c4919dea94cdd34f))
+
+- **csv**: Escape group and reservation exports correctly
+  ([`40ae66b`](https://github.com/LibreBooking/librebooking/commit/40ae66bef9c4a6a97491038914aa489d5bbf1f65))
+
+- **csv**: Escape report CSV values and headers for CSV
+  ([`c6fe0e1`](https://github.com/LibreBooking/librebooking/commit/c6fe0e126c117fd9bf63326ff3a0c38e91262759))
+
+- **csv**: Fix quote escaping and avoid null admin group in exports csv
+  ([`9935df0`](https://github.com/LibreBooking/librebooking/commit/9935df0e6f3371698d3738920dfcea7c85f76dba))
+
+- **csv**: Separate custom attribute headers in users export
+  ([`1b51550`](https://github.com/LibreBooking/librebooking/commit/1b5155039ec8637bd8f534810a5a9581c2c7b9ca))
+
+- **embed**: Restore embed.css
+  ([`5f9e886`](https://github.com/LibreBooking/librebooking/commit/5f9e886d6d3dc7d83c5ce0a5cb54262989231c73))
+
+- **install**: Require install password before install and upgrade
+  ([`ab8b8cd`](https://github.com/LibreBooking/librebooking/commit/ab8b8cd23cd1d05a9ae8f13c358fd5e1e134b914))
+
+### Features
+
+- **database**: Add ExecuteAffectedRows() to database layer
+  ([`d561a22`](https://github.com/LibreBooking/librebooking/commit/d561a22bea116f570cb98536de95a95519e864f8))
+
+### Refactoring
+
+- **auth**: Move UserSession building into UserSessionBuilder
+  ([`ccb9b07`](https://github.com/LibreBooking/librebooking/commit/ccb9b077e163f575a15bef53b8e5960ff0b68862))
+
+- **calendar**: Simplify CalendarSubscriptionPresenter::PageLoad
+  ([`6e81e38`](https://github.com/LibreBooking/librebooking/commit/6e81e385a1c9d539b01624ec70c39ded0ee18954))
+
+- **csv**: Reformat group and reservation CSV templates
+  ([`d6fb663`](https://github.com/LibreBooking/librebooking/commit/d6fb6632bf9869cc1ec647a5ee76103d9d16be41))
+
+- **csv**: Reformat report CSV template
+  ([`ef3b61d`](https://github.com/LibreBooking/librebooking/commit/ef3b61d24ff800e95efc58a1eec7bc231940d583))
+
+- **csv**: Reformat user and resource CSV templates for readability
+  ([`523f775`](https://github.com/LibreBooking/librebooking/commit/523f77580624660cfdea5fb3fc13a7776afcde11))
+
+### Testing
+
+- **csv**: Add tests for group and reservation export templates
+  ([`2c9cba0`](https://github.com/LibreBooking/librebooking/commit/2c9cba0935d4da174264639b379067d2d7f8e9f6))
+
+- **csv**: Add tests for the report CSV export template
+  ([`5670f50`](https://github.com/LibreBooking/librebooking/commit/5670f501b4a86296d2f384833928080eabd1c3b9))
+
+- **csv**: Add tests for user and resource CSV export templates
+  ([`024b04f`](https://github.com/LibreBooking/librebooking/commit/024b04f9872df326e652470a498682eabfabce3f))
+
+- **integration**: Add database tests runnable locally and in CI
+  ([`5bf1f57`](https://github.com/LibreBooking/librebooking/commit/5bf1f57e612fda23abba153091c5ac8567fbeedb))
+
+
 ## v6.0.0 (2026-10-01)
 
 ### Bug Fixes
