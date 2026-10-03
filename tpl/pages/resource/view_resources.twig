@@ -104,11 +104,9 @@
                                 <td>
                                     {% embed 'components/common/accordion-item.twig' with {id: 'resource' ~ id, contentsId: 'id' ~ id, title: resource.GetName(), buttonClass: '', bodyClass: 'resourceDetails row'} %}
                                     {% block body %}
-                                                <div class="col-12 col-sm-5">
-                                                    <input type="hidden" class="id" value="{{ id }}" />
-                                                    <div class="row gy-2">
-                                                        <div class="col-sm-3 col-6 resourceImage">
-                                                            <div class="">
+<input type="hidden" class="id" value="{{ id }}" />
+<div class="col-12 col-sm-2 p-2">
+                                                            <div class="resourceImage">
                                                                 {% if resource.HasImage() %}
 
                                                                     <div id="resourceImageCarousel" class="carousel slide">
@@ -157,9 +155,10 @@
                                                                     style="height: 23px;background-color:{% if resource.HasColor() %}{{ resource.GetColor() }}{% else %}#ffffff{% endif %}">
                                                                 </div>
                                                             </div>
-                                                        </div>
-
-                                                        <div class="col-sm-9 col-6">
+</div>
+<div class="col-12 col-sm-10">
+    <div class="row row-cols-auto row-cols-sm-3">
+        <div class="col d-block">
                                                             <div class="title resourceNameField fs-5 fw-bold">
                                                                 {{ resource.GetName() }}</div>
                                                             <div>
@@ -250,90 +249,84 @@
                                                                     {% endif %}
                                                                 </span>
                                                             </div>
+        </div>
+        <div class="col">
+            <div>
+                <span class="fs-6 fw-bold">{{ translate('Access') }}</span>
+                <div class="accessPlaceHolder">
+                    {{ include('Admin/Resources/manage_resources_access.twig', {resource: resource}) }}
+                </div>
+            </div>
+            <div class="mt-2">
+                <span class="fs-6 fw-bold">{{ translate('PermissionType') }}</span>
+                <div class="resourcePermissionTypePlaceHolder">
+                    {% if ResourcePermissionTypes is defined and ResourcePermissionTypes[resource.GetId()] == 0 %}
+                        {{ translate('FullAccess') }}
+                    {% else %}
+                        {{ translate('ViewOnly') }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div>
+                <span class="fs-6 fw-bold">{{ translate('Duration') }}</span>
+                <div class="durationPlaceHolder">
+                    {{ include('Admin/Resources/manage_resources_duration.twig', {resource: resource}) }}
+                </div>
+            </div>
+            {% if CreditsEnabled is defined and CreditsEnabled %}
+                <div class="mt-2">
+                    <span class="fs-6 fw-bold">{{ translate('Credits') }}</span>
+                    <div class="creditsPlaceHolder">
+                        {{ include('Admin/Resources/manage_resources_credits.twig', {resource: resource}) }}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="mt-2">
+                <span class="fs-6 fw-bold">{{ translate('Capacity') }}</span>
+                <div class="capacityPlaceHolder">
+                    {{ include('Admin/Resources/manage_resources_capacity.twig', {resource: resource}) }}
+                </div>
+            </div>
+            <div class="mt-2">
+                <span class="fs-6 fw-bold">{{ translate('ResourceGroups') }}</span>
+                <div class="resourceGroupsPlaceHolder">
+                    {% if resource.GetResourceGroupIds()|length == 0 %}
+                        {{ translate('None') }}
+                    {% endif %}
+                    {% for resourceGroupId in resource.GetResourceGroupIds() %}
+                        <span class="resourceGroupId" data-value="{{ resourceGroupId }}">{{ ResourceGroup[resourceGroupId].name }}</span>{% if not loop.last %},
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                                        </div>
-                                                    </div>
-                                                </div>
+    {% set applicableAttributes = (AttributeFilters ?? [])|filter(a => a.AppliesToEntity(id)) %}
+    {% if applicableAttributes|length > 0 %}
+        <hr class="hr" />
+        <div class="mb-4">
+            <span class="fs-6 fw-bold">{{ translate('CustomAttributes') }}</span>
+            <div>
+                {% for attribute in applicableAttributes %}
+                    <div class="mb-0 me-3 d-inline-block">
+                        <label class="inline fw-bold">{{ attribute.Label() }}</label>
+                        {{ resource.GetAttributeValue(attribute.Id())|escape }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 
-                                                <div class="col-12 col-sm-7">
-                                                    <div class="row">
-                                                        <div class="col-sm-6 col-12">
-                                                            <div class="mb-4">
-                                                                <span class="fs-6 fw-bold">{{ translate('Duration') }}</span>
-                                                                <div class="durationPlaceHolder">
-                                                                    {{ include('Admin/Resources/manage_resources_duration.twig', {resource: resource}) }}
-                                                                </div>
-                                                            </div>
-
-                                                            {% if CreditsEnabled is defined and CreditsEnabled %}
-                                                                <div class="mb-4">
-                                                                    <span class="fs-6 fw-bold">{{ translate('Credits') }}</span>
-                                                                    <div class="creditsPlaceHolder">
-                                                                        {{ include('Admin/Resources/manage_resources_credits.twig', {resource: resource}) }}
-                                                                    </div>
-                                                                </div>
-                                                            {% endif %}
-
-                                                            <div style="mb-4">
-                                                                <span class="fs-6 fw-bold">{{ translate('Capacity') }}</span>
-                                                                <div class="capacityPlaceHolder">
-                                                                    {{ include('Admin/Resources/manage_resources_capacity.twig', {resource: resource}) }}
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="col-sm-6 col-12">
-                                                            <div style="mb-4">
-                                                                <span class="fs-6 fw-bold">{{ translate('Access') }}</span>
-                                                                <div class="accessPlaceHolder">
-                                                                    {{ include('Admin/Resources/manage_resources_access.twig', {resource: resource}) }}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-sm-6 col-12 mt-4">
-                                                            <span class="fs-6 fw-bold">{{ translate('PermissionType') }}</span>
-                                                            <div class="resourcePermissionTypePlaceHolder">
-                                                                {% if ResourcePermissionTypes is defined and ResourcePermissionTypes[resource.GetId()] == 0 %}
-                                                                    {{ translate('FullAccess') }}
-                                                                {% else %}
-                                                                    {{ translate('ViewOnly') }}
-                                                                {% endif %}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-sm-6 col-12 mt-4">
-                                                            <span class="fs-6 fw-bold">{{ translate('ResourceGroups') }}</span>
-                                                            <div class="resourceGroupsPlaceHolder">
-                                                                {% if resource.GetResourceGroupIds()|length == 0 %}
-                                                                    {{ translate('None') }}
-                                                                {% endif %}
-                                                                {% for resourceGroupId in resource.GetResourceGroupIds() %}
-                                                                    <span class="resourceGroupId"
-                                                                        data-value="{{ resourceGroupId }}">{{ ResourceGroup[resourceGroupId].name }}</span>{% if not loop.last %},
-                                                                    {% endif %}
-                                                                {% endfor %}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-12 mt-4">
-                                                            <div class="fs-6 fw-bold">{{ translate('Public') }}</div>
-                                                            <div class="publicSettingsPlaceHolder">
-                                                                {{ include('Admin/Resources/manage_resources_public.twig', {resource: resource, modeEdit: true}) }}
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="customAttributes">
-                                                    {% if AttributeList is defined and AttributeList|length > 0 %}
-                                                        {% for attribute in AttributeList %}
-                                                            {{ include('Admin/InlineAttributeEdit.twig', {url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageResourcesActions::ActionChangeAttribute'), id: id, attribute: attribute, value: resource.GetAttributeValue(attribute.Id())}) }}
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </div>
+    <div>
+        <div class="fs-6 fw-bold">{{ translate('Public') }}</div>
+        <div class="publicSettingsPlaceHolder">
+            {{ include('Admin/Resources/manage_resources_public.twig', {resource: resource, modeEdit: true}) }}
+        </div>
+    </div>
+</div>
                                     {% endblock %}
                                     {% endembed %}
                                 </td>
