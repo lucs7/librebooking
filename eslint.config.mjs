@@ -49,6 +49,7 @@ export default [
         ClearAsyncErrors: 'readonly',
         HtmlDecode: 'readonly',
         ajaxPagination: 'readonly',
+        hideModalWhenShown: 'readonly',
         ConfigureAdminDialog: 'readonly',
 
         // Date helpers (date-helper.js)

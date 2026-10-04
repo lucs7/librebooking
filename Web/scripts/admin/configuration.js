@@ -57,7 +57,7 @@ function Configuration() {
   }
 
   function hideModal() {
-    $('#waitModal').modal('hide');
+    hideModalWhenShown($('#waitModal'));
 
     var top = $('#updatedMessage').scrollTop();
     $('html, body').animate({ scrollTop: top }, 'slow');

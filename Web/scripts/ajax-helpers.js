@@ -1,4 +1,4 @@
-/* exported ajaxPost, ajaxGet, ajaxPagination */
+/* exported ajaxPost, ajaxGet, ajaxPagination, hideModalWhenShown */
 function ajaxPost(formElement, url, onBefore, onAfter) {
   BeforeSerialize(formElement);
 
@@ -275,4 +275,42 @@ function ajaxPagination(element, callback) {
     var a = $(e.target);
     callback(a.data('page'), a.data('page-size'));
   });
+}
+
+/*
+ * Wait boxes: Bootstrap ignores hide() while a modal is still fading in, so a fast response can
+ * strand the box on screen. Hide it once the show has finished, and keep it up for a minimum time
+ * so a quick save does not just flash. Keep MODAL_MIN_VISIBLE_MS above the fade-in (~300 ms).
+ */
+var MODAL_MIN_VISIBLE_MS = 1000;
+
+$(document)
+  .on('show.bs.modal', '.modal', function () {
+    $(this).data('isShowing', true).data('shownAt', Date.now());
+  })
+  .on('shown.bs.modal hidden.bs.modal', '.modal', function () {
+    $(this).data('isShowing', false);
+  });
+
+function hideModalWhenShown($modal) {
+  var shownAt = $modal.data('shownAt') || 0;
+
+  function hideAfterMinimum() {
+    var remaining = MODAL_MIN_VISIBLE_MS - (Date.now() - shownAt);
+    setTimeout(
+      function () {
+        // skip if the modal was re-opened in the meantime
+        if ($modal.data('shownAt') === shownAt) {
+          $modal.modal('hide');
+        }
+      },
+      Math.max(remaining, 0)
+    );
+  }
+
+  if ($modal.data('isShowing')) {
+    $modal.one('shown.bs.modal', hideAfterMinimum);
+  } else {
+    hideAfterMinimum();
+  }
 }

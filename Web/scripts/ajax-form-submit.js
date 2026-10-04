@@ -27,7 +27,7 @@ jQuery.fn.bindAjaxSubmit = function (updateButton, successElement, modalDiv) {
   }
 
   function hideModal() {
-    $('#waitModal').modal('hide');
+    hideModalWhenShown($('#waitModal'));
 
     var top = self.scrollTop();
     $('html, body').animate({ scrollTop: top }, 'slow');
