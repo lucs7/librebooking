@@ -1070,7 +1070,7 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                         '<script>
            var table =  $("#' . $tableId . '").DataTable({
                 "searching": false,
-                "dom": \'<"d-flex justify-content-center flex-wrap"B><"d-flex justify-content-between flex-wrap mt-2"fil>rt<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
+                "dom": \'<"d-flex justify-content-center flex-wrap"B><"d-flex justify-content-between align-items-center flex-wrap my-2"fil>rt<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
                 ' . $pagination . '
                 "language": {
                     search: "' . $searchText . '",
@@ -1143,7 +1143,7 @@ class LibreBookingExtension extends AbstractExtension implements GlobalsInterfac
                     return sprintf(
                         '<script>
            var table =  $("#' . $tableId . '").DataTable({
-                "dom": \'<"d-flex justify-content-between my-1"fl><t>t<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
+                "dom": \'<"d-flex justify-content-between align-items-center my-1"fl><t>t<"d-flex justify-content-center"i><"d-flex justify-content-center"p><"clear">\',
                 "pageLength": ' . $defaultPageSize . ',
                 "lengthMenu": ' . $lengthMenu . ',
                 language: {
