@@ -1,9 +1,10 @@
-{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
 
+{% block content %}
 <div id="page-data-cleanup" class="admin-page">
 
-    <div class="card shadow col-12 col-sm-8 mx-auto">
-        <div class="card-body">
+    {% embed 'components/common/card.twig' with {class: 'col-12 col-sm-8 mx-auto'} %}
+        {% block body %}
             <h1 class="border-bottom mb-3">{{ translate('DataCleanup') }}</h1>
 
             <!-- Reservations Item -->
@@ -110,19 +111,13 @@
                 </div>
 
             </div>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
-    <div class="modal fade" id="deleteReservationsDialog" tabindex="-1" role="dialog"
-        aria-labelledby="deleteReservationsDialogLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="deleteReservationsForm" method="post" ajaxAction="deleteReservations">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteReservationsDialogLabel">{{ translate('Delete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="deleteReservationsForm" method="post" ajaxAction="deleteReservations">
+        {% embed 'components/common/modal.twig' with {id: 'deleteReservationsDialog'} %}
+            {% block header %}<h5 class="modal-title" id="deleteReservationsDialogLabel">{{ translate('Delete') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="alert alert-warning">
                             <div>{{ translate('DeleteWarning') }}</div>
                             <div>
@@ -131,54 +126,42 @@
                             </div>
                             <input type="hidden" {{ formname('BEGIN_DATE') }} id="formDeleteReservationDate" />
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button(submit: true) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button(submit: true) }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="modal fade" id="purgeReservationsDialog" tabindex="-1" role="dialog"
-        aria-labelledby="purgeReservationsDialogLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="purgeReservationsForm" method="post" ajaxAction="purge">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="purgeReservationsDialogLabel">{{ translate('Delete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="purgeReservationsForm" method="post" ajaxAction="purge">
+        {% embed 'components/common/modal.twig' with {id: 'purgeReservationsDialog'} %}
+            {% block header %}<h5 class="modal-title" id="purgeReservationsDialogLabel">{{ translate('Delete') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="alert alert-warning">
                             <div>{{ translate('DeleteWarning') }}</div>
                             <div>
                                 <strong>{{ DeletedReservationCount }}</strong> {{ translate('ReservationsWillBePurged') }}
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button(submit: true) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button(submit: true) }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="modal fade" id="deleteBlackoutDialog" tabindex="-1" role="dialog"
-        aria-labelledby="deleteBlackoutDialogLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="deleteBlackoutsForm" method="post" ajaxAction="deleteBlackouts">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteBlackoutDialogLabel">{{ translate('Delete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="deleteBlackoutsForm" method="post" ajaxAction="deleteBlackouts">
+        {% embed 'components/common/modal.twig' with {id: 'deleteBlackoutDialog'} %}
+            {% block header %}<h5 class="modal-title" id="deleteBlackoutDialogLabel">{{ translate('Delete') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="alert alert-warning">
                             <div>{{ translate('DeleteWarning') }}</div>
                             <div>
@@ -187,27 +170,21 @@
                             </div>
                             <input type="hidden" {{ formname('BEGIN_DATE') }} id="formDeleteBlackoutDate" />
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button(submit: true) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button(submit: true) }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="modal fade" id="deleteUsersDialog" tabindex="-1" role="dialog" aria-labelledby="deleteUsersDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="deleteUsersForm" method="post" ajaxAction="deleteUsers">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteUsersDialogLabel">{{ translate('Delete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="deleteUsersForm" method="post" ajaxAction="deleteUsers">
+        {% embed 'components/common/modal.twig' with {id: 'deleteUsersDialog'} %}
+            {% block header %}<h5 class="modal-title" id="deleteUsersDialogLabel">{{ translate('Delete') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="alert alert-warning">
                             <div>{{ translate('DeleteWarning') }}</div>
                             <div>
@@ -215,21 +192,20 @@
                             </div>
                         </div>
                         <input type="hidden" {{ formname('BEGIN_DATE') }} id="formDeleteUserDate" />
-
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button(submit: true) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button(submit: true) }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
 </div>
 
-{{ include('javascript-includes.twig') }}
+{{ include('javascript-includes.twig', {}, false) }}
 {{ jsfile(src: 'ajax-helpers.js') }}
 
 {{ control('DatePickerSetupControl', {ControlId: 'reservationDeleteDate', DefaultDate: DeleteDate}) }}
@@ -272,4 +248,4 @@
     ConfigureAsyncForm($('#deleteUsersForm'));
     });
 </script>
-{{ include('globalfooter.twig') }}
+{% endblock %}

@@ -54,7 +54,7 @@ class DataCleanupPage extends AdminPage
         $this->Set('BlackoutsCount', $blackoutsCount);
         $this->Set('UserCount', $userCount);
         $this->Set('DeleteDate', Date::Now()->AddYears(-1));
-        $this->Display('Configuration/data_cleanup.tpl');
+        $this->Display('pages/admin/configuration/data_cleanup.twig');
     }
 
     private function ProcessAction()
