@@ -173,7 +173,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->Set('CanChangeRoles', $this->CanChangeRoles);
         $this->Set('CanImportGroups', $this->CanImportGroups);
         $this->Set('CanExportGroups', $this->CanExportGroups);
-        $this->Display('Admin/Groups/manage_groups.tpl');
+        $this->Display('pages/admin/manage_groups.twig');
     }
 
     public function BindPageInfo(PageInfo $pageInfo)
@@ -296,7 +296,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
         $this->Set('Users', $users);
         $this->Set('PermissionsWrite', $permissionsWrite);
         $this->Set('PermissionsRead', $permissionsRead);
-        $this->DisplayCsv('Admin/Groups/groups_csv.tpl', 'groups.csv');
+        $this->DisplayCsv('components/group/groups-csv.twig', 'groups.csv');
     }
 
     public function GetImportFile()
@@ -306,7 +306,7 @@ class ManageGroupsPage extends ActionPage implements IManageGroupsPage
 
     public function ShowTemplateCsv()
     {
-        $this->DisplayCsv('Admin/Groups/groups_csv.tpl', 'groups.csv');
+        $this->DisplayCsv('components/group/groups-csv.twig', 'groups.csv');
     }
 
     public function SetImportResult($importResult)

@@ -1,5 +1,7 @@
-{% set DataTable = true %}{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
+{% set DataTable = true %}
 
+{% block content %}
 <div id="page-manage-groups" class="admin-page">
     <div class="border-bottom mb-3 clearfix">
         <div class="dropdown admin-header-more float-end">
@@ -38,17 +40,17 @@
         <h1>{{ translate('ManageGroups') }}</h1>
     </div>
 
-    <div class="card shadow mb-2" id="groupSearchPanel">
-        <div class="card-body">
+    {% embed 'components/common/card.twig' with {id: 'groupSearchPanel', class: 'mb-2'} %}
+        {% block body %}
             <label for="groupSearch">{{ translate('FindGroup') }}</label>
             | {{ html_link(key: 'AllGroups', href: server.SCRIPT_NAME) }}
             <input type="text" id="groupSearch" class="form-control form-control-sm" size="40" />
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
-    <div class="card shadow">
-        <div class="card-body">
-            {% set tableId = 'groupList' %}
+    {% set tableId = 'groupList' %}
+    {% embed 'components/common/card.twig' %}
+        {% block body %}
             <table class="table table-striped table-hover border-top" id="{{ tableId }}">
                 <thead>
                     <tr>
@@ -132,20 +134,14 @@
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
     <input type="hidden" id="activeId" />
 
-    <div class="modal fade" id="membersDialog" tabindex="-1" role="dialog" aria-labelledby="membersDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="membersDialogLabel">{{ translate('GroupMembers') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+    {% embed 'components/common/modal.twig' with {id: 'membersDialog', scrollable: true} %}
+            {% block header %}<h5 class="modal-title" id="membersDialogLabel">{{ translate('GroupMembers') }}</h5>{% endblock %}
+            {% block body %}
                     <div class="form-group mb-2">
                         <label class="fw-bold" for="userSearch">{{ translate('AddUser') }}: </label>
                         <a href="#" id="browseUsers" class="link-primary">{{ translate('Browse') }}</a>
@@ -154,40 +150,26 @@
                     <h5><span id="totalUsers"></span> {{ translate('UsersInGroup') }}</h5>
 
                     <div id="groupUserList"></div>
-                </div>
+            {% endblock %}
+            {% block footer %}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary cancel"
                         data-bs-dismiss="modal">{{ translate('Done') }}</button>
                 </div>
-            </div>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
 
-    <div id="allUsers" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="browseUsersDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="browseUsersDialogLabel">{{ translate('AllUsers') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="allUsersList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% embed 'components/common/modal.twig' with {id: 'allUsers', scrollable: true} %}
+            {% block header %}<h5 class="modal-title" id="allUsersLabel">{{ translate('AllUsers') }}</h5>{% endblock %}
+            {% block body %}
+                <div id="allUsersList"></div>
+            {% endblock %}
+        {% endembed %}
 
-    <div class="modal fade" id="permissionsDialog" tabindex="-1" role="dialog" aria-labelledby="permissionsDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="permissionsDialogLabel">{{ translate('Permissions') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+    {% set tableIdFilter = 'permissionsDialogtable' %}
+    {% embed 'components/common/modal.twig' with {id: 'permissionsDialog', scrollable: true} %}
+            {% block header %}<h5 class="modal-title" id="permissionsDialogLabel">{{ translate('Permissions') }}</h5>{% endblock %}
+            {% block body %}
                     <form id="permissionsForm" method="post">
                         <div class="d-flex align-items-center gap-1">
                             <a href="#" id="checkNoResources" class="link-primary">{{ translate('None') }}</a>
@@ -197,7 +179,6 @@
                             <a href="#" id="checkAllResourcesView" class="link-primary">{{ translate('ViewOnly') }}</a>
                         </div>
 
-                        {% set tableIdFilter = 'permissionsDialogtable' %}
                         <table class="table table-striped table-hover overflow-auto w-100" id="{{ tableIdFilter }}">
                             <thead class="visually-hidden">
                                 <tr>
@@ -212,7 +193,7 @@
                                             <label for="permission_{{ rid }}"
                                                 class="float-start">{{ resource.GetName() }}</label>
                                             <select class="form-select form-select-sm w-auto resourceId float-end"
-                                                {{ formname(key: 'RESOURCE_ID', multi: true) }}id="permission_{{ rid }}">
+                                                {{ formname(key: 'RESOURCE_ID', multi: true) }} id="permission_{{ rid }}">
                                                 <option value="{{ rid }}_none" class="none">{{ translate('None') }}</option>
                                                 <option value="{{ rid }}_0" class="full">{{ translate('FullAccess') }}</option>
                                                 <option value="{{ rid }}_1" class="view">{{ translate('ViewOnly') }}</option>
@@ -223,15 +204,15 @@
                             {% endfor %}
                         </table>
                     </form>
-                </div>
+            {% endblock %}
+            {% block footer %}
                 <div class="modal-footer">
                     {{ cancel_button() }}
                     {{ update_button(submit: true, attributes: {form: 'permissionsForm'}) }}
                     {{ indicator() }}
                 </div>
-            </div>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
 
     <form id="removeUserForm" method="post">
         <input type="hidden" id="removeUserId" {{ formname(key: 'USER_ID') }} />
@@ -241,16 +222,10 @@
         <input type="hidden" id="addUserId" {{ formname(key: 'USER_ID') }} />
     </form>
 
-    <div class="modal fade" id="addGroupDialog" tabindex="-1" role="dialog" aria-labelledby="addDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="addGroupForm" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addDialogLabel">{{ translate('AddGroup') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="addGroupForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'addGroupDialog'} %}
+            {% block header %}<h5 class="modal-title" id="addGroupDialogLabel">{{ translate('AddGroup') }}</h5>{% endblock %}
+            {% block body %}
                         <div id="addGroupResults" class="error" style="display:none;"></div>
                         <div class="form-group">
                             <label class="fw-bold" for="addGroupName">{{ translate('Name') }}<i
@@ -258,60 +233,43 @@
                             <input {{ formname(key: 'GROUP_NAME') }} type="text" id="addGroupName" required
                                 class="form-control required has-feedback" />
                         </div>
-                        <div class="form-group mt-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="addGroupIsDefault"
-                                    {{ formname(key: 'IS_DEFAULT') }} />
-                                <label class="form-check-label"
-                                    for="addGroupIsDefault">{{ translate('AutomaticallyAddToGroup') }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ add_button() }}
-                        {{ indicator() }}
-                    </div>
+                <div class="form-group mt-2">
+                    {{ include('components/common/checkbox.twig', {id: 'addGroupIsDefault', name: constant('FormKeys::IS_DEFAULT'), labelkey: 'AutomaticallyAddToGroup', switchStyle: false}, false) }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ add_button() }}
+                    {{ indicator() }}
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="deleteGroupForm" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="deleteGroupForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'deleteDialog'} %}
+            {% block header %}<h5 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="alert alert-warning">
                             <div>{{ translate('DeleteWarning') }}</div>
                             <div>{{ translate('DeleteGroupWarning') }}</div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button() }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button() }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="modal fade" id="editDialog" tabindex="-1" role="dialog" aria-labelledby="editDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="editGroupForm" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editDialogLabel">{{ translate('Update') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="editGroupForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'editDialog'} %}
+            {% block header %}<h5 class="modal-title" id="editDialogLabel">{{ translate('Update') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="form-group">
                             <label class="fw-bold" for="editGroupName">{{ translate('Name') }}<i
                                     class="bi bi-asterisk text-danger align-top form-control-feedback"
@@ -319,36 +277,25 @@
                             <input type="text" id="editGroupName" class="form-control required has-feedback" required
                                 {{ formname(key: 'GROUP_NAME') }} />
                         </div>
-                        <div class="form-group mt-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="editGroupIsDefault"
-                                    {{ formname(key: 'IS_DEFAULT') }} />
-                                <label class="form-check-label"
-                                    for="editGroupIsDefault">{{ translate('AutomaticallyAddToGroup') }}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button() }}
-                        {{ indicator() }}
-                    </div>
+                <div class="form-group mt-2">
+                    {{ include('components/common/checkbox.twig', {id: 'editGroupIsDefault', name: constant('FormKeys::IS_DEFAULT'), labelkey: 'AutomaticallyAddToGroup', switchStyle: false}, false) }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button() }}
+                    {{ indicator() }}
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
     {% if CanChangeRoles %}
-        <div class="modal fade" id="rolesDialog" tabindex="-1" role="dialog" aria-labelledby="rolesDialogLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <form id="rolesForm" method="post">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="rolesDialogLabel">{{ translate('WhatRolesApplyToThisGroup') }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                        </div>
-                        <div class="modal-body">
+    <form id="rolesForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'rolesDialog'} %}
+            {% block header %}<h5 class="modal-title" id="rolesDialogLabel">{{ translate('WhatRolesApplyToThisGroup') }}</h5>{% endblock %}
+            {% block body %}
                             {% for role in Roles %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="role{{ role.Id }}"
@@ -356,26 +303,20 @@
                                     <label class="form-check-label" for="role{{ role.Id }}">{{ role.Name }}</label>
                                 </div>
                             {% endfor %}
-                        </div>
-                        <div class="modal-footer">
-                            {{ cancel_button() }}
-                            {{ update_button() }}
-                            {{ indicator() }}
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="modal fade adminDialog" id="resourceAdminDialog" tabindex="-1" role="dialog"
-            aria-labelledby="resourceAdminDialogLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="resourceAdminDialogLabel">{{ translate('WhatCanThisGroupManage') }}
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button() }}
+                    {{ indicator() }}
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
+
+    {% embed 'components/common/modal.twig' with {id: 'resourceAdminDialog', class: 'adminDialog', scrollable: true} %}
+            {% block header %}<h5 class="modal-title" id="resourceAdminDialogLabel">{{ translate('WhatCanThisGroupManage') }}</h5>{% endblock %}
+            {% block body %}
                         <form id="resourceAdminForm" method="post">
                             <h4><span class="count"></span> {{ translate('Resources') }}</h4>
 
@@ -388,56 +329,43 @@
                                 </div>
                             {% endfor %}
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button(submit: true, attributes: {form: 'resourceAdminForm'}) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button(submit: true, attributes: {form: 'resourceAdminForm'}) }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </div>
-        <div class="modal fade adminDialog" id="groupAdminAllDialog" tabindex="-1" role="dialog"
-            aria-labelledby="groupAdminAllDialogLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <form id="groupAdminGroupsForm" method="post">
+            {% endblock %}
+        {% endembed %}
 
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="groupAdminAllDialogLabel">{{ translate('WhatCanThisGroupManage') }}
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                        </div>
-                        <div class="modal-body scrollable-modal-content">
+    <form id="groupAdminGroupsForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'groupAdminAllDialog', class: 'adminDialog', bodyClass: 'scrollable-modal-content'} %}
+            {% block header %}<h5 class="modal-title" id="groupAdminAllDialogLabel">{{ translate('WhatCanThisGroupManage') }}</h5>{% endblock %}
+            {% block body %}
                             <h4><span class="count"></span> {{ translate('Groups') }}</h4>
 
                             {% for group in groups %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="group{{ group.Id }}"
-                                        {{ formname(key: 'GROUP_ID', multi: true) }}" value="{{ group.Id }}" />
+                                        {{ formname(key: 'GROUP_ID', multi: true) }} value="{{ group.Id }}" />
                             <label class="form-check-label" for="group{{ group.Id }}">{{ group.Name }}</label>
                         </div>
                         {% endfor %}
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button() }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button() }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
-    <div class="modal fade adminDialog" id="scheduleAdminDialog" tabindex="-1" role="dialog"
-        aria-labelledby="scheduleAdminDialogLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="scheduleAdminAllDialogLabel">{{ translate('WhatCanThisGroupManage') }}
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+            {% endblock %}
+        {% endembed %}
+    </form>
+
+    {% embed 'components/common/modal.twig' with {id: 'scheduleAdminDialog', class: 'adminDialog', scrollable: true} %}
+            {% block header %}<h5 class="modal-title" id="scheduleAdminDialogLabel">{{ translate('WhatCanThisGroupManage') }}</h5>{% endblock %}
+            {% block body %}
                     <form id="scheduleAdminForm" method="post">
                         <h4><span class="count"></span> {{ translate('Schedules') }}</h4>
 
@@ -450,28 +378,22 @@
                         </div>
                         {% endfor %}
                     </form>
-                </div>
+            {% endblock %}
+            {% block footer %}
                 <div class="modal-footer">
                     {{ cancel_button() }}
                     {{ update_button(submit: true, attributes: {form: 'scheduleAdminForm'}) }}
                     {{ indicator() }}
                 </div>
-            </div>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
     {% endif %}
 
     {% if CanChangeRoles %}
-    <div class="modal fade" id="groupAdminDialog" tabindex="-1" role="dialog" aria-labelledby="groupAdminDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="groupAdminForm" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="groupAdminDialogLabel">{{ translate('WhoCanManageThisGroup') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="groupAdminForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'groupAdminDialog'} %}
+            {% block header %}<h5 class="modal-title" id="groupAdminDialogLabel">{{ translate('WhoCanManageThisGroup') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="form-group has-feedback">
                             <label for="groupAdmin"
                                 class="off-screen fw-bold">{{ translate('WhoCanManageThisGroup') }}</label>
@@ -482,30 +404,23 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button() }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button() }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
     {% endif %}
 
     {% if CanImportGroups %}
-    <div id="importGroupsDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="importGroupsModalLabel"
-        aria-hidden="true">
-        <form id="importGroupsForm" class="form" role="form" method="post" enctype="multipart/form-data"
-            ajaxAction="{{ constant('ManageGroupsActions::Import') }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="importGroupsModalLabel">{{ translate('Import') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="importGroupsForm" class="form" role="form" method="post" enctype="multipart/form-data" ajaxAction="{{ constant('ManageGroupsActions::Import') }}">
+        {% embed 'components/common/modal.twig' with {id: 'importGroupsDialog'} %}
+            {% block header %}<h5 class="modal-title" id="importGroupsDialogLabel">{{ translate('Import') }}</h5>{% endblock %}
+            {% block body %}
                         <div id="importInstructions" class="alert alert-info">
                             <div class="note fst-italic">{{ translate('GroupsImportInstructions') }}</div>
                             <a href="{{ server.SCRIPT_NAME }}?dr=template" class="alert-link"
@@ -531,28 +446,23 @@
                             <label class="visually-hidden" for="groupsImportFile">{{ translate('File') }}</label>
                             <input type="file" class="form-control" {{ formname(key: 'GROUP_IMPORT_FILE') }}
                                 id="groupsImportFile" />
-                            <div class="form-check mt-1">
-                                <input class="form-check-input" type="checkbox" id="updateOnImport"
-                                    {{ formname(key: 'UPDATE_ON_IMPORT') }} />
-                                <label class="form-check-label"
-                                    for="updateOnImport">{{ translate('UpdateGroupsOnImport') }}</label>
-                            </div>
+                            {{ include('components/common/checkbox.twig', {id: 'updateOnImport', name: constant('FormKeys::UPDATE_ON_IMPORT'), labelkey: 'UpdateGroupsOnImport', switchStyle: false, class: 'mt-1'}, false) }}
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ add_button(key: 'Import') }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ add_button(key: 'Import') }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
     {% endif %}
 
     {{ csrf_token() }}
 
-    {{ include('javascript-includes.twig', {DataTable: true}) }}
+    {{ include('javascript-includes.twig', {DataTable: true}, false) }}
     {{ datatable(tableId) }}
     {{ datatablefilter(tableIdFilter) }}
     {{ jsfile(src: 'ajax-helpers.js') }}
@@ -609,5 +519,5 @@
                     //$('#add-group-panel').showHidePanel();
                 });
             </script>
-        </div>
-        {{ include('globalfooter.twig') }}
+</div>
+{% endblock %}
