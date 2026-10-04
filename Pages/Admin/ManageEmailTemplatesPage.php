@@ -74,7 +74,7 @@ class ManageEmailTemplatesPage extends ActionPage implements IManageEmailTemplat
 
         $this->presenter->PageLoad();
 
-        $this->Display('Admin/Configuration/manage_email_templates.tpl');
+        $this->Display('pages/admin/configuration/manage_email_templates.twig');
     }
 
     public function GetUpdatedLanguage(): string
