@@ -124,7 +124,7 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     public function ProcessPageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Display('Admin/Attributes/manage_attributes.tpl');
+        $this->Display('pages/admin/manage_attributes.twig');
     }
 
     public function ProcessAction()
@@ -196,7 +196,7 @@ class ManageAttributesPage extends ActionPage implements IManageAttributesPage
     public function BindAttributes($attributes)
     {
         $this->Set('Attributes', $attributes);
-        $this->Display('Admin/Attributes/attribute-list.tpl');
+        $this->Display('components/attribute/list_attributes.twig');
     }
 
     public function SetCategory($categoryId)

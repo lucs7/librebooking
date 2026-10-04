@@ -1,50 +1,29 @@
-{{ include('globalheader.twig', {DataTable: true}) }}
+{% extends 'layouts/base.twig' %}
+{% set DataTable = true %}
 
+{% block content %}
 <div id="page-manage-attributes" class="admin-page">
     <h1 class="border-bottom mb-3">{{ translate('CustomAttributes') }}</h1>
 
-    <div id="customAttributeHeader" class="card shadow mb-3">
-        <div class="card-body">
+    {% embed 'components/common/card.twig' with {id: 'customAttributeHeader', class: 'mb-3'} %}
+        {% block body %}
             <label class="fw-bold" for="attributeCategory">{{ translate('Category') }}: </label>
             <div class="input-group">
-                <select id="attributeCategory" class="inline form-select">
-                    <option value="{{ constant('CustomAttributeCategory::RESERVATION') }}">{{ translate('CategoryReservation') }}</option>
-                    <option value="{{ constant('CustomAttributeCategory::USER') }}">{{ translate('User') }}</option>
-                    <option value="{{ constant('CustomAttributeCategory::RESOURCE') }}">{{ translate('Resource') }}</option>
-                    <option value="{{ constant('CustomAttributeCategory::RESOURCE_TYPE') }}">{{ translate('ResourceType') }}</option>
-                </select>
+                {{ include('components/common/select.twig', {id: 'attributeCategory', class: 'inline', options: {(constant('CustomAttributeCategory::RESERVATION')): translate('CategoryReservation'), (constant('CustomAttributeCategory::USER')): translate('User'), (constant('CustomAttributeCategory::RESOURCE')): translate('Resource'), (constant('CustomAttributeCategory::RESOURCE_TYPE')): translate('ResourceType')}}, false) }}
                 <a href="#" id="addAttributeButton" class="btn btn-primary"><i
                         class="bi bi-plus-circle-fill me-1 icon add"></i>{{ translate('AddAttribute') }}</a>
             </div>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
-    <div class="modal fade" id="addAttributeDialog" tabindex="-1" role="dialog" aria-labelledby="addLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="addAttributeForm" ajaxAction="{{ constant('ManageAttributesActions::AddAttribute') }}" method="post">
+    <form id="addAttributeForm" ajaxAction="{{ constant('ManageAttributesActions::AddAttribute') }}" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'addAttributeDialog'} %}
+            {% block header %}<h5 class="modal-title" id="addAttributeDialogLabel">{{ translate('AddAttribute') }}</h5>{% endblock %}
+            {% block body %}
                 <input type="hidden" {{ formname(key: 'ATTRIBUTE_CATEGORY') }} id="addCategory" value="" />
-
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addLabel">{{ translate('AddAttribute') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
                         <div class="form-group mb-2">
                             <label class="fw-bold" for="attributeType">{{ translate('Type') }}</label>
-                            <select {{ formname(key: 'ATTRIBUTE_TYPE') }} id="attributeType" class="form-select">
-                                <option value="{{ constant('CustomAttributeTypes::SINGLE_LINE_TEXTBOX') }}">
-                                    {{ translate(Types[constant('CustomAttributeTypes::SINGLE_LINE_TEXTBOX')]) }}</option>
-                                <option value="{{ constant('CustomAttributeTypes::MULTI_LINE_TEXTBOX') }}">
-                                    {{ translate(Types[constant('CustomAttributeTypes::MULTI_LINE_TEXTBOX')]) }}</option>
-                                <option value="{{ constant('CustomAttributeTypes::SELECT_LIST') }}">
-                                    {{ translate(Types[constant('CustomAttributeTypes::SELECT_LIST')]) }}</option>
-                                <option value="{{ constant('CustomAttributeTypes::CHECKBOX') }}">
-                                    {{ translate(Types[constant('CustomAttributeTypes::CHECKBOX')]) }}</option>
-                                <option value="{{ constant('CustomAttributeTypes::DATETIME') }}">
-                                    {{ translate(Types[constant('CustomAttributeTypes::DATETIME')]) }}</option>
-                            </select>
+                            {{ include('components/common/select.twig', {id: 'attributeType', options: {(constant('CustomAttributeTypes::SINGLE_LINE_TEXTBOX')): translate(Types[constant('CustomAttributeTypes::SINGLE_LINE_TEXTBOX')]), (constant('CustomAttributeTypes::MULTI_LINE_TEXTBOX')): translate(Types[constant('CustomAttributeTypes::MULTI_LINE_TEXTBOX')]), (constant('CustomAttributeTypes::SELECT_LIST')): translate(Types[constant('CustomAttributeTypes::SELECT_LIST')]), (constant('CustomAttributeTypes::CHECKBOX')): translate(Types[constant('CustomAttributeTypes::CHECKBOX')]), (constant('CustomAttributeTypes::DATETIME')): translate(Types[constant('CustomAttributeTypes::DATETIME')])}, attrs: formname(key: 'ATTRIBUTE_TYPE')}, false) }}
                         </div>
                         <div class="textBoxOptions">
                             <div class="attributeLabel form-group mb-2">
@@ -79,29 +58,14 @@
                             </div>
 
                             <div class="attributeRequired form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" {{ formname(key: 'ATTRIBUTE_IS_REQUIRED') }}
-                                        id="attributeRequired" />
-                                    <label class="form-check-label"
-                                        for="attributeRequired">{{ translate('Required') }}</label>
-                                </div>
+                                {{ include('components/common/checkbox.twig', {id: 'attributeRequired', name: constant('FormKeys::ATTRIBUTE_IS_REQUIRED'), labelkey: 'Required', switchStyle: false}, false) }}
                             </div>
 
                             <div class="attributeAdminOnly form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox"
-                                        {{ formname(key: 'ATTRIBUTE_IS_ADMIN_ONLY') }} id="ATTRIBUTE_IS_ADMIN_ONLY" />
-                                    <label class="form-check-label"
-                                        for="ATTRIBUTE_IS_ADMIN_ONLY">{{ translate('AdminOnly') }}</label>
-                                </div>
+                                {{ include('components/common/checkbox.twig', {id: 'ATTRIBUTE_IS_ADMIN_ONLY', name: constant('FormKeys::ATTRIBUTE_IS_ADMIN_ONLY'), labelkey: 'AdminOnly', switchStyle: false}, false) }}
                             </div>
                             <div class="attributeIsPrivate form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" {{ formname(key: 'ATTRIBUTE_IS_PRIVATE') }}
-                                        id='attributePrivate' />
-                                    <label class="form-check-label"
-                                        for="attributePrivate">{{ translate('Private') }}</label>
-                                </div>
+                                {{ include('components/common/checkbox.twig', {id: 'attributePrivate', name: constant('FormKeys::ATTRIBUTE_IS_PRIVATE'), labelkey: 'Private', switchStyle: false}, false) }}
                             </div>
 
                             <div class="secondaryEntities d-none form-group">
@@ -115,14 +79,7 @@
                             <div class="attributeSecondary d-none form-group">
                                 <label for="attributeSecondaryCategory"
                                     class="visually-hidden">{{ translate('Category') }}</label>
-                                <select class="secondaryAttributeCategory form-select"
-                                    {{ formname(key: 'ATTRIBUTE_SECONDARY_CATEGORY') }} id="attributeSecondaryCategory">
-                                    <option value="{{ constant('CustomAttributeCategory::USER') }}">{{ translate('User') }}</option>
-                                    <option value="{{ constant('CustomAttributeCategory::RESOURCE') }}">{{ translate('Resource') }}
-                                    </option>
-                                    <option value="{{ constant('CustomAttributeCategory::RESOURCE_TYPE') }}">
-                                        {{ translate('ResourceType') }}</option>
-                                </select>
+                                {{ include('components/common/select.twig', {id: 'attributeSecondaryCategory', options: {(constant('CustomAttributeCategory::USER')): translate('User'), (constant('CustomAttributeCategory::RESOURCE')): translate('Resource'), (constant('CustomAttributeCategory::RESOURCE_TYPE')): translate('ResourceType')}, class: 'secondaryAttributeCategory', attrs: formname(key: 'ATTRIBUTE_SECONDARY_CATEGORY')}, false) }}
                             </div>
                             <div class="attributeSecondary d-none form-group">
                                 <label for="attributeSecondaryEntityDescription">{{ translate('CollectFor') }}</label>
@@ -133,28 +90,21 @@
                         </div>
 
                         <div id="entityChoices"></div>
-
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ add_button() }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ add_button() }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="modal fade" id="editAttributeDialog" tabindex="-1" role="dialog" aria-labelledby="editLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="editAttributeForm" ajaxAction="{{ constant('ManageAttributesActions::UpdateAttribute') }}" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editLabel">{{ translate('EditAttribute') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="editAttributeForm" ajaxAction="{{ constant('ManageAttributesActions::UpdateAttribute') }}" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'editAttributeDialog'} %}
+            {% block header %}<h5 class="modal-title" id="editAttributeDialogLabel">{{ translate('EditAttribute') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="form-group mb-2">
                             <label class="fw-bold">{{ translate('Type') }}</label>
                             <span class='editAttributeType'
@@ -200,30 +150,15 @@
                             </div>
 
                             <div class="form-group attributeRequired">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" {{ formname(key: 'ATTRIBUTE_IS_REQUIRED') }}
-                                        id='editAttributeRequired' />
-                                    <label class="form-check-label"
-                                        for="editAttributeRequired">{{ translate('Required') }}</label>
-                                </div>
+                                {{ include('components/common/checkbox.twig', {id: 'editAttributeRequired', name: constant('FormKeys::ATTRIBUTE_IS_REQUIRED'), labelkey: 'Required', switchStyle: false}, false) }}
                             </div>
 
                             <div class="form-group attributeAdminOnly">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox"
-                                        {{ formname(key: 'ATTRIBUTE_IS_ADMIN_ONLY') }} id="editAttributeAdminOnly" />
-                                    <label class="form-check-label"
-                                        for="editAttributeAdminOnly">{{ translate('AdminOnly') }}</label>
-                                </div>
+                                {{ include('components/common/checkbox.twig', {id: 'editAttributeAdminOnly', name: constant('FormKeys::ATTRIBUTE_IS_ADMIN_ONLY'), labelkey: 'AdminOnly', switchStyle: false}, false) }}
                             </div>
 
                             <div class="form-group attributeIsPrivate">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" {{ formname(key: 'ATTRIBUTE_IS_PRIVATE') }}
-                                        id='editAttributePrivate' />
-                                    <label class="form-check-label"
-                                        for="editAttributePrivate">{{ translate('Private') }}</label>
-                                </div>
+                                {{ include('components/common/checkbox.twig', {id: 'editAttributePrivate', name: constant('FormKeys::ATTRIBUTE_IS_PRIVATE'), labelkey: 'Private', switchStyle: false}, false) }}
                             </div>
 
                             <div class="form-group secondaryEntities d-none">
@@ -238,14 +173,7 @@
                             <div class="form-group attributeSecondary d-none">
                                 <label for="editAttributeSecondaryCategory"
                                     class="visually-hidden">{{ translate('Category') }}</label>
-                                <select class="secondaryAttributeCategory form-select"
-                                    {{ formname(key: 'ATTRIBUTE_SECONDARY_CATEGORY') }} id="editAttributeSecondaryCategory">
-                                    <option value="{{ constant('CustomAttributeCategory::USER') }}">{{ translate('User') }}</option>
-                                    <option value="{{ constant('CustomAttributeCategory::RESOURCE') }}">{{ translate('Resource') }}
-                                    </option>
-                                    <option value="{{ constant('CustomAttributeCategory::RESOURCE_TYPE') }}">
-                                        {{ translate('ResourceType') }}</option>
-                                </select>
+                                {{ include('components/common/select.twig', {id: 'editAttributeSecondaryCategory', options: {(constant('CustomAttributeCategory::USER')): translate('User'), (constant('CustomAttributeCategory::RESOURCE')): translate('Resource'), (constant('CustomAttributeCategory::RESOURCE_TYPE')): translate('ResourceType')}, class: 'secondaryAttributeCategory', attrs: formname(key: 'ATTRIBUTE_SECONDARY_CATEGORY')}, false) }}
                             </div>
 
                             <div class="form-group attributeSecondary d-none">
@@ -255,54 +183,48 @@
                             </div>
                         </div>
                         <div id="editEntityChoices"></div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button() }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button() }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="modal fade" id="deleteDialog" tabindex="-1" role="dialog" aria-labelledby="deleteLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="deleteForm" ajaxAction="{{ constant('ManageAttributesActions::DeleteAttribute') }}" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteLabel">{{ translate('Delete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-danger">
-                            {{ translate('DeleteWarning') }}<br>
-                            <strong>{{ translate('DisplayLabel') }}: <span id="deleteAttributeLabel"></span></strong>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button() }}
-                        {{ indicator() }}
-                    </div>
+    <form id="deleteForm" ajaxAction="{{ constant('ManageAttributesActions::DeleteAttribute') }}" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'deleteDialog'} %}
+            {% block header %}<h5 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h5>{% endblock %}
+            {% block body %}
+                <div class="alert alert-danger">
+                    {{ translate('DeleteWarning') }}<br>
+                    <strong>{{ translate('DisplayLabel') }}: <span id="deleteAttributeLabel"></span></strong>
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button() }}
+                    {{ indicator() }}
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="card shadow">
-        <div class="card-body">
+    {% embed 'components/common/card.twig' %}
+        {% block body %}
             <div id="attributeList">
             </div>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
     {{ csrf_token() }}
     {{ indicator(id: 'indicator') }}
 
     <input type="hidden" id="activeId" value="" />
-    {{ include('javascript-includes.twig', {DataTable: true}) }}
+    {{ include('javascript-includes.twig', {DataTable: true}, false) }}
     {{ jsfile(src: 'ajax-helpers.js') }}
     {{ jsfile(src: 'admin/attributes.js') }}
     {{ vendor_js(src: 'jquery-form/3.09/jquery.form-3.09.min.js') }}
@@ -334,4 +256,4 @@
         });
     </script>
 </div>
-{{ include('globalfooter.twig') }}
+{% endblock %}
