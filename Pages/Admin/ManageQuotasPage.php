@@ -130,7 +130,7 @@ class ManageQuotasPage extends ActionPage implements IManageQuotasPage
         ]);
         $this->Set('TimeFormat', Resources::GetInstance()->GetDateFormat('period_time'));
 
-        $this->Display('Admin/manage_quotas.tpl');
+        $this->Display('pages/admin/manage_quotas.twig');
     }
 
     public function ProcessAction()
