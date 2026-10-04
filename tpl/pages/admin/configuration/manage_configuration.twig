@@ -1,4 +1,4 @@
-{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
 
 {% macro list_settings(settings, DefaultTimezoneKey, TimezoneValues, TimezoneOutput, DefaultLanguageKey, Languages, DefaultHomepageKey) %}
     <div class="row gy-4 mb-3">
@@ -70,6 +70,7 @@
 
 {% import _self as configHelpers %}
 
+{% block content %}
 <div id="page-manage-configuration" class="admin-page">
 
     <h1 class="border-bottom mb-3">{{ translate('ManageConfiguration') }}</h1>
@@ -111,9 +112,16 @@
         </div>
     {% endif %}
 
+    {# macro imports are not visible inside embed bodies: render the settings here and pass the HTML in #}
+    {% set generalSettingsHtml = configHelpers.list_settings(Settings|default([]), DefaultTimezoneKey, TimezoneValues, TimezoneOutput, DefaultLanguageKey, Languages, DefaultHomepageKey) %}
+    {% set sectionSettingsHtml = {} %}
+    {% for section, settings in SectionSettings|default([]) %}
+        {% set sectionSettingsHtml = sectionSettingsHtml|merge({(section): configHelpers.list_settings(settings, DefaultTimezoneKey, TimezoneValues, TimezoneOutput, DefaultLanguageKey, Languages, DefaultHomepageKey)}) %}
+    {% endfor %}
+
     {% if IsPageEnabled and IsConfigFileWritable %}
-        <div class="card shadow">
-            <div class="card-body">
+        {% embed 'components/common/card.twig' %}
+            {% block body %}
                 {% set HelpUrl = 'https://librebooking.readthedocs.io/en/latest/ADMINISTRATION.html' %}
                 <h2 class="text-center border-bottom mb-3">{{ translate('ConfigurationUpdateHelp', HelpUrl) }}</h2>
                 <div id="updatedMessage" class="alert alert-success" style="display:none;">
@@ -128,49 +136,27 @@
                         action="{{ server.SCRIPT_NAME }}">
                         <div class="accordion my-3" id="accordionConfig">
                             {% if Settings is not empty %}
-                                <div>
-                                    <div class="accordion-item shadow mb-2">
-                                        <h2 class="accordion-header text-capitalize">
-                                            <button class="accordion-button text-capitalize" type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#{{ translate('GeneralConfigSettings') }}">
-                                                {{ translate('GeneralConfigSettings') }}
-                                            </button>
-                                        </h2>
-                                        <div id="{{ translate('GeneralConfigSettings') }}"
-                                            class="accordion-collapse collapse show">
-                                            <div class="accordion-body">
-                                                <fieldset>
-                                                    <div class="no-style config-settings">
-                                                        {{ configHelpers.list_settings(Settings, DefaultTimezoneKey, TimezoneValues, TimezoneOutput, DefaultLanguageKey, Languages, DefaultHomepageKey) }}
-                                                    </div>
-                                                </fieldset>
+                                {% embed 'components/common/accordion-item.twig' with {id: 'config-general', contentsId: 'generalConfigSettings', title: translate('GeneralConfigSettings'), buttonClass: 'text-capitalize', open: true, settingsHtml: generalSettingsHtml} %}
+                                    {% block body %}
+                                        <fieldset>
+                                            <div class="no-style config-settings">
+                                                {{ settingsHtml|raw }}
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                        </fieldset>
+                                    {% endblock %}
+                                {% endembed %}
                             {% endif %}
 
                             {% for section, settings in SectionSettings %}
-                                <div>
-                                    <div class="accordion-item shadow mb-2">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed text-capitalize" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#{{ section }}">
-                                                {{ section }}
-                                            </button>
-                                        </h2>
-                                        <div id="{{ section }}" class="accordion-collapse collapse">
-                                            <div class="accordion-body">
-                                                <fieldset>
-                                                    <div class="no-style config-settings">
-                                                        {{ configHelpers.list_settings(settings, DefaultTimezoneKey, TimezoneValues, TimezoneOutput, DefaultLanguageKey, Languages, DefaultHomepageKey) }}
-                                                    </div>
-                                                </fieldset>
+                                {% embed 'components/common/accordion-item.twig' with {id: 'config-' ~ section, contentsId: section, title: section, buttonClass: 'text-capitalize', open: true, settingsHtml: sectionSettingsHtml[section]} %}
+                                    {% block body %}
+                                        <fieldset>
+                                            <div class="no-style config-settings">
+                                                {{ settingsHtml|raw }}
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                        </fieldset>
+                                    {% endblock %}
+                                {% endembed %}
                             {% endfor %}
                         </div>
                         <input type="hidden" name="setting_names" value="{{ SettingNames }}" />
@@ -188,10 +174,10 @@
                 </form>
 
                 {{ csrf_token() }}
-            </div>
-        </div>
+            {% endblock %}
+        {% endembed %}
 
-        {{ include('javascript-includes.twig') }}
+        {{ include('javascript-includes.twig', {}, false) }}
 
         {{ jsfile(src: 'ajax-helpers.js') }}
         {{ vendor_js(src: 'jquery-form/3.09/jquery.form-3.09.min.js') }}
@@ -202,10 +188,7 @@
                 config.init();
             });
         </script>
-        <div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
-            data-bs-backdrop="static" aria-hidden="true">
-            {{ include('wait-box.twig', {translateKey: 'Working'}) }}
-        </div>
+        {{ include('components/common/wait-box-modal.twig', {id: 'waitModal'}) }}
     {% endif %}
 </div>
 <script>
@@ -214,4 +197,4 @@
         return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 </script>
-{{ include('globalfooter.twig') }}
+{% endblock %}

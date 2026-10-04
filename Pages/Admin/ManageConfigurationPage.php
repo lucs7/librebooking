@@ -117,7 +117,7 @@ class ManageConfigurationPage extends ActionPage implements IManageConfiguration
         $this->Set('DefaultHomepageKey', ConfigKeys::DEFAULT_HOMEPAGE['key']);
         $this->Set('SettingNames', $this->settingNames->ToString());
         $this->Set('IsEnvPresent', Configuration::EnvFilePresent());
-        $this->Display('Admin/Configuration/manage_configuration.tpl');
+        $this->Display('pages/admin/configuration/manage_configuration.twig');
     }
 
     public function SetIsPageEnabled($isPageEnabled)
