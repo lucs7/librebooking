@@ -54,7 +54,7 @@ class ICalImportPage extends ActionPage implements IICalImportPage
 
     public function ProcessPageLoad()
     {
-        $this->Display('Admin/Import/ics_import.tpl');
+        $this->Display('pages/admin/ics_import.twig');
     }
 
     public function GetImportFile()
