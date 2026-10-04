@@ -36,7 +36,7 @@ class ManageThemePage extends ActionPage
      */
     public function ProcessPageLoad()
     {
-        $this->Display('Admin/Configuration/change_theme.tpl');
+        $this->Display('pages/admin/configuration/manage_theme.twig');
     }
 
     /**

@@ -1,8 +1,9 @@
-{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
 
+{% block content %}
 <div id="page-change-theme" class="admin-page">
-    <div class="card shadow col-12 col-sm-8 mx-auto">
-        <div class="card-body">
+    {% embed 'components/common/card.twig' with {class: 'col-12 col-sm-8 mx-auto'} %}
+        {% block body %}
             <h1 class="border-bottom mb-3">{{ translate('LookAndFeel') }}</h1>
 
             <div id="successMessage" class="alert alert-success d-none">
@@ -94,15 +95,12 @@
                 {{ csrf_token() }}
 
             </form>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
-    <div class="modal" id="waitModal" tabindex="-1" role="dialog" aria-labelledby="waitModalLabel"
-        data-bs-backdrop="static" aria-hidden="true">
-        {{ include('wait-box.twig', {translateKey: 'Working'}) }}
-    </div>
+    {{ include('components/common/wait-box-modal.twig', {id: 'waitModal'}) }}
 
-    {{ include('javascript-includes.twig') }}
+    {{ include('javascript-includes.twig', {}, false) }}
 
     {{ jsfile(src: 'ajax-helpers.js') }}
     {{ vendor_js(src: 'jquery-form/3.09/jquery.form-3.09.min.js') }}
@@ -146,4 +144,4 @@
     </script>
 
 </div>
-{{ include('globalfooter.twig') }}
+{% endblock %}
