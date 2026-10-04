@@ -1,8 +1,9 @@
-{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
 
+{% block content %}
 <div id="server-settings-page" class="admin-page">
-    <div class="card shadow col-12 col-sm-8 mx-auto">
-        <div class="card-body">
+    {% embed 'components/common/card.twig' with {class: 'col-12 col-sm-8 mx-auto'} %}
+        {% block body %}
             <h1 class="border-bottom mb-3">{{ translate('ServerSettings') }}</h1>
 
             <ul class="indented">
@@ -31,9 +32,9 @@
                     </li>
                 {% endfor %}
             </ul>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 </div>
 
-{{ include('javascript-includes.twig') }}
-{{ include('globalfooter.twig') }}
+{{ include('javascript-includes.twig', {}, false) }}
+{% endblock %}

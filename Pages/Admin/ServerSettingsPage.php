@@ -26,7 +26,7 @@ class ServerSettingsPage extends AdminPage
         $this->Set('imageUploadDirPermissions', substr(sprintf('%o', fileperms($uploadDir->GetDirectory())), -4));
         $this->Set('imageUploadDirectory', $uploadDir->GetDirectory());
         $this->Set('templateCacheDirectory', $cacheDir->GetDirectory());
-        $this->Display('Configuration/server_settings.tpl');
+        $this->Display('pages/admin/configuration/server_settings.twig');
     }
 
     public function ProcessAction()
