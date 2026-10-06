@@ -3,6 +3,45 @@
 
 <!-- version list -->
 
+## v7.0.0 (2026-10-06)
+
+### Bug Fixes
+
+- **i18n**: Correct German check-in/check-out translations
+  ([`d134686`](https://github.com/LibreBooking/librebooking/commit/d1346868c603d5dc474ce03e5fc7d62446d3f9ec))
+
+- **install**: Remove the web-based phpScheduleIt migration
+  ([`c9a9297`](https://github.com/LibreBooking/librebooking/commit/c9a92971ff3dbe1b4fdcfad7b19e200e87b69960))
+
+- **schedule**: Decode entity-encoded names in resource filter
+  ([`76b4cef`](https://github.com/LibreBooking/librebooking/commit/76b4ceff560650e2d768fda42b862a6c87d7d60e))
+
+### Chores
+
+- **AGENTS.md**: Remove mention of master as stable branch
+  ([`26bfe22`](https://github.com/LibreBooking/librebooking/commit/26bfe22ef57943579a032c7efc11a71ea5eba68b))
+
+### Documentation
+
+- Clarify commit line length limit
+  ([`de1ff8a`](https://github.com/LibreBooking/librebooking/commit/de1ff8aaf872cae21c3abc5b7d0c96748cb4e915))
+
+- **security**: Clarify supported release and fix policy
+  ([`d9d07bf`](https://github.com/LibreBooking/librebooking/commit/d9d07bf032d73effb873bbf39f3f34addb282112))
+
+### Refactoring
+
+- **import**: Remove Quartzy import and import landing pages
+  ([`06207bb`](https://github.com/LibreBooking/librebooking/commit/06207bb35f071cacf681fda57988b79a64ef89e0))
+
+### Breaking Changes
+
+- **import**: Admin/quartzy_import.php and admin/import.php are removed; only admin/ics_import.php
+  remains.
+
+- **install**: The web migration from phpScheduleIt 1.2 is no longer available.
+
+
 ## v6.1.0 (2026-10-03)
 
 ### Bug Fixes
