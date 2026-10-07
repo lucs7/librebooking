@@ -19,12 +19,13 @@ export async function createBooking(
     date: string;
     title: string;
     resourceId?: number;
+    scheduleId?: number;
     begin?: string;
     end?: string;
     repeatUntil?: string;
   }
 ) {
-  await page.goto(`reservation.php?rid=${options.resourceId ?? 1}&sid=1&rd=${options.date}`);
+  await page.goto(`reservation.php?rid=${options.resourceId ?? 1}&sid=${options.scheduleId ?? 1}&rd=${options.date}`);
   await page.locator('#reservationTitle').fill(options.title);
   if (options.begin) {
     await page.locator('#BeginPeriod').selectOption(options.begin);

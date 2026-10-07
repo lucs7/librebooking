@@ -18,3 +18,11 @@ async function logInAndSave(page: Page, username: string, password: string, file
 setup('log in as admin', async ({ page }) => {
   await logInAndSave(page, 'admin', 'password', authFile('admin.json'));
 });
+
+setup('log in as the normal user', async ({ page }) => {
+  await logInAndSave(page, 'e2e.user', 'e2e-password', authFile('e2e-user.json'));
+});
+
+setup('log in as the group user', async ({ page }) => {
+  await logInAndSave(page, 'e2e.group', 'e2e-password', authFile('e2e-group.json'));
+});

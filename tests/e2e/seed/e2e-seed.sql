@@ -1,8 +1,8 @@
--- Test data for the Playwright stack: a standalone copy of the demo data.
--- setup-test-database.sh loads it through LB_TEST_SAMPLE_DATA instead of
--- sample-data-utf8.sql.
+-- Test data for the Playwright stack: a standalone copy of the demo data plus
+-- additions for the E2E specs. setup-test-database.sh loads it through
+-- LB_TEST_SAMPLE_DATA instead of sample-data-utf8.sql.
 --
--- Logins: admin and user (password).
+-- Logins: admin and user (password), e2e.user and e2e.group (e2e-password).
 
 SET foreign_key_checks = 0;
 
@@ -34,5 +34,32 @@ insert into `custom_attributes` (`custom_attribute_id`,`display_label`,`display_
   (2, 'Test String', 1, 1, null, false, null),
   (3, 'Test Number', 1, 4, null, false, null),
   (4, 'Test String', 1, 4, null, false, null);
+
+-- Additions for the E2E specs.
+
+-- Normal users: e2e.user has a direct permission for Conference Room 1;
+-- e2e.group gets Conference Room 2 only through the group E2E Group.
+insert into `users` (`fname`, `lname`, `email`, `username`, `password`, `salt`, `timezone`, `lastlogin`, `status_id`, `date_created`, `language`, `organization`)
+values ('E2E', 'User', 'e2e.user@example.com', 'e2e.user', '3469e3a038fa3653a4cc843af92d50dae09e4c7d', 'a1b2c3d4', 'America/New_York', '2010-03-26 12:44:00', 1, now(), 'en_us', 'E2E Org'),
+       ('E2E', 'Group', 'e2e.group@example.com', 'e2e.group', '3469e3a038fa3653a4cc843af92d50dae09e4c7d', 'a1b2c3d4', 'America/New_York', '2010-03-26 12:44:00', 1, now(), 'en_us', 'E2E Org');
+
+insert into `groups` (`group_id`, `name`) values (5, 'E2E Group');
+
+insert into `user_groups` (`user_id`, `group_id`)
+select `user_id`, 5 from `users` where `username` = 'e2e.group';
+
+insert into `group_resource_permissions` (`group_id`, `resource_id`) values (5, 2);
+
+-- A resource only the admin may book, on its own schedule so the Default
+-- schedule keeps the two rows per day the schedule specs count.
+insert into `schedules` (`schedule_id`, `name`, `isdefault`, `weekdaystart`, `layout_id`) values (2, 'E2E Restricted', 0, 0, 1);
+
+insert into `resources` (`resource_id`, `name`, `location`, `contact_info`, `description`, `notes`, `min_duration`, `min_increment`, `max_duration`, `unit_cost`, `autoassign`, `requires_approval`, `allow_multiday_reservations`, `max_participants`, `min_notice_time_add`, `max_notice_time`, `image_name`, `legacyid`, `schedule_id`) VALUES
+  (3, 'E2E Restricted Room', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, NULL, NULL, NULL, NULL, NULL, 2);
+
+insert into `user_resource_permissions`
+select `user_id`, 3, 1, 0 from `users` where `username` = 'admin';
+insert into `user_resource_permissions`
+select `user_id`, 1, 1, 0 from `users` where `username` = 'e2e.user';
 
 SET foreign_key_checks = 1;
