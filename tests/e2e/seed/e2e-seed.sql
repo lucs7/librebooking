@@ -2,7 +2,8 @@
 -- additions for the E2E specs. setup-test-database.sh loads it through
 -- LB_TEST_SAMPLE_DATA instead of sample-data-utf8.sql.
 --
--- Logins: admin and user (password), e2e.user and e2e.group (e2e-password).
+-- Logins: admin and user (password), e2e.* (e2e-password), except e2e.password
+-- (E2e-Passw0rd!, which meets the password policy so a spec can change it back).
 
 SET foreign_key_checks = 0;
 
@@ -39,9 +40,12 @@ insert into `custom_attributes` (`custom_attribute_id`,`display_label`,`display_
 
 -- Normal users: e2e.user has a direct permission for Conference Room 1;
 -- e2e.group gets Conference Room 2 only through the group E2E Group.
+-- e2e.profile and e2e.password are changed by the profile and password specs.
 insert into `users` (`fname`, `lname`, `email`, `username`, `password`, `salt`, `timezone`, `lastlogin`, `status_id`, `date_created`, `language`, `organization`)
 values ('E2E', 'User', 'e2e.user@example.com', 'e2e.user', '3469e3a038fa3653a4cc843af92d50dae09e4c7d', 'a1b2c3d4', 'America/New_York', '2010-03-26 12:44:00', 1, now(), 'en_us', 'E2E Org'),
-       ('E2E', 'Group', 'e2e.group@example.com', 'e2e.group', '3469e3a038fa3653a4cc843af92d50dae09e4c7d', 'a1b2c3d4', 'America/New_York', '2010-03-26 12:44:00', 1, now(), 'en_us', 'E2E Org');
+       ('E2E', 'Group', 'e2e.group@example.com', 'e2e.group', '3469e3a038fa3653a4cc843af92d50dae09e4c7d', 'a1b2c3d4', 'America/New_York', '2010-03-26 12:44:00', 1, now(), 'en_us', 'E2E Org'),
+       ('E2E', 'Profile', 'e2e.profile@example.com', 'e2e.profile', '3469e3a038fa3653a4cc843af92d50dae09e4c7d', 'a1b2c3d4', 'America/New_York', '2010-03-26 12:44:00', 1, now(), 'en_us', 'E2E Org'),
+       ('E2E', 'Password', 'e2e.password@example.com', 'e2e.password', 'd34efbf534bb878ff92f9b4f392b37fe2b5fc62b', 'a1b2c3d4', 'America/New_York', '2010-03-26 12:44:00', 1, now(), 'en_us', 'E2E Org');
 
 insert into `groups` (`group_id`, `name`) values (5, 'E2E Group');
 

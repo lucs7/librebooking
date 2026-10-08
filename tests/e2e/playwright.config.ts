@@ -8,6 +8,8 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:8088/Web/';
 // running one; support/stack.mjs removes a stack it started again.
 const startStack = !process.env.PLAYWRIGHT_BASE_URL;
 
+const CONFIG_SPECS = /password\.spec\.ts/;
+
 export default defineConfig({
   testDir: './specs',
   outputDir: 'test-results',
@@ -32,8 +34,17 @@ export default defineConfig({
     {
       name: 'chromium',
       testMatch: /.*\.spec\.ts/,
+      testIgnore: CONFIG_SPECS,
       use: { ...devices['Desktop Chrome'], storageState: authFile('admin.json') },
       dependencies: ['setup'],
+    },
+    // Specs that change app settings affect the whole stack, so they run
+    // after everything else.
+    {
+      name: 'config',
+      testMatch: CONFIG_SPECS,
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['chromium'],
     },
   ],
 });
