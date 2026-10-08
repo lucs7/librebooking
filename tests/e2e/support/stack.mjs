@@ -7,6 +7,7 @@ const files = ['-f', 'docker/docker-compose.yml', '-f', 'docker/docker-compose.h
 const compose = (...args) => spawnSync('docker', ['compose', ...files, ...args], { cwd, stdio: 'inherit' });
 
 compose('down', '-v', '--remove-orphans');
+spawnSync('node', ['support/prepare-config.mjs', 'host'], { cwd, stdio: 'inherit' });
 const up = spawn('docker', ['compose', ...files, 'up', '--build', '--attach-dependencies', 'web'], {
   cwd,
   stdio: 'inherit',

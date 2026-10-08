@@ -48,8 +48,8 @@ services:
       LB_SCRIPT_URL: http://localhost:8080/Web
       LB_EMAIL_ENABLE: "false"
       LB_ENV: production
-    tmpfs:
-      - /config:mode=1777
+    volumes:
+      - ../.runtime/${E2E_RUNTIME:-host}/config:/config
     healthcheck:
       test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1:8080/Web/index.php') === false ? 1 : 0);"]
       interval: 5s
@@ -74,6 +74,7 @@ services:
       HOME: /tmp
       CI: "true"
       PLAYWRIGHT_BASE_URL: http://localhost:8080/Web/
+      E2E_RUNTIME: ${E2E_RUNTIME:-host}
     command:
       - sh
       - -c
