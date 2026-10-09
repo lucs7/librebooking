@@ -1,20 +1,32 @@
 <?php
 
+use LibreBooking\Database\PreparedQuery;
+use LibreBooking\Database\PreparedQueryBuilder;
+
+/**
+ * IDbConnection on PDO with real (server-side) prepared statements. Values are
+ * bound, never spliced into the SQL text.
+ */
 class MySqlConnection implements IDbConnection
 {
+    private const SQL_MODE = "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'";
+    private const ERROR_UNKNOWN_DATABASE = 1049;
+
     private $_dbUser = '';
     private $_dbPassword = '';
     private $_hostSpec = '';
     private $_dbName = '';
     private $_port = null;
 
+    /**
+     * @var PDO|null
+     */
     private $_db = null;
-    private $_connected = false;
 
     /**
      * @param string $dbUser
      * @param string $dbPassword
-     * @param string $hostSpec
+     * @param string $hostSpec host or host:port
      * @param string $dbName
      */
     public function __construct($dbUser, $dbPassword, $hostSpec, $dbName)
@@ -27,62 +39,57 @@ class MySqlConnection implements IDbConnection
 
     public function Connect()
     {
-        if ($this->_connected && !is_null($this->_db)) {
+        if (!is_null($this->_db)) {
             return;
         }
 
-        $port = null;
-        if (BookedStringHelper::Contains($this->_hostSpec, ':')) {
-            $parts = explode(':', $this->_hostSpec);
-            $this->_hostSpec = $parts[0];
+        $host = $this->_hostSpec;
+        if (BookedStringHelper::Contains($host, ':')) {
+            $parts = explode(':', $host);
+            $host = $parts[0];
             $this->_port = intval($parts[1]);
         }
 
-        $this->_db = mysqli_connect($this->_hostSpec, $this->_dbUser, $this->_dbPassword, $this->_dbName, $this->_port);
+        $dsn = 'mysql:host=' . $host . ($this->_port ? ';port=' . $this->_port : '') . ';dbname=' . $this->_dbName . ';charset=utf8mb4';
 
-        if (!$this->_db) {
-            $connectError = mysqli_connect_error();
-            Log::Error("Error connecting to database\nCheck your database settings in the config file\n%s", $connectError);
-            throw new DatabaseConnectionException("Error connecting to database\nError: " . $connectError);
+        try {
+            $this->_db = new PDO($dsn, $this->_dbUser, $this->_dbPassword, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                // Keep every column a string (or null), as the mysqli text protocol returned them.
+                PDO::ATTR_STRINGIFY_FETCHES => true,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]);
+        } catch (PDOException $e) {
+            if ((int)($e->errorInfo[1] ?? 0) === self::ERROR_UNKNOWN_DATABASE) {
+                Log::Error("Error selecting database '%s'\nCheck your database settings in the config file\n%s", $this->_dbName, $e->getMessage());
+                throw new DatabaseNotFoundException("Error selecting database\nError: " . $e->getMessage());
+            }
+
+            Log::Error("Error connecting to database\nCheck your database settings in the config file\n%s", $e->getMessage());
+            throw new DatabaseConnectionException("Error connecting to database\nError: " . $e->getMessage());
         }
-
-        $selected = mysqli_select_db($this->_db, $this->_dbName);
-
-        if (!$selected) {
-            Log::Error("Error selecting database '%s'\nCheck your database settings in the config file\n%s", $this->_dbName, mysqli_error($this->_db));
-            throw new DatabaseNotFoundException("Error selecting database\nError: " . mysqli_error($this->_db));
-        }
-        mysqli_set_charset($this->_db, 'utf8mb4');
-
-        $this->_connected = true;
     }
 
     public function Disconnect()
     {
-        mysqli_close($this->_db);
         $this->_db = null;
-        $this->_connected = false;
     }
 
     public function Query(ISqlCommand $sqlCommand)
     {
-        $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
-
-        if (Log::DebugEnabled()) {
-            Log::Sql('MySql Query: ' . str_replace('%', '%%', $mysqlCommand->GetQuery()));
-        }
+        $query = $this->Prepare($sqlCommand->GetQuery(), $sqlCommand);
 
         if ($sqlCommand->ContainsGroupConcat()) {
-            mysqli_query($this->_db, 'SET SESSION group_concat_max_len = 1000000;');
+            $this->_db->exec('SET SESSION group_concat_max_len = 1000000;');
         }
+        $this->_db->exec(self::SQL_MODE);
 
-        mysqli_query($this->_db, "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
+        $statement = $this->Run($query, 'MySql Query: ');
+        $rows = $statement->fetchAll();
+        $statement->closeCursor();
 
-        $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
-
-        $this->_handleError($result);
-
-        return new MySqlReader($result);
+        return new MySqlReader($rows);
     }
 
     public function LimitQuery(ISqlCommand $command, $limit, $offset = 0)
@@ -98,19 +105,16 @@ class MySqlConnection implements IDbConnection
 
     public function Execute(ISqlCommand $sqlCommand)
     {
-        $mysqlCommand = $this->_prepareExecute(sqlCommand: $sqlCommand, logPrefix: 'MySql Execute: ');
+        $this->_db->exec(self::SQL_MODE);
 
-        if ($sqlCommand->IsMultiQuery()) {
-            $result = mysqli_multi_query($this->_db, $mysqlCommand->GetQuery());
-            do {
-                if ($r = mysqli_store_result($this->_db)) {
-                    mysqli_free_result($r);
-                }
-            } while (mysqli_next_result($this->_db));
-        } else {
-            $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
+        // A prepared statement holds one statement, so a multi-query command runs its statements in turn.
+        $templates = $sqlCommand->IsMultiQuery()
+            ? PreparedQueryBuilder::splitStatements($sqlCommand->GetQuery())
+            : [$sqlCommand->GetQuery()];
+
+        foreach ($templates as $template) {
+            $this->Run($this->Prepare($template, $sqlCommand), 'MySql Execute: ');
         }
-        $this->_handleError($result);
     }
 
     public function ExecuteAffectedRows(ISqlCommand $sqlCommand): int
@@ -121,71 +125,52 @@ class MySqlConnection implements IDbConnection
             );
         }
 
-        $mysqlCommand = $this->_prepareExecute(sqlCommand: $sqlCommand, logPrefix: 'MySql ExecuteAffectedRows: ');
+        $this->_db->exec(self::SQL_MODE);
 
-        $result = mysqli_query($this->_db, $mysqlCommand->GetQuery());
-        $this->_handleError($result);
-
-        // Read immediately after the statement, before any other query or Disconnect() resets it.
-        return (int)mysqli_affected_rows($this->_db);
-    }
-
-    private function _prepareExecute(ISqlCommand $sqlCommand, string $logPrefix): MySqlCommandAdapter
-    {
-        $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
-
-        if (Log::DebugEnabled()) {
-            Log::Sql($logPrefix . str_replace('%', '%%', $mysqlCommand->GetQuery()));
-        }
-
-        mysqli_query($this->_db, "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
-
-        return $mysqlCommand;
+        // Like mysqli_affected_rows, rowCount() counts only rows whose values actually changed.
+        return $this->Run($this->Prepare($sqlCommand->GetQuery(), $sqlCommand), 'MySql ExecuteAffectedRows: ')->rowCount();
     }
 
     public function GetLastInsertId()
     {
-        return mysqli_insert_id($this->_db);
+        return (int)$this->_db->lastInsertId();
     }
 
-    private function _handleError($result)
+    private function Prepare(string $template, SqlCommand $sqlCommand): PreparedQuery
     {
-        if (!$result) {
-            Log::Error('Error executing MySQL query %s', mysqli_error($this->_db));
+        $parameters = [];
+        $rawNames = [];
 
-            throw new Exception('There was an error executing your query\n' .  mysqli_error($this->_db));
+        for ($p = 0; $p < $sqlCommand->Parameters->Count(); $p++) {
+            $parameter = $sqlCommand->Parameters->Items($p);
+            if (array_key_exists($parameter->Name, $parameters)) {
+                continue; // the first parameter of a name wins, as before
+            }
+
+            $parameters[$parameter->Name] = $parameter->Value;
+            if ($parameter instanceof ParameterRaw) {
+                $rawNames[] = $parameter->Name;
+            }
         }
-        return false;
-    }
-}
 
-class MySqlLimitCommand extends SqlCommand
-{
-    /**
-     * @var SqlCommand
-     */
-    private $baseCommand;
-
-    private $limit;
-    private $offset;
-
-    public function __construct(SqlCommand $baseCommand, $limit, $offset)
-    {
-        parent::__construct();
-
-        $this->baseCommand = $baseCommand;
-        $this->limit = $limit;
-        $this->offset = $offset;
-        $this->Parameters = $baseCommand->Parameters;
+        return PreparedQueryBuilder::build($template, $parameters, $rawNames);
     }
 
-    public function GetQuery()
+    private function Run(PreparedQuery $query, string $logPrefix): PDOStatement
     {
-        return $this->baseCommand->GetQuery() . sprintf(' LIMIT %s OFFSET %s', $this->limit, $this->offset);
-    }
+        if (Log::DebugEnabled()) {
+            Log::Sql($logPrefix . str_replace('%', '%%', $query->sql));
+        }
 
-    public function ContainsGroupConcat()
-    {
-        return $this->baseCommand->ContainsGroupConcat();
+        try {
+            $statement = $this->_db->prepare($query->sql);
+            $statement->execute($query->values);
+        } catch (PDOException $e) {
+            Log::Error('Error executing PDO query %s', $e->getMessage());
+
+            throw new Exception('There was an error executing your query\n' . $e->getMessage());
+        }
+
+        return $statement;
     }
 }

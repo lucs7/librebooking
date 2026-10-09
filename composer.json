@@ -43,6 +43,8 @@
         "pear/net_ldap2": "^2.3",
         "ext-intl": "*",
         "ext-ldap": "*",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
         "symfony/html-sanitizer": "^7.4",
         "league/uri": "^7.8"
     },

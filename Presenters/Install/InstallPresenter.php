@@ -7,6 +7,8 @@ require_once(ROOT_DIR . 'Presenters/Install/InstallSecurityGuard.php');
 
 class InstallPresenter
 {
+    private const ERROR_MISSING_EXTENSION = 1;
+
     /**
      * @var IInstallPage
      */
@@ -96,8 +98,34 @@ class InstallPresenter
         return $this->securityGuard->ValidatePassword($installPassword);
     }
 
+    /**
+     * The application reaches the database through PDO, so installing or upgrading without it would
+     * leave an installation that fails on its first request.
+     */
+    protected function HasPdoMysql(): bool
+    {
+        return extension_loaded('pdo_mysql');
+    }
+
+    private function MissingPdoMysqlResult(): InstallationResult
+    {
+        $result = new InstallationResult('Check PHP extensions');
+        $result->SetResult(
+            self::ERROR_MISSING_EXTENSION,
+            'The PHP extension pdo_mysql is required but not loaded. Install it (for example the php-mysql package), restart the web server and reload this page.',
+            ''
+        );
+
+        return $result;
+    }
+
     private function RunInstall()
     {
+        if (!$this->HasPdoMysql()) {
+            $this->page->SetInstallResults([$this->MissingPdoMysqlResult()]);
+            return;
+        }
+
         $install = new Installer($this->page->GetInstallUser(), $this->page->GetInstallUserPassword());
 
         $results = $install->InstallFresh(
@@ -113,6 +141,11 @@ class InstallPresenter
 
     private function RunUpgrade()
     {
+        if (!$this->HasPdoMysql()) {
+            $this->page->SetUpgradeResults([$this->MissingPdoMysqlResult()], Configuration::VERSION);
+            return;
+        }
+
         $install = new Installer($this->page->GetInstallUser(), $this->page->GetInstallUserPassword());
         $results = $install->Upgrade();
         $install->ClearCachedTemplates();

@@ -2,25 +2,40 @@
 
 class MySqlReader implements IReader
 {
-    private $_result = null;
+    /**
+     * @var array<int, array<string, string|null>>
+     */
+    private $_rows;
 
-    public function __construct($result)
+    private $_position = 0;
+
+    /**
+     * Rows are read eagerly so the reader does not keep the connection alive after Disconnect().
+     *
+     * @param array<int, array<string, string|null>> $rows
+     */
+    public function __construct(array $rows)
     {
-        $this->_result = $result;
+        $this->_rows = $rows;
     }
 
     public function GetRow()
     {
-        return mysqli_fetch_assoc($this->_result);
+        if ($this->_position >= count($this->_rows)) {
+            return false;
+        }
+
+        return $this->_rows[$this->_position++];
     }
 
     public function NumRows()
     {
-        return mysqli_num_rows($this->_result);
+        return count($this->_rows);
     }
 
     public function Free()
     {
-        mysqli_free_result($this->_result);
+        $this->_rows = [];
+        $this->_position = 0;
     }
 }

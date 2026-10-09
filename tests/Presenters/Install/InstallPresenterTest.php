@@ -38,6 +38,45 @@ class InstallPresenterTest extends TestBase
         $this->loadPage(new InstallPresenter($page, $guard));
     }
 
+    public function testInstallStopsWithAClearErrorWhenPdoMysqlIsMissing()
+    {
+        $page = $this->createMock(IInstallPage::class);
+        $page->method('RunningInstall')->willReturn(true);
+        $page->expects($this->once())->method('SetInstallResults')->with($this->callback(
+            fn (array $results) => count($results) === 1
+                && !$results[0]->WasSuccessful()
+                && str_contains($results[0]->sqlErrorText, 'pdo_mysql')
+        ));
+
+        $this->loadPage($this->presenterWithoutPdoMysql($page));
+    }
+
+    public function testUpgradeStopsWithAClearErrorWhenPdoMysqlIsMissing()
+    {
+        $page = $this->createMock(IInstallPage::class);
+        $page->method('RunningUpgrade')->willReturn(true);
+        $page->expects($this->once())->method('SetUpgradeResults')->with($this->callback(
+            fn (array $results) => count($results) === 1
+                && !$results[0]->WasSuccessful()
+                && str_contains($results[0]->sqlErrorText, 'pdo_mysql')
+        ));
+
+        $this->loadPage($this->presenterWithoutPdoMysql($page));
+    }
+
+    private function presenterWithoutPdoMysql(IInstallPage $page): InstallPresenter
+    {
+        $guard = $this->createMock(InstallSecurityGuard::class);
+        $guard->method('IsAuthenticated')->willReturn(true);
+
+        return new class ($page, $guard) extends InstallPresenter {
+            protected function HasPdoMysql(): bool
+            {
+                return false;
+            }
+        };
+    }
+
     /**
      * PageLoad() ends by asking a real Installer for the schema version. The
      * fake config has no database settings, so the connection fails; that is
