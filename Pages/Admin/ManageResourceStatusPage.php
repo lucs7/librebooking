@@ -34,7 +34,7 @@ class ManageResourceStatusPage extends ActionPage implements IManageResourceStat
     {
         $this->presenter->PageLoad();
 
-        $this->Display('Admin/Resources/manage_resource_status.tpl');
+        $this->Display('pages/admin/manage_resource_status.twig');
     }
 
     /**

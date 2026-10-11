@@ -1,4 +1,9 @@
-{{ include('globalheader.twig', {InlineEdit: true, DataTable: true, Trumbowyg: true}) }}
+{% extends 'layouts/base.twig' %}
+{% set InlineEdit = true %}
+{% set DataTable = true %}
+{% set Trumbowyg = true %}
+
+{% block content %}
 
 <div id="page-manage-resources" class="admin-page">
     <div class="clearfix border-bottom mb-3">
@@ -65,17 +70,10 @@
     </div>
 
     <div class="accordion">
-        <div class="accordion-item shadow mb-3 panel-default filterTable" id="filter-resources-panel">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed link-primary fw-bold" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#filter-resources-content" aria-expanded="false"
-                    aria-controls="filter-resources-content">
-                    <i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}
-                </button>
-            </h2>
-            <div id="filter-resources-content" class="accordion-collapse collapse">
-                <form id="filterForm" class="horizontal-list" role="form" method="get">
-                    <div class="accordion-body">
+        <form id="filterForm" class="horizontal-list" role="form" method="get">
+            {% set filterTitle %}<i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}{% endset %}
+            {% embed 'components/common/accordion-item.twig' with {id: 'filter-resources-panel', contentsId: 'filter-resources-content', title: filterTitle, class: 'filterTable'} %}
+                {% block body %}
                         <div class="row gy-2 mb-2">
                             {% set groupClass = 'col-12 col-sm-4 col-md-3' %}
 
@@ -174,16 +172,15 @@
                             {{ filter_button(attributes: {id: 'filter'}) }}
                             {{ reset_button(attributes: {id: 'clearFilter'}) }}
                         </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+                {% endblock %}
+            {% endembed %}
+        </form>
     </div>
 
     <div id="globalError" class="error d-none"></div>
 
-    <div class="card shadow panel-default admin-panel" id="list-resources-panel">
-        <div class="no-padding card-body accordion" id="resourceList">
+    {% embed 'components/common/card.twig' with {id: 'list-resources-panel', bodyId: 'resourceList', bodyClass: 'accordion'} %}
+{% block body %}
             {% set tableId = 'resourcesTable' %}
             <table class="table table-borderless w-100" id="{{ tableId }}">
                 <thead class="d-none">
@@ -196,17 +193,11 @@
                         {% set id = resource.GetResourceId() %}
                         <tr>
                             <td>
-                                <div class="resourceItem accordion-item shadow mb-2">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#id{{ resource.GetResourceId() }}" aria-expanded="false"
-                                            aria-controls="id{{ resource.GetResourceId() }}">
-                                            {{ resource.GetName() }}
-                                        </button>
-                                    </h2>
-
-                                    <div id="id{{ id }}" class="accordion-collapse collapse">
-                                        <div class="accordion-body resourceDetails" data-resourceId="{{ id }}">
+                                {% embed 'components/common/accordion-item.twig' with {id: 'resource-item-' ~ id, contentsId: 'id' ~ id, title: resource.GetName(), class: 'resourceItem', buttonClass: ''} %}
+{% block body %}
+{# the embed's own `id` param shadows the resource id inside the body #}
+{% set id = resource.GetResourceId() %}
+<div class="resourceDetails" data-resourceId="{{ id }}">
                                             <input type="hidden" class="id" value="{{ id }}" />
                                             <div class="row">
                                                 <div class="col-12 col-sm-2 p-2">
@@ -451,7 +442,7 @@
                                                                 </a>
 
                                                                 <div class="accessPlaceHolder">
-                                                                    {{ include('Admin/Resources/manage_resources_access.twig', {resource: resource}) }}
+                                                                    {{ include('components/resource/access.twig', {resource: resource}) }}
                                                                 </div>
                                                             </div>
                                                             <div class="mt-2">
@@ -501,7 +492,7 @@
                                                                 </a>
 
                                                                 <div class="durationPlaceHolder">
-                                                                    {{ include('Admin/Resources/manage_resources_duration.twig', {resource: resource}) }}
+                                                                    {{ include('components/resource/duration.twig', {resource: resource}) }}
                                                                 </div>
                                                             </div>
 
@@ -515,7 +506,7 @@
                                                                         <span class="bi bi-pencil-square"></span>
                                                                     </a>
                                                                     <div class="creditsPlaceHolder">
-                                                                        {{ include('Admin/Resources/manage_resources_credits.twig', {resource: resource}) }}
+                                                                        {{ include('components/resource/credits.twig', {resource: resource}) }}
                                                                     </div>
                                                                 </div>
                                                             {% endif %}
@@ -529,7 +520,7 @@
                                                                     <span class="bi bi-pencil-square"></span>
                                                                 </a>
                                                                 <div class="capacityPlaceHolder">
-                                                                    {{ include('Admin/Resources/manage_resources_capacity.twig', {resource: resource}) }}
+                                                                    {{ include('components/resource/capacity.twig', {resource: resource}) }}
                                                                 </div>
                                                             </div>
                                                             <div class="mt-2">
@@ -543,7 +534,7 @@
                                                                 </a>
 
                                                                 <div class="resourceGroupsPlaceHolder">
-                                                                    {{ include('Admin/Resources/manage_resources_groups.twig', {resource: resource}) }}
+                                                                    {{ include('components/resource/groups.twig', {resource: resource}) }}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -563,7 +554,7 @@
                                                                 <div id="customAttributes{{ id }}" class="collapse show">
                                                                     <div>
                                                                         {% for attribute in applicableAttributes %}
-                                                                            {{ include('Admin/InlineAttributeEdit.twig', {url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageResourcesActions::ActionChangeAttribute'), id: id, attribute: attribute, value: resource.GetAttributeValue(attribute.Id())}) }}
+                                                                            {{ include('components/controls/attributes/inline-edit.twig', {url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageResourcesActions::ActionChangeAttribute'), id: id, attribute: attribute, value: resource.GetAttributeValue(attribute.Id())}, false) }}
                                                                         {% endfor %}
                                                                     </div>
                                                                 </div>
@@ -573,7 +564,7 @@
                                                     <div class="">
                                                         <div class="fs-6 fw-bold me-2">{{ translate('Public') }}</div>
                                                         <div class="publicSettingsPlaceHolder">
-                                                            {{ include('Admin/Resources/manage_resources_public.twig', {resource: resource}) }}
+                                                            {{ include('components/resource/public.twig', {resource: resource}) }}
                                                         </div>
                                                         <div class="">
                                                             <a href="{{ server.SCRIPT_NAME }}?action={{ constant('ManageResourcesActions::ActionPrintQR') }}&rid={{ id }}"
@@ -583,28 +574,23 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
+</div>
+{% endblock %}
+{% endembed %}
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </div>
 
-    <div id="add-resource-dialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="addResourceModalLabel"
-        aria-hidden="true">
-        <form id="addResourceForm" class="form" role="form" method="post"
+{% endblock %}
+{% endembed %}
+
+    <form id="addResourceForm" class="form" role="form" method="post"
             ajaxAction="{{ constant('ManageResourcesActions::ActionAdd') }}" enctype="multipart/form-data">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addResourceModalLabel">{{ translate('AddNewResource') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+{% embed 'components/common/modal.twig' with {id: 'add-resource-dialog'} %}
+{% block header %}<h5 class="modal-title" id="add-resource-dialogLabel">{{ translate('AddNewResource') }}</h5>{% endblock %}
+{% block body %}
                         <div id="addResourceResults" class="alert alert-danger no-show"></div>
 
                         <div class="form-group mb-2">
@@ -652,30 +638,26 @@
                                 accept="image/*;capture=camera" />
                         </div>
                         <div class="note fst-italic">.gif, .jpg, or .png</div>
-                    </div>
-                    <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                         {{ cancel_button() }}
                         {{ add_button() }}
                         {{ indicator() }}
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+
+</div>
+{% endblock %}
+{% endembed %}
+</form>
 
     <input type="hidden" id="activeId" value="" />
 
-    <div id="imageDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-        aria-hidden="true">
-        <form id="imageForm" method="post" enctype="multipart/form-data"
+    <form id="imageForm" method="post" enctype="multipart/form-data"
             ajaxAction="{{ constant('ManageResourcesActions::ActionChangeImage') }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="imageModalLabel">{{ translate('ResourceImages') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+{% embed 'components/common/modal.twig' with {id: 'imageDialog'} %}
+{% block header %}<h5 class="modal-title" id="imageDialogLabel">{{ translate('ResourceImages') }}</h5>{% endblock %}
+{% block body %}
                         <div class="clearfix">
                             <div class="row " id="resource-images">
 
@@ -694,16 +676,17 @@
                         </div>
 
                         <div class="note fst-italic">.gif, .jpg, .png</div>
-                    </div>
 
-                    <div class="modal-footer">
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                         {{ cancel_button(key: 'Done') }}
                         {{ indicator() }}
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+
+</div>
+{% endblock %}
+{% endembed %}
+</form>
 
     <form id="removeImageForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionRemoveImage') }}">
         <input type="hidden" id="removeImageName" {{ formname(key: 'RESOURCE_IMAGE') }} />
@@ -713,44 +696,34 @@
         <input type="hidden" id="defaultImageName" {{ formname(key: 'RESOURCE_IMAGE') }} />
     </form>
 
-    <div id="copyDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel" aria-hidden="true">
-        <form id="copyForm" method="post" enctype="multipart/form-data"
+    <form id="copyForm" method="post" enctype="multipart/form-data"
             ajaxAction="{{ constant('ManageResourcesActions::ActionCopyResource') }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="copyModalLabel">{{ translate('Copy') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+{% embed 'components/common/modal.twig' with {id: 'copyDialog'} %}
+{% block header %}<h5 class="modal-title" id="copyDialogLabel">{{ translate('Copy') }}</h5>{% endblock %}
+{% block body %}
                         <div class="form-group">
                             <label class="fw-bold" for="copyResourceName">{{ translate('Name') }}<i
                                     class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
                             <input type="text" class="form-control required has-feedback" maxlength="85"
                                 id="copyResourceName" {{ formname(key: 'RESOURCE_NAME') }} />
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                         {{ cancel_button() }}
                         {{ add_button() }}
                         {{ indicator() }}
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
-    <div id="durationDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="durationModalLabel"
-        aria-hidden="true">
-        <form id="durationForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeDuration') }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="durationModalLabel">{{ translate('Duration') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+</div>
+{% endblock %}
+{% endembed %}
+</form>
+
+    <form id="durationForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeDuration') }}">
+{% embed 'components/common/modal.twig' with {id: 'durationDialog'} %}
+{% block header %}<h5 class="modal-title" id="durationDialogLabel">{{ translate('Duration') }}</h5>{% endblock %}
+{% block body %}
                         <div class="editMinDuration mb-2">
                             <div class="form-check">
                                 <input type="checkbox" id="noMinimumDuration" class="noMinimumDuration form-check-input"
@@ -840,28 +813,22 @@
                             </div>
                         </div>
 
-                    </div>
-
-                    <div class="modal-footer">
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                         {{ cancel_button() }}
                         {{ update_button() }}
                         {{ indicator() }}
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
-    <div id="capacityDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="capacityModalLabel"
-        aria-hidden="true">
-        <form id="capacityForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeCapacity') }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="capacityModalLabel">{{ translate('Capacity') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+</div>
+{% endblock %}
+{% endembed %}
+</form>
+
+    <form id="capacityForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeCapacity') }}">
+{% embed 'components/common/modal.twig' with {id: 'capacityDialog'} %}
+{% block header %}<h5 class="modal-title" id="capacityDialogLabel">{{ translate('Capacity') }}</h5>{% endblock %}
+{% block body %}
                         <div class="editCapacity">
                             <div class="form-check">
                                 <input type="checkbox" id="unlimitedCapacity" class="unlimitedCapacity form-check-input"
@@ -881,28 +848,23 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                         {{ cancel_button() }}
                         {{ update_button() }}
                         {{ indicator() }}
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
-    <div id="accessDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="accessModalLabel"
-        aria-hidden="true">
-        <form id="accessForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeAccess') }}">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="accessModalLabel">{{ translate('Access') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+</div>
+{% endblock %}
+{% endembed %}
+</form>
+
+    <form id="accessForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeAccess') }}">
+{% embed 'components/common/modal.twig' with {id: 'accessDialog', size: 'lg'} %}
+{% block header %}<h5 class="modal-title" id="accessDialogLabel">{{ translate('Access') }}</h5>{% endblock %}
+{% block body %}
                         <div class="editStartNoticeAdd">
                             <div class="form-check">
                                 <input type="checkbox" id="noStartNoticeAdd" class="noStartNoticeAdd form-check-input"
@@ -1088,28 +1050,23 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                         {{ cancel_button() }}
                         {{ update_button() }}
                         {{ indicator() }}
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
-    <div id="statusDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel"
-        aria-hidden="true">
-        <form id="statusForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeStatus') }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="statusModalLabel">{{ translate('ChangeResourceStatus') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+</div>
+{% endblock %}
+{% endembed %}
+</form>
+
+    <form id="statusForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeStatus') }}">
+{% embed 'components/common/modal.twig' with {id: 'statusDialog'} %}
+{% block header %}<h5 class="modal-title" id="statusDialogLabel">{{ translate('ChangeResourceStatus') }}</h5>{% endblock %}
+{% block body %}
                         <div class="control-group form-group">
                             <div class="form-group mb-2">
                                 <label class="fw-bold">{{ translate('Status') }}
@@ -1173,27 +1130,23 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                         {{ cancel_button() }}
                         {{ update_button() }}
                         {{ indicator() }}
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
-    <div id="deletePrompt" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteResourceDialogLabel"
-        aria-hidden="true">
-        <form id="deleteForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionDelete') }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteResourceDialogLabel">{{ translate('Delete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+</div>
+{% endblock %}
+{% endembed %}
+</form>
+
+    <form id="deleteForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionDelete') }}">
+{% embed 'components/common/modal.twig' with {id: 'deletePrompt'} %}
+{% block header %}<h5 class="modal-title" id="deletePromptLabel">{{ translate('Delete') }}</h5>{% endblock %}
+{% block body %}
                         <div class="alert alert-warning">
                             <div>{{ translate('DeleteWarning') }}</div>
                             {{ translate('DeleteResourceWarning') }}:
@@ -1204,27 +1157,22 @@
 
                             {{ translate('DeleteResourceWarningReassign') }}
                         </div>
-                    </div>
-                    <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                         {{ cancel_button() }}
                         {{ delete_button() }}
                         {{ indicator() }}
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
-    <div id="bulkUpdateDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bulkUpdateLabel"
-        aria-hidden="true">
+</div>
+{% endblock %}
+{% endembed %}
+</form>
 
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="bulkUpdateLabel">{{ translate('BulkResourceUpdate') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+    {% embed 'components/common/modal.twig' with {id: 'bulkUpdateDialog', size: 'lg', scrollable: true} %}
+{% block header %}<h5 class="modal-title" id="bulkUpdateDialogLabel">{{ translate('BulkResourceUpdate') }}</h5>{% endblock %}
+{% block body %}
                     <form id="bulkUpdateForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionBulkUpdate') }}"
                         class="form-vertical" role="form">
                         <div id="bulkUpdateErrors" class="error d-none mb-2">
@@ -1785,27 +1733,23 @@
                         </div>
                         {{ csrf_token() }}
                     </form>
-                </div>
-                <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                     {{ cancel_button() }}
                     {{ update_button(submit: '1', attributes: {form: 'bulkUpdateForm'}) }}
                     {{ indicator() }}
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div id="bulkDeleteDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bulkDeleteLabel"
-        aria-hidden="true">
-        <form id="bulkDeleteForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionBulkDelete') }}"
+</div>
+{% endblock %}
+{% endembed %}
+
+    <form id="bulkDeleteForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionBulkDelete') }}"
             class="form-vertical" role="form">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="bulkDeleteLabel">{{ translate('BulkResourceDelete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+{% embed 'components/common/modal.twig' with {id: 'bulkDeleteDialog', size: 'lg'} %}
+{% block header %}<h5 class="modal-title" id="bulkDeleteDialogLabel">{{ translate('BulkResourceDelete') }}</h5>{% endblock %}
+{% block body %}
                         <div class="alert alert-warning">
                             <div>{{ translate('DeleteWarning') }}</div>
                             {{ translate('DeleteResourceWarning') }}:
@@ -1823,67 +1767,48 @@
                             <a href="#" id="checkNoDeleteResources" class="link-primary">{{ translate('None') }}</a>
                         </div>
                         <div id="bulkDeleteList" class="bg-light border rounded p-2"></div>
-                    </div>
-                    <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                         {{ cancel_button() }}
                         {{ delete_button() }}
                         {{ indicator() }}
-                    </div>
-                </div>
-            </div>
-            {{ csrf_token() }}
-        </form>
-    </div>
 
-    <div id="userDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userPermissionDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="userPermissionDialogLabel">{{ translate('Users') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+</div>
+{% endblock %}
+{% endembed %}
+</form>
+
+    {% embed 'components/common/modal.twig' with {id: 'userDialog', scrollable: true} %}
+{% block header %}<h5 class="modal-title" id="userDialogLabel">{{ translate('Users') }}</h5>{% endblock %}
+{% block body %}
                     <div class="form-group">
                         <label for="userSearch">{{ translate('AddUser') }}</label>
                         <a href="#" id="browseUsers" class="link-primary">{{ translate('Browse') }}</a>
                         <input type="text" id="userSearch" class="form-control form-control-sm" size="60" />
                     </div>
                     <div id="resourceUserList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div id="allUsers" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="browseUsersDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="browseUsersDialogLabel">{{ translate('AllUsers') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+{% endblock %}
+{% endembed %}
+
+    {% embed 'components/common/modal.twig' with {id: 'allUsers', scrollable: true} %}
+{% block header %}<h5 class="modal-title" id="allUsersLabel">{{ translate('AllUsers') }}</h5>{% endblock %}
+{% block body %}
                     <div id="allUsersList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+{% endblock %}
+{% endembed %}
 
     <form id="changeUserForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeUserPermission') }}">
         <input type="hidden" id="changeUserId" {{ formname(key: 'USER_ID') }} />
         <input type="hidden" id="changeUserType" {{ formname(key: 'PERMISSION_TYPE') }} />
     </form>
 
-    <div id="groupDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="browseGroupsDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="browseGroupsDialogLabel">{{ translate('AllGroups') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body scrollable-modal-content">
+    {% embed 'components/common/modal.twig' with {id: 'groupDialog', scrollable: true, bodyClass: 'scrollable-modal-content'} %}
+{% block header %}<h5 class="modal-title" id="groupDialogLabel">{{ translate('AllGroups') }}</h5>{% endblock %}
+{% block body %}
                     <div class="form-group">
                         <label for="groupSearch">{{ translate('AddGroup') }}</label>
                         <a href="#" id="browseGroups" class="link-primary">{{ translate('AllGroups') }}</a>
@@ -1891,68 +1816,50 @@
                     </div>
 
                     <div id="resourceGroupList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div id="allGroups" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="groupPermissionDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="groupPermissionDialogLabel">{{ translate('Groups') }}</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+{% endblock %}
+{% endembed %}
+
+    {% embed 'components/common/modal.twig' with {id: 'allGroups', scrollable: true} %}
+{% block header %}<h5 class="modal-title" id="allGroupsLabel">{{ translate('Groups') }}</h5>{% endblock %}
+{% block body %}
                     <div id="allGroupsList"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+{% endblock %}
+{% endembed %}
 
     <form id="changeGroupForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeGroupPermission') }}">
         <input type="hidden" id="changeGroupId" {{ formname(key: 'GROUP_ID') }} />
         <input type="hidden" id="changeGroupType" {{ formname(key: 'PERMISSION_TYPE') }} />
     </form>
 
-    <div class="modal fade" id="resourceGroupDialog" tabindex="-1" role="dialog"
-        aria-labelledby="resourceGroupsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <form id="resourceGroupForm" method="post"
+    <form id="resourceGroupForm" method="post"
                 ajaxAction="{{ constant('ManageResourcesActions::ActionChangeResourceGroups') }}">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="resourceGroupsModalLabel">{{ translate('ResourceGroups') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+{% embed 'components/common/modal.twig' with {id: 'resourceGroupDialog', scrollable: true} %}
+{% block header %}<h5 class="modal-title" id="resourceGroupDialogLabel">{{ translate('ResourceGroups') }}</h5>{% endblock %}
+{% block body %}
                         <div id="resourceGroups">{{ translate('None') }}</div>
-            </form>
-        </div>
-        <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
             {{ cancel_button() }}
             {{ update_button(submit: '1', attributes: {form: 'resourceGroupForm'}) }}
             {{ indicator() }}
-        </div>
-    </div>
+
 </div>
-</div>
+{% endblock %}
+{% endembed %}
+</form>
 
 <form id="colorForm" method="post" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeColor') }}">
     <input type="hidden" id="reservationColor" {{ formname(key: 'RESERVATION_COLOR') }} />
 </form>
 
-<div id="creditsDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="creditsModalLabel"
-    aria-hidden="true">
-    <form id="creditsForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeCredits') }}">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="creditsModalLabel">{{ translate('Credits') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+<form id="creditsForm" method="post" role="form" ajaxAction="{{ constant('ManageResourcesActions::ActionChangeCredits') }}">
+{% embed 'components/common/modal.twig' with {id: 'creditsDialog'} %}
+{% block header %}<h5 class="modal-title" id="creditsDialogLabel">{{ translate('Credits') }}</h5>{% endblock %}
+{% block body %}
                     <div class="mb-2">
                         {% set creditsPerSLot %}
                             <label for='creditsPerSlot' class='visually-hidden'>Credits Per Slot</label>
@@ -1972,28 +1879,24 @@
                         <div class="d-flex align-items-center gap-1">
                             {{ translate('PeakCreditUsagePerSlot', peakCreditsPerSlot) }}</div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                     {{ cancel_button() }}
                     {{ update_button() }}
                     {{ indicator() }}
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
 
-<div id="importDialog" class="modal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
-    <form id="importForm" class="form" role="form" method="post" enctype="multipart/form-data"
+</div>
+{% endblock %}
+{% endembed %}
+</form>
+
+<form id="importForm" class="form" role="form" method="post" enctype="multipart/form-data"
         ajaxAction="{{ constant('ManageResourcesActions::ImportResources') }}">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="importModalLabel">{{ translate('Import') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+{% embed 'components/common/modal.twig' with {id: 'importDialog'} %}
+{% block header %}<h5 class="modal-title" id="importDialogLabel">{{ translate('Import') }}</h5>{% endblock %}
+{% block body %}
                     <div id="importInstructions" class="alert alert-info fst-italic">
                         <div class="note">{{ translate('ResourceImportInstructions') }}</div>
                         <a href="{{ server.SCRIPT_NAME }}?dr=template" class="alert-link"
@@ -2026,20 +1929,22 @@
                                 class="form-check-label">{{ translate('UpdateResourcesOnImport') }}</label>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                     {{ cancel_button() }}
                     {{ add_button(key: 'Import') }}
                     {{ indicator() }}
-                </div>
-            </div>
-        </div>
-    </form>
+
 </div>
+{% endblock %}
+{% endembed %}
+</form>
 
 {{ csrf_token() }}
 
-{{ include('javascript-includes.twig', {InlineEdit: true, Clear: true, DataTable: true, Trumbowyg: true}) }}
+{{ include('javascript-includes.twig', {InlineEdit: true, Clear: true, DataTable: true, Trumbowyg: true}, false) }}
 {{ datatable(tableId: tableId) }}
 {{ jsfile(src: 'ajax-helpers.js') }}
 {{ jsfile(src: 'autocomplete.js') }}
@@ -2394,4 +2299,4 @@
 </script>
 </div>
 
-{{ include('globalfooter.twig') }}
+{% endblock %}

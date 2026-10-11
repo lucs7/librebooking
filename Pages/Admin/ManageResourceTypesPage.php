@@ -72,7 +72,7 @@ class ManageResourceTypesPage extends ActionPage implements IManageResourceTypes
     {
         $this->presenter->PageLoad();
 
-        $this->Display('Admin/Resources/manage_resource_types.tpl');
+        $this->Display('pages/admin/manage_resource_types.twig');
     }
 
     /**

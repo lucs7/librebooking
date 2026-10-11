@@ -1,4 +1,7 @@
-{{ include('globalheader.twig', {HideNavBar: true}) }}
+{% extends 'layouts/base.twig' %}
+{% set HideNavBar = true %}
+
+{% block content %}
 
 <div class="min-vh-75 d-flex justify-content-center align-items-center p-3">
   <div class="border rounded-3 p-3 text-center bg-white shadow-sm" style="max-width: 300px; width: 100%;">
@@ -10,4 +13,4 @@
   </div>
 </div>
 
-{{ include('globalfooter.twig') }}
+{% endblock %}

@@ -74,7 +74,7 @@ class ExportCsvTemplatesTest extends TestBase
             self::RESOURCE_GROUP_ID_B => new ResourceGroup(self::RESOURCE_GROUP_ID_B, "Floor 'Two'"),
         ]);
 
-        $output = $page->fetch('Admin/Resources/resources_csv.twig');
+        $output = $page->fetch('components/resource/resources-csv.twig');
 
         $this->assertSame(self::EXPECTED_RESOURCES_CSV, $output);
         $this->assertEveryRowMatchesHeaderColumnCount($output);

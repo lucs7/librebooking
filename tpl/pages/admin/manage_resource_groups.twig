@@ -1,14 +1,17 @@
-{{ include('globalheader.twig', {cssFiles: 'assets/vendor/jquery-contextmenu/2.9.2/css/jquery.contextMenu.css,assets/vendor/jqtree/1.8.11/css/jqtree.css'}) }}
+{% extends 'layouts/base.twig' %}
+{% set cssFiles = 'assets/vendor/jquery-contextmenu/2.9.2/css/jquery.contextMenu.css,assets/vendor/jqtree/1.8.11/css/jqtree.css' %}
+
+{% block content %}
 
 <div id="page-manage-resource-groups" class="admin-page">
 
-    {{ include('Admin/Resources/manage_resource_menu.twig', {ResourcePageTitleKey: 'ManageResourceGroups'}) }}
+    {{ include('components/resource/menu.twig', {ResourcePageTitleKey: 'ManageResourceGroups'}) }}
 
     <div id="globalError" class="alert alert-danger d-none"></div>
 
     <div id="manage-resource-groups-container bg-dark">
-        <div class="card shadow mb-3">
-            <div class="card-body">
+        {% embed 'components/common/card.twig' with {class: 'mb-3'} %}
+{% block body %}
                 <div id="help" class="alert alert-info d-flex align-items-center" role="alert">
                     <div>
                         <div>{{ translate('ResourceGroupHelp1') }}</div>
@@ -49,94 +52,83 @@
                         {% endfor %}
                     </div>
                 </div>
-            </div>
-        </div>
+
+{% endblock %}
+{% endembed %}
     </div>
 </div>
 
 <input type="hidden" id="activeId" value="" />
 
-<div id="renameDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="renameGroupDialogLabel"
-    aria-hidden="true">
-    <form id="renameForm" method="post" ajaxAction="{{ constant('ManageResourceGroupsActions::RenameGroup') }}" class="was-validated">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="renameGroupDialogLabel">{{ translate('Rename') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+<form id="renameForm" method="post" ajaxAction="{{ constant('ManageResourceGroupsActions::RenameGroup') }}" class="was-validated">
+{% embed 'components/common/modal.twig' with {id: 'renameDialog'} %}
+{% block header %}<h5 class="modal-title" id="renameDialogLabel">{{ translate('Rename') }}</h5>{% endblock %}
+{% block body %}
                     <div class="form-group">
                         <label class="form-label fw-bold" for="editName">{{ translate('Name') }}</label>
                         <input id="editName" type="text" class="form-control textbox required triggerSubmit" required
                             maxlength="85" {{ formname(key: 'GROUP_NAME') }} />
                     </div>
-                </div>
-                <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                     {{ cancel_button() }}
                     {{ update_button() }}
                     {{ indicator() }}
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
 
-<div id="deleteDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteDialogLabel"
-    aria-hidden="true">
-    <form id="deleteForm" method="post" ajaxAction="{{ constant('ManageResourceGroupsActions::DeleteGroup') }}">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+</div>
+{% endblock %}
+{% endembed %}
+</form>
+
+<form id="deleteForm" method="post" ajaxAction="{{ constant('ManageResourceGroupsActions::DeleteGroup') }}">
+{% embed 'components/common/modal.twig' with {id: 'deleteDialog'} %}
+{% block header %}<h5 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h5>{% endblock %}
+{% block body %}
                     <div class="alert alert-warning">
                         <div>{{ translate('DeleteWarning') }}</div>
                     </div>
-                </div>
-                <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                     {{ cancel_button() }}
                     {{ delete_button() }}
                     {{ indicator() }}
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
 
-<div id="addChildDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addGroupDialogLabel"
-    aria-hidden="true">
-    <form id="addChildForm" method="post" ajaxAction="{{ constant('ManageResourceGroupsActions::AddGroup') }}" class="was-validated">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addGroupDialogLabel">{{ translate('AddNewGroup') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+</div>
+{% endblock %}
+{% endembed %}
+</form>
+
+<form id="addChildForm" method="post" ajaxAction="{{ constant('ManageResourceGroupsActions::AddGroup') }}" class="was-validated">
+{% embed 'components/common/modal.twig' with {id: 'addChildDialog'} %}
+{% block header %}<h5 class="modal-title" id="addChildDialogLabel">{{ translate('AddNewGroup') }}</h5>{% endblock %}
+{% block body %}
                     <div class="form-group">
                         <label for="childName" class="form-label fw-bold">{{ translate('Name') }}</label>
                         <input id="childName" type="text" class="form-control required new-group" maxlength="85"
                             {{ formname(key: 'GROUP_NAME') }} required />
                     </div>
-                </div>
-                <div class="modal-footer">
+
+{% endblock %}
+{% block footer %}
+<div class="modal-footer">
                     {{ cancel_button() }}
                     {{ add_button() }}
                     <input type="hidden" id="groupParentId" name="{{ constant('FormKeys::PARENT_ID') }}" />
 
                     {{ indicator() }}
-                </div>
-            </div>
-        </div>
-    </form>
+
 </div>
+{% endblock %}
+{% endembed %}
+</form>
 
 {{ csrf_token() }}
 
-{{ include('javascript-includes.twig') }}
+{{ include('javascript-includes.twig', {}, false) }}
 {{ jsfile('ajax-helpers.js') }}
 {{ jsfile('admin/resource-groups.js') }}
 {{ vendor_js('jquery-form/3.09/jquery.form-3.09.min.js') }}
@@ -171,4 +163,4 @@
 </script>
 </div>
 
-{{ include('globalfooter.twig') }}
+{% endblock %}

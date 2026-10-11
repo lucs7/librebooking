@@ -254,7 +254,7 @@
             <div>
                 <span class="fs-6 fw-bold">{{ translate('Access') }}</span>
                 <div class="accessPlaceHolder">
-                    {{ include('Admin/Resources/manage_resources_access.twig', {resource: resource}) }}
+                    {{ include('components/resource/access.twig', {resource: resource}) }}
                 </div>
             </div>
             <div class="mt-2">
@@ -272,21 +272,21 @@
             <div>
                 <span class="fs-6 fw-bold">{{ translate('Duration') }}</span>
                 <div class="durationPlaceHolder">
-                    {{ include('Admin/Resources/manage_resources_duration.twig', {resource: resource}) }}
+                    {{ include('components/resource/duration.twig', {resource: resource}) }}
                 </div>
             </div>
             {% if CreditsEnabled is defined and CreditsEnabled %}
                 <div class="mt-2">
                     <span class="fs-6 fw-bold">{{ translate('Credits') }}</span>
                     <div class="creditsPlaceHolder">
-                        {{ include('Admin/Resources/manage_resources_credits.twig', {resource: resource}) }}
+                        {{ include('components/resource/credits.twig', {resource: resource}) }}
                     </div>
                 </div>
             {% endif %}
             <div class="mt-2">
                 <span class="fs-6 fw-bold">{{ translate('Capacity') }}</span>
                 <div class="capacityPlaceHolder">
-                    {{ include('Admin/Resources/manage_resources_capacity.twig', {resource: resource}) }}
+                    {{ include('components/resource/capacity.twig', {resource: resource}) }}
                 </div>
             </div>
             <div class="mt-2">
@@ -323,7 +323,7 @@
     <div>
         <div class="fs-6 fw-bold">{{ translate('Public') }}</div>
         <div class="publicSettingsPlaceHolder">
-            {{ include('Admin/Resources/manage_resources_public.twig', {resource: resource, modeEdit: true}) }}
+            {{ include('components/resource/public.twig', {resource: resource, modeEdit: true}) }}
         </div>
     </div>
 </div>

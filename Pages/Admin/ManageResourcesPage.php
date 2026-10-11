@@ -520,7 +520,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     {
         $this->presenter->PageLoad();
 
-        $this->Display('Admin/Resources/manage_resources.tpl');
+        $this->Display('pages/admin/manage_resources.twig');
     }
 
     /**
@@ -927,7 +927,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     public function BindUpdatedDuration($resource)
     {
         $this->Set('resource', $resource);
-        $this->Display('Admin/Resources/manage_resources_duration.tpl');
+        $this->Display('components/resource/duration.twig');
     }
 
     /**
@@ -936,7 +936,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     public function BindUpdatedCapacity($resource)
     {
         $this->Set('resource', $resource);
-        $this->Display('Admin/Resources/manage_resources_capacity.tpl');
+        $this->Display('components/resource/capacity.twig');
     }
 
     /**
@@ -945,7 +945,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     public function BindUpdatedAccess($resource)
     {
         $this->Set('resource', $resource);
-        $this->Display('Admin/Resources/manage_resources_access.tpl');
+        $this->Display('components/resource/access.twig');
     }
 
     /**
@@ -956,7 +956,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     {
         $this->Set('resource', $resource);
         $this->Set('ResourceGroupList', $groupList);
-        $this->Display('Admin/Resources/manage_resources_groups.tpl');
+        $this->Display('components/resource/groups.twig');
     }
 
     /**
@@ -1040,7 +1040,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     public function BindUpdatedResourceCredits(BookableResource $resource)
     {
         $this->Set('resource', $resource);
-        $this->Display('Admin/Resources/manage_resources_credits.tpl');
+        $this->Display('components/resource/credits.twig');
     }
 
     public function ShowQRCode($qrCodeImageUrl, $resourceName)
@@ -1048,7 +1048,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
         $this->Set('QRImageUrl', $qrCodeImageUrl);
         $this->Set('ResourceName', $resourceName);
 
-        $this->Display('Admin/Resources/show_resource_qr.tpl');
+        $this->Display('pages/admin/resource_qr.twig');
     }
 
     /**
@@ -1083,7 +1083,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     public function ShowTemplateCSV($attributes)
     {
         $this->Set('attributes', $attributes);
-        $this->DisplayCsv('Admin/Resources/import_resource_template_csv.tpl', 'resources.csv');
+        $this->DisplayCsv('components/resource/import-template-csv.twig', 'resources.csv');
     }
 
     public function SetImportResult($importResult)
@@ -1093,7 +1093,7 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
 
     public function ShowExportCsv()
     {
-        $this->DisplayCsv('Admin/Resources/resources_csv.tpl', 'resources.csv');
+        $this->DisplayCsv('components/resource/resources-csv.twig', 'resources.csv');
     }
 
     public function GetMaxParticipantsUnlimited()
@@ -1127,19 +1127,19 @@ class ManageResourcesPage extends ActionPage implements IManageResourcesPage
     public function BindGroupPermissions($groups)
     {
         $this->Set('Groups', $groups);
-        $this->Display('Admin/Resources/manage_resources_group_permissions.tpl');
+        $this->Display('components/resource/group-permissions.twig');
     }
 
     public function BindUserPermissions($users)
     {
         $this->Set('Users', $users);
-        $this->Display('Admin/Resources/manage_resources_user_permissions.tpl');
+        $this->Display('components/resource/user-permissions.twig');
     }
 
     public function DisplayPublicSettings($resource)
     {
         $this->Set('resource', $resource);
-        $this->Display('Admin/Resources/manage_resources_public.tpl');
+        $this->Display('components/resource/public.twig');
     }
 
     public function GetAllowConcurrentReservations()
