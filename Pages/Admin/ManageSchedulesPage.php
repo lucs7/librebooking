@@ -294,7 +294,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
             ScheduleStyle::Tall->value => $resources->GetString('Tall'),
             ScheduleStyle::CondensedWeek->value => $resources->GetString('Week'),
         ]);
-        $this->Display('Admin/Schedules/manage_schedules.tpl');
+        $this->Display('pages/admin/manage_schedules.twig');
     }
 
     public function DisplayPeakTimes(IScheduleLayout $layout)
@@ -302,7 +302,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
         $this->Set('Layout', $layout);
         $this->Set('Months', Resources::GetInstance()->GetMonths('full'));
         $this->Set('DayNames', Resources::GetInstance()->GetDays('full'));
-        $this->Display('Admin/Schedules/manage_peak_times.tpl');
+        $this->Display('components/schedule/peak-times.twig');
     }
 
     public function ProcessAction()
@@ -579,7 +579,7 @@ class ManageSchedulesPage extends ActionPage implements IManageSchedulesPage
     {
         $this->Set('schedule', $schedule);
         $this->Set('timezone', $timezone);
-        $this->Display('Admin/Schedules/manage_availability.tpl');
+        $this->Display('components/schedule/availability.twig');
     }
 
     public function GetLayoutType()

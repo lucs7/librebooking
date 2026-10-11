@@ -49,7 +49,7 @@
                                                         </div>
 
                                                         <div class="">
-                                                            {{ render_partial('Admin/Schedules/manage_availability.tpl', _context|merge({schedule: schedule, timezone: Timezone})) }}
+                                                            {{ include('components/schedule/availability.twig', {schedule: schedule, timezone: Timezone}, false) }}
                                                         </div>
 
                                                         <div class="maximumConcurrentContainer">
@@ -77,7 +77,7 @@
                                                         {% if CreditsEnabled is defined and CreditsEnabled %}
                                                             <span>{{ translate('PeakTimes') }}</span>
                                                             <div class="fw-bold">
-                                                                {{ render_partial('Admin/Schedules/manage_peak_times.tpl', _context|merge({Layout: Layouts[id], Months: Months, DayNames: DayNames})) }}
+                                                                {{ include('components/schedule/peak-times.twig', {Layout: Layouts[id], Months: Months, DayNames: DayNames}, false) }}
                                                             </div>
                                                         {% endif %}
 

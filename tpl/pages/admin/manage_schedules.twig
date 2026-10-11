@@ -1,5 +1,9 @@
-{% set InlineEdit = true %}{% set Fullcalendar = true %}{% set DataTable = true %}{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
+{% set InlineEdit = true %}
+{% set Fullcalendar = true %}
+{% set DataTable = true %}
 
+{% block content %}
 <div id="page-manage-schedules" class="admin-page">
 
     <div class="border-bottom mb-3 clearfix">
@@ -9,10 +13,10 @@
         </a>
     </div>
 
-    <div class="card shadow" id="list-schedules-panel">
-        <div class="card-body no-padding" id="scheduleList">
+    {% set tableIdFilter = 'schedulesTable' %}
+    {% embed 'components/common/card.twig' with {id: 'list-schedules-panel', bodyId: 'scheduleList'} %}
+        {% block body %}
             <div class="accordion" id="scheduleAccordion">
-                {% set tableIdFilter = 'schedulesTable' %}
                 <table class="table table-borderless w-100" id="{{ tableIdFilter }}">
                     <thead class="d-none">
                         <tr>
@@ -20,9 +24,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for schedule in Schedules %}
-                            <tr>
-                                <td>
+                            {% for schedule in Schedules %}
+                                <tr>
+                                    <td>
                                     {% set id = schedule.GetId() %}
                                     {% set dayOfWeek = schedule.GetWeekdayStart() %}
                                     {% set daysVisibleSpan %}<span
@@ -34,16 +38,10 @@
                                             data-type='select' data-pk='{{ id }}' data-name='{{ constant('FormKeys::SCHEDULE_WEEKDAY_START') }}'
                                             data-value='{{ dayOfWeek }}'>{% if dayOfWeek == constant('Schedule::Today') %}{{ Today }}{% else %}{{ DayNames[dayOfWeek] }}{% endif %}</span>
                                     {% endset %}
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#panel{{ id }}" aria-expanded="true"
-                                                aria-controls="panel{{ id }}">
-                                                {{ schedule.GetName() }}
-                                            </button>
-                                        </h2>
-                                        <div id="panel{{ id }}" class="accordion-collapse collapse show">
-                                            <div class="accordion-body">
+                                        {% embed 'components/common/accordion-item.twig' with {id: 'schedule' ~ id, contentsId: 'panel' ~ id, title: schedule.GetName(), buttonClass: '', open: false} %}
+                                            {% block body %}
+                                                {# the embed's own `id` param shadows the schedule id inside the body #}
+                                                {% set id = schedule.GetId() %}
                                                 <div class="scheduleDetails row" data-schedule-id="{{ id }}">
                                                     <div class="col-12 col-sm-6">
                                                         <input type="hidden" class="id" value="{{ id }}" />
@@ -86,7 +84,7 @@
 
                                                         <div class="availabilityPlaceHolder d-flex align-items-center">
                                                             <div class="availabilityContent">
-                                                                {{ render_partial('Admin/Schedules/manage_availability.tpl', _context|merge({schedule: schedule, timezone: Timezone})) }}
+                                                                {{ include('components/schedule/availability.twig', {schedule: schedule, timezone: Timezone}, false) }}
                                                             </div>
 
                                                             <a class="update changeAvailability link-primary ms-1" href="#">
@@ -142,7 +140,7 @@
                                                                 <span class="bi bi-pencil-square"></span>
                                                             </a>
                                                             <div class="peakPlaceHolder">
-                                                                {{ render_partial('Admin/Schedules/manage_peak_times.tpl', _context|merge({Layout: Layouts[id], Months: Months, DayNames: DayNames})) }}
+                                                                {{ include('components/schedule/peak-times.twig', {Layout: Layouts[id], Months: Months, DayNames: DayNames}, false) }}
                                                             </div>
                                                         {% endif %}
 
@@ -316,28 +314,21 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
+                                            {% endblock %}
+                                        {% endembed %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
-    <div id="addDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addScheduleDialogLabel"
-        aria-hidden="true">
-        <form id="addScheduleForm" method="post">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addScheduleDialogLabel">{{ translate('AddSchedule') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body vstack gap-2">
+    <form id="addScheduleForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'addDialog'} %}
+            {% block header %}<h5 class="modal-title" id="addDialogLabel">{{ translate('AddSchedule') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="form-group">
                             <label class="fw-bold" for="addName">{{ translate('Name') }}<i
                                     class="bi bi-asterisk text-danger align-top" style="font-size: 0.5rem;"></i></label>
@@ -360,35 +351,25 @@
                         </div>
                         <div class="form-group">
                             <label class="fw-bold" for="addSameLayoutAs">{{ translate('UseSameLayoutAs') }}</label>
-                            <select class="form-select" {{ formname('SCHEDULE_ID') }} id="addSameLayoutAs">
-                                {% for schedule in SourceSchedules %}
-                                    <option value="{{ schedule.GetId() }}">{{ schedule.GetName() }}</option>
-                                {% endfor %}
-                            </select>
+                            {{ include('components/common/select.twig', {id: 'addSameLayoutAs', options: SourceSchedules, key: 'GetId', label: 'GetName', attrs: formname(key: 'SCHEDULE_ID')}, false) }}
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ add_button(submit: true) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ add_button(submit: true) }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
     <input type="hidden" id="activeId" value="" />
 
-    <div id="deleteDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteScheduleDialogLabel"
-        aria-hidden="true">
-        <form id="deleteForm" method="post">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteScheduleDialogLabel">{{ translate('Delete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="deleteForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'deleteDialog'} %}
+            {% block header %}<h5 class="modal-title" id="deleteDialogLabel">{{ translate('Delete') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="form-group">
                             <label class="fw-bold"
                                 for="targetScheduleId">{{ translate('MoveResourcesAndReservations') }}</label>
@@ -399,209 +380,62 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button() }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button() }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div id="changeLayoutDialog" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="changeLayoutDialogLabel" aria-hidden="true">
-        <form id="changeLayoutForm" method="post" role="form" class="form-inline">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="changeLayoutDialogLabel">{{ translate('ChangeLayout') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body row gy-2">
+    <form id="changeLayoutForm" method="post" role="form" class="form-inline">
+        {% embed 'components/common/modal.twig' with {id: 'changeLayoutDialog', size: 'lg', scrollable: true, bodyClass: 'row gy-2'} %}
+            {% block header %}<h5 class="modal-title" id="changeLayoutDialogLabel">{{ translate('ChangeLayout') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="col-12">
                             <div class="validationSummary alert alert-danger no-show">
                                 <ul>{{ async_validator('layoutValidator', 'ValidLayoutRequired') }}</ul>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="usesSingleLayout"
-                                    {{ formname('USING_SINGLE_LAYOUT') }}>
-                                <label class="form-check-label"
-                                    for="usesSingleLayout">{{ translate('UseSameLayoutForAllDays') }}</label>
-                            </div>
-                        </div>
+                <div class="col-12">
+                    {{ include('components/common/checkbox.twig', {id: '<built-in function id>', name: constant('FormKeys::USING_SINGLE_LAYOUT'), labelkey: 'UseSameLayoutForAllDays', switchStyle: false}, false) }}
+                </div>
 
-                        <div class="col-12" id="dailySlots">
-                            <div role="tabpanel" id="tabs">
-                                <ul class="nav nav-tabs mb-2" role="tablist">
-                                    <li role="presentation" class="nav-item"><a href="#tabs-0"
-                                            class="nav-link active link-primary" aria-controls="tabs-0" role="tab"
-                                            data-bs-toggle="tab">{{ DayNames[0] }}</a>
-                                    </li>
-                                    <li role="presentation" class="nav-item"><a href="#tabs-1"
-                                            class="nav-link link-primary" aria-controls="tabs-1" role="tab"
-                                            data-bs-toggle="tab">{{ DayNames[1] }}</a>
-                                    </li>
-                                    <li role="presentation" class="nav-item"><a href="#tabs-2"
-                                            class="nav-link link-primary" aria-controls="tabs-2" role="tab"
-                                            data-bs-toggle="tab" class="nav-item">{{ DayNames[2] }}</a></li>
-                                    <li role="presentation" class="nav-item"><a href="#tabs-3"
-                                            class="nav-link link-primary" aria-controls="tabs-3" role="tab"
-                                            data-bs-toggle="tab">{{ DayNames[3] }}</a>
-                                    </li>
-                                    <li role="presentation" class="nav-item"><a href="#tabs-4"
-                                            class="nav-link link-primary" aria-controls="tabs-4" role="tab"
-                                            data-bs-toggle="tab">{{ DayNames[4] }}</a>
-                                    </li>
-                                    <li role="presentation" class="nav-item"><a href="#tabs-5"
-                                            class="nav-link link-primary" aria-controls="tabs-5" role="tab"
-                                            data-bs-toggle="tab">{{ DayNames[5] }}</a>
-                                    </li>
-                                    <li role="presentation" class="nav-item"><a href="#tabs-6"
-                                            class="nav-link link-primary" aria-controls="tabs-6" role="tab"
-                                            data-bs-toggle="tab">{{ DayNames[6] }}</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div role="tab-pane" class="tab-pane active" id="tabs-0">
-                                        <div id="{{ id }}" class="row">
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="reservableEdit_0">{{ translate('ReservableTimeSlots') }}</label>
-                                                <textarea class="reservableEdit form-control" id="reservableEdit_0"
-                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_0"></textarea>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="blockedEdit_0">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
-                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
-                                                        class="bi bi-magic"></i>
-                                                    {{ translate('Autofill') }}</a>
-                                                <textarea class="blockedEdit form-control" id="blockedEdit_0"
-                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_0"></textarea>
-                                            </div>
+                <div class="col-12" id="dailySlots">
+                    <div role="tabpanel" id="tabs">
+                        <ul class="nav nav-tabs mb-2" role="tablist">
+                            {% for day in range(0, 6) %}
+                                <li role="presentation" class="nav-item"><a href="#tabs-{{ day }}"
+                                        class="nav-link{{ day == 0 ? ' active' : '' }} link-primary" aria-controls="tabs-{{ day }}" role="tab"
+                                        data-bs-toggle="tab">{{ DayNames[day] }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content">
+                            {% for day in range(0, 6) %}
+                                <div role="tabpanel" class="tab-pane{{ day == 0 ? ' active' : '' }}" id="tabs-{{ day }}">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="fw-bold" for="reservableEdit_{{ day }}">{{ translate('ReservableTimeSlots') }}</label>
+                                            <textarea class="reservableEdit form-control" id="reservableEdit_{{ day }}"
+                                                name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_{{ day }}"></textarea>
                                         </div>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="tabs-1">
-                                        <div id="{{ id }}" class="row">
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="reservableEdit_1">{{ translate('ReservableTimeSlots') }}</label>
-                                                <textarea class="reservableEdit form-control" id="reservableEdit_1"
-                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_1"></textarea>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="blockedEdit_1">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
-                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
-                                                        class="bi bi-magic"></i>
-                                                    {{ translate('Autofill') }}</a>
-                                                <textarea class="blockedEdit form-control" id="blockedEdit_1"
-                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_1"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="tabs-2">
-                                        <div id="{{ id }}" class="row">
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="reservableEdit_2">{{ translate('ReservableTimeSlots') }}</label>
-                                                <textarea class="reservableEdit form-control" id="reservableEdit_2"
-                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_2"></textarea>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="blockedEdit_2">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
-                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
-                                                        class="bi bi-magic"></i>
-                                                    {{ translate('Autofill') }}</a>
-                                                <textarea class="blockedEdit form-control" id="blockedEdit_2"
-                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_2"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="tabs-3">
-                                        <div id="{{ id }}" class="row">
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="reservableEdit_3">{{ translate('ReservableTimeSlots') }}</label>
-                                                <textarea class="reservableEdit form-control" id="reservableEdit_3"
-                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_3"></textarea>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="blockedEdit_3">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
-                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
-                                                        class="bi bi-magic"></i>
-                                                    {{ translate('Autofill') }}</a>
-                                                <textarea class="blockedEdit form-control" id="blockedEdit_3"
-                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_3"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="tabs-4">
-                                        <div id="{{ id }}" class="row">
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="reservableEdit_4">{{ translate('ReservableTimeSlots') }}</label>
-                                                <textarea class="reservableEdit form-control" id="reservableEdit_4"
-                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_4"></textarea>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="blockedEdit_4">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
-                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
-                                                        class="bi bi-magic"></i>
-                                                    {{ translate('Autofill') }}</a>
-                                                <textarea class="blockedEdit form-control" id="blockedEdit_4"
-                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_4"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="tabs-5">
-                                        <div id="{{ id }}" class="row">
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="reservableEdit_5">{{ translate('ReservableTimeSlots') }}</label>
-                                                <textarea class="reservableEdit form-control" id="reservableEdit_5"
-                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_5"></textarea>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="blockedEdit_5">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
-                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
-                                                        class="bi bi-magic"></i>
-                                                    {{ translate('Autofill') }}</a>
-                                                <textarea class="blockedEdit form-control" id="blockedEdit_5"
-                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_5"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="tabs-6">
-                                        <div id="{{ id }}" class="row">
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="reservableEdit_6">{{ translate('ReservableTimeSlots') }}</label>
-                                                <textarea class="reservableEdit form-control" id="reservableEdit_6"
-                                                    name="{{ constant('FormKeys::SLOTS_RESERVABLE') }}_6"></textarea>
-                                            </div>
-                                            <div class="col-6">
-                                                <label class="fw-bold"
-                                                    for="blockedEdit_6">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
-                                                    class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
-                                                        class="bi bi-magic"></i>
-                                                    {{ translate('Autofill') }}</a>
-                                                <textarea class="blockedEdit form-control" id="blockedEdit_6"
-                                                    name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_6"></textarea>
-                                            </div>
+                                        <div class="col-6">
+                                            <label class="fw-bold" for="blockedEdit_{{ day }}">{{ translate('BlockedTimeSlots') }}</label> <a href="#"
+                                                class="autofillBlocked link-primary" title="{{ translate('Autofill') }}"><i
+                                                    class="bi bi-magic"></i>
+                                                {{ translate('Autofill') }}</a>
+                                            <textarea class="blockedEdit form-control" id="blockedEdit_{{ day }}"
+                                                name="{{ constant('FormKeys::SLOTS_BLOCKED') }}_{{ day }}"></textarea>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            {% endfor %}
                         </div>
+                    </div>
+                </div>
 
                         <div id="staticSlots" class="row">
                             <div class="col-6">
@@ -649,33 +483,23 @@
                             <p>{{ translate('LayoutInstructions') }}</p>
                         </div>
 
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button() }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button() }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div id="peakTimesDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="peakTimesDialogLabel"
-        aria-hidden="true">
-        <form id="peakTimesForm" method="post">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="peakTimesDialogLabel">{{ translate('PeakTimes') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group mb-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="peakAllDay"
-                                    {{ formname('PEAK_ALL_DAY') }} />
-                                <label class="form-check-label" for="peakAllDay">{{ translate('AllDay') }}</label>
-                            </div>
+    <form id="peakTimesForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'peakTimesDialog'} %}
+            {% block header %}<h5 class="modal-title" id="peakTimesDialogLabel">{{ translate('PeakTimes') }}</h5>{% endblock %}
+            {% block body %}
+                <div class="form-group mb-2">
+                    {{ include('components/common/checkbox.twig', {id: '<built-in function id>', name: constant('FormKeys::PEAK_ALL_DAY'), labelkey: 'AllDay', switchStyle: false}, false) }}
                             <div id="peakTimes" class="d-flex align-items-center flex-wrap gap-1">
                                 <label class="fw-bold" for="peakStartTime">{{ translate('Between') }}</label>
                                 <label for="peakStartTime" class="visually-hidden">Peak Begin Time</label>
@@ -690,65 +514,20 @@
                                     data-step="30" data-default="{{ DefaultDate.AddHours(9).format('H:i') }}">
                                 </select>
                             </div>
+                </div>
+                <div class="form-group mb-2">
+                    {{ include('components/common/checkbox.twig', {id: '<built-in function id>', name: constant('FormKeys::PEAK_EVERY_DAY'), labelkey: 'Everyday', switchStyle: false, checked: true}, false) }}
+                    <div id="peakDayList" class="no-show">
+                        <div class="btn-group-sm" data-bs-toggle="buttons">
+                            {% for i, dayKey in ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'] %}
+                                <input type="checkbox" class="btn-check" id="peakDay{{ i }}" {{ formname('REPEAT_' ~ dayKey) }} />
+                                <label class="btn btn-outline-primary" for="peakDay{{ i }}">{{ DayNames[i] }}</label>
+                            {% endfor %}
                         </div>
-                        <div class="form-group mb-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="peakEveryDay" checked="checked"
-                                    {{ formname('PEAK_EVERY_DAY') }} />
-                                <label class="form-check-label" for="peakEveryDay">{{ translate('Everyday') }}</label>
-                            </div>
-                            <div id="peakDayList" class="no-show">
-                                <div class="btn-group-sm" data-bs-toggle="buttons">
-                                    <input type="checkbox" class="btn-check" id="peakDay0"
-                                        {{ formname('REPEAT_SUNDAY') }} />
-                                    <label class="btn btn-outline-primary" for="peakDay0">
-                                        {{ DayNames[0] }}
-                                    </label>
-
-                                    <input type="checkbox" class="btn-check" id="peakDay1"
-                                        {{ formname('REPEAT_MONDAY') }} />
-                                    <label class="btn btn-outline-primary" for="peakDay1">
-                                        {{ DayNames[1] }}
-                                    </label>
-
-                                    <input type="checkbox" class="btn-check" id="peakDay2"
-                                        {{ formname('REPEAT_TUESDAY') }} />
-                                    <label class="btn btn-outline-primary" for="peakDay2">
-                                        {{ DayNames[2] }}
-                                    </label>
-
-                                    <input type="checkbox" class="btn-check" id="peakDay3"
-                                        {{ formname('REPEAT_WEDNESDAY') }} />
-                                    <label class="btn btn-outline-primary" for="peakDay3">
-                                        {{ DayNames[3] }}
-                                    </label>
-
-                                    <input type="checkbox" class="btn-check" id="peakDay4"
-                                        {{ formname('REPEAT_THURSDAY') }} />
-                                    <label class="btn btn-outline-primary" for="peakDay4">
-                                        {{ DayNames[4] }}
-                                    </label>
-
-                                    <input type="checkbox" class="btn-check" id="peakDay5"
-                                        {{ formname('REPEAT_FRIDAY') }} />
-                                    <label class="btn btn-outline-primary" for="peakDay5">
-                                        {{ DayNames[5] }}
-                                    </label>
-
-                                    <input type="checkbox" class="btn-check" id="peakDay6"
-                                        {{ formname('REPEAT_SATURDAY') }} />
-                                    <label class="btn btn-outline-primary" for="peakDay6">
-                                        {{ DayNames[6] }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group mb-2">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="peakAllYear" checked="checked"
-                                    {{ formname('PEAK_ALL_YEAR') }} />
-                                <label class="form-check-label" for="peakAllYear">{{ translate('AllYear') }}</label>
-                            </div>
+                    </div>
+                </div>
+                <div class="form-group mb-2">
+                    {{ include('components/common/checkbox.twig', {id: '<built-in function id>', name: constant('FormKeys::PEAK_ALL_YEAR'), labelkey: 'AllYear', switchStyle: false, checked: true}, false) }}
                             <div id="peakDateRange" class="no-show d-flex align-items-center gap-1">
                                 <label for="peakBeginMonth" class="fw-bold">{{ translate('BeginDate') }}</label>
 
@@ -782,38 +561,27 @@
                                 </select>
 
                             </div>
-                        </div>
+                </div>
 
                         <input type="hidden" {{ formname('PEAK_DELETE') }} id="deletePeakTimes" value="" />
-                    </div>
-                    <div class="modal-footer">
-                        {{ delete_button(class: 'pull-left', attributes: {id: 'deletePeakBtn'}) }}
-                        {{ cancel_button() }}
-                        {{ update_button() }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ delete_button(class: 'pull-left', attributes: {id: 'deletePeakBtn'}) }}
+                    {{ cancel_button() }}
+                    {{ update_button() }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div id="availabilityDialog" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="availabilityDialogLabel" aria-hidden="true">
-        <form id="availabilityForm" method="post">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="availabilityDialogLabel">{{ translate('Availability') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="availableAllYear"
-                                    {{ formname('AVAILABLE_ALL_YEAR') }} />
-                                <label class="form-check-label"
-                                    for="availableAllYear">{{ translate('AvailableAllYear') }}</label>
-                            </div>
+    <form id="availabilityForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'availabilityDialog'} %}
+            {% block header %}<h5 class="modal-title" id="availabilityDialogLabel">{{ translate('Availability') }}</h5>{% endblock %}
+            {% block body %}
+                <div class="form-group">
+                    {{ include('components/common/checkbox.twig', {id: '<built-in function id>', name: constant('FormKeys::AVAILABLE_ALL_YEAR'), labelkey: 'AvailableAllYear', switchStyle: false}, false) }}
                             <div id="availableDates" class="d-flex align-items-center gap-1">
                                 <label for="availabilityStartDate">{{ translate('AvailableBetween') }}</label>
                                 <label for="availabilityEndDate" class="visually-hidden">Available End Date</label>
@@ -823,58 +591,44 @@
                                 <input type="text" id="availabilityEndDate" {{ formname('AVAILABLE_END_DATE') }}
                                     class="form-control form-control-sm w-auto" />
                             </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button() }}
-                        {{ indicator() }}
-                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button() }}
+                    {{ indicator() }}
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div id="switchLayoutDialog" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="switchLayoutDialogLabel" aria-hidden="true">
-        <form id="switchLayoutForm" method="post">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="switchLayoutDialogLabel">{{ translate('ChangeLayout') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="switchLayoutForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'switchLayoutDialog'} %}
+            {% block header %}<h5 class="modal-title" id="switchLayoutDialogLabel">{{ translate('ChangeLayout') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="alert alert-warning">
                             {{ translate('SwitchLayoutWarning') }}
                         </div>
                         <input type="hidden" id="switchLayoutTypeId" {{ formname('LAYOUT_TYPE') }} />
                         <div class="clearfix"></div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button(submit: true) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button(submit: true) }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div id="customLayoutDialog" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="customLayoutDialogLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="customLayoutDialogLabel">{{ translate('ChangeLayout') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="calendar"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% embed 'components/common/modal.twig' with {id: 'customLayoutDialog', size: 'lg'} %}
+            {% block header %}<h5 class="modal-title" id="customLayoutDialogLabel">{{ translate('ChangeLayout') }}</h5>{% endblock %}
+            {% block body %}
+                <div id="calendar"></div>
+            {% endblock %}
+        {% endembed %}
 
     <form id="layoutSlotForm" method="post">
         <input type="hidden" id="slotStartDate" {{ formname('BEGIN_DATE') }} />
@@ -899,60 +653,36 @@
         {{ add_button(attributes: {id: 'confirmCreateOK'}) }}
     </div>
 
-    <div id="concurrentMaximumDialog" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="concurrentMaximumDialogLabel" aria-hidden="true">
-        <form id="concurrentMaximumForm" method="post">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="concurrentMaximumDialogLabel">
-                            {{ translate('ScheduleMaximumConcurrent') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="concurrentMaximumForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'concurrentMaximumDialog'} %}
+            {% block header %}<h5 class="modal-title" id="concurrentMaximumDialogLabel">{{ translate('ScheduleMaximumConcurrent') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="alert alert-info">
                             {{ translate('ScheduleMaximumConcurrentNote') }}
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="maximumConcurrentUnlimited"
-                                {{ formname('MAXIMUM_CONCURRENT_UNLIMITED') }} />
-                            <label class="form-check-label"
-                                for="maximumConcurrentUnlimited">{{ translate('Unlimited') }}</label>
-                        </div>
+                {{ include('components/common/checkbox.twig', {id: '<built-in function id>', name: constant('FormKeys::MAXIMUM_CONCURRENT_UNLIMITED'), labelkey: 'Unlimited', switchStyle: false}, false) }}
                         <div class="form-group">
                             <label class="fw-bold" for="maximumConcurrent">{{ translate('Resources') }}</label>
                             <input type="number" class="form-control form-control-sm required" min="0"
                                 id="maximumConcurrent" {{ formname('MAXIMUM_CONCURRENT_RESERVATIONS') }} />
                         </div>
                         <div class="clearfix"></div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button(submit: true) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button(submit: true) }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div id="resourcesPerReservationDialog" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="resourcesPerReservationDialogLabel" aria-hidden="true">
-        <form id="resourcesPerReservationForm" method="post">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="resourcesPerReservationDialogLabel">
-                            {{ translate('ScheduleResourcesPerReservation') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="resourcesPerReservationUnlimited"
-                                {{ formname('MAXIMUM_RESOURCES_PER_RESERVATION_UNLIMITED') }} />
-                            <label class="form-check-label"
-                                for="resourcesPerReservationUnlimited">{{ translate('Unlimited') }}</label>
-                        </div>
+    <form id="resourcesPerReservationForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'resourcesPerReservationDialog'} %}
+            {% block header %}<h5 class="modal-title" id="resourcesPerReservationDialogLabel">{{ translate('ScheduleResourcesPerReservation') }}</h5>{% endblock %}
+            {% block body %}
+                {{ include('components/common/checkbox.twig', {id: '<built-in function id>', name: constant('FormKeys::MAXIMUM_RESOURCES_PER_RESERVATION_UNLIMITED'), labelkey: 'Unlimited', switchStyle: false}, false) }}
                         <div class="form-group">
                             <label class="fw-bold"
                                 for="resourcesPerReservationResources">{{ translate('Resources') }}</label>
@@ -960,22 +690,22 @@
                                 id="resourcesPerReservationResources"
                                 {{ formname('MAXIMUM_RESOURCES_PER_RESERVATION') }} />
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button(submit: true) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button(submit: true) }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
     {{ control('DatePickerSetupControl', {ControlId: 'availabilityStartDate', DefaultDate: StartDate}) }}
     {{ control('DatePickerSetupControl', {ControlId: 'availabilityEndDate', DefaultDate: EndDate}) }}
 
     {{ csrf_token() }}
-    {% set InlineEdit = true %}{% set Fullcalendar = true %}{% set DataTable = true %}{{ include('javascript-includes.twig') }}
+    {{ include('javascript-includes.twig', {InlineEdit: true, Fullcalendar: true, DataTable: true}, false) }}
     {{ datatablefilter(tableIdFilter) }}
     {{ jsfile(src: 'ajax-helpers.js') }}
     {{ jsfile(src: 'date-helper.js') }}
@@ -1092,4 +822,4 @@
     </script>
 
 </div>
-{{ include('globalfooter.twig') }}
+{% endblock %}
