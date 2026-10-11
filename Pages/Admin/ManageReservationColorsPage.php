@@ -119,7 +119,7 @@ class ManageReservationColorsPage extends ActionPage implements IManageReservati
     public function ProcessPageLoad()
     {
         $this->presenter->PageLoad();
-        $this->Display('Admin/Reservations/manage_reservation_colors.tpl');
+        $this->Display('pages/admin/reservations/manage_reservation_colors.twig');
     }
 
     public function SetAttributes($attributes)

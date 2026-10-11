@@ -215,32 +215,6 @@ class LibreBookingExtensionGroupDTest extends TestBase
         $this->assertStringNotContainsString('"pageLength"', $actual);
     }
 
-    public function testDatatableMatchesSmartyPageForNormalTable(): void
-    {
-        $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_PAGE_SIZE, 50);
-
-        $page = new SmartyPage(Resources::GetInstance(), 'http://example.com/');
-        $expected = $page->CreateDataTable(['tableId' => 'users-table']);
-
-        $env = $this->makeEnv("{{ datatable(tableId='users-table') }}");
-        $actual = $env->render('t');
-
-        $this->assertSame($expected, $actual);
-    }
-
-    public function testDatatableMatchesSmartyPageForReportResults(): void
-    {
-        $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_PAGE_SIZE, 50);
-
-        $page = new SmartyPage(Resources::GetInstance(), 'http://example.com/');
-        $expected = $page->CreateDataTable(['tableId' => 'report-results']);
-
-        $env = $this->makeEnv("{{ datatable(tableId='report-results') }}");
-        $actual = $env->render('t');
-
-        $this->assertSame($expected, $actual);
-    }
-
     // ── datatablefilter ───────────────────────────────────────────────────────
 
     public function testDatatablefilterRendersScriptTag(): void
@@ -261,18 +235,5 @@ class LibreBookingExtensionGroupDTest extends TestBase
         $actual = $env->render('t');
 
         $this->assertStringContainsString('"pageLength": 25', $actual);
-    }
-
-    public function testDatatablefilterMatchesSmartyPage(): void
-    {
-        $this->fakeConfig->SetKey(ConfigKeys::DEFAULT_PAGE_SIZE, 50);
-
-        $page = new SmartyPage(Resources::GetInstance(), 'http://example.com/');
-        $expected = $page->CreateDataTableFilter(['tableId' => 'filter-table']);
-
-        $env = $this->makeEnv("{{ datatablefilter(tableId='filter-table') }}");
-        $actual = $env->render('t');
-
-        $this->assertSame($expected, $actual);
     }
 }

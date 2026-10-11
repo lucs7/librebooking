@@ -382,12 +382,12 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
 
     public function ShowPage()
     {
-        $this->Display('Admin/Reservations/manage_reservations.tpl');
+        $this->Display('pages/admin/reservations/manage_reservations.twig');
     }
 
     public function ShowCsv()
     {
-        $this->DisplayCsv('Admin/Reservations/reservations_csv.tpl', 'reservations.csv');
+        $this->DisplayCsv('components/reservation/reservations-csv.twig', 'reservations.csv');
     }
 
     public function BindReservations($reservations)
@@ -654,7 +654,7 @@ class ManageReservationsPage extends ActionPage implements IManageReservationsPa
     public function ShowTemplateCSV($attributes)
     {
         $this->Set('Attributes', $attributes);
-        $this->DisplayCsv('Admin/Reservations/import_reservations_template_csv.tpl', 'reservations.csv');
+        $this->DisplayCsv('components/reservation/import-template-csv.twig', 'reservations.csv');
     }
 
     public function GetImportFile()

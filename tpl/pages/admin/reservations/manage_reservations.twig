@@ -1,5 +1,8 @@
-{% set InlineEdit = true %}{% set DataTable = true %}{{ include('globalheader.twig') }}
+{% extends 'layouts/base.twig' %}
+{% set InlineEdit = true %}
+{% set DataTable = true %}
 
+{% block content %}
 <div id="page-manage-reservations" class="admin-page">
     <div class="clearfix border-bottom mb-3">
         <div class="dropdown admin-header-more float-end">
@@ -46,18 +49,11 @@
     </div>
 
     <div class="accordion">
-        <div class="filterTable accordion-item shadow mb-2" id="filter-reservations-panel">
-            <h2 class="accordion-header">
-                <button class="accordion-button link-primary fw-bold" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#filter-reservations-content" aria-expanded="true"
-                    aria-controls="filter-reservations-content">
-                    <i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}
-                </button>
-            </h2>
-            <div id="filter-reservations-content" class="accordion-collapse collapse show">
-                <div class="accordion-body">
-                    {% set groupClass = 'col-12 col-sm-4 col-md-3' %}
-                    <form id="filterForm" role="form" class="row gy-2">
+        {% set filterTitle %}<i class="bi bi-funnel-fill me-1"></i>{{ translate('Filter') }}{% endset %}
+        {% embed 'components/common/accordion-item.twig' with {id: 'filter-reservations-panel', contentsId: 'filter-reservations-content', title: filterTitle, class: 'filterTable', open: true} %}
+            {% block body %}
+                        {% set groupClass = 'col-12 col-sm-4 col-md-3' %}
+                        <form id="filterForm" role="form" class="row gy-2">
                         <div
                             class="form-group filter-dates {{ groupClass }} d-flex justify-content-between align-items-center">
                             <div>
@@ -69,29 +65,19 @@
                                 <input id="endDate" type="text" class="form-control form-control-sm" />
                             </div>
                         </div>
-                        <div class="form-group filter-user {{ groupClass }}">
-                            <label for="userFilter" class="fw-bold">{{ translate('User') }}</label>
-                            <div class="position-relative">
-                                <input id="userFilter" type="text" class="form-control form-control-sm"
-                                    value="{{ UserNameFilter is defined ? UserNameFilter : '' }}" placeholder="{{ translate('User') }}" />
-                                <input id="userId" type="hidden" value="{{ UserIdFilter is defined ? UserIdFilter : '' }}" />
-                                <span class="searchclear bi bi-x-circle-fill" ref="userFilter,userId"></span>
+                            <div class="form-group filter-user {{ groupClass }}">
+                                <label for="userFilter" class="fw-bold">{{ translate('User') }}</label>
+                                {{ include('components/common/searchbox.twig', {id: 'userFilter', ref: 'userFilter,userId', value: UserNameFilter ?? '', placeholder: 'User', class: 'form-control-sm', labelStyle: false}, false) }}
+                                <input id="userId" type="hidden" value="{{ UserIdFilter ?? '' }}" />
                             </div>
-                        </div>
-                        <div class="form-group filter-schedule {{ groupClass }}">
-                            <label for="scheduleId" class="fw-bold">{{ translate('Schedule') }}</label>
-                            <select id="scheduleId" class="form-select form-select-sm">
-                                <option value="">{{ translate('AllSchedules') }}</option>
-                                {{ object_html_options(options: Schedules, key: 'GetId', label: 'GetName', selected: (ScheduleId is defined ? ScheduleId : null)) }}
-                            </select>
-                        </div>
-                        <div class="form-group filter-resource {{ groupClass }}">
-                            <label for="resourceId" class="fw-bold">{{ translate('Resource') }}</label>
-                            <select id="resourceId" class="form-select form-select-sm">
-                                <option value="">{{ translate('AllResources') }}</option>
-                                {{ object_html_options(options: Resources, key: 'GetId', label: 'GetName', selected: (ResourceId is defined ? ResourceId : null)) }}
-                            </select>
-                        </div>
+                            <div class="form-group filter-schedule {{ groupClass }}">
+                                <label for="scheduleId" class="fw-bold">{{ translate('Schedule') }}</label>
+                                {{ include('components/common/select.twig', {id: 'scheduleId', options: Schedules, key: 'GetId', label: 'GetName', selected: ScheduleId ?? '', placeholder: 'AllSchedules', class: 'form-select-sm'}, false) }}
+                            </div>
+                            <div class="form-group filter-resource {{ groupClass }}">
+                                <label for="resourceId" class="fw-bold">{{ translate('Resource') }}</label>
+                                {{ include('components/common/select.twig', {id: 'resourceId', options: Resources, key: 'GetId', label: 'GetName', selected: ResourceId ?? '', placeholder: 'AllResources', class: 'form-select-sm'}, false) }}
+                            </div>
                         <div class="form-group filter-status {{ groupClass }}">
                             <label for="statusId" class="fw-bold">{{ translate('Status') }}</label>
                             <select id="statusId" class="form-select form-select-sm">
@@ -101,31 +87,18 @@
                                     {{ translate('PendingReservations') }}</option>
                             </select>
                         </div>
-                        <div class="form-group filter-referenceNumber {{ groupClass }}">
-                            <label for="referenceNumber" class="fw-bold">{{ translate('ReferenceNumber') }}</label>
-                            <div class="position-relative">
-                                <input id="referenceNumber" type="text" class="form-control form-control-sm"
-                                    value="{{ ReferenceNumber is defined ? ReferenceNumber : '' }}" placeholder="{{ translate('ReferenceNumber') }}" />
-                                <span class="searchclear bi bi-x-circle-fill" ref="referenceNumber"></span>
+                            <div class="form-group filter-referenceNumber {{ groupClass }}">
+                                <label for="referenceNumber" class="fw-bold">{{ translate('ReferenceNumber') }}</label>
+                                {{ include('components/common/searchbox.twig', {id: 'referenceNumber', value: ReferenceNumber ?? '', placeholder: 'ReferenceNumber', class: 'form-control-sm', labelStyle: false}, false) }}
                             </div>
-                        </div>
-                        <div class="form-group filter-title {{ groupClass }}">
-                            <label for="reservationTitle" class="fw-bold">{{ translate('Title') }}</label>
-                            <div class="position-relative">
-                                <input id="reservationTitle" type="text" class="form-control form-control-sm"
-                                    value="{{ ReservationTitle is defined ? ReservationTitle : '' }}" placeholder="{{ translate('Title') }}" />
-                                <span class="searchclear bi bi-x-circle-fill" ref="reservationTitle"></span>
+                            <div class="form-group filter-title {{ groupClass }}">
+                                <label for="reservationTitle" class="fw-bold">{{ translate('Title') }}</label>
+                                {{ include('components/common/searchbox.twig', {id: 'reservationTitle', value: ReservationTitle ?? '', placeholder: 'Title', class: 'form-control-sm', labelStyle: false}, false) }}
                             </div>
-                        </div>
-                        <div class="form-group filter-title {{ groupClass }}">
-                            <label for="reservationDescription"
-                                class="fw-bold">{{ translate('ReservationDescription') }}</label>
-                            <div class="position-relative">
-                                <input id="reservationDescription" type="text" class="form-control form-control-sm"
-                                    value="{{ ReservationDescription is defined ? ReservationDescription : '' }}" placeholder="{{ translate('Description') }}" />
-                                <span class="searchclear bi bi-x-circle-fill" ref="reservationDescription"></span>
+                            <div class="form-group filter-title {{ groupClass }}">
+                                <label for="reservationDescription" class="fw-bold">{{ translate('ReservationDescription') }}</label>
+                                {{ include('components/common/searchbox.twig', {id: 'reservationDescription', value: ReservationDescription ?? '', placeholder: 'Description', class: 'form-control-sm', labelStyle: false}, false) }}
                             </div>
-                        </div>
                         <div class="form-group filter-resourceStatus {{ groupClass }}">
                             <label for="resourceStatusIdFilter" class="fw-bold">{{ translate('ResourceStatus') }}</label>
                             <select id="resourceStatusIdFilter" class="form-select form-select-sm">
@@ -139,22 +112,12 @@
                             <label for="resourceReasonIdFilter" class="fw-bold">{{ translate('Reason') }}</label>
                             <select id="resourceReasonIdFilter" class="form-select form-select-sm"></select>
                         </div>
-                        <div class="form-group filter-checkin {{ groupClass }} d-flex align-items-center">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="missedCheckin"
-                                    {% if MissedCheckin is defined and MissedCheckin %}checked="checked" {% endif %} />
-                                <label class="form-check-label"
-                                    for="missedCheckin">{{ translate('MissedCheckin') }}</label>
+                            <div class="form-group filter-checkin {{ groupClass }} d-flex align-items-center">
+                                {{ include('components/common/checkbox.twig', {id: 'missedCheckin', name: 'missedCheckin', labelkey: 'MissedCheckin', checked: MissedCheckin ?? false, switchStyle: false}, false) }}
                             </div>
-                        </div>
-                        <div class="form-group filter-checkout {{ groupClass }} d-flex align-items-center">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="missedCheckout"
-                                    {% if MissedCheckout is defined and MissedCheckout %}checked="checked" {% endif %} />
-                                <label class="form-check-label"
-                                    for="missedCheckout">{{ translate('MissedCheckout') }}</label>
+                            <div class="form-group filter-checkout {{ groupClass }} d-flex align-items-center">
+                                {{ include('components/common/checkbox.twig', {id: 'missedCheckout', name: 'missedCheckout', labelkey: 'MissedCheckout', checked: MissedCheckout ?? false, switchStyle: false}, false) }}
                             </div>
-                        </div>
                         {% if AttributeFilters is defined %}
                             {% for attribute in AttributeFilters %}
                                 {{ control('AttributeControl', {attribute: attribute, searchmode: true, class: 'customAttribute filter-customAttribute' ~ attribute.Id() ~ ' ' ~ groupClass}) }}
@@ -166,17 +129,15 @@
                         {{ filter_button(attributes: {id: 'filter'}) }}
                         {{ reset_button(attributes: {id: 'clearFilter'}) }}
                     </div>
-                </div>
-            </div>
-        </div>
+            {% endblock %}
+        {% endembed %}
     </div>
 
-    <div class="card shadow">
-        <div class="card-body">
+    {% set tableId = 'reservationTable' %}
+    {% embed 'components/common/card.twig' %}
+        {% block body %}
             <div class="table-responsive">
-                {% set tableId = 'reservationTable' %}
-                <table class="table table-striped table-hover border-top w-100 admin-panel" id="{{ tableId }}">
-                    {% set colCount = 11 %}
+                <table class="table table-striped table-hover border-top w-100" id="{{ tableId }}">
                     <thead>
                         <tr>
                             <th class="id d-none">ID</th>
@@ -190,11 +151,9 @@
                             <th>{{ translate('ReferenceNumber') }}</th>
                             {% if CreditsEnabled is defined and CreditsEnabled %}
                                 <th>{{ translate('Credits') }}</th>
-                                {% set colCount = colCount + 1 %}
                             {% endif %}
                             {% if not (IsDesktop is defined and IsDesktop) %}
                                 <th class="action">{{ translate('Edit') }}</th>
-                                {% set colCount = colCount + 1 %}
                             {% endif %}
                             <th class="action">{{ translate('Approve') }}</th>
                             <th class="action">{{ translate('Delete') }}</th>
@@ -305,7 +264,7 @@
                                     {% if ReservationAttributes is defined and ReservationAttributes|length > 0 %}
                                         <div class="reservation-list-attributes d-flex">
                                             {% for attribute in ReservationAttributes %}
-                                                {{ render_partial('Admin/InlineAttributeEdit.tpl', {id: reservation.ReferenceNumber, attribute: attribute, value: reservation.Attributes.Get(attribute.Id()), url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageReservationsActions::UpdateAttribute')}) }}
+                                                {{ include('components/controls/attributes/inline-edit.twig', {id: reservation.ReferenceNumber, attribute: attribute, value: reservation.Attributes.Get(attribute.Id()), url: server.SCRIPT_NAME ~ '?action=' ~ constant('ManageReservationsActions::UpdateAttribute')}, false) }}
                                             {% endfor %}
                                         </div>
                                     {% endif %}
@@ -317,19 +276,13 @@
                 </table>
 
             </div>
-        </div>
-    </div>
+        {% endblock %}
+    {% endembed %}
 
-    <div class="modal fade" id="deleteInstanceDialog" tabindex="-1" role="dialog"
-        aria-labelledby="deleteInstanceDialogLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="deleteInstanceForm" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteInstanceDialogLabel">{{ translate('Delete') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="deleteInstanceForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'deleteInstanceDialog'} %}
+            {% block header %}<h5 class="modal-title" id="deleteInstanceDialogLabel">{{ translate('Delete') }}</h5>{% endblock %}
+            {% block body %}
                         <div class="delResResponse"></div>
                         <div class="alert alert-warning">
                             {{ translate('DeleteWarning') }}
@@ -338,116 +291,85 @@
                         <input type="hidden" {{ formname(key: 'SERIES_UPDATE_SCOPE') }}
                             value="{{ constant('SeriesUpdateScope::ThisInstance') }}" />
                         <input type="hidden" {{ formname(key: 'REFERENCE_NUMBER') }} value="" class="referenceNumber" />
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button() }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button() }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="modal fade" id="deleteSeriesDialog" tabindex="-1" role="dialog"
-        aria-labelledby="deleteSeriesDialogLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="deleteSeriesForm" method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="deleteSeriesDialogLabel">{{ translate('Delete') }}</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="deleteSeriesForm" method="post">
+        {% embed 'components/common/modal.twig' with {id: 'deleteSeriesDialog'} %}
+            {% block header %}<h4 class="modal-title" id="deleteSeriesDialogLabel">{{ translate('Delete') }}</h4>{% endblock %}
+            {% block body %}
                         <div class="alert alert-warning">
                             {{ translate('DeleteWarning') }}
                         </div>
                         <input type="hidden" id="hdnSeriesUpdateScope" {{ formname(key: 'SERIES_UPDATE_SCOPE') }} />
                         <input type="hidden" {{ formname(key: 'REFERENCE_NUMBER') }} value="" class="referenceNumber" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary cancel"
-                            data-bs-dismiss="modal">{{ translate('Cancel') }}</button>
-
-                        <button type="button" class="btn btn-danger saveSeries btnUpdateThisInstance"
-                            id="btnUpdateThisInstance">
-                            {{ translate('ThisInstance') }}
-                        </button>
-                        <button type="button" class="btn btn-danger saveSeries btnUpdateAllInstances"
-                            id="btnUpdateAllInstances">
-                            {{ translate('AllInstances') }}
-                        </button>
-                        <button type="button" class="btn btn-danger saveSeries btnUpdateFutureInstances"
-                            id="btnUpdateFutureInstances">
-                            {{ translate('FutureInstances') }}
-                        </button>
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary cancel"
+                        data-bs-dismiss="modal">{{ translate('Cancel') }}</button>
+                    <button type="button" class="btn btn-danger saveSeries btnUpdateThisInstance" id="btnUpdateThisInstance">
+                        {{ translate('ThisInstance') }}
+                    </button>
+                    <button type="button" class="btn btn-danger saveSeries btnUpdateAllInstances" id="btnUpdateAllInstances">
+                        {{ translate('AllInstances') }}
+                    </button>
+                    <button type="button" class="btn btn-danger saveSeries btnUpdateFutureInstances" id="btnUpdateFutureInstances">
+                        {{ translate('FutureInstances') }}
+                    </button>
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div id="deleteMultipleDialog" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="deleteMultipleModalLabel" aria-hidden="true">
-        <form id="deleteMultipleForm" method="post" ajaxAction="{{ constant('ManageReservationsActions::DeleteMultiple') }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="deleteMultipleModalLabel">{{ translate('Delete') }} (<span
-                                id="deleteMultipleCount"></span>)</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="deleteMultipleForm" method="post" ajaxAction="{{ constant('ManageReservationsActions::DeleteMultiple') }}">
+        {% embed 'components/common/modal.twig' with {id: 'deleteMultipleDialog'} %}
+            {% block header %}<h4 class="modal-title" id="deleteMultipleDialogLabel">{{ translate('Delete') }} (<span id="deleteMultipleCount"></span>)</h4>{% endblock %}
+            {% block body %}
                         <div class="alert alert-warning">
                             <div>{{ translate('DeleteWarning') }}</div>
 
                             <div>{{ translate('DeleteMultipleReservationsWarning') }}</div>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button() }}
-                        {{ indicator() }}
-                    </div>
-                    <div id="deleteMultiplePlaceHolder" class="d-none"></div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button() }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+                <div id="deleteMultiplePlaceHolder" class="d-none"></div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div id="inlineUpdateErrorDialog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="inlineErrorLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="inlineErrorLabel">{{ translate('Error') }}</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
+    {% embed 'components/common/modal.twig' with {id: 'inlineUpdateErrorDialog'} %}
+            {% block header %}<h4 class="modal-title" id="inlineUpdateErrorDialogLabel">{{ translate('Error') }}</h4>{% endblock %}
+            {% block body %}
                     <div id="inlineUpdateErrors" class="hidden error">&nbsp;</div>
                     <div id="reservationAccessError" class="hidden error"></div>
-                </div>
+            {% endblock %}
+            {% block footer %}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary cancel"
                         data-bs-dismiss="modal">{{ translate('OK') }}</button>
                 </div>
-            </div>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
 
-    <div id="importReservationsDialog" class="modal" tabindex="-1" role="dialog"
-        aria-labelledby="importReservationsModalLabel" aria-hidden="true">
-        <form id="importReservationsForm" class="form" role="form" method="post" enctype="multipart/form-data"
-            ajaxAction="{{ constant('ManageReservationsActions::Import') }}">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="importReservationsModalLabel">{{ translate('Import') }}</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="importReservationsForm" class="form" role="form" method="post" enctype="multipart/form-data" ajaxAction="{{ constant('ManageReservationsActions::Import') }}">
+        {% embed 'components/common/modal.twig' with {id: 'importReservationsDialog'} %}
+            {% block header %}<h4 class="modal-title" id="importReservationsDialogLabel">{{ translate('Import') }}</h4>{% endblock %}
+            {% block body %}
                         <div id="importInstructions" class="alert alert-info">
                             <div class="note">{{ translate('ReservationImportInstructions') }}</div>
                             <a href="{{ server.SCRIPT_NAME }}?dr=template" class="alert-link"
@@ -475,27 +397,21 @@
                             <input type="file" {{ formname(key: 'RESERVATION_IMPORT_FILE') }} id="reservationImportFile"
                                 class="form-control form-control-sm" accept=".csv" />
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ add_button(key: 'Import') }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ add_button(key: 'Import') }}
+                    {{ indicator() }}
                 </div>
-            </div>
-        </form>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    <div class="modal fade" id="termsOfServiceDialog" tabindex="-1" role="dialog"
-        aria-labelledby="termsOfServiceDialogLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form id="termsOfServiceForm" method="post" ajaxAction="termsOfService" enctype="multipart/form-data">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="termsOfServiceDialogLabel">{{ translate('TermsOfService') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
+    <form id="termsOfServiceForm" method="post" ajaxAction="termsOfService" enctype="multipart/form-data">
+        {% embed 'components/common/modal.twig' with {id: 'termsOfServiceDialog'} %}
+            {% block header %}<h5 class="modal-title" id="termsOfServiceDialogLabel">{{ translate('TermsOfService') }}</h5>{% endblock %}
+            {% block body %}
                         <div>
                             <div class="form-check">
                                 <input type="radio" {{ formname(key: 'TOS_METHOD') }} value="manual" id="tos_manual_radio"
@@ -559,19 +475,19 @@
                                     class="form-check-label">{{ translate('UponRegistration') }}</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ delete_button(class: 'd-none', attributes: {id: 'deleteTerms'}) }}
-                        {{ update_button(submit: true) }}
-                        {{ indicator() }}
-                    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ delete_button(class: 'd-none', attributes: {id: 'deleteTerms'}) }}
+                    {{ update_button(submit: true) }}
+                    {{ indicator() }}
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
-    {{ render_partial('javascript-includes.tpl', _context) }}
+    {{ include('javascript-includes.twig', {InlineEdit: true, DataTable: true}, false) }}
     {{ datatable(tableId: tableId) }}
     {{ jsfile(src: 'ajax-helpers.js') }}
     {{ jsfile(src: 'admin/reservations.js') }}
@@ -678,10 +594,11 @@
 
     {{ csrf_token() }}
 
-    <div class="modal fade" id="approveDiv" tabindex="-1" role="dialog" aria-labelledby="approveDivLabel"
-        data-bs-backdrop="static" aria-hidden="true">
-        {{ include('wait-box.twig', {translateKey: 'Approving'}) }}
-    </div>
+    {% embed 'components/common/modal.twig' with {id: 'approveDiv', centered: true, static: true} %}
+        {% block body %}
+            {{ include('components/common/wait-box.twig', {translateKey: 'Approving'}, false) }}
+        {% endblock %}
+    {% endembed %}
 
 </div>
-{{ include('globalfooter.twig') }}
+{% endblock %}

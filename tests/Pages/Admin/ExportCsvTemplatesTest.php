@@ -142,7 +142,7 @@ class ExportCsvTemplatesTest extends TestBase
         $page->assign('reservations', $this->reservations());
         $page->assign('Timezone', 'UTC');
 
-        $output = $page->fetch('Admin/Reservations/reservations_csv.twig');
+        $output = $page->fetch('components/reservation/reservations-csv.twig');
 
         $this->assertSame(self::EXPECTED_RESERVATIONS_CSV, $output);
         $this->assertEveryRowMatchesHeaderColumnCount($output);
