@@ -1,0 +1,38 @@
+Foglalás részletei:
+<br/>
+<br/>
+
+Kezdés: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Befejezés: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Elemek:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|raw }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Elem: {{ ResourceName|raw }}
+    <br/>
+{% endif %}
+
+Megnevezés: {{ Title|raw }}<br/>
+Leírás: {{ Description|nl2br|raw }}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Kiegészítők:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<br/>
+Referenciaszám: {{ ReferenceNumber|raw }}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">A fogalás megtekintése</a> |
+<a href="{{ ScriptUrl|raw }}">Bejelentkezés ide: {{ AppTitle|raw }}</a>

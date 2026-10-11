@@ -1,0 +1,51 @@
+Reserverings Details:
+<br/>
+<br/>
+
+Gebruiker: {{ UserName|raw }}<br/>
+Start: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Eindingd: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Bronnen:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|raw }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Bron: {{ ResourceName|raw }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Titel: {{ Title|raw }}<br/>
+Beschrijving: {{ Description|nl2br|raw }}<br/>
+{{ DeleteReason|nl2br|raw }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    De volgende data zijn verwijderd:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Benodigdheden:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}">Login in LibreBooking</a>

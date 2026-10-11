@@ -1,0 +1,43 @@
+פרטי ההזמנה:
+<br/>
+<br/>
+
+התחלה: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+סיום: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    משאבים:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|raw }}
+        <br/>
+    {% endfor %}
+{% else %}
+    משאב: {{ ResourceName|raw }}
+    <br/>
+{% endif %}
+כותר: {{ Title|raw }}<br/>
+תאור: {{ Description|nl2br|raw }}<br/>
+{{ DeleteReason|nl2br|raw }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    הוסרו התאריכים הבאים:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    משאבים:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<a href="{{ ScriptUrl|raw }}">להתחבר ל-LibreBooking</a>
