@@ -1,0 +1,28 @@
+Varauksen tiedot:
+<br/>
+<br/>
+
+Alkaa: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Päättyy: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+Resurssi: {{ ResourceName|raw }}<br/>
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Otsikko: {{ Title|raw }}<br/>
+Kuvaus: {{ Description|nl2br|raw }}<br/>
+{{ DeleteReason|nl2br|raw }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    Varaus toistuu seuraavina päivinä:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+<a href="{{ ScriptUrl|raw }}">Kirjaudu sovellukseen LibreBooking</a>

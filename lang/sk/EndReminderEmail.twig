@@ -1,0 +1,13 @@
+Vaša rezervácia čoskoro skončí.<br/>
+Podrobnosti rezervácie:
+    <br/>
+    <br/>
+    Začiatok: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Koniec: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    Ihrisko: {{ ResourceName|raw }}<br/>
+    Názov: {{ Title|raw }}<br/>
+    Popis: {{ Description|nl2br|raw }}<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Zobraziť túto rezerváciu</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Pridať do kalendára</a> |
+<a href="{{ ScriptUrl|raw }}">Prihláste sa</a>

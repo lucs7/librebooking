@@ -1,0 +1,18 @@
+<p>Je hebt je check in gemist.</p>
+<p><strong>Reservering details:</strong></p>
+<p>
+    <strong>Start:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Eind:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Bron:</strong> {{ ResourceName|raw }}<br/>
+    <strong>Titel:</strong> {{ Title|raw }}<br/>
+    <strong>Omschrijving:</strong> {{ Description|nl2br|raw }}
+</p>
+
+{% if IsAutoRelease %}
+    <p>Als je niet incheckt wordt deze reservering automatisch geanuleerd op {{ formatdate(date: AutoReleaseTime, key: 'reservation_email') }}</p>
+{% endif %}
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Bekijk deze reservering</a> |
+    <a href="{{ ScriptUrl|raw }}">Login op {{ AppTitle|raw }}</a>
+</p>

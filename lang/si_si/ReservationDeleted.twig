@@ -1,0 +1,51 @@
+Podrobnosti rezervacije:
+<br/>
+<br/>
+
+Uporabnik: {{ UserName|raw }}<br/>
+Začetek: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Konec: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Viri:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|raw }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Vir: {{ ResourceName|raw }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Naslov: {{ Title|raw }}<br/>
+Opis: {{ Description|nl2br|raw }}<br/>
+{{ DeleteReason|nl2br|raw }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    Naslednji datumi so bili odstranjeni:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Dodatki:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}">Prijava v program LibreBooking</a>

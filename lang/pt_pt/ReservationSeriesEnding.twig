@@ -1,0 +1,14 @@
+<p>A série de reservas recorrentes de {{ ResourceName|raw }} irá terminar em {{ formatdate(date: StartDate, key: 'reservation_email') }}.</p>
+<p><strong>Detalhes da reserva:</strong></p>
+<p>
+    <strong>Início:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Fim:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Recurso:</strong> {{ ResourceName|raw }}<br/>
+    <strong>Título:</strong> {{ Title|raw }}<br/>
+    <strong>Descrição:</strong> {{ Description|nl2br|raw }}
+</p>
+
+<p>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Ver esta reserva</a> |
+    <a href="{{ ScriptUrl|raw }}">Entrar em {{ AppTitle|raw }}</a>
+</p>

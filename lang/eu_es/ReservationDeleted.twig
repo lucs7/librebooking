@@ -1,0 +1,51 @@
+Erreserbaren xehetasunak:
+<br/>
+<br/>
+
+Erabiltzailea: {{ UserName|raw }}<br/>
+Hasiera: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+Amaiera: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+{% if ResourceNames|default([])|length > 1 %}
+    Baliabideak:
+    <br/>
+    {% for resourceName in ResourceNames %}
+        {{ resourceName|raw }}
+        <br/>
+    {% endfor %}
+{% else %}
+    Baliabidea: {{ ResourceName|raw }}
+    <br/>
+{% endif %}
+
+{% if ResourceImage %}
+    <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+{% endif %}
+
+Izenburua: {{ Title|raw }}<br/>
+Deskripzioa: {{ Description|nl2br|raw }}<br/>
+{{ DeleteReason|nl2br|raw }}<br/>
+
+{% if RepeatDates|length > 0 %}
+    <br/>
+    Data hauek ezabatu dira:
+    <br/>
+{% endif %}
+
+{% for date in RepeatDates %}
+    {{ formatdate(date: date) }}
+    <br/>
+{% endfor %}
+
+{% if Accessories|default([])|length > 0 %}
+    <br/>
+    Osagarriak:
+    <br/>
+    {% for accessory in Accessories %}
+        ({{ accessory.QuantityReserved }}) {{ accessory.Name|raw }}
+        <br/>
+    {% endfor %}
+{% endif %}
+
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}">Saioa hasi LibreBooking-en</a>

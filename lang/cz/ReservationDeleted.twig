@@ -1,0 +1,44 @@
+    Administrátorem byly smazány tyto rezervace:
+    <br/>
+    <br/>
+
+    Uživatel: {{ UserName|raw }}<br/>
+    Začátek: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Konec: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    {% if ResourceNames|default([])|length > 1 %}
+    Zdroje:<br/>
+        {% for resourceName in ResourceNames %}
+            {{ resourceName|raw }}<br/>
+        {% endfor %}
+        {% else %}
+    Zdroj: {{ ResourceName|raw }}<br/>
+    {% endif %}
+
+    {% if ResourceImage %}
+        <div class="resource-image"><img src="{{ ScriptUrl|raw }}/{{ ResourceImage|raw }}"/></div>
+    {% endif %}
+
+    Nadpis: {{ Title|raw }}<br/>
+    Popis: {{ Description|nl2br|raw }}<br/>
+{{ DeleteReason|nl2br|raw }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        Došlo ke smazání všech těchto rezervovaných termínů:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Příslušenství:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|raw }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    <br/>
+        <br/>
+    <a href="{{ ScriptUrl|raw }}">Přihlásit se do rezervačního systému</a>

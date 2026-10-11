@@ -1,0 +1,83 @@
+    Reserverings Details:
+    <br/>
+    <br/>
+
+    Start: {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    Eindigd: {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+
+    {% if Resources|default([])|length > 1 %}
+        <strong>Bronnen ({{ Resources|default([])|length }}):</strong> <br />
+    {% else %}
+        <strong>Bron:</strong><br/>
+    {% endif %}
+    {% for resource in Resources %}
+        <strong>{{ resource.name }}</strong><br/>
+        {% if resource.scheduleName %}<strong>Schema:</strong> {{ resource.scheduleName }}<br/>{% endif %}
+        <strong>Resource-ID:</strong> {{ resource.id }}<br/>
+        {% if resource.location %}<strong>Locatie:</strong> {{ resource.location }}<br/>{% endif %}
+        {% if resource.contact %}<strong>Contactpersoon:</strong> {{ resource.contact }}<br/>{% endif %}
+        {% if resource.description %}<strong>Beschrijving:</strong> {{ resource.description|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.notes %}<strong>Notities:</strong> {{ resource.notes|sanitize_rich_text|url2link|nl2br|raw }}<br/>{% endif %}
+        {% if resource.resourceAdministrator %}<strong>Resourcebeheerder:</strong> {{ resource.resourceAdministrator }}<br/>{% endif %}
+
+        {% if resource.attributeRows|default([])|length > 0 %}
+            <strong>Resourcedetails:</strong><br/>
+            <table cellpadding="4" cellspacing="0" border="1" style="border-collapse: collapse; margin-top: 4px;">
+                {% for row in resource.attributeRows %}
+                    <tr>
+                        <th scope="row" valign="top" style="text-align: left;"><strong>{{ row.label }}</strong></th>
+                        <td valign="top">{{ row.displayValue|nl2br }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        {% if resource.image %}
+            <div class="resource-image"><img alt="{{ resource.name }}" src="{{ ScriptUrl|raw }}/{{ resource.image }}"/></div>
+        {% endif %}
+
+        {% if not loop.last %}<br/>{% endif %}
+    {% endfor %}
+
+    Titel: {{ Title|raw }}<br/>
+    Beschrijving: {{ Description|nl2br|raw }}<br/>
+
+    {% if RepeatDates|length > 0 %}
+        <br/>
+        De reservering zal zijn op de volgende data:
+        <br/>
+    {% endif %}
+
+    {% for date in RepeatDates %}
+        {{ formatdate(date: date) }}<br/>
+    {% endfor %}
+
+    {% if Accessories|default([])|length > 0 %}
+        <br/>Benodigdheden:<br/>
+        {% for accessory in Accessories %}
+            ({{ accessory.QuantityReserved }}) {{ accessory.Name|raw }}<br/>
+        {% endfor %}
+    {% endif %}
+
+    {% if Attributes|default([])|length > 0 %}
+        <br/>
+        {% for attribute in Attributes %}
+            <div>{{ control('AttributeControl', {attribute: attribute, readonly: true}) }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if RequiresApproval %}
+        <br/>
+        E�n of meerdere bronnen die gereserveerd zijn hebben goedkeuring nodig voor gebruik. Deze reservering wordt in behandeling genomen totdat hij is goedgekeurd.
+    {% endif %}
+
+    {% if ApprovedBy %}
+        <br/>
+        Geaccepteerd door: {{ ApprovedBy|raw }}
+    {% endif %}
+
+    <br/>
+    <br/>
+    <a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Bekijk deze reservering</a> |
+    <a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Voeg toe aan agenda</a> |
+    <a href="{{ ScriptUrl|raw }}">Login in LibreBooking</a>

@@ -1,0 +1,13 @@
+<p>Tu reserva comienza pronto.</p>
+<p><strong>Detalles de la reserva:</strong></p>
+<p>
+    <strong>Inicio:</strong> {{ formatdate(date: StartDate, key: 'reservation_email') }}<br/>
+    <strong>Fin:</strong> {{ formatdate(date: EndDate, key: 'reservation_email') }}<br/>
+    <strong>Recurso:</strong> {{ ResourceName|raw }}<br/>
+    <strong>Título:</strong> {{ Title|raw }}<br/>
+    <strong>Descripción:</strong> {{ Description|nl2br|raw }}<br/>
+<br/>
+<br/>
+<a href="{{ ScriptUrl|raw }}/{{ ReservationUrl|raw }}">Ver esta reserva</a> |
+<a href="{{ ScriptUrl|raw }}/{{ ICalUrl|raw }}">Agregar a un calendario</a> |
+<a href="{{ ScriptUrl|raw }}">Iniciar sesión en {{ AppTitle|raw }}</a>
