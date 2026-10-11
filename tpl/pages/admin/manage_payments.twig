@@ -1,4 +1,7 @@
-{{ include('globalheader.twig', {DataTable: true}) }}
+{% extends 'layouts/base.twig' %}
+{% set DataTable = true %}
+
+{% block content %}
 
 <div id="page-manage-payments" class="admin-page">
 
@@ -167,33 +170,27 @@
         </div>
     {% endif %}
 
-    <div class="modal fade" id="refundDialog" tabindex="-1" role="dialog" aria-labelledby="refundDialogLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <form role="form" name="issueRefundForm" id="issueRefundForm" method="post" ajaxAction="issueRefund"
-                action="{{ server.SCRIPT_NAME|raw }}" class="form-vertical">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="refundDialogLabel">{{ translate('IssueRefund') }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="refundAmount">{{ translate('RefundAmount') }}</label>
-                            <input type="number" id="refundAmount" min=".01" step="any" class="form-control"
-                                {{ formname('REFUND_AMOUNT') }} />
-                            <input type="hidden" id="refundId" {{ formname('REFUND_TRANSACTION_ID') }} />
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        {{ cancel_button() }}
-                        {{ update_button(submit: true, key: 'IssueRefund') }}
-                        {{ indicator() }}
-                    </div>
+    <form role="form" name="issueRefundForm" id="issueRefundForm" method="post" ajaxAction="issueRefund"
+        action="{{ server.SCRIPT_NAME|raw }}" class="form-vertical">
+        {% embed 'components/common/modal.twig' with {id: 'refundDialog'} %}
+            {% block header %}<h5 class="modal-title" id="refundDialogLabel">{{ translate('IssueRefund') }}</h5>{% endblock %}
+            {% block body %}
+                <div class="form-group">
+                    <label for="refundAmount">{{ translate('RefundAmount') }}</label>
+                    <input type="number" id="refundAmount" min=".01" step="any" class="form-control"
+                        {{ formname('REFUND_AMOUNT') }} />
+                    <input type="hidden" id="refundId" {{ formname('REFUND_TRANSACTION_ID') }} />
                 </div>
-            </form>
-        </div>
-    </div>
+            {% endblock %}
+            {% block footer %}
+                <div class="modal-footer">
+                    {{ cancel_button() }}
+                    {{ update_button(submit: true, key: 'IssueRefund') }}
+                    {{ indicator() }}
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </form>
 
     {{ csrf_token() }}
     {{ indicator(id: 'indicator') }}
@@ -226,5 +223,4 @@
     </script>
 
 </div>
-
-{{ include('globalfooter.twig') }}
+{% endblock %}

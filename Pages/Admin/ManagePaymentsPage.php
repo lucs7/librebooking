@@ -154,7 +154,7 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
         $this->Set('Currencies', \Booked\Currency::Currencies());
         $this->Set('PaymentsEnabled', $paymentsEnabled);
         $this->presenter->PageLoad();
-        $this->Display('Admin/Payments/manage_payments.tpl');
+        $this->Display('pages/admin/manage_payments.twig');
     }
 
     public function GetCreditCount()
@@ -231,7 +231,7 @@ class ManagePaymentsPage extends ActionPage implements IManagePaymentsPage
     {
         $this->Set('TransactionLog', $transactionLog->Results());
         $this->Set('PageInfo', $transactionLog->PageInfo());
-        $this->Display('Admin/Payments/transaction_log.tpl');
+        $this->Display('components/credits/admin-transaction-log.twig');
     }
 
     public function GetPageNumber()
