@@ -67,19 +67,24 @@ class MySqlConnection implements IDbConnection
         $this->_connected = false;
     }
 
-    /** True when logging.sql is on, whatever logging.level is. */
-    private static function SqlLoggingEnabled(): bool
+    /**
+     * Logs a statement on the 'sql' channel when logging.sql is on, whatever logging.level is.
+     * The statement is the message as is: no format string, so '%' needs no escaping.
+     * GetQuery() builds the SQL with its values, so it only runs when the entry is written.
+     */
+    private static function LogSql(string $prefix, MySqlCommandAdapter $command): void
     {
-        return LoggerFactory::channel(name: LoggerFactory::SQL)->isHandling(level: Level::Debug);
+        $logger = LoggerFactory::channel(name: LoggerFactory::SQL);
+        if ($logger->isHandling(level: Level::Debug)) {
+            $logger->debug(message: $prefix . $command->GetQuery());
+        }
     }
 
     public function Query(ISqlCommand $command)
     {
         $mysqlCommand = new MySqlCommandAdapter(command: $command, db: $this->_db);
 
-        if (self::SqlLoggingEnabled()) {
-            Log::Sql('MySql Query: ' . str_replace('%', '%%', $mysqlCommand->GetQuery()));
-        }
+        self::LogSql(prefix: 'MySql Query: ', command: $mysqlCommand);
 
         if ($command->ContainsGroupConcat()) {
             mysqli_query($this->_db, 'SET SESSION group_concat_max_len = 1000000;');
@@ -149,9 +154,7 @@ class MySqlConnection implements IDbConnection
     {
         $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
 
-        if (self::SqlLoggingEnabled()) {
-            Log::Sql($logPrefix . str_replace('%', '%%', $mysqlCommand->GetQuery()));
-        }
+        self::LogSql(prefix: $logPrefix, command: $mysqlCommand);
 
         mysqli_query($this->_db, "SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
 
