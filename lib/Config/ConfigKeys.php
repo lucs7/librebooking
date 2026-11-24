@@ -464,11 +464,14 @@ class ConfigKeys extends AbstractConfigKeys
         'default' => 'error',
         'choices' => [
             'none' => 'None',
-            'error' => 'error',
-            'debug' => 'debug',
+            'error' => 'Error',
+            'warning' => 'Warning',
+            'info' => 'Info',
+            'debug' => 'Debug',
         ],
         'label' => 'Logging Level',
-        'description' => 'Logging level: none, debug, error',
+        'description' => 'Lowest severity written to the application log (case-insensitive); none turns logging off',
+        'config_file_comment' => 'Lowest severity that is logged: none, error, warning, info, debug',
         'section' => 'logging'
     ];
 
@@ -479,6 +482,16 @@ class ConfigKeys extends AbstractConfigKeys
         'label' => 'Log SQL Queries',
         'description' => 'Enable or disable logging of SQL queries',
         'config_file_comment' => 'Enable SQL logging',
+        'section' => 'logging'
+    ];
+
+    public const LOGGING_ROTATE_SIZE = [
+        'key' => 'logging.rotate_size',
+        'type' => 'integer',
+        'default' => 0,
+        'label' => 'Log Rotation Size',
+        'description' => 'Size in bytes at which app.log or sql.log is renamed with a timestamp and a new file is started; rotated files are kept. 0 (default) disables rotation',
+        'config_file_comment' => "Size in bytes at which a log file is renamed to <name>.<timestamp> and a new one is started\nRotated files are kept; 0 (default) disables rotation, e.g. 104857600 rotates at 100 MB",
         'section' => 'logging'
     ];
 

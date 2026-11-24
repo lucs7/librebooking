@@ -453,6 +453,20 @@ class ConfigurationFile implements IConfigurationFile
         return ['entry' => $entry, 'isLegacy' => $entry !== null];
     }
 
+    /**
+     * @param array<int|string, string> $choices
+     */
+    private function CanonicalChoice(array $choices, string $value): ?string
+    {
+        foreach (array_keys($choices) as $choice) {
+            if (strcasecmp((string) $choice, $value) === 0) {
+                return (string) $choice;
+            }
+        }
+
+        return null;
+    }
+
     private function ValidateConfig(array $data, string $path = ''): array
     {
         $validated = [];
@@ -485,6 +499,11 @@ class ConfigurationFile implements IConfigurationFile
                 error_log("[CONFIG] Invalid type for '{$fullKey}'. Should be '{$configDef->type}', using default.");
                 $validated[$key] = $configDef->default;
                 continue;
+            }
+
+            if ($configDef->choices !== null && !$configDef->allowCustom && is_string($value)) {
+                // choices match case-insensitively ('DEBUG' = 'debug') and are stored in their canonical case
+                $value = $this->CanonicalChoice(choices: $configDef->choices, value: $value) ?? $value;
             }
 
             if ($configDef->choices !== null

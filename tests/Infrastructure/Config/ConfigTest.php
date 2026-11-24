@@ -244,6 +244,47 @@ PHP
         $this->assertLogMessage($errorLogs, "Invalid type for 'password.minimum.length'. Should be 'integer'", 'password.minimum.letters type validation error');
     }
 
+    public function testLoggingSettingsAcceptPsr3LevelsCaseInsensitively(): void
+    {
+        $configFile = sys_get_temp_dir() . '/lb-logging-config-' . bin2hex(random_bytes(6)) . '.php';
+        file_put_contents($configFile, '<?php return ' . var_export([
+            'settings' => [
+                'logging' => [
+                    'folder' => '/var/log/librebooking',
+                    'level' => 'WARNING',
+                    'sql' => true,
+                    'rotate_size' => 1048576,
+                ],
+            ],
+        ], true) . ';');
+
+        $errorLogs = $this->captureErrorLog(function () use ($configFile) {
+            Configuration::Instance()->Register(
+                configFile: $configFile,
+                envFile: '',
+                configId: self::CONFIG_ID,
+                overwrite: true
+            );
+            $config = Configuration::Instance()->File(self::CONFIG_ID);
+
+            $this->assertSame('warning', $config->GetKey(ConfigKeys::LOGGING_LEVEL), 'Upper-case level is stored in its canonical case');
+            $this->assertSame('/var/log/librebooking', $config->GetKey(ConfigKeys::LOGGING_FOLDER));
+            $this->assertTrue($config->GetKey(ConfigKeys::LOGGING_SQL, new BooleanConverter()));
+            $this->assertSame(1048576, $config->GetKey(ConfigKeys::LOGGING_ROTATE_SIZE, new IntConverter()));
+        });
+
+        unlink($configFile);
+        $this->assertSame([], array_values(preg_grep('/logging\./', $errorLogs)), 'No validation warning for valid logging settings');
+    }
+
+    public function testLoggingRotateSizeDefaultsToNoRotation(): void
+    {
+        Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_config.php', '', self::CONFIG_ID, true);
+        $config = Configuration::Instance()->File(self::CONFIG_ID);
+
+        $this->assertSame(0, $config->GetKey(ConfigKeys::LOGGING_ROTATE_SIZE, new IntConverter()));
+    }
+
     public function testRegistersPluginConfigFiles()
     {
         Configuration::Instance()->Register(ROOT_DIR . 'tests/data/test_config.php', '', self::CONFIG_ID, true);

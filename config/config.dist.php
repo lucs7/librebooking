@@ -217,12 +217,16 @@ return [
             # Write permission is required
             'folder' => '/var/log/librebooking/log',
 
-            # Logging level: none, debug, error
-            # Options: none, error, debug
+            # Lowest severity that is logged: none, error, warning, info, debug
+            # Options: none, error, warning, info, debug
             'level' => 'error',
 
             # Enable SQL logging (true/false)
             'sql' => false,
+
+            # Size in bytes at which a log file is renamed to <name>.<timestamp> and a new one is started
+            # Rotated files are kept; 0 (default) disables rotation, e.g. 104857600 rotates at 100 MB
+            'rotate_size' => 0,
         ],
 
         #########
