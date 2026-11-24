@@ -1,5 +1,8 @@
 <?php
 
+use LibreBooking\Logging\LoggerFactory;
+use Monolog\Level;
+
 class MySqlConnection implements IDbConnection
 {
     private $_dbUser = '';
@@ -64,11 +67,17 @@ class MySqlConnection implements IDbConnection
         $this->_connected = false;
     }
 
+    /** True when logging.sql is on, whatever logging.level is. */
+    private static function SqlLoggingEnabled(): bool
+    {
+        return LoggerFactory::channel(name: LoggerFactory::SQL)->isHandling(level: Level::Debug);
+    }
+
     public function Query(ISqlCommand $command)
     {
         $mysqlCommand = new MySqlCommandAdapter(command: $command, db: $this->_db);
 
-        if (Log::DebugEnabled()) {
+        if (self::SqlLoggingEnabled()) {
             Log::Sql('MySql Query: ' . str_replace('%', '%%', $mysqlCommand->GetQuery()));
         }
 
@@ -140,7 +149,7 @@ class MySqlConnection implements IDbConnection
     {
         $mysqlCommand = new MySqlCommandAdapter($sqlCommand, $this->_db);
 
-        if (Log::DebugEnabled()) {
+        if (self::SqlLoggingEnabled()) {
             Log::Sql($logPrefix . str_replace('%', '%%', $mysqlCommand->GetQuery()));
         }
 
