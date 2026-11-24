@@ -6,7 +6,7 @@ namespace LibreBooking\Logging;
 
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\FallbackGroupHandler;
-use Monolog\Handler\HandlerInterface;
+use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
@@ -18,6 +18,7 @@ use Monolog\Processor\WebProcessor;
  * Builds the PSR-3 loggers for the 'app' and 'sql' channels.
  *
  * - every write falls back to PHP's error_log when the target fails, and never throws
+ * - every handler formats with SafeLineFormatter: one escaped line per record
  * - entries carry the user id and, on 'app', the calling file/line as extra
  * - 'sql' logs at Debug and only follows logging.sql, not logging.level
  *
@@ -28,6 +29,8 @@ final class LoggerFactory
 {
     public const APP = 'app';
     public const SQL = 'sql';
+    /** error_log adds its own timestamp. */
+    private const ERROR_LOG_FORMAT = '%channel%.%level_name%: %message% %context% %extra%';
 
     /** @var array<string, Logger> */
     private static array $channels = [];
@@ -47,10 +50,9 @@ final class LoggerFactory
         }
         self::$building = true;
         try {
-            self::$settings ??= self::settingsFromConfiguration();
             return self::$channels[$name] = self::create(
                 name: $name,
-                settings: self::$settings,
+                settings: self::settings(),
                 userId: self::currentUserId(...),
             );
         } finally {
@@ -71,12 +73,15 @@ final class LoggerFactory
             return $logger;
         }
 
-        $logger->pushHandler(new FallbackGroupHandler(handlers: [
-            self::primaryHandler(name: $name, settings: $settings, threshold: $threshold),
-            new ErrorLogHandler(level: $threshold),
-        ]));
+        $primary = self::primaryHandler(name: $name, settings: $settings, threshold: $threshold);
+        $primary->setFormatter(new SafeLineFormatter());
+        $fallback = new ErrorLogHandler(level: $threshold);
+        $fallback->setFormatter(new SafeLineFormatter(format: self::ERROR_LOG_FORMAT));
+        $logger->pushHandler(new FallbackGroupHandler(handlers: [$primary, $fallback]));
         // always also to stderr: the container output (docker logs) or the web server's error log
-        $logger->pushHandler(new StreamHandler(stream: self::$stderr, level: $threshold));
+        $stderr = new StreamHandler(stream: self::$stderr, level: $threshold);
+        $stderr->setFormatter(new SafeLineFormatter());
+        $logger->pushHandler($stderr);
         $logger->pushProcessor(new WebProcessor());
         if ($name !== self::SQL) {
             // one debug_backtrace per entry; skipped for SQL, which is logged per statement
@@ -91,9 +96,15 @@ final class LoggerFactory
             }
             return $record;
         });
-        $logger->pushProcessor(new PsrLogMessageProcessor());
+        $logger->pushProcessor(new PsrLogMessageProcessor(removeUsedContextFields: true));
 
         return $logger;
+    }
+
+    /** The logging settings the cached loggers were built from. */
+    public static function settings(): LoggingSettings
+    {
+        return self::$settings ??= self::settingsFromConfiguration();
     }
 
     /** @internal lets tests capture what would go to stderr */
@@ -110,7 +121,7 @@ final class LoggerFactory
         self::$settings = null;
     }
 
-    private static function primaryHandler(string $name, LoggingSettings $settings, Level $threshold): HandlerInterface
+    private static function primaryHandler(string $name, LoggingSettings $settings, Level $threshold): AbstractProcessingHandler
     {
         if ($settings->rotateSize > LoggingSettings::NO_ROTATION) {
             return new SizeRotatingFileHandler(

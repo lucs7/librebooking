@@ -1,65 +1,152 @@
 <?php
 
+use LibreBooking\Logging\LoggerFactory;
+use LibreBooking\Logging\SafeLineFormatter;
+
+/**
+ * The one path for uncaught exceptions on web pages, the REST API and CLI jobs.
+ *
+ * Log() records each exception under a random reference id: one ERROR
+ * record with the stack trace on the 'app' channel, and always one error_log line per trace
+ * frame, so the server/container log (docker logs) gets it even at logging.level none or
+ * when the logger itself fails. As the logger also writes to stderr, the container
+ * output shows both copies under the same reference.
+ */
 abstract class ExceptionHandler
 {
+    /** Random bytes in the reference id that tags every log line of one exception. */
+    private const REFERENCE_BYTES = 4;
+    private const HTTP_SERVER_ERROR = 500;
+    private const HTTP_SERVICE_UNAVAILABLE = 503;
+    /** PHP's own exit code for an uncaught exception. */
+    private const UNCAUGHT_EXIT_CODE = 255;
+
     private static ?ExceptionHandler $handler = null;
 
-    public static function SetExceptionHandler(ExceptionHandler $handler)
+    /** Installs Handle() as PHP's exception handler; called once by the bootstrap. */
+    public static function Register(): void
+    {
+        set_exception_handler([self::class, 'Handle']);
+    }
+
+    /** Sets the handler that renders the response after an uncaught exception was logged. */
+    public static function SetExceptionHandler(?ExceptionHandler $handler)
     {
         self::$handler = $handler;
     }
 
-    abstract public function HandleException($exception);
+    abstract public function HandleException(Throwable $exception, string $reference);
 
-    public static function Handle($exception)
+    public static function Handle(Throwable $exception)
     {
-        Log::Error('Uncaught exception: %s', $exception);
+        $reference = self::Log($exception);
 
         if (self::$handler !== null) {
-            self::$handler->HandleException($exception);
+            try {
+                self::$handler->HandleException($exception, $reference);
+            } catch (Throwable $renderingFailure) {
+                // the error page itself failed: log that too, still answer with the reference
+                self::Log($renderingFailure);
+                if (!headers_sent()) {
+                    http_response_code(self::StatusFor($exception));
+                }
+                echo 'An error occurred. Reference: ' . $reference;
+            }
+        } elseif (PHP_SAPI === 'cli') {
+            // a handled exception would otherwise end a CLI script (cron job) with exit code 0
+            exit(self::UNCAUGHT_EXIT_CODE);
         }
+    }
+
+    /**
+     * Logs $exception once per destination and returns its reference id. Never throws.
+     */
+    public static function Log(Throwable $exception): string
+    {
+        $reference = bin2hex(random_bytes(self::REFERENCE_BYTES));
+
+        try {
+            LoggerFactory::channel(LoggerFactory::APP)->error(
+                message: '[exception {reference}] Uncaught exception: {class}: {message}',
+                context: [
+                    'reference' => $reference,
+                    'class' => get_class($exception),
+                    'message' => $exception->getMessage(),
+                    'exception' => $exception,
+                ],
+            );
+        } catch (Throwable) {
+            // the error_log copy below still records it
+        }
+
+        try {
+            foreach (self::FormatException($exception) as $line) {
+                error_log(message: "[exception {$reference}] {$line}");
+            }
+        } catch (Throwable) {
+            // logging must never prevent the error response
+        }
+
+        return $reference;
+    }
+
+    /** HTTP status for an uncaught exception: 503 when the database is unavailable, else 500. */
+    public static function StatusFor(Throwable $exception): int
+    {
+        return $exception instanceof DatabaseException ? self::HTTP_SERVICE_UNAVAILABLE : self::HTTP_SERVER_ERROR;
+    }
+
+    /**
+     * Formats an exception and its previous-exception chain as log lines, one error_log()
+     * call each, so no server has to escape embedded newlines and PHP-FPM's log_limit is
+     * less likely to truncate the trace. Every line is escaped by SafeLineFormatter.
+     *
+     * @return list<string>
+     */
+    public static function FormatException(Throwable $exception): array
+    {
+        $lines = [];
+        for ($e = $exception, $label = 'Uncaught exception'; $e !== null; $e = $e->getPrevious(), $label = 'Caused by') {
+            $lines[] = SafeLineFormatter::escape(sprintf(
+                '%s: %s: %s in %s:%d',
+                $label,
+                get_class($e),
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+            ));
+            foreach (explode("\n", $e->getTraceAsString()) as $line) {
+                $lines[] = SafeLineFormatter::escape(' => ' . $line);
+            }
+        }
+
+        return $lines;
     }
 }
 
 class WebExceptionHandler extends ExceptionHandler
 {
-    /** Random bytes in the ID that tags every log line of one exception. */
-    private const EXCEPTION_ID_BYTES = 4;
-
     /**
-     * For valid UTF-8: C0 controls except tab, DEL, C1 controls (U+0080-U+009F)
-     * and U+2028/U+2029. Matched bytewise; other characters are left intact.
-     */
-    private const CONTROL_CHARS_UTF8 = '/[\x00-\x08\x0A-\x1F\x7F]|\xC2[\x80-\x9F]|\xE2\x80[\xA8\xA9]/';
-
-    /**
-     * For text that is not valid UTF-8, characters cannot be told apart
-     * reliably, so every byte from 0x80 up is escaped as well. This covers raw
-     * 8-bit C1 bytes such as 0x9B (CSI) without touching valid UTF-8 text,
-     * whose continuation bytes also fall in 0x80-0x9F.
-     */
-    private const CONTROL_CHARS_NOT_UTF8 = '/[\x00-\x08\x0A-\x1F\x7F-\xFF]/';
-
-    /**
-     * @var callable
+     * @var callable(int $errorMessageId, string $reference): void
      */
     private $callback;
 
+    /**
+     * @param callable(int $errorMessageId, string $reference): void $callback renders the error page
+     */
     public function __construct($callback)
     {
         $this->callback = $callback;
     }
 
-    public function HandleException($exception)
+    public function HandleException(Throwable $exception, string $reference)
     {
-        $this->LogException($exception);
-
         // Uncaught exceptions indicate a server-side failure.
-        // Set 500 only while headers are still mutable.
+        // Set the status only while headers are still mutable, and keep an error status already set.
         if (!headers_sent() && !connection_aborted()) {
             $currentStatus = http_response_code();
             if ($currentStatus === false || $currentStatus < 400) {
-                http_response_code(500);
+                http_response_code(response_code: self::StatusFor($exception));
             }
         }
 
@@ -70,66 +157,6 @@ class WebExceptionHandler extends ExceptionHandler
             $errorMessageId = ErrorMessages::DATABASE_NOT_FOUND;
         }
 
-        call_user_func($this->callback, $errorMessageId);
-    }
-
-    /**
-     * Logs the exception through PHP's configured error log, one error_log()
-     * call per line, so the trace stays readable whatever the destination: no
-     * server has to escape embedded newlines, each line gets whatever prefix
-     * the destination adds (e.g. a timestamp, or Apache's client details), and
-     * logging each frame separately reduces the risk of PHP-FPM's log_limit
-     * truncating the trace. Every line carries a random per-exception ID so
-     * interleaved lines from concurrent requests can be grouped again.
-     * Never throws.
-     */
-    private function LogException(Throwable $exception): void
-    {
-        try {
-            $id = bin2hex(random_bytes(self::EXCEPTION_ID_BYTES));
-            foreach (self::FormatException($exception) as $line) {
-                error_log("[exception {$id}] {$line}");
-            }
-        } catch (Throwable $ignored) {
-            // logging must never prevent the error page from rendering
-        }
-    }
-
-    /**
-     * Formats an exception and its previous-exception chain as log lines.
-     * Control characters, newlines included, are escaped so a message cannot
-     * forge log lines or inject terminal escape sequences.
-     *
-     * @return list<string>
-     */
-    public static function FormatException(Throwable $exception): array
-    {
-        $clean = static fn (string $text): string => preg_replace_callback(
-            preg_match('//u', $text) === 1 ? self::CONTROL_CHARS_UTF8 : self::CONTROL_CHARS_NOT_UTF8,
-            static fn (array $m): string => implode(
-                '',
-                array_map(static fn (string $b): string => sprintf('\\x%02X', ord($b)), str_split($m[0]))
-            ),
-            $text
-        ) ?? '[unprintable]';
-
-        $lines = [];
-        for ($e = $exception, $label = 'Uncaught exception'; $e !== null; $e = $e->getPrevious(), $label = 'Caused by') {
-            $lines[] = sprintf(
-                '%s: %s: %s in %s:%d',
-                $label,
-                $clean(get_class($e)),
-                $clean($e->getMessage()),
-                $clean($e->getFile()),
-                $e->getLine()
-            );
-            foreach (explode("\n", $e->getTraceAsString()) as $line) {
-                $lines[] = ' => ' . $clean($line);
-            }
-        }
-
-        return $lines;
+        call_user_func($this->callback, $errorMessageId, $reference);
     }
 }
-
-set_exception_handler(['ExceptionHandler', 'Handle']);

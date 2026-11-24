@@ -25,21 +25,24 @@ require_once(ROOT_DIR . 'WebServices/AccountWebService.php');
 
 require_once(ROOT_DIR . 'Web/Services/Help/ApiHelpPage.php');
 
-set_exception_handler(function ($e) {
-    Log::Error('Uncaught bootstrap exception: %s', $e);
-    $accept    = $_SERVER['HTTP_ACCEPT'] ?? '';
-    $wantsJson = stripos($accept, 'application/json') !== false;
+/** JSON body for an API error: no exception details, only the reference of the logged exception. */
+function ApiErrorBody(string $reference): string
+{
+    return json_encode(value: ['message' => 'Exception was logged.', 'reference' => $reference]);
+}
 
-    header('Content-Type: ' . ($wantsJson ? 'application/json; charset=utf-8'
-                                          : 'text/plain; charset=utf-8'), true, 500);
-    echo $wantsJson
-        ? json_encode(['error' => 'server_error', 'message' => $e->getMessage()], JSON_UNESCAPED_SLASHES)
-        : 'Server error: ' . $e->getMessage();
+set_exception_handler(function (Throwable $e) {
+    $reference = ExceptionHandler::Log($e);
+    if (!headers_sent()) {
+        header(header: 'Content-Type: application/json; charset=utf-8', replace: true, response_code: ExceptionHandler::StatusFor($e));
+    }
+    echo ApiErrorBody(reference: $reference);
     exit;
 });
 
 \Slim\Slim::registerAutoloader();
-$app = new \Slim\Slim();
+// debug off: Slim's debug page would send the stack trace to the client; $app->error handles it
+$app = new \Slim\Slim(['debug' => false]);
 
 $server = new SlimServer($app);
 ServiceLocator::SetApiServer(apiServer: $server);
@@ -98,11 +101,10 @@ $app->notFound(function () use ($app) {
 });
 
 $app->error(function (\Exception $e) use ($app) {
-    require_once(ROOT_DIR . 'lib/Common/Logging/Log.php');
-    Log::Error('Slim Exception. %s', $e);
+    $reference = ExceptionHandler::Log($e);
     $app->response()->header('Content-Type', 'application/json');
-    $app->response()->status(RestResponse::SERVER_ERROR);
-    $app->response()->write('Exception was logged.');
+    $app->response()->status(ExceptionHandler::StatusFor($e));
+    $app->response()->write(ApiErrorBody(reference: $reference));
 });
 
 $app->run();

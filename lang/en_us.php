@@ -94,6 +94,7 @@ class en_us extends Language
         $strings['Error'] = 'Error';
         $strings['ReturnToPreviousPage'] = 'Return to the last page that you were on';
         $strings['UnknownError'] = 'Unknown Error';
+        $strings['ErrorReference'] = 'Reference for the administrator';
         $strings['DatabaseConnectionError'] = 'Unable to connect to the database server.<br/>Ask the website administrator to verify the database host, username, and password in <code>config/config.php</code>.';
         $strings['DatabaseNotFoundError'] = 'Unable to select the configured database.<br/>Ask the website administrator to verify the database name in <code>config/config.php</code> and confirm the database has been created/initialized.';
         $strings['InsufficientPermissionsError'] = 'You do not have permission to access this resource';

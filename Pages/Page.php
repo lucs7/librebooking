@@ -33,7 +33,13 @@ abstract class Page implements IPage
 
     protected function __construct($titleKey = '', $pageDepth = 0)
     {
-        ExceptionHandler::SetExceptionHandler(new WebExceptionHandler([$this, 'RedirectToError']));
+        ExceptionHandler::SetExceptionHandler(new WebExceptionHandler(
+            function (int $errorMessageId, string $reference): void {
+                // shown on the error page so an admin can find the logged exception
+                $this->Set(var: 'ErrorReference', value: $reference);
+                $this->RedirectToError(errorMessageId: $errorMessageId);
+            }
+        ));
 
         $this->SetSecurityHeaders();
 

@@ -89,6 +89,19 @@ POST Requests
 When making POST API requests it is required to send the POST data as
 JSON
 
+Server Errors
+~~~~~~~~~~~~~
+
+When a request fails with an unexpected error, the API answers with HTTP
+``503`` if the database is unavailable and ``500`` otherwise. The body is
+JSON and contains no exception details, only a reference that an
+administrator can search for in the application log (``app.log``) and in
+the web server or container log:
+
+.. code:: json
+
+   {"message": "Exception was logged.", "reference": "a1b2c3d4"}
+
 .. _curl-variables:
 
 curl Variables
