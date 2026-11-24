@@ -318,18 +318,54 @@ Logging Configuration
 
    'logging' => [
        'folder' => '/var/log/librebooking/log',
-       'level' => 'none',
+       'level' => 'error',
        'sql' => false,
+       'rotate_size' => 0,
    ],
 
 **logging.folder**
-  Directory where log files are stored.
+  Directory where ``app.log`` and ``sql.log`` are written. The web server
+  account needs write access. Every entry is also written to stderr, so it
+  appears in the container output (``docker logs``) or the web server's error
+  log. Under PHP-FPM this needs ``catch_workers_output = yes`` in the pool
+  configuration, otherwise the stderr copy is discarded.
 
 **logging.level**
-  Logging level: none, DEBUG, INFO, WARNING, ERROR.
+  Lowest severity written to ``app.log``: ``error`` (default, an operation
+  failed), ``warning`` (something unexpected or security-relevant was handled,
+  such as a failed login or a denied action), ``info`` (business events such
+  as created, updated or deleted records and sent emails) or ``debug``
+  (tracing). Case does not matter. ``none`` turns application logging off.
+  Any other value falls back to ``error`` with a warning in the web server log.
 
 **logging.sql**
-  Enable or disable logging of SQL queries.
+  Write every executed SQL statement to ``sql.log`` at debug severity,
+  independent of ``logging.level``. The statements contain the bound values,
+  including password hashes, session tokens and email addresses: enable it
+  only while troubleshooting and protect or delete the file afterwards.
+
+**logging.rotate_size**
+  Size in bytes at which ``app.log`` or ``sql.log`` is renamed with a
+  timestamp (for example ``app.log.20261125-164500``) and a new file is
+  started. Rotated files are kept; delete or archive old ones as needed. The
+  default ``0`` disables rotation (a single file per channel, for example for
+  logrotate); ``104857600`` rotates at 100 MB.
+
+**What the logs contain**
+  Each entry has a timestamp, the channel (``app`` or ``sql``), the severity,
+  the message and structured data: the id of the acting user (``user_id``;
+  ``0`` for guests), the calling file and line, and for web requests the URL,
+  method and client IP address. Names and email addresses are not logged.
+  Control characters are escaped, so every entry is one line.
+
+**Uncaught exceptions**
+  An uncaught exception is logged under a random reference id, for example
+  ``[exception a1b2c3d4]``: once as an ``ERROR`` entry with the stack trace
+  in ``app.log``, and always in the web server or container log (PHP's
+  ``error_log``), one line per stack frame, even when ``logging.level`` is
+  ``none``. The error page and the API error response show the same
+  reference, so an administrator can find the entry from a user's report.
+  In the container output both copies appear under the same reference.
 
 File Upload Settings
 --------------------

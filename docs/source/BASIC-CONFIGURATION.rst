@@ -482,10 +482,15 @@ Docker Environment Variables
   Log directory (default: ``/var/log/librebooking``)
 
 ``LB_LOGGING_LEVEL``
-  Logging level: ``none`` (default), ``debug``, ``error``
+  Logging level: ``none`` (default), ``error``, ``warning``, ``info``,
+  ``debug``
 
 ``LB_LOGGING_SQL``
   Enable SQL logging: ``false`` (default), ``true``
+
+``LB_LOGGING_ROTATE_SIZE``
+  Size in bytes at which a log file is renamed with a timestamp (rotated files
+  are kept); ``0`` (default) disables rotation, e.g. ``104857600`` for 100 MB
 
 ``LB_PATH``
   URL path prefix (for reverse proxy setups)

@@ -796,12 +796,14 @@ application or database logs. To do this:
 -  To allow application logging, the PHP account requires write access
    (0755) to your configured log directory.
 -  Logging is configured in /config/config.php
--  Levels used by LibreBooking are OFF, DEBUG, ERROR. For normal
-   operation, ERROR is appropriate. If trace logs are needed, DEBUG is
-   appropriate.
--  To turn on application logging, change the logging level setting
-   in your configuration file to an appropriate level. For example,
-   set ``'logging' => ['level' => 'debug']`` within the settings array.
+-  The levels are ``error``, ``warning``, ``info`` and ``debug``, plus
+   ``none`` to turn logging off. For normal operation, ``error`` (the default)
+   is appropriate. If trace logs are needed, ``debug`` is appropriate.
+-  To change what is logged, set the logging level in your configuration
+   file. For example, set ``'logging' => ['level' => 'debug']`` within the
+   settings array.
+-  Uncaught exceptions are always written to the web server log (PHP's
+   ``error_log``) with a reference id that is also shown to the user.
 
 For detailed information on all logging and other configuration options,
 see :doc:`BASIC-CONFIGURATION` for essential settings or :doc:`ADVANCED-CONFIGURATION`
