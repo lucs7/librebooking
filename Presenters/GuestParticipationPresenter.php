@@ -56,7 +56,7 @@ class GuestParticipationPresenter
         $user = $this->userRepository->LoadByUsername($email);
         $referenceNumber = $this->page->GetInvitationReferenceNumber();
 
-        Log::Debug('Invitation action %s for user %s and reference number %s', $invitationAction, $email, $referenceNumber);
+        Log::Debug('Invitation action %s for reference number %s', $invitationAction, $referenceNumber);
 
         $series = $this->reservationRepository->LoadByReferenceNumber($referenceNumber);
         $result = InvitationResult::None();

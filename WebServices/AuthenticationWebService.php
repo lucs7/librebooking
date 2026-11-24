@@ -70,7 +70,7 @@ class AuthenticationWebService
             }
             $reader->Free();
 
-            Log::Debug('SessionToken=%s', $session->SessionToken);
+            Log::Debug('WebService session created for userId %s', $session->UserId);
             $this->server->WriteResponse(AuthenticationResponse::Success($this->server, $session, $version));
         } else {
             Log::Debug('WebService Authenticate, user %s was not authenticated', $username);
@@ -91,7 +91,7 @@ class AuthenticationWebService
         $userId = $request->userId;
         $sessionToken = $request->sessionToken;
 
-        Log::Debug('WebService SignOut for userId %s and sessionToken %s', $userId, $sessionToken);
+        Log::Debug('WebService SignOut for userId %s', $userId);
 
         $this->authentication->Logout($userId, $sessionToken);
         $r = new SignedOutResponse();

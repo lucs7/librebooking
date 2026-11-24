@@ -69,7 +69,7 @@ class ConfigurePresenter
             return;
         }
         $user = ServiceLocator::GetServer()->GetUserSession();
-        Log::Debug('Editing configuration file. Email=%s, UserId=%s', $user->Email, $user->UserId);
+        Log::Debug('Editing configuration file. UserId=%s', $user->UserId);
 
         $configFile = ROOT_DIR . 'config/config.php';
         $configDistFile = ROOT_DIR . 'config/config.dist.php';

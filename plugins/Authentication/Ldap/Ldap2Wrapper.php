@@ -47,7 +47,7 @@ class Ldap2Wrapper
         }
         if (PEAR::isError($this->ldap)) {
             $message = 'Could not connect to LDAP server. Check your settings in Ldap.config.php : ' . $this->ldap->getMessage();
-            Log::Error($message);
+            Log::Error('%s', $message);
             throw new Exception($message);
         }
 
@@ -83,8 +83,7 @@ class Ldap2Wrapper
         }
 
         if (PEAR::isError($result)) {
-            $message = 'Could not authenticate user against ldap %s: ' . $result->getMessage();
-            Log::Error($message, $username);
+            Log::Error('Could not authenticate user against ldap %s: %s', $username, $result->getMessage());
         }
         return false;
     }
@@ -107,14 +106,12 @@ class Ldap2Wrapper
         if ($configFilter) {
             $configFilter = Net_LDAP2_Filter::parse($configFilter);
             if (PEAR::isError($configFilter)) {
-                $message = 'Could not parse search filter %s: ' . $configFilter->getMessage();
-                Log::Error($message, $username);
+                Log::Error('Could not parse search filter %s: %s', $username, $configFilter->getMessage());
                 return false;
             }
             $filter = Net_LDAP2_Filter::combine('and', [$filter, $configFilter]);
             if (PEAR::isError($filter)) {
-                $message = 'Could not combine search filters for user %s: ' . $filter->getMessage();
-                Log::Error($message, $username);
+                Log::Error('Could not combine search filters for user %s: %s', $username, $filter->getMessage());
                 return false;
             }
         }
@@ -133,8 +130,7 @@ class Ldap2Wrapper
         $searchResult = $this->ldap->search(null, $filter, $options);
 
         if (PEAR::isError($searchResult)) {
-            $message = 'Could not search ldap for user %s: ' . $searchResult->getMessage();
-            Log::Error($message, $username);
+            Log::Error('Could not search ldap for user %s: %s', $username, $searchResult->getMessage());
             return false;
         }
 

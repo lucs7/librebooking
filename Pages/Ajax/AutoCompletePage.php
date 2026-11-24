@@ -22,7 +22,7 @@ class AutoCompletePage extends Page
     {
         $results = $this->GetResults($this->GetType(), $this->GetSearchTerm());
 
-        Log::Debug(sprintf('AutoComplete: %s results found for search type: %s, term: %s', count($results), $this->GetType(), $this->GetSearchTerm()));
+        Log::Debug('AutoComplete: %s results found for search type: %s, term: %s', count($results), $this->GetType(), $this->GetSearchTerm());
 
         $this->SetJson($results);
     }
@@ -34,7 +34,7 @@ class AutoCompletePage extends Page
             return $this->$method($term);
         }
 
-        Log::Debug("AutoComplete for type: $type not defined");
+        Log::Debug('AutoComplete for type: %s not defined', $type);
 
         return [];
     }

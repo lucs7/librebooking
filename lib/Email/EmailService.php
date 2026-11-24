@@ -61,9 +61,7 @@ class EmailService implements IEmailService
         $this->phpMailer->addReplyTo($replyTo->Address(), $replyTo->Name());
 
         $to = $this->ensureArray($emailMessage->To());
-        $toAddresses = new StringBuilder();
         foreach ($to as $address) {
-            $toAddresses->Append($address->Address());
             $this->phpMailer->addAddress($address->Address(), $address->Name());
         }
 
@@ -87,7 +85,7 @@ class EmailService implements IEmailService
             );
         }
 
-        Log::Debug('Sending %s email to: %s from: %s', get_class($emailMessage), $toAddresses->ToString(), $this->phpMailer->From);
+        Log::Debug('Sending %s email to %s recipient(s)', get_class($emailMessage), count($to));
 
         $success = false;
         try {

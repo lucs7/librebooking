@@ -23,11 +23,11 @@ class PostRegistration implements IPostRegistration
     public function HandleSelfRegistration(User $user, IRegistrationPage $page, ILoginContext $loginContext)
     {
         if ($user->StatusId() == AccountStatus::ACTIVE) {
-            Log::Debug('PostRegistration - Handling activate user %s', $user->EmailAddress());
+            Log::Debug('PostRegistration - Handling activate user %s', $user->Id());
             $this->authentication->Login($user->EmailAddress(), $loginContext);
             $page->Redirect(Pages::UrlFromId($user->Homepage()));
         } else {
-            Log::Debug('PostRegistration - Handling pending user %s', $user->EmailAddress());
+            Log::Debug('PostRegistration - Handling pending user %s', $user->Id());
             $this->activation->Notify($user);
             $page->Redirect(Pages::ACTIVATION);
         }

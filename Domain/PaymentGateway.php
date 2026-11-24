@@ -336,14 +336,13 @@ class PayPalGateway implements IPaymentGateway
             $response = Unirest\Request::post($checkoutUrl, $headers, $body);
 
             if (Log::DebugEnabled()) {
-                Log::Debug('PayPal Checkout/Orders Url: %s, Request: %s, Response: %s', $checkoutUrl, $body, json_encode($response->body));
+                Log::Debug('PayPal Checkout/Orders Url: %s, OrderId: %s, Status: %s', $checkoutUrl, $response->body->id ?? '', $response->body->status ?? '');
             }
 
             return $response->body;
         } catch (Exception $exception) {
             Log::Error(
-                'PayPal Checkout/Orders error details. Data: %s, CartId/invoice number: %s, Total: %s, Error: %s',
-                $body,
+                'PayPal Checkout/Orders error details. CartId/invoice number: %s, Total: %s, Error: %s',
                 $cart->Id(),
                 $cart->Total(),
                 $exception
@@ -404,7 +403,7 @@ class PayPalGateway implements IPaymentGateway
                 json_encode($response->body)
             );
             if (Log::DebugEnabled()) {
-                Log::Debug('PayPal Capture Url: %s, Response: %s', $checkoutUrl, json_encode($response->body));
+                Log::Debug('PayPal Capture Url: %s, OrderId: %s, Status: %s', $checkoutUrl, $response->body->id ?? '', $response->body->status ?? '');
             }
 
             return $response->body;
@@ -437,7 +436,7 @@ class PayPalGateway implements IPaymentGateway
             $response = Unirest\Request::post($refundUrl, $headers, $body);
 
             if (Log::DebugEnabled()) {
-                Log::Debug('PayPal Refund Url: %s, Request: %s, Response: %s', $refundUrl, $body, json_encode($response->body));
+                Log::Debug('PayPal Refund Url: %s, RefundId: %s, Status: %s', $refundUrl, $response->body->id ?? '', $response->body->status ?? '');
             }
 
             $self = '';
@@ -588,7 +587,7 @@ class StripeGateway implements IPaymentGateway
             ]);
 
             if (Log::DebugEnabled()) {
-                Log::Debug('Stripe charge response %s', json_encode($charge));
+                Log::Debug('Stripe charge %s, status %s', $charge->id ?? '', $charge->status ?? '');
             }
 
             $chargeData = $charge->toArray();
@@ -657,7 +656,7 @@ class StripeGateway implements IPaymentGateway
             ]);
 
             if (Log::DebugEnabled()) {
-                Log::Debug('Stripe refund response %s', json_encode($refund));
+                Log::Debug('Stripe refund %s, status %s', $refund->id ?? '', $refund->status ?? '');
             }
 
             $logger->LogRefund(

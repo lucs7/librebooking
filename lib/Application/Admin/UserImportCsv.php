@@ -54,7 +54,7 @@ class UserImportCsvRow
     {
         $isValid = !empty($this->username) && !empty($this->email);
         if (!$isValid) {
-            Log::Debug('User import row is not valid. Username %s, Email %s', $this->username, $this->email);
+            Log::Debug('User import row is not valid: %s', empty($this->username) ? 'username missing' : 'email missing');
         }
         return $isValid;
     }

@@ -30,8 +30,8 @@ class AdLdapWrapper implements IActiveDirectory
         $options = $this->options->AdLdapOptions();
 
         while (!$connected && $attempts < count($hosts)) {
+            $host = $hosts[$attempts];
             try {
-                $host = $hosts[$attempts];
                 Log::Debug('ActiveDirectory - Trying to connect to host %s', $host);
                 $options['domain_controllers'] = [$host];
                 $attempts++;
@@ -40,7 +40,7 @@ class AdLdapWrapper implements IActiveDirectory
 
                 Log::Debug('ActiveDirectory - Connection succeeded to host %s', $host);
             } catch (Exception $ex) {
-                Log::Error($ex);
+                Log::Error('ActiveDirectory - Connection to host %s failed: %s', $host, $ex);
                 throw($ex);
             }
         }

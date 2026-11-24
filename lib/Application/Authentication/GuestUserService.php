@@ -51,17 +51,17 @@ class GuestUserService implements IGuestUserService
 
         if ($this->Exists($user)) {
             if (!$this->IsActive($user)) {
-                Log::Debug('Account is not active, not creating a guest account %s', $email);
+                Log::Debug('Account is not active, not creating a guest account');
 
                 return new NullUserSession();
             }
 
-            Log::Debug('User already has account, skipping guest creation %s', $email);
+            Log::Debug('User %s already has an account, skipping guest creation', $user->Id());
 
             return $this->userSessionBuilder->buildUserSession(user: $user, loginTime: LoginTime::Now());
         }
 
-        Log::Debug('Email address was not found, creating guest account %s', $email);
+        Log::Debug('Email address was not found, creating guest account');
 
         $currentLanguage = Resources::GetInstance()->CurrentLanguage;
         $this->registration->Register($email, $email, 'Guest', 'Guest', Password::GenerateRandom(), null, $currentLanguage, null);

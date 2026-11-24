@@ -72,8 +72,7 @@ class adSAML
             if (array_key_exists('ssphp_sp', $options)) {
                 $this->ssphpSP = $options['ssphp_sp'];
             } else {
-                Log::Error('Could not connect to SAML service provider.'
-                           . '  Please check your SAML configuration settings');
+                Log::Error('Could not connect to SAML service provider.  Please check your SAML configuration settings');
             }
         }
 

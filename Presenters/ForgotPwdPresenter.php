@@ -37,7 +37,7 @@ class ForgotPwdPresenter
     {
         $emailAddress = $this->_page->GetEmailAddress();
 
-        Log::Debug('Password reset request for email address %s requested from REMOTE_ADDR: %s REMOTE_HOST: %s', $emailAddress, $_SERVER['REMOTE_ADDR'], $_SERVER['REMOTE_HOST']);
+        Log::Debug('Password reset requested from REMOTE_ADDR: %s', $_SERVER['REMOTE_ADDR'] ?? '');
 
         $temporaryPassword = Password::GenerateRandom();
 

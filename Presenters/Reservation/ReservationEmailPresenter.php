@@ -61,7 +61,7 @@ class ReservationEmailPresenter
         }
 
         foreach ($this->page->GetEmailAddresses() as $emailAddress) {
-            Log::Debug('Emailing reservation details. Reference Number %s, UserId %s, To %s', $existingSeries->CurrentInstance()->ReferenceNumber(), $this->userSession->UserId, $emailAddress);
+            Log::Debug('Emailing reservation details. Reference Number %s, UserId %s', $existingSeries->CurrentInstance()->ReferenceNumber(), $this->userSession->UserId);
 
             $email = new ReservationShareEmail($owner, $emailAddress, $existingSeries, $this->attributeRepository, $this->userRepository);
             ServiceLocator::GetEmailService()->Send($email);

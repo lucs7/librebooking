@@ -103,8 +103,8 @@ class ManageConfigurationPresenter extends ActionPresenter
         }
 
         Log::Debug(
-            'Loading and displaying config file for editing by %s',
-            ServiceLocator::GetServer()->GetUserSession()->Email
+            'Loading and displaying config file for editing by user %s',
+            ServiceLocator::GetServer()->GetUserSession()->UserId
         );
 
         $this->BringConfigFileUpToDate();
@@ -233,7 +233,7 @@ class ManageConfigurationPresenter extends ActionPresenter
         // WriteSettings will handle the proper nesting based on file type
         $this->configSettings->WriteSettings($this->configFilePath, $mergedSettings);
 
-        Log::Debug('Config file saved by %s', ServiceLocator::GetServer()->GetUserSession()->Email);
+        Log::Debug('Config file saved by user %s', ServiceLocator::GetServer()->GetUserSession()->UserId);
     }
 
     public function SetHomepage()
@@ -348,7 +348,7 @@ class ManageConfigurationPresenter extends ActionPresenter
 
                 // Check if directory exists
                 if (!is_dir($rootDir)) {
-                    Log::Error("Plugin directory not found: $rootDir");
+                    Log::Error('Plugin directory not found: %s', $rootDir);
                     return;
                 }
 
@@ -359,16 +359,16 @@ class ManageConfigurationPresenter extends ActionPresenter
                 if (count($distFile) == 1 && count($configFile) == 0) {
                     try {
                         copy($distFile[0], str_replace('.dist', '', $distFile[0]));
-                        Log::Debug("Created new config file from dist template: {$distFile[0]}");
+                        Log::Debug('Created new config file from dist template: %s', $distFile[0]);
                     } catch (Exception $e) {
-                        Log::Error('Failed to create config file: ' . $e->getMessage());
+                        Log::Error('Failed to create config file: %s', $e->getMessage());
                         return;
                     }
                     $configFile = glob("$rootDir/*config.php");
                 }
 
                 if (count($configFile) == 0) {
-                    Log::Error("No config file found for plugin: $requestedConfigFile");
+                    Log::Error('No config file found for plugin: %s', $requestedConfigFile);
                     return;
                 }
 
@@ -381,7 +381,7 @@ class ManageConfigurationPresenter extends ActionPresenter
         }
 
         if (!$found) {
-            Log::Error("Requested config file not found: $requestedConfigFile");
+            Log::Error('Requested config file not found: %s', $requestedConfigFile);
         }
     }
 

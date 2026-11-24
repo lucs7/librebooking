@@ -77,12 +77,12 @@ class UserPreferences
         if (array_key_exists($name, $this->preferences)) {
             $currentValue = $this->preferences[$name];
             if ($value != $currentValue) {
-                Log::Debug('changed ' . $name);
+                Log::Debug('changed %s', $name);
 
                 $this->changed[] = $name;
             }
         } else {
-            Log::Debug('added ' . $name);
+            Log::Debug('added %s', $name);
             $this->added[] = $name;
         }
 

@@ -36,16 +36,16 @@ class ParamsValidator
             $validators = (array) $validators;
 
             if (!array_key_exists($param, $queryParams)) {
-                Log::Debug(message: "Skipping param '$param': not present in request.");
+                Log::Debug("Skipping param '%s': not present in request.", $param);
                 continue;
             }
 
             if (!self::validateParam($param, $validators, $requestURI)) {
-                Log::Debug(message: "Validation failed for '$param'.");
+                Log::Debug("Validation failed for '%s'.", $param);
                 return false;
             }
 
-            Log::Debug(message: "Validation passed for '$param'.");
+            Log::Debug("Validation passed for '%s'.", $param);
         }
         return true;
     }
@@ -57,7 +57,7 @@ class ParamsValidator
                 scriptName: $_SERVER['SCRIPT_NAME'] ?? '',
                 page: $redirectURL,
             );
-            Log::Debug(message: 'Validation failed. Redirecting to: ' . $location);
+            Log::Debug('Validation failed. Redirecting to: %s', $location);
             header('Location: ' . $location);
             exit;
         }
@@ -77,7 +77,7 @@ class ParamsValidator
         $hasNormal = false;
         $passedNormal = false;
 
-        Log::Debug(message: "Validating param '$param' with rules: " . json_encode($validators));
+        Log::Debug("Validating param '%s' with rules: %s", $param, json_encode($validators));
 
         foreach ($validators as $validator) {
             // MATCH validator (array of expected values)
@@ -86,7 +86,7 @@ class ParamsValidator
 
                 foreach ($validator as $expected) {
                     $result = ParamsValidatorMethods::matchValidator($param, $expected, $requestURI);
-                    Log::Debug(message: "MATCH validation for '$param' against expected '$expected': " . ($result ? 'passed' : 'failed'));
+                    Log::Debug("MATCH validation for '%s' against expected '%s': %s", $param, $expected, $result ? 'passed' : 'failed');
 
                     if ($result) {
                         $passedMatch = true;
@@ -99,7 +99,7 @@ class ParamsValidator
                 $hasNormal = true;
 
                 $result = self::runSimpleValidation($param, $validator, $requestURI);
-                Log::Debug(message: "Validator '$validator' for '$param': " . ($result ? 'passed' : 'failed'));
+                Log::Debug("Validator '%s' for '%s': %s", $validator, $param, $result ? 'passed' : 'failed');
 
                 if ($result) {
                     $passedNormal = true;
@@ -112,7 +112,7 @@ class ParamsValidator
         // AND
         // - No normal validator is defined OR one normal validator passed
         $finalResult = (!$hasMatch || $passedMatch) && (!$hasNormal || $passedNormal);
-        Log::Debug(message: "Final validation result for '$param': " . ($finalResult ? 'passed' : 'failed'));
+        Log::Debug("Final validation result for '%s': %s", $param, $finalResult ? 'passed' : 'failed');
 
         return $finalResult;
     }
@@ -158,7 +158,7 @@ class ParamsValidator
                 return ParamsValidatorMethods::booleanValidator($param, $requestURI);
 
             default:
-                Log::Debug(message: "Unknown validator '$validator' for param '$param'. Failing by default.");
+                Log::Debug("Unknown validator '%s' for param '%s'. Failing by default.", $validator, $param);
                 return false;
         }
     }

@@ -598,8 +598,7 @@ class ScheduleLayout implements IScheduleLayout, ILayoutCreation
             }
 
             if ($start->Compare($testDate->SetTime($period->Start)) <= 0 && $end->Compare($testDate->SetTime($period->End, true)) >= 0) {
-                Log::Debug($period->Start);
-                Log::Debug($period->End);
+                Log::Debug('Period %s - %s', $period->Start, $period->End);
 
                 $isPeak = $this->HasPeakTimesDefined() && $this->peakTimes->IsWithinPeak($testDate->SetTime($period->Start));
                 if ($isPeak) {

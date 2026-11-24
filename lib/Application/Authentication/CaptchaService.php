@@ -57,7 +57,7 @@ class CaptchaService implements ICaptchaService
     {
         $isValid = $captchaValue == $_SESSION['phrase'];
 
-        Log::Debug('Checking captcha value. Value entered: %s. Correct value: %s.  IsValid: %s', $captchaValue, $_SESSION['phrase'], (int)$isValid);
+        Log::Debug('Checking captcha value. IsValid: %s', (int)$isValid);
 
         return $isValid;
     }

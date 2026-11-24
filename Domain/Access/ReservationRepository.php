@@ -6,14 +6,14 @@ class ReservationRepository implements IReservationRepository
 {
     public function LoadById($reservationId)
     {
-        Log::Debug("ReservationRepository::LoadById() - ReservationID: $reservationId");
+        Log::Debug('ReservationRepository::LoadById() - ReservationID: %s', $reservationId);
 
         return $this->Load(new GetReservationByIdCommand($reservationId));
     }
 
     public function LoadByReferenceNumber($referenceNumber)
     {
-        Log::Debug("ReservationRepository::LoadByReferenceNumber() - ReferenceNumber: $referenceNumber");
+        Log::Debug('ReservationRepository::LoadByReferenceNumber() - ReferenceNumber: %s', $referenceNumber);
 
         return $this->Load(new GetReservationByReferenceNumberCommand($referenceNumber));
     }
@@ -603,7 +603,7 @@ class ReservationEventMapper
     {
         $eventType = get_class($event);
         if (!isset($this->buildMethods[$eventType])) {
-            Log::Debug("No command event mapper found for event $eventType");
+            Log::Debug('No command event mapper found for event %s', $eventType);
             return null;
         }
 

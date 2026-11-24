@@ -415,7 +415,7 @@ class ManageResourcesPresenter extends ActionPresenter
         $fileName = "resource{$resourceId}{$time}.$fileType";
         $path = $this->GetResourceImageDirectory($fileName);
 
-        Log::Debug("Saving resource image $path");
+        Log::Debug('Saving resource image %s', $path);
 
         $image->Save($path);
 

@@ -19,7 +19,7 @@ class WebServiceSecurity
         $sessionToken = $server->GetHeader(WebServiceHeaders::SESSION_TOKEN);
         $userId = $server->GetHeader(WebServiceHeaders::USER_ID);
 
-        Log::Debug('Handling secure request. url=%s, userId=%s, sessionToken=%s', $_SERVER['REQUEST_URI'], $userId, $sessionToken);
+        Log::Debug('Handling secure request. url=%s, userId=%s', $_SERVER['REQUEST_URI'], $userId);
 
         if (empty($sessionToken) || empty($userId)) {
             Log::Debug('Empty token or userId');

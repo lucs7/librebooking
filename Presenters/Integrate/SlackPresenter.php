@@ -28,7 +28,7 @@ class SlackPresenter
         $token = $this->page->GetToken();
 
         if (!$this->ValidateToken($token)) {
-            Log::Debug('Invalid Slack token. Provided token: %s', $token);
+            Log::Debug('Invalid Slack token provided');
             $this->page->BindError();
             return;
         }
