@@ -23,7 +23,7 @@ class ReservationRepository implements IReservationRepository
         $reader = ServiceLocator::GetDatabase()->Query($loadSeriesCommand);
 
         if ($reader->NumRows() != 1) {
-            Log::Debug('Reservation not found');
+            Log::Info('Reservation not found');
             return null;
         }
 
@@ -106,7 +106,7 @@ class ReservationRepository implements IReservationRepository
 
             $creditsToDeduct = $reservationSeries->GetCreditsRequired() - $reservationSeries->GetOriginalCreditsConsumed();
 
-            Log::Debug(
+            Log::Info(
                 'CREDITS - Reservation update adjusting credits for user %s by %s. Required %s, consumed %s',
                 $reservationSeries->UserId(),
                 $creditsToDeduct,
@@ -196,7 +196,7 @@ class ReservationRepository implements IReservationRepository
 
         $creditsToDeduct = $reservationSeries->GetCreditsRequired() - $reservationSeries->GetCreditsConsumed();
 
-        Log::Debug(
+        Log::Info(
             'CREDITS - Reservation update adjusting credits for user %s by %s. Required %s, consumed %s',
             $reservationSeries->UserId(),
             $creditsToDeduct,
@@ -223,7 +223,7 @@ class ReservationRepository implements IReservationRepository
         //		$creditAdjustment = $existingReservationSeries->GetCreditsRequired() - $existingReservationSeries->GetOriginalCreditsConsumed();
         $creditAdjustment = 0 - $existingReservationSeries->GetUnusedCreditBalance();
         if ($creditAdjustment != 0) {
-            Log::Debug('CREDITS - Reservation delete adjusting credits for user %s by %s', $existingReservationSeries->UserId(), $creditAdjustment);
+            Log::Info('CREDITS - Reservation delete adjusting credits for user %s by %s', $existingReservationSeries->UserId(), $creditAdjustment);
 
             try {
                 $adjustCreditsCommand = new AdjustUserCreditsCommand($existingReservationSeries->UserId(), $creditAdjustment, Resources::GetInstance()->GetString('ReservationDeletedLog', $existingReservationSeries->CurrentInstance()->ReferenceNumber()));
@@ -603,7 +603,7 @@ class ReservationEventMapper
     {
         $eventType = get_class($event);
         if (!isset($this->buildMethods[$eventType])) {
-            Log::Debug('No command event mapper found for event %s', $eventType);
+            Log::Warning('No command event mapper found for event %s', $eventType);
             return null;
         }
 

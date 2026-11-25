@@ -380,7 +380,7 @@ class Configurator implements IConfigurationSettings
         $newSettings = $this->GetSettings($distPhp);
 
         if ($this->AreKeysTheSame(currentSettings: $currentSettings, newSettings: $newSettings)) {
-            Log::Debug('Config file is already up to date. Skipping config merge.');
+            Log::Info('Config file is already up to date. Skipping config merge.');
             return false;
         }
 
@@ -399,7 +399,7 @@ class Configurator implements IConfigurationSettings
     {
         foreach ($newSettings as $key => $val) {
             if (!array_key_exists($key, $currentSettings)) {
-                Log::Debug('Could not find key in config file: %s', $key);
+                Log::Warning('Could not find key in config file: %s', $key);
                 return false;
             }
 

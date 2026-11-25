@@ -89,7 +89,7 @@ class UploadedFile
         $messages = [];
         foreach ($files ?? [] as $file) {
             if ($file != null && $file->IsRejected()) {
-                Log::Error('Error attaching file %s. %s', $file->OriginalName(), $file->Error());
+                Log::Warning('Error attaching file %s. %s', $file->OriginalName(), $file->Error());
                 $messages[] = Resources::GetInstance()->GetString('AttachmentUploadFailed', [htmlspecialchars($file->OriginalName()), self::GetMaxSize()]);
             }
         }
@@ -170,7 +170,7 @@ class UploadedFile
     public static function CheckOversizedPost()
     {
         if (self::ExceedsPostMaxSize()) {
-            Log::Error('Request body of %s bytes exceeds post_max_size of %s', $_SERVER['CONTENT_LENGTH'], ini_get('post_max_size'));
+            Log::Warning('Request body of %s bytes exceeds post_max_size of %s', $_SERVER['CONTENT_LENGTH'], ini_get('post_max_size'));
         }
     }
 

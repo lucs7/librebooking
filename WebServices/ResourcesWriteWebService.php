@@ -38,14 +38,14 @@ class ResourcesWriteWebService
         $result = $this->controller->Create($request, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug('ResourcesWriteWebService.Create() - Resource created with id %s', $result->ResourceId());
+            Log::Info('ResourcesWriteWebService.Create() - Resource created with id %s', $result->ResourceId());
 
             $this->server->WriteResponse(
                 new ResourceCreatedResponse($this->server, $result->ResourceId()),
                 RestResponse::CREATED_CODE
             );
         } else {
-            Log::Debug('ResourcesWriteWebService.Create() - Resource create failed');
+            Log::Info('ResourcesWriteWebService.Create() - Resource create failed');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),
@@ -77,7 +77,7 @@ class ResourcesWriteWebService
         $result = $this->controller->Update($resourceId, $request, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug(
+            Log::Info(
                 'ResourcesWriteWebService.Update() - Resource Updated. ResourceId=%s',
                 $result->ResourceId()
             );
@@ -87,7 +87,7 @@ class ResourcesWriteWebService
                 RestResponse::OK_CODE
             );
         } else {
-            Log::Debug('ResourcesWriteWebService.Update() - Resource Update Failed.');
+            Log::Info('ResourcesWriteWebService.Update() - Resource Update Failed.');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),
@@ -110,14 +110,14 @@ class ResourcesWriteWebService
         $result = $this->controller->Delete($resourceId, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug(
+            Log::Info(
                 'ResourcesWriteWebService.Delete() - Resource Deleted. ResourceId=%s',
                 $result->ResourceId()
             );
 
             $this->server->WriteResponse(new DeletedResponse(), RestResponse::OK_CODE);
         } else {
-            Log::Debug('ResourcesWriteWebService.Delete() - Resource Delete Failed.');
+            Log::Info('ResourcesWriteWebService.Delete() - Resource Delete Failed.');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),

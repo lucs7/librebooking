@@ -107,7 +107,7 @@ class ReservationsWebService
         if (!empty($reservation->ReferenceNumber) && !$this->CanViewReservation($reservation)) {
             // Respond as if the reservation does not exist so reference
             // numbers cannot be probed.
-            Log::Debug('GetReservation denied. $referenceNumber=%s', $referenceNumber);
+            Log::Warning('GetReservation denied. $referenceNumber=%s', $referenceNumber);
             $this->server->WriteResponse(RestResponse::NotFound(), RestResponse::NOT_FOUND_CODE);
             return;
         }

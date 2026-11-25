@@ -71,7 +71,7 @@ class GroupImportCsvRow
     {
         $isValid = !empty($this->name);
         if (!$isValid) {
-            Log::Debug('Group import row is not valid. Name %s', $this->name);
+            Log::Warning('Group import row is not valid. Name %s', $this->name);
         }
         return $isValid;
     }
@@ -181,7 +181,7 @@ class GroupImportCsv
         $csvRows = preg_split('/\n|\r\n?/', $contents);
 
         if (count($csvRows) == 0) {
-            Log::Debug('No rows in group import file');
+            Log::Info('No rows in group import file');
             return $rows;
         }
 
@@ -190,7 +190,7 @@ class GroupImportCsv
         $headers = GroupImportCsvRow::GetHeaders(str_getcsv($csvRows[0]));
 
         if (!$headers) {
-            Log::Debug('No headers in group import file');
+            Log::Info('No headers in group import file');
             return $rows;
         }
 
@@ -202,7 +202,7 @@ class GroupImportCsv
             if ($row->IsValid()) {
                 $rows[] = $row;
             } else {
-                Log::Error('Skipped import of group row %s. Values %s', $i, print_r($values, true));
+                Log::Warning('Skipped import of group row %s. Values %s', $i, print_r($values, true));
                 $this->skippedRowNumbers[] = $i;
             }
         }

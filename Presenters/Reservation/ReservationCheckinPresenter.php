@@ -45,7 +45,7 @@ class ReservationCheckinPresenter
             $action = ReservationAction::Checkout;
         }
 
-        Log::Debug('User: %s, Checkin/out reservation with reference number %s, action %s', $this->userSession->UserId, $referenceNumber, $action);
+        Log::Info('User: %s, Checkin/out reservation with reference number %s, action %s', $this->userSession->UserId, $referenceNumber, $action);
 
         $reservationSeries = $this->persistenceService->LoadByReferenceNumber($referenceNumber);
 

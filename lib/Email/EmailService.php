@@ -85,7 +85,7 @@ class EmailService implements IEmailService
             );
         }
 
-        Log::Debug('Sending %s email to %s recipient(s)', get_class($emailMessage), count($to));
+        Log::Info('Sending %s email to %s recipient(s)', get_class($emailMessage), count($to));
 
         $success = false;
         try {

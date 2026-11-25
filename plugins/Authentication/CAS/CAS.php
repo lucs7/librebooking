@@ -80,7 +80,7 @@ class CAS extends Authentication implements IAuthentication
 
     public function Logout(UserSession $user)
     {
-        Log::Debug('Attempting CAS logout for user %s', $user->UserId);
+        Log::Info('Attempting CAS logout for user %s', $user->UserId);
         $this->authToDecorate->Logout($user);
 
         if ($this->options->CasHandlesLogouts()) {

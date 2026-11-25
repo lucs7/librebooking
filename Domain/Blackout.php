@@ -208,7 +208,7 @@ class BlackoutSeries
     public function Delete(Blackout $blackout)
     {
         if (count($this->blackouts) <= 1) {
-            Log::Debug('Only blackout in the series. Cannot delete. Id %s', $blackout->Id());
+            Log::Info('Only blackout in the series. Cannot delete. Id %s', $blackout->Id());
             return false;
         }
         $key = $this->ToKey($blackout->Date());
@@ -216,7 +216,7 @@ class BlackoutSeries
         unset($this->blackouts[$key]);
         $this->currentBlackoutInstanceId = null;
 
-        Log::Debug('Deleted blackout Id %s', $blackout->Id());
+        Log::Info('Deleted blackout Id %s', $blackout->Id());
         return true;
     }
 

@@ -307,7 +307,7 @@ abstract class Page implements IPage
         $session = $this->server->GetUserSession();
         if ($this->IsPost() && (empty($token) || $token != $session->CSRFToken)) {
             $problem = empty($token) ? 'missing' : 'mismatched';
-            Log::Error('Possible CSRF attack: %s CSRF token for user %s', $problem, $session->UserId);
+            Log::Warning('Possible CSRF attack: %s CSRF token for user %s', $problem, $session->UserId);
             http_response_code(500);
             die('Insecure request');
         }

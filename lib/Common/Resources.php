@@ -311,13 +311,13 @@ class Resources implements IResourceLocalization
             if (array_key_exists($code, $allLanguages)) {
                 $filtered[$code] = $allLanguages[$code];
             } else {
-                Log::Error('Unknown language code in enabled.languages config: %s', $code);
+                Log::Warning('Unknown language code in enabled.languages config: %s', $code);
             }
         }
 
         // If every code was invalid, fall back to all languages to avoid breaking the app
         if (empty($filtered)) {
-            Log::Error('All language codes in enabled.languages are invalid, falling back to all languages');
+            Log::Warning('All language codes in enabled.languages are invalid, falling back to all languages');
             $this->AvailableLanguages = $allLanguages;
             return;
         }
@@ -329,7 +329,7 @@ class Resources implements IResourceLocalization
         $defaultLanguage = strtolower(trim(Configuration::Instance()->GetKey(ConfigKeys::DEFAULT_LANGUAGE)));
         if (!array_key_exists($defaultLanguage, $filtered)) {
             $defaultFallback = ConfigKeys::DEFAULT_LANGUAGE['default'];
-            Log::Error(
+            Log::Warning(
                 'default.language "%s" is not in enabled.languages list, falling back to "%s"',
                 $defaultLanguage,
                 $defaultFallback

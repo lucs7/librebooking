@@ -83,7 +83,7 @@ class Ldap2Wrapper
         }
 
         if (PEAR::isError($result)) {
-            Log::Error('Could not authenticate user against ldap %s: %s', $username, $result->getMessage());
+            Log::Warning('Could not authenticate user against ldap %s: %s', $username, $result->getMessage());
         }
         return false;
     }
@@ -165,7 +165,7 @@ class Ldap2Wrapper
                     $this->user = new LdapUser($currentResult, $this->options->AttributeMapping(), $userGroups);
                     return !empty($this->user->GetEmail());
                 } else {
-                    Log::Error('Not in required group %s', $requiredGroup);
+                    Log::Warning('Not in required group %s', $requiredGroup);
                     return false;
                 }
             } else {
@@ -173,7 +173,7 @@ class Ldap2Wrapper
                 return !empty($this->user->GetEmail());
             }
         } else {
-            Log::Error('Could not find user %s', $username);
+            Log::Warning('Could not find user %s', $username);
             return false;
         }
     }

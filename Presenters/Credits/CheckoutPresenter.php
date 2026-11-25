@@ -56,7 +56,7 @@ class CheckoutPresenter extends ActionPresenter
             }
         }
         if (!isset($cost)) {
-            Log::Error('Could not find cost for credit count %s', $creditCount);
+            Log::Warning('Could not find cost for credit count %s', $creditCount);
             return;
         }
 

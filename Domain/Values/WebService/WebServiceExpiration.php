@@ -18,7 +18,7 @@ class WebServiceExpiration
     {
         $minutes = Configuration::Instance()->GetKey(ConfigKeys::INACTIVITY_TIMEOUT, new IntConverter());
         if ($minutes <= 0) {
-            Log::Error('Invalid inactivity.timeout value: %d. Falling back to default: %d', $minutes, ConfigKeys::INACTIVITY_TIMEOUT['default']);
+            Log::Warning('Invalid inactivity.timeout value: %d. Falling back to default: %d', $minutes, ConfigKeys::INACTIVITY_TIMEOUT['default']);
             $minutes = ConfigKeys::INACTIVITY_TIMEOUT['default'];
         }
 

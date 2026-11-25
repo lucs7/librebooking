@@ -39,11 +39,11 @@ class AttributesWriteWebService
         $result = $this->attributeController->Create($request, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug('AttributesWriteWebService.Create() - Attribute Created. AttributeId=%s', $result->AttributeId());
+            Log::Info('AttributesWriteWebService.Create() - Attribute Created. AttributeId=%s', $result->AttributeId());
 
             $this->server->WriteResponse(new CustomAttributeCreatedResponse($this->server, $result->AttributeId()), RestResponse::CREATED_CODE);
         } else {
-            Log::Debug('AttributesWriteWebService.Create() - Create Failed.');
+            Log::Info('AttributesWriteWebService.Create() - Create Failed.');
 
             $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
@@ -71,11 +71,11 @@ class AttributesWriteWebService
         $result = $this->attributeController->Update($attributeId, $request, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug('AttributesWriteWebService.Update() - Attribute Updated. AttributeId=%s', $result->AttributeId());
+            Log::Info('AttributesWriteWebService.Update() - Attribute Updated. AttributeId=%s', $result->AttributeId());
 
             $this->server->WriteResponse(new CustomAttributeUpdatedResponse($this->server, $result->AttributeId()), RestResponse::CREATED_CODE);
         } else {
-            Log::Debug('AttributesWriteWebService.Update() - Update Failed.');
+            Log::Info('AttributesWriteWebService.Update() - Update Failed.');
 
             $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
@@ -95,11 +95,11 @@ class AttributesWriteWebService
         $result = $this->attributeController->Delete($attributeId, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug('AttributesWriteWebService.Delete() - Attribute Deleted. AttributeId=%s', $result->AttributeId());
+            Log::Info('AttributesWriteWebService.Delete() - Attribute Deleted. AttributeId=%s', $result->AttributeId());
 
             $this->server->WriteResponse(new DeletedResponse(), RestResponse::OK_CODE);
         } else {
-            Log::Debug('AttributesWriteWebService.Delete() - Attribute Delete Failed.');
+            Log::Info('AttributesWriteWebService.Delete() - Attribute Delete Failed.');
 
             $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }

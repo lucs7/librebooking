@@ -76,7 +76,7 @@ class ManageAccessoriesPresenter extends ActionPresenter
 
         $accessory = $this->accessoryRepository->LoadById($id);
         if ($accessory === null) {
-            Log::Error('Cannot change accessory, accessory %s not found', $id);
+            Log::Warning('Cannot change accessory, accessory %s not found', $id);
             return;
         }
 
@@ -115,7 +115,7 @@ class ManageAccessoriesPresenter extends ActionPresenter
         $accessoryId = $this->page->GetAccessoryId();
         $accessory = $this->accessoryRepository->LoadById($accessoryId);
         if ($accessory === null) {
-            Log::Error('Cannot change accessory resources, accessory %s not found', $accessoryId);
+            Log::Warning('Cannot change accessory resources, accessory %s not found', $accessoryId);
             return;
         }
 

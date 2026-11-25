@@ -101,7 +101,7 @@ class ManageQuotasPresenter extends ActionPresenter
             $enforcedDays = [];
         }
 
-        Log::Debug(
+        Log::Info(
             'Adding new quota. Duration %s, Limit %s, Unit %s, Resource %s, Group %s, Schedule %s, All Day %s, Start Time %s, End Time %s, Every Day %s, Days %s, Scope %s',
             $duration,
             $decimal,

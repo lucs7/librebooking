@@ -57,7 +57,7 @@ class AuthenticationWebService
 
             if (!$session->IsAdmin && is_numeric($this->api_access_group_id)) {
                 if (!UserGroupHelper::isUserInGroup(groupId: $this->api_access_group_id, userId: $session->UserId)) {
-                    Log::Debug('WebService Authenticate, user %s was denied API access', $username);
+                    Log::Warning('WebService Authenticate, user %s was denied API access', $username);
                     $this->server->WriteResponse(AuthenticationResponse::NotAuthorized(), statusCode: RestResponse::FORBIDDEN_CODE);
                     return;
                 }
@@ -70,10 +70,10 @@ class AuthenticationWebService
             }
             $reader->Free();
 
-            Log::Debug('WebService session created for userId %s', $session->UserId);
+            Log::Info('WebService session created for userId %s', $session->UserId);
             $this->server->WriteResponse(AuthenticationResponse::Success($this->server, $session, $version));
         } else {
-            Log::Debug('WebService Authenticate, user %s was not authenticated', $username);
+            Log::Warning('WebService Authenticate, user %s was not authenticated', $username);
 
             $this->server->WriteResponse(AuthenticationResponse::Failed(), RestResponse::UNAUTHORIZED_CODE);
         }
@@ -91,7 +91,7 @@ class AuthenticationWebService
         $userId = $request->userId;
         $sessionToken = $request->sessionToken;
 
-        Log::Debug('WebService SignOut for userId %s', $userId);
+        Log::Info('WebService SignOut for userId %s', $userId);
 
         $this->authentication->Logout($userId, $sessionToken);
         $r = new SignedOutResponse();

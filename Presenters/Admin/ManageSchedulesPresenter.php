@@ -717,7 +717,7 @@ class ManageSchedulesPresenter extends ActionPresenter
         $max = $this->page->GetMaximumConcurrentReservations();
         $unlimited = $this->page->GetIsUnlimitedConcurrentReservations();
 
-        Log::Debug('Changing maximum number of concurrent reservations. Schedule %s, Max %s, Unlimited %s', $scheduleId, $max, $unlimited);
+        Log::Info('Changing maximum number of concurrent reservations. Schedule %s, Max %s, Unlimited %s', $scheduleId, $max, $unlimited);
 
         $this->manageSchedulesService->ChangeConcurrentReservationMaximum($scheduleId, $max, $unlimited);
     }
@@ -728,7 +728,7 @@ class ManageSchedulesPresenter extends ActionPresenter
         $max = $this->page->GetMaximumResourcesPerReservation();
         $unlimited = $this->page->GetIsUnlimitedMaximumResourcesPerReservation();
 
-        Log::Debug('Changing maximum number of resources per reservation. Schedule %s, Max %s, Unlimited %s', $scheduleId, $max, $unlimited);
+        Log::Info('Changing maximum number of resources per reservation. Schedule %s, Max %s, Unlimited %s', $scheduleId, $max, $unlimited);
 
         $this->manageSchedulesService->ChangeResourcesPerReservation($scheduleId, $max, $unlimited);
     }

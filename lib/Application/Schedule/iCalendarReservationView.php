@@ -60,7 +60,7 @@ class iCalendarReservationView
         $privateEmail = Configuration::Instance()->GetKey(ConfigKeys::EMAIL_DEFAULT_FROM_ADDRESS);
         static $missingPrivateOrganizerEmailLogged = false;
         if (!$canViewUser && $privateEmail === '' && !$missingPrivateOrganizerEmailLogged) {
-            Log::Error('ICS private organizer email is not configured. Set the email.default.from.address setting.');
+            Log::Warning('ICS private organizer email is not configured. Set the email.default.from.address setting.');
             $missingPrivateOrganizerEmailLogged = true;
         }
 

@@ -54,7 +54,7 @@ class UserImportCsvRow
     {
         $isValid = !empty($this->username) && !empty($this->email);
         if (!$isValid) {
-            Log::Debug('User import row is not valid: %s', empty($this->username) ? 'username missing' : 'email missing');
+            Log::Warning('User import row is not valid: %s', empty($this->username) ? 'username missing' : 'email missing');
         }
         return $isValid;
     }
@@ -167,7 +167,7 @@ class UserImportCsv
         $csvRows = preg_split('/\n|\r\n?/', $contents);
 
         if (count($csvRows) == 0) {
-            Log::Debug('No rows in user import file');
+            Log::Info('No rows in user import file');
             return $rows;
         }
 
@@ -176,7 +176,7 @@ class UserImportCsv
         $headers = UserImportCsvRow::GetHeaders(str_getcsv($csvRows[0]), $this->attributes);
 
         if (!$headers) {
-            Log::Debug('No headers in user import file');
+            Log::Info('No headers in user import file');
             return $rows;
         }
 
@@ -188,7 +188,7 @@ class UserImportCsv
             if ($row->IsValid()) {
                 $rows[] = $row;
             } else {
-                Log::Error('Skipped import of user row %s. Values %s', $i, print_r($values, true));
+                Log::Warning('Skipped import of user row %s. Values %s', $i, print_r($values, true));
                 $this->skippedRowNumbers[] = $i;
             }
         }

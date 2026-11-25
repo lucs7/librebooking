@@ -70,7 +70,7 @@ class WordPress extends Authentication implements IAuthentication
         $user = wp_authenticate($username, $password);
 
         if (is_wp_error($user)) {
-            Log::Error('WordPress authentication error: %s', $user->get_error_message());
+            Log::Warning('WordPress authentication error: %s', $user->get_error_message());
             return false;
         }
 
@@ -80,7 +80,7 @@ class WordPress extends Authentication implements IAuthentication
             $this->password = $password;
             return true;
         } else {
-            Log::Debug('WordPress authentication failed. User=%s', $username);
+            Log::Warning('WordPress authentication failed. User=%s', $username);
             if ($this->options->RetryAgainstDatabase()) {
                 Log::Debug('WordPress authentication retrying against database');
                 return $this->authToDecorate->Validate($username, $password);

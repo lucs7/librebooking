@@ -45,7 +45,7 @@ try {
 
         $alreadySeen[$reservation->ReferenceNumber] = 1;
 
-        Log::Debug(
+        Log::Info(
             'Sending missed checkin email. ReferenceNumber=%s, User=%s, Resource=%s',
             $reservation->ReferenceNumber,
             $reservation->UserId,

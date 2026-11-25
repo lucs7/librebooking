@@ -137,7 +137,7 @@ class ManageUsersService implements IManageUsersService
         $currentUser = ServiceLocator::GetServer()->GetUserSession();
         if (!$currentUser->IsAdmin) {
             // only application administrators may create accounts
-            Log::Error('AddUser denied. UserId=%s is not an application administrator', $currentUser->UserId);
+            Log::Warning('AddUser denied. UserId=%s is not an application administrator', $currentUser->UserId);
             return null;
         }
 
@@ -162,7 +162,7 @@ class ManageUsersService implements IManageUsersService
         $currentUser = ServiceLocator::GetServer()->GetUserSession();
         if (!$currentUser->IsAdmin) {
             // only application administrators may change user attributes
-            Log::Error('ChangeAttribute denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            Log::Warning('ChangeAttribute denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
             return;
         }
 
@@ -176,7 +176,7 @@ class ManageUsersService implements IManageUsersService
         $currentUser = ServiceLocator::GetServer()->GetUserSession();
         if (!$currentUser->IsAdmin) {
             // only application administrators may change user attributes
-            Log::Error('ChangeAttributes denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            Log::Warning('ChangeAttributes denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
             return;
         }
 
@@ -192,7 +192,7 @@ class ManageUsersService implements IManageUsersService
         $currentUser = ServiceLocator::GetServer()->GetUserSession();
         if (!$currentUser->IsAdmin) {
             // only application administrators may delete accounts
-            Log::Error('DeleteUser denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            Log::Warning('DeleteUser denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
             return;
         }
 
@@ -223,7 +223,7 @@ class ManageUsersService implements IManageUsersService
         $currentUser = ServiceLocator::GetServer()->GetUserSession();
         if (!$currentUser->IsAdmin) {
             // only application administrators may update accounts
-            Log::Error('UpdateUser denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            Log::Warning('UpdateUser denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
             return null;
         }
 
@@ -282,7 +282,7 @@ class ManageUsersService implements IManageUsersService
         $currentUser = ServiceLocator::GetServer()->GetUserSession();
         if (!$currentUser->IsAdmin) {
             // only application administrators may change passwords
-            Log::Error('UpdatePassword denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
+            Log::Warning('UpdatePassword denied. UserId=%s is not an application administrator. Target UserId=%s', $currentUser->UserId, $userId);
             return;
         }
 

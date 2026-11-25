@@ -237,7 +237,7 @@ class ManageBlackoutsPresenter extends ActionPresenter
     public function DeleteMultiple()
     {
         $ids = $this->page->GetDeletedBlackoutIds();
-        Log::Debug('Blackout multiple delete. Ids=%s', implode(',', $ids));
+        Log::Info('Blackout multiple delete. Ids=%s', implode(',', $ids));
         foreach ($ids as $id) {
             $this->manageBlackoutsService->Delete($id, SeriesUpdateScope::ThisInstance);
         }

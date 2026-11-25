@@ -322,7 +322,7 @@ class PayPalGateway implements IPaymentGateway
         $body = '';
 
         try {
-            Log::Debug('PayPal Checkout/Orders CartId/invoice number: %s, Total: %s', $cart->Id(), $cart->Total());
+            Log::Info('PayPal Checkout/Orders CartId/invoice number: %s, Total: %s', $cart->Id(), $cart->Total());
             $checkoutUrl = "$baseUrl/v2/checkout/orders";
             $headers = ['Accept' => 'application/json', 'Accept-Language' => 'en_US', 'Content-Type' => 'application/json', 'Authorization' => "Bearer $token"];
             $purchaseRequest = ['description' => $resources->GetString('CreditPurchase'), 'amount' => ['value' => "{$cart->Total()}", 'currency_code' => $cart->Currency]];
@@ -612,7 +612,7 @@ class StripeGateway implements IPaymentGateway
             // Declined
             $body = $ex->getJsonBody();
             $err = $body['error'];
-            Log::Debug(
+            Log::Info(
                 'Stripe charge failed. http status %s, type %s, code %s, param %s, message %s',
                 $ex->getHttpStatus(),
                 $err['type'],
@@ -677,7 +677,7 @@ class StripeGateway implements IPaymentGateway
             // Declined
             $body = $ex->getJsonBody();
             $err = $body['error'];
-            Log::Debug(
+            Log::Warning(
                 'Stripe refund  failed. http status %s, type %s, code %s, param %s, message %s',
                 $ex->getHttpStatus(),
                 $err['type'],

@@ -27,7 +27,7 @@ class ManageThemePresenter extends ActionPresenter
         $favicon = $this->page->GetFaviconFile();
 
         if ($logoFile != null) {
-            Log::Debug('Replacing logo with %s', $logoFile->OriginalName());
+            Log::Info('Replacing logo with %s', $logoFile->OriginalName());
 
             $this->RemoveLogo();
 
@@ -44,7 +44,7 @@ class ManageThemePresenter extends ActionPresenter
             }
         }
         if ($cssFile != null) {
-            Log::Debug('Replacing css file with %s', $cssFile->OriginalName());
+            Log::Info('Replacing css file with %s', $cssFile->OriginalName());
             $target = ROOT_DIR . 'Web/css/custom-style.css';
             $copied = copy($cssFile->TemporaryName(), $target);
             if (!$copied) {
@@ -56,7 +56,7 @@ class ManageThemePresenter extends ActionPresenter
             }
         }
         if ($favicon != null) {
-            Log::Debug('Replacing favicon with %s', $favicon->OriginalName());
+            Log::Info('Replacing favicon with %s', $favicon->OriginalName());
 
             $this->RemoveFavicon();
 

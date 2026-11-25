@@ -123,7 +123,7 @@ class ReCaptchaService implements ICaptchaService
                 $method = new \ReCaptcha\RequestMethod\CurlPost();
                 break;
             default:
-                Log::Error('Invalid ReCaptcha request method: %s. Fallback to', $configuredMethod);
+                Log::Warning('Invalid ReCaptcha request method: %s. Fallback to', $configuredMethod);
         }
 
         $recap = new \ReCaptcha\ReCaptcha($privatekey, $method);

@@ -18,7 +18,7 @@ class VersionDisplayResolver
         $customVersion = $this->GetValidatedValue($this->customVersionFile, 'custom version');
         if ($customVersion !== null) {
             if (is_file($this->versionSuffixFile)) {
-                Log::Error(
+                Log::Warning(
                     'Ignoring version suffix in %s because custom version in %s takes precedence',
                     $this->versionSuffixFile,
                     $this->customVersionFile
@@ -50,18 +50,18 @@ class VersionDisplayResolver
 
         $contents = rtrim($contents, "\r\n");
         if (preg_match('/\R/', $contents) === 1) {
-            Log::Error('Ignoring %s in %s because it contains more than one line', $label, $filePath);
+            Log::Warning('Ignoring %s in %s because it contains more than one line', $label, $filePath);
             return null;
         }
 
         $value = trim($contents);
         if (empty($value)) {
-            Log::Error('Ignoring %s in %s because it is empty', $label, $filePath);
+            Log::Warning('Ignoring %s in %s because it is empty', $label, $filePath);
             return null;
         }
 
         if (strlen($value) > self::MAX_VERSION_METADATA_LENGTH) {
-            Log::Error(
+            Log::Warning(
                 'Ignoring %s in %s because it exceeds %d characters',
                 $label,
                 $filePath,
@@ -71,7 +71,7 @@ class VersionDisplayResolver
         }
 
         if (preg_match('/^[A-Za-z0-9._-]+$/', $value) !== 1) {
-            Log::Error(
+            Log::Warning(
                 'Ignoring %s in %s because it contains invalid characters. Allowed characters are letters, numbers, ".", "_", and "-"',
                 $label,
                 $filePath

@@ -120,7 +120,7 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
         $templateName = $this->page->GetUpdatedTemplateName();
 
         if (!$this->IsValidTemplateName($templateName)) {
-            Log::Error('Rejected email template update with invalid template name. Template=%s', json_encode($templateName));
+            Log::Warning('Rejected email template update with invalid template name. Template=%s', json_encode($templateName));
             $this->page->SetSaveResult(false);
             return;
         }
@@ -129,7 +129,7 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
         // language would overwrite the English template.
         $language = $this->page->GetUpdatedLanguage();
         if ($language === null || !AvailableLanguages::Contains(language: $language)) {
-            Log::Error(
+            Log::Warning(
                 'Rejected email template update with missing or unknown language. Template=%s, Language=%s',
                 $templateName,
                 json_encode($language),
@@ -146,7 +146,7 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
         // is a valid, intentionally empty template.
         $contents = $this->page->GetTemplateContents();
         if ($contents === null) {
-            Log::Error('Rejected email template update with missing contents. Template=%s', $templateName);
+            Log::Warning('Rejected email template update with missing contents. Template=%s', $templateName);
             $this->page->SetSaveResult(false);
             return;
         }
@@ -162,7 +162,7 @@ class ManageEmailTemplatesPresenter extends ActionPresenter
 
             $this->filesystem->FlushSmartyCache();
 
-            Log::Debug('Update email template results. Template=%s, Result=%s', $templateName, $saveResult);
+            Log::Info('Update email template results. Template=%s, Result=%s', $templateName, $saveResult);
             $this->page->SetSaveResult($saveResult);
         } catch (Exception $exception) {
             Log::Error('Error updating email template. Template=%s. %s', $templateName, $exception);

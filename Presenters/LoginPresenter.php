@@ -147,7 +147,7 @@ class LoginPresenter
         try {
             $isValid = $this->authentication->Validate($id, $this->_page->GetPassword());
         } catch (Throwable $ex) {
-            Log::Error('Authentication failure for user %s: %s', $id, $ex->getMessage());
+            Log::Warning('Authentication failure for user %s: %s', $id, $ex->getMessage());
             $this->_page->SetLoginErrorMessage(message: $this->GetLdapErrorMessage(ex: $ex));
             $this->_page->SetShowLoginError();
             return;

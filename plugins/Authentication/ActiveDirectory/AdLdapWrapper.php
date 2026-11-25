@@ -52,7 +52,7 @@ class AdLdapWrapper implements IActiveDirectory
     {
         $authenticated = $this->ldap->user()->authenticate($username, $password);
         if (!$authenticated) {
-            Log::Debug(
+            Log::Warning(
                 'ActiveDirectory - Authenticate for user %s failed with reason %s',
                 $username,
                 $this->ldap->getLastError()
@@ -75,7 +75,7 @@ class AdLdapWrapper implements IActiveDirectory
                     }
                 }
 
-                Log::Debug('ActiveDirectory - Authenticate for user %s failed because user was not in the required groups', $username);
+                Log::Warning('ActiveDirectory - Authenticate for user %s failed because user was not in the required groups', $username);
             }
         }
 
@@ -96,7 +96,7 @@ class AdLdapWrapper implements IActiveDirectory
             }
             return new ActiveDirectoryUser($entries, $this->options->AttributeMapping(), $groups);
         } else {
-            Log::Debug(
+            Log::Error(
                 'ActiveDirectory - Could not load user details for user %s. Reason %s',
                 $username,
                 $this->ldap->getLastError()

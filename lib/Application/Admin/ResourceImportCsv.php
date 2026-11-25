@@ -82,7 +82,7 @@ class ResourceImportCsvRow
     {
         $isValid = !empty($this->name);
         if (!$isValid) {
-            Log::Debug('Resource import row is not valid. Missing name');
+            Log::Warning('Resource import row is not valid. Missing name');
         }
         return $isValid;
     }
@@ -198,7 +198,7 @@ class ResourceImportCsv
         $csvRows = preg_split('/\n|\r\n?/', $contents);
 
         if (count($csvRows) == 0) {
-            Log::Debug('No rows in resource import file');
+            Log::Info('No rows in resource import file');
             return $rows;
         }
 
@@ -207,7 +207,7 @@ class ResourceImportCsv
         $headers = ResourceImportCsvRow::GetHeaders(str_getcsv($csvRows[0]), $this->attributes);
 
         if (!$headers) {
-            Log::Debug('No headers in resource import file.');
+            Log::Info('No headers in resource import file.');
             Log::Debug('Header row: %s', var_export(str_getcsv($csvRows[0]), true));
             return $rows;
         }
@@ -220,7 +220,7 @@ class ResourceImportCsv
             if ($row->IsValid()) {
                 $rows[] = $row;
             } else {
-                Log::Error('Skipped import of resource row %s. Values %s', $i, print_r($values, true));
+                Log::Warning('Skipped import of resource row %s. Values %s', $i, print_r($values, true));
                 $this->skippedRowNumbers[] = $i;
             }
         }

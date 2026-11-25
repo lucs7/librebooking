@@ -273,7 +273,7 @@ class ScheduleReservationList implements IScheduleReservationList
             return $this->_layoutItems[0];
         }
 
-        Log::Error('Could not find a fitting starting slot for reservation. Item %s', var_export($item, true));
+        Log::Warning('Could not find a fitting starting slot for reservation. Item %s', var_export($item, true));
         return null;
     }
 

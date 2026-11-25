@@ -37,7 +37,7 @@ class UsersWriteWebService
         $result = $this->controller->Create($request, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug(
+            Log::Info(
                 'UsersWriteWebService.Create() - User Created. Created UserId=%s',
                 $result->UserId()
             );
@@ -47,7 +47,7 @@ class UsersWriteWebService
                 RestResponse::CREATED_CODE
             );
         } else {
-            Log::Debug('UsersWriteWebService.Create() - User Create Failed.');
+            Log::Info('UsersWriteWebService.Create() - User Create Failed.');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),
@@ -74,7 +74,7 @@ class UsersWriteWebService
         $result = $this->controller->Update($userId, $request, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug(
+            Log::Info(
                 'UsersWriteWebService.Update() - User Updated. UserId=%s',
                 $result->UserId()
             );
@@ -84,7 +84,7 @@ class UsersWriteWebService
                 RestResponse::OK_CODE
             );
         } else {
-            Log::Debug('UsersWriteWebService.Create() - User Update Failed.');
+            Log::Info('UsersWriteWebService.Create() - User Update Failed.');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),
@@ -107,14 +107,14 @@ class UsersWriteWebService
         $result = $this->controller->Delete($userId, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug(
+            Log::Info(
                 'UsersWriteWebService.Delete() - User Deleted. UserId=%s',
                 $result->UserId()
             );
 
             $this->server->WriteResponse(new DeletedResponse(), RestResponse::OK_CODE);
         } else {
-            Log::Debug('UsersWriteWebService.Delete() - User Delete Failed.');
+            Log::Info('UsersWriteWebService.Delete() - User Delete Failed.');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),
@@ -141,14 +141,14 @@ class UsersWriteWebService
         $result = $this->controller->UpdatePassword($userId, $request->password, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug(
+            Log::Info(
                 'UsersWriteWebService.UpdatePassword() - User password updated. UserId=%s',
                 $result->UserId()
             );
 
             $this->server->WriteResponse(new UserUpdatedResponse($this->server, $result->UserId()), RestResponse::OK_CODE);
         } else {
-            Log::Debug('UsersWriteWebService.UpdatePassword() - User Password Update Failed.');
+            Log::Info('UsersWriteWebService.UpdatePassword() - User Password Update Failed.');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),

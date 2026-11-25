@@ -101,7 +101,7 @@ class ICalImportPresenter extends ActionPresenter
                 $location = (string) $event->LOCATION;
                 if (empty($location)) {
                     $numberSkipped++;
-                    Log::Debug('Skipping ics import - missing resource');
+                    Log::Info('Skipping ics import - missing resource');
                     continue;
                 }
 
@@ -151,7 +151,7 @@ class ICalImportPresenter extends ActionPresenter
             }
         }
 
-        Log::Debug('Done running ics import. Imported %s Skipped %s', $numberImported, $numberSkipped);
+        Log::Info('Done running ics import. Imported %s Skipped %s', $numberImported, $numberSkipped);
         $this->page->SetNumberImported($numberImported, $numberSkipped);
     }
 

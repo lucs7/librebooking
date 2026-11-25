@@ -269,7 +269,7 @@ class ManageReservationsPresenter extends ActionPresenter
     public function UpdateResourceStatus()
     {
         if (!$this->page->CanUpdateResourceStatuses()) {
-            Log::Debug('User does not have rights to update resource statuses');
+            Log::Warning('User does not have rights to update resource statuses');
 
             return;
         }
@@ -301,7 +301,7 @@ class ManageReservationsPresenter extends ActionPresenter
             // which includes '0'. That would match every reservation and
             // update all of their resources, so use the same test here.
             if (!is_string($referenceNumber) || empty($referenceNumber)) {
-                Log::Error('Rejected resource status update with missing or malformed reference number');
+                Log::Warning('Rejected resource status update with missing or malformed reference number');
 
                 return;
             }
@@ -506,7 +506,7 @@ class ManageReservationsPresenter extends ActionPresenter
     public function DeleteMultiple()
     {
         $ids = $this->page->GetDeletedReservationIds();
-        Log::Debug('Reservation multiple delete. Ids=%s', implode(',', $ids));
+        Log::Info('Reservation multiple delete. Ids=%s', implode(',', $ids));
         foreach ($ids as $id) {
             $this->manageReservationsService->UnsafeDelete($id, ServiceLocator::GetServer()->GetUserSession());
         }

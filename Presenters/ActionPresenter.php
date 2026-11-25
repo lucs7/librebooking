@@ -60,7 +60,7 @@ abstract class ActionPresenter
                 Log::Error('ProcessAction Error. Action %s, Error %s', $action, $ex);
             }
         } else {
-            Log::Error('Unknown action %s', $action);
+            Log::Warning('Unknown action %s', $action);
         }
     }
 }

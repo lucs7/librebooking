@@ -94,7 +94,7 @@ class ManagePaymentsPresenter extends ActionPresenter
         // to INF, which cannot be stored.
         $submittedCost = $this->page->GetCreditCost();
         if (!is_numeric($submittedCost) || !is_finite(floatval($submittedCost))) {
-            Log::Error('Rejected credit cost update with missing or malformed cost. Count=%s', $count);
+            Log::Warning('Rejected credit cost update with missing or malformed cost. Count=%s', $count);
             $this->page->BindCreditCostRejected();
 
             return;
@@ -109,7 +109,7 @@ class ManagePaymentsPresenter extends ActionPresenter
         // 99999.995 up out of range.
         $isAboveMaximum = round(num: $cost, precision: self::CREDIT_COST_DECIMAL_PLACES) > self::MAX_CREDIT_COST;
         if ($cost < self::MIN_CREDIT_COST || $isAboveMaximum) {
-            Log::Error('Rejected credit cost update with cost outside the allowed range. Count=%s, Cost=%s', $count, $cost);
+            Log::Warning('Rejected credit cost update with cost outside the allowed range. Count=%s, Cost=%s', $count, $cost);
             $this->page->BindCreditCostRejected();
 
             return;
@@ -121,7 +121,7 @@ class ManagePaymentsPresenter extends ActionPresenter
         // out a short code the application does not know.
         $currency = $this->page->GetCreditCurrency();
         if (!$this->IsKnownCurrency(currency: $currency)) {
-            Log::Error('Rejected credit cost update with missing or unknown currency. Count=%s', $count);
+            Log::Warning('Rejected credit cost update with missing or unknown currency. Count=%s', $count);
             $this->page->BindCreditCostRejected();
 
             return;
@@ -142,7 +142,7 @@ class ManagePaymentsPresenter extends ActionPresenter
             ['options' => ['min_range' => self::BASE_CREDIT_COUNT + 1]],
         );
         if ($count === false) {
-            Log::Error('Rejected credit cost delete with missing, malformed or base count');
+            Log::Warning('Rejected credit cost delete with missing, malformed or base count');
             $this->page->BindCreditCostRejected();
 
             return;
@@ -163,7 +163,7 @@ class ManagePaymentsPresenter extends ActionPresenter
         $canStorePayPal = $this->HasStorableSettings(gateway: $paypalGateway);
         $canStoreStripe = $this->HasStorableSettings(gateway: $stripeGateway);
         if (!$canStorePayPal || !$canStoreStripe) {
-            Log::Error(
+            Log::Warning(
                 'Rejected payment gateway update with missing or malformed settings. PayPalValid=%s, StripeValid=%s',
                 json_encode($canStorePayPal),
                 json_encode($canStoreStripe),
@@ -269,7 +269,7 @@ class ManagePaymentsPresenter extends ActionPresenter
         $transactionLogView = $this->paymentRepository->GetTransactionLogView($id);
 
         if ($transactionLogView === null) {
-            Log::Error('Cannot issue refund, transaction log %s not found', $id);
+            Log::Warning('Cannot issue refund, transaction log %s not found', $id);
             $this->page->BindRefundIssued(false);
             return;
         }

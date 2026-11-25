@@ -56,7 +56,7 @@ class QuotaRule implements IReservationValidationRule
 
         foreach ($quotas as $quota) {
             if ($quota->ExceedsQuota($reservationSeries, $user, $schedule, $this->reservationViewRepository)) {
-                Log::Debug('Quota exceeded. %s', $quota->ToString());
+                Log::Info('Quota exceeded. %s', $quota->ToString());
                 $item = isset($quotaViews[$quota->Id()]) ? $quotaViews[$quota->Id()] : null;
                 return new ReservationRuleResult(false, $this->GetDescription($item));
             }

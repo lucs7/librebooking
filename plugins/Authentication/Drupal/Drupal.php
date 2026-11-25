@@ -78,11 +78,11 @@ class Drupal extends Authentication implements IAuthentication
         $account = $this->GetDrupalAccount($username);
 
         if (!$account) {
-            Log::Debug('DRUPAL: Could not find Drupal account for user=%s', $username);
+            Log::Warning('DRUPAL: Could not find Drupal account for user=%s', $username);
             return false;
         }
         if (!$this->user_check_password($password, $account)) {
-            Log::Debug('DRUPAL: Drupal account found but password was incorrect for user=%s', $username);
+            Log::Warning('DRUPAL: Drupal account found but password was incorrect for user=%s', $username);
             return false;
         }
 

@@ -68,7 +68,7 @@ class MoodleAdv extends Authentication implements IAuthentication
         if ($account && $this->user_check_password($password, $account)) {
             return true;
         };
-        Log::Debug('MOODLEADV: User not found or wrong password');
+        Log::Warning('MOODLEADV: User not found or wrong password');
         return false;
     }
 
@@ -144,7 +144,7 @@ class MoodleAdv extends Authentication implements IAuthentication
                     }
                     $query .= ')';
                 } else {
-                    Log::Error(message: 'MOODLEADV: Authentication method is roles but no roles are configured');
+                    Log::Warning(message: 'MOODLEADV: Authentication method is roles but no roles are configured');
                     return false;
                 }
                 $command = new AdHocCommand($query);
@@ -170,7 +170,7 @@ class MoodleAdv extends Authentication implements IAuthentication
                 $command->AddParameter(new Parameter('@user', $username));
                 break;
             default:
-                Log::Error(message: 'MOODLEADV: Unknown authentication method configured');
+                Log::Warning(message: 'MOODLEADV: Unknown authentication method configured');
                 return false;
         }
 

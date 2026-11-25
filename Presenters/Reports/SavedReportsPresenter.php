@@ -70,7 +70,7 @@ class SavedReportsPresenter extends ActionPresenter
             $this->page->BindReport($report, new ReportDefinition($report, $this->user->Timezone), $user->GetPreference(UserPreferences::REPORT_COLUMNS));
             call_user_func($callback);
         } else {
-            Log::Debug('Report not found for userId: %s, reportId %s', $userId, $reportId);
+            Log::Info('Report not found for userId: %s, reportId %s', $userId, $reportId);
             $this->page->DisplayError();
         }
     }
@@ -109,7 +109,7 @@ class SavedReportsPresenter extends ActionPresenter
         $reportId = $this->page->GetReportId();
         $userId = $this->user->UserId;
 
-        Log::Debug('Deleting saved report. reportId: %s, userId: %s', $reportId, $userId);
+        Log::Info('Deleting saved report. reportId: %s, userId: %s', $reportId, $userId);
         $this->service->DeleteSavedReport($reportId, $userId);
     }
 

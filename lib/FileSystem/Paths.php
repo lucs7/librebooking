@@ -25,12 +25,12 @@ class Paths
         }
 
         if (!is_dir($uploadDir)) {
-            Log::Debug('Could not find directory %s. Attempting to create it', $uploadDir);
+            Log::Info('Could not find directory %s. Attempting to create it', $uploadDir);
             $created = mkdir($uploadDir);
             if ($created) {
-                Log::Debug('Created %s', $uploadDir);
+                Log::Info('Created %s', $uploadDir);
             } else {
-                Log::Debug('Could not create %s', $uploadDir);
+                Log::Error('Could not create %s', $uploadDir);
             }
         }
         return $uploadDir;

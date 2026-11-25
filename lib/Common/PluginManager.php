@@ -222,7 +222,7 @@ class PluginManager
             $plugin = Configuration::Instance()->GetKey($configDef);
 
             if (!empty($plugin) && !preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $plugin)) {
-                Log::Error('Plugin name is not a valid class name. Type=%s, Plugin=%s', $configKey, $plugin);
+                Log::Warning('Plugin name is not a valid class name. Type=%s, Plugin=%s', $configKey, $plugin);
                 $this->Cache($configKey, null);
                 return $this->GetCached($configKey);
             }

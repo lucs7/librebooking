@@ -34,7 +34,7 @@ class AutoCompletePage extends Page
             return $this->$method($term);
         }
 
-        Log::Debug('AutoComplete for type: %s not defined', $type);
+        Log::Warning('AutoComplete for type: %s not defined', $type);
 
         return [];
     }

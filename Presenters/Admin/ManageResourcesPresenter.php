@@ -382,7 +382,7 @@ class ManageResourcesPresenter extends ActionPresenter
         }
 
         if ($uploadedImage->IsError()) {
-            Log::Error('Error with uploaded image for resource id %s. %s', $resourceId, $uploadedImage->Error());
+            Log::Warning('Error with uploaded image for resource id %s. %s', $resourceId, $uploadedImage->Error());
             die('Image error: ' . $uploadedImage->Error());
         }
 
@@ -391,7 +391,7 @@ class ManageResourcesPresenter extends ActionPresenter
         $supportedTypes = ['jpeg', 'gif', 'png', 'jpg'];
 
         if (!in_array($fileType, $supportedTypes)) {
-            Log::Error('Invalid image type for resource id %s, filetype %s', $resourceId, $fileType);
+            Log::Warning('Invalid image type for resource id %s, filetype %s', $resourceId, $fileType);
             die("Invalid image type: $fileType");
         }
 
@@ -404,7 +404,7 @@ class ManageResourcesPresenter extends ActionPresenter
 
         if ($needed > $limit) {
             echo 'Image too big. Resize to a smaller size or reduce the resolution and try again.';
-            Log::Error('Uploaded image for %s is too big. Needed %s limit %s', $resourceId, $needed, $limit);
+            Log::Warning('Uploaded image for %s is too big. Needed %s limit %s', $resourceId, $needed, $limit);
             die();
         }
 
@@ -483,7 +483,7 @@ class ManageResourcesPresenter extends ActionPresenter
             $days = max(1, min($days, 365));
             $message = $this->page->GetStatusChangeMessage();
 
-            Log::Debug('Sending resource status changed email to users. Days: %s', $days);
+            Log::Info('Sending resource status changed email to users. Days: %s', $days);
 
             $reservations = $this->reservationViewRepository->GetReservations(Date::Now(), Date::Now()->AddDays($days), null, null, null, $resourceId);
 

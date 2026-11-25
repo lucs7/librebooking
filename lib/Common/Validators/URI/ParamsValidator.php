@@ -20,13 +20,13 @@ class ParamsValidator
 
         // If there are no query parameters
         if (empty($queryParams)) {
-            Log::Debug(message: 'No parameters found in URI.');
+            Log::Warning(message: 'No parameters found in URI.');
 
             if ($optional) {
-                Log::Debug(message: 'Validation optional. Skipping.');
+                Log::Warning(message: 'Validation optional. Skipping.');
                 return true;
             } else {
-                Log::Debug(message: 'Parameters required but missing.');
+                Log::Warning(message: 'Parameters required but missing.');
                 return false;
             }
         }
@@ -36,12 +36,12 @@ class ParamsValidator
             $validators = (array) $validators;
 
             if (!array_key_exists($param, $queryParams)) {
-                Log::Debug("Skipping param '%s': not present in request.", $param);
+                Log::Warning("Skipping param '%s': not present in request.", $param);
                 continue;
             }
 
             if (!self::validateParam($param, $validators, $requestURI)) {
-                Log::Debug("Validation failed for '%s'.", $param);
+                Log::Warning("Validation failed for '%s'.", $param);
                 return false;
             }
 
@@ -57,7 +57,7 @@ class ParamsValidator
                 scriptName: $_SERVER['SCRIPT_NAME'] ?? '',
                 page: $redirectURL,
             );
-            Log::Debug('Validation failed. Redirecting to: %s', $location);
+            Log::Warning('Validation failed. Redirecting to: %s', $location);
             header('Location: ' . $location);
             exit;
         }
@@ -158,7 +158,7 @@ class ParamsValidator
                 return ParamsValidatorMethods::booleanValidator($param, $requestURI);
 
             default:
-                Log::Debug("Unknown validator '%s' for param '%s'. Failing by default.", $validator, $param);
+                Log::Warning("Unknown validator '%s' for param '%s'. Failing by default.", $validator, $param);
                 return false;
         }
     }

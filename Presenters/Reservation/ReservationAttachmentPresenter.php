@@ -54,28 +54,28 @@ class ReservationAttachmentPresenter
 
         $attachment = $this->reservationRepository->LoadReservationAttachment($fileId);
         if ($attachment == null) {
-            Log::Error('Error loading resource attachment, attachment not found');
+            Log::Warning('Error loading resource attachment, attachment not found');
             return false;
         }
 
         $reservation = $this->reservationRepository->LoadByReferenceNumber($referenceNumber);
         if ($reservation == null) {
-            Log::Error('Error loading resource attachment, reservation not found');
+            Log::Warning('Error loading resource attachment, reservation not found');
             return false;
         }
 
         if ($reservation->SeriesId() != $attachment->SeriesId()) {
-            Log::Error('Error loading resource attachment, attachment not associated with reservation');
+            Log::Warning('Error loading resource attachment, attachment not associated with reservation');
             return false;
         }
 
         if (!$this->permissionService->CanAccessResource(new ReservationResource($reservation->ResourceId()), $currentUser)) {
-            Log::Error('Error loading resource attachment, insufficient permissions');
+            Log::Warning('Error loading resource attachment, insufficient permissions');
             return false;
         }
 
         if (!$this->reservationAuthorization->CanViewSeriesAttachments($reservation, $currentUser)) {
-            Log::Error('Error loading resource attachment, user is not owner, participant, invitee or administrator of the reservation');
+            Log::Warning('Error loading resource attachment, user is not owner, participant, invitee or administrator of the reservation');
             return false;
         }
 

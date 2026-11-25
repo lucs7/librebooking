@@ -107,7 +107,7 @@ class WebAuthentication implements IWebAuthentication
     public function Logout(UserSession $userSession)
     {
         $this->authentication->Logout($userSession);
-        Log::Debug('Logout userId: %s', $userSession->UserId);
+        Log::Info('Logout userId: %s', $userSession->UserId);
 
         $this->DeletePersistLoginCookie();
         ServiceLocator::GetServer()->EndSession(SessionKeys::USER_SESSION);
@@ -123,7 +123,7 @@ class WebAuthentication implements IWebAuthentication
         if (method_exists($this->authentication, 'postLogout')) {
             $this->authentication->postLogout($userSession);
         }
-        Log::Debug('Logout userId: %s', $userSession->UserId);
+        Log::Info('Logout userId: %s', $userSession->UserId);
 
         $this->DeletePersistLoginCookie();
         ServiceLocator::GetServer()->EndSession(SessionKeys::USER_SESSION);

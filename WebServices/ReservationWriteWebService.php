@@ -40,7 +40,7 @@ class ReservationWriteWebService
         $result = $this->controller->Create($request, $this->server->GetSession());
 
         if ($result->WasSuccessful()) {
-            Log::Debug(
+            Log::Info(
                 'ReservationWriteWebService.Create() - Reservation Created. ReferenceNumber=%s',
                 $result->CreatedReferenceNumber()
             );
@@ -50,7 +50,7 @@ class ReservationWriteWebService
                 RestResponse::CREATED_CODE
             );
         } else {
-            Log::Debug('ReservationWriteWebService.Create() - Reservation Failed.');
+            Log::Info('ReservationWriteWebService.Create() - Reservation Failed.');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),
@@ -84,7 +84,7 @@ class ReservationWriteWebService
         $result = $this->controller->Update($request, $this->server->GetSession(), $referenceNumber, $updateScope);
 
         if ($result->WasSuccessful()) {
-            Log::Debug(
+            Log::Info(
                 'ReservationWriteWebService.Update() - Reservation Updated. ReferenceNumber=%s',
                 $result->CreatedReferenceNumber()
             );
@@ -94,7 +94,7 @@ class ReservationWriteWebService
                 RestResponse::OK_CODE
             );
         } else {
-            Log::Debug('ReservationWriteWebService.Update() - Reservation Failed.');
+            Log::Info('ReservationWriteWebService.Update() - Reservation Failed.');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),
@@ -117,11 +117,11 @@ class ReservationWriteWebService
         $result = $this->controller->Approve($this->server->GetSession(), $referenceNumber);
 
         if ($result->WasSuccessful()) {
-            Log::Debug('ReservationWriteWebService.Approve() - Reservation Approved. ReferenceNumber=%s', $referenceNumber);
+            Log::Info('ReservationWriteWebService.Approve() - Reservation Approved. ReferenceNumber=%s', $referenceNumber);
 
             $this->server->WriteResponse(new ReservationApprovedResponse($this->server, $referenceNumber), RestResponse::OK_CODE);
         } else {
-            Log::Debug('ReservationWriteWebService.Approve() - Reservation Failed.');
+            Log::Info('ReservationWriteWebService.Approve() - Reservation Failed.');
 
             $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
@@ -141,11 +141,11 @@ class ReservationWriteWebService
         $result = $this->controller->Checkin($this->server->GetSession(), $referenceNumber);
 
         if ($result->WasSuccessful()) {
-            Log::Debug('ReservationWriteWebService.Checkin() - Reservation checked in. ReferenceNumber=%s', $referenceNumber);
+            Log::Info('ReservationWriteWebService.Checkin() - Reservation checked in. ReferenceNumber=%s', $referenceNumber);
 
             $this->server->WriteResponse(new ReservationCheckedInResponse($this->server, $referenceNumber), RestResponse::OK_CODE);
         } else {
-            Log::Debug('ReservationWriteWebService.Checkin() - Reservation Failed.');
+            Log::Info('ReservationWriteWebService.Checkin() - Reservation Failed.');
 
             $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
@@ -165,11 +165,11 @@ class ReservationWriteWebService
         $result = $this->controller->Checkout($this->server->GetSession(), $referenceNumber);
 
         if ($result->WasSuccessful()) {
-            Log::Debug('ReservationWriteWebService.Checkout() - Reservation checked out. ReferenceNumber=%s', $referenceNumber);
+            Log::Info('ReservationWriteWebService.Checkout() - Reservation checked out. ReferenceNumber=%s', $referenceNumber);
 
             $this->server->WriteResponse(new ReservationCheckedOutResponse($this->server, $referenceNumber), RestResponse::OK_CODE);
         } else {
-            Log::Debug('ReservationWriteWebService.Checkout() - Reservation Failed.');
+            Log::Info('ReservationWriteWebService.Checkout() - Reservation Failed.');
 
             $this->server->WriteResponse(new FailedResponse($result->Errors()), RestResponse::BAD_REQUEST_CODE);
         }
@@ -195,14 +195,14 @@ class ReservationWriteWebService
         $result = $this->controller->Delete($this->server->GetSession(), $referenceNumber, $updateScope);
 
         if ($result->WasSuccessful()) {
-            Log::Debug(
+            Log::Info(
                 'ReservationWriteWebService.Delete() - Reservation Deleted. ReferenceNumber=%s',
                 $result->CreatedReferenceNumber()
             );
 
             $this->server->WriteResponse(new DeletedResponse(), RestResponse::OK_CODE);
         } else {
-            Log::Debug('ReservationWriteWebService.Delete() - Reservation Failed.');
+            Log::Info('ReservationWriteWebService.Delete() - Reservation Failed.');
 
             $this->server->WriteResponse(
                 new FailedResponse($result->Errors()),

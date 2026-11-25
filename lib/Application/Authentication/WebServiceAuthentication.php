@@ -84,7 +84,7 @@ class WebServiceAuthentication implements IWebServiceAuthentication
      */
     public function Logout($userId, $sessionToken)
     {
-        Log::Debug('WebService logout for userId %s', $userId);
+        Log::Info('WebService logout for userId %s', $userId);
 
         $webSession = $this->userSessionRepository->LoadBySessionToken($sessionToken);
         if ($webSession != null && $webSession->UserId == $userId) {

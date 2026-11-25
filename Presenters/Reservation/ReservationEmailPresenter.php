@@ -56,7 +56,7 @@ class ReservationEmailPresenter
         $owner = $this->userRepository->LoadById($existingSeries->UserId());
 
         if (!$this->HasPermissionToSend($existingSeries)) {
-            Log::Debug('Attempting to email reservation but user does not have permission. Reference Number %s, UserId %s', $existingSeries->CurrentInstance()->ReferenceNumber(), $this->userSession->UserId);
+            Log::Warning('Attempting to email reservation but user does not have permission. Reference Number %s, UserId %s', $existingSeries->CurrentInstance()->ReferenceNumber(), $this->userSession->UserId);
             return;
         }
 

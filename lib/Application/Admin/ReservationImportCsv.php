@@ -40,7 +40,7 @@ class ReservationImportCsvRow
     {
         $isValid = !empty($this->email) && !empty($this->resourceNames) && !empty($this->begin) && !empty($this->end);
         if (!$isValid) {
-            Log::Debug('Reservation import row is not valid. Missing email, resource or dates');
+            Log::Warning('Reservation import row is not valid. Missing email, resource or dates');
         }
         return $isValid;
     }
@@ -134,7 +134,7 @@ class ReservationImportCsv
         $csvRows = preg_split('/\n|\r\n?/', $contents);
 
         if (count($csvRows) == 0) {
-            Log::Debug('No rows in reservation import file');
+            Log::Info('No rows in reservation import file');
             return $rows;
         }
 
@@ -143,7 +143,7 @@ class ReservationImportCsv
         $headers = ReservationImportCsvRow::GetHeaders(str_getcsv($csvRows[0]), $this->attributes);
 
         if (!$headers) {
-            Log::Debug('No headers in reservation import file');
+            Log::Info('No headers in reservation import file');
             return $rows;
         }
 
@@ -155,7 +155,7 @@ class ReservationImportCsv
             if ($row->IsValid()) {
                 $rows[] = $row;
             } else {
-                Log::Error('Skipped import of reservation row %s. Values %s', $i, print_r($values, true));
+                Log::Warning('Skipped import of reservation row %s. Values %s', $i, print_r($values, true));
                 $this->skippedRowNumbers[] = $i;
             }
         }

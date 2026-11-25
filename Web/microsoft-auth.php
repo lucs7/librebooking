@@ -14,7 +14,7 @@ $result = (new MicrosoftOAuthCallback())->handle(
 );
 
 if ($result->hasOAuthErrorResponse()) {
-    Log::Error('Microsoft OAuth error: %s - %s', $result->error, $result->getErrorDescription());
+    Log::Info('Microsoft OAuth error: %s - %s', $result->error, $result->getErrorDescription());
 }
 
 header('Location: ' . $result->redirectURL);

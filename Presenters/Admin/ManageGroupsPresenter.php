@@ -165,7 +165,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may change group roles
-            Log::Error('ChangeRoles denied. UserId=%s is not an application administrator', $userSession->UserId);
+            Log::Warning('ChangeRoles denied. UserId=%s is not an application administrator', $userSession->UserId);
             return;
         }
 
@@ -301,7 +301,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may change group administrators
-            Log::Error('ChangeGroupAdmin denied. UserId=%s is not an application administrator', $userSession->UserId);
+            Log::Warning('ChangeGroupAdmin denied. UserId=%s is not an application administrator', $userSession->UserId);
             return;
         }
 
@@ -404,7 +404,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may change administered groups
-            Log::Error('ChangeAdminGroups denied. UserId=%s is not an application administrator', $userSession->UserId);
+            Log::Warning('ChangeAdminGroups denied. UserId=%s is not an application administrator', $userSession->UserId);
             return;
         }
 
@@ -434,7 +434,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may change administered resources
-            Log::Error('ChangeResourceGroups denied. UserId=%s is not an application administrator', $userSession->UserId);
+            Log::Warning('ChangeResourceGroups denied. UserId=%s is not an application administrator', $userSession->UserId);
             return;
         }
 
@@ -464,7 +464,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may change administered schedules
-            Log::Error('ChangeScheduleGroups denied. UserId=%s is not an application administrator', $userSession->UserId);
+            Log::Warning('ChangeScheduleGroups denied. UserId=%s is not an application administrator', $userSession->UserId);
             return;
         }
 
@@ -494,7 +494,7 @@ class ManageGroupsPresenter extends ActionPresenter
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may export groups
-            Log::Error('Export denied. UserId=%s is not an application administrator', $userSession->UserId);
+            Log::Warning('Export denied. UserId=%s is not an application administrator', $userSession->UserId);
             return;
         }
 

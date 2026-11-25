@@ -67,7 +67,7 @@ try {
     $instancesEnding = BuildQuery();
 
     $reader = ServiceLocator::GetDatabase()->Query($instancesEnding);
-    Log::Debug('Sending %s series ending emails', $reader->NumRows());
+    Log::Info('Sending %s series ending emails', $reader->NumRows());
 
     while ($row = $reader->GetRow()) {
         $referenceNumber = $row[ColumnNames::REFERENCE_NUMBER];
@@ -77,7 +77,7 @@ try {
 
         $reservation = $reservationRepository->LoadByReferenceNumber($referenceNumber);
 
-        Log::Debug(
+        Log::Info(
             'Sending series ending email. ReferenceNumber=%s, User=%s',
             $referenceNumber,
             $reservation->UserId()

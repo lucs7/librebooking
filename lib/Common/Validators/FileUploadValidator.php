@@ -22,7 +22,7 @@ class FileUploadValidator extends ValidatorBase implements IValidator
         }
         $this->isValid = !$this->file->IsError();
         if (!$this->IsValid()) {
-            Log::Debug('Uploaded file %s is not valid. %s', $this->file->OriginalName(), $this->file->Error());
+            Log::Info('Uploaded file %s is not valid. %s', $this->file->OriginalName(), $this->file->Error());
             $this->AddMessage($this->file->Error());
         }
     }

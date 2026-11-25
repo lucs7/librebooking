@@ -22,25 +22,25 @@ class WebServiceSecurity
         Log::Debug('Handling secure request. url=%s, userId=%s', $_SERVER['REQUEST_URI'], $userId);
 
         if (empty($sessionToken) || empty($userId)) {
-            Log::Debug('Empty token or userId');
+            Log::Warning('Empty token or userId');
             return false;
         }
 
         $session = $this->repository->LoadBySessionToken($sessionToken);
 
         if ($session != null && $session->IsExpired()) {
-            Log::Debug('Session is expired');
+            Log::Info('Session is expired');
             $this->repository->Delete($session);
             return false;
         }
 
         if ($session == null || $session->UserId != $userId) {
-            Log::Debug('Session token does not match user session token');
+            Log::Warning('Session token does not match user session token');
             return false;
         }
 
         if ($requireAdminRole && !$session->IsAdmin) {
-            Log::Debug('Route is limited to application administrators and this user is not an admin');
+            Log::Warning('Route is limited to application administrators and this user is not an admin');
             return false;
         }
 

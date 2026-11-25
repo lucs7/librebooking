@@ -75,7 +75,7 @@ if ((Configuration::Instance()->GetKey(ConfigKeys::CLEANUP_YEARS_OLD_DATA)) > 0)
     }
 } else {
     Log::Error('Error running deleteolddata.php');
-    Log::Error('Invalid years.old.data value in config file, value must be positive!');
+    Log::Warning('Invalid years.old.data value in config file, value must be positive!');
 }
 Log::Debug('Finished running deleteolddata.php');
 
@@ -175,7 +175,7 @@ function DeleteAnnouncementsQuery($announcementid)
     );
     ServiceLocator::GetDatabase()->Execute($deleteAnnouncements);
 
-    Log::Debug('Announcement with id %s deleted', $announcementid);
+    Log::Info('Announcement with id %s deleted', $announcementid);
 }
 
 //          ->    BLACKOUTS
@@ -201,7 +201,7 @@ function DeleteBlackoutsQuery($blackoutid)
     );
     ServiceLocator::GetDatabase()->Execute($deleteBlackoutSeries);
 
-    Log::Debug('Blackout with id %s deleted', $blackoutid);
+    Log::Info('Blackout with id %s deleted', $blackoutid);
 }
 
 //          ->    RESERVATION USERS
@@ -261,5 +261,5 @@ function DeleteReservationsQuery($reservationId)
     );
     ServiceLocator::GetDatabase()->Execute($deleteReservationSeries);
 
-    Log::Debug('Reservation with id %s deleted', $reservationId);
+    Log::Info('Reservation with id %s deleted', $reservationId);
 }

@@ -221,7 +221,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may deactivate accounts
-            Log::Error('Deactivate denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            Log::Warning('Deactivate denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
             return;
         }
 
@@ -240,7 +240,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may activate accounts
-            Log::Error('Activate denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            Log::Warning('Activate denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
             return;
         }
 
@@ -329,7 +329,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may change resource permissions
-            Log::Error('ChangePermissions denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            Log::Warning('ChangePermissions denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
             return;
         }
 
@@ -376,7 +376,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may export users
-            Log::Error('ExportUsers denied. UserId=%s is not an application administrator', $userSession->UserId);
+            Log::Warning('ExportUsers denied. UserId=%s is not an application administrator', $userSession->UserId);
             return;
         }
 
@@ -525,7 +525,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may change reservation colors
-            Log::Error('ChangeColor denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            Log::Warning('ChangeColor denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
             return;
         }
 
@@ -534,7 +534,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
 
         $color = $this->page->GetReservationColor();
         if (!$this->IsValidReservationColor($color)) {
-            Log::Error('ChangeColor denied. Invalid reservation color. UserId=%s, Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            Log::Warning('ChangeColor denied. Invalid reservation color. UserId=%s, Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
             return;
         }
 
@@ -549,7 +549,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may change credits
-            Log::Error('ChangeCredits denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
+            Log::Warning('ChangeCredits denied. UserId=%s is not an application administrator. Target UserId=%s', $userSession->UserId, $this->page->GetUserId());
             return;
         }
 
@@ -716,7 +716,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
                         if ($this->IsValidReservationColor($row->color)) {
                             $user->ChangePreference(UserPreferences::RESERVATION_COLOR, $row->color);
                         } else {
-                            Log::Error('Ignoring invalid reservation color during user import. Username=%s', $row->username);
+                            Log::Warning('Ignoring invalid reservation color during user import. Username=%s', $row->username);
                         }
                     }
 
@@ -749,7 +749,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
         $userSession = ServiceLocator::GetServer()->GetUserSession();
         if (!$userSession->IsAdmin) {
             // only application administrators may invite new accounts
-            Log::Error('InviteUsers denied. UserId=%s is not an application administrator', $userSession->UserId);
+            Log::Warning('InviteUsers denied. UserId=%s is not an application administrator', $userSession->UserId);
             return;
         }
 
@@ -763,7 +763,7 @@ class ManageUsersPresenter extends ActionPresenter implements IManageUsersPresen
     public function DeleteMultipleUsers()
     {
         $ids = $this->page->GetDeletedUserIds();
-        Log::Debug('User multiple delete. Ids=%s', implode(',', $ids));
+        Log::Info('User multiple delete. Ids=%s', implode(',', $ids));
         foreach ($ids as $id) {
             $this->manageUsersService->DeleteUser($id);
         }
